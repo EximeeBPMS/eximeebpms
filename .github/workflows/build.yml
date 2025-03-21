@@ -32,6 +32,7 @@ permissions:
   packages: write
   checks: write
   id-token: write
+  actions: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -68,8 +69,8 @@ jobs:
             <servers>
               <server>
                 <id>github</id>
-                <username>robertmastalerek</username>
-                <password>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</password>
+                <username>${{ github.actor }}</username>
+                <password>${{ secrets.GITHUB_TOKEN }}</password>
               </server>
             </servers>
           </settings>" > ~/.m2/settings.xml

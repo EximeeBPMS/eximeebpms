@@ -61,6 +61,8 @@ jobs:
           
       - name: Configure Maven to use GitHub Packages
         run: |
+          echo "ACTOR: ${{ github.actor }}"
+          echo "TOKEN: ${{ secrets.GITHUB_TOKEN }}"
           mkdir -p ~/.m2
           echo "<settings>
             <servers>

@@ -68,8 +68,8 @@ jobs:
             <servers>
               <server>
                 <id>github</id>
-                <username>EximeeBPMS</username>
-                <password>${{ secrets.GITHUB_TOKEN }}</password>
+                <username>robertmastalerek</username>
+                <password>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</password>
               </server>
             </servers>
           </settings>" > ~/.m2/settings.xml

@@ -69,8 +69,8 @@ jobs:
             <servers>
               <server>
                 <id>github</id>
-                <username>EximeeBPMS</username>
-                <password>${{ secrets.GITHUB_TOKEN }}</password>
+                <username>${{ github.actor }}</username>
+                <password>${{ secrets.GH_TOKEN }}</password>
               </server>
             </servers>
           </settings>" > ~/.m2/settings.xml

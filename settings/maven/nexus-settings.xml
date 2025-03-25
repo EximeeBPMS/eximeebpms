@@ -8,7 +8,7 @@
       <mirrorOf>eximeebpms-nexus</mirrorOf>
       <name>ExmeeBPMS Nexus</name>
 <!--      <url>https://artifacts.eximeebpms.com/artifactory/public/</url>-->
-      <url>https://maven.pkg.github.com/robertmastalerek/eximeebpms</url>
+      <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</url>
     </mirror>
   </mirrors>
 

@@ -327,7 +327,7 @@
 <!--    </repository>-->
     <repository>
       <id>github</id>
-      <url>https://maven.pkg.github.com/robertmastalerek/eximeebpms</url>
+      <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>

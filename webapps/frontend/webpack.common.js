@@ -218,12 +218,12 @@ module.exports = (_env, argv = {}) => {
       }),
       new webpack.DefinePlugin({
         EXIMEEBPMS_VERSION: `'${version}'`,
-        EXIMEE_BPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
+        EXIMEEBPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
         DEV_MODE: devMode,
         _import: 'function(filePath) { return import(filePath) }' // dynamic import workaround
       }),
       new webpack.ProvidePlugin({
-        EXIMEE_BPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
+        EXIMEEBPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
         DEV_MODE: devMode
       }),
       new ESLintPlugin()

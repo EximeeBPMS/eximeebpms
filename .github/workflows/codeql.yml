@@ -1,8 +1,8 @@
-# name: "CodeQL"
+name: "CodeQL"
 
-# on:
- # push:
- #   branches: [ "main" ]
+on:
+ push:
+   branches: [ "never" ] # temporary until we publish the repository - after that change to master / main
  # pull_request:
  #   branches: [ "main" ]
 # jobs:

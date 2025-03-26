@@ -26,6 +26,7 @@ on:
       - 'LICENSE'
       - 'NOTICE'
 
+
 permissions:
   contents: write
   packages: write

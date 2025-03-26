@@ -38,85 +38,85 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
-    runs-on: self-hosted
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+#   build:
+#     name: Build
+#     runs-on: self-hosted
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#       - name: Cache Maven packages
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.m2
+#           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#           restore-keys: ${{ runner.os }}-m2
+#       - name: Cache SonarCloud packages
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.sonar/cache
+#           key: ${{ runner.os }}-sonar
+#           restore-keys: ${{ runner.os }}-sonar
           
-      - name: Configure Maven to use GitHub Packages
-        run: |
-          echo "ACTOR: ${{ github.actor }}"
-          echo "TOKEN: ${{ secrets.GITHUB_TOKEN }}"
-          mkdir -p ~/.m2
-          echo "<settings>
-            <servers>
-              <server>
-                <id>github</id>
-                <username>${{ github.actor }}</username>
-                <password>${{ secrets.GH_TOKEN }}</password>
-              </server>
-            </servers>
-          </settings>" > ~/.m2/settings.xml
+#       - name: Configure Maven to use GitHub Packages
+#         run: |
+#           echo "ACTOR: ${{ github.actor }}"
+#           echo "TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+#           mkdir -p ~/.m2
+#           echo "<settings>
+#             <servers>
+#               <server>
+#                 <id>github</id>
+#                 <username>${{ github.actor }}</username>
+#                 <password>${{ secrets.GH_TOKEN }}</password>
+#               </server>
+#             </servers>
+#           </settings>" > ~/.m2/settings.xml
           
-      - name: Maven Build
-        id: maven-build
-        shell: bash
-        run: |
-          .github/scripts/jacoco-create-flag-files.sh
-          ./mvnw verify
-          ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish Test Report
-        if: always()
-        # https://github.com/marketplace/actions/junit-report-action
-        uses: mikepenz/action-junit-report@v4
-        with:
-          report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
-          require_passed_tests: true
-      - name: Upload Surefire Reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: ${{ github.workspace }}/**/target/surefire-reports/**
-          retention-days: 30
-#      - name: Sonarqube Analysis
-#        if: env.SONAR_TOKEN && (github.ref == 'refs/heads/main' || github.event_name == 'pull_request')
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        shell: bash
-#        run: ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=eximeebpms
-#        continue-on-error: true
-      - name: Cache build artifacts
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            distro/**/target/eximeebpms-*.gz
-            distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-          key: ${{ github.run_id }}-build-artifacts
+#       - name: Maven Build
+#         id: maven-build
+#         shell: bash
+#         run: |
+#           .github/scripts/jacoco-create-flag-files.sh
+#           ./mvnw verify
+#           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Publish Test Report
+#         if: always()
+#         # https://github.com/marketplace/actions/junit-report-action
+#         uses: mikepenz/action-junit-report@v4
+#         with:
+#           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+#           require_passed_tests: true
+#       - name: Upload Surefire Reports
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: surefire-reports
+#           path: ${{ github.workspace }}/**/target/surefire-reports/**
+#           retention-days: 30
+# #      - name: Sonarqube Analysis
+# #        if: env.SONAR_TOKEN && (github.ref == 'refs/heads/main' || github.event_name == 'pull_request')
+# #        env:
+# #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+# #        shell: bash
+# #        run: ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=eximeebpms
+# #        continue-on-error: true
+#       - name: Cache build artifacts
+#         uses: actions/cache/save@v4
+#         with:
+#           path: |
+#             distro/**/target/eximeebpms-*.gz
+#             distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+#           key: ${{ github.run_id }}-build-artifacts
 
   publish:
     name: Publish
-    needs: build
-    runs-on: ubuntu-24.04
+    # needs: build
+    runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

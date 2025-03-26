@@ -1,6 +1,7 @@
 name: Slack Notifications
 
 on:
+  workflow_dispatch:
   fork:
   discussion:
   discussion_comment:

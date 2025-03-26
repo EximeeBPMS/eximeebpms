@@ -1,13 +1,13 @@
 name: "CodeQL"
 
-#on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
+on:
+ push:
+   branches: [ "main" ]
+ pull_request:
+   branches: [ "main" ]
 jobs:
   analyze:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
 

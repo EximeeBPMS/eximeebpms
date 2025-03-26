@@ -26,7 +26,6 @@ on:
       - 'LICENSE'
       - 'NOTICE'
 
-
 permissions:
   contents: write
   packages: write
@@ -41,7 +40,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

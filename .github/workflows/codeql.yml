@@ -1,16 +1,15 @@
 name: "CodeQL"
 
-on:
- push:
-   branches: [ "main" ]
- pull_request:
-   branches: [ "main" ]
+# on:
+ # push:
+ #   branches: [ "main" ]
+ # pull_request:
+ #   branches: [ "main" ]
 jobs:
   analyze:
     runs-on: self-hosted
 
     steps:
-
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:

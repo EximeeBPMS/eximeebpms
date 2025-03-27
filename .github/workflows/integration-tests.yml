@@ -90,8 +90,16 @@ jobs:
         shell: bash
         run: |
           ./mvnw -P${{ matrix.testsuite }}-integration,${{ matrix.container }},${{ matrix.database }} verify -f qa
+      - name: Check if any surefire reports exist
+        id: check_tests
+        run: |
+          if find ${{ github.workspace }} -path "*/target/surefire-reports/*.xml" | grep -q .; then
+            echo "found=true" >> $GITHUB_ENV
+          else
+            echo "found=false" >> $GITHUB_ENV
+          fi
       - name: Publish Test Report
-        if: always()
+        if: env.found == 'true'
         uses: mikepenz/action-junit-report@v4
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml

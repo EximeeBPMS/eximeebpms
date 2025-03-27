@@ -96,6 +96,7 @@ jobs:
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
           require_passed_tests: true
+          skip_empty_reports: true
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4

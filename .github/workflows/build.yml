@@ -59,8 +59,6 @@ jobs:
           
       - name: Configure Maven to use GitHub Packages
         run: |
-          echo "ACTOR: ${{ github.actor }}"
-          echo "TOKEN: ${{ secrets.GITHUB_TOKEN }}"
           mkdir -p ~/.m2
           echo "<settings>
             <servers>
@@ -77,7 +75,7 @@ jobs:
         shell: bash
         run: |
           .github/scripts/jacoco-create-flag-files.sh
-          ./mvnw verify -DskipTests
+          ./mvnw verify
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -111,43 +109,45 @@ jobs:
             distro/webjar/target/eximeebpms-webapp-webjar-*.jar
           key: ${{ github.run_id }}-build-artifacts
 
-  # publish:
-  #   name: Publish
-  #   needs: build
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Restore build artifacts cache
-  #       uses: actions/cache/restore@v4
-  #       with:
-  #         path: |
-  #           distro/**/target/eximeebpms-*.gz
-  #           distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-  #         key: ${{ github.run_id }}-build-artifacts
-  #         fail-on-cache-miss: true
-  #     - run: |
-  #         sudo apt-get update > /dev/null
-  #         sudo apt-get install -y xq > /dev/null
-  #         PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout | tail -n 1)
-  #         TOMCAT_VERSION=$(xq --xpath project/properties/version.tomcat parent/pom.xml)
-  #         echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-  #         echo "TOMCAT_VERSION=$TOMCAT_VERSION" >> $GITHUB_ENV
-  #     - name: Upload distro Tomcat
-  #       id: upload-distro-tomcat
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: EximeeBPMS (Tomcat ${{ env.TOMCAT_VERSION }} Bundle)
-  #         path: distro/tomcat/distro/target/eximeebpms-bpm-tomcat-${{ env.PROJECT_VERSION }}.tar.gz
-  #         if-no-files-found: error
-  #         retention-days: 10
-  #     - name: Upload distro sql-scripts
-  #       id: upload-distro-sql-scripts
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: EximeeBPMS SQL Scripts
-  #         path: distro/sql-script/target/eximeebpms-sql-scripts-*.tar.gz
-  #         if-no-files-found: error
-  #         retention-days: 10
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: self-hosted
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore build artifacts cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            distro/**/target/eximeebpms-*.gz
+            distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+          key: ${{ github.run_id }}-build-artifacts
+          fail-on-cache-miss: true
+      - run: |
+          sudo apt-get update > /dev/null
+          sudo apt-get install -y xq > /dev/null
+          PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout | tail -n 1)
+          TOMCAT_VERSION=$(xq --xpath project/properties/version.tomcat parent/pom.xml)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          echo "TOMCAT_VERSION=$TOMCAT_VERSION" >> $GITHUB_ENV
+      - name: Upload distro Tomcat
+        id: upload-distro-tomcat
+        uses: actions/upload-artifact@v4
+        with:
+          name: EximeeBPMS (Tomcat ${{ env.TOMCAT_VERSION }} Bundle)
+          path: distro/tomcat/distro/target/eximeebpms-bpm-tomcat-${{ env.PROJECT_VERSION }}.tar.gz
+          if-no-files-found: error
+          retention-days: 10
+      - name: Upload distro sql-scripts
+        id: upload-distro-sql-scripts
+        uses: actions/upload-artifact@v4
+        with:
+          name: EximeeBPMS SQL Scripts
+          path: distro/sql-script/target/eximeebpms-sql-scripts-*.tar.gz
+          if-no-files-found: error
+          retention-days: 10

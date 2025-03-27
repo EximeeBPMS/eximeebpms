@@ -85,12 +85,12 @@ jobs:
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>
                   </servers>
-                </settings>" > /tmp/m2/settings.xml
-            export MAVEN_SETTINGS_PATH=/tmp/m2/settings.xml
+                </settings>" > /tmp/settings.xml
+            export MAVEN_SETTINGS_PATH=/tmp/settings.xml
                 
        - name: Maven Build
          env:
-           MAVEN_SETTINGS_PATH: /tmp/m2/settings.xml
+           MAVEN_SETTINGS_PATH: /tmp/settings.xml
          run: |
            PROJECT_ROOT=$(pwd)
            # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.

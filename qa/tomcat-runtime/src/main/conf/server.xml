@@ -68,12 +68,12 @@
               minIdle="5"
               maxIdle="20" />
               
-    <Resource name="global/eximeebpms-bpm-platform/process-engine/ProcessEngineService!org.eximeebpms.bpm.ProcessEngineService" auth="Container"
+    <Resource name="global/eximeebpms/process-engine/ProcessEngineService!org.eximeebpms.bpm.ProcessEngineService" auth="Container"
               type="org.eximeebpms.bpm.ProcessEngineService"
               description="Camunda Platform Process Engine Service"
               factory="org.eximeebpms.bpm.container.impl.jndi.ProcessEngineServiceObjectFactory" />
               
-    <Resource name="global/eximeebpms-bpm-platform/process-engine/ProcessApplicationService!org.eximeebpms.bpm.ProcessApplicationService" auth="Container"
+    <Resource name="global/eximeebpms/process-engine/ProcessApplicationService!org.eximeebpms.bpm.ProcessApplicationService" auth="Container"
               type="org.eximeebpms.bpm.ProcessApplicationService"
               description="Camunda Platform Process Application Service"
               factory="org.eximeebpms.bpm.container.impl.jndi.ProcessApplicationServiceObjectFactory" />

@@ -76,8 +76,8 @@ jobs:
         shell: bash
         run: |
           .github/scripts/jacoco-create-flag-files.sh
-          ./mvnw verify
-          ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
+          ./mvnw -s $MAVEN_SETTINGS_PATH verify \
+          ./mvnw -s $MAVEN_SETTINGS_PATH --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml

@@ -1,4 +1,3 @@
-# This workflow performs integration tests for Operaton
 name: Integration Tests
 
 on:
@@ -62,7 +61,7 @@ jobs:
       matrix:
         java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine"]') }}
-        distro: ${{ fromJson(github.event.inputs.distro || '["operaton", "tomcat", "wildfly"]') }}
+        distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
     steps:
       - name: Checkout Code

@@ -6,7 +6,7 @@ TEST_SUITE="engine"
 DATABASE="h2"
 DISTRO="tomcat"
 VALID_TEST_SUITES=("engine" "webapps")
-VALID_DISTROS=("operaton" "tomcat" "wildfly")
+VALID_DISTROS=("tomcat" "wildfly")
 VALID_DATABASES=("h2" "postgresql")
 
 ##########################################################################

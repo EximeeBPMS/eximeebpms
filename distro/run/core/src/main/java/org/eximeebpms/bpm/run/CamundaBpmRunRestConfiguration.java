@@ -66,7 +66,7 @@ public class CamundaBpmRunRestConfiguration {
   @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunAuthenticationProperties.PREFIX)
   public FilterRegistrationBean<Filter> processEngineAuthenticationFilter(JerseyApplicationPath applicationPath) {
     FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
-    registration.setName("camunda-auth");
+    registration.setName("eximeebpms-auth");
     registration.setFilter(new ProcessEngineAuthenticationFilter());
     registration.setOrder(AUTH_FILTER_PRECEDENCE);
 
@@ -85,7 +85,7 @@ public class CamundaBpmRunRestConfiguration {
   @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunCorsProperty.PREFIX)
   public FilterRegistrationBean<Filter> corsFilter(JerseyApplicationPath applicationPath) {
     FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
-    registration.setName("camunda-cors");
+    registration.setName("eximeebpms-cors");
     CorsFilter corsFilter = new CorsFilter();
     registration.setFilter(corsFilter);
     registration.setOrder(CORS_FILTER_PRECEDENCE);

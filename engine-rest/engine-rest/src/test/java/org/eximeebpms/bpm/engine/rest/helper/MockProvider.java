@@ -1024,7 +1024,7 @@ public abstract class MockProvider {
       EXAMPLE_TELEMETRY_SERVER, EXAMPLE_TELEMETRY_LICENSE, EXAMPLE_TELEMETRY_JDK);
   static {
     EXAMPLE_TELEMETRY_INTERNALS.setCamundaIntegration(
-        Stream.of("spring-boot-starter", "camunda-bpm-run").collect(Collectors.toCollection(HashSet::new)));
+        Stream.of("spring-boot-starter", "eximeebpms-bpm-run").collect(Collectors.toCollection(HashSet::new)));
     EXAMPLE_TELEMETRY_INTERNALS
         .setWebapps(Stream.of("cockpit", "admin").collect(Collectors.toCollection(HashSet::new)));
     EXAMPLE_TELEMETRY_INTERNALS

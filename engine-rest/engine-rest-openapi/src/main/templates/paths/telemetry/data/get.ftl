@@ -50,9 +50,9 @@
                                  "executed-decision-elements": { "count": 732 }
                                },
                                "data-collection-start-date": "2022-11-320T15:53:20.386+0100",
-                               "camunda-integration": [
+                               "eximeebpms-integration": [
                                  "spring-boot-starter",
-                                 "camunda-bpm-run"
+                                 "eximeebpms-bpm-run"
                                ],
                                "license-key": {
                                  "customer": "customer name",

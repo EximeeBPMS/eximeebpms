@@ -140,6 +140,20 @@ jobs:
          with:
            fetch-depth: 0
            ref: ${{github.event.inputs.release_branch}}
+
+       - name: Setup Maven settings.xml
+         run: |
+            mkdir -p /tmp
+            echo "<settings>
+                   <servers>
+                    <server>
+                      <id>github</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                  </servers>
+                </settings>" > /tmp/maven-settings.xml
+            export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
   
        # - name: Restore build artifacts cache
        #   uses: actions/cache@v4
@@ -157,13 +171,14 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          ./mvnw release:prepare release:perform -B \
+          ./mvnw -s $MAVEN_SETTINGS_PATH release:prepare release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
             -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+           MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
   
        - name: Publish Test Report
          if: always()

@@ -14,26 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eximeebpms.impl.test.utils.testcontainers;
+package org.eximeebpms.bpm.spring.boot.starter.webapp;
 
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.MariaDBContainer;
-import org.testcontainers.containers.MariaDBContainerProvider;
-import org.testcontainers.utility.DockerImageName;
+import java.io.IOException;
+import org.springframework.core.io.Resource;
+import org.springframework.lang.NonNull;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
-public class CamundaMariaDBContainerProvider extends MariaDBContainerProvider {
-
-  private static final String NAME = "cammariadb";
-
+public class FaviconResourceResolver extends PathResourceResolver {
   @Override
-  public boolean supports(String databaseType) {
-    return NAME.equals(databaseType);
-  }
-
-  @Override
-  public JdbcDatabaseContainer newInstance(String tag) {
-    DockerImageName dockerImageName = TestcontainersHelper
-      .resolveDockerImageName("mariadb", tag, "mariadb");
-    return new MariaDBContainer(dockerImageName);
+  protected Resource getResource(String resourcePath, @NonNull Resource location) throws IOException {
+    final var idx = resourcePath.lastIndexOf('/');
+    // cut off `applicationPath` before getting the resource
+    return super.getResource(resourcePath.substring(idx), location);
   }
 }

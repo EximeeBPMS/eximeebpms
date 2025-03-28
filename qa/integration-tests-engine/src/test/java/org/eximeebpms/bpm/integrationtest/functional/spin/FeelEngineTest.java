@@ -34,7 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(Arquillian.class)
-public class FeelEngineIT extends AbstractFoxPlatformIntegrationTest {
+public class FeelEngineTest extends AbstractFoxPlatformIntegrationTest {
 
   protected static final String PATH = "org/eximeebpms/bpm/integrationtest/functional/spin/feel/";
 

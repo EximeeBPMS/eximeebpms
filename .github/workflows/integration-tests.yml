@@ -55,15 +55,16 @@ concurrency:
 
 jobs:
   build:
-    name: Build
+    name: Integration Tests
     runs-on: self-hosted
+    if: ${{ github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
-        java: ${{ fromJson(github.event.inputs.java_version || '["17", "21"]') }}
-        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}
-        container: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
-        database: ${{ fromJson(github.event.inputs.database || '["h2", "postgres"]') }}
+        java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
+        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine"]') }}
+        distro: ${{ fromJson(github.event.inputs.distro || '["operaton", "tomcat", "wildfly"]') }}
+        database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -84,34 +85,30 @@ jobs:
         id: maven-build
         shell: bash
         run: |
-          ./mvnw -DskipTests -Pdistro,distro-webjar,distro-${{ matrix.container }},${{ matrix.container }},h2-in-memory clean install
+          .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-test
       - name: Execute Integration Tests
         id: maven-integration-tests
         shell: bash
         run: |
-          ./mvnw -P${{ matrix.testsuite }}-integration,${{ matrix.container }},${{ matrix.database }} verify -f qa
-      - name: Check if any surefire reports exist
-        id: check_tests
-        run: |
-          if find ${{ github.workspace }} -path "*/target/surefire-reports/*.xml" | grep -q .; then
-            echo "found=true" >> $GITHUB_ENV
-          else
-            echo "found=false" >> $GITHUB_ENV
+          if [[ "${{ matrix.distro }}" == "wildfly" && "${{ matrix.database }}" == "postgresql" && "${{ github.event_name }}" == "schedule" ]]; then
+            echo "Warning: Skipping build for distro 'wildfly' with database 'postgresql' due."
+            exit 0
           fi
+          .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-build
       - name: Publish Test Report
-        if: env.found == 'true'
+        if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+          report_paths: ${{ github.workspace }}/**/target/*-reports/*.xml
           require_passed_tests: true
-          skip_empty_reports: true
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports-${{ matrix.testsuite }}-${{ matrix.container }}-${{ matrix.database }}
+          name: surefire-reports-${{ matrix.testsuite }}-${{ matrix.distro }}-${{ matrix.database }}
           path: |
             ${{ github.workspace }}/**/target/surefire-reports/**
+            ${{ github.workspace }}/**/target/failsafe-reports/**
             ${{ github.workspace }}/qa/**/target/**/logs/**
             ${{ github.workspace }}/**/target/cargo.log
           retention-days: 30

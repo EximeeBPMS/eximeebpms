@@ -4,6 +4,7 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
+      - '.github/scripts/**'
       - '.github/workflows/**'
       - '!.github/workflows/build.yml'
       - '.github/jreleaser/changelog.tpl'
@@ -16,6 +17,7 @@ on:
   pull_request:
     branches: ["main"]
     paths-ignore:
+      - '.github/scripts/**'
       - '.github/workflows/**'
       - '!.github/workflows/build.yml'
       - '.github/jreleaser/changelog.tpl'

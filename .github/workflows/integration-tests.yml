@@ -79,6 +79,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
+      - name: Setup Maven settings.xml
+        run: |
+          mkdir -p /tmp
+          echo "<settings>
+                 <servers>
+                  <server>
+                    <id>github</id>
+                    <username>${{ github.actor }}</username>
+                    <password>${{ secrets.GITHUB_TOKEN }}</password>
+                  </server>
+                </servers>
+              </settings>" > /tmp/maven-settings.xml
+          export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
       - name: Maven Build
         id: maven-build
         shell: bash

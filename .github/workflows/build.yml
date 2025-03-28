@@ -57,18 +57,19 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
           
-      - name: Configure Maven to use GitHub Packages
+      - name: Setup Maven settings.xml
         run: |
-          mkdir -p ~/.m2
+          mkdir -p /tmp
           echo "<settings>
-            <servers>
-              <server>
-                <id>github</id>
-                <username>${{ github.actor }}</username>
-                <password>${{ secrets.GH_TOKEN }}</password>
-              </server>
-            </servers>
-          </settings>" > ~/.m2/settings.xml
+                 <servers>
+                  <server>
+                    <id>github</id>
+                    <username>${{ github.actor }}</username>
+                    <password>${{ secrets.GITHUB_TOKEN }}</password>
+                  </server>
+                </servers>
+              </settings>" > /tmp/maven-settings.xml
+          export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
           
       - name: Maven Build
         id: maven-build
@@ -79,6 +80,7 @@ jobs:
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
       - name: Publish Test Report
         if: always()
         # https://github.com/marketplace/actions/junit-report-action

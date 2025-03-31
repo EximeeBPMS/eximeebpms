@@ -178,11 +178,13 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          ./mvnw clean -X -s $MAVEN_SETTINGS_PATH release:prepare release:perform -B \
+          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:clean release:prepare release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
+
+            
+            # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
            MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml

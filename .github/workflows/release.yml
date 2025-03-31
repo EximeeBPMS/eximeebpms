@@ -177,8 +177,7 @@ jobs:
   
        - name: Release prepare with Maven 
          run: |
-          export MAVEN_OPTS='-s /tmp/maven-settings.xml'
-          ./mvnw -X release:clean release:prepare -B \
+          ./mvnw -X -s /tmp/maven-settings.xml release:clean release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
@@ -189,13 +188,10 @@ jobs:
   
        - name: Release with Maven 
          run: |          
-           export MAVEN_OPTS='-s /tmp/maven-settings.xml'
-          
-           ./mvnw -X release:perform -B \
+           ./mvnw -X -s /tmp/maven-settings.xml release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
-
             
             # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
          env:

@@ -143,23 +143,23 @@ jobs:
            branch: main
            # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
-       # - name: Setup Maven settings.xml
-       #   run: |
-       #      mkdir -p /tmp
-       #      echo "<settings>
-       #             <servers>
-       #              <server>
-       #                <id>github</id>
-       #                <username>${{ github.actor }}</username>
-       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
-       #              </server>
-       #              <server>
-       #                <id>github-release</id>
-       #                <username>${{ github.actor }}</username>
-       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
-       #              </server>
-       #            </servers>
-       #          </settings>" > /tmp/maven-settings.xml
+       - name: Setup Maven settings.xml
+         run: |
+            mkdir -p /tmp
+            echo "<settings>
+                   <servers>
+                    <server>
+                      <id>github</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                    <server>
+                      <id>github-release</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                  </servers>
+                </settings>" > /tmp/maven-settings.xml
   
        # - name: Restore build artifacts cache
        #   uses: actions/cache@v4
@@ -175,23 +175,23 @@ jobs:
        #     key: ${{ github.run_id }}-build-artifacts
        #     fail-on-cache-miss: true
   
-       - name: Release prepare with Maven 
-         run: |
-          ./mvnw -X release:clean release:prepare -B \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-            -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       # - name: Release prepare with Maven 
+       #   run: |
+       #    ./mvnw -X release:clean release:prepare -B \
+       #      -DreleaseVersion=${{ github.event.inputs.release_version }} \
+       #      -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+       #      -Darguments="-DskipTests"
+       #   env:
+       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
-       - name: Release perform dry run with Maven 
-         run: |
-          ./mvnw -X release:perform -B \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-            -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       # - name: Release perform dry run with Maven 
+       #   run: |
+       #    ./mvnw -X release:perform -B \
+       #      -DreleaseVersion=${{ github.event.inputs.release_version }} \
+       #      -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+       #      -Darguments="-DskipTests"
+       #   env:
+       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
        - name: Publish Test Report
          if: always()

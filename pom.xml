@@ -161,17 +161,6 @@
       </build>
     </profile>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>${snapshot.repository.id}</id>
-      <url>${snapshot.repository}</url>
-    </snapshotRepository>
-    <repository>
-      <id>${release.repository.id}</id>
-      <url>${release.repository}</url>
-    </repository>
-  </distributionManagement>
-
     <profile>
       <id>distro-serverless</id>
       <modules>
@@ -389,5 +378,16 @@
     <url>https://app.camunda.com/jira/browse/CAM/</url>
   </issueManagement>
 
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>${snapshot.repository.id}</id>
+      <url>${snapshot.repository}</url>
+    </snapshotRepository>
+    <repository>
+      <id>${release.repository.id}</id>
+      <url>${release.repository}</url>
+    </repository>
+  </distributionManagement>
 
 </project>

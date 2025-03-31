@@ -185,7 +185,7 @@ jobs:
           cat ./release.properties
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-           MAVEN_OPTS: "-s /tmp/maven-settings.xml"
+           MAVEN_OPTS: -s /tmp/maven-settings.xml
   
        - name: Release with Maven 
          run: |
@@ -198,7 +198,7 @@ jobs:
             # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-           MAVEN_OPTS: "-s /tmp/maven-settings.xml"
+           MAVEN_OPTS: -s /tmp/maven-settings.xml
   
        - name: Publish Test Report
          if: always()

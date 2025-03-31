@@ -48,11 +48,6 @@
           <excludedScopes>test</excludedScopes>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>3.1.1</version>
-      </plugin>
     </plugins>
   </build>
 
@@ -68,7 +63,7 @@
         <!-- This profile is run in the CI as the first step (platform-ASSEMBLY); It must not activate
           any modules that have a dependency to the webapps. See also the referenced POMs,
           they usually define which modules are covered by the distro profile -->
-        <!--<module>spring-boot-starter</module>
+        <module>spring-boot-starter</module>
 
         <module>quarkus-extension</module>
 
@@ -116,7 +111,7 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
-        <module>bom</module>-->
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -128,12 +123,12 @@
       <modules>
         <!-- This profile is run in the CI after the webapps were built (platform-ASSEMBLY);
           It should activate any module that has a dependency to the webapps -->
-        <!--<module>spring-boot-starter</module>
+        <module>spring-boot-starter</module>
 
         <module>distro/license-book</module>
         <module>distro/jboss</module>
         <module>distro/tomcat</module>
-        <module>distro/run</module>-->
+        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -169,7 +164,7 @@
     <profile>
       <id>distro-serverless</id>
       <modules>
-        <!--<module>qa</module>
+        <module>qa</module>
 
         <module>engine</module>
         <module>engine-cdi</module>
@@ -187,7 +182,7 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
-        <module>bom</module>-->
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -197,8 +192,8 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <!--<module>distro/license-book</module>
-        <module>distro/tomcat</module>-->
+        <module>distro/license-book</module>
+        <module>distro/tomcat</module>
       </modules>
     </profile>
 
@@ -208,11 +203,11 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <!--<module>javaee/ejb-client</module>
+        <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
         <module>distro/license-book</module>
         <module>distro/wildfly</module>
-        <module>distro/wildfly26</module>-->
+        <module>distro/wildfly26</module>
       </modules>
     </profile>
 
@@ -222,7 +217,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <!--<module>distro/webjar</module>-->
+        <module>distro/webjar</module>
       </modules>
     </profile>
 
@@ -232,7 +227,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <!--<module>distro/run</module>-->
+        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -242,7 +237,7 @@
           It can be removed if the distro job is merged with the assembly job and
           distro-ce is not used for building the spring boot starter -->
       <modules>
-        <!--<module>spring-boot-starter</module>-->
+        <module>spring-boot-starter</module>
       </modules>
     </profile>
 
@@ -250,7 +245,7 @@
       <!-- profile for running process-engine unit tests in QA -->
       <id>check-engine</id>
       <modules>
-        <!--<module>engine</module>
+        <module>engine</module>
         <module>engine-cdi</module>
         <module>engine-spring</module>
         <module>engine-rest</module>
@@ -258,7 +253,7 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
-        <module>bom</module>-->
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -266,16 +261,16 @@
       <!-- profile for running webapp unit tests in QA -->
       <id>check-webapps</id>
       <modules>
-        <!--<module>internal-dependencies</module>
+        <module>internal-dependencies</module>
         <module>parent</module>
-        <module>bom</module>-->
+        <module>bom</module>
       </modules>
     </profile>
 
     <profile>
       <id>sonatype-oss-release</id>
       <modules>
-        <!--<module>spring-boot-starter</module>
+        <module>spring-boot-starter</module>
         <module>quarkus-extension</module>
         <module>model-api</module>
 
@@ -309,7 +304,7 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
-        <module>bom</module>-->
+        <module>bom</module>
       </modules>
     </profile>
 

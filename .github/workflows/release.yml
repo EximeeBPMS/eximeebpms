@@ -177,7 +177,7 @@ jobs:
   
        - name: Release prepare with Maven 
          run: |
-          ./mvnw -X -s /tmp/maven-settings.xml release:clean release:prepare -B \
+          ./mvnw -X -gs /tmp/maven-settings.xml release:clean release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
@@ -188,7 +188,7 @@ jobs:
   
        - name: Release with Maven 
          run: |          
-           ./mvnw -X -s /tmp/maven-settings.xml release:perform -B \
+           ./mvnw -X -gs /tmp/maven-settings.xml release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"

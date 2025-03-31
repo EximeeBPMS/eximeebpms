@@ -143,23 +143,23 @@ jobs:
            branch: main
            # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
-       - name: Setup Maven settings.xml
-         run: |
-            mkdir -p /tmp
-            echo "<settings>
-                   <servers>
-                    <server>
-                      <id>github</id>
-                      <username>${{ github.actor }}</username>
-                      <password>${{ secrets.GITHUB_TOKEN }}</password>
-                    </server>
-                    <server>
-                      <id>github-release</id>
-                      <username>${{ github.actor }}</username>
-                      <password>${{ secrets.GITHUB_TOKEN }}</password>
-                    </server>
-                  </servers>
-                </settings>" > /tmp/maven-settings.xml
+       # - name: Setup Maven settings.xml
+       #   run: |
+       #      mkdir -p /tmp
+       #      echo "<settings>
+       #             <servers>
+       #              <server>
+       #                <id>github</id>
+       #                <username>${{ github.actor }}</username>
+       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
+       #              </server>
+       #              <server>
+       #                <id>github-release</id>
+       #                <username>${{ github.actor }}</username>
+       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
+       #              </server>
+       #            </servers>
+       #          </settings>" > /tmp/maven-settings.xml
   
        # - name: Restore build artifacts cache
        #   uses: actions/cache@v4
@@ -177,7 +177,7 @@ jobs:
   
        - name: Release prepare with Maven 
          run: |
-          ./mvnw -X -gs /tmp/maven-settings.xml release:clean release:prepare -B \
+          ./mvnw -X release:clean release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
@@ -188,22 +188,12 @@ jobs:
   
        - name: Release perform dry run with Maven 
          run: |
-          ./mvnw -X -gs /tmp/maven-settings.xml -DdryRun=true release:clean release:prepare -B \
+          ./mvnw -X release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
 
           cat ./release.properties
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  
-       - name: Release with Maven 
-         run: |          
-           cd target/checkout
-           ./mvnw -X -gs /tmp/maven-settings.xml deploy -B \
-            -Darguments="-DskipTests"
-            
-            # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   

@@ -138,8 +138,10 @@ jobs:
        - name: Check out the code
          uses: actions/checkout@v4
          with:
-           fetch-depth: 0
-           ref: ${{github.event.inputs.release_branch}}
+           # fetch-depth: 1
+           depth: 1
+           branch: main
+           # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
        - name: Setup Maven settings.xml
          run: |
@@ -176,12 +178,15 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
-            -DconnectionUrl=scm:svn:https://github.com/EximeeBPMS/eximeebpms/tags/eximeebpms-0.9.0 \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
-            -Darguments="-DskipTests"
+          git checkout eximeebpms-0.9.0
+          ./mvnw deploy 
+          
+          # ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
+          #   -DconnectionUrl=scm:svn:https://github.com/EximeeBPMS/eximeebpms/tags/eximeebpms-0.9.0 \
+          #   -DreleaseVersion=${{ github.event.inputs.release_version }} \
+          #   -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
+          #   -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
+          #   -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
            MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml

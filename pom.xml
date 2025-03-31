@@ -29,12 +29,6 @@
     <version.joda-time>2.12.5</version.joda-time>
     <version.uuid-generator>4.3.0</version.uuid-generator>
     <version.feel-scala>1.19.1</version.feel-scala>
-
-    <snapshot.repository.id>github</snapshot.repository.id>
-    <snapshot.repository>https://maven.pkg.github.com/EximeeBPMS/eximeebpms-release-parent</snapshot.repository>
-    <release.repository.id>github-release</release.repository.id>
-    <release.repository>https://maven.pkg.github.com/EximeeBPMS/eximeebpms-release-parent</release.repository>
-    <nexus.sonatype.url>https://central.sonatype.com</nexus.sonatype.url>
   </properties>
 
   <build>
@@ -377,17 +371,5 @@
     <system>Jira</system>
     <url>https://app.camunda.com/jira/browse/CAM/</url>
   </issueManagement>
-
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>${snapshot.repository.id}</id>
-      <url>${snapshot.repository}</url>
-    </snapshotRepository>
-    <repository>
-      <id>${release.repository.id}</id>
-      <url>${release.repository}</url>
-    </repository>
-  </distributionManagement>
 
 </project>

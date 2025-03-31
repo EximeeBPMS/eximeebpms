@@ -154,7 +154,7 @@ jobs:
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>
                     <server>
-                      <id>releases</id>
+                      <id>github-releases</id>
                       <username>${{ github.actor }}</username>
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>
@@ -178,15 +178,11 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          git checkout eximeebpms-0.9.0
-          ./mvnw deploy 
-          
-          # ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
-          #   -DconnectionUrl=scm:svn:https://github.com/EximeeBPMS/eximeebpms/tags/eximeebpms-0.9.0 \
-          #   -DreleaseVersion=${{ github.event.inputs.release_version }} \
-          #   -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
-          #   -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
-          #   -Darguments="-DskipTests"
+          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:prepare release:perform -B \
+            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
+            -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
            MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml

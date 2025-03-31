@@ -29,6 +29,12 @@
     <version.joda-time>2.12.5</version.joda-time>
     <version.uuid-generator>4.3.0</version.uuid-generator>
     <version.feel-scala>1.19.1</version.feel-scala>
+
+    <snapshot.repository.id>github</snapshot.repository.id>
+    <snapshot.repository>https://maven.pkg.github.com/EximeeBPMS/eximeebpms-release-parent</snapshot.repository>
+    <release.repository.id>github-release</release.repository.id>
+    <release.repository>https://maven.pkg.github.com/EximeeBPMS/eximeebpms-release-parent</release.repository>
+    <nexus.sonatype.url>https://central.sonatype.com</nexus.sonatype.url>
   </properties>
 
   <build>
@@ -57,7 +63,7 @@
         <!-- This profile is run in the CI as the first step (platform-ASSEMBLY); It must not activate
           any modules that have a dependency to the webapps. See also the referenced POMs,
           they usually define which modules are covered by the distro profile -->
-        <module>spring-boot-starter</module>
+        <!-- <module>spring-boot-starter</module>
 
         <module>quarkus-extension</module>
 
@@ -105,7 +111,7 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
-        <module>bom</module>
+        <module>bom</module>--> 
       </modules>
     </profile>
 
@@ -154,6 +160,17 @@
         </plugins>
       </build>
     </profile>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>${snapshot.repository.id}</id>
+      <url>${snapshot.repository}</url>
+    </snapshotRepository>
+    <repository>
+      <id>${release.repository.id}</id>
+      <url>${release.repository}</url>
+    </repository>
+  </distributionManagement>
 
     <profile>
       <id>distro-serverless</id>

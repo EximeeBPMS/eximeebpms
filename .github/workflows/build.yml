@@ -61,11 +61,17 @@ jobs:
           
       - name: Setup Maven settings.xml
         run: |
+          rm -f /tmp/maven-settings.xml
           mkdir -p /tmp
           echo "<settings>
                  <servers>
                   <server>
                     <id>github</id>
+                    <username>${{ github.actor }}</username>
+                    <password>${{ secrets.GITHUB_TOKEN }}</password>
+                  </server>
+                  <server>
+                    <id>github-release</id>
                     <username>${{ github.actor }}</username>
                     <password>${{ secrets.GITHUB_TOKEN }}</password>
                   </server>

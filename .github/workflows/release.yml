@@ -177,6 +177,7 @@ jobs:
        - name: Release with Maven 
          run: |
           ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
+            -DconnectionUrl=scm:svn:https://github.com/EximeeBPMS/eximeebpms/releases/tag/eximeebpms-0.9.0 \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT

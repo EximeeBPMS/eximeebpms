@@ -177,7 +177,8 @@ jobs:
   
        - name: Release prepare with Maven 
          run: |
-          ./mvnw -X  release:clean release:prepare -B \
+          export MAVEN_OPTS='-s /tmp/maven-settings.xml'
+          ./mvnw -X release:clean release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
@@ -185,11 +186,12 @@ jobs:
           cat ./release.properties
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-           MAVEN_OPTS: -s /tmp/maven-settings.xml
   
        - name: Release with Maven 
-         run: |
-          ./mvnw -X release:perform -B \
+         run: |          
+           export MAVEN_OPTS='-s /tmp/maven-settings.xml'
+          
+           ./mvnw -X release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
@@ -198,7 +200,6 @@ jobs:
             # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-           MAVEN_OPTS: -s /tmp/maven-settings.xml
   
        - name: Publish Test Report
          if: always()

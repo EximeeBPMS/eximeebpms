@@ -154,7 +154,7 @@ jobs:
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>
                     <server>
-                      <id>github-releases</id>
+                      <id>github-release</id>
                       <username>${{ github.actor }}</username>
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>

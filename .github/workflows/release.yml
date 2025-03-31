@@ -145,6 +145,7 @@ jobs:
 
        - name: Setup Maven settings.xml
          run: |
+            rm -f /tmp/maven-settings.xml
             mkdir -p /tmp
             echo "<settings>
                    <servers>

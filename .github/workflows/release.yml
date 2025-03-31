@@ -151,6 +151,10 @@ jobs:
                       <username>${{ github.actor }}</username>
                       <password>${{ secrets.GITHUB_TOKEN }}</password>
                     </server>
+                      <id>releases</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
                   </servers>
                 </settings>" > /tmp/maven-settings.xml
             export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
@@ -171,7 +175,7 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          ./mvnw -s $MAVEN_SETTINGS_PATH release:prepare release:perform -B \
+          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT

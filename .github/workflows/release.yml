@@ -186,11 +186,21 @@ jobs:
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
-       - name: Release with Maven 
-         run: |          
-           ./mvnw -X -gs /tmp/maven-settings.xml release:perform -B \
+       - name: Release perform dry run with Maven 
+         run: |
+          ./mvnw -X -gs /tmp/maven-settings.xml -DdryRun=true release:clean release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+            -Darguments="-DskipTests"
+
+          cat ./release.properties
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  
+       - name: Release with Maven 
+         run: |          
+           cd target/checkout
+           ./mvnw -X -gs /tmp/maven-settings.xml deploy -B \
             -Darguments="-DskipTests"
             
             # -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \

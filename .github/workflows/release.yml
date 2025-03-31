@@ -176,9 +176,21 @@ jobs:
        #     key: ${{ github.run_id }}-build-artifacts
        #     fail-on-cache-miss: true
   
+       - name: Release prepare with Maven 
+         run: |
+          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:clean release:prepare -B \
+            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+            -Darguments="-DskipTests"
+
+          cat ./release.properties
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+           MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
+  
        - name: Release with Maven 
          run: |
-          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:clean release:prepare release:perform -B \
+          ./mvnw -X -s $MAVEN_SETTINGS_PATH release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"

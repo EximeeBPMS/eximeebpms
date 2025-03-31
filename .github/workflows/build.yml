@@ -1,19 +1,19 @@
 name: build
 
 on:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - '.github/scripts/**'
-      - '.github/workflows/**'
-      - '!.github/workflows/build.yml'
-      - '.github/jreleaser/changelog.tpl'
-      - '**/*.md'
-      - 'distro/**'
-      - 'settings/**'
-      - '.gitingore'
-      - 'LICENSE'
-      - 'NOTICE'
+  # push:
+  #   branches: ["main"]
+  #   paths-ignore:
+  #     - '.github/scripts/**'
+  #     - '.github/workflows/**'
+  #     - '!.github/workflows/build.yml'
+  #     - '.github/jreleaser/changelog.tpl'
+  #     - '**/*.md'
+  #     - 'distro/**'
+  #     - 'settings/**'
+  #     - '.gitingore'
+  #     - 'LICENSE'
+  #     - 'NOTICE'
   pull_request:
     branches: ["main"]
     paths-ignore:

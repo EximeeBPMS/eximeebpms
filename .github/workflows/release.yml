@@ -179,6 +179,7 @@ jobs:
           ./mvnw release:prepare release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

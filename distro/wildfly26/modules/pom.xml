@@ -142,6 +142,12 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>copy-dependencies</id>
             <phase>prepare-package</phase>
             <goals>

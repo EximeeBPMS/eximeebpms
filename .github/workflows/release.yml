@@ -142,7 +142,7 @@ jobs:
          uses: actions/checkout@v4
          with:
            # fetch-depth: 1
-           fetch-depth: 1
+           fetch-depth: 0
            ref: main
            # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
@@ -179,13 +179,27 @@ jobs:
 
        - name: Check if tag exists and delete it
          run: |
-            TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
-            if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
-              echo "Tag $TAG_NAME already exists. Deleting..."
-              git push origin --delete $TAG_NAME
-            else
-              echo "Tag $TAG_NAME does not exist. Proceeding..."
-            fi
+           TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
+           
+           echo "Fetching tags from remote..."
+           git fetch --prune --tags
+           
+           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+             echo "Tag $TAG_NAME exists locally. Deleting..."
+             git tag -d "$TAG_NAME"
+           else
+             echo "Tag $TAG_NAME does not exist locally."
+           fi
+           
+           if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+             echo "Tag $TAG_NAME exists on remote. Deleting..."
+             git push origin --delete "$TAG_NAME"
+           else
+             echo "Tag $TAG_NAME does not exist on remote."
+           fi
+           
+           echo "Fetching updated tags..."
+           git fetch --prune --tags
   
        - name: Release prepare with Maven 
          run: |

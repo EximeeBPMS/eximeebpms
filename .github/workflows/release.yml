@@ -174,12 +174,18 @@ jobs:
        #     key: ${{ github.run_id }}-build-artifacts
        #     fail-on-cache-miss: true
   
-       - name: Release with Maven 
+       - name: Release prepare with Maven 
          run: |
-          ./mvnw release:prepare release:perform -B \
+          ./mvnw -X release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  
+       - name: Release perform with Maven 
+         run: |
+          ./mvnw release:perform -B -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   

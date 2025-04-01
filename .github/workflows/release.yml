@@ -18,7 +18,7 @@ on:
       new_tag:
         description: 'Tag'
         required: true
-        default: 'test-eximeebpms'
+        default: 'test-eximeebpms2'
       # dry_run:
       #   description: 'Dry-Run: Skips remote operations when true'
       #   type: boolean

@@ -142,8 +142,8 @@ jobs:
          uses: actions/checkout@v4
          with:
            # fetch-depth: 1
-           depth: 1
-           branch: main
+           fetch-depth: 1
+           ref: main
            # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
        - name: Setup Maven settings.xml

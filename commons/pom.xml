@@ -135,6 +135,7 @@
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
     <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
 </project>

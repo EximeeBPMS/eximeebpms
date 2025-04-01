@@ -32,7 +32,6 @@
   </properties>
 
   <build>
-    <finalName>test-eximeebpms</finalName>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

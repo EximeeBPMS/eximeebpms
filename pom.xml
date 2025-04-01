@@ -32,7 +32,7 @@
   </properties>
 
   <build>
-    <finalName>test-eximeebpms2</finalName>
+    <finalName>test-eximeebpms</finalName>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

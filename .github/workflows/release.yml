@@ -143,8 +143,8 @@ jobs:
          with:
            # fetch-depth: 1
            fetch-depth: 1
-           ref: eximeebpms-${{github.event.inputs.release_branch}}
-#           ref: main
+           ref: main
+           # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
        - name: Setup Maven settings.xml
          run: |

@@ -5,12 +5,12 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.9.0</version>
   </parent>
 
   <groupId>org.eximeebpms.template-engines</groupId>
   <artifactId>eximeebpms-template-engines-freemarker</artifactId>
-  <version>0.10.0-SNAPSHOT</version>
+  <version>0.9.0</version>
   
   <name>EximeeBPMS template engine jsr223 freemarker</name>
 
@@ -102,7 +102,7 @@
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
     <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>eximeebpms-0.9.0</tag>
   </scm>
 
 </project>

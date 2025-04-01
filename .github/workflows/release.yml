@@ -176,7 +176,7 @@ jobs:
   
        - name: Release with Maven 
          run: |
-          ./mvnw release:clean release:prepare release:perform -B \
+          ./mvnw release:prepare release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"

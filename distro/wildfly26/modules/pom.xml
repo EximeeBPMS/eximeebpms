@@ -415,8 +415,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>eximeebpms-root-0.9.0</tag>
-  </scm>
 </project>

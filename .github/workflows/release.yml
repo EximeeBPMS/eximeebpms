@@ -180,7 +180,7 @@ jobs:
        - name: Release prepare with Maven 
          run: |
           mvn -X release:prepare -B \
-            -DignoreSnapshots=true -DremoteTagging=true \
+            -DignoreSnapshots=true -DremoteTagging=false \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \

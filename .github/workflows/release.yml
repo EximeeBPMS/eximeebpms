@@ -178,6 +178,7 @@ jobs:
          run: |
           ./mvnw -X release:prepare -B \
             -DignoreSnapshots=true -DremoteTagging=true \
+            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"

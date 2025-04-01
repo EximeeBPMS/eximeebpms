@@ -15,6 +15,10 @@ on:
         description: 'The next development version to set (without -SNAPSHOT suffix)'
         required: true
         default: '0.10.0'
+      new_tag:
+        description: 'Tag'
+        required: true
+        default: 'test-eximeebpms'
       # dry_run:
       #   description: 'Dry-Run: Skips remote operations when true'
       #   type: boolean
@@ -180,6 +184,7 @@ jobs:
          run: |
           mvn -X release:prepare -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -Dtag=${{ github.event.inputs.new_tag }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
          env:

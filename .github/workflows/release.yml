@@ -143,24 +143,22 @@ jobs:
            branch: main
            # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
-       # - name: Setup Maven settings.xml
-       #   run: |
-       #      rm -f /tmp/maven-settings-release.xml
-       #      mkdir -p /tmp
-       #      echo "<settings>
-       #             <servers>
-       #              <server>
-       #                <id>github</id>
-       #                <username>${{ github.actor }}</username>
-       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
-       #              </server>
-       #              <server>
-       #                <id>github-release</id>
-       #                <username>${{ github.actor }}</username>
-       #                <password>${{ secrets.GITHUB_TOKEN }}</password>
-       #              </server>
-       #            </servers>
-       #          </settings>" > /tmp/maven-settings-release.xml
+       - name: Setup Maven settings.xml
+         run: |
+            echo "<settings>
+                   <servers>
+                    <server>
+                      <id>github</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                    <server>
+                      <id>github-release</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                  </servers>
+                </settings>" > ~/.m2/settings.xml
   
        # - name: Restore build artifacts cache
        #   uses: actions/cache@v4

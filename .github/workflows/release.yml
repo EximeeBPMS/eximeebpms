@@ -177,6 +177,7 @@ jobs:
        - name: Release prepare with Maven 
          run: |
           ./mvnw -X release:prepare -B \
+            -DignoreSnapshots=true -DremoteTagging=true \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"

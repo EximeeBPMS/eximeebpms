@@ -189,6 +189,7 @@
                   </mapper>
                 </copy>
 
+                <mkdir dir="target/modules/org/eximeebpms/bpm/wildfly/eximeebpms-wildfly26-subsystem"/>
                 <copy todir="target/modules/org/eximeebpms/bpm/wildfly/eximeebpms-wildfly-subsystem" flatten="false">
                   <fileset dir="target/modules/org/eximeebpms/bpm/wildfly/eximeebpms-wildfly26-subsystem" includes="**/*.jar" />
                 </copy>

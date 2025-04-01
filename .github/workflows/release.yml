@@ -176,7 +176,7 @@ jobs:
   
        - name: Release prepare with Maven 
          run: |
-          ./mvnw -X release:prepare -B \
+          mvn -X release:prepare -B \
             -DignoreSnapshots=true -DremoteTagging=true \
             -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
@@ -187,7 +187,7 @@ jobs:
   
        - name: Release perform with Maven 
          run: |
-          ./mvnw release:perform -B -Darguments="-DskipTests"
+          mvn release:perform -B -Darguments="-DskipTests"
          env:
            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   

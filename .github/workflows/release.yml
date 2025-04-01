@@ -176,6 +176,16 @@ jobs:
        #       target/project-reports.zip
        #     key: ${{ github.run_id }}-build-artifacts
        #     fail-on-cache-miss: true
+
+       - name: Check if tag exists and delete it
+         run: |
+            TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
+            if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+              echo "Tag $TAG_NAME already exists. Deleting..."
+              git push origin --delete $TAG_NAME
+            else
+              echo "Tag $TAG_NAME does not exist. Proceeding..."
+            fi
   
        - name: Release prepare with Maven 
          run: |

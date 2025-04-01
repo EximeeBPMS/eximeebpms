@@ -180,7 +180,6 @@ jobs:
          run: |
           ./mvnw release:clean release:prepare release:perform -B \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -Dtag=eximeebpms-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
          env:

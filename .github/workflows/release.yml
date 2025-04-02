@@ -58,7 +58,7 @@ jobs:
             PROJECT_ROOT=$(pwd)
             # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
            
-           cat ~/.m2/settings.xml
+            cat ~/.m2/settings.xml
            
             ./mvnw -X \
               -Pdistro,distro-run,distro-tomcat,h2-in-memory \

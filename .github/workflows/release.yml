@@ -69,7 +69,7 @@ jobs:
             cat ~/.m2/settings.xml
            
             ./mvnw -X \
-              -Pdistro,distro-run,distro-tomcat,h2-in-memory \
+              -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
               install \
               versions:dependency-updates-aggregate-report \
               versions:plugin-updates-aggregate-report \
@@ -82,8 +82,6 @@ jobs:
             ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
            
             find target -name maven-metadata.* -delete
-
-#              -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
 
         - name: Cache build artifacts
           uses: actions/cache@v4
@@ -100,114 +98,89 @@ jobs:
 
 # #------------------------------------------------------------------------------------------------
 
-#  release:
-#     name: Release
-#     # needs:
-#     #   - precheck
-#     #   - release_build
-#     runs-on: self-hosted
-#     steps:
-#       - name: Check out the code
-#         uses: actions/checkout@v4
-#         with:
-#           # fetch-depth: 1
-#           fetch-depth: 0
-#           ref: main
-#           # ref: eximeebpms-${{github.event.inputs.release_branch}}
-#
-#       - name: Setup Maven settings.xml
-#         run: |
-#            echo "<settings>
-#                   <servers>
-#                    <server>
-#                      <id>github</id>
-#                      <username>Konasiek</username>
-#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
-#                    </server>
-#                    <server>
-#                      <id>github-release</id>
-#                      <username>Konasiek</username>
-#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
-#                    </server>
-#                  </servers>
-#                </settings>" > ~/.m2/settings.xml
-#
-#       # - name: Restore build artifacts cache
-#       #   uses: actions/cache@v4
-#       #   with:
-#       #     path: |
-#       #       distro/**/*.tar.gz
-#       #       distro/**/*.zip
-#       #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-#       #       ./*/staging-deploy/**
-#       #       **/target/reports/**
-#       #       **/target/surefire-reports/*.xml
-#       #       target/project-reports.zip
-#       #     key: ${{ github.run_id }}-build-artifacts
-#       #     fail-on-cache-miss: true
-#
-#       - name: Check if tag exists and delete it
-#         run: |
-#           TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
-#
-#           echo "Fetching tags from remote..."
-#           git fetch --prune --tags
-#
-#           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-#             echo "Tag $TAG_NAME exists locally. Deleting..."
-#             git tag -d "$TAG_NAME"
-#           else
-#             echo "Tag $TAG_NAME does not exist locally."
-#           fi
-#
-#           if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
-#             echo "Tag $TAG_NAME exists on remote. Deleting..."
-#             git push origin --delete "$TAG_NAME"
-#           else
-#             echo "Tag $TAG_NAME does not exist on remote."
-#           fi
-#
-#           echo "Fetching updated tags..."
-#           git fetch --prune --tags
-#
-#       - name: Release prepare with Maven
-#         run: |
-#          mvn -X release:prepare -B \
-#            -DignoreSnapshots=true -DremoteTagging=false \
-#            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-#            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-#            -Darguments="-DskipTests"
-#         env:
-#           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#
-#       - name: Release perform with Maven
-#         run: |
-#          mvn release:perform -B -Darguments="-DskipTests"
-#         env:
-#           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#
-#       - name: Publish Test Report
-#         if: always()
-#         #https://github.com/marketplace/actions/junit-report-action
-#         uses: mikepenz/action-junit-report@v4
-#         with:
-#           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
-#           require_passed_tests: true
-#
-#       - name: Archive Reports
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: reports
-#           path: |
-#             **/target/reports/**
-#
-#       - name: Archive Staging Repo
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: staging
-#           path: |
-#             ./*/staging-deploy/**
-#           retention-days: 10
+   release:
+     name: Release
+     needs:
+        - release_build
+     runs-on: self-hosted
+     steps:
+       - name: Check out the code
+         uses: actions/checkout@v4
+         with:
+           # fetch-depth: 1
+           fetch-depth: 0
+           ref: main
+           # ref: eximeebpms-${{github.event.inputs.release_branch}}
+
+       - name: Setup Maven settings.xml
+         run: |
+            echo "<settings>
+                   <servers>
+                    <server>
+                      <id>github</id>
+                      <username>Konasiek</username>
+                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+                    </server>
+                    <server>
+                      <id>github-release</id>
+                      <username>Konasiek</username>
+                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+                    </server>
+                  </servers>
+                </settings>" > ~/.m2/settings.xml
+
+       # - name: Restore build artifacts cache
+       #   uses: actions/cache@v4
+       #   with:
+       #     path: |
+       #       distro/**/*.tar.gz
+       #       distro/**/*.zip
+       #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+       #       ./*/staging-deploy/**
+       #       **/target/reports/**
+       #       **/target/surefire-reports/*.xml
+       #       target/project-reports.zip
+       #     key: ${{ github.run_id }}-build-artifacts
+       #     fail-on-cache-miss: true
+
+
+       - name: Release prepare with Maven
+         run: |
+          mvn -X release:prepare -B \
+            -DignoreSnapshots=true -DremoteTagging=false \
+            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+       - name: Release perform with Maven
+         run: |
+          mvn release:perform -B -Darguments="-DskipTests"
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+       - name: Publish Test Report
+         if: always()
+         #https://github.com/marketplace/actions/junit-report-action
+         uses: mikepenz/action-junit-report@v4
+         with:
+           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+           require_passed_tests: true
+
+       - name: Archive Reports
+         uses: actions/upload-artifact@v4
+         with:
+           name: reports
+           path: |
+             **/target/reports/**
+
+       - name: Archive Staging Repo
+         uses: actions/upload-artifact@v4
+         with:
+           name: staging
+           path: |
+             ./*/staging-deploy/**
+           retention-days: 10
 
 #------------------------------------------------------------------------------------------------
 
@@ -229,17 +202,7 @@ jobs:
   #        with:
   #          java-version: '17'
   #          distribution: 'temurin'
-  
-  #      - name: Set next development version
-  #        run: |
-  #          NEXT_VERSION=${{github.event.inputs.next_version}}-SNAPSHOT
-  #          .github/scripts/set-project-version.sh $NEXT_VERSION
-  #          if ! git diff-index --quiet HEAD --; then
-  #            git config --local user.name "$GITHUB_ACTOR"
-  #            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-  #            git commit --allow-empty -am "[releng] Bump version to $NEXT_VERSION"
-  #            git push origin ${{github.event.inputs.release_branch}}
-  #          fi
+
   
        # - name: Notify Docker Repository
        #   run: |

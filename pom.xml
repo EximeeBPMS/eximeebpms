@@ -57,55 +57,55 @@
         <!-- This profile is run in the CI as the first step (platform-ASSEMBLY); It must not activate
           any modules that have a dependency to the webapps. See also the referenced POMs,
           they usually define which modules are covered by the distro profile -->
-<!--        <module>spring-boot-starter</module>-->
+        <module>spring-boot-starter</module>
 
-<!--        <module>quarkus-extension</module>-->
+        <module>quarkus-extension</module>
 
-<!--        <module>qa</module>-->
+        <module>qa</module>
 
-<!--        <module>javaee/ejb-service</module>-->
-<!--        <module>javaee/ejb-client</module>-->
-<!--        <module>javaee/ejb-client-jakarta</module>-->
-<!--        <module>javaee/jobexecutor-ra</module>-->
-<!--        <module>javaee/jobexecutor-rar</module>-->
+        <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client</module>
+        <module>javaee/ejb-client-jakarta</module>
+        <module>javaee/jobexecutor-ra</module>
+        <module>javaee/jobexecutor-rar</module>
 
-<!--        <module>model-api</module>-->
-<!--        <module>engine-dmn</module>-->
-<!--        <module>connect</module>-->
-<!--        <module>juel</module>-->
-<!--        <module>spin</module>-->
-<!--        <module>commons</module>-->
-<!--        <module>freemarker-template-engine</module>-->
+        <module>model-api</module>
+        <module>engine-dmn</module>
+        <module>connect</module>
+        <module>juel</module>
+        <module>spin</module>
+        <module>commons</module>
+        <module>freemarker-template-engine</module>
 
-<!--        <module>test-utils/testcontainers</module>-->
-<!--        <module>test-utils/junit5-extension</module>-->
-<!--        <module>test-utils/junit5-extension-dmn</module>-->
-<!--        <module>test-utils/assert</module>-->
-<!--        <module>test-utils/archunit</module>-->
+        <module>test-utils/testcontainers</module>
+        <module>test-utils/junit5-extension</module>
+        <module>test-utils/junit5-extension-dmn</module>
+        <module>test-utils/assert</module>
+        <module>test-utils/archunit</module>
 
-<!--        <module>engine</module>-->
-<!--        <module>engine-cdi</module>-->
-<!--        <module>engine-spring</module>-->
-<!--        <module>engine-rest</module>-->
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
 
-<!--        <module>webapps</module>-->
+        <module>webapps</module>
 
-<!--        <module>examples</module>-->
+        <module>examples</module>
 
-<!--        <module>engine-plugins</module>-->
+        <module>engine-plugins</module>
 
-<!--        <module>distro/license-book</module>-->
-<!--        <module>distro/jboss</module>-->
-<!--        <module>distro/tomcat</module>-->
-<!--        <module>distro/sql-script</module>-->
-<!--        <module>distro/run</module>-->
+        <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
+        <module>distro/sql-script</module>
+        <module>distro/run</module>
 
-<!--        <module>clients/java</module>-->
+        <module>clients/java</module>
 
-<!--        <module>internal-dependencies</module>-->
-<!--        <module>database</module>-->
-<!--        <module>parent</module>-->
-<!--        <module>bom</module>-->
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -117,12 +117,12 @@
       <modules>
         <!-- This profile is run in the CI after the webapps were built (platform-ASSEMBLY);
           It should activate any module that has a dependency to the webapps -->
-<!--        <module>spring-boot-starter</module>-->
+        <module>spring-boot-starter</module>
 
-<!--        <module>distro/license-book</module>-->
-<!--        <module>distro/jboss</module>-->
-<!--        <module>distro/tomcat</module>-->
-<!--        <module>distro/run</module>-->
+        <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
+        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -158,25 +158,25 @@
     <profile>
       <id>distro-serverless</id>
       <modules>
-<!--        <module>qa</module>-->
+        <module>qa</module>
 
-<!--        <module>engine</module>-->
-<!--        <module>engine-cdi</module>-->
-<!--        <module>engine-spring</module>-->
-<!--        <module>engine-rest</module>-->
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
 
-<!--        <module>webapps</module>-->
+        <module>webapps</module>
 
-<!--        <module>examples</module>-->
+        <module>examples</module>
 
-<!--        <module>engine-plugins</module>-->
+        <module>engine-plugins</module>
 
-<!--        <module>distro/sql-script</module>-->
+        <module>distro/sql-script</module>
 
-<!--        <module>internal-dependencies</module>-->
-<!--        <module>database</module>-->
-<!--        <module>parent</module>-->
-<!--        <module>bom</module>-->
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -186,8 +186,8 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-<!--        <module>distro/license-book</module>-->
-<!--        <module>distro/tomcat</module>-->
+        <module>distro/license-book</module>
+        <module>distro/tomcat</module>
       </modules>
     </profile>
 
@@ -197,11 +197,11 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-<!--        <module>javaee/ejb-client</module>-->
-<!--        <module>javaee/ejb-client-jakarta</module>-->
-<!--        <module>distro/license-book</module>-->
-<!--        <module>distro/wildfly</module>-->
-<!--        <module>distro/wildfly26</module>-->
+        <module>javaee/ejb-client</module>
+        <module>javaee/ejb-client-jakarta</module>
+        <module>distro/license-book</module>
+        <module>distro/wildfly</module>
+        <module>distro/wildfly26</module>
       </modules>
     </profile>
 
@@ -211,7 +211,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-<!--        <module>distro/webjar</module>-->
+        <module>distro/webjar</module>
       </modules>
     </profile>
 
@@ -221,7 +221,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-<!--        <module>distro/run</module>-->
+        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -231,7 +231,7 @@
           It can be removed if the distro job is merged with the assembly job and
           distro-ce is not used for building the spring boot starter -->
       <modules>
-<!--        <module>spring-boot-starter</module>-->
+        <module>spring-boot-starter</module>
       </modules>
     </profile>
 
@@ -239,15 +239,15 @@
       <!-- profile for running process-engine unit tests in QA -->
       <id>check-engine</id>
       <modules>
-<!--        <module>engine</module>-->
-<!--        <module>engine-cdi</module>-->
-<!--        <module>engine-spring</module>-->
-<!--        <module>engine-rest</module>-->
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
 
-<!--        <module>internal-dependencies</module>-->
-<!--        <module>database</module>-->
-<!--        <module>parent</module>-->
-<!--        <module>bom</module>-->
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
       </modules>
     </profile>
 
@@ -255,50 +255,50 @@
       <!-- profile for running webapp unit tests in QA -->
       <id>check-webapps</id>
       <modules>
-<!--        <module>internal-dependencies</module>-->
-<!--        <module>parent</module>-->
-<!--        <module>bom</module>-->
+        <module>internal-dependencies</module>
+        <module>parent</module>
+        <module>bom</module>
       </modules>
     </profile>
 
     <profile>
       <id>sonatype-oss-release</id>
       <modules>
-<!--        <module>spring-boot-starter</module>-->
-<!--        <module>quarkus-extension</module>-->
-<!--        <module>model-api</module>-->
+        <module>spring-boot-starter</module>
+        <module>quarkus-extension</module>
+        <module>model-api</module>
 
-<!--        <module>engine</module>-->
-<!--        <module>engine-cdi</module>-->
-<!--        <module>engine-spring</module>-->
-<!--        <module>engine-rest</module>-->
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
 
-<!--        <module>engine-dmn</module>-->
-<!--        <module>connect</module>-->
-<!--        <module>juel</module>-->
-<!--        <module>spin</module>-->
-<!--        <module>commons</module>-->
-<!--        <module>freemarker-template-engine</module>-->
+        <module>engine-dmn</module>
+        <module>connect</module>
+        <module>juel</module>
+        <module>spin</module>
+        <module>commons</module>
+        <module>freemarker-template-engine</module>
 
-<!--        <module>javaee/ejb-client</module>-->
-<!--        <module>javaee/ejb-client-jakarta</module>-->
+        <module>javaee/ejb-client</module>
+        <module>javaee/ejb-client-jakarta</module>
 
-<!--        <module>webapps</module>-->
+        <module>webapps</module>
 
-<!--        <module>engine-plugins</module>-->
+        <module>engine-plugins</module>
 
-<!--        <module>distro/webjar</module>-->
+        <module>distro/webjar</module>
 
-<!--        <module>clients/java</module>-->
+        <module>clients/java</module>
 
-<!--        <module>test-utils/junit5-extension</module>-->
-<!--        <module>test-utils/junit5-extension-dmn</module>-->
-<!--        <module>test-utils/assert</module>-->
+        <module>test-utils/junit5-extension</module>
+        <module>test-utils/junit5-extension-dmn</module>
+        <module>test-utils/assert</module>
 
-<!--        <module>internal-dependencies</module>-->
-<!--        <module>database</module>-->
-<!--        <module>parent</module>-->
-<!--        <module>bom</module>-->
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
       </modules>
     </profile>
 

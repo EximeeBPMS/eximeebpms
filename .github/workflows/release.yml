@@ -24,6 +24,16 @@ on:
 permissions:
   contents: write
   packages: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  discussions: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
         
 jobs:
 #   precheck:

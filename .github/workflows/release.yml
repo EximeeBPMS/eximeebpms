@@ -162,13 +162,13 @@ jobs:
                    <servers>
                     <server>
                       <id>github</id>
-                      <username>${{ github.actor }}</username>
-                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                      <username>Konasiek</username>
+                      <password>${{ secrets.RELEASE_TOKEN }}</password>
                     </server>
                     <server>
                       <id>github-release</id>
-                      <username>${{ github.actor }}</username>
-                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                      <username>Konasiek</username>
+                      <password>${{ secrets.RELEASE_TOKEN }}</password>
                     </server>
                   </servers>
                 </settings>" > ~/.m2/settings.xml

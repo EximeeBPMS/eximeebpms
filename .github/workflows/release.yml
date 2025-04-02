@@ -158,20 +158,20 @@ jobs:
 
        - name: Setup Maven settings.xml
          run: |
-         #   echo "<settings>
-         #          <servers>
-         #           <server>
-         #             <id>github</id>
-         #             <username>${{ github.actor }}</username>
-         #             <password>${{ secrets.GITHUB_TOKEN }}</password>
-         #           </server>
-         #           <server>
-         #             <id>github-release</id>
-         #             <username>${{ github.actor }}</username>
-         #             <password>${{ secrets.GITHUB_TOKEN }}</password>
-         #           </server>
-         #         </servers>
-         #       </settings>" > ~/.m2/settings.xml
+            echo "<settings>
+                   <servers>
+                    <server>
+                      <id>github</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                    <server>
+                      <id>github-release</id>
+                      <username>${{ github.actor }}</username>
+                      <password>${{ secrets.GITHUB_TOKEN }}</password>
+                    </server>
+                  </servers>
+                </settings>" > ~/.m2/settings.xml
   
        # - name: Restore build artifacts cache
        #   uses: actions/cache@v4

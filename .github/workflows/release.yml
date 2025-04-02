@@ -36,219 +36,168 @@ permissions:
   statuses: write
         
 jobs:
-#   precheck:
-#     name: Precheck
+
+   release_build:
+      name: Release Build
+      runs-on: self-hosted
+      steps:
+        - name: Check out the code
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            ref: ${{github.event.inputs.release_branch}}
+  
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+                
+        - name: Maven Build
+          env:
+           MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
+          run: |
+            PROJECT_ROOT=$(pwd)
+            # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
+           
+            ./mvnw -s /tmp/maven-settings.xml \
+          #    -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
+              -Pdistro,distro-run,distro-tomcat,h2-in-memory \
+              install \
+              versions:dependency-updates-aggregate-report \
+              versions:plugin-updates-aggregate-report \
+              -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
+              -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
+             
+            .github/scripts/prepare-reports.sh
+           
+            # ./mvnw -Psonatype-oss-release -DskipTests=true -Dskip.frontend.build=true deploy
+            ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
+           
+            find target -name maven-metadata.* -delete
+        - name: Cache build artifacts
+          uses: actions/cache@v4
+          with:
+            path: |
+              distro/**/*.tar.gz
+              distro/**/*.zip
+              distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+              ./*/staging-deploy/**
+              **/target/reports/**
+              **/target/surefire-reports/*.xml
+              target/project-reports.zip
+            key: ${{ github.run_id }}-build-artifacts
+
+# #------------------------------------------------------------------------------------------------
+
+#  release:
+#     name: Release
+#     # needs:
+#     #   - precheck
+#     #   - release_build
 #     runs-on: self-hosted
-#     outputs:
-#       version: ${{steps.version.outputs.version}}
-#       database_version: ${{steps.maven-build.outputs.database_version}}
-#       is_prerelease: ${{steps.version.outputs.is_prerelease}}
 #     steps:
-#       - name: Checkout
+#       - name: Check out the code
 #         uses: actions/checkout@v4
 #         with:
+#           # fetch-depth: 1
 #           fetch-depth: 0
-#           ref: ${{github.event.inputs.release_branch}}
-#       - name: Version
-#         id: version
-#         shell: bash
+#           ref: main
+#           # ref: eximeebpms-${{github.event.inputs.release_branch}}
+#
+#       - name: Setup Maven settings.xml
 #         run: |
-#           RELEASE_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout | tail -n 1 | sed -e 's/-SNAPSHOT//')
-#           echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
-#           if [[ "$RELEASE_VERSION" == *"alpha"* || "$RELEASE_VERSION" == *"beta"* ]]; then
-#             echo "⚙ Releasing version '$RELEASE_VERSION' (Pre-Release)"
-#             echo "is_prerelease=true" >> $GITHUB_OUTPUT
+#            echo "<settings>
+#                   <servers>
+#                    <server>
+#                      <id>github</id>
+#                      <username>Konasiek</username>
+#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+#                    </server>
+#                    <server>
+#                      <id>github-release</id>
+#                      <username>Konasiek</username>
+#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+#                    </server>
+#                  </servers>
+#                </settings>" > ~/.m2/settings.xml
+#
+#       # - name: Restore build artifacts cache
+#       #   uses: actions/cache@v4
+#       #   with:
+#       #     path: |
+#       #       distro/**/*.tar.gz
+#       #       distro/**/*.zip
+#       #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+#       #       ./*/staging-deploy/**
+#       #       **/target/reports/**
+#       #       **/target/surefire-reports/*.xml
+#       #       target/project-reports.zip
+#       #     key: ${{ github.run_id }}-build-artifacts
+#       #     fail-on-cache-miss: true
+#
+#       - name: Check if tag exists and delete it
+#         run: |
+#           TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
+#
+#           echo "Fetching tags from remote..."
+#           git fetch --prune --tags
+#
+#           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+#             echo "Tag $TAG_NAME exists locally. Deleting..."
+#             git tag -d "$TAG_NAME"
 #           else
-#             echo "⚙ Releasing version '$RELEASE_VERSION'"
-#             echo "is_prerelease=false" >> $GITHUB_OUTPUT
+#             echo "Tag $TAG_NAME does not exist locally."
 #           fi
-#           .github/scripts/set-project-version.sh $RELEASE_VERSION
-#           if ! git diff-index --quiet HEAD --; then
-#             git config --local user.name "$GITHUB_ACTOR"
-#             git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-#             git commit -am "[releng] Releasing version $RELEASE_VERSION"
-#             git push origin ${{github.event.inputs.release_branch}}
+#
+#           if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+#             echo "Tag $TAG_NAME exists on remote. Deleting..."
+#             git push origin --delete "$TAG_NAME"
+#           else
+#             echo "Tag $TAG_NAME does not exist on remote."
 #           fi
-
-# #------------------------------------------------------------------------------------------------
-
-#   release_build:
-#      name: Release Build
-#      needs: precheck
-#      runs-on: self-hosted
-#      outputs:
-#        output1: ${{steps.upload-release-artifacts.outputs.artifact-id}}
-#      steps:
-#        - name: Check out the code
-#          uses: actions/checkout@v4
-#          with:
-#            fetch-depth: 0
-#            ref: ${{github.event.inputs.release_branch}}
-  
-#        - name: Set up JDK
-#          uses: actions/setup-java@v4
-#          with:
-#            java-version: '17'
-#            distribution: 'temurin'
-
-#        - name: Setup Maven settings.xml
-#          run: |
-#             mkdir -p /tmp
-#             echo "<settings>
-#                    <servers>
-#                     <server>
-#                       <id>github</id>
-#                       <username>${{ github.actor }}</username>
-#                       <password>${{ secrets.GITHUB_TOKEN }}</password>
-#                     </server>
-#                   </servers>
-#                 </settings>" > /tmp/maven-settings.xml
-#             export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
-                
-#        - name: Maven Build
-#          env:
-#           MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
-#          run: |
-#            PROJECT_ROOT=$(pwd)
-#            # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
-           
-#            ./mvnw -s /tmp/maven-settings.xml \
-#              -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
-#              install \
-#              versions:dependency-updates-aggregate-report \
-#              versions:plugin-updates-aggregate-report \
-#              -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
-#              -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
-             
-#            .github/scripts/prepare-reports.sh
-           
-#            # ./mvnw -Psonatype-oss-release -DskipTests=true -Dskip.frontend.build=true deploy
-#            ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
-           
-#            find target -name maven-metadata.* -delete
-#        - name: Cache build artifacts
-#          uses: actions/cache@v4
-#          with:
-#            path: |
-#              distro/**/*.tar.gz
-#              distro/**/*.zip
-#              distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-#              ./*/staging-deploy/**
-#              **/target/reports/**
-#              **/target/surefire-reports/*.xml
-#              target/project-reports.zip
-#            key: ${{ github.run_id }}-build-artifacts
-
-# #------------------------------------------------------------------------------------------------
-
-  release:
-     name: Release
-     # needs:
-     #   - precheck
-     #   - release_build
-     runs-on: self-hosted
-     steps:
-       - name: Check out the code
-         uses: actions/checkout@v4
-         with:
-           # fetch-depth: 1
-           fetch-depth: 0
-           ref: main
-           # ref: eximeebpms-${{github.event.inputs.release_branch}}
-
-       - name: Setup Maven settings.xml
-         run: |
-            echo "<settings>
-                   <servers>
-                    <server>
-                      <id>github</id>
-                      <username>Konasiek</username>
-                      <password>${{ secrets.RELEASE_TOKEN }}</password>
-                    </server>
-                    <server>
-                      <id>github-release</id>
-                      <username>Konasiek</username>
-                      <password>${{ secrets.RELEASE_TOKEN }}</password>
-                    </server>
-                  </servers>
-                </settings>" > ~/.m2/settings.xml
-  
-       # - name: Restore build artifacts cache
-       #   uses: actions/cache@v4
-       #   with:
-       #     path: |
-       #       distro/**/*.tar.gz
-       #       distro/**/*.zip
-       #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-       #       ./*/staging-deploy/**
-       #       **/target/reports/**
-       #       **/target/surefire-reports/*.xml
-       #       target/project-reports.zip
-       #     key: ${{ github.run_id }}-build-artifacts
-       #     fail-on-cache-miss: true
-
-       - name: Check if tag exists and delete it
-         run: |
-           TAG_NAME="eximeebpms-${{ github.event.inputs.release_version }}"
-           
-           echo "Fetching tags from remote..."
-           git fetch --prune --tags
-           
-           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-             echo "Tag $TAG_NAME exists locally. Deleting..."
-             git tag -d "$TAG_NAME"
-           else
-             echo "Tag $TAG_NAME does not exist locally."
-           fi
-           
-           if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
-             echo "Tag $TAG_NAME exists on remote. Deleting..."
-             git push origin --delete "$TAG_NAME"
-           else
-             echo "Tag $TAG_NAME does not exist on remote."
-           fi
-           
-           echo "Fetching updated tags..."
-           git fetch --prune --tags
-  
-       - name: Release prepare with Maven 
-         run: |
-          mvn -X release:prepare -B \
-            -DignoreSnapshots=true -DremoteTagging=false \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-            -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  
-       - name: Release perform with Maven 
-         run: |
-          mvn release:perform -B -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  
-       - name: Publish Test Report
-         if: always()
-         #https://github.com/marketplace/actions/junit-report-action
-         uses: mikepenz/action-junit-report@v4
-         with:
-           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
-           require_passed_tests: true
-  
-       - name: Archive Reports
-         uses: actions/upload-artifact@v4
-         with:
-           name: reports
-           path: |
-             **/target/reports/**
-  
-       - name: Archive Staging Repo
-         uses: actions/upload-artifact@v4
-         with:
-           name: staging
-           path: |
-             ./*/staging-deploy/**
-           retention-days: 10
+#
+#           echo "Fetching updated tags..."
+#           git fetch --prune --tags
+#
+#       - name: Release prepare with Maven
+#         run: |
+#          mvn -X release:prepare -B \
+#            -DignoreSnapshots=true -DremoteTagging=false \
+#            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+#            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+#            -Darguments="-DskipTests"
+#         env:
+#           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#
+#       - name: Release perform with Maven
+#         run: |
+#          mvn release:perform -B -Darguments="-DskipTests"
+#         env:
+#           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#
+#       - name: Publish Test Report
+#         if: always()
+#         #https://github.com/marketplace/actions/junit-report-action
+#         uses: mikepenz/action-junit-report@v4
+#         with:
+#           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+#           require_passed_tests: true
+#
+#       - name: Archive Reports
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: reports
+#           path: |
+#             **/target/reports/**
+#
+#       - name: Archive Staging Repo
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: staging
+#           path: |
+#             ./*/staging-deploy/**
+#           retention-days: 10
 
 #------------------------------------------------------------------------------------------------
 

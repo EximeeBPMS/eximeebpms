@@ -206,7 +206,6 @@ jobs:
           mvn -X release:prepare -B \
             -DignoreSnapshots=true -DremoteTagging=false \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -Dtag=eximeebpms-root-${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
             -Darguments="-DskipTests"
          env:

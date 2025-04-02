@@ -41,12 +41,19 @@ jobs:
       name: Release Build
       runs-on: self-hosted
       steps:
+        - name: xyz
+          run: |
+           cat ~/.m2/settings.xml
         - name: Check out the code
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
             ref: ${{github.event.inputs.release_branch}}
+        - name: xyz2
+          run: |
+            cat ~/.m2/settings.xml
   
+
         - name: Set up JDK
           uses: actions/setup-java@v4
           with:

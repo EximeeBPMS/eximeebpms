@@ -9,7 +9,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.9.0</version>
   </parent>
 
   <dependencyManagement>

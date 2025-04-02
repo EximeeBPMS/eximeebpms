@@ -54,12 +54,13 @@ jobs:
             cat ~/.m2/settings.xml
   
 
-#        - name: Set up JDK
-#          uses: actions/setup-java@v4
-#          with:
-#            java-version: '17'
-#            distribution: 'temurin'
-                
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+            overwrite-settings: false
+
         - name: Maven Build
           run: |
             PROJECT_ROOT=$(pwd)

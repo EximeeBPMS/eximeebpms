@@ -60,7 +60,7 @@ import org.joda.time.DateTime;
  *
  * @author nico.rehwaldt
  */
-@ProcessApplication("camunda-test-processes")
+@ProcessApplication("eximeebpms-test-processes")
 public class DevProcessApplication extends ServletProcessApplication {
 
   private final static Logger LOGGER = Logger.getLogger(DevProcessApplication.class.getName());

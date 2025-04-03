@@ -17,7 +17,7 @@
 
 'use strict';
 
-var resetUrl = 'http://localhost:8080/camunda/ensureCleanDb/default';
+var resetUrl = 'http://localhost:8080/eximeebpms/ensureCleanDb/default';
 var request = require('request');
 var CamSDK = require('eximeebpms-bpm-sdk-js');
 var camClient = new CamSDK.Client({

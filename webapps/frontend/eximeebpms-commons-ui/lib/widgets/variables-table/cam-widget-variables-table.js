@@ -242,7 +242,7 @@ module.exports = [
           ? $scope.downloadVar
           : function(info) {
               return (
-                '/camunda/api/engine/engine/default/variable-instance/' +
+                '/eximeebpms/api/engine/engine/default/variable-instance/' +
                 info.variable.id +
                 '/data'
               );

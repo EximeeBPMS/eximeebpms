@@ -56,8 +56,8 @@ parse_args() {
 run_build () {
   PROFILES=(distro distro-webjar h2-in-memory)
 
-  if [[ "$DISTRO" == "operaton" ]]; then
-    PROFILES+=(distro-run integration-test-operaton-run)
+  if [[ "$DISTRO" == "eximeebpms" ]]; then
+    PROFILES+=(distro-run integration-test-eximeebpms-run)
   fi
   if [[ "$DISTRO" == "tomcat" ]]; then
     PROFILES+=(tomcat distro-tomcat)
@@ -90,8 +90,8 @@ run_tests () {
   esac
 
   case "$DISTRO" in
-    operaton)
-      PROFILES+=(integration-test-operaton-run)
+    eximeebpms)
+      PROFILES+=(integration-test-eximeebpms-run)
       QA_DIR=distro/run/qa
       ;;
     tomcat)

@@ -18,7 +18,7 @@
     <version.jaxb-api>2.3.1</version.jaxb-api>
     <version.jersey-apache-client>1.15</version.jersey-apache-client>
     <version.junit>4.12</version.junit>
-    <version.chromedriver>112.0.5615.49</version.chromedriver>
+    <version.chromedriver>135.0.7049.52</version.chromedriver>
 
     <http.port>58080</http.port>
     <http.ctx-path.webapp>eximeebpms/</http.ctx-path.webapp>
@@ -191,10 +191,30 @@
                   <goal>wget</goal>
                 </goals>
                 <configuration>
-                  <url>https://chromedriver.storage.googleapis.com/${version.chromedriver}/chromedriver_${os.type}.zip</url>
+                  <url>https://storage.googleapis.com/chrome-for-testing-public/${version.chromedriver}/${os.type}/chromedriver-${os.type}.zip</url>
                   <outputFileName>chromedriver.zip</outputFileName>
                   <unpack>true</unpack>
                   <outputDirectory>${project.build.directory}/chromedriver</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <move todir="${project.build.directory}/chromedriver">
+                      <fileset dir="${project.build.directory}/chromedriver/chromedriver-${os.type}"/>
+                    </move>
+                    <delete dir="${project.build.directory}/chromedriver/chromedriver-${os.type}"/>
+                  </target>
                 </configuration>
               </execution>
             </executions>

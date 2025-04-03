@@ -54,9 +54,9 @@ function requirejsConf(options) {
         'node_modules/angular-translate/dist/angular-translate',
       'angular-moment': 'node_modules/angular-moment/angular-moment',
       'eximeebpms-bpm-sdk-js':
-        'node_modules/eximeebpms-bpm-sdk-js/dist/eximeebpms-bpm-sdk-angular',
+        'node_modules/eximeebpms-bpm-sdk-js/dist/camunda-bpm-sdk-angular',
       'eximeebpms-bpm-sdk-js-type-utils':
-        'node_modules/eximeebpms-bpm-sdk-js/dist/eximeebpms-bpm-sdk-type-utils',
+        'node_modules/eximeebpms-bpm-sdk-js/dist/camunda-bpm-sdk-type-utils',
       jquery: 'node_modules/jquery/dist/jquery',
       moment: 'node_modules/moment/moment',
       requirejs: 'node_modules/requirejs/require',

@@ -60,7 +60,7 @@ jobs:
       fail-fast: false
       matrix:
         java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
-        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine"]') }}
+        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
     steps:
@@ -79,24 +79,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - name: Setup Maven settings.xml
-        run: |
-          mkdir -p /tmp
-          echo "<settings>
-                 <servers>
-                  <server>
-                    <id>github</id>
-                    <username>${{ github.actor }}</username>
-                    <password>${{ secrets.GITHUB_TOKEN }}</password>
-                  </server>
-                </servers>
-              </settings>" > /tmp/maven-settings.xml
-          export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
+          overwrite-settings: false
+
       - name: Maven Build
         id: maven-build
         shell: bash
         run: |
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-test
+
       - name: Execute Integration Tests
         id: maven-integration-tests
         shell: bash

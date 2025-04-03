@@ -131,14 +131,14 @@ ALTER TABLE ACT_RU_JOB
 
 -- AUTHORIZATION --
 
--- add grant authorizations for group camunda-admin:
+-- add grant authorizations for group eximeebpms-admin:
 INSERT INTO
   ACT_RU_AUTHORIZATION (ID_, TYPE_, GROUP_ID_, RESOURCE_TYPE_, RESOURCE_ID_, PERMS_, REV_)
 VALUES
-  ('camunda-admin-grant-process-definition', 1, 'camunda-admin', 6, '*', 2147483647, 1),
-  ('camunda-admin-grant-task', 1, 'camunda-admin', 7, '*', 2147483647, 1),
-  ('camunda-admin-grant-process-instance', 1, 'camunda-admin', 8, '*', 2147483647, 1),
-  ('camunda-admin-grant-deployment', 1, 'camunda-admin', 9, '*', 2147483647, 1);
+  ('eximeebpms-admin-grant-process-definition', 1, 'eximeebpms-admin', 6, '*', 2147483647, 1),
+  ('eximeebpms-admin-grant-task', 1, 'eximeebpms-admin', 7, '*', 2147483647, 1),
+  ('eximeebpms-admin-grant-process-instance', 1, 'eximeebpms-admin', 8, '*', 2147483647, 1),
+  ('eximeebpms-admin-grant-deployment', 1, 'eximeebpms-admin', 9, '*', 2147483647, 1);
 
 -- add global grant authorizations for new authorization resources:
 -- DEPLOYMENT

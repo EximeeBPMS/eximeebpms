@@ -143,7 +143,7 @@ public class DemoDataGenerator {
       identityService.createMembership("demo", "sales");
       identityService.createMembership("demo", "accounting");
       identityService.createMembership("demo", "management");
-      identityService.createMembership("demo", "camunda-admin");
+      identityService.createMembership("demo", "eximeebpms-admin");
 
       identityService.createMembership("john", "sales");
       identityService.createMembership("mary", "accounting");

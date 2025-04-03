@@ -52,7 +52,7 @@
 
   <!-- Http Basic Authentication Filter -->
   <!-- <filter>
-    <filter-name>camunda-auth</filter-name>
+    <filter-name>eximeebpms-auth</filter-name>
     <filter-class>
       org.eximeebpms.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter
     </filter-class>
@@ -63,7 +63,7 @@
   </filter>
 
   <filter-mapping>
-    <filter-name>camunda-auth</filter-name>
+    <filter-name>eximeebpms-auth</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping> -->
 

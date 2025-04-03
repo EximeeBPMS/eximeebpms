@@ -96,7 +96,7 @@
                   <goal>update</goal>
                 </goals>
                 <configuration>
-                  <changeLogFile>camunda-changelog.xml</changeLogFile>
+                  <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
                   <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
                 </configuration>
               </execution>

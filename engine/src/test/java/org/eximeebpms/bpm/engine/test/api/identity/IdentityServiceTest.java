@@ -970,7 +970,7 @@ public class IdentityServiceTest {
 
   @Test
   public void testCamundaAdminId() {
-    String camundaAdminID = "camunda-admin";
+    String camundaAdminID = "eximeebpms-admin";
     try {
       identityService.newUser(camundaAdminID);
       identityService.newGroup(camundaAdminID);

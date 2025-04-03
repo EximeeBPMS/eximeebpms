@@ -17,11 +17,11 @@
 
 -- AUTHORIZATION --
 
--- add grant authorizations for group camunda-admin:
+-- add grant authorizations for group eximeebpms-admin:
 INSERT INTO
   ACT_RU_AUTHORIZATION (ID_, TYPE_, GROUP_ID_, RESOURCE_TYPE_, RESOURCE_ID_, PERMS_, REV_)
 VALUES
-  ('camunda-admin-grant-drd', 1, 'camunda-admin', 14, '*', 2147483647, 1);
+  ('eximeebpms-admin-grant-drd', 1, 'eximeebpms-admin', 14, '*', 2147483647, 1);
 
 -- decision requirements definition --
 

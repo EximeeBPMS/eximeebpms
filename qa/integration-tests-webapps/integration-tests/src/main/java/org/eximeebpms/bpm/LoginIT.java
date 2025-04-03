@@ -31,7 +31,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-@Ignore("TODO - rmastalerek")
 public class LoginIT extends AbstractWebappUiIntegrationTest {
 
   protected WebDriverWait wait;

@@ -6,7 +6,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn">
 
-  <process id="feelScriptExecution" isExecutable="true" camunda:historyTimeToLive="180">
+  <process id="feelScriptExecution" isExecutable="true" eximeebpms:historyTimeToLive="180">
 
     <startEvent id="theStart" name="Start" />
 

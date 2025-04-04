@@ -162,7 +162,7 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.current</propertyPrefix>
+                  <propertyPrefix>eximeebpms.current</propertyPrefix>
                   <versionString>7.4.0</versionString>
                 </configuration>
               </execution>
@@ -172,7 +172,7 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.previous</propertyPrefix>
+                  <propertyPrefix>eximeebpms.previous</propertyPrefix>
                   <versionString>${eximeebpms.version.previous}</versionString>
                 </configuration>
               </execution>

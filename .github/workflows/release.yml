@@ -51,14 +51,13 @@ jobs:
           with:
             java-version: '17'
             distribution: 'temurin'
-            maven-version: '3.8.8'
             server-id: github
             server-username: ${{ github.actor }}
             server-password: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Release prepare with Maven
           run: |
-            mvn release:prepare release:perform -B \
+            ./mvnw release:prepare release:perform -B \
               -DignoreSnapshots=true -DremoteTagging=false \
               -DreleaseVersion=${{ github.event.inputs.release_version }} \
               -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \

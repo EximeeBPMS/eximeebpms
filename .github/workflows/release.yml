@@ -41,6 +41,17 @@ jobs:
       name: Release Build
       runs-on: self-hosted
       steps:
+        - name: Set the token based on actor
+          id: set-token
+          run: |
+            echo "Actor is: ${{ github.actor }}"
+            
+            case "${{ github.actor }}" in
+              "dkubiak")
+                echo "Using PAT for dkubiak"
+                echo "PAT=${{ secrets.PAT_DKUBIAK }}" >> $GITHUB_ENV
+                ;;
+            esac
         - name: Check out the code
           uses: actions/checkout@v4
           with:
@@ -53,7 +64,7 @@ jobs:
             distribution: 'temurin'
             server-id: github
             server-username: ${{ github.actor }}
-            server-password: ${{ secrets.GITHUB_TOKEN }}
+            server-password: $PAT
 
         - name: Release prepare with Maven
           run: |

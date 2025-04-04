@@ -1,0 +1,12 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.bpm.model.eximeebpms-cmmn-model">
+  <resources>
+    <resource-root path="eximeebpms-cmmn-model-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+
+    <module name="javax.api" />
+    <module name="org.eximeebpms.bpm.model.eximeebpms-xml-model" />
+
+  </dependencies>
+</module>

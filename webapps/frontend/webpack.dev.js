@@ -31,18 +31,18 @@ module.exports = (_env, argv = {}) => {
 
   const addEngines = engines => {
     return engines.reduce((acc, engine) => {
-      acc[`/camunda/app/*/${engine}/`] = {
+      acc[`/eximeebpms/app/*/${engine}/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
-          return path.replace(`/${engine}`, '').replace('/camunda', '');
+          return path.replace(`/${engine}`, '').replace('/eximeebpms', '');
         }
       };
-      acc[`/camunda/app/*/${engine}/setup/`] = {
+      acc[`/eximeebpms/app/*/${engine}/setup/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
           return path
             .replace(`/${engine}`, '')
-            .replace('/camunda', '')
+            .replace('/eximeebpms', '')
             .replace('/setup', '');
         }
       };
@@ -67,33 +67,33 @@ module.exports = (_env, argv = {}) => {
       https: false,
       proxy: {
         '/api': {
-          target: 'http://localhost:8080/camunda/api',
+          target: 'http://localhost:8080/eximeebpms/api',
           logLevel: 'debug',
           pathRewrite: {
             '^/api': ''
           }
         },
-        '/camunda-welcome': {
+        '/eximeebpms-welcome': {
           target: 'http://localhost:8080/',
           logLevel: 'debug'
         },
         ...addEngines(['default', 'engine2', 'engine3']),
-        '/camunda/*': {
+        '/eximeebpms/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/camunda', '');
+            return path.replace('/eximeebpms', '');
           }
         },
-        '/camunda/api/*': {
+        '/eximeebpms/api/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/camunda', '');
+            return path.replace('/eximeebpms', '');
           }
         }
       },
-      open: ['/camunda/app/cockpit/default/']
+      open: ['/eximeebpms/app/cockpit/default/']
     }
   };
 
@@ -140,9 +140,9 @@ module.exports = (_env, argv = {}) => {
       const options = plugin.options;
       plugin.options = {
         ...options,
-        publicPath: '/camunda',
-        appRoot: '/camunda',
-        appBase: `/camunda/app/${options['appName']}/{ENGINE}/`,
+        publicPath: '/eximeebpms',
+        appRoot: '/eximeebpms',
+        appBase: `/eximeebpms/app/${options['appName']}/{ENGINE}/`,
         pluginDeps: getPluginDeps(options['appName']),
         pluginPackages: getPluginPackages(options['appName'])
       };

@@ -7,7 +7,7 @@
 # Best Practices for Writing Test Cases
 
 * write JUnit4-style tests, not JUnit3
-* Project `camunda-engine`: If you need a process engine object, use the JUnit rule `org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule`. It ensures that the process engine object is reused across test cases and that certain integrity checks are performed after every test. For example:
+* Project `eximeebpms-engine`: If you need a process engine object, use the JUnit rule `org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule`. It ensures that the process engine object is reused across test cases and that certain integrity checks are performed after every test. For example:
   ```
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
 
@@ -18,12 +18,12 @@
     ...
   }
   ```
-* Project `camunda-engine`: As an alternative to the above, you can extend extend the `org.camunda.bpm.engine.test.util.PluggableProcessEngineTest` class.
+* Project `eximeebpms-engine`: As an alternative to the above, you can extend extend the `org.eximeebpms.bpm.engine.test.util.PluggableProcessEngineTest` class.
   The class already provides an instance of the `ProvidedProcessEngineRule`, as well as the `ProcessEngineTestRule` that
   provides some additional custom assertions and helper methods.
   * However, if you need to make modifications to the `ProcessEngineConfiguration`, then please use the `ProcessEngineBootstrapRule`
     as described below. 
-* Project `camunda-engine`: If you need a process engine with custom configuration, use the JUnit rule `org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule` and chain it with `org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule` like so:
+* Project `eximeebpms-engine`: If you need a process engine with custom configuration, use the JUnit rule `org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule` and chain it with `org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule` like so:
   ```
   protected ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(configuration -> {
       // apply configuration options here
@@ -135,7 +135,6 @@ Docker image can be used this way, please perform the following steps:
 At the moment, Testcontainers can be used with the Camunda-supported versions of the following databases. Please make 
 sure that the database image is configured according to [this guide](https://docs.camunda.org/manual/latest/user-guide/process-engine/database/database-configuration/#isolation-level-configuration):
 * PostgreSQL
-* MariaDB
 * MySQL
 * MS-SQL 2017/2019 ([MSSQL-specific configuraion guide](https://docs.camunda.org/manual/latest/user-guide/process-engine/database/mssql-configuration/))
 

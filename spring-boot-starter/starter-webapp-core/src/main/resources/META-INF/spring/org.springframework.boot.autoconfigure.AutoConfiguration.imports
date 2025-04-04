@@ -1,1 +1,1 @@
-org.camunda.bpm.spring.boot.starter.webapp.CamundaBpmWebappAutoConfiguration
+org.eximeebpms.bpm.spring.boot.starter.webapp.CamundaBpmWebappAutoConfiguration

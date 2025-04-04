@@ -20,19 +20,19 @@ The **Camunda External Task Client (Java)** allows to set up remote Service Task
 
 
 ## Configuration options
-* The client can be configured with the fluent api of the [ExternalTaskClientBuilder](client/src/main/java/org/camunda/bpm/client/ExternalTaskClientBuilder.java).
-* The topic subscription can be configured with the fluent api of the [TopicSubscriptionBuilder](client/src/main/java/org/camunda/bpm/client/topic/TopicSubscriptionBuilder.java).
+* The client can be configured with the fluent api of the [ExternalTaskClientBuilder](client/src/main/java/org/eximeebpms/bpm/client/ExternalTaskClientBuilder.java).
+* The topic subscription can be configured with the fluent api of the [TopicSubscriptionBuilder](client/src/main/java/org/eximeebpms/bpm/client/topic/TopicSubscriptionBuilder.java).
 
 ## Prerequisites
-* Java (supported version by the used Camunda Platform 7)
-* Camunda Platform 7
+* Java (supported version by the used EximeeBPMS)
+* EximeeBPMS
 
 ## Maven coordinates
 The following Maven coordinate needs to be added to the projects `pom.xml`:
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-external-task-client</artifactId>
+  <groupId>org.eximeebpms.bpm</groupId>
+  <artifactId>eximeebpms-external-task-client</artifactId>
   <version>${version}</version>
 </dependency>
 ```

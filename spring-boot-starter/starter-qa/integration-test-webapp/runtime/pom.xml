@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>org.eximeebpms.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>qa-webapp-ce-runtime</artifactId>
-  <name>Camunda Platform - Spring Boot Starter - QA - Webapps Runtime</name>
+  <name>EximeeBPMS - Spring Boot Starter - QA - Webapps Runtime</name>
 
   <properties>
     <version.jersey-json>1.15</version.jersey-json>
@@ -18,10 +18,10 @@
     <version.jaxb-api>2.3.1</version.jaxb-api>
     <version.jersey-apache-client>1.15</version.jersey-apache-client>
     <version.junit>4.12</version.junit>
-    <version.chromedriver>112.0.5615.49</version.chromedriver>
+    <version.chromedriver>135.0.7049.52</version.chromedriver>
 
     <http.port>58080</http.port>
-    <http.ctx-path.webapp>camunda/</http.ctx-path.webapp>
+    <http.ctx-path.webapp>eximeebpms/</http.ctx-path.webapp>
     <http.ctx-path.rest>engine-rest/</http.ctx-path.rest>
   </properties>
 
@@ -33,27 +33,27 @@
 
         <!-- Web Applications -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
-          <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+          <groupId>org.eximeebpms.bpm.springboot</groupId>
+          <artifactId>eximeebpms-bpm-spring-boot-starter-webapp</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <!-- REST API -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
-          <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+          <groupId>org.eximeebpms.bpm.springboot</groupId>
+          <artifactId>eximeebpms-bpm-spring-boot-starter-rest</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.qa</groupId>
-          <artifactId>camunda-qa-integration-tests-webapps</artifactId>
+          <groupId>org.eximeebpms.bpm.qa</groupId>
+          <artifactId>eximeebpms-qa-integration-tests-webapps</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.springboot.project</groupId>
+          <groupId>org.eximeebpms.bpm.springboot.project</groupId>
           <artifactId>qa-webapp-invoice-example</artifactId>
           <version>${project.version}</version>
         </dependency>
@@ -127,7 +127,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>${version.spring-boot}</version>
             <configuration>
-              <mainClass>org.camunda.bpm.qa.Application</mainClass>
+              <mainClass>org.eximeebpms.bpm.qa.Application</mainClass>
             </configuration>
             <executions>
               <execution>
@@ -150,7 +150,7 @@
             <version>3.0.0-M3</version>
             <configuration>
               <dependenciesToScan>
-                <dependency>org.camunda.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>org.eximeebpms.bpm.qa:eximeebpms-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <skipTests>false</skipTests>
             </configuration>
@@ -191,10 +191,30 @@
                   <goal>wget</goal>
                 </goals>
                 <configuration>
-                  <url>https://chromedriver.storage.googleapis.com/${version.chromedriver}/chromedriver_${os.type}.zip</url>
+                  <url>https://storage.googleapis.com/chrome-for-testing-public/${version.chromedriver}/${os.type}/chromedriver-${os.type}.zip</url>
                   <outputFileName>chromedriver.zip</outputFileName>
                   <unpack>true</unpack>
                   <outputDirectory>${project.build.directory}/chromedriver</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <move todir="${project.build.directory}/chromedriver">
+                      <fileset dir="${project.build.directory}/chromedriver/chromedriver-${os.type}"/>
+                    </move>
+                    <delete dir="${project.build.directory}/chromedriver/chromedriver-${os.type}"/>
+                  </target>
                 </configuration>
               </execution>
             </executions>

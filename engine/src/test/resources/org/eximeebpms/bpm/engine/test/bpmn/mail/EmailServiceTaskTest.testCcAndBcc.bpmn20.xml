@@ -1,0 +1,36 @@
+<definitions 
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  targetNamespace="Examples">
+
+  <process id="ccAndBcc"  isExecutable="true">
+
+    <startEvent id="theStart" />
+    <sequenceFlow sourceRef="theStart" targetRef="sendMail" />
+    
+    <serviceTask id="sendMail" eximeebpms:type="mail">
+      <extensionElements>
+        <eximeebpms:field name="to">
+          <eximeebpms:string>kermit@eximeebpms.org</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="subject">
+          <eximeebpms:string>Hello world</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="text">
+          <eximeebpms:string>This is the content</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="cc">
+          <eximeebpms:string>fozzie@eximeebpms.org</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="bcc">
+          <eximeebpms:string>mispiggy@eximeebpms.org</eximeebpms:string>
+        </eximeebpms:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow sourceRef="sendMail" targetRef="theEnd" />
+    
+    <endEvent id="theEnd" />
+
+  </process>
+
+</definitions>

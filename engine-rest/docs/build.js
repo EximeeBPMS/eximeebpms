@@ -30,7 +30,7 @@ async function generateDocs() {
 
     const state = await store.toJS()
 
-    const camundaVersion = require('./package.json').version;
+    const eximeebpmsVersion = require('./package.json').version;
 
     const page = `<!DOCTYPE html>
 <html>
@@ -44,7 +44,7 @@ async function generateDocs() {
     <!-- End Google Tag Manager -->
 
     <meta charset="utf8"/>
-    <title>Camunda Automation Platform ${camundaVersion} REST API</title>
+    <title>Camunda Automation Platform ${eximeebpmsVersion} REST API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; script-src 'unsafe-inline' blob:; style-src 'unsafe-inline' 'self'; img-src 'self' data:;">

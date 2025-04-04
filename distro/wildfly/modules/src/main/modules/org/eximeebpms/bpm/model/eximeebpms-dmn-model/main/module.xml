@@ -1,0 +1,13 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.bpm.model.eximeebpms-dmn-model">
+  <resources>
+    <resource-root path="eximeebpms-dmn-model-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+
+    <module name="java.base" />
+    <module name="java.xml" />
+    <module name="org.eximeebpms.bpm.model.eximeebpms-xml-model" />
+
+  </dependencies>
+</module>

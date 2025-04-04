@@ -11,7 +11,7 @@ pipeline {
   environment {
     LOGGER_LOG_LEVEL = 'DEBUG'
     MAVEN_VERSION = 'maven-3.8-latest'
-    DEF_JDK_VERSION = 'jdk-17-latest'
+    DEF_JDK_VERSION = 'jdk-11-latest'
   }
   parameters {
     booleanParam name: 'TRIGGERED_BY_UPSTREAM', defaultValue: false, description: 'Is the current build triggered in the scope of an upstream pipeline (pull request or default branch)'
@@ -40,10 +40,10 @@ pipeline {
           runSteps: {
             cambpmCopyArtifacts(params.UPSTREAM_PROJECT_NAME, params.UPSTREAM_BUILD_NUMBER)
             cambpmStash("platform-stash-runtime",
-                        ".m2/org/camunda/**/*-SNAPSHOT/**",
+                        ".m2/org/eximeebpms/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                        ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                        ".m2/org/eximeebpms/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/eximeebpms/bpm/**/*qa*/**/*-SNAPSHOT/**",
                         "**/*.zip,**/*.tar.gz")
           }
         ])

@@ -2,24 +2,24 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.spin</groupId>
-    <artifactId>camunda-spin-root</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.spin</groupId>
+    <artifactId>eximeebpms-spin-root</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-spin-core</artifactId>
-  <name>camunda Spin - core</name>
+  <artifactId>eximeebpms-spin-core</artifactId>
+  <name>EximeeBPMS Spin - core</name>
 
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-logging</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-utils</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-utils</artifactId>
     </dependency>
 
     <dependency>
@@ -191,7 +191,7 @@
               <comparisonVersion>${spin.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/spin/impl/**</exclude>
+                <exclude>org/eximeebpms/spin/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>camunda-qa-tomcat9-runtime</artifactId>
+  <artifactId>eximeebpms-qa-tomcat9-runtime</artifactId>
   <packaging>pom</packaging>
 
-  <name>Camunda Platform - QA Tomcat 9 Test Runtime</name>
+  <name>EximeeBPMS - QA Tomcat 9 Test Runtime</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.qa</groupId>
+    <artifactId>eximeebpms-qa</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
@@ -36,8 +36,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
-      <artifactId>camunda-qa-ensure-clean-db</artifactId>
+      <groupId>org.eximeebpms.bpm.qa</groupId>
+      <artifactId>eximeebpms-qa-ensure-clean-db</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
@@ -112,8 +112,8 @@
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine</artifactId>
           <exclusions>
             <exclusion>
               <groupId>org.springframework</groupId>
@@ -127,53 +127,53 @@
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.identity</groupId>
-          <artifactId>camunda-identity-ldap</artifactId>
+          <groupId>org.eximeebpms.bpm.identity</groupId>
+          <artifactId>eximeebpms-identity-ldap</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-core</artifactId>
+          <groupId>org.eximeebpms.spin</groupId>
+          <artifactId>eximeebpms-spin-core</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-spin</artifactId>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine-plugin-spin</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-all</artifactId>
+          <groupId>org.eximeebpms.spin</groupId>
+          <artifactId>eximeebpms-spin-dataformat-all</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.connect</groupId>
-          <artifactId>camunda-connect-core</artifactId>
+          <groupId>org.eximeebpms.connect</groupId>
+          <artifactId>eximeebpms-connect-core</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-connect</artifactId>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine-plugin-connect</artifactId>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.connect</groupId>
-          <artifactId>camunda-connect-connectors-all</artifactId>
+          <groupId>org.eximeebpms.connect</groupId>
+          <artifactId>eximeebpms-connect-connectors-all</artifactId>
           <exclusions>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
-              <artifactId>camunda-connect-http-client</artifactId>
+              <groupId>org.eximeebpms.connect</groupId>
+              <artifactId>eximeebpms-connect-http-client</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
-              <artifactId>camunda-connect-soap-http-client</artifactId>
+              <groupId>org.eximeebpms.connect</groupId>
+              <artifactId>eximeebpms-connect-soap-http-client</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.template-engines</groupId>
-          <artifactId>camunda-template-engines-freemarker</artifactId>
+          <groupId>org.eximeebpms.template-engines</groupId>
+          <artifactId>eximeebpms-template-engines-freemarker</artifactId>
         </dependency>
 
         <dependency>
@@ -194,7 +194,7 @@
         <!-- The order of declaration of the plugin executions is important to preserve the correct build sequence of
              a) packing b) unpacking the server c) copy libs so that the properties are resolved correctly. -->
         <plugins>
-          <!-- Produces the camunda-qa-tomcat9.tar.gz -->
+          <!-- Produces the eximeebpms-qa-tomcat9.tar.gz -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -214,7 +214,7 @@
                   <outputDirectory>target/</outputDirectory>
                   <workDirectory>target/assembly/work</workDirectory>
                   <tarLongFileMode>gnu</tarLongFileMode>
-                  <finalName>camunda-qa-tomcat9</finalName>
+                  <finalName>eximeebpms-qa-tomcat9</finalName>
                 </configuration>
               </execution>
             </executions>
@@ -231,7 +231,7 @@
                 <phase>generate-resources</phase>
                 <configuration>
                   <target>
-                    <untar src="${project.build.directory}/camunda-qa-tomcat9.tar.gz" dest="${project.build.directory}/" compression="gzip" />
+                    <untar src="${project.build.directory}/eximeebpms-qa-tomcat9.tar.gz" dest="${project.build.directory}/" compression="gzip" />
                   </target>
                 </configuration>
                 <goals>

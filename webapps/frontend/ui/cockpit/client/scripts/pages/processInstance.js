@@ -19,11 +19,11 @@
 
 var template = require('./process-instance.html?raw');
 
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('eximeebpms-commons-ui/vendor/angular');
 var commonModule = require('../../../../common/scripts/module');
 
 var routeUtil = require('../../../../common/scripts/util/routeUtil');
-var camCommons = require('camunda-commons-ui/lib');
+var camCommons = require('eximeebpms-commons-ui/lib');
 
 var ngModule = angular.module('cam.cockpit.pages.processInstance', [
   camCommons.name,

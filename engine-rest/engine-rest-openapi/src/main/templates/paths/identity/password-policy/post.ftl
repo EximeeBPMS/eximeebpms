@@ -23,7 +23,7 @@
                          "id": "jonny1",
                          "firstName": "John",
                          "lastName": "Doe",
-                         "email": "jonny@camunda.org"
+                         "email": "jonny@eximeebpms.org"
                        }
                      }
                    }']

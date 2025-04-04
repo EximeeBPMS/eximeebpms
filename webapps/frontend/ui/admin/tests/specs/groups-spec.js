@@ -154,7 +154,7 @@ describe('Admin Groups Spec', function() {
         groupsPage.editGroup.pageHeader(),
         'camunda BPM Administrators'
       );
-      groupsPage.editGroup.isActive({group: 'camunda-admin'});
+      groupsPage.editGroup.isActive({group: 'eximeebpms-admin'});
       expect(
         groupsPage.editGroup.updateGroupButton().isEnabled()
       ).to.eventually.eql(false);
@@ -198,7 +198,7 @@ describe('Admin Groups Spec', function() {
       groupsPage.editGroup.selectUserNavbarItem('Tenants');
 
       // then
-      groupsPage.editGroupTenants.isActive({group: 'camunda-admin'});
+      groupsPage.editGroupTenants.isActive({group: 'eximeebpms-admin'});
       expect(groupsPage.editGroupTenants.subHeader()).to.eventually.eql(
         "camunda BPM Administrators's" + ' ' + 'Tenants'
       );
@@ -242,7 +242,7 @@ describe('Admin Groups Spec', function() {
       groupsPage.editGroup.selectUserNavbarItem('Tenants');
 
       // then
-      groupsPage.editGroupTenants.isActive({group: 'camunda-admin'});
+      groupsPage.editGroupTenants.isActive({group: 'eximeebpms-admin'});
       expect(
         groupsPage.editGroupTenants.tenantList().count()
       ).to.eventually.eql(1);

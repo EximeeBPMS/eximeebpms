@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+	xmlns:fox="http://eximeebpms.org/fox"
+	targetNamespace="Examples">
+
+	<process id="failedSendTask" isExecutable="true">
+
+		<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingSendTask" />
+
+		<sendTask id="failingSendTask" eximeebpms:type="mail" eximeebpms:async="true">
+			<extensionElements>
+	       		<fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
+	       		<eximeebpms:field name="to">
+					<eximeebpms:string>Hello Kermit!</eximeebpms:string>
+				</eximeebpms:field>
+				<eximeebpms:field name="subject">
+					<eximeebpms:string>Hello Kermit!</eximeebpms:string>
+				</eximeebpms:field>
+				<eximeebpms:field name="text">
+					<eximeebpms:string>This a text only e-mail.</eximeebpms:string>
+				</eximeebpms:field>
+			</extensionElements>
+		</sendTask>
+		
+		<sequenceFlow id="flow2" sourceRef="failingSendTask" targetRef="theEnd" />
+		
+		<endEvent id="theEnd" />
+
+	</process>
+	
+</definitions>

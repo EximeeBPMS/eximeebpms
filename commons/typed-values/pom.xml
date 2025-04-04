@@ -2,22 +2,22 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.commons</groupId>
-  <artifactId>camunda-commons-typed-values</artifactId>
-  <name>camunda Commons - Typed Values</name>
+  <groupId>org.eximeebpms.commons</groupId>
+  <artifactId>eximeebpms-commons-typed-values</artifactId>
+  <name>EximeeBPMS Commons - Typed Values</name>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>7.23.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -25,16 +25,16 @@
     </dependencies>
   </dependencyManagement>
   <properties>
-    <camunda.artifact>org.camunda.bpm.engine.variable</camunda.artifact>
-    <camunda.osgi.import.additional>
+    <eximeebpms.artifact>org.eximeebpms.bpm.engine.variable</eximeebpms.artifact>
+    <eximeebpms.osgi.import.additional>
       !javax.activation
-    </camunda.osgi.import.additional>
+    </eximeebpms.osgi.import.additional>
   </properties>
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-utils</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-utils</artifactId>
     </dependency>
 
     <dependency>
@@ -57,8 +57,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -71,10 +71,10 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
         <configuration>
-          <comparisonVersion>${camunda.version.old}</comparisonVersion>
+          <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
           <logResults>true</logResults>
           <excludes>
-            <exclude>org/camunda/bpm/engine/impl/**</exclude>
+            <exclude>org/eximeebpms/bpm/engine/impl/**</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -91,11 +91,11 @@
               <ignored>
                 <difference>
                   <differenceType>8001</differenceType>
-                  <className>camundajar/com/sun/activation/**/*</className>
+                  <className>eximeebpmsjar/com/sun/activation/**/*</className>
                 </difference>
                 <difference>
                   <differenceType>8001</differenceType>
-                  <className>camundajar/javax/activation/**/*</className>
+                  <className>eximeebpmsjar/javax/activation/**/*</className>
                 </difference>
               </ignored>
             </configuration>
@@ -133,11 +133,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.sun.activation</pattern>
-                  <shadedPattern>camundajar.com.sun.activation</shadedPattern>
+                  <shadedPattern>eximeebpmsjar.com.sun.activation</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>javax.activation</pattern>
-                  <shadedPattern>camundajar.javax.activation</shadedPattern>
+                  <shadedPattern>eximeebpmsjar.javax.activation</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
@@ -167,7 +167,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>org.eximeebpms.bpm:eximeebpms-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>

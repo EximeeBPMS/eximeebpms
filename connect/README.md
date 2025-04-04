@@ -1,8 +1,8 @@
-camunda-connect
+eximeebpms-connect
 ===============
 
 <p>
-  <a href="http://camunda.com/">Home</a> |
+  <a href="http://eximeebpms.com/">Home</a> |
   <a href="https://docs.camunda.org/manual/latest/reference/connect/">Documentation</a> |
   <a href="https://forum.camunda.org/">Forum</a> |
   <a href="https://jira.camunda.com/browse/CAM">Issues</a> |

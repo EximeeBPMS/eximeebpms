@@ -19,10 +19,10 @@
 
 var template = require('./process-definition.html?raw');
 
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('eximeebpms-commons-ui/vendor/angular');
 var routeUtil = require('../../../../common/scripts/util/routeUtil');
 var searchWidgetUtils = require('../../../../common/scripts/util/search-widget-utils');
-var camCommons = require('camunda-commons-ui/lib');
+var camCommons = require('eximeebpms-commons-ui/lib');
 
 var ngModule = angular.module('cam.cockpit.pages.processDefinition', [
   'dataDepend',

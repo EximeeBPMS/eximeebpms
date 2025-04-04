@@ -1,0 +1,15 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.connect.eximeebpms-connect-http-client">
+  <resources>
+    <resource-root path="eximeebpms-connect-http-client-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+    <module name="org.eximeebpms.commons.eximeebpms-commons-logging" />
+    <module name="org.eximeebpms.commons.eximeebpms-commons-utils" />
+
+    <module name="org.eximeebpms.connect.eximeebpms-connect-core" />
+
+    <module name="org.apache.httpcomponents.httpclient" />
+  </dependencies>
+</module>

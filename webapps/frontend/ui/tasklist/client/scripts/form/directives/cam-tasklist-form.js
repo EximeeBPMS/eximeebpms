@@ -23,7 +23,7 @@ var EMBEDDED_KEY = 'embedded:',
   APP_KEY = 'app:',
   ENGINE_KEY = 'engine:',
   DEPLOYMENT_KEY = 'deployment:',
-  CAMUNDA_FORMS_KEY = 'camunda-forms:';
+  CAMUNDA_FORMS_KEY = 'eximeebpms-forms:';
 
 function compact(arr) {
   var a = [];

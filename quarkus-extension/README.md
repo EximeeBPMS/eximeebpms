@@ -14,8 +14,8 @@ We also provide some useful examples at our
 ```xml
 <dependency>
   <dependency>
-    <groupId>org.camunda.bpm.quarkus</groupId>
-    <artifactId>camunda-bpm-quarkus-engine</artifactId>
+    <groupId>org.eximeebpms.bpm.quarkus</groupId>
+    <artifactId>eximeebpms-bpm-quarkus-engine</artifactId>
     <version>${version.camunda}</version><!-- place Camunda version here -->
   </dependency>
 </dependency>
@@ -43,7 +43,7 @@ quarkus.camunda.job-executor.generic-config.backoff-time-in-millis=5
 quarkus.datasource.my-datasource.db-kind=h2
 quarkus.datasource.my-datasource.username=camunda
 quarkus.datasource.my-datasource.password=camunda
-quarkus.datasource.my-datasource.jdbc.url=jdbc:h2:mem:camunda;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
+quarkus.datasource.my-datasource.jdbc.url=jdbc:h2:mem:eximeebpms;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
 quarkus.camunda.datasource=my-datasource
 ```
 
@@ -68,14 +68,14 @@ quarkus.camunda.datasource=my-datasource
 Caused by: java.lang.VerifyError: Bad type on operand stack
 Exception Details:
 Location:
-org/camunda/bpm/engine/impl/el/JuelExpressionManager.<init>(Ljava/util/Map;)V @28: putfield
+org/eximeebpms/bpm/engine/impl/el/JuelExpressionManager.<init>(Ljava/util/Map;)V @28: putfield
 Reason:
-Type 'org/camunda/bpm/impl/juel/ExpressionFactoryImpl' (current frame, stack[1]) is not assignable to 'org/camunda/bpm/impl/juel/jakarta/el/ExpressionFactory'
+Type 'org/eximeebpms/bpm/impl/juel/ExpressionFactoryImpl' (current frame, stack[1]) is not assignable to 'org/eximeebpms/bpm/impl/juel/jakarta/el/ExpressionFactory'
 Current Frame:
 bci: @28
 flags: { }
-locals: { 'org/camunda/bpm/engine/impl/el/JuelExpressionManager', 'java/util/Map' }
-stack: { 'org/camunda/bpm/engine/impl/el/JuelExpressionManager', 'org/camunda/bpm/impl/juel/ExpressionFactoryImpl' }
+locals: { 'org/eximeebpms/bpm/engine/impl/el/JuelExpressionManager', 'java/util/Map' }
+stack: { 'org/eximeebpms/bpm/engine/impl/el/JuelExpressionManager', 'org/eximeebpms/bpm/impl/juel/ExpressionFactoryImpl' }
 Bytecode:
 0000000: 2ab7 0007 2abb 000c 59b7 000e b500 0f2a
 0000010: 03b5 0013 2abb 0017 59b7 0019 b500 1a2a

@@ -14,7 +14,7 @@
    <dependencySet>
       <outputDirectory>/</outputDirectory>
       <includes>
-        <include>org.camunda.bpm:license-book:zip</include>
+        <include>org.eximeebpms.bpm:license-book:zip</include>
       </includes>
       <unpack>true</unpack>
     </dependencySet>
@@ -38,11 +38,11 @@
     <dependencySet>
       <outputDirectory>lib</outputDirectory>
       <includes>
-        <include>org.camunda.bpm.javaee:camunda-ejb-client-jakarta:jar:${project.version}</include>
-        <include>org.camunda.bpm:*</include>
-        <include>org.camunda.bpm.identity:*</include>
-        <include>org.camunda.bpm.model:*</include>
-        <include>org.camunda.bpm.juel:*</include>
+        <include>org.eximeebpms.bpm.javaee:eximeebpms-ejb-client-jakarta:jar:${project.version}</include>
+        <include>org.eximeebpms.bpm:*</include>
+        <include>org.eximeebpms.bpm.identity:*</include>
+        <include>org.eximeebpms.bpm.model:*</include>
+        <include>org.eximeebpms.bpm.juel:*</include>
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
         <include>joda-time:joda-time:jar:*</include>
@@ -79,12 +79,12 @@
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.bat</source>
+      <source>src/start-eximeebpms.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.sh</source>
+      <source>src/start-eximeebpms.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>

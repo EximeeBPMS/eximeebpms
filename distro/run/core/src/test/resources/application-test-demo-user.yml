@@ -1,4 +1,4 @@
-camunda.bpm:
+eximeebpms.bpm:
   admin-user:
     id: demo
     password: demo

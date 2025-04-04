@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  targetNamespace="http://eximeebpms.org/test">
+
+  <!-- NOTE: this document is not valid and is only used to test all camunda extensions -->
+
+  <process id="process"
+      eximeebpms:candidateStarterGroups="group1, ${group2(a, b)}, group3"
+      eximeebpms:candidateStarterUsers="user1, ${user2(a, b)}, user3"
+      eximeebpms:jobPriority="15"
+      eximeebpms:taskPriority="13"
+      eximeebpms:historyTimeToLive="5"
+      eximeebpms:isStartableInTasklist="false"
+      eximeebpms:versionTag="v1.0.0">
+    <extensionElements>
+      <eximeebpms:executionListener event="start" class="org.eximeebpms.test.Test"/>
+    </extensionElements>
+
+    <startEvent id="startEvent"
+        eximeebpms:initiator="test"
+        eximeebpms:formHandlerClass="org.eximeebpms.test.Test"
+        eximeebpms:formKey="test"
+        eximeebpms:asyncBefore="true"
+        eximeebpms:asyncAfter="true"
+        eximeebpms:jobPriority="${test}">
+      <extensionElements>
+        <eximeebpms:executionListener event="start" expression="${test}"/>
+        <eximeebpms:potentialStarter>
+          <resourceAssignmentExpression>
+            <formalExpression>group1, ${group2(a, b)}, group3</formalExpression>
+          </resourceAssignmentExpression>
+        </eximeebpms:potentialStarter>
+        <eximeebpms:formProperty id="test" name="test" type="test" variable="test" expression="${test}" datePattern="test" default="test"/>
+      </extensionElements>
+      <errorEventDefinition eximeebpms:errorCodeVariable="errorVariable" eximeebpms:errorMessageVariable="errorMessageVariable"/>
+    </startEvent>
+
+    <sequenceFlow id="sequenceFlow" sourceRef="startEvent" targetRef="userTask">
+      <extensionElements>
+        <eximeebpms:executionListener>
+          <eximeebpms:script scriptFormat="groovy">println 'Hello World'</eximeebpms:script>
+        </eximeebpms:executionListener>
+      </extensionElements>
+    </sequenceFlow>
+
+    <userTask id="userTask"
+        eximeebpms:assignee="test"
+        eximeebpms:async="true"
+        eximeebpms:asyncBefore="true"
+        eximeebpms:asyncAfter="true"
+        eximeebpms:candidateGroups="group1, ${group2(a, b)}, group3"
+        eximeebpms:candidateUsers="user1, ${user2(a, b)}, user3"
+        eximeebpms:dueDate="2014-02-27"
+        eximeebpms:exclusive="false"
+        eximeebpms:formHandlerClass="org.eximeebpms.test.Test"
+        eximeebpms:formKey="test"
+        eximeebpms:priority="12"
+        eximeebpms:jobPriority="${test}">
+      <extensionElements>
+        <eximeebpms:taskListener event="create" class="org.eximeebpms.test.Test" expression="${test}" delegateExpression="${org.eximeebpms.test.Test}">
+          <eximeebpms:field name="test">
+            <eximeebpms:string>test</eximeebpms:string>
+          </eximeebpms:field>
+          <timerEventDefinition>
+            <timeDuration xsi:type="tFormalExpression">PT1H</timeDuration>
+          </timerEventDefinition>
+        </eximeebpms:taskListener>
+        <eximeebpms:taskListener>
+          <eximeebpms:script scriptFormat="groovy" resource="test.groovy" />
+        </eximeebpms:taskListener>
+        <eximeebpms:formData>
+          <eximeebpms:formField id="test" label="test" type="test" datePattern="test" defaultValue="test">
+            <eximeebpms:properties>
+              <eximeebpms:property id="test" value="test"/>
+            </eximeebpms:properties>
+            <eximeebpms:validation>
+              <eximeebpms:constraint name="test" config="test"/>
+            </eximeebpms:validation>
+            <eximeebpms:value id="test" name="test"/>
+          </eximeebpms:formField>
+        </eximeebpms:formData>
+      </extensionElements>
+    </userTask>
+
+    <serviceTask id="serviceTask"
+        eximeebpms:expression="${test}"
+        eximeebpms:class="org.eximeebpms.test.Test"
+        eximeebpms:delegateExpression="${org.eximeebpms.test.Test}"
+        eximeebpms:resultVariable="test"
+        eximeebpms:type="mail"
+        eximeebpms:topic="test"
+        eximeebpms:taskPriority="${test}">
+      <extensionElements>
+        <eximeebpms:executionListener event="start" delegateExpression="${org.eximeebpms.test.Test}"/>
+        <eximeebpms:connector>
+          <eximeebpms:connectorId>soap-http-connector</eximeebpms:connectorId>
+          <eximeebpms:inputOutput>
+            <eximeebpms:inputParameter name="endpointUrl">http://example.com/webservice</eximeebpms:inputParameter>
+            <eximeebpms:outputParameter name="result">output</eximeebpms:outputParameter>
+          </eximeebpms:inputOutput>
+        </eximeebpms:connector>
+        <eximeebpms:inputOutput>
+          <eximeebpms:inputParameter name="shouldBeNull"/>
+          <eximeebpms:inputParameter name="shouldBeConstant">foo</eximeebpms:inputParameter>
+          <eximeebpms:inputParameter name="shouldBeExpression">${1 + 1}</eximeebpms:inputParameter>
+          <eximeebpms:inputParameter name="shouldBeList">
+            <eximeebpms:list>
+              <eximeebpms:value>a</eximeebpms:value>
+              <eximeebpms:value>b</eximeebpms:value>
+              <eximeebpms:value>c</eximeebpms:value>
+            </eximeebpms:list>
+          </eximeebpms:inputParameter>
+          <eximeebpms:inputParameter name="shouldBeMap">
+            <eximeebpms:map>
+              <eximeebpms:entry key="foo">bar</eximeebpms:entry>
+              <eximeebpms:entry key="hello">world</eximeebpms:entry>
+            </eximeebpms:map>
+          </eximeebpms:inputParameter>
+          <eximeebpms:inputParameter name="shouldBeScript">
+            <eximeebpms:script scriptFormat="groovy">1 + 1</eximeebpms:script>
+          </eximeebpms:inputParameter>
+          <eximeebpms:outputParameter name="nested">
+            <eximeebpms:list>
+              <eximeebpms:value>
+                <eximeebpms:list>
+                  <eximeebpms:value>list</eximeebpms:value>
+                  <eximeebpms:value>list</eximeebpms:value>
+                </eximeebpms:list>
+              </eximeebpms:value>
+              <eximeebpms:value>
+                <eximeebpms:map>
+                  <eximeebpms:entry key="list">
+                    <eximeebpms:list>
+                      <eximeebpms:value>map</eximeebpms:value>
+                      <eximeebpms:value>map</eximeebpms:value>
+                      <eximeebpms:value>map</eximeebpms:value>
+                    </eximeebpms:list>
+                  </eximeebpms:entry>
+                  <eximeebpms:entry key="map">
+                    <eximeebpms:map>
+                      <eximeebpms:entry key="so">nested</eximeebpms:entry>
+                    </eximeebpms:map>
+                  </eximeebpms:entry>
+                </eximeebpms:map>
+              </eximeebpms:value>
+            </eximeebpms:list>
+          </eximeebpms:outputParameter>
+        </eximeebpms:inputOutput>
+      </extensionElements>
+    </serviceTask>
+
+    <sendTask id="sendTask">
+      <extensionElements>
+        <eximeebpms:failedJobRetryTimeCycle>test</eximeebpms:failedJobRetryTimeCycle>
+        <eximeebpms:field name="test" stringValue="test" expression="${test}">
+          <eximeebpms:expression>${test}</eximeebpms:expression>
+          <eximeebpms:string>test</eximeebpms:string>
+        </eximeebpms:field>
+      </extensionElements>
+    </sendTask>
+
+    <scriptTask id="scriptTask" scriptFormat="groovy" eximeebpms:resource="test.groovy" />
+
+    <callActivity id="callActivity"
+                  eximeebpms:calledElementBinding="test"
+                  eximeebpms:calledElementVersion="test"
+                  eximeebpms:calledElementVersionTag="test"
+                  eximeebpms:calledElementTenantId="test"
+                  eximeebpms:caseRef="test"
+                  eximeebpms:caseBinding="test"
+                  eximeebpms:caseVersion="test"
+                  eximeebpms:caseTenantId="test"
+                  eximeebpms:exclusive="false"
+                  eximeebpms:variableMappingClass="org.eximeebpms.test.Test"
+                  eximeebpms:variableMappingDelegateExpression="${org.eximeebpms.test.Test}">
+      <extensionElements>
+        <eximeebpms:in source="test" sourceExpression="${test}" variables="test" businessKey="${test}" target="test" local="true"/>
+        <eximeebpms:out source="test" sourceExpression="${test}" variables="test" target="test" local="true"/>
+      </extensionElements>
+    </callActivity>
+
+    <businessRuleTask id="businessRuleTask"
+                      eximeebpms:decisionRef="test"
+                      eximeebpms:decisionRefBinding="test"
+                      eximeebpms:decisionRefVersion="test"
+                      eximeebpms:decisionRefVersionTag="test"
+                      eximeebpms:decisionRefTenantId="test"
+                      eximeebpms:mapDecisionResult="test"
+                      eximeebpms:taskPriority="test"/>
+
+    <endEvent id="endEvent"
+              eximeebpms:asyncAfter="true"
+              eximeebpms:asyncBefore="true"
+              eximeebpms:jobPriority="${test}">
+      <extensionElements>
+        <eximeebpms:properties>
+          <eximeebpms:property name="name1" value="value1"/>
+          <eximeebpms:property name="name2" value="value2"/>
+        </eximeebpms:properties>
+      </extensionElements>
+      <messageEventDefinition
+        eximeebpms:class="org.eximeebpms.test.Test"
+        eximeebpms:expression="${test}"
+        eximeebpms:delegateExpression="${org.eximeebpms.test.Test}"
+        eximeebpms:resultVariable="test"
+        eximeebpms:topic="test"
+        eximeebpms:type="test" />
+    </endEvent>
+
+    <parallelGateway id="parallelGateway"
+                     eximeebpms:async="true"
+                     eximeebpms:asyncBefore="true"
+                     eximeebpms:asyncAfter="true"
+                     eximeebpms:jobPriority="${test}">
+
+    </parallelGateway>
+  </process>
+
+  <error id="error" eximeebpms:errorMessage="test" />
+</definitions>

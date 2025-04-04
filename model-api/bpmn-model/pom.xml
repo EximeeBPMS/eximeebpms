@@ -2,29 +2,29 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.model</groupId>
-    <artifactId>camunda-model-apis</artifactId>
+    <groupId>org.eximeebpms.bpm.model</groupId>
+    <artifactId>eximeebpms-model-apis</artifactId>
     <relativePath>../</relativePath>
-    <version>7.23.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-bpmn-model</artifactId>
+  <artifactId>eximeebpms-bpmn-model</artifactId>
   <packaging>jar</packaging>
 
-  <name>Camunda Platform - BPMN Model API</name>
+  <name>EximeeBPMS - BPMN Model API</name>
   <inceptionYear>2014</inceptionYear>
   <properties>
-    <camunda.artifact>org.camunda.bpm.model.bpmn</camunda.artifact>
-    <camunda.osgi.export>
-      !org.camunda.bpm.model.bpmn.schema,
-      ${camunda.osgi.export.pkg};${camunda.osgi.version};-noimport:=true
-    </camunda.osgi.export>
+    <eximeebpms.artifact>org.eximeebpms.bpm.model.bpmn</eximeebpms.artifact>
+    <eximeebpms.osgi.export>
+      !org.eximeebpms.bpm.model.bpmn.schema,
+      ${eximeebpms.osgi.export.pkg};${eximeebpms.osgi.version};-noimport:=true
+    </eximeebpms.osgi.export>
   </properties>
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-xml-model</artifactId>
+      <groupId>org.eximeebpms.bpm.model</groupId>
+      <artifactId>eximeebpms-xml-model</artifactId>
     </dependency>
 
     <dependency>
@@ -40,8 +40,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -73,7 +73,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>org.eximeebpms.bpm:eximeebpms-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -93,10 +93,10 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/model/bpmn/impl/**</exclude>
+                <exclude>org/eximeebpms/bpm/model/bpmn/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

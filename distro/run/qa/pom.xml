@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-root</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.run</groupId>
+    <artifactId>eximeebpms-bpm-run-root</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run-qa</artifactId>
-  <name>Camunda Platform - Run - QA</name>
+  <artifactId>eximeebpms-bpm-run-qa</artifactId>
+  <name>EximeeBPMS - Run - QA</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -21,7 +21,7 @@
     <version.jersey-apache-client>1.15</version.jersey-apache-client>
     <version.httpcomponents>4.5.10</version.httpcomponents>
     <version.junit>4.13.1</version.junit>
-    <version.chromedriver>112.0.5615.49</version.chromedriver>
+    <version.chromedriver>135.0.7049.52</version.chromedriver>
   </properties>
 
   <dependencyManagement>
@@ -86,7 +86,7 @@
       </modules>
     </profile>
     <profile>
-      <id>integration-test-camunda-run</id>
+      <id>integration-test-eximeebpms-run</id>
       <modules>
         <module>example-plugin</module>
         <module>integration-tests</module>

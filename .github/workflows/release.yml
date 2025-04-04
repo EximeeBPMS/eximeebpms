@@ -1,0 +1,208 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_branch:
+        description: 'The branch to release from'
+        required: true
+        default: 'main'
+      release_version:
+        description: 'Release version to set'
+        required: true
+        default: '0.9.0'
+      development_version:
+        description: 'The next development version to set (without -SNAPSHOT suffix)'
+        required: true
+        default: '0.10.0'
+      # dry_run:
+      #   description: 'Dry-Run: Skips remote operations when true'
+      #   type: boolean
+      #   required: true
+      #   default: true
+
+permissions:
+  contents: write
+  packages: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  discussions: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+        
+jobs:
+
+   release_build:
+      name: Release Build
+      runs-on: self-hosted
+      steps:
+        - name: Check out the code
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            ref: ${{github.event.inputs.release_branch}}
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+            overwrite-settings: false
+
+        - name: Maven Build
+          run: |
+            PROJECT_ROOT=$(pwd)
+            # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
+           
+            ./mvnw -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
+              install \
+              versions:dependency-updates-aggregate-report \
+              versions:plugin-updates-aggregate-report \
+              -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
+              -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
+             
+            .github/scripts/prepare-reports.sh
+           
+            # ./mvnw -Psonatype-oss-release -DskipTests=true -Dskip.frontend.build=true deploy
+            ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
+           
+            find target -name maven-metadata.* -delete
+
+        - name: Cache build artifacts
+          uses: actions/cache@v4
+          with:
+            path: |
+              distro/**/*.tar.gz
+              distro/**/*.zip
+              distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+              ./*/staging-deploy/**
+              **/target/reports/**
+              **/target/surefire-reports/*.xml
+              target/project-reports.zip
+            key: ${{ github.run_id }}-build-artifacts
+
+# #------------------------------------------------------------------------------------------------
+
+   release:
+     name: Release
+     needs:
+        - release_build
+     runs-on: self-hosted
+     steps:
+       - name: Check out the code
+         uses: actions/checkout@v4
+         with:
+           # fetch-depth: 1
+           fetch-depth: 0
+           ref: main
+           # ref: eximeebpms-${{github.event.inputs.release_branch}}
+
+#       - name: Setup Maven settings.xml
+#         run: |
+#            echo "<settings>
+#                   <servers>
+#                    <server>
+#                      <id>github</id>
+#                      <username>Konasiek</username>
+#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+#                    </server>
+#                    <server>
+#                      <id>github-release</id>
+#                      <username>Konasiek</username>
+#                      <password>${{ secrets.RELEASE_TOKEN }}</password>
+#                    </server>
+#                  </servers>
+#                </settings>" > ~/.m2/settings.xml
+
+       # - name: Restore build artifacts cache
+       #   uses: actions/cache@v4
+       #   with:
+       #     path: |
+       #       distro/**/*.tar.gz
+       #       distro/**/*.zip
+       #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+       #       ./*/staging-deploy/**
+       #       **/target/reports/**
+       #       **/target/surefire-reports/*.xml
+       #       target/project-reports.zip
+       #     key: ${{ github.run_id }}-build-artifacts
+       #     fail-on-cache-miss: true
+
+
+       - name: Release prepare with Maven
+         run: |
+          mvn release:prepare -B \
+            -DignoreSnapshots=true -DremoteTagging=false \
+            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+            -Darguments="-DskipTests"
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+       - name: Release perform with Maven
+         run: |
+          mvn release:perform -B -Darguments="-DskipTests"
+         env:
+           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+       - name: Publish Test Report
+         if: always()
+         #https://github.com/marketplace/actions/junit-report-action
+         uses: mikepenz/action-junit-report@v4
+         with:
+           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+           require_passed_tests: true
+
+       - name: Archive Reports
+         uses: actions/upload-artifact@v4
+         with:
+           name: reports
+           path: |
+             **/target/reports/**
+
+       - name: Archive Staging Repo
+         uses: actions/upload-artifact@v4
+         with:
+           name: staging
+           path: |
+             ./*/staging-deploy/**
+           retention-days: 10
+
+#------------------------------------------------------------------------------------------------
+
+  # post_release:
+  #    name: Post-Release
+  #    needs:
+  #      - precheck
+  #      - release
+  #    runs-on: self-hosted
+  #    steps:
+  #      - name: Check out the code
+  #        uses: actions/checkout@v4
+  #        with:
+  #          fetch-depth: 0
+  #          ref: ${{github.event.inputs.release_branch}}
+  
+  #      - name: Set up JDK
+  #        uses: actions/setup-java@v4
+  #        with:
+  #          java-version: '17'
+  #          distribution: 'temurin'
+
+  
+       # - name: Notify Docker Repository
+       #   run: |
+       #     response=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+       #       -H "Authorization: Bearer ${{ secrets.DOCKER_ACTION_DISPATCH_TOKEN }}" \
+       #       -H "Accept: application/vnd.github.v3+json" \
+       #       -H "X-GitHub-Api-Version: 2022-11-28" \
+       #       -d '{"ref":"main","inputs":{"version": "${{ needs.precheck.outputs.version}}","snapshot": "false"}}' \
+       #       https://api.github.com/repos/eximeebpms/eximeebpms-docker/actions/workflows/build-test-and-publish.yml/dispatches)
+       #     if [ "$response" -ne 204 ]; then
+       #       echo "Failed to notify Docker repository. HTTP response code: $response"
+       #       exit 1
+       #     fi

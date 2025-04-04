@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions id="definitions"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+             targetNamespace="Examples">
+
+    <process id="BackwardsCompatibleExpressionProcess" isExecutable="true">
+
+        <startEvent id="theStart"/>
+
+        <sequenceFlow sourceRef="theStart"
+                      targetRef="delegate"/>
+
+        <serviceTask id="delegate"
+                     eximeebpms:class="org.eximeebpms.bpm.engine.test.bpmn.servicetask.util.BackwardsCompatibleExpressionDelegate">
+		      <extensionElements>
+		        <eximeebpms:field name="expression">
+		          <eximeebpms:expression>...${var}...</eximeebpms:expression>
+		        </eximeebpms:field>
+          </extensionElements>
+        </serviceTask>
+
+        <sequenceFlow sourceRef="delegate"
+                      targetRef="wait"/>
+
+        <receiveTask id="wait"/>
+
+    </process>
+
+</definitions>

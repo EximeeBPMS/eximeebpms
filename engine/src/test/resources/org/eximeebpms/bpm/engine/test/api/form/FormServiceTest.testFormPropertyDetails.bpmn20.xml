@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<definitions id="definitions"
+             targetNamespace="http://eximeebpms.org/schema/1.0/bpmn20"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn">
+  
+  <process id="FormPropertyDetails" isExecutable="true">
+  
+    <startEvent id="start">
+      <extensionElements>
+        <eximeebpms:formProperty id="speaker"
+          name="Speaker"
+          variable="SpeakerName" 
+          type="string" />
+
+        <eximeebpms:formProperty id="start"
+          type="date" 
+          datePattern="dd-MMM-yyyy" />
+
+        <eximeebpms:formProperty id="direction" type="enum">
+          <eximeebpms:value id="left" name="Go Left" />
+          <eximeebpms:value id="right" name="Go Right" />
+          <eximeebpms:value id="up" name="Go Up" />
+          <eximeebpms:value id="down" name="Go Down" />
+        </eximeebpms:formProperty>
+        
+      </extensionElements>
+    </startEvent>
+
+  </process>
+  
+</definitions>

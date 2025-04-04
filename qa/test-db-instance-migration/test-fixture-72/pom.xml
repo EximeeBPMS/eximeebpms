@@ -2,22 +2,21 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.qa.upgrade</groupId>
-    <artifactId>camunda-qa-db-instance-migration</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+    <artifactId>eximeebpms-qa-db-instance-migration</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-upgrade-test-fixture-72</artifactId>
+  <artifactId>eximeebpms-qa-upgrade-test-fixture-72</artifactId>
   <packaging>jar</packaging>
-  <name>Camunda Platform - QA - upgrade - instance migration - test fixture - 7.2.0</name>
+  <name>EximeeBPMS - QA - upgrade - instance migration - test fixture - 7.2.0</name>
 
   <properties>
   <!-- Due to https://issues.apache.org/jira/browse/MRELEASE-799 the release test fails when
      the version is managed in a property. Thus we use explicit versions everywhere. -->
-<!--     <camunda.version.current>7.2.0</camunda.version.current> -->
+<!--     <eximeebpms.version.current>7.2.0</eximeebpms.version.current> -->
 
     <version.h2>${version.h2-v1}</version.h2>
-    <version.mariadb>${version.mariadb-v1}</version.mariadb>
   </properties>
 
   <dependencyManagement>
@@ -34,15 +33,15 @@
 
   <dependencies>
     <!-- NOTE: this pulls transitive dependencies of version ${project.version} in unless
-      you declare them to be ${camunda.version.current} here -->
+      you declare them to be ${eximeebpms.version.current} here -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-upgrade-scenario-util</artifactId>
+      <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+      <artifactId>eximeebpms-qa-upgrade-scenario-util</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -85,7 +84,7 @@
                 </goals>
                 <phase>process-test-classes</phase>
                 <configuration>
-                  <mainClass>org.camunda.bpm.qa.upgrade.TestFixture</mainClass>
+                  <mainClass>org.eximeebpms.bpm.qa.upgrade.TestFixture</mainClass>
                 </configuration>
               </execution>
             </executions>

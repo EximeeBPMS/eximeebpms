@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+    xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
+    xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
+    typeLanguage="http://www.w3.org/2001/XMLSchema" 
+    expressionLanguage="http://www.w3.org/1999/XPath"
+    targetNamespace="test">
+
+  <process id="testProcess" isExecutable="true">
+
+    <startEvent id="start">
+    	 <extensionElements>
+        <eximeebpms:formData>
+          <eximeebpms:formField id="stringField" label="String Field" type="string" defaultValue="someString">
+            <eximeebpms:validation>
+              <eximeebpms:constraint name="maxlength" config="10" />
+              <eximeebpms:constraint name="minlength" config="5" />
+            </eximeebpms:validation>
+          </eximeebpms:formField>
+          <eximeebpms:formField id="longField" label="Long Field" type="long" defaultValue="5">
+            <eximeebpms:validation>
+              <eximeebpms:constraint name="max" config="10" />
+              <eximeebpms:constraint name="min" config="3" />
+            </eximeebpms:validation>
+          </eximeebpms:formField>
+        </eximeebpms:formData>
+      </extensionElements>
+    </startEvent>
+
+    <sequenceFlow sourceRef="start" targetRef="usertask" />
+
+    <userTask id="usertask" name="Task" eximeebpms:candidateGroups="dummy">
+    
+    </userTask>
+
+    <sequenceFlow sourceRef="usertask" targetRef="task2" />
+
+    <userTask id="task2" />
+
+  </process>
+
+</definitions>

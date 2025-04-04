@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-jobexecutor-ra</artifactId>
+  <artifactId>eximeebpms-jobexecutor-ra</artifactId>
   <packaging>jar</packaging>
-  <name>Camunda Platform - Job Executor RA</name>
+  <name>EximeeBPMS - Job Executor RA</name>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-parent</artifactId>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>7.23.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -19,8 +19,8 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -31,8 +31,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -58,5 +58,5 @@
 
   </dependencies>
 
-  <groupId>org.camunda.bpm.javaee</groupId>
+  <groupId>org.eximeebpms.bpm.javaee</groupId>
 </project>

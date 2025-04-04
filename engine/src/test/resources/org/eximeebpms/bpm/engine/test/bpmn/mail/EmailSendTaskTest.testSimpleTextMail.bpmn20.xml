@@ -1,0 +1,30 @@
+<definitions 
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  targetNamespace="Examples">
+
+  <process id="simpleTextOnly"  isExecutable="true">
+
+    <startEvent id="theStart" />
+    <sequenceFlow sourceRef="theStart" targetRef="sendMail" />
+    
+    <sendTask id="sendMail" eximeebpms:type="mail">
+      <extensionElements>
+        <eximeebpms:field name="to">
+          <eximeebpms:string>kermit@eximeebpms.org</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="subject">
+          <eximeebpms:string>Hello Kermit!</eximeebpms:string>
+        </eximeebpms:field>
+        <eximeebpms:field name="text">
+          <eximeebpms:string>This a text only e-mail.</eximeebpms:string>
+        </eximeebpms:field>
+      </extensionElements>
+    </sendTask>
+    <sequenceFlow sourceRef="sendMail" targetRef="theEnd" />
+    
+    <endEvent id="theEnd" />
+
+  </process>
+
+</definitions>

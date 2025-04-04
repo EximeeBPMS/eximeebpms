@@ -1,0 +1,21 @@
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn" targetNamespace="Examples">
+
+	<process id="potentialStarter" eximeebpms:candidateStarterUsers="user1, user2"  eximeebpms:candidateStarterGroups="group1" isExecutable="true">
+
+		<extensionElements>
+			<eximeebpms:potentialStarter>
+				<resourceAssignmentExpression>
+					<formalExpression>group2, group(group3), user(user3)</formalExpression>
+				</resourceAssignmentExpression>
+			</eximeebpms:potentialStarter>
+		</extensionElements>
+
+		<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="theEnd" />
+		<endEvent id="theEnd" />
+	</process>
+
+
+</definitions>

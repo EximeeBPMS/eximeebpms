@@ -45,15 +45,15 @@ module.exports = async function loadPlugins(config, appName) {
       !camundaPlugins.includes(el.name) &&
       !el.name.startsWith(`${appName}-plugin-legacy`)
   ).map(el => {
-    addCssSource(`${el.location}/plugin.css?bust=${CAMUNDA_VERSION}`); // eslint-disable-line
-    return `${el.location}/${el.main}?bust=${CAMUNDA_VERSION}`; // eslint-disable-line
+    addCssSource(`${el.location}/plugin.css?bust=${EXIMEEBPMS_VERSION}`); // eslint-disable-line
+    return `${el.location}/${el.main}?bust=${EXIMEEBPMS_VERSION}`; // eslint-disable-line
   });
 
   const baseImportPath = `${appRoot}/app/${appName}/`;
   const fetchers = customScripts.map(url =>
     // eslint-disable-next-line
     _import(
-      baseImportPath + withSuffix(url, '.js') + `?bust=${CAMUNDA_VERSION}` // eslint-disable-line
+      baseImportPath + withSuffix(url, '.js') + `?bust=${EXIMEEBPMS_VERSION}` // eslint-disable-line
     ).catch(
       e => console.error(e) // eslint-disable-line
     )

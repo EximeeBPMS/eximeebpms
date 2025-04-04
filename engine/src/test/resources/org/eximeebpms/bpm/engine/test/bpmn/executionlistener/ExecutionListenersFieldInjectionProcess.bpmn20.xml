@@ -1,0 +1,22 @@
+<definitions 
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  targetNamespace="Examples">
+  
+  <process id="executionListenersProcess" isExecutable="true">
+    <extensionElements>
+      <eximeebpms:executionListener class="org.eximeebpms.bpm.engine.test.bpmn.executionlistener.ExampleFieldInjectedExecutionListener" event="start">
+        <eximeebpms:field name="fixedValue" stringValue="Yes, I am " />
+        <eximeebpms:field name="dynamicValue" expression="${myVar}" />
+      </eximeebpms:executionListener>
+    </extensionElements>
+    
+    <startEvent id="theStart" />
+    <sequenceFlow sourceRef="theStart" targetRef="firstTask" />
+    
+    <userTask id="firstTask" />
+    <sequenceFlow sourceRef="firstTask" targetRef="theEnd" />
+    
+    <endEvent id="theEnd" />
+  </process>
+</definitions>

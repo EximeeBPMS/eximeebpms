@@ -2,26 +2,26 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.23.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-root</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>camunda-parent</artifactId>
-  <name>Camunda Platform - Parent Pom</name>
+  <artifactId>eximeebpms-parent</artifactId>
+  <name>EximeeBPMS - Parent Pom</name>
   <inceptionYear>2013</inceptionYear>
   <packaging>pom</packaging>
 
   <description>
-    This pom is the parent of all Camunda Platform projects
+    This pom is the parent of all EximeeBPMS projects
   </description>
 
   <properties>
-    <version.quarkus>3.15.0</version.quarkus>
+    <version.quarkus>3.20.0</version.quarkus>
     <version.spring.framework>5.3.39</version.spring.framework>
-    <version.spring.framework6>6.2.1</version.spring.framework6>
-    <version.spring-boot>3.4.3</version.spring-boot>
+    <version.spring.framework6>6.2.4</version.spring.framework6>
+    <version.spring-boot>3.4.4</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
@@ -79,41 +79,41 @@
     <version.npm>10.7.0</version.npm>
 
     <!-- OSGi bundles properties -->
-    <camunda.artifact />
-    <camunda.osgi.import.camunda.spin.version>version="[$(version;==;${camunda.spin.version.clean}),$(version;=+;${camunda.spin.version.clean}))"</camunda.osgi.import.camunda.spin.version>
-    <camunda.osgi.import.camunda.connect.version>version="[$(version;==;${camunda.connect.version.clean}),$(version;=+;${camunda.connect.version.clean}))"</camunda.osgi.import.camunda.connect.version>
-    <camunda.osgi.import.camunda.commons.version>version="[$(version;==;${camunda.commons.version.clean}),$(version;=+;${camunda.commons.version.clean}))"</camunda.osgi.import.camunda.commons.version>
-    <camunda.osgi.import.camunda.version>version="[$(version;==;${camunda.osgi.version.clean}),$(version;=+;${camunda.osgi.version.clean}))"</camunda.osgi.import.camunda.version>
-    <camunda.osgi.import.strict.version>version="[$(version;===;${camunda.osgi.version.clean}),$(version;==+;${camunda.osgi.version.clean}))"</camunda.osgi.import.strict.version>
-    <camunda.osgi.import.default.version>[$(version;==;$(@)),$(version;+;$(@)))</camunda.osgi.import.default.version>
-    <camunda.osgi.import.defaults>
-    </camunda.osgi.import.defaults>
-    <camunda.osgi.import.before.defaults />
-    <camunda.osgi.import.additional />
-    <camunda.osgi.import.pkg>
-      ${camunda.osgi.import.before.defaults},
-      ${camunda.osgi.import.defaults},
-      ${camunda.osgi.import.additional},
+    <eximeebpms.artifact />
+    <eximeebpms.osgi.import.eximeebpms.spin.version>version="[$(version;==;${eximeebpms.spin.version.clean}),$(version;=+;${eximeebpms.spin.version.clean}))"</eximeebpms.osgi.import.eximeebpms.spin.version>
+    <eximeebpms.osgi.import.eximeebpms.connect.version>version="[$(version;==;${eximeebpms.connect.version.clean}),$(version;=+;${eximeebpms.connect.version.clean}))"</eximeebpms.osgi.import.eximeebpms.connect.version>
+    <eximeebpms.osgi.import.eximeebpms.commons.version>version="[$(version;==;${eximeebpms.commons.version.clean}),$(version;=+;${eximeebpms.commons.version.clean}))"</eximeebpms.osgi.import.eximeebpms.commons.version>
+    <eximeebpms.osgi.import.eximeebpms.version>version="[$(version;==;${eximeebpms.osgi.version.clean}),$(version;=+;${eximeebpms.osgi.version.clean}))"</eximeebpms.osgi.import.eximeebpms.version>
+    <eximeebpms.osgi.import.strict.version>version="[$(version;===;${eximeebpms.osgi.version.clean}),$(version;==+;${eximeebpms.osgi.version.clean}))"</eximeebpms.osgi.import.strict.version>
+    <eximeebpms.osgi.import.default.version>[$(version;==;$(@)),$(version;+;$(@)))</eximeebpms.osgi.import.default.version>
+    <eximeebpms.osgi.import.defaults>
+    </eximeebpms.osgi.import.defaults>
+    <eximeebpms.osgi.import.before.defaults />
+    <eximeebpms.osgi.import.additional />
+    <eximeebpms.osgi.import.pkg>
+      ${eximeebpms.osgi.import.before.defaults},
+      ${eximeebpms.osgi.import.defaults},
+      ${eximeebpms.osgi.import.additional},
       *
-    </camunda.osgi.import.pkg>
-    <camunda.osgi.activator />
-    <camunda.osgi.failok>false</camunda.osgi.failok>
-    <camunda.osgi.export>${camunda.osgi.export.pkg};${camunda.osgi.version};-noimport:=true</camunda.osgi.export>
+    </eximeebpms.osgi.import.pkg>
+    <eximeebpms.osgi.activator />
+    <eximeebpms.osgi.failok>false</eximeebpms.osgi.failok>
+    <eximeebpms.osgi.export>${eximeebpms.osgi.export.pkg};${eximeebpms.osgi.version};-noimport:=true</eximeebpms.osgi.export>
     <!--
-    <camunda.osgi.export.pkg>!*.impl;${camunda.artifact}*</camunda.osgi.export.pkg>
-    <camunda.osgi.private.pkg>${camunda.artifact}*.impl</camunda.osgi.private.pkg>
+    <eximeebpms.osgi.export.pkg>!*.impl;${eximeebpms.artifact}*</eximeebpms.osgi.export.pkg>
+    <eximeebpms.osgi.private.pkg>${eximeebpms.artifact}*.impl</eximeebpms.osgi.private.pkg>
     -->
-    <camunda.osgi.export.pkg>${camunda.artifact}*</camunda.osgi.export.pkg>
-    <camunda.osgi.private.pkg />
-    <camunda.osgi.version>version=${project.version}</camunda.osgi.version>
-    <camunda.osgi.split.pkg>-split-package:=first</camunda.osgi.split.pkg>
-    <camunda.osgi.import>${camunda.osgi.import.pkg}</camunda.osgi.import>
-    <camunda.osgi.dynamic />
-    <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-    <camunda.osgi.exclude.dependencies>false</camunda.osgi.exclude.dependencies>
-    <camunda.osgi.remove.headers>Ignore-Package,Include-Resource,Private-Package,Bundle-DocURL</camunda.osgi.remove.headers>
-    <camunda.osgi.include.resource>{maven-resources}</camunda.osgi.include.resource>
-    <camunda.osgi.embed />
+    <eximeebpms.osgi.export.pkg>${eximeebpms.artifact}*</eximeebpms.osgi.export.pkg>
+    <eximeebpms.osgi.private.pkg />
+    <eximeebpms.osgi.version>version=${project.version}</eximeebpms.osgi.version>
+    <eximeebpms.osgi.split.pkg>-split-package:=first</eximeebpms.osgi.split.pkg>
+    <eximeebpms.osgi.import>${eximeebpms.osgi.import.pkg}</eximeebpms.osgi.import>
+    <eximeebpms.osgi.dynamic />
+    <eximeebpms.osgi.symbolic.name>${eximeebpms.artifact}</eximeebpms.osgi.symbolic.name>
+    <eximeebpms.osgi.exclude.dependencies>false</eximeebpms.osgi.exclude.dependencies>
+    <eximeebpms.osgi.remove.headers>Ignore-Package,Include-Resource,Private-Package,Bundle-DocURL</eximeebpms.osgi.remove.headers>
+    <eximeebpms.osgi.include.resource>{maven-resources}</eximeebpms.osgi.include.resource>
+    <eximeebpms.osgi.embed />
     <plugin.version.maven-bundle>5.1.9</plugin.version.maven-bundle> <!-- compatible with JDK 17 -->
   </properties>
 
@@ -121,8 +121,8 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -212,30 +212,30 @@
           <artifactId>maven-bundle-plugin</artifactId>
           <version>${plugin.version.maven-bundle}</version>
           <configuration>
-           <excludeDependencies>${camunda.osgi.exclude.dependencies}</excludeDependencies>
+           <excludeDependencies>${eximeebpms.osgi.exclude.dependencies}</excludeDependencies>
            <instructions>
              <Bundle-Name>${project.name}</Bundle-Name>
-             <Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-             <Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
-             <Export-Package>${camunda.osgi.export}</Export-Package>
-             <Import-Package>${camunda.osgi.import}</Import-Package>
-             <DynamicImport-Package>${camunda.osgi.dynamic}</DynamicImport-Package>
-             <Private-Package>${camunda.osgi.private.pkg}</Private-Package>
-             <Implementation-Title>camunda</Implementation-Title>
+             <Bundle-SymbolicName>${eximeebpms.osgi.symbolic.name}</Bundle-SymbolicName>
+             <Bundle-Activator>${eximeebpms.osgi.activator}</Bundle-Activator>
+             <Export-Package>${eximeebpms.osgi.export}</Export-Package>
+             <Import-Package>${eximeebpms.osgi.import}</Import-Package>
+             <DynamicImport-Package>${eximeebpms.osgi.dynamic}</DynamicImport-Package>
+             <Private-Package>${eximeebpms.osgi.private.pkg}</Private-Package>
+             <Implementation-Title>eximeebpms</Implementation-Title>
              <Implementation-Version>${project.version}</Implementation-Version>
-             <Include-Resource>${camunda.osgi.include.resource}</Include-Resource>
-             <_versionpolicy>${camunda.osgi.import.default.version}</_versionpolicy>
-             <_removeheaders>${camunda.osgi.remove.headers}</_removeheaders>
-             <_failok>${camunda.osgi.failok}</_failok>
-             <Export-Service>${camunda.osgi.export.service}</Export-Service>
-             <Import-Service>${camunda.osgi.import.service}</Import-Service>
-             <Embed-Dependency>${camunda.osgi.embed}</Embed-Dependency>
+             <Include-Resource>${eximeebpms.osgi.include.resource}</Include-Resource>
+             <_versionpolicy>${eximeebpms.osgi.import.default.version}</_versionpolicy>
+             <_removeheaders>${eximeebpms.osgi.remove.headers}</_removeheaders>
+             <_failok>${eximeebpms.osgi.failok}</_failok>
+             <Export-Service>${eximeebpms.osgi.export.service}</Export-Service>
+             <Import-Service>${eximeebpms.osgi.import.service}</Import-Service>
+             <Embed-Dependency>${eximeebpms.osgi.embed}</Embed-Dependency>
             </instructions>
            <versions>
-            <camunda.osgi.version.clean>${project.version}</camunda.osgi.version.clean>
-            <camunda.connect.version.clean>${project.version}</camunda.connect.version.clean>
-            <camunda.spin.version.clean>${project.version}</camunda.spin.version.clean>
-            <camunda.commons.version.clean>${project.version}</camunda.commons.version.clean>
+            <eximeebpms.osgi.version.clean>${project.version}</eximeebpms.osgi.version.clean>
+            <eximeebpms.connect.version.clean>${project.version}</eximeebpms.connect.version.clean>
+            <eximeebpms.spin.version.clean>${project.version}</eximeebpms.spin.version.clean>
+            <eximeebpms.commons.version.clean>${project.version}</eximeebpms.commons.version.clean>
            </versions>
           </configuration>
         </plugin>
@@ -282,8 +282,8 @@
               <additionalJOption>-Xdoclint:none</additionalJOption>
               <additionalJOption>--ignore-source-errors</additionalJOption>
             </additionalJOptions>
-            <doctitle>Camunda Platform Javadocs ${project.version}</doctitle>
-            <windowtitle>Camunda Platform Javadocs ${project.version}</windowtitle>
+            <doctitle>EximeeBPMS Javadocs ${project.version}</doctitle>
+            <windowtitle>EximeeBPMS Javadocs ${project.version}</windowtitle>
           </configuration>
         </plugin>
 
@@ -295,8 +295,8 @@
             <rules>
               <jakartaDefaults>true</jakartaDefaults>
               <renames>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/jakarta-renames.properties</rename>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/camunda-renames.properties</rename>
+                <rename>jar:file:${org.eximeebpms.bpm:eximeebpms-engine:jar}!/META-INF/jakarta-renames.properties</rename>
+                <rename>jar:file:${org.eximeebpms.bpm:eximeebpms-engine:jar}!/META-INF/eximeebpms-renames.properties</rename>
               </renames>
             </rules>
             <classifier>jakarta</classifier>
@@ -317,7 +317,7 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <configuration>
-            <!-- https://github.com/camunda/camunda-bpm-platform/issues/3996 -->
+            <!-- https://github.com/EximeeBPMS/eximeebpms/issues/3996 -->
             <wait>750</wait>
           </configuration>
         </plugin>
@@ -355,11 +355,11 @@
   </licenses>
 
   <organization>
-    <name>camunda services GmbH</name>
-    <url>http://www.camunda.com</url>
+    <name>EximeeBPMS services GmbH</name>
+    <url>https://eximeebpms.org</url>
   </organization>
 
-  <url>http://www.camunda.org</url>
+  <url>https://eximeebpms.org</url>
 </project>
 
 

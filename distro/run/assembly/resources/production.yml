@@ -2,7 +2,7 @@
 # The provided links to documentation guides for each property will give more information about the purpose of each property.
 # security guide: https://docs.camunda.org/manual/latest/user-guide/security/
 
-camunda.bpm:
+eximeebpms.bpm:
 # https://docs.camunda.org/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.camunda.org/manual/latest/webapps/shared-options/header-security/
   webapp:
@@ -37,7 +37,7 @@ camunda.bpm:
 #    ldap:
 #      enabled: true
 #      server-url: ldaps://localhost:4334
-#      administrator-group-name: camunda-admin
+#      administrator-group-name: eximeebpms-admin
 #      accept-untrusted-certificates: false
 #      manager-dn: uid=jonny,ou=office-berlin,o=camunda,c=org
 #      manager-password: s3cr3t
@@ -84,14 +84,14 @@ server:
 # https://docs.camunda.org/manual/latest/user-guide/logging/#process-engine
 logging:
    level.root: INFO
-   file.name: logs/camunda-bpm-run.log
+   file.name: logs/eximeebpms-bpm-run.log
 
 # datasource configuration is required
 # do not use the H2 databse in production
 # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#connect-to-a-database
 # https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#database
 spring.datasource:
-  url: jdbc:h2:./camunda-h2-test-production/process-engine;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
+  url: jdbc:h2:./eximeebpms-h2-test-production/process-engine;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
   driver-class-name: org.h2.Driver
   username: sa
   password: sa

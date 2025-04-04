@@ -51,55 +51,66 @@ jobs:
           with:
             java-version: '17'
             distribution: 'temurin'
-            overwrite-settings: false
 
-        - name: Maven Build
+            server-id: github
+            server-username: ${{ github.actor }}
+            server-password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Release prepare with Maven
           run: |
-            PROJECT_ROOT=$(pwd)
-            # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
+            mvn release:prepare release:perform -B \
+              -DignoreSnapshots=true -DremoteTagging=false \
+              -DreleaseVersion=${{ github.event.inputs.release_version }} \
+              -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+              -Darguments="-DskipTests"
+  
+        # - name: Maven Build
+        #   run: |
+        #     PROJECT_ROOT=$(pwd)
+        #     # Make a verification build. Also the deploy step will need the tomcat distro for building, but we don't want to deploy it.
            
-            ./mvnw -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
-              install \
-              versions:dependency-updates-aggregate-report \
-              versions:plugin-updates-aggregate-report \
-              -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
-              -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
+        #     ./mvnw -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
+        #       install \
+        #       versions:dependency-updates-aggregate-report \
+        #       versions:plugin-updates-aggregate-report \
+        #       -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
+        #       -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
              
-            .github/scripts/prepare-reports.sh
+        #     .github/scripts/prepare-reports.sh
            
-            # ./mvnw -Psonatype-oss-release -DskipTests=true -Dskip.frontend.build=true deploy
-            ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
+        #     # ./mvnw -Psonatype-oss-release -DskipTests=true -Dskip.frontend.build=true deploy
+        #     ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
            
-            find target -name maven-metadata.* -delete
+        #     find target -name maven-metadata.* -delete
 
-        - name: Cache build artifacts
-          uses: actions/cache@v4
-          with:
-            path: |
-              distro/**/*.tar.gz
-              distro/**/*.zip
-              distro/webjar/target/eximeebpms-webapp-webjar-*.jar
-              ./*/staging-deploy/**
-              **/target/reports/**
-              **/target/surefire-reports/*.xml
-              target/project-reports.zip
-            key: ${{ github.run_id }}-build-artifacts
+        # - name: Cache build artifacts
+        #   uses: actions/cache@v4
+        #   with:
+        #     path: |
+        #       distro/**/*.tar.gz
+        #       distro/**/*.zip
+        #       distro/webjar/target/eximeebpms-webapp-webjar-*.jar
+        #       ./*/staging-deploy/**
+        #       **/target/reports/**
+        #       **/target/surefire-reports/*.xml
+        #       target/project-reports.zip
+        #     key: ${{ github.run_id }}-build-artifacts
 
 # #------------------------------------------------------------------------------------------------
 
-   release:
-     name: Release
-     needs:
-        - release_build
-     runs-on: self-hosted
-     steps:
-       - name: Check out the code
-         uses: actions/checkout@v4
-         with:
-           # fetch-depth: 1
-           fetch-depth: 0
-           ref: main
-           # ref: eximeebpms-${{github.event.inputs.release_branch}}
+   # release:
+   #   name: Release
+   #   needs:
+   #      - release_build
+   #   runs-on: self-hosted
+   #   steps:
+   #     - name: Check out the code
+   #       uses: actions/checkout@v4
+   #       with:
+   #         # fetch-depth: 1
+   #         fetch-depth: 0
+   #         ref: main
+   #         # ref: eximeebpms-${{github.event.inputs.release_branch}}
 
 #       - name: Setup Maven settings.xml
 #         run: |
@@ -133,44 +144,44 @@ jobs:
        #     fail-on-cache-miss: true
 
 
-       - name: Release prepare with Maven
-         run: |
-          mvn release:prepare -B \
-            -DignoreSnapshots=true -DremoteTagging=false \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-            -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       # - name: Release prepare with Maven
+       #   run: |
+       #    mvn release:prepare -B \
+       #      -DignoreSnapshots=true -DremoteTagging=false \
+       #      -DreleaseVersion=${{ github.event.inputs.release_version }} \
+       #      -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+       #      -Darguments="-DskipTests"
+       #   env:
+       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-       - name: Release perform with Maven
-         run: |
-          mvn release:perform -B -Darguments="-DskipTests"
-         env:
-           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       # - name: Release perform with Maven
+       #   run: |
+       #    mvn release:perform -B -Darguments="-DskipTests"
+       #   env:
+       #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-       - name: Publish Test Report
-         if: always()
-         #https://github.com/marketplace/actions/junit-report-action
-         uses: mikepenz/action-junit-report@v4
-         with:
-           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
-           require_passed_tests: true
+       # - name: Publish Test Report
+       #   if: always()
+       #   #https://github.com/marketplace/actions/junit-report-action
+       #   uses: mikepenz/action-junit-report@v4
+       #   with:
+       #     report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+       #     require_passed_tests: true
 
-       - name: Archive Reports
-         uses: actions/upload-artifact@v4
-         with:
-           name: reports
-           path: |
-             **/target/reports/**
+       # - name: Archive Reports
+       #   uses: actions/upload-artifact@v4
+       #   with:
+       #     name: reports
+       #     path: |
+       #       **/target/reports/**
 
-       - name: Archive Staging Repo
-         uses: actions/upload-artifact@v4
-         with:
-           name: staging
-           path: |
-             ./*/staging-deploy/**
-           retention-days: 10
+       # - name: Archive Staging Repo
+       #   uses: actions/upload-artifact@v4
+       #   with:
+       #     name: staging
+       #     path: |
+       #       ./*/staging-deploy/**
+       #     retention-days: 10
 
 #------------------------------------------------------------------------------------------------
 

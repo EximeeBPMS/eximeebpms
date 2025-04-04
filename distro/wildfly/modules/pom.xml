@@ -223,7 +223,7 @@
                   </mapper>
                 </copy>
 
-                <delete dir="target/modules/org/eximeebpms/feel" />
+                <delete dir="target/modules/org/camunda/feel" />
                 <copy todir="target/modules" flatten="false">
                   <fileset refid="maven.project.dependencies" />
                   <mapper>

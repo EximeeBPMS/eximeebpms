@@ -80,7 +80,7 @@ jobs:
           env:
             GITHUB_ACTOR: ${{ github.actor }}
   
-        - name: Release prepare with Maven
+        - name: Release prepare & perform with Maven
           run: |
             ./mvnw release:prepare release:perform -B \
               -DignoreSnapshots=true -DremoteTagging=false \

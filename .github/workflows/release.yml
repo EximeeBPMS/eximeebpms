@@ -76,12 +76,12 @@ jobs:
                 <server>
                   <id>github-eximeebpms</id>
                   <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
+                  <password>${PAT}</password>
                 </server>
                 <server>
-                  <id>github-eximeebpms-parent</id>
+                  <id>github-eximeebpms-release-parent</id>
                   <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
+                  <password>${PAT}</password>
                 </server>
               </servers>
             </settings>

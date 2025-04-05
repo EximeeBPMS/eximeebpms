@@ -342,7 +342,7 @@
         <enabled>false</enabled>
       </snapshots>
       <releases>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </releases>
     </repository>
   </repositories>

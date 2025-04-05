@@ -64,9 +64,9 @@ jobs:
           with:
             java-version: '17'
             distribution: 'temurin'
-            server-id: github
+            # server-id: 'github'
             # server-password: PAT
-            overwrite-settings: 'true'
+            # overwrite-settings: 'true'
   
         - name: Release prepare with Maven
           run: |
@@ -75,6 +75,8 @@ jobs:
               -DreleaseVersion=${{ github.event.inputs.release_version }} \
               -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
               -Darguments="-DskipTests"
+          env:
+            GITHUB_TOKEN: ${{ github.token }}  
   
         # - name: Maven Build
         #   run: |

@@ -5,8 +5,6 @@
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
     <version>1.2.0</version>
-    <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
-<!--     <relativePath /> -->
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -57,7 +55,7 @@
         <!-- This profile is run in the CI as the first step (platform-ASSEMBLY); It must not activate
           any modules that have a dependency to the webapps. See also the referenced POMs,
           they usually define which modules are covered by the distro profile -->
-<!--         <module>spring-boot-starter</module>
+        <module>spring-boot-starter</module>
 
         <module>quarkus-extension</module>
 
@@ -103,7 +101,7 @@
         <module>clients/java</module>
 
         <module>internal-dependencies</module>
-        <module>database</module> -->
+        <module>database</module>
         <module>parent</module>
         <module>bom</module>
       </modules>
@@ -112,7 +110,7 @@
     <profile>
       <id>distro-ce</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <!-- This profile is run in the CI after the webapps were built (platform-ASSEMBLY);
@@ -183,7 +181,7 @@
     <profile>
       <id>distro-tomcat</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>distro/license-book</module>
@@ -194,7 +192,7 @@
     <profile>
       <id>distro-wildfly</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>javaee/ejb-client</module>
@@ -208,7 +206,7 @@
     <profile>
       <id>distro-webjar</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>distro/webjar</module>
@@ -218,7 +216,7 @@
     <profile>
       <id>distro-run</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>distro/run</module>

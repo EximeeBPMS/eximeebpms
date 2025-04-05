@@ -65,7 +65,8 @@ jobs:
             server-id: github
             server-username: ${{ github.actor }}
             server-password: $PAT
-
+        - name: Show Maven settings.xml
+          run: cat ~/.m2/settings.xml
         - name: Release prepare with Maven
           run: |
             ./mvnw release:prepare release:perform -B \

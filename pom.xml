@@ -27,6 +27,8 @@
     <version.joda-time>2.12.5</version.joda-time>
     <version.uuid-generator>4.3.0</version.uuid-generator>
     <version.feel-scala>1.19.1</version.feel-scala>
+    <release.repository.id>github-release</release.repository.id>
+    <release.repository>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</release.repository>
   </properties>
 
   <build>

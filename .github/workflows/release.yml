@@ -74,21 +74,15 @@ jobs:
             <settings>
               <servers>
                 <server>
-                  <id>github-eximeebpms</id>
-                  <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
-                </server>
-                <server>
                   <id>github-eximeebpms-release-parent</id>
                   <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
+                  <password>${PAT}</password>
                 </server>
               </servers>
             </settings>
             EOF
           env:
             GITHUB_ACTOR: ${{ github.actor }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
         - name: Release prepare with Maven
           run: |

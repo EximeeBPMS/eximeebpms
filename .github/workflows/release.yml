@@ -65,7 +65,7 @@ jobs:
             java-version: '17'
             distribution: 'temurin'
             server-id: github
-            server-username: ${{ github.actor }}
+            server-username: 'dkubiak'
             server-password: ${{ env.PAT }}
         - name: Show Maven settings.xml
           run: cat ~/.m2/settings.xml

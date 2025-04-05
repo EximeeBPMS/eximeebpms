@@ -326,16 +326,6 @@
 <!--      </snapshots>-->
 <!--    </repository>-->
     <repository>
-      <id>github-eximeebpms</id>
-      <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    <repository>
       <id>github-eximeebpms-release-parent</id>
       <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms-release-parent</url>
       <snapshots>

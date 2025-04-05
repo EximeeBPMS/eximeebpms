@@ -65,7 +65,6 @@ jobs:
             java-version: '17'
             distribution: 'temurin'
             server-id: github
-            server-username: 'dkubiak'
             server-password: PAT
             overwrite-settings: 'true'
         - name: Show Maven settings.xml

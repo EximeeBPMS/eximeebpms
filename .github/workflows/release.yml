@@ -41,32 +41,31 @@ jobs:
       name: Release Build
       runs-on: self-hosted
       steps:
-        # - name: Set the token based on actor
-        #   id: set-token
-        #   run: |
-        #     echo "Actor is: ${{ github.actor }}"
+        - name: Set the token based on actor
+          id: set-token
+          run: |
+            echo "Actor is: ${{ github.actor }}"
             
-        #     case "${{ github.actor }}" in
-        #       "dkubiak")
-        #         echo "Using PAT for dkubiak"
-        #         echo "PAT=${{ secrets.PAT_DKUBIAK }}" >> $GITHUB_ENV
-        #         ;;
-        #     esac
+            case "${{ github.actor }}" in
+              "dkubiak")
+                echo "Using PAT for dkubiak"
+                echo "PAT=${{ secrets.PAT_DKUBIAK }}" >> $GITHUB_ENV
+                ;;
+            esac
         - name: Check out the code
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
             ref: ${{github.event.inputs.release_branch}}
-        - name: Usuń ~/.m2/settings.xml jeśli istnieje
-          run: rm -f ~/.m2/settings.xml    
         - name: Set up JDK
           uses: actions/setup-java@v4
           with:
             java-version: '17'
             distribution: 'temurin'
-            # server-id: 'github'
-            # server-password: PAT
-            # overwrite-settings: 'true'
+            server-id: github
+            server-username: MAVEN_USERNAME
+            server-password: PAT
+            overwrite-settings: 'true'
   
         - name: Release prepare with Maven
           run: |
@@ -76,7 +75,8 @@ jobs:
               -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
               -Darguments="-DskipTests"
           env:
-            GITHUB_TOKEN: ${{ github.token }}  
+            MAVEN_USERNAME: ${{ github.actor }}
+            # MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }} 
   
         # - name: Maven Build
         #   run: |

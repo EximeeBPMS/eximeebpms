@@ -57,6 +57,8 @@ jobs:
           with:
             fetch-depth: 0
             ref: ${{github.event.inputs.release_branch}}
+        - name: Usuń ~/.m2/settings.xml jeśli istnieje
+          run: rm -f ~/.m2/settings.xml    
         - name: Set up JDK
           uses: actions/setup-java@v4
           with:
@@ -64,9 +66,11 @@ jobs:
             distribution: 'temurin'
             server-id: github
             server-username: ${{ github.actor }}
-            server-password: $PAT
+            server-password: ${{ env.PAT }}
         - name: Show Maven settings.xml
           run: cat ~/.m2/settings.xml
+        - name: Show Maven settings.xml
+          run: cat /home/runner/.m2/settings.xml
         - name: Release prepare with Maven
           run: |
             ./mvnw release:prepare release:perform -B \

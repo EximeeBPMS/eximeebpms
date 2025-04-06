@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version to release'
+        required: true
+      development_version:
+        description: 'Next snapshot version'
+        required: true
+
+jobs:
+  release:
+    runs-on: self-hosted
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create custom settings.xml 
+        run: |
+            mkdir -p ~/.m2
+            cat <<EOF > ~/.m2/settings.xml
+            <settings>
+              <servers>
+                <server>
+                  <id>central</id>
+                  <username>${CPP_USERNAME}</username>
+                  <password>${CPP_PASSWORD}</password>
+                </server>
+                <server>
+                  <id>github</id>
+                  <username>${GITHUB_ACTOR}</username>
+                  <password>${GITHUB_TOKEN}</password>
+                </server>
+              </servers>
+            </settings>
+            EOF
+        env:
+          CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
+          CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Import GPG key
+        run: |
+          echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
+          gpg --batch --import private.key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+      - name: Add GitHub SSH host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts          
+
+      - name: Configure Git user
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions@github.com'
+      - name: Release prepare & perform with Maven
+        run: |
+          ./mvnw release:prepare release:perform -B \
+            -Prelease \
+            -DtagNameFormat=v@{project.version} \
+            -DreleaseVersion=${{ github.event.inputs.release_version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release v${{ github.event.inputs.release_version }}
+          tag_name: v${{ github.event.inputs.release_version }}
+          draft: false
+          prerelease: false
+          body: |
+            Release generated on ${{ github.event.head_commit.timestamp }}
+            with commit message: ${{ github.event.head_commit.message }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

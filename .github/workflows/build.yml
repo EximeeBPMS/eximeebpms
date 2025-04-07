@@ -65,27 +65,23 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-          
       - name: Setup Maven settings.xml
-        run: |
-          rm -f /tmp/maven-settings.xml
-          mkdir -p /tmp
-          echo "<settings>
-                 <servers>
-                  <server>
-                    <id>github</id>
-                    <username>${{ github.actor }}</username>
-                    <password>${{ secrets.GITHUB_TOKEN }}</password>
-                  </server>
-                  <server>
-                    <id>github-release</id>
-                    <username>${{ github.actor }}</username>
-                    <password>${{ secrets.GITHUB_TOKEN }}</password>
-                  </server>
-                </servers>
-              </settings>" > /tmp/maven-settings.xml
-          export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
-          
+        uses: s4u/maven-settings-action@v3.1.0
+        with:
+          servers: |
+            [
+              {
+                "id": "github-releases",
+                "username": "${{ github.actor }}",
+                "password": "${{ secrets.GITHUB_TOKEN }}"
+              }
+            ]'
+# added by default
+#               {
+#                 "id": "github",
+#                 "username": "${{ github.actor }}",
+#                 "password": "${{ secrets.GITHUB_TOKEN }}"
+#               },
       - name: Maven Build
         id: maven-build
         shell: bash

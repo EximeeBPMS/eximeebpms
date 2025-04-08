@@ -4,9 +4,7 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>1.0.0</version>
-    <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
-    <relativePath />
+    <version>0.0.1</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -313,29 +311,8 @@
         </plugins>
       </build>
     </profile>
-
   </profiles>
 
-  <repositories>
-<!--    <repository>-->
-<!--      <id>maven-central</id>-->
-<!--      <name>Maven Central</name>-->
-<!--      <url>https://repo1.maven.org/maven2</url>-->
-<!--      <snapshots>-->
-<!--        <enabled>false</enabled>-->
-<!--      </snapshots>-->
-<!--    </repository>-->
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
 
   <licenses>
     <license>
@@ -361,15 +338,13 @@
   </developers>
 
   <scm>
-    <url>https://github.com/EximeeBPMS/eximeebpms</url>
-    <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
-    <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
+    <url>https://github.com/EximeeBPMS/eximeebpmst</url>
+    <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpmst.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
-    <system>Jira</system>
-    <url>https://app.camunda.com/jira/browse/CAM/</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/eximeebpms/eximeebpms/issues</url>
   </issueManagement>
-
 </project>

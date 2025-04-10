@@ -9,7 +9,7 @@
         <groupId>org.eximeebpms.bpm</groupId>
         <artifactId>eximeebpms-database-settings</artifactId>
         <relativePath>../../database</relativePath>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>

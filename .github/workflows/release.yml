@@ -66,6 +66,7 @@ jobs:
       - name: Release prepare & perform with Maven
         run: |
           ./mvnw release:prepare release:perform -B \
+            -DskipTests
             -Prelease \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \

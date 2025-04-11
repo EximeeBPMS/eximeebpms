@@ -338,8 +338,8 @@
   </developers>
 
   <scm>
-    <url>https://github.com/EximeeBPMS/eximeebpmst</url>
-    <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpmst.git</developerConnection>
+    <url>https://github.com/EximeeBPMS/eximeebpms</url>
+    <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

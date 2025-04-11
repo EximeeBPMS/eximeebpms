@@ -65,9 +65,8 @@ jobs:
           git config --global user.email 'github-actions@github.com'
       - name: Release prepare & perform with Maven
         run: |
-          ./mvnw release:prepare release:perform -B \
+          ./mvnw release:prepare release:perform -Darguments="-DskipTests" -B \
             -Prelease \
-            -DskipTests \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \

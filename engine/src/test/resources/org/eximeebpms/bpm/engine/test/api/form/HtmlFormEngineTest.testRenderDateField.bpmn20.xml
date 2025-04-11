@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+    xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
     xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
     xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
     xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
@@ -13,19 +13,19 @@
 
     <startEvent id="start">
       <extensionElements>
-        <eximeebpms:formData>
-            <eximeebpms:formField
+        <camunda:formData>
+            <camunda:formField
                 id="dateField" label="Date Field" type="date"
                 defaultValue="10/11/2014">
-            </eximeebpms:formField>
-            <eximeebpms:formField
+            </camunda:formField>
+            <camunda:formField
                 id="readOnlyDateField" label="Read Only Field" type="date"
                 defaultValue="12/12/2014">
-                <eximeebpms:validation>
-                  <eximeebpms:constraint name="readonly" />
-                </eximeebpms:validation>
-            </eximeebpms:formField>
-        </eximeebpms:formData>
+                <camunda:validation>
+                  <camunda:constraint name="readonly" />
+                </camunda:validation>
+            </camunda:formField>
+        </camunda:formData>
       </extensionElements>
     </startEvent>
 

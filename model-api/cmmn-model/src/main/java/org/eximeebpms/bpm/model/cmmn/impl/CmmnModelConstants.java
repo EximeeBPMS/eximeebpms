@@ -40,7 +40,7 @@ public class CmmnModelConstants {
   public static final String XPATH_NS = "http://www.w3.org/1999/XPath";
 
   /** Camunda namespace */
-  public static final String CAMUNDA_NS = "http://eximeebpms.org/schema/1.0/cmmn";
+  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/cmmn";
 
   // elements ///////////////////////////////////////////////////////////////////////////
 

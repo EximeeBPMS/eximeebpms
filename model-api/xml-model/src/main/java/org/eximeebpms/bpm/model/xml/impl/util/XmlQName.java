@@ -33,9 +33,9 @@ public class XmlQName {
   static
   {
     KNOWN_PREFIXES = new HashMap<String, String>();
-    KNOWN_PREFIXES.put("http://eximeebpms.org/fox", "fox");
-    KNOWN_PREFIXES.put("http://activiti.org/bpmn", "eximeebpms");
-    KNOWN_PREFIXES.put("http://eximeebpms.org/schema/1.0/bpmn", "eximeebpms");
+    KNOWN_PREFIXES.put("http://www.camunda.org/fox", "fox");
+    KNOWN_PREFIXES.put("http://activiti.org/bpmn", "camunda");
+    KNOWN_PREFIXES.put("http://camunda.org/schema/1.0/bpmn", "camunda");
     KNOWN_PREFIXES.put("http://www.omg.org/spec/BPMN/20100524/MODEL", "bpmn2");
     KNOWN_PREFIXES.put("http://www.omg.org/spec/BPMN/20100524/DI", "bpmndi");
     KNOWN_PREFIXES.put("http://www.omg.org/spec/DD/20100524/DI", "di");

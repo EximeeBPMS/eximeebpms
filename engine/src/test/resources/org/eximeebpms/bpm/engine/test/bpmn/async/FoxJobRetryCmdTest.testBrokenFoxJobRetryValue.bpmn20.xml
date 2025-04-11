@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
-	xmlns:fox="http://eximeebpms.org/fox"
+	xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+	xmlns:fox="http://www.camunda.org/fox"
 	targetNamespace="Examples">
 
 	<process id="brokenFoxJobRetryValue" isExecutable="true">
@@ -18,7 +18,7 @@
 
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingServiceTask" />
 		
-		<serviceTask id="failingServiceTask" eximeebpms:class="com.camunda.fox.engine.test.cmd.FailingDelegate" />
+		<serviceTask id="failingServiceTask" camunda:class="com.camunda.fox.engine.test.cmd.FailingDelegate" />
         
 		<sequenceFlow id="flow2" sourceRef="failingServiceTask" targetRef="theEnd" />
 		

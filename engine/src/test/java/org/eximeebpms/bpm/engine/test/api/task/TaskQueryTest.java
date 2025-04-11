@@ -5732,7 +5732,7 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
     task.setAssignee("myself");
     // when
     taskService.createComment(task.getId(), processInstance.getId(), "testComment");
-    taskService.createAttachment("foo", task.getId(), processInstance.getId(), "testAttachment", "testDesc", "http://eximeebpms.org");
+    taskService.createAttachment("foo", task.getId(), processInstance.getId(), "testAttachment", "testDesc", "http://camunda.org");
     // then
     Task taskResult = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
     assertThat(taskResult).isNotNull();
@@ -5748,7 +5748,7 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
     Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
     // when
     taskService.createComment(task.getId(), processInstance.getId(), "testComment");
-    taskService.createAttachment("foo", task.getId(), processInstance.getId(), "testAttachment",  "testDesc", "http://eximeebpms.org");
+    taskService.createAttachment("foo", task.getId(), processInstance.getId(), "testAttachment",  "testDesc", "http://camunda.org");
     // then
     Task taskResult = taskService.createTaskQuery().processInstanceId(processInstance.getId()).withCommentAttachmentInfo().singleResult();
     assertThat(taskResult).isNotNull();

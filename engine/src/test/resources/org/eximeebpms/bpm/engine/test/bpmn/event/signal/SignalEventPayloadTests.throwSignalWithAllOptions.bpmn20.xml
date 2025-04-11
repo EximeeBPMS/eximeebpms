@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+	xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	targetNamespace="Examples">
 	
 	<signal id="alertSignal" name="alert" />
@@ -14,17 +14,17 @@
 
 		<intermediateThrowEvent id="signalEvent" name="Alert" >
 			<extensionElements>
-				<eximeebpms:inputOutput>
-					<eximeebpms:inputParameter name="localVar1">localVal1</eximeebpms:inputParameter>
-					<eximeebpms:inputParameter name="localVar2">localVal2</eximeebpms:inputParameter>
-				</eximeebpms:inputOutput>
+				<camunda:inputOutput>
+					<camunda:inputParameter name="localVar1">localVal1</camunda:inputParameter>
+					<camunda:inputParameter name="localVar2">localVal2</camunda:inputParameter>
+				</camunda:inputOutput>
 			</extensionElements>
 			<signalEventDefinition signalRef="alertSignal">
 				<extensionElements>
-					<eximeebpms:in businessKey="${execution.processBusinessKey}" />
-					<eximeebpms:in variables="all" local="true" />
-					<eximeebpms:in source="payloadVar1" target="payloadVar1Target" />
-					<eximeebpms:in sourceExpression="${payloadVar2.concat('Source')}" target="payloadVar2Target" />
+					<camunda:in businessKey="${execution.processBusinessKey}" />
+					<camunda:in variables="all" local="true" />
+					<camunda:in source="payloadVar1" target="payloadVar1Target" />
+					<camunda:in sourceExpression="${payloadVar2.concat('Source')}" target="payloadVar2Target" />
 				</extensionElements>
 			</signalEventDefinition>
 		</intermediateThrowEvent>

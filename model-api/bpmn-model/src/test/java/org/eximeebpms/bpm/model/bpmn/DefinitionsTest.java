@@ -49,7 +49,7 @@ public class DefinitionsTest extends BpmnModelTest {
     assertThat(definitions).isNotNull();
 
     // provided in file
-    assertThat(definitions.getTargetNamespace()).isEqualTo("http://eximeebpms.org/test");
+    assertThat(definitions.getTargetNamespace()).isEqualTo("http://camunda.org/test");
 
     // defaults provided in Schema
     assertThat(definitions.getExpressionLanguage()).isEqualTo(XPATH_NS);

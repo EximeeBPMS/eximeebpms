@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <process id="testProcess" isExecutable="true">
@@ -10,21 +10,21 @@
 
     <sequenceFlow id="flow1"  sourceRef="start" targetRef="service" />
 
-    <serviceTask id="service" eximeebpms:expression="${execution.setVariable('behaviorInvoked', execution.getVariable('behaviorInvoked') + 1)}">
+    <serviceTask id="service" camunda:expression="${execution.setVariable('behaviorInvoked', execution.getVariable('behaviorInvoked') + 1)}">
 
       <extensionElements>
 
-          <eximeebpms:executionListener
+          <camunda:executionListener
               event="start"
               expression="${execution.setVariable('listenerStartInvoked', true)}" />
 
-          <eximeebpms:executionListener
+          <camunda:executionListener
               event="end"
               expression="${execution.setVariable('listenerEndInvoked', true)}" />
 		 
         </extensionElements>
 
-		<multiInstanceLoopCharacteristics isSequential="false" eximeebpms:asyncAfter="true">
+		<multiInstanceLoopCharacteristics isSequential="false" camunda:asyncAfter="true">
  			<loopCardinality>5</loopCardinality>
 		</multiInstanceLoopCharacteristics>		
 

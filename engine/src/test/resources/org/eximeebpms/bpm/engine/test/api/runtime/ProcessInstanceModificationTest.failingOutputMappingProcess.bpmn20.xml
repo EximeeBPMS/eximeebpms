@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="org.eximeebpms.bpm.engine.test.enginge.test.api.runtime">
 
   <process id="failingOutputMappingProcess" isExecutable="true">
@@ -13,9 +13,9 @@
     <sequenceFlow id="flow2" sourceRef="fork" targetRef="outerTask" />
     <userTask id="outerTask">
       <extensionElements>
-        <eximeebpms:inputOutput>
-          <eximeebpms:outputParameter name="outVar">${nonExistingVariable}</eximeebpms:outputParameter>
-        </eximeebpms:inputOutput>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="outVar">${nonExistingVariable}</camunda:outputParameter>
+        </camunda:inputOutput>
       </extensionElements>
     </userTask>    
     <sequenceFlow id="flow3" sourceRef="outerTask" targetRef="outerEnd" />
@@ -24,18 +24,18 @@
     
     <subProcess id="subProcess">
       <extensionElements>
-        <eximeebpms:inputOutput>
-          <eximeebpms:outputParameter name="outVar">${nonExistingVariable}</eximeebpms:outputParameter>
-        </eximeebpms:inputOutput>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="outVar">${nonExistingVariable}</camunda:outputParameter>
+        </camunda:inputOutput>
       </extensionElements>
       
       <startEvent id="subProcessStart" />
       <sequenceFlow id="flow5" sourceRef="subProcessStart" targetRef="innerTask" />
       <userTask id="innerTask">
         <extensionElements>
-          <eximeebpms:inputOutput>
-            <eximeebpms:outputParameter name="outVar">${nonExistingVariable}</eximeebpms:outputParameter>
-          </eximeebpms:inputOutput>
+          <camunda:inputOutput>
+            <camunda:outputParameter name="outVar">${nonExistingVariable}</camunda:outputParameter>
+          </camunda:inputOutput>
         </extensionElements>
       </userTask>
       <sequenceFlow id="flow7" sourceRef="innerTask" targetRef="innerEnd" />

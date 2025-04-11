@@ -2,8 +2,8 @@
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
-  targetNamespace="http://eximeebpms.org/test">
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  targetNamespace="http://camunda.org/test">
 
   <process id="process">
 
@@ -19,7 +19,7 @@
     </sequenceFlow>
 
     <sequenceFlow id="flow3" sourceRef="start" targetRef="end">
-      <conditionExpression xsi:type="tFormalExpression" language="groovy" eximeebpms:resource="test.groovy" />
+      <conditionExpression xsi:type="tFormalExpression" language="groovy" camunda:resource="test.groovy" />
     </sequenceFlow>
   </process>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
-  targetNamespace="http://eximeebpms.org/test">
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  targetNamespace="http://camunda.org/test">
   <message id="message"/>
   <error id="error"/>
   <itemDefinition id="itemDef"/>
@@ -21,7 +21,7 @@
         <source>link</source>
         <target>link</target>
       </linkEventDefinition>
-      <messageEventDefinition messageRef="message" eximeebpms:taskPriority="5"/>
+      <messageEventDefinition messageRef="message" camunda:taskPriority="5"/>
       <signalEventDefinition signalRef="signal"/>
       <terminateEventDefinition/>
       <timerEventDefinition id="date">

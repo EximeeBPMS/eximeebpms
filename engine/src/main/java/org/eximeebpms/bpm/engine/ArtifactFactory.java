@@ -22,9 +22,9 @@ package org.eximeebpms.bpm.engine;
  * <br/>
  * Samples:
  * <pre>
- *     &lt;eximeebpms:taskListener class="org.mypackage.MyListener".../&gt;
+ *     &lt;camunda:taskListener class="org.mypackage.MyListener".../&gt;
  *     or
- *     &lt;serviceTask eximeebpms:class=""org.mypackage.MyJavaDelegate".. /&gt;
+ *     &lt;serviceTask camunda:class=""org.mypackage.MyJavaDelegate".. /&gt;
  * </pre>
  *
  * The default implementation uses Class.newInstance to create artifacts.

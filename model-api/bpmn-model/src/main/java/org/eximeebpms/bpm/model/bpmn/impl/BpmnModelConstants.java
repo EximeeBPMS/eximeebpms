@@ -55,7 +55,7 @@ public final class BpmnModelConstants {
   public static final String ACTIVITI_NS = "http://activiti.org/bpmn";
 
   /** CAMUNDA_NS namespace */
-  public static final String CAMUNDA_NS = "http://eximeebpms.org/schema/1.0/bpmn";
+  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/bpmn";
 
   // elements ////////////////////////////////////////
 

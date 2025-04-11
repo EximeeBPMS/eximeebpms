@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * the following declaration:
  * <p/>
  * <code>
- * &lt;service-task eximeebpms:expression = "myBean" id = "confirm-receipt" /&gt;
+ * &lt;service-task camunda:expression = "myBean" id = "confirm-receipt" /&gt;
  * </code>
  * <p/>
  * This is a state that will be entered from Camunda Platform and execution will flow through to the bean

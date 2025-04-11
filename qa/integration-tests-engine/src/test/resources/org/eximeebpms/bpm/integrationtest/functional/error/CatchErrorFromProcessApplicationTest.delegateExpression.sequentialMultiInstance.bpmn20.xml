@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <error id="myError" errorCode="MyError" />
   <error id="myException" errorCode="org.eximeebpms.bpm.integrationtest.functional.error.MyBusinessException" />
 
-  <process id="testProcessDelegateExpressionSequentialMI" isExecutable="true" eximeebpms:historyTimeToLive="5">
+  <process id="testProcessDelegateExpressionSequentialMI" isExecutable="true" camunda:historyTimeToLive="5">
   
     <startEvent id="start" />
 
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
     
-    <serviceTask id="serviceTask" eximeebpms:delegateExpression="${throwErrorDelegate}">
+    <serviceTask id="serviceTask" camunda:delegateExpression="${throwErrorDelegate}">
       <multiInstanceLoopCharacteristics isSequential="true">
         <loopCardinality>5</loopCardinality>
       </multiInstanceLoopCharacteristics>

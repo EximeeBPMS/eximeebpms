@@ -24,14 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @author Stefan Hentschel.
  */
-@XmlRootElement(name = "order-details", namespace = "http://eximeebpms.org/test-example")
+@XmlRootElement(name = "order-details", namespace = "http://camunda.org/test-example")
 public class OrderDetails {
 
   private long id;
   private Date date;
   private String product;
 
-  @XmlElement(namespace = "http://eximeebpms.org/test-example")
+  @XmlElement(namespace = "http://camunda.org/test-example")
   public long getId() {
     return id;
   }
@@ -40,7 +40,7 @@ public class OrderDetails {
     this.id = id;
   }
 
-  @XmlElement(namespace = "http://eximeebpms.org/test-example")
+  @XmlElement(namespace = "http://camunda.org/test-example")
   public Date getDate() {
     return date;
   }
@@ -49,7 +49,7 @@ public class OrderDetails {
     this.date = date;
   }
 
-  @XmlElement(namespace = "http://eximeebpms.org/test-example")
+  @XmlElement(namespace = "http://camunda.org/test-example")
   public String getProduct() {
     return product;
   }

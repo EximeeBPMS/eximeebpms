@@ -55,7 +55,7 @@ public final class DmnModelConstants {
   public static final String FEEL15_NS = "https://www.omg.org/spec/DMN/20230324/FEEL/";
 
   /** Camunda namespace */
-  public static final String CAMUNDA_NS = "http://eximeebpms.org/schema/1.0/dmn";
+  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/dmn";
 
   /** DMN element */
 

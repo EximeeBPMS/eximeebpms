@@ -468,7 +468,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
 
     CallActivityBuilder callActivityBuilder = ((CallActivity) modelInstance.getModelElementById("callActivity")).builder();
 
-    // create eximeebpms:in with source but without target
+    // create camunda:in with source but without target
     CamundaIn camundaIn = modelInstance.newInstance(CamundaIn.class);
     camundaIn.setCamundaSource("superVariable");
     callActivityBuilder.addExtensionElement(camundaIn);
@@ -477,7 +477,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     camundaIn.setCamundaTarget("subVariable");
 
-    // create eximeebpms:in with sourceExpression but without target
+    // create camunda:in with sourceExpression but without target
     camundaIn = modelInstance.newInstance(CamundaIn.class);
     camundaIn.setCamundaSourceExpression("${x+5}");
     callActivityBuilder.addExtensionElement(camundaIn);
@@ -486,7 +486,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     camundaIn.setCamundaTarget("subVariable2");
 
-    // create eximeebpms:out with source but without target
+    // create camunda:out with source but without target
     CamundaOut camundaOut = modelInstance.newInstance(CamundaOut.class);
     camundaOut.setCamundaSource("subVariable");
     callActivityBuilder.addExtensionElement(camundaOut);
@@ -495,7 +495,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     camundaOut.setCamundaTarget("superVariable");
 
-    // create eximeebpms:out with sourceExpression but without target
+    // create camunda:out with sourceExpression but without target
     camundaOut = modelInstance.newInstance(CamundaOut.class);
     camundaOut.setCamundaSourceExpression("${y+1}");
     callActivityBuilder.addExtensionElement(camundaOut);
@@ -879,7 +879,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   /**
-   * This testcase verifies that <eximeebpms:out variables="all" /> works also in
+   * This testcase verifies that <camunda:out variables="all" /> works also in
    * case super process has no variables
    *
    * https://app.camunda.com/jira/browse/CAM-1617

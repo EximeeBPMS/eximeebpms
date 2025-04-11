@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<eximeebpms:process-application
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/ProcessApplication"
+<camunda:process-application
+  xmlns:camunda="http://camunda.org/schema/1.0/ProcessApplication"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://eximeebpms.org/schema/1.0/ProcessApplication http://eximeebpms.org/schema/1.0/ProcessApplication ">
+  xsi:schemaLocation="http://camunda.org/schema/1.0/ProcessApplication http://camunda.org/schema/1.0/ProcessApplication ">
   
-  <eximeebpms:process-engine name="engine1">
-    <eximeebpms:job-acquisition>default</eximeebpms:job-acquisition>
-    <eximeebpms:configuration>configuration</eximeebpms:configuration>
-    <eximeebpms:datasource>datasource</eximeebpms:datasource>
-    <eximeebpms:properties />
-  </eximeebpms:process-engine>
+  <camunda:process-engine name="engine1">
+    <camunda:job-acquisition>default</camunda:job-acquisition>
+    <camunda:configuration>configuration</camunda:configuration>
+    <camunda:datasource>datasource</camunda:datasource>
+    <camunda:properties />
+  </camunda:process-engine>
   
-  <eximeebpms:process-archive name="pa1">
-    <eximeebpms:process-engine>process-engine</eximeebpms:process-engine>
-    <eximeebpms:process>process</eximeebpms:process>
-    <eximeebpms:properties />
-  </eximeebpms:process-archive>
+  <camunda:process-archive name="pa1">
+    <camunda:process-engine>process-engine</camunda:process-engine>
+    <camunda:process>process</camunda:process>
+    <camunda:properties />
+  </camunda:process-archive>
   
-</eximeebpms:process-application>
+</camunda:process-application>

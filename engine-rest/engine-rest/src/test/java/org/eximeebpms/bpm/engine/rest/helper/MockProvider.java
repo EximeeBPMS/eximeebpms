@@ -533,7 +533,7 @@ public abstract class MockProvider {
 
   // process applications
   public static final String EXAMPLE_PROCESS_APPLICATION_NAME = "aProcessApplication";
-  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://eximeebpms.org/someContext";
+  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://camunda.org/someContext";
 
   // Historic Process Instance
   public static final String EXAMPLE_HISTORIC_PROCESS_INSTANCE_DELETE_REASON = "aDeleteReason";

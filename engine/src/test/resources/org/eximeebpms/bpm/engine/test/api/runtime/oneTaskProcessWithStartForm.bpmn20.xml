@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="org.eximeebpms.bpm.engine.test.enginge.test.api.runtime">
   
   <process id="oneTaskProcessWithStartForm" isExecutable="true">
   
     <startEvent id="theStart">
       <extensionElements>
-        <eximeebpms:formProperty id="itemName" variable="itemName"/>
-        <eximeebpms:formProperty id="amount" type="long"/>
+        <camunda:formProperty id="itemName" variable="itemName"/>
+        <camunda:formProperty id="amount" type="long"/>
       </extensionElements>
     </startEvent>
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theTask" />

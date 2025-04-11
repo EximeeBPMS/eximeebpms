@@ -35,7 +35,7 @@ public class CreateModelTest {
   public void createEmptyModel() {
     modelInstance = Bpmn.createEmptyModel();
     definitions = modelInstance.newInstance(Definitions.class);
-    definitions.setTargetNamespace("http://eximeebpms.org/examples");
+    definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
   }
 

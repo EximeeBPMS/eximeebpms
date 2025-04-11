@@ -42,7 +42,7 @@ You can easily create a new empty BPMN model.
 ----
 BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
 Definitions definitions = modelInstance.newInstance(Definitions.class);
-definitions.setTargetNamespace("http://eximeebpms.org/examples");
+definitions.setTargetNamespace("http://camunda.org/examples");
 modelInstance.setDefinitions(definitions);
 ----
 

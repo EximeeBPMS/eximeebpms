@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="org.eximeebpms.bpm.engine.test.enginge.test.api.runtime">
 
-  <process id="oneTaskProcessForHistoricIdentityLinkWithCanidateStarterUsers" eximeebpms:candidateStarterUsers="demo" isExecutable="true">
+  <process id="oneTaskProcessForHistoricIdentityLinkWithCanidateStarterUsers" camunda:candidateStarterUsers="demo" isExecutable="true">
 
     <startEvent id="theStart" />
     <sequenceFlow sourceRef="theStart" targetRef="theTask" />

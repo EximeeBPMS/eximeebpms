@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
   
   <error id="myError" errorCode="23"/>
@@ -14,7 +14,7 @@
     
     <callActivity id="callSubProcess" calledElement="catchErrorThrownByJavaDelegateOnCallActivity-child" >
      <extensionElements>
-      <eximeebpms:in source="exceptionType" target="exceptionType" ></eximeebpms:in>
+      <camunda:in source="exceptionType" target="exceptionType" ></camunda:in>
      </extensionElements>
     </callActivity> 
     

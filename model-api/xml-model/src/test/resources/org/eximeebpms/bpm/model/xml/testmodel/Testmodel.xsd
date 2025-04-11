@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema elementFormDefault="qualified" attributeFormDefault="unqualified"
   xmlns="http://www.w3.org/2001/XMLSchema"
-  xmlns:tns="http://eximeebpms.org/animals"
-  targetNamespace="http://eximeebpms.org/animals">
+  xmlns:tns="http://camunda.org/animals"
+  targetNamespace="http://camunda.org/animals">
 
   <element name="animals" type="tns:tAnimals"/>
   <complexType name="tAnimals">

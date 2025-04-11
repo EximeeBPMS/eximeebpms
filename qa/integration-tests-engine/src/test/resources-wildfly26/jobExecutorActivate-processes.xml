@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<process-application xmlns="http://eximeebpms.org/schema/1.0/ProcessApplication" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://eximeebpms.org/schema/1.0/ProcessApplication http://eximeebpms.org/schema/1.0/ProcessApplication ">
+<process-application xmlns="http://camunda.org/schema/1.0/ProcessApplication" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://camunda.org/schema/1.0/ProcessApplication http://camunda.org/schema/1.0/ProcessApplication ">
 
   <process-engine name="jobExecutorActivate-FALSE-engine">
     <job-acquisition>second</job-acquisition>

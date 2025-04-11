@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  */
 public class XmlTestConstants {
 
-  public static final String EXAMPLE_NAMESPACE = "http://eximeebpms.org/example";
+  public static final String EXAMPLE_NAMESPACE = "http://camunda.org/example";
 
   public static final String EXAMPLE_XML_FILE_NAME = "org/eximeebpms/spin/xml/example.xml";
 

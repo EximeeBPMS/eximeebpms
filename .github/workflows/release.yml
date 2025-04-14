@@ -14,8 +14,14 @@ jobs:
   release:
     runs-on: self-hosted
     steps:
+      - name: Determine user and set secret
+        run: |
+          echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
+          
       - name: Check out the code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets[env.GITHUB_PAT_USER] }}
         
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -42,10 +48,11 @@ jobs:
               </servers>
             </settings>
             EOF
+            cat ~/.m2/settings.xml
         env:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
         
       - name: Import GPG key
         run: |
@@ -65,14 +72,14 @@ jobs:
           git config --global user.email 'github-actions@github.com'
       - name: Release prepare & perform with Maven
         run: |
-          ./mvnw release:prepare release:perform -Darguments="-DskipTests" -B \
+          ./mvnw -X release:prepare release:perform -B \
             -Prelease \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.dmn</groupId>
     <artifactId>eximeebpms-engine-dmn-root</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3</version>
   </parent>
 
   <artifactId>eximeebpms-engine-feel-scala</artifactId>

@@ -72,7 +72,7 @@ jobs:
           git config --global user.email 'github-actions@github.com'
       - name: Release prepare & perform with Maven
         run: |
-          ./mvnw -X release:prepare release:perform -B \
+          ./mvnw release:prepare release:perform -B \
             -Prelease \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \

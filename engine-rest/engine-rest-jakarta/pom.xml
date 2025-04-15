@@ -9,7 +9,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-engine-rest-root</artifactId>
     <relativePath>../</relativePath>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.0.7</version>
   </parent>
 
   <properties>

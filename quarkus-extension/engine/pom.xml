@@ -6,7 +6,7 @@
   <parent>
     <artifactId>eximeebpms-bpm-quarkus-parent</artifactId>
     <groupId>org.eximeebpms.bpm.quarkus</groupId>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-bpm-quarkus-engine-parent</artifactId>

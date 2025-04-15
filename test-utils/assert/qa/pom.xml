@@ -9,7 +9,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-bpm-assert-root</artifactId>
     <relativePath>../</relativePath>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
   </parent>
 
   <dependencies>

@@ -181,7 +181,7 @@
     <profile>
       <id>distro-tomcat</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>distro/license-book</module>
@@ -192,7 +192,7 @@
     <profile>
       <id>distro-wildfly</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>javaee/ejb-client</module>
@@ -206,7 +206,7 @@
     <profile>
       <id>distro-webjar</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>distro/webjar</module>
@@ -216,7 +216,7 @@
     <profile>
       <id>distro-run</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>distro/run</module>

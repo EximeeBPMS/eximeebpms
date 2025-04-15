@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-root</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.3</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>org.eximeebpms.connect</groupId>
   <artifactId>eximeebpms-connect-bom</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3</version>
   <name>EximeeBPMS - connect - bom</name>
   <packaging>pom</packaging>
 

@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @author Stefan Hentschel.
  */
-@XmlRootElement(namespace = "http://eximeebpms.org/example")
+@XmlRootElement(namespace = "http://camunda.org/example")
 public class Customer {
 
   private String id;
@@ -41,7 +41,7 @@ public class Customer {
   }
 
   // <name>
-  @XmlElement(namespace = "http://eximeebpms.org/example")
+  @XmlElement(namespace = "http://camunda.org/example")
   public String getName() {
     return name;
   }
@@ -51,7 +51,7 @@ public class Customer {
   }
 
   // <contractStartDate>
-  @XmlElement(namespace = "http://eximeebpms.org/example")
+  @XmlElement(namespace = "http://camunda.org/example")
   public int getContractStartDate() {
     return contractStartDate;
   }

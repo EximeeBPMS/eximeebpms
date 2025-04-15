@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
   xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
   expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Examples">
  
-  <process id="mainProcessASync" isExecutable="true" eximeebpms:historyTimeToLive="5">
+  <process id="mainProcessASync" isExecutable="true" camunda:historyTimeToLive="5">
 
     <startEvent id="start" />
     
     <sequenceFlow sourceRef="start" targetRef="serviceBefore" />
     
-    <serviceTask id="serviceBefore" eximeebpms:delegateExpression="${delegateBefore}" />
+    <serviceTask id="serviceBefore" camunda:delegateExpression="${delegateBefore}" />
     
     <sequenceFlow sourceRef="serviceBefore" targetRef="callActivity" />
     
-    <callActivity id="callActivity" calledElement="${calledElement}" eximeebpms:async="true" />
+    <callActivity id="callActivity" calledElement="${calledElement}" camunda:async="true" />
     
     <sequenceFlow sourceRef="callActivity" targetRef="serviceAfter" />
     
-    <serviceTask id="serviceAfter" eximeebpms:delegateExpression="${delegateAfter}" />
+    <serviceTask id="serviceAfter" camunda:delegateExpression="${delegateAfter}" />
     
     <sequenceFlow sourceRef="serviceAfter" targetRef="userTask" />
     

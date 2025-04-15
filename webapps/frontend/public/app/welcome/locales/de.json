@@ -17,7 +17,6 @@
     "AUTH_LOGOUT_SUCCESSFUL": "Sie haben sich erfolgreich abgemeldet",
     "AUTH_LOGOUT_THANKS": "Vielen Dank für die Nutzung von Camunda. Wir wünschen einen schönen {{dayContext}}!",
     "BACK": "Zurück",
-    "BANNER_CE_EOL_TEXT": "Es ist Zeit zu Camunda 8 zu migrieren! Das letzte Release von Camunda 7 CE wird im Oktober 2025 sein. Werfe einen Blick in den <a href=\"https://docs.camunda.io/docs/guides/migrating-from-camunda-7/\">Migrations-Guide</a>.",
     "BOOLEAN": "Boolean",
     "CAM_WIDGET_BPMN_VIEWER_ERROR": "Diagramm konnte nicht gerendert werden:",
     "CAM_WIDGET_BPMN_VIEWER_LOADING": "Diagramm laden",
@@ -97,7 +96,7 @@
     "FILTER": "Filter",
     "FILTERS": "Filter",
     "FIRST_LOGIN_HEADING": "Willkommen bei Camunda",
-    "FIRST_LOGIN_INFO": "Anscheinend verwenden Sie die Webapps zum ersten Mal. Besuchen Sie die <a href=\"/eximeebpms-welcome\">Camunda Welcome Seite</a> für einen schnellen Überblick.",
+    "FIRST_LOGIN_INFO": "Anscheinend verwenden Sie die Webapps zum ersten Mal. Besuchen Sie die <a href=\"/eximeebpms-welcome\">EximeeBPMS Welcome Seite</a> für einen schnellen Überblick.",
     "FIRST_NAME": "Vorname",
     "GROUPS": "Benutzergruppen",
     "INTEGER": "Integer",
@@ -149,6 +148,10 @@
     "REQUIRED_HEX_COLOR_FIELD": "Wert muß eine hexadezimale Farbe sein",
     "REQUIRED_INTEGER_FIELD": "Wert muß eine ganze Zahl sein",
     "SAVE": "Speichern",
+    "SEARCH_GREATER_THAN": ">",
+    "SEARCH_GREATER_THAN_EQUALS": ">=",
+    "SEARCH_LESS_THAN": "<",
+    "SEARCH_LESS_THAN_EQUALS": "<=",
     "SERVICES_RESOURCE_RESOLVER_AUTH_FAILED": "Authentifizierung fehlgeschlagen. Ihre Sitzung könnte abgelaufen sein. Bitte melden Sie sich erneut an.",
     "SERVICES_RESOURCE_RESOLVER_DISPLAY_FAILED": "Fehler beim Anzeigen von {{resourceName}}",
     "SERVICES_RESOURCE_RESOLVER_ID_NOT_FOUND": "Keine {{resourceName}} mit der ID {{id}} gefunden",
@@ -167,10 +170,6 @@
     "TOGGLE_NAVIGATION": "Navigation umschalten",
     "UPDATE": "Aktualisieren",
     "USERNAME": "Benutzername",
-    "USERNAME_FOR_AUTHENTICATION": "Benutzername für Authentifizierung: {{username}}",
-    "SEARCH_LESS_THAN": "<",
-    "SEARCH_LESS_THAN_EQUALS": "<=",
-    "SEARCH_GREATER_THAN": ">",
-    "SEARCH_GREATER_THAN_EQUALS": ">="
+    "USERNAME_FOR_AUTHENTICATION": "Benutzername für Authentifizierung: {{username}}"
   }
 }

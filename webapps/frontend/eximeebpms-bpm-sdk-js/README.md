@@ -10,7 +10,7 @@ bower install eximeebpms-bpm-sdk-js --save
 
 ## Documentation
 
-See https://docs.camunda.org/manual/latest/reference/embedded-forms/
+See https://docs.eximeebpms.org/manual/latest/reference/embedded-forms/
 
 ## Development
 

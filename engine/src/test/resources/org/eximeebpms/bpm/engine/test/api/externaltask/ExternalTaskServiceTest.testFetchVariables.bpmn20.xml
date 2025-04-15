@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <process id="subProcessExternalTask" isExecutable="true">
@@ -10,18 +10,18 @@
 
     <subProcess id="subProcess">
       <extensionElements>
-        <eximeebpms:inputOutput>
-          <eximeebpms:inputParameter name="subProcessVar">${44}</eximeebpms:inputParameter>
-        </eximeebpms:inputOutput>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="subProcessVar">${44}</camunda:inputParameter>
+        </camunda:inputOutput>
       </extensionElements>
 
       <startEvent id="subProcessStart" />
       <sequenceFlow id="flow2" sourceRef="subProcessStart" targetRef="externalTask" />
-      <serviceTask id="externalTask" eximeebpms:type="external" eximeebpms:topic="externalTaskTopic">
+      <serviceTask id="externalTask" camunda:type="external" camunda:topic="externalTaskTopic">
         <extensionElements>
-          <eximeebpms:inputOutput>
-            <eximeebpms:inputParameter name="taskVar">${45}</eximeebpms:inputParameter>
-          </eximeebpms:inputOutput>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="taskVar">${45}</camunda:inputParameter>
+          </camunda:inputOutput>
         </extensionElements>
       </serviceTask>
       <sequenceFlow id="flow3" sourceRef="externalTask" targetRef="subProcessEnd" />

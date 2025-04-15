@@ -1437,12 +1437,12 @@ public interface ManagementService {
   /**
    * This method returns the current state of the collected telemetry data. For a
    * detailed explanation on what is included, read the
-   * <a href="https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Telemetry</a>
+   * <a href="https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Telemetry</a>
    * page in the Camunda docs.
    *
    * The engine collects information about multiple aspects of the installation.
    *
-   * @see <a href="https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda Documentation: Telemetry</a>
+   * @see <a href="https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Camunda Documentation: Telemetry</a>
    */
   TelemetryData getTelemetryData();
 

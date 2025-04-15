@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
-  xmlns:fox="http://eximeebpms.org/fox"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns:fox="http://www.camunda.org/fox"
   targetNamespace="Examples">
 
   <process id="process" isExecutable="true">
@@ -11,11 +11,11 @@
     
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="task" />
     
-    <userTask id="task" eximeebpms:asyncAfter="true">
+    <userTask id="task" camunda:asyncAfter="true">
       <extensionElements>
          <fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
       </extensionElements>
-      <multiInstanceLoopCharacteristics isSequential="false" eximeebpms:asyncBefore="true">
+      <multiInstanceLoopCharacteristics isSequential="false" camunda:asyncBefore="true">
         <extensionElements>
            <fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
         </extensionElements>

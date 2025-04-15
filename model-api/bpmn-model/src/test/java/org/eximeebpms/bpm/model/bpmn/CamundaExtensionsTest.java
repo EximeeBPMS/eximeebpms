@@ -1168,7 +1168,7 @@ public class CamundaExtensionsTest {
         return camundaInputParameter;
       }
     }
-    throw new BpmnModelException("Unable to find eximeebpms:inputParameter with name '" + name + "' for element with id '" + baseElement.getId() + "'");
+    throw new BpmnModelException("Unable to find camunda:inputParameter with name '" + name + "' for element with id '" + baseElement.getId() + "'");
   }
 
   @After

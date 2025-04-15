@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Examples">
-  <process id="testTaskListenerProcess" isExecutable="true" eximeebpms:historyTimeToLive="5">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Examples">
+  <process id="testTaskListenerProcess" isExecutable="true" camunda:historyTimeToLive="5">
     <startEvent id="theStart" name="Start"></startEvent>
     
     <userTask id="usertask" name="First User Task">
 	    <extensionElements>
-			  <eximeebpms:taskListener event="complete" class="org.eximeebpms.bpm.integrationtest.functional.classloading.beans.ExampleTaskListener" ></eximeebpms:taskListener>
-			  <eximeebpms:taskListener event="assignment" class="org.eximeebpms.bpm.integrationtest.functional.classloading.beans.ExampleTaskListener" ></eximeebpms:taskListener>
+			  <camunda:taskListener event="complete" class="org.eximeebpms.bpm.integrationtest.functional.classloading.beans.ExampleTaskListener" ></camunda:taskListener>
+			  <camunda:taskListener event="assignment" class="org.eximeebpms.bpm.integrationtest.functional.classloading.beans.ExampleTaskListener" ></camunda:taskListener>
 			</extensionElements>
     </userTask>
     <userTask id="usertask2" name="Second User Task">
 	    <extensionElements>
-	      <eximeebpms:taskListener event="complete" delegateExpression="${taskListener}" ></eximeebpms:taskListener>
-	      <eximeebpms:taskListener event="assignment" delegateExpression="${taskListener}" ></eximeebpms:taskListener>
+	      <camunda:taskListener event="complete" delegateExpression="${taskListener}" ></camunda:taskListener>
+	      <camunda:taskListener event="assignment" delegateExpression="${taskListener}" ></camunda:taskListener>
 	    </extensionElements>
     </userTask>
     

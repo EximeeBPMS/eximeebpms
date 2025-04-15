@@ -910,7 +910,7 @@ public class TaskServiceTest {
       String processInstanceId = "someProcessInstanceId";
       String attachmentName = "attachmentName";
       String attachmentDescription = "attachmentDescription";
-      String url = "http://eximeebpms.org";
+      String url = "http://camunda.org";
 
       Attachment attachment = taskService.createAttachment(
           attachmentType,

@@ -1,4 +1,13 @@
 {
+  "tooltips": {
+    "deleteSearch": "DELETE_SEARCH",
+    "inputPlaceholder": "SEARCH_PLACEHOLDER",
+    "invalid": "INVALID_SEARCH",
+    "name": "PROPERTY",
+    "operator": "OPERATOR",
+    "type": "TYPE",
+    "value": "VALUE"
+  },
   "types": [
     {
       "id": {
@@ -53,14 +62,5 @@
         }
       ]
     }
-  ],
-  "tooltips": {
-    "inputPlaceholder": "SEARCH_PLACEHOLDER",
-    "invalid": "INVALID_SEARCH",
-    "deleteSearch": "DELETE_SEARCH",
-    "type": "TYPE",
-    "name": "PROPERTY",
-    "operator": "OPERATOR",
-    "value": "VALUE"
-  }
+  ]
 }

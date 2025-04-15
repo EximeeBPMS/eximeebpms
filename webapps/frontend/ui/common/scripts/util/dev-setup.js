@@ -24,7 +24,9 @@ export const setupDev = () => {
   const newPath = href.replace('{ENGINE}', engine);
   base.attr('href', newPath);
 
-  if (!window.location.href.includes(`/eximeebpms/app/admin/${engine}/setup/`)) {
+  if (
+    !window.location.href.includes(`/eximeebpms/app/admin/${engine}/setup/`)
+  ) {
     fetch(`/eximeebpms/api/admin/setup/${engine}/user/create`, {
       method: 'POST',
       body: JSON.stringify({}),

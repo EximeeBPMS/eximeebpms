@@ -1,22 +1,22 @@
-# Camunda Webapp
+# EximeeBPMS Webapp
 
-This is the Camunda Platform web application source.
+This is the EximeeBPMS web application source.
 Clean, package and install it via [Maven](https://maven.apache.org/).
 
 ## Structure of this project
 
 The structure is as follows:
 
-* `assembly` - Java sources and tests for the Camunda web application based on `javax` namespace.
-* `assembly-jakarta` - Java sources and tests for the Camunda web application based on `jakarta` namespace.
+* `assembly` - Java sources and tests for the EximeeBPMS web application based on `javax` namespace.
+* `assembly-jakarta` - Java sources and tests for the EximeeBPMS web application based on `jakarta` namespace.
   * This module is created from the `assembly` module via code transformation.
-* `frontend` - HTML, CSS and Javascript sources as well as Plugins and tests for the Camunda webapplications Cockpit, Tasklist and Admin.
+* `frontend` - HTML, CSS and Javascript sources as well as Plugins and tests for the EximeeBPMS webapplications Cockpit, Tasklist and Admin.
 
 ## FRONTEND
 
 ### UI
 
-There are 3 web applications available for the Camunda Platform :
+There are 3 web applications available for the EximeeBPMS Platform :
 
 * __cockpit__: an administration interface for processes and decisions
 * __tasklist__: provides an interface to process user tasks
@@ -32,20 +32,20 @@ The webapps above are relying on 2 libraries:
 
 Parts of the web applications can be extended using plugins.
 
-See [plugin development guide](http://docs.camunda.org/latest/real-life/how-to/#cockpit-how-to-develop-a-cockpit-plugin) for details.
+See [plugin development guide](http://docs.eximeebpms.org/real-life/how-to/#cockpit-how-to-develop-a-cockpit-plugin) for details.
 
 #### Translations
 
 English and german translations are located in the `ui/<app>/client/locales` folders.  
-Translations for other languages are available in the [camunda-7-webapp-translations](https://github.com/camunda-community-hub/camunda-7-webapp-translations) repository.
+Translations for other languages are available in the [eximeebpms-webapp-translations](https://github.com/camunda-community-hub/camunda-7-webapp-translations) repository.
 
 ### Libraries
 
-#### [eximeebpms-bpm-sdk-js](https://github.com/camunda/eximeebpms-bpm-platform/tree/master/webapps/frontend/eximeebpms-bpm-sdk-js)
+#### [eximeebpms-bpm-sdk-js](https://github.com/EximeeBPMS/eximeebpms/tree/master/webapps/frontend/eximeebpms-bpm-sdk-js)
 
 Has tools to work with the REST API and forms (included transitively via eximeebpms-commons-ui).
 
-#### [eximeebpms-commons-ui](https://github.com/camunda/eximeebpms-bpm-platform/tree/master/webapps/frontend/eximeebpms-commons-ui)
+#### [eximeebpms-commons-ui](https://github.com/EximeeBPMS/eximeebpms/tree/master/webapps/frontend/eximeebpms-commons-ui)
 
 Contains resources like images, [`.less`](http://lesscss.org) stylesheets as well as some [angular.js](http://angularjs.org) modules.
 
@@ -57,7 +57,7 @@ You need [node.js](http://nodejs.org) >= 17 and npm.
 
 #### Adjusting Maven Settings
 
-See https://github.com/camunda/eximeebpms-bpm-platform/blob/master/CONTRIBUTING.md#build-from-source
+See https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md#build-from-source
 
 #### Using Webpack
 
@@ -65,7 +65,7 @@ Build the web apps using Webpack:
 
 ```sh
 # cd <path to your workspace>
-git clone git@github.com:camunda/eximeebpms-bpm-platform.git
+git clone git@github.com:EximeeBPMS/eximeebpms.git
 cd eximeebpms-bpm-platform/webapps/frontend
 npm install
 npm start
@@ -102,14 +102,14 @@ The supported browsers are:
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/eximeebpms-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## Help and support
 
-* [Documentation](http://docs.camunda.org/manual/latest/)
-* [Forum](https://forum.camunda.org)
+* [Documentation](http://docs.eximeebpms.org/manual/)
 * [Stackoverflow](https://stackoverflow.com/questions/tagged/camunda)
+<!-- * [Forum](https://forum.camunda.org)-->
 
 ## License
 

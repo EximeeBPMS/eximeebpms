@@ -1,17 +1,14 @@
 # EximeeBPMS - The open source BPMN platform
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.camunda.org/manual/latest/) [![License](https://img.shields.io/github/license/camunda/camunda-bpm-platform?color=blue&logo=apache)](https://github.com/camunda/camunda-bpm-platform/blob/master/LICENSE) [![Forum](https://img.shields.io/badge/forum-camunda-green)](https://forum.camunda.org/)
-
-> [!Caution]  
-> Camunda 7 Community Edition will reach its **end of life by October 2025** and the Enterprise Edition will move into maintenance mode, receiving only maintenance improvements as well as bug and security fixes from that point forward. Looking ahead, [Camunda 8](https://github.com/camunda/camunda) is the successor to this project, so we strongly encourage you to explore it and contribute there instead.
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/) [![License](https://img.shields.io/github/license/camunda/camunda-bpm-platform?color=blue&logo=apache)](https://github.com/camunda/camunda-bpm-platform/blob/master/LICENSE) [![Forum](https://img.shields.io/badge/forum-camunda-green)](https://forum.camunda.org/)
 
 EximeeBPMS is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
 
-- Web Site: https://www.camunda.org/
-- Getting Started: https://docs.camunda.org/get-started/
-- User Forum: https://forum.camunda.org/
-- Issue Tracker: https://github.com/camunda/camunda-bpm-platform/issues
-- Contribution Guidelines: https://camunda.org/contribute/
+- Web Site: https://eximeebpms.org/
+- Getting Started: https://docs.eximeebpms.org/get-started/ 
+<!-- - User Forum: https://forum.camunda.org/ -->
+- Issue Tracker: https://github.com/EximeeBPMS/eximeebpms/issues
+<!-- - Contribution Guidelines: https://eximeebpms.org/contribute/ -->
 
 ## Components
 
@@ -19,7 +16,7 @@ EximeeBPMS provides a rich set of components centered around the BPM lifecycle.
 
 #### Process Implementation and Execution
 
-- Camunda Engine - The core component responsible for executing BPMN 2.0 processes.
+- EximeeBPMS Engine - The core component responsible for executing BPMN 2.0 processes.
 - REST API - The REST API provides remote access to running processes.
 - Spring, CDI Integration - Programming model integration that allows developers to write Java Applications that interact with running processes.
 
@@ -29,18 +26,18 @@ EximeeBPMS provides a rich set of components centered around the BPM lifecycle.
 
 #### Process Operations
 
-- Camunda Engine - JMX and advanced Runtime Container Integration for process engine monitoring.
-- Camunda Cockpit - Web application tool for process operations.
-- Camunda Admin - Web application for managing users, groups, and their access permissions.
+- EximeeBPMS Engine - JMX and advanced Runtime Container Integration for process engine monitoring.
+- EximeeBPMS Cockpit - Web application tool for process operations.
+- EximeeBPMS Admin - Web application for managing users, groups, and their access permissions.
 
 #### Human Task Management
 
-- Camunda Tasklist - Web application for managing and completing user tasks in the context of processes.
+- EximeeBPMS Tasklist - Web application for managing and completing user tasks in the context of processes.
 
 #### And there's more...
 
 - [bpmn.io](https://bpmn.io/) - Toolkits for BPMN, CMMN, and DMN in JavaScript (rendering, modeling)
-- [Community Extensions](https://docs.camunda.org/manual/7.5/introduction/extensions/) - Extensions on top of EximeeBPMS provided and maintained by our great open source community
+- [Community Extensions](https://docs.eximeebpms.org/manual/latest/introduction/latest/extensions/) - Extensions on top of EximeeBPMS provided and maintained by our great open source community
 
 ## A Framework
 
@@ -67,4 +64,4 @@ To run the tests in this repository, please see our [testing tips and tricks](TE
 
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
 
-EximeeBPMS uses and includes third-party dependencies published under various licenses. By downloading and using EximeeBPMS artifacts, you agree to their terms and conditions. Refer to https://docs.camunda.org/manual/latest/introduction/third-party-libraries/ for an overview of third-party libraries and particularly important third-party licenses we want to make you aware of.
+EximeeBPMS uses and includes third-party dependencies published under various licenses. By downloading and using EximeeBPMS artifacts, you agree to their terms and conditions. Refer to https://docs.eximeebpms.org/manual/latest/introduction/third-party-libraries/ for an overview of third-party libraries and particularly important third-party licenses we want to make you aware of.

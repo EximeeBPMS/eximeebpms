@@ -1,7 +1,7 @@
 REST API
 ========
 
-A JAX-RS-based REST API for Camunda Platform.
+A JAX-RS-based REST API for EximeebPMS Platform.
 
 Running Tests
 -------------

@@ -136,7 +136,7 @@ public class AttributeTest extends TestModelTest {
 
   @Test
   public void testSetNamespaceUri() {
-    String testNamespace = "http://eximeebpms.org/test";
+    String testNamespace = "http://camunda.org/test";
 
     ((AttributeImpl<String>) idAttribute).setNamespaceUri(testNamespace);
     assertThat(idAttribute).hasNamespaceUri(testNamespace);

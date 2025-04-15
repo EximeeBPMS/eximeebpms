@@ -1,3 +1,3 @@
-#camunda commons Utils
+#EximeeBPMS commons Utils
 
-This project provides some generic util classes which are use in several camunda projects.
+This project provides some generic util classes which are use in several Camunda projects.

@@ -211,7 +211,7 @@ ExternalTask.retries = function(params, done) {
 /**
  * Set the number of retries left to execute an external task asynchronously. If retries are set to 0, an incident is created.
  *
- * @see https://docs.camunda.org/manual/latest/reference/rest/external-task/post-retries-async/
+ * @see https://docs.eximeebpms.org/manual/latest/reference/rest/external-task/post-retries-async/
  *
  * @param   {Object}            params
  * @param   {requestCallback}   done

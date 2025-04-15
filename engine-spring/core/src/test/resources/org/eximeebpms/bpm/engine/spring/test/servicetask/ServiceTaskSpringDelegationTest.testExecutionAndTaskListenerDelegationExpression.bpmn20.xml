@@ -2,7 +2,7 @@
 
 <definitions id="definitions" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
   
   <process id="executionAndTaskListenerDelegation" isExecutable="true">
@@ -12,12 +12,12 @@
     
     <userTask id="userTask" name="Schedule meeting">
       <extensionElements>
-        <eximeebpms:executionListener event="start" delegateExpression="${myExecutionListenerBean}">
-          <eximeebpms:field name="someField" stringValue="executionListenerInjection"/>
-        </eximeebpms:executionListener>
-        <eximeebpms:taskListener event="create" delegateExpression="${myTaskListenerBean}">
-          <eximeebpms:field name="someField" stringValue="taskListenerInjection"/>
-        </eximeebpms:taskListener>
+        <camunda:executionListener event="start" delegateExpression="${myExecutionListenerBean}">
+          <camunda:field name="someField" stringValue="executionListenerInjection"/>
+        </camunda:executionListener>
+        <camunda:taskListener event="create" delegateExpression="${myTaskListenerBean}">
+          <camunda:field name="someField" stringValue="taskListenerInjection"/>
+        </camunda:taskListener>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow3" sourceRef="userTask" targetRef="end" />

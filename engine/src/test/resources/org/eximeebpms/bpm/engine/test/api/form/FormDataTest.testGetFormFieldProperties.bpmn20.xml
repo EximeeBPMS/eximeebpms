@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+    xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
     xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
     xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
     xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
@@ -15,18 +15,18 @@
 
     <sequenceFlow sourceRef="start" targetRef="usertask" />
 
-    <userTask id="usertask" name="Task" eximeebpms:candidateGroups="dummy">
+    <userTask id="usertask" name="Task" camunda:candidateGroups="dummy">
       <extensionElements>
-        <eximeebpms:formData>
-            <eximeebpms:formField
+        <camunda:formData>
+            <camunda:formField
                 id="stringField" label="String Field" type="string"
                 defaultValue="someString">
-              <eximeebpms:properties>
-                <eximeebpms:property id="p1" value="property1"/>
-                <eximeebpms:property id="p2" value="property2"/>
-              </eximeebpms:properties>
-            </eximeebpms:formField>
-        </eximeebpms:formData>
+              <camunda:properties>
+                <camunda:property id="p1" value="property1"/>
+                <camunda:property id="p2" value="property2"/>
+              </camunda:properties>
+            </camunda:formField>
+        </camunda:formData>
       </extensionElements>
     </userTask>
 

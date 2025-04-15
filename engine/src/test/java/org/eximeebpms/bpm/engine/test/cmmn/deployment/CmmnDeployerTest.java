@@ -173,7 +173,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
   protected static CmmnModelInstance createCmmnModelInstance() {
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
     org.eximeebpms.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(org.eximeebpms.bpm.model.cmmn.instance.Definitions.class);
-    definitions.setTargetNamespace("http://eximeebpms.org/examples");
+    definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
 
     Case caseElement = modelInstance.newInstance(Case.class);
@@ -215,7 +215,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     // given empty case model
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
     org.eximeebpms.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(org.eximeebpms.bpm.model.cmmn.instance.Definitions.class);
-    definitions.setTargetNamespace("http://eximeebpms.org/examples");
+    definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
 
     // when case model is deployed

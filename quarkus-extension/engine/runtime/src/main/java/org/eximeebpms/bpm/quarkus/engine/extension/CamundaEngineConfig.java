@@ -28,7 +28,7 @@ public interface CamundaEngineConfig {
 
   /**
    * The Camunda ProcessEngineConfiguration properties. For more details,
-   * @see <a href="https://docs.camunda.org/manual/latest/reference/deployment-descriptors/tags/process-engine/#configuration-properties">Process Engine Configuration Properties</a>.
+   * @see <a href="https://docs.eximeebpms.org/manual/latest/reference/deployment-descriptors/tags/process-engine/#configuration-properties">Process Engine Configuration Properties</a>.
    */
   Map<String, String> genericConfig();
 

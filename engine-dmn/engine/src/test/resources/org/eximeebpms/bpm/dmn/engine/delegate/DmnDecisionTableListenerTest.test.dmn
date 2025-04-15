@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd"
-             xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/dmn"
+             xmlns:camunda="http://camunda.org/schema/1.0/dmn"
              id="definitions"
              name="camunda"
-             namespace="http://eximeebpms.org/schema/1.0/dmn">
+             namespace="http://camunda.org/schema/1.0/dmn">
 
   <decision id="decision" name="decision">
     <decisionTable id="decisionTable" hitPolicy="RULE ORDER">
@@ -12,7 +12,7 @@
           <text>${input1}</text>
         </inputExpression>
       </input>
-      <input id="input2" eximeebpms:inputVariable="x">
+      <input id="input2" camunda:inputVariable="x">
         <inputExpression id="inputExpression2">
           <text>${input2}</text>
         </inputExpression>

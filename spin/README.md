@@ -2,10 +2,10 @@ eximeebpms-spin
 ============
 
 <p>
-  <a href="https://camunda.com/">Home</a> |
-  <a href="https://docs.camunda.org/manual/reference/spin/">Documentation</a> |
-  <a href="https://forum.camunda.org/">Forum</a> |
-  <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> |
+  <a href="https://eximeebpms.org/">Home</a> |
+  <a href="https://docs.eximeebpms.org/manual/latest/reference/spin/">Documentation</a> |
+  <!-- <a href="https://forum.camunda.org/">Forum</a> | -->
+  <!-- <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> | -->
   <a href="../LICENSE">License</a> |
   <a href="../CONTRIBUTING.md">Contribute</a>
 </p>
@@ -72,7 +72,7 @@ Element e = XML( xmlSource ).childElement("customer").unwrap();
 
 # Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 # License:

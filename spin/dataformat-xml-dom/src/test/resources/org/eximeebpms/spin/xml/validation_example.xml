@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><customers xmlns="http://eximeebpms.org/example" xmlns:ns2="http://eximeebpms.org/test-example" dueUntil="20150112" order="order1">
+<?xml version="1.0" encoding="UTF-8"?><customers xmlns="http://camunda.org/example" xmlns:ns2="http://camunda.org/test-example" dueUntil="20150112" order="order1">
   <customer id="customer1">
     <contractStartDate>1354539722</contractStartDate>
     <name>Kermit</name>

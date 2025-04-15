@@ -1,4 +1,4 @@
-# Camunda Platform JUnit 5
+# EximeeBPMS JUnit 5
 
 JUnit 5 extension that allows you to inject a process engine into your test.
 

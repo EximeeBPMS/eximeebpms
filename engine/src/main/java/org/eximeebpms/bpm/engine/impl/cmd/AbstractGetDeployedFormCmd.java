@@ -56,7 +56,7 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
     } else if(camundaFormRef != null && camundaFormRef.getKey() != null) {
       return getResourceForCamundaFormRef(camundaFormRef, formData.getDeploymentId());
     } else {
-      throw new BadUserRequestException("One of the attributes 'formKey' and 'eximeebpms:formRef' must be supplied but none were set.");
+      throw new BadUserRequestException("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
     }
   }
 

@@ -133,7 +133,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Delete multiple process instances asynchronously (batch).
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-delete/
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-delete/
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -149,7 +149,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Delete a set of process instances asynchronously (batch) based on a historic process instance query.
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-delete-historic-query-based/
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-delete-historic-query-based/
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -165,7 +165,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Set retries of jobs belonging to process instances asynchronously (batch).
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-set-job-retries
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-set-job-retries
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -181,7 +181,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Create a batch to set retries of jobs asynchronously based on a historic process instance query.
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-set-job-retries-historic-query-based
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-set-job-retries-historic-query-based
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -197,7 +197,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Activates or suspends process instances asynchronously with a list of process instance ids, a process instance query, and/or a historical process instance query
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-activate-suspend-in-batch/
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-activate-suspend-in-batch/
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -212,7 +212,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Sets variables to process instances (batch).
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-set-variables-async/
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-set-variables-async/
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done
@@ -227,7 +227,7 @@ var ProcessInstance = AbstractClientResource.extend(
     /**
      * Correlates a message against process instances (batch).
      *
-     * @see https://docs.camunda.org/manual/latest/reference/rest/process-instance/post-message-async/
+     * @see https://docs.eximeebpms.org/manual/latest/reference/rest/process-instance/post-message-async/
      *
      * @param   {Object}            payload
      * @param   {requestCallback}   done

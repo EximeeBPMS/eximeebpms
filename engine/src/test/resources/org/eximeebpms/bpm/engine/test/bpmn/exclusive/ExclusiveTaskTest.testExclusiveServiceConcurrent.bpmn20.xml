@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <process id="exclusive" isExecutable="true">
@@ -15,9 +15,9 @@
     <sequenceFlow sourceRef="fork" targetRef="service2" />
     <sequenceFlow sourceRef="fork" targetRef="service3" />
     
-    <serviceTask id="service" eximeebpms:expression="${true}" eximeebpms:async="true" />
-    <serviceTask id="service2" eximeebpms:expression="${true}" eximeebpms:async="true" />
-    <serviceTask id="service3" eximeebpms:expression="${true}" eximeebpms:async="true" />
+    <serviceTask id="service" camunda:expression="${true}" camunda:async="true" />
+    <serviceTask id="service2" camunda:expression="${true}" camunda:async="true" />
+    <serviceTask id="service3" camunda:expression="${true}" camunda:async="true" />
     
     <parallelGateway id="fork2" />
     
@@ -25,9 +25,9 @@
     <sequenceFlow sourceRef="fork2" targetRef="service11" />
     <sequenceFlow sourceRef="fork2" targetRef="service12" />
     
-    <serviceTask id="service10" eximeebpms:expression="${true}" eximeebpms:async="true" />
-    <serviceTask id="service11" eximeebpms:expression="${true}" eximeebpms:async="true" />
-    <serviceTask id="service12" eximeebpms:expression="${true}" eximeebpms:async="true" />
+    <serviceTask id="service10" camunda:expression="${true}" camunda:async="true" />
+    <serviceTask id="service11" camunda:expression="${true}" camunda:async="true" />
+    <serviceTask id="service12" camunda:expression="${true}" camunda:async="true" />
     
     <sequenceFlow sourceRef="service10" targetRef="join2" />
     <sequenceFlow sourceRef="service11" targetRef="join2" />

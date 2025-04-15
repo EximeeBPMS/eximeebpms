@@ -811,7 +811,7 @@ public class BulkHistoryDeleteTest {
     String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
 
     Task task = taskService.createTaskQuery().singleResult();
-    taskService.createAttachment("foo", task.getId(), null, "something", null, "http://eximeebpms.org");
+    taskService.createAttachment("foo", task.getId(), null, "something", null, "http://camunda.org");
 
     // assume
     List<Attachment> attachments = taskService.getTaskAttachments(task.getId());

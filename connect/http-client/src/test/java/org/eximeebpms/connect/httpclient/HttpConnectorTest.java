@@ -42,7 +42,7 @@ import org.junit.Test;
 
 public class HttpConnectorTest {
 
-  public static final String EXAMPLE_URL = "http://eximeebpms.org/example";
+  public static final String EXAMPLE_URL = "http://camunda.org/example";
   public static final String EXAMPLE_CONTENT_TYPE = "application/json";
   public static final String EXAMPLE_PAYLOAD = "eximeebpms";
 

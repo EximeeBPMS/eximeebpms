@@ -27,8 +27,8 @@ import org.eximeebpms.bpm.model.xml.instance.DomElement;
 
 /**
  * A helper interface for camunda extension elements which
- * hold a generic child element like eximeebpms:inputParameter,
- * eximeebpms:outputParameter and eximeebpms:entry.
+ * hold a generic child element like camunda:inputParameter,
+ * camunda:outputParameter and camunda:entry.
  *
  * @author Sebastian Menski
  */

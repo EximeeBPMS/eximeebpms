@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 /**
  * @author Stefan Hentschel.
  */
-@XmlRootElement(name = "customers", namespace = "http://eximeebpms.org/example")
+@XmlRootElement(name = "customers", namespace = "http://camunda.org/example")
 public class Order {
   private String order;
   private Date dueUntil;
@@ -36,7 +36,7 @@ public class Order {
   private OrderDetails orderDetails;
 
   // <order-details>
-  @XmlElement(name = "order-details", namespace = "http://eximeebpms.org/example")
+  @XmlElement(name = "order-details", namespace = "http://camunda.org/example")
   public OrderDetails getOrderDetails() {
     return orderDetails;
   }
@@ -70,7 +70,7 @@ public class Order {
 
 
   // <customer tags>
-  @XmlElement(namespace = "http://eximeebpms.org/example")
+  @XmlElement(namespace = "http://camunda.org/example")
   public LinkedList<Customer> getCustomer() {
     return customer;
   }

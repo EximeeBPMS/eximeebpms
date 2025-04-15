@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn" targetNamespace="Examples">
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" targetNamespace="Examples">
 
   <process id="ioMappingProcess" isExecutable="true">
 
@@ -10,10 +10,10 @@
     <sequenceFlow id="flow2" sourceRef="task1" targetRef="task2"/>
     <userTask id="task2" >
       <extensionElements>
-        <eximeebpms:inputOutput>
-          <eximeebpms:inputParameter name="inputMappingExecuted">${true}</eximeebpms:inputParameter>
-          <eximeebpms:outputParameter name="outputMappingExecuted">${true}</eximeebpms:outputParameter>
-        </eximeebpms:inputOutput>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="inputMappingExecuted">${true}</camunda:inputParameter>
+          <camunda:outputParameter name="outputMappingExecuted">${true}</camunda:outputParameter>
+        </camunda:inputOutput>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow3" sourceRef="task2" targetRef="theEnd" />

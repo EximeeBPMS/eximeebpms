@@ -73,7 +73,7 @@ public class CmmnTransformerTest {
 
     modelInstance = Cmmn.createEmptyModel();
     definitions = modelInstance.newInstance(Definitions.class);
-    definitions.setTargetNamespace("http://eximeebpms.org/examples");
+    definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
 
     caseDefinition = createElement(definitions, "aCaseDefinition", Case.class);

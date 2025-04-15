@@ -29,7 +29,7 @@ import org.eximeebpms.bpm.engine.impl.pvm.delegate.MigrationObserverBehavior;
 
 /**
  * Implements behavior of external task activities, i.e. all service-task-like
- * activities that have eximeebpms:type="external".
+ * activities that have camunda:type="external".
  *
  * @author Thorben Lindhauer
  * @author Christopher Zell

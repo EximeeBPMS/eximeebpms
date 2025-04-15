@@ -37,21 +37,21 @@ import org.junit.runner.RunWith;
 public class ClassloadingDuringJobExecutionTest extends AbstractFoxPlatformIntegrationTest {
   protected static String process =
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
-      "<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:eximeebpms=\"http://eximeebpms.org/schema/1.0/bpmn\" targetNamespace=\"Examples\">\r\n" +
-      "  <process id=\"Process_1\" name=\"ServiceTask_Throw_BMPN_Error\" isExecutable=\"true\" eximeebpms:historyTimeToLive=\"P180D\">\r\n" +
+      "<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:camunda=\"http://camunda.org/schema/1.0/bpmn\" targetNamespace=\"Examples\">\r\n" +
+      "  <process id=\"Process_1\" name=\"ServiceTask_Throw_BMPN_Error\" isExecutable=\"true\" camunda:historyTimeToLive=\"P180D\">\r\n" +
       "    <startEvent id=\"StartEvent_1\">\r\n" +
       "    </startEvent>\r\n" +
       "    <sequenceFlow id=\"SequenceFlow_03wj6bv\" sourceRef=\"StartEvent_1\" targetRef=\"Task_1bkcm2v\" />\r\n" +
       "    <endEvent id=\"EndEvent_0joyvpc\">\r\n" +
       "    </endEvent>\r\n" +
       "    <sequenceFlow id=\"SequenceFlow_0mt1p11\" sourceRef=\"Task_1bkcm2v\" targetRef=\"EndEvent_0joyvpc\" />\r\n" +
-      "    <serviceTask id=\"Task_1bkcm2v\" name=\"Throw BPMN Error\" eximeebpms:asyncBefore=\"true\" eximeebpms:expression=\"${true}\">\r\n" +
+      "    <serviceTask id=\"Task_1bkcm2v\" name=\"Throw BPMN Error\" camunda:asyncBefore=\"true\" camunda:expression=\"${true}\">\r\n" +
       "      <extensionElements>\r\n" +
-      "        <eximeebpms:inputOutput>\r\n" +
-      "          <eximeebpms:outputParameter name=\"output\">\r\n" +
-      "            <eximeebpms:script scriptFormat=\"Javascript\">throw new org.eximeebpms.bpm.engine.delegate.BpmnError(\"Test error thrown\");</eximeebpms:script>\r\n" +
-      "          </eximeebpms:outputParameter>\r\n" +
-      "        </eximeebpms:inputOutput>\r\n" +
+      "        <camunda:inputOutput>\r\n" +
+      "          <camunda:outputParameter name=\"output\">\r\n" +
+      "            <camunda:script scriptFormat=\"Javascript\">throw new org.eximeebpms.bpm.engine.delegate.BpmnError(\"Test error thrown\");</camunda:script>\r\n" +
+      "          </camunda:outputParameter>\r\n" +
+      "        </camunda:inputOutput>\r\n" +
       "      </extensionElements>\r\n" +
       "    </serviceTask>\r\n" +
       "  </process>\r\n" +

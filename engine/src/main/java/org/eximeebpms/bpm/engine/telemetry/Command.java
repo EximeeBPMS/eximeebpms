@@ -31,7 +31,7 @@ import org.eximeebpms.bpm.engine.ManagementService;
  * {@link ManagementService#getTelemetryData()} will not reset the counter.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Camunda
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface Command {

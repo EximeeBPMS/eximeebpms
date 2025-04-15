@@ -4,9 +4,9 @@
 Lightweight Execution Engine for DMN (Decision Model and Notation) written in Java.
 
 <p>
-  <a href="http://camunda.org/">Home</a> |
-  <a href="http://camunda.org/community/forum.html">Forum</a> |
-  <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> |
+  <a href="https://eximeebpms.org/">Home</a> <!-- | -->
+  <!-- <a href="http://camunda.org/community/forum.html">Forum</a> | -->
+  <!-- <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> | -->
 </p>
 
 The Decision Engine can be used seamlessly in combination with BPMN and CMMN or standalone.
@@ -19,7 +19,7 @@ Add the following Maven Coordinates to your project:
 <dependency>
   <groupId>org.eximeebpms.bpm.dmn</groupId>
   <artifactId>eximeebpms-engine-dmn</artifactId>
-  <version>${version.camunda}</version>
+  <version>${version.eximeebpms}</version>
 </dependency>
 ```
 
@@ -55,7 +55,7 @@ Add the following Maven Coordinates to your project:
 <dependency>
   <groupId>org.eximeebpms.bpm</groupId>
   <artifactId>eximeebpms-engine</artifactId>
-  <version>${version.camunda}</versions>
+  <version>${version.eximeebpms}</versions>
 </dependency>
 <dependency>
   <groupId>com.h2database</groupId>
@@ -69,12 +69,12 @@ Next, reference a DMN decision from a BPMN Business Rule Task:
 
 ```xml
 <bpmn:businessRuleTask id="assignApprover"
-  eximeebpms:decisionRef="invoice-assign-approver"
-  eximeebpms:resultVariable="approverGroups"
+  camunda:decisionRef="invoice-assign-approver"
+  camunda:resultVariable="approverGroups"
   name="Assign Approver Group(s)">
 </bpmn:businessRuleTask>
 ```
-The `eximeebpms:decisionRef` attribute references the id of the decision in the DMN file:
+The `camunda:decisionRef` attribute references the id of the decision in the DMN file:
 
 ```xml
 <dmn:decision id="invoice-assign-approver" name="Assign Approver">

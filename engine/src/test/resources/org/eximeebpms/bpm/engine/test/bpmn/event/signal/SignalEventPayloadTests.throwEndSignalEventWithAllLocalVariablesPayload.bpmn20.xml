@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+	xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	targetNamespace="Examples">
 	
 	<signal id="alertSignal" name="alert" />
@@ -14,14 +14,14 @@
 
 		<endEvent id="end">
 			<extensionElements>
-				<eximeebpms:inputOutput>
-					<eximeebpms:inputParameter name="localVar1">localVal1</eximeebpms:inputParameter>
-					<eximeebpms:inputParameter name="localVar2">localVal2</eximeebpms:inputParameter>
-				</eximeebpms:inputOutput>
+				<camunda:inputOutput>
+					<camunda:inputParameter name="localVar1">localVal1</camunda:inputParameter>
+					<camunda:inputParameter name="localVar2">localVal2</camunda:inputParameter>
+				</camunda:inputOutput>
 			</extensionElements>
 			<signalEventDefinition signalRef="alertSignal">
 				<extensionElements>
-					<eximeebpms:in variables="all" local="true" />
+					<camunda:in variables="all" local="true" />
 				</extensionElements>
 			</signalEventDefinition>
 		</endEvent>

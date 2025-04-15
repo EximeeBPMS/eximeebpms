@@ -2,7 +2,7 @@
 
 <definitions id="definitions"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/bpmn"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
              targetNamespace="Examples">
 
     <process id="BackwardsCompatibleExpressionProcess" isExecutable="true">
@@ -13,11 +13,11 @@
                       targetRef="delegate"/>
 
         <serviceTask id="delegate"
-                     eximeebpms:class="org.eximeebpms.bpm.engine.test.bpmn.servicetask.util.BackwardsCompatibleExpressionDelegate">
+                     camunda:class="org.eximeebpms.bpm.engine.test.bpmn.servicetask.util.BackwardsCompatibleExpressionDelegate">
 		      <extensionElements>
-		        <eximeebpms:field name="expression">
-		          <eximeebpms:expression>...${var}...</eximeebpms:expression>
-		        </eximeebpms:field>
+		        <camunda:field name="expression">
+		          <camunda:expression>...${var}...</camunda:expression>
+		        </camunda:field>
           </extensionElements>
         </serviceTask>
 

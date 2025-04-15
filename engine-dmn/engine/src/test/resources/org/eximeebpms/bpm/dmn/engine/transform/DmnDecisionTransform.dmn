@@ -3,11 +3,11 @@
              name="Dmn Tranform"
              namespace="decisionWithRequiredDecisionTransform"
              xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd"
-             xmlns:eximeebpms="http://eximeebpms.org/schema/1.0/dmn">
+             xmlns:camunda="http://camunda.org/schema/1.0/dmn">
 
   <decision id="decision1" name="eximeebpms">
     <decisionTable id="decisionTable1">
-      <input id="input1" label="eximeebpms" eximeebpms:inputVariable="eximeebpms">
+      <input id="input1" label="eximeebpms" camunda:inputVariable="eximeebpms">
         <inputExpression id="inputExpression" typeRef="string" expressionLanguage="eximeebpms">
           <text>eximeebpms</text>
         </inputExpression>

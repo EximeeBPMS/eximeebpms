@@ -40,7 +40,7 @@ public class TestModelParser extends AbstractModelParser {
   private static final String SCHEMA_LOCATION = "org/eximeebpms/bpm/model/xml/testmodel/Testmodel.xsd";
   private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
-  private static final String TEST_NS = "http://eximeebpms.org/animals";
+  private static final String TEST_NS = "http://camunda.org/animals";
 
   public TestModelParser() {
     this.schemaFactory = SchemaFactory.newInstance(W3C_XML_SCHEMA);

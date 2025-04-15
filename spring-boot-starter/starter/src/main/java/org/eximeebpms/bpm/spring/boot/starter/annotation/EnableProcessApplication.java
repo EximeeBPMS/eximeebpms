@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * auto-deploy feature and instead uses the required META-INF/processes.xml
  * as an indicator for resource scanning. This also allows all processes.xml
  * configuration features described here:
- * <a href="https://docs.camunda.org/manual/latest/user-guide/process-applications/the-processes-xml-deployment-descriptor/">The processes.xml Deployment Descriptor</a>
+ * <a href="https://docs.eximeebpms.org/manual/latest/user-guide/process-applications/the-processes-xml-deployment-descriptor/">The processes.xml Deployment Descriptor</a>
  * 
  * <p>To use it, just add the annotation to your Spring Boot application class:</p>
  * <pre>

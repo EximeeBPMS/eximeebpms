@@ -34,8 +34,8 @@ import org.junit.Test;
 public abstract class XmlDomXPathScriptTest extends ScriptTest {
 
   private static final String xml = "<root><child id=\"child\"><a id=\"a\"/><b id=\"b\"/><a id=\"c\"/></child></root>";
-  private static final String xmlWithNamespace = "<root xmlns:bar=\"http://eximeebpms.org\" xmlns:foo=\"http://eximeebpms.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
-  private static final String xmlWithDefaultNamespace = "<root xmlns=\"http://eximeebpms.com/example\" xmlns:bar=\"http://eximeebpms.org\" xmlns:foo=\"http://eximeebpms.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
+  private static final String xmlWithNamespace = "<root xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://eximeebpms.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
+  private static final String xmlWithDefaultNamespace = "<root xmlns=\"http://eximeebpms.com/example\" xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://eximeebpms.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
 
   @Test(expected = SpinXPathException.class)
   @Script(

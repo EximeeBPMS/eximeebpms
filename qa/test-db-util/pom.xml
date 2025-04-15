@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa</groupId>
     <artifactId>eximeebpms-qa</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.3</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.springboot.project</groupId>
     <artifactId>eximeebpms-bpm-spring-boot-starter-qa</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>qa-request-scope</artifactId>

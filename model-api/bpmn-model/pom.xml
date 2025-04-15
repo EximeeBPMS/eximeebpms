@@ -5,7 +5,7 @@
     <groupId>org.eximeebpms.bpm.model</groupId>
     <artifactId>eximeebpms-model-apis</artifactId>
     <relativePath>../</relativePath>
-    <version>0.0.10</version>
+    <version>0.0.11-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-bpmn-model</artifactId>

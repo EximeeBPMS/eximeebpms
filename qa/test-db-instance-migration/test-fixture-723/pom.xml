@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
     <artifactId>eximeebpms-qa-db-instance-migration</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-qa-upgrade-test-fixture-723</artifactId>

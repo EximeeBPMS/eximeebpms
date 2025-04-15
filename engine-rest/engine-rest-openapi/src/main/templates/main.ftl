@@ -4,8 +4,8 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "Camunda Platform REST API",
-    "description": "OpenApi Spec for Camunda Platform REST API.",
+    "title": "EximeeBPMS REST API",
+    "description": "OpenApi Spec for EximeeBPMS REST API.",
     "version": "${cambpmVersion}",
     "license": {
       "name": "Apache License 2.0",
@@ -13,7 +13,7 @@
     }
   },
   "externalDocs": {
-    "description": "Find out more about Camunda Rest API",
+    "description": "Find out more about EximeeBPMS Rest API",
     "url": "${docsUrl}/reference/rest/overview/"
   },
   "servers": [

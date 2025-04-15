@@ -9,7 +9,7 @@
     <groupId>org.eximeebpms.bpm.example</groupId>
     <artifactId>eximeebpms-example-root</artifactId>
     <relativePath>../</relativePath>
-    <version>0.0.6</version>
+    <version>0.0.7-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>

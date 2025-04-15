@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.connect</groupId>
     <artifactId>eximeebpms-connect-root</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-connect-core</artifactId>

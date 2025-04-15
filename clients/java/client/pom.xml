@@ -110,6 +110,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.eximeebpms.bpm.qa</groupId>
       <artifactId>engine-variable-test</artifactId>
       <version>${project.version}</version>
@@ -117,205 +124,209 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.eximeebpms.bpm.tomcat</groupId>
-      <artifactId>eximeebpms-tomcat-assembly</artifactId>
-      <version>${project.version}</version>
-      <type>tar.gz</type>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
-      <scope>test</scope>
-      <type>war</type>
-      <classifier>tomcat</classifier>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eximeebpms.bpm.qa</groupId>
-      <artifactId>engine-variable-test</artifactId>
-      <scope>test</scope>
-      <type>war</type>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>${version.xml.jaxb-impl4}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
     <plugins>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>add-it-source</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>add-test-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/it/java</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <trimStackTrace>false</trimStackTrace>
-        </configuration>
       </plugin>
+    </plugins>
+  </build>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
+  <profiles>
+    <profile>
+      <id>integration-tests</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.eximeebpms.bpm.tomcat</groupId>
+          <artifactId>eximeebpms-tomcat-assembly</artifactId>
+          <version>${project.version}</version>
+          <type>tar.gz</type>
+          <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <artifactId>slf4j-api</artifactId>
+              <groupId>org.slf4j</groupId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+
+        <dependency>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
+          <scope>test</scope>
+          <type>war</type>
+          <classifier>tomcat</classifier>
+          <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.eximeebpms.bpm.qa</groupId>
+          <artifactId>engine-variable-test</artifactId>
+          <scope>test</scope>
+          <type>war</type>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>add-it-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                  <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/it/java</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <trimStackTrace>false</trimStackTrace>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <skip>${skipTests}</skip>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.eximeebpms.bpm.tomcat</groupId>
+                      <artifactId>eximeebpms-tomcat-assembly</artifactId>
+                      <version>${project.version}</version>
+                      <type>tar.gz</type>
+                      <outputDirectory>${engine.runtime}</outputDirectory>
+                      <overWrite>true</overWrite>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>start-container</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop-container</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
             <configuration>
               <skip>${skipTests}</skip>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.eximeebpms.bpm.tomcat</groupId>
-                  <artifactId>eximeebpms-tomcat-assembly</artifactId>
-                  <version>${project.version}</version>
-                  <type>tar.gz</type>
-                  <outputDirectory>${engine.runtime}</outputDirectory>
-                  <overWrite>true</overWrite>
-                </artifactItem>
-              </artifactItems>
+              <!-- Container configuration -->
+              <container>
+                <type>installed</type>
+                <containerId>tomcat10x</containerId>
+                <append>false</append>
+                <home>${tomcat.runtime}</home>
+                <timeout>${cargo.timeout}</timeout>
+                <log>${tomcat.runtime}/logs/catalina.out</log>
+              </container>
+              <configuration>
+                <type>standalone</type>
+                <home>${project.build.directory}/cargo-config-tomcat</home>
+                <properties>
+                  <cargo.servlet.port>${tomcat.connector.http.port}</cargo.servlet.port>
+                  <cargo.tomcat.ajp.port>${tomcat.connector.ajp.port}</cargo.tomcat.ajp.port>
+                  <cargo.start.jvmargs>-Djava.security.egd=file:/dev/./urandom</cargo.start.jvmargs>
+                </properties>
+                <files>
+                  <copy>
+                    <configfile>true</configfile>
+                    <file>${project.basedir}/src/it/resources/tomcat/bpm-platform.xml</file>
+                    <tofile>conf/bpm-platform.xml</tofile>
+                    <overwrite>true</overwrite>
+                  </copy>
+                </files>
+              </configuration>
+              <deployables>
+                <deployable>
+                  <groupId>org.eximeebpms.bpm</groupId>
+                  <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
+                  <type>war</type>
+                  <classifier>tomcat</classifier>
+                  <pingURL>
+                    http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/process-definition
+                  </pingURL>
+                  <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
+                  <properties>
+                    <context>engine-rest</context>
+                  </properties>
+                </deployable>
+                <deployable>
+                  <groupId>org.eximeebpms.bpm.qa</groupId>
+                  <artifactId>engine-variable-test</artifactId>
+                  <type>war</type>
+                </deployable>
+              </deployables>
+              <wait>false</wait>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
+          </plugin>
 
-      <plugin>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+        </plugins>
 
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven3-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>start-container</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>start</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>stop-container</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <skip>${skipTests}</skip>
-          <!-- Container configuration -->
-          <container>
-            <type>installed</type>
-            <containerId>tomcat10x</containerId>
-            <append>false</append>
-            <home>${tomcat.runtime}</home>
-            <timeout>${cargo.timeout}</timeout>
-            <log>${tomcat.runtime}/logs/catalina.out</log>
-          </container>
-          <configuration>
-            <type>standalone</type>
-            <home>${project.build.directory}/cargo-config-tomcat</home>
-            <properties>
-              <cargo.servlet.port>${tomcat.connector.http.port}</cargo.servlet.port>
-              <cargo.tomcat.ajp.port>${tomcat.connector.ajp.port}</cargo.tomcat.ajp.port>
-              <cargo.start.jvmargs>-Djava.security.egd=file:/dev/./urandom</cargo.start.jvmargs>
-            </properties>
-            <files>
-              <copy>
-                <configfile>true</configfile>
-                <file>${project.basedir}/src/it/resources/tomcat/bpm-platform.xml</file>
-                <tofile>conf/bpm-platform.xml</tofile>
-                <overwrite>true</overwrite>
-              </copy>
-            </files>
-          </configuration>
-          <deployables>
-            <deployable>
-              <groupId>org.eximeebpms.bpm</groupId>
-              <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
-              <type>war</type>
-              <classifier>tomcat</classifier>
-              <pingURL>
-                http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/process-definition
-              </pingURL>
-              <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
-              <properties>
-                <context>engine-rest</context>
-              </properties>
-            </deployable>
-            <deployable>
-              <groupId>org.eximeebpms.bpm.qa</groupId>
-              <artifactId>engine-variable-test</artifactId>
-              <type>war</type>
-            </deployable>
-          </deployables>
-          <wait>false</wait>
-        </configuration>
-      </plugin>
+        <testResources>
+          <testResource>
+            <directory>src/it/resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
+        </testResources>
 
-    </plugins>
+      </build>
 
-    <testResources>
-      <testResource>
-        <directory>src/it/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-      </testResource>
-    </testResources>
+    </profile>
+  </profiles>
 
-  </build>
+
 
 </project>

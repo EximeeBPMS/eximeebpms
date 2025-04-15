@@ -289,9 +289,13 @@
 
         <module>clients/java</module>
 
+        <module>test-utils/archunit</module>
+        <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
+
+        <module>examples</module>
 
         <module>internal-dependencies</module>
         <module>database</module>

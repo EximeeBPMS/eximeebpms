@@ -76,6 +76,5 @@
   <scm>
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>v0.0.9</tag>
   </scm>
 </project>

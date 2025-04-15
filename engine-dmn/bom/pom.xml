@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-root</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.5</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.eximeebpms.bpm.dmn</groupId>
   <artifactId>eximeebpms-engine-dmn-bom</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.5</version>
   <name>EximeeBPMS DMN - engine - bom</name>
   <packaging>pom</packaging>
 

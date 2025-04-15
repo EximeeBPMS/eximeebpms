@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa</groupId>
     <artifactId>eximeebpms-qa</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.5</version>
   </parent>
 
   <dependencies>

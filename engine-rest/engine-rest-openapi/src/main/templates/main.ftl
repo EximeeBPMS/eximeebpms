@@ -13,7 +13,7 @@
     }
   },
   "externalDocs": {
-    "description": "Find out more about Camunda Rest API",
+    "description": "Find out more about EximeeBPMS Rest API",
     "url": "${docsUrl}/reference/rest/overview/"
   },
   "servers": [

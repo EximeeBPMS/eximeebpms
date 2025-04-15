@@ -8,5 +8,5 @@
 ╚══════╝╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝     ╚═╝     ╚═╝╚══════╝
 
   Spring-Boot: ${spring-boot.formatted-version}
-  Camunda Platform: ${eximeebpms.bpm.formatted-version}
-  Camunda Platform Spring Boot Starter: (v@project.version@)
+  EximeeBPMS: ${eximeebpms.bpm.formatted-version}
+  EximeeBPMS Spring Boot Starter: (v@project.version@)

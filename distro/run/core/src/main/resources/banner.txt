@@ -8,4 +8,4 @@
 ╚══════╝╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝     ╚═╝     ╚═╝╚══════╝
 
   Spring-Boot: ${spring-boot.formatted-version}
-  Camunda Platform: ${eximeebpms.bpm.formatted-version}
+  EximeeBPMS: ${eximeebpms.bpm.formatted-version}

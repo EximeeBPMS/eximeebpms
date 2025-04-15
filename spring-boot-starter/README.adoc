@@ -12,10 +12,10 @@ image::https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm.sprin
 image::https://www.openhub.net/p/eximeebpms-bpm-spring-boot-starter/widgets/project_thin_badge.gif[link="https://www.openhub.net/p/eximeebpms-bpm-spring-boot-starter"]
 ,====
 
-This project provides Spring Boot starters that allow you to integrate the Camunda Platform into your Spring Boot applications.
+This project provides Spring Boot starters that allow you to integrate the EximeeBPMS into your Spring Boot applications.
 
-Please check out the https://docs.camunda.org/manual/develop/user-guide/spring-boot-integration/[Documentation],
-the https://docs.camunda.org/get-started/spring-boot/[Getting Started Guide] and
+Please check out the https://docs.eximeebpms.org/manual/latest/user-guide/spring-boot-integration/[Documentation],
+the https://docs.eximeebpms.org/get-started/spring-boot/[Getting Started Guide] and
 the https://github.com/camunda/camunda-bpm-examples/tree/master/spring-boot-starter[Examples].
 
 ## Resources

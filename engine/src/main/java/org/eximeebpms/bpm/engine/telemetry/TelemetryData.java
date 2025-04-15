@@ -28,7 +28,7 @@ import org.eximeebpms.bpm.engine.ManagementService;
  * This class represents the data structure used to collect telemetry data.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Camunda
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface TelemetryData {

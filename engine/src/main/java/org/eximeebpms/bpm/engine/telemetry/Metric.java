@@ -32,7 +32,7 @@ import org.eximeebpms.bpm.engine.ManagementService;
  * enterprise setups.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Camunda
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface Metric {

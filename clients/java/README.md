@@ -1,4 +1,4 @@
-# Camunda External Task Client (Java)
+# EximeeBPMS External Task Client (Java)
 
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm/camunda-external-task-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm/camunda-external-task-client)
@@ -7,8 +7,8 @@
 
 The **Camunda External Task Client (Java)** allows to set up remote Service Tasks for your workflow.
 
-* [Quick Start](https://docs.camunda.org/get-started/quick-start/)
-* [Documentation](https://docs.camunda.org/manual/develop/user-guide/ext-client/)
+* [Quick Start](https://docs.eximeebpms.org/get-started/quick-start/)
+* [Documentation](https://docs.eximeebpms.org/manual/latest/user-guide/ext-client/)
 * [Examples](https://github.com/camunda/camunda-bpm-examples/tree/master/clients/java)
 
 ## Features
@@ -39,7 +39,7 @@ The following Maven coordinate needs to be added to the projects `pom.xml`:
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## License

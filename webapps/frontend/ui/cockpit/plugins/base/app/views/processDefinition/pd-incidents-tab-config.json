@@ -1,4 +1,13 @@
 {
+  "tooltips": {
+    "deleteSearch": "Remove search",
+    "inputPlaceholder": "Add criteria",
+    "invalid": "This search query is not valid",
+    "name": "Property",
+    "operator": "Operator",
+    "type": "Type",
+    "value": "Value"
+  },
   "types": [
     {
       "id": {
@@ -13,14 +22,5 @@
         }
       ]
     }
-  ],
-  "tooltips": {
-    "inputPlaceholder": "Add criteria",
-    "invalid": "This search query is not valid",
-    "deleteSearch": "Remove search",
-    "type": "Type",
-    "name": "Property",
-    "operator": "Operator",
-    "value": "Value"
-  }
+  ]
 }

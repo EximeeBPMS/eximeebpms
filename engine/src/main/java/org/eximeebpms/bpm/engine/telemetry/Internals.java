@@ -29,7 +29,7 @@ import org.eximeebpms.bpm.engine.ManagementService;
  * This information is sent to Camunda when telemetry is enabled.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.eximeebpms.org/manual/latest/introduction/telemetry/#collected-data">Camunda
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface Internals {

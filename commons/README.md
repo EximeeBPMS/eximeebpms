@@ -9,7 +9,7 @@ camunda commons is a collection of shared libraries used by camunda open source 
 
 * [eximeebpms commons logging][logging]
 * [eximeebpms commons utils][utils]
-* [eximeebpms-bpm-platform][typed-values]
+* [eximeebpms][typed-values]
 
 
 ## Getting started
@@ -48,7 +48,7 @@ Java JRE 11+ is required.
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## License:

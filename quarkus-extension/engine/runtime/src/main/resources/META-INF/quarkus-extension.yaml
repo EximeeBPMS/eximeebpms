@@ -11,6 +11,6 @@ metadata:
     - "decisions"
     - "bpmn"
     - "dmn"
-  guide: "https://docs.camunda.org/manual/latest/user-guide/quarkus-integration/"
+  guide: "https://docs.eximeebpms.org/manual/latest/user-guide/quarkus-integration/"
   categories:
     - "business-automation"

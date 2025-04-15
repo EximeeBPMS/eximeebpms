@@ -1,12 +1,12 @@
-# Camunda Platform Quarkus Extensions
+# EximeeBPMS Quarkus Extensions
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine) [![camunda manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine) [![camunda manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/user-guide/quarkus-integration/)
 
-This sub-project provides Camunda Platform Quarkus Extensions that allow you to add behavior to your Quarkus 
+This sub-project provides EximeeBPMS Quarkus Extensions that allow you to add behavior to your Quarkus 
 application by adding dependencies to the classpath.
 
-You can find the documentation on the Camunda Platform Quarkus Extensions 
-[here](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/).
+You can find the documentation on the EximeeBPMS Quarkus Extensions 
+[here](https://docs.eximeebpms.org/manual/latest/user-guide/quarkus-integration/).
 
 We also provide some useful examples at our 
 [camunda-bpm-examples](https://github.com/camunda/camunda-bpm-examples/tree/master/quarkus-extension) repository.
@@ -16,35 +16,35 @@ We also provide some useful examples at our
   <dependency>
     <groupId>org.eximeebpms.bpm.quarkus</groupId>
     <artifactId>eximeebpms-bpm-quarkus-engine</artifactId>
-    <version>${version.camunda}</version><!-- place Camunda version here -->
+    <version>${version.eximeebpms}</version><!-- place EximeeBPMS version here -->
   </dependency>
 </dependency>
 ```
 
-To configure a Camunda Platform Quarkus extension, you can use an `application.properties` file. It
+To configure a EximeeBPMS Quarkus extension, you can use an `application.properties` file. It
 can look like the following:
 
 ```properties
 # process engine configuration
-quarkus.camunda.generic-config.cmmn-enabled=false
-quarkus.camunda.generic-config.dmn-enabled=false
-quarkus.camunda.generic-config.history=none
+quarkus.eximeebpms.generic-config.cmmn-enabled=false
+quarkus.eximeebpms.generic-config.dmn-enabled=false
+quarkus.eximeebpms.generic-config.history=none
 
 # job executor configuration
-quarkus.camunda.job-executor.thread-pool.max-pool-size=12
-quarkus.camunda.job-executor.thread-pool.queue-size=5
-quarkus.camunda.job-executor.generic-config.max-jobs-per-acquisition=5
-quarkus.camunda.job-executor.generic-config.lock-time-in-millis=500000
-quarkus.camunda.job-executor.generic-config.wait-time-in-millis=7000
-quarkus.camunda.job-executor.generic-config.max-wait=65000
-quarkus.camunda.job-executor.generic-config.backoff-time-in-millis=5
+quarkus.eximeebpms.job-executor.thread-pool.max-pool-size=12
+quarkus.eximeebpms.job-executor.thread-pool.queue-size=5
+quarkus.eximeebpms.job-executor.generic-config.max-jobs-per-acquisition=5
+quarkus.eximeebpms.job-executor.generic-config.lock-time-in-millis=500000
+quarkus.eximeebpms.job-executor.generic-config.wait-time-in-millis=7000
+quarkus.eximeebpms.job-executor.generic-config.max-wait=65000
+quarkus.eximeebpms.job-executor.generic-config.backoff-time-in-millis=5
 
 # custom data source configuration and selection
 quarkus.datasource.my-datasource.db-kind=h2
-quarkus.datasource.my-datasource.username=camunda
-quarkus.datasource.my-datasource.password=camunda
+quarkus.datasource.my-datasource.username=eximeebpms
+quarkus.datasource.my-datasource.password=eximeebpms
 quarkus.datasource.my-datasource.jdbc.url=jdbc:h2:mem:eximeebpms;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
-quarkus.camunda.datasource=my-datasource
+quarkus.eximeebpms.datasource=my-datasource
 ```
 
 ### Local Build

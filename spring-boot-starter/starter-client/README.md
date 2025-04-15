@@ -1,8 +1,8 @@
-# Camunda External Task Client as Spring Boot Starter
+# EximeeBPMS External Task Client as Spring Boot Starter
 
-This project provides a Spring Boot Starter that allows you to implement an External Task Worker for Camunda. It uses the Camunda REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
+This project provides a Spring Boot Starter that allows you to implement an External Task Worker for EximeeBPMS. It uses the EximeeBPMS REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
 
-* [Documentation](https://docs.camunda.org/manual/develop/user-guide/ext-client/spring-boot-starter/)
+* [Documentation](https://docs.eximeebpms.org/manual/latest/user-guide/ext-client/spring-boot-starter/)
 * [Examples](https://github.com/camunda/camunda-bpm-examples/tree/master/spring-boot-starter/external-task-client)
 
 ## Dependency
@@ -19,7 +19,7 @@ You need this dependency to get started:
 
 ## Configuration
 
-You can configure the Camunda Platform Runtime REST API endpoint and other properties in the `application.yml` file:
+You can configure the EximeeBPMS Runtime REST API endpoint and other properties in the `application.yml` file:
 
 ```yaml
 eximeebpms.bpm.client:
@@ -72,4 +72,4 @@ public class SimpleConfiguration {
 
 ## Credits
 
-The Camunda External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).
+The EximeeBPMS External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).

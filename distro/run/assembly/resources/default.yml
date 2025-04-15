@@ -1,6 +1,6 @@
 # Find more available configuration properties on the following pages of the documentation.
-# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#configure-camunda-bpm-run
-# https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/#camunda-engine-properties
+# https://docs.eximeebpms.org/manual/latest/user-guide/camunda-bpm-run/#configure-camunda-bpm-run
+# https://docs.eximeebpms.org/manual/latest/user-guide/spring-boot-integration/configuration/#camunda-engine-properties
 
 eximeebpms.bpm:
   admin-user:
@@ -9,7 +9,7 @@ eximeebpms.bpm:
   filter:
     create: All tasks
   run:
-# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
+# https://docs.eximeebpms.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:
       enabled: true
       allowed-origins: "*"
@@ -17,7 +17,7 @@ eximeebpms.bpm:
       disable-wadl: false
     deployment:
       deploy-changed-only: true
-# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#example-application
+# https://docs.eximeebpms.org/manual/latest/user-guide/camunda-bpm-run/#example-application
     example:
       enabled: true
 

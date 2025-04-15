@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.tomcat</groupId>
     <artifactId>eximeebpms-tomcat</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9</version>
   </parent>
 
   <name>EximeeBPMS - tomcat Distro</name>
@@ -86,11 +86,11 @@
         <version>1.7.0</version>
         <configuration>
           <pomElements>
-            <organization/>
-            <description/>
-            <developers/>
-            <scm/>
-            <url/>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
           </pomElements>
         </configuration>
         <executions>

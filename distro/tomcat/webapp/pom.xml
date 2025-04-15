@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.tomcat</groupId>
     <artifactId>eximeebpms-tomcat</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -45,11 +45,11 @@
         <version>1.7.0</version>
         <configuration>
           <pomElements>
-            <organization/>
-            <description/>
-            <developers/>
-            <scm/>
-            <url/>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
           </pomElements>
         </configuration>
         <executions>

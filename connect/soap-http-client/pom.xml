@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.connect</groupId>
     <artifactId>eximeebpms-connect-root</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9</version>
   </parent>
 
   <artifactId>eximeebpms-connect-soap-http-client</artifactId>

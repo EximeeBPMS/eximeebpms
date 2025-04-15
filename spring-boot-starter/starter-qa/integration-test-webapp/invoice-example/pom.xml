@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9</version>
   </parent>
 
   <artifactId>qa-webapp-invoice-example</artifactId>

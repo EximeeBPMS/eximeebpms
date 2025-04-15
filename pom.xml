@@ -184,7 +184,6 @@
         <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
-        <module>distro/license-book</module>
         <module>distro/tomcat</module>
       </modules>
     </profile>
@@ -280,6 +279,9 @@
 
         <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
+
+        <module>distro/license-book</module>
+        <module>distro/sql-script</module>
 
         <module>webapps</module>
 

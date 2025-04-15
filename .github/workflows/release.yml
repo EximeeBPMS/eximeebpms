@@ -89,11 +89,15 @@ jobs:
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
+# Tutaj trzeba czekać na publish!
+# Distro powstaje z mvn central.
       - name: Release - deploy distro Tomcat
         run: |
-          cd target/checkout/distro/tomcat
-          ../.././mvnw deploy -Prelease,distro-ce -B -DskipTests
+#          buduj: sql-script
+#          license-book
+
+          ccd target/checkout
+         ./mvnw deploy -Prelease,distro-tomcat -B -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}

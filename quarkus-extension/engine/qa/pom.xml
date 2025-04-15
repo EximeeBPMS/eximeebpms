@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.quarkus</groupId>
     <artifactId>eximeebpms-bpm-quarkus-engine-parent</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.0.10</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>

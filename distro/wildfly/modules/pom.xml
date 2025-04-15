@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.wildfly</groupId>
     <artifactId>eximeebpms-wildfly</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>0.0.11</version>
   </parent>
 
   <artifactId>eximeebpms-wildfly-modules</artifactId>

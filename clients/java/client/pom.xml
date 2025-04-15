@@ -72,6 +72,14 @@
     </dependency>
 
     <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${version.xml.jaxb-impl4}</version>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
       <scope>test</scope>

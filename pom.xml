@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>0.0.1</version>
+    <version>1.1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
   <artifactId>eximeebpms-root</artifactId>
-  <version>0.0.13-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>EximeeBPMS - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -191,7 +191,7 @@
     <profile>
       <id>distro-wildfly</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>javaee/ejb-client</module>
@@ -205,7 +205,7 @@
     <profile>
       <id>distro-webjar</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>distro/webjar</module>
@@ -215,7 +215,7 @@
     <profile>
       <id>distro-run</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>distro/run</module>

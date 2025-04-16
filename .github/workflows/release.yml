@@ -92,7 +92,7 @@ jobs:
       - name: Release - deploy distro Tomcat
         run: |
           cd target/checkout/distro/tomcat
-         ../.././mvnw deploy -Prelease,distro,distro-tomcat -B -DskipTests
+          ../.././mvnw deploy -Prelease,distro,distro-tomcat -B -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}

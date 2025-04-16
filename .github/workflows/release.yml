@@ -81,23 +81,18 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
-      - name: Release - deploy base artifact
+      - name: Release - deploy base artifacts
         run: |
-          ./mvn release:perform -Dgoals=""
+          ./mvnw release:perform -Dgoals=""
           cd target/checkout
           ./mvnw deploy -Prelease,sonatype-oss-release -B -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-# Tutaj trzeba czekać na publish!
-# Distro powstaje z mvn central.
       - name: Release - deploy distro Tomcat
         run: |
-#          buduj: sql-script
-#          license-book
-
-          ccd target/checkout
-         ./mvnw deploy -Prelease,distro-tomcat -B -DskipTests
+          cd target/checkout/distro/tomcat
+         ../.././mvnw deploy -Prelease,distro,distro-tomcat -B -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}

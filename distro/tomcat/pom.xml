@@ -13,7 +13,6 @@
   <packaging>pom</packaging>
 
   <name>EximeeBPMS - tomcat</name>
-  <description>EximeeBPMS Tomcat distribution</description>
 
   <dependencyManagement>
     <dependencies>
@@ -50,32 +49,33 @@
     </profile>
   </profiles>
 
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0123</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.7.0</version>
+        <configuration>
+          <pomElements>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
+          </pomElements>
+          <updatePomFile>true</updatePomFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
-  <organization>
-    <name>EximeeBPMS services GmbH</name>
-    <url>https://eximeebpms.org</url>
-  </organization>
-
-  <url>https://eximeebpms.org</url>
-
-  <developers>
-    <developer>
-      <id>EximeeBPMS</id>
-      <name>EximeeBPMS Community</name>
-      <organization>EximeeBPMS</organization>
-      <organizationUrl>https://eximeebpms.org</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/EximeeBPMS/eximeebpms</url>
-    <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

@@ -12,7 +12,7 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>EximeeBPMS - Root Pom</name>
-  <inceptionYear>2013</inceptionYear>
+  <inceptionYear>2025</inceptionYear>
 
   <description>
     This pom defines the modules that make up the build.

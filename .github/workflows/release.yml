@@ -70,13 +70,29 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
-      - name: Release prepare & perform with Maven
+      - name: Release prepare
         run: |
-          ./mvnw release:prepare release:perform -B -Darguments="-DskipTests" \
-            -Prelease \
+          ./mvnw release:prepare -B -Darguments="-DskipTests" \
+            -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+
+      - name: Release - deploy base artifacts
+        run: |
+          ./mvnw release:perform -Dgoals=""
+          cd target/checkout
+          ./mvnw deploy -Prelease,sonatype-oss-release -B -DskipTests
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+      - name: Release - deploy distro Tomcat
+        run: |
+          cd target/checkout/distro/tomcat
+         ../.././mvnw deploy -Prelease,distro,distro-tomcat -B -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}

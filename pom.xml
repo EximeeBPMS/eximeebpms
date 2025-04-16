@@ -9,7 +9,7 @@
 
   <groupId>org.eximeebpms.bpm</groupId>
   <artifactId>eximeebpms-root</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.13-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>EximeeBPMS - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -184,7 +184,6 @@
         <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
-        <module>distro/license-book</module>
         <module>distro/tomcat</module>
       </modules>
     </profile>
@@ -281,6 +280,9 @@
         <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
 
+        <module>distro/license-book</module>
+        <module>distro/sql-script</module>
+
         <module>webapps</module>
 
         <module>engine-plugins</module>
@@ -289,9 +291,13 @@
 
         <module>clients/java</module>
 
+        <module>test-utils/archunit</module>
+        <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
+
+        <module>examples</module>
 
         <module>internal-dependencies</module>
         <module>database</module>
@@ -340,7 +346,7 @@
   <scm>
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.0.9</tag>
   </scm>
 
   <issueManagement>

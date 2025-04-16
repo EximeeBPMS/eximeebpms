@@ -5,7 +5,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.13-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-tomcat</artifactId>
@@ -48,4 +48,34 @@
       </modules>
     </profile>
   </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.7.0</version>
+        <configuration>
+          <pomElements>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
+          </pomElements>
+          <updatePomFile>true</updatePomFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

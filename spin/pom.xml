@@ -5,7 +5,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.13-SNAPSHOT</version>
   </parent>
 
   <groupId>org.eximeebpms.spin</groupId>
@@ -192,7 +192,7 @@
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
     <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>v0.0.3</tag>
+    <tag>v0.0.9</tag>
   </scm>
 
 </project>

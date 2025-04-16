@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.tomcat</groupId>
     <artifactId>eximeebpms-tomcat</artifactId>
-    <version>0.0.12-SNAPSHOT</version>
+    <version>0.0.12</version>
   </parent>
 
   <name>EximeeBPMS - tomcat Distro</name>
@@ -133,7 +133,7 @@
   <scm>
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.0.12</tag>
   </scm>
 
 </project>

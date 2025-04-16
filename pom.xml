@@ -9,7 +9,7 @@
 
   <groupId>org.eximeebpms.bpm</groupId>
   <artifactId>eximeebpms-root</artifactId>
-  <version>0.0.12-SNAPSHOT</version>
+  <version>0.0.12</version>
   <packaging>pom</packaging>
   <name>EximeeBPMS - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -346,7 +346,7 @@
   <scm>
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <developerConnection>scm:git:https://github.com/EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>v0.0.9</tag>
+    <tag>v0.0.12</tag>
   </scm>
 
   <issueManagement>

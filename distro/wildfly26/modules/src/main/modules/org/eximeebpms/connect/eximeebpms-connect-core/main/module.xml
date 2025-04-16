@@ -1,0 +1,11 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.connect.eximeebpms-connect-core">
+  <resources>
+    <resource-root path="eximeebpms-connect-core-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="org.eximeebpms.commons.eximeebpms-commons-logging" />
+    <module name="org.eximeebpms.commons.eximeebpms-commons-utils" />
+  </dependencies>
+</module>

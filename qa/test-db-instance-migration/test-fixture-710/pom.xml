@@ -2,17 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.qa.upgrade</groupId>
-    <artifactId>camunda-qa-db-instance-migration</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+    <artifactId>eximeebpms-qa-db-instance-migration</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-upgrade-test-fixture-710</artifactId>
+  <artifactId>eximeebpms-qa-upgrade-test-fixture-710</artifactId>
   <packaging>jar</packaging>
-  <name>Camunda Platform - QA - upgrade - instance migration - test fixture - 7.10.0</name>
+  <name>EximeeBPMS - QA - upgrade - instance migration - test fixture - 7.10.0</name>
 
   <properties>
-    <camunda.version.previous>7.9.0</camunda.version.previous>
+    <eximeebpms.version.previous>7.9.0</eximeebpms.version.previous>
     
     <version.h2>${version.h2-v1}</version.h2>
     <version.groovy.old>2.4.21</version.groovy.old>
@@ -32,22 +32,22 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <groupId>org.eximeebpms.spin</groupId>
+      <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-upgrade-scenario-util</artifactId>
+      <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+      <artifactId>eximeebpms-qa-upgrade-scenario-util</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -87,8 +87,8 @@
                 <phase>generate-test-sources</phase>
                 <configuration>
                   <target>
-                    <property name="current.minor.version" value="${camunda.current.majorVersion}.${camunda.current.minorVersion}" />
-                    <property name="previous.minor.version" value="${camunda.previous.majorVersion}.${camunda.previous.minorVersion}" />
+                    <property name="current.minor.version" value="${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}" />
+                    <property name="previous.minor.version" value="${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}" />
                     <property name="current.sql.upgrade.dir" value="${project.build.directory}/scripts-current/sql/upgrade" />
                     <property name="minor.version.upgrade.script.previous.to.current.engine" value="${database.type}_engine_${previous.minor.version}_to_${current.minor.version}.sql" />
                     <property name="minor.version.upgrade.script.previous.to.current.identity" value="${database.type}_identity_${previous.minor.version}_to_${current.minor.version}.sql" />
@@ -101,8 +101,8 @@
 
                     <!-- concanated patches for last minor version -->
                     <!-- 7.9.0 is on a clean state so we can again use the concanated patches -->
-                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql" />
-                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_patch.sql" />
 
                     <!-- minor version upgrade from previous to current version -->
                     <touch file="${current.sql.upgrade.dir}/${minor.version.upgrade.script.previous.to.current.engine}" />
@@ -130,8 +130,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
+                      <groupId>org.eximeebpms.bpm.distro</groupId>
+                      <artifactId>eximeebpms-sql-scripts</artifactId>
                       <version>7.10.0</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>
@@ -154,7 +154,7 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.current</propertyPrefix>
+                  <propertyPrefix>eximeebpms.current</propertyPrefix>
                   <versionString>7.10.0</versionString>
                 </configuration>
               </execution>
@@ -164,8 +164,8 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.previous</propertyPrefix>
-                  <versionString>${camunda.version.previous}</versionString>
+                  <propertyPrefix>eximeebpms.previous</propertyPrefix>
+                  <versionString>${eximeebpms.version.previous}</versionString>
                 </configuration>
               </execution>
             </executions>
@@ -187,9 +187,9 @@
                 <configuration>
                   <srcFiles>
                     <!-- now patch old version of the schema -->
-                    <!--<srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}.x_to_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}.y.sql</srcFile>-->
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql</srcFile>
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql</srcFile>
+                    <!--<srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_patch_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}.x_to_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}.y.sql</srcFile>-->
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_patch.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_patch.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
@@ -202,8 +202,8 @@
                 <configuration>
                   <srcFiles>
                     <!-- now perform the schema migrations -->
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_to_${camunda.current.majorVersion}.${camunda.current.minorVersion}.sql</srcFile>
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_to_${camunda.current.majorVersion}.${camunda.current.minorVersion}.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_to_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${eximeebpms.previous.majorVersion}.${eximeebpms.previous.minorVersion}_to_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
@@ -218,8 +218,8 @@
                   <srcFiles>
                     // now patch current version of the schema
                     // example for aggregate patching of current version
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql</srcFile>
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
@@ -244,7 +244,7 @@
                 </goals>
                 <phase>process-test-classes</phase>
                 <configuration>
-                  <mainClass>org.camunda.bpm.qa.upgrade.TestFixture</mainClass>
+                  <mainClass>org.eximeebpms.bpm.qa.upgrade.TestFixture</mainClass>
                 </configuration>
               </execution>
             </executions>

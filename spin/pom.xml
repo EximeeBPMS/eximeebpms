@@ -2,15 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-parent</artifactId>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.camunda.spin</groupId>
-  <artifactId>camunda-spin-root</artifactId>
-  <name>camunda Spin - root</name>
+  <groupId>org.eximeebpms.spin</groupId>
+  <artifactId>eximeebpms-spin-root</artifactId>
+  <name>EximeeBPMS Spin - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>
 
@@ -36,8 +36,8 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -146,7 +146,7 @@
           <version>3.5.0</version>
           <configuration>
             <instructions>
-              <Export-Package>org.camunda.spin*</Export-Package>
+              <Export-Package>org.eximeebpms.spin*</Export-Package>
             </instructions>
           </configuration>
         </plugin>
@@ -189,9 +189,9 @@
   </profiles>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/EximeeBPMS/eximeebpms</url>
+    <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
+    <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

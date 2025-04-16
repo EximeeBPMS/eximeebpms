@@ -1,0 +1,2 @@
+org.eximeebpms.connect.dummy.DummyConnectorProvider
+org.eximeebpms.connect.dummy.MyHttpConnectorProvider

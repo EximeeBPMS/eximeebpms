@@ -2,23 +2,23 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-tomcat</artifactId>
-  <groupId>org.camunda.bpm.tomcat</groupId>
+  <artifactId>eximeebpms-tomcat</artifactId>
+  <groupId>org.eximeebpms.bpm.tomcat</groupId>
   <packaging>pom</packaging>
 
-  <name>Camunda Platform - tomcat</name>
+  <name>EximeeBPMS - tomcat</name>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -48,4 +48,34 @@
       </modules>
     </profile>
   </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.7.0</version>
+        <configuration>
+          <pomElements>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
+          </pomElements>
+          <updatePomFile>true</updatePomFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

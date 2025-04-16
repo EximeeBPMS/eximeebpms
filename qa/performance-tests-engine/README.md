@@ -67,7 +67,7 @@ for the next run.
 
 ```Shell
 mvn clean install -Pbenchmark,h2 \ 
-                  -DlongTermBenchmarkResultFile=C:\\Arbeit\\camunda\\performanceTests\\longtermResults.csv
+                  -DlongTermBenchmarkResultFile=C:\\Arbeit\\eximeebpms\\performanceTests\\longtermResults.csv
 ```
 
 The results file may look like this:
@@ -104,11 +104,11 @@ The raw JSON result files allow you to inspect the database communication betwee
 
 ```json
 {
-    "testName": "org.camunda.bpm.qa.performance.engine.bpmn.SequencePerformanceTest.asyncSequence1Step",
+    "testName": "org.eximeebpms.bpm.qa.performance.engine.bpmn.SequencePerformanceTest.asyncSequence1Step",
     "configuration": {
         "numberOfThreads": 1,
         "numberOfRuns": 1,
-        "testWatchers": "org.camunda.bpm.qa.performance.engine.sql.statementlog.StatementLogPerfTestWatcher"
+        "testWatchers": "org.eximeebpms.bpm.qa.performance.engine.sql.statementlog.StatementLogPerfTestWatcher"
     },
     "duration": 20,
     "stepResults": [
@@ -248,7 +248,7 @@ Example for command line parameters:
 ```Shell
 mvn clean install -Pbenchmark,mysql \
                   -Ddatabase.driver=com.mysql.jdbc.Driver \
-                  -Ddatabase.url=jdbc:mysql://localhost:3306:camunda \
+                  -Ddatabase.url=jdbc:mysql://localhost:3306:eximeebpms \
                   -Ddatabase.username=oscar \
                   -Ddatabase.password=s3cret \
 ```

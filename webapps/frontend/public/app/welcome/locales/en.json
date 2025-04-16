@@ -17,7 +17,6 @@
     "AUTH_LOGOUT_SUCCESSFUL": "Logout successful",
     "AUTH_LOGOUT_THANKS": "Thank you for using Camunda today. Have a great {{dayContext}}!",
     "BACK": "Back",
-    "BANNER_CE_EOL_TEXT": "It is time to migrate to Camunda 8. The last release of Camunda 7 CE will be in October 2025. Please have a look at our <a href=\"https://docs.camunda.io/docs/guides/migrating-from-camunda-7/\">migration guide</a>.",
     "BOOLEAN": "Boolean",
     "CAM_WIDGET_BPMN_VIEWER_ERROR": "Could not render diagram:",
     "CAM_WIDGET_BPMN_VIEWER_LOADING": "Loading diagram",
@@ -97,7 +96,7 @@
     "FILTER": "Filter",
     "FILTERS": "Filters",
     "FIRST_LOGIN_HEADING": "Welcome to Camunda",
-    "FIRST_LOGIN_INFO": "It looks like this is your first time using the webapps. Check out the <a href=\"/camunda-welcome\">Camunda Welcome Page</a> for a quick overview.",
+    "FIRST_LOGIN_INFO": "It looks like this is your first time using the webapps. Check out the <a href=\"/eximeebpms-welcome\">EximeeBPMS Welcome Page</a> for a quick overview.",
     "FIRST_NAME": "First name",
     "GROUPS": "Groups",
     "INTEGER": "Integer",
@@ -149,6 +148,10 @@
     "REQUIRED_HEX_COLOR_FIELD": "Value must be an hexadecimal color",
     "REQUIRED_INTEGER_FIELD": "Value must be an integer",
     "SAVE": "Save",
+    "SEARCH_GREATER_THAN": ">",
+    "SEARCH_GREATER_THAN_EQUALS": ">=",
+    "SEARCH_LESS_THAN": "<",
+    "SEARCH_LESS_THAN_EQUALS": "<=",
     "SERVICES_RESOURCE_RESOLVER_AUTH_FAILED": "Authentication failed. Your session might have expired, you need to login.",
     "SERVICES_RESOURCE_RESOLVER_DISPLAY_FAILED": "Failed to display {{resourceName}}",
     "SERVICES_RESOURCE_RESOLVER_ID_NOT_FOUND": "No {{resourceName}} with ID {{id}}",
@@ -167,10 +170,6 @@
     "TOGGLE_NAVIGATION": "Toggle navigation",
     "UPDATE": "Update",
     "USERNAME": "Username",
-    "USERNAME_FOR_AUTHENTICATION": "Username for authentication: {{username}}",
-    "SEARCH_LESS_THAN": "<",
-    "SEARCH_LESS_THAN_EQUALS": "<=",
-    "SEARCH_GREATER_THAN": ">",
-    "SEARCH_GREATER_THAN_EQUALS": ">="
+    "USERNAME_FOR_AUTHENTICATION": "Username for authentication: {{username}}"
   }
 }

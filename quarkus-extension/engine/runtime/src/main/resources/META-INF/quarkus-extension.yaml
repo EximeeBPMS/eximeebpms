@@ -1,7 +1,7 @@
 ---
 artifact: ${project.groupId}:${project.artifactId}:${project.version}
-name: "Camunda Platform 7 Engine"
-description: "Quarkus Extension for the Camunda Platform 7 Engine"
+name: "EximeeBPMS Engine"
+description: "Quarkus Extension for the EximeeBPMS Engine"
 metadata:
   keywords:
     - "camunda"
@@ -11,6 +11,6 @@ metadata:
     - "decisions"
     - "bpmn"
     - "dmn"
-  guide: "https://docs.camunda.org/manual/latest/user-guide/quarkus-integration/"
+  guide: "https://docs.eximeebpms.org/manual/latest/user-guide/quarkus-integration/"
   categories:
     - "business-automation"

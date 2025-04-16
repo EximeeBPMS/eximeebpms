@@ -1,16 +1,15 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+ push:
+   branches: [ "never" ] # temporary until we publish the repository - after that change to master / main
+ # pull_request:
+ #   branches: [ "main" ]
 jobs:
   analyze:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:

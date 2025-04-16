@@ -2,7 +2,7 @@
 <jboss-deployment-structure>
   <deployment>
     <dependencies>
-      <module name="org.camunda.bpm.camunda-engine" />
+      <module name="org.eximeebpms.bpm.eximeebpms-engine" />
       <module name="org.mybatis.mybatis"/>
     </dependencies>
   </deployment>

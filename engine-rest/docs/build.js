@@ -30,7 +30,7 @@ async function generateDocs() {
 
     const state = await store.toJS()
 
-    const camundaVersion = require('./package.json').version;
+    const eximeebpmsVersion = require('./package.json').version;
 
     const page = `<!DOCTYPE html>
 <html>
@@ -39,12 +39,12 @@ async function generateDocs() {
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://ssgtm.camunda.org/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-PP9MHKW');</script>
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-N39WSFRC');</script>
     <!-- End Google Tag Manager -->
 
     <meta charset="utf8"/>
-    <title>Camunda Automation Platform ${camundaVersion} REST API</title>
+    <title>EximeeBPMS Automation Platform ${eximeebpmsVersion} REST API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; script-src 'unsafe-inline' blob:; style-src 'unsafe-inline' 'self'; img-src 'self' data:;">
@@ -69,6 +69,9 @@ async function generateDocs() {
 </head>
 
 <body>
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N39WSFRC" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <div id="redoc">${html}</div>
 <script>
     var container = document.getElementById('redoc');

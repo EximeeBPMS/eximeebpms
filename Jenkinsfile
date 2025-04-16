@@ -49,13 +49,7 @@ pipeline {
                skipTests = "-DskipTests "
             }
 
-            withVault([vaultSecrets: [
-                [
-                    path        : 'secret/products/cambpm/ci/hero-devs',
-                    secretValues: [
-                        [envVar: 'HERODEVS_REGISTRY', vaultKey: 'registry'],
-                        [envVar: 'HERODEVS_AUTH_TOKEN', vaultKey: 'authToken']]
-                ]]]) {
+            withVault([vaultSecrets: []]) {
               cambpmRunMaven('.',
                   'clean source:jar deploy source:test-jar com.mycila:license-maven-plugin:check -Pdistro,distro-ce,distro-wildfly,distro-webjar,h2-in-memory -DaltStagingDirectory=${WORKSPACE}/staging -DskipRemoteStaging=true '+ skipTests,
                   withCatch: false,
@@ -67,27 +61,27 @@ pipeline {
 
             // archive all .jar, .pom, .xml, .txt runtime artifacts + required .war/.zip/.tar.gz for EE pipeline
             // add a new line for each group of artifacts
-            cambpmArchiveArtifacts('.m2/org/camunda/**/*-SNAPSHOT/**/*.jar,.m2/org/camunda/**/*-SNAPSHOT/**/*.pom,.m2/org/camunda/**/*-SNAPSHOT/**/*.xml,.m2/org/camunda/**/*-SNAPSHOT/**/*.txt',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-webapp*frontend-sources.zip',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/license-book*.zip',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-*-assembly*.tar.gz',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-webapp*.war',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-engine-rest*.war',
-                                  '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-example-invoice*.war')
+            cambpmArchiveArtifacts('.m2/org/eximeebpms/**/*-SNAPSHOT/**/*.jar,.m2/org/eximeebpms/**/*-SNAPSHOT/**/*.pom,.m2/org/eximeebpms/**/*-SNAPSHOT/**/*.xml,.m2/org/eximeebpms/**/*-SNAPSHOT/**/*.txt',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-webapp*frontend-sources.zip',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/license-book*.zip',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-*-assembly*.tar.gz',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-webapp*.war',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-engine-rest*.war',
+                                  '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-example-invoice*.war')
 
             if (env.CHANGE_ID != null && pullRequest.labels.contains('ci:distro')) {
               cambpmArchiveArtifacts(
-                     '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-bpm-*.zip',
-                     '.m2/org/camunda/**/*-SNAPSHOT/**/camunda-bpm-*.tar.gz')
+                     '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-bpm-*.zip',
+                     '.m2/org/eximeebpms/**/*-SNAPSHOT/**/camunda-bpm-*.tar.gz')
             }
 
             cambpmStash("platform-stash-runtime",
-                        ".m2/org/camunda/**/*-SNAPSHOT/**",
+                        ".m2/org/eximeebpms/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-archives",
-                        ".m2/org/camunda/bpm/**/*-SNAPSHOT/**/*.zip,.m2/org/camunda/bpm/**/*-SNAPSHOT/**/*.tar.gz")
+                        ".m2/org/eximeebpms/bpm/**/*-SNAPSHOT/**/*.zip,.m2/org/eximeebpms/bpm/**/*-SNAPSHOT/**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                      ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                      ".m2/org/eximeebpms/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/eximeebpms/bpm/**/*qa*/**/*-SNAPSHOT/**",
                       "**/*.zip,**/*.tar.gz")
 
             script {

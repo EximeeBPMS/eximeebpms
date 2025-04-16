@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>camunda-qa-integration-tests-webapps-root</artifactId>
-  <name>Camunda Platform - QA Integration Tests - Webapps Root</name>
+  <artifactId>eximeebpms-qa-integration-tests-webapps-root</artifactId>
+  <name>EximeeBPMS - QA Integration Tests - Webapps Root</name>
 
   <packaging>pom</packaging>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.qa</groupId>
+    <artifactId>eximeebpms-qa</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -23,10 +23,10 @@
 
     <redirect.test.output>true</redirect.test.output>
 
-    <http.ctx-path.webapp>camunda/</http.ctx-path.webapp>
+    <http.ctx-path.webapp>eximeebpms/</http.ctx-path.webapp>
     <http.ctx-path.rest>engine-rest/</http.ctx-path.rest>
 
-    <version.chromedriver>112.0.5615.49</version.chromedriver>
+    <version.chromedriver>135.0.7049.52</version.chromedriver>
 
     <!-- default os -->
     <os.type>linux64</os.type>
@@ -169,28 +169,28 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-logging</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
-      <artifactId>camunda-example-invoice</artifactId>
+      <groupId>org.eximeebpms.bpm.example</groupId>
+      <artifactId>eximeebpms-example-invoice</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-rest</artifactId>
       <type>jar</type>
       <classifier>classes</classifier>
       <scope>test</scope>
@@ -256,10 +256,30 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://chromedriver.storage.googleapis.com/${version.chromedriver}/chromedriver_${os.type}.zip</url>
+              <url>https://storage.googleapis.com/chrome-for-testing-public/${version.chromedriver}/${os.type}/chromedriver-${os.type}.zip</url>
               <outputFileName>chromedriver.zip</outputFileName>
               <unpack>true</unpack>
               <outputDirectory>${project.build.directory}/chromedriver</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <move todir="${project.build.directory}/chromedriver">
+                  <fileset dir="${project.build.directory}/chromedriver/chromedriver-${os.type}" />
+                </move>
+                <delete dir="${project.build.directory}/chromedriver/chromedriver-${os.type}" />
+              </target>
             </configuration>
           </execution>
         </executions>

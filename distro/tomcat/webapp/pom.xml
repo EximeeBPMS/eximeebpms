@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>org.camunda.bpm.tomcat</groupId>
-    <artifactId>camunda-tomcat</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.tomcat</groupId>
+    <artifactId>eximeebpms-tomcat</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <name>Camunda Platform - webapp - Tomcat</name>
-  <groupId>org.camunda.bpm.webapp</groupId>
-  <artifactId>camunda-webapp-tomcat</artifactId>
+  <name>EximeeBPMS - webapp - Tomcat</name>
+  <groupId>org.eximeebpms.bpm.webapp</groupId>
+  <artifactId>eximeebpms-webapp-tomcat</artifactId>
   <packaging>war</packaging>
   
   <properties>
@@ -18,8 +18,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.webapp</groupId>
-      <artifactId>camunda-webapp</artifactId>
+      <groupId>org.eximeebpms.bpm.webapp</groupId>
+      <artifactId>eximeebpms-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>runtime</scope>
@@ -32,12 +32,35 @@
   </dependencies>
 
   <build>
-    <finalName>camunda-webapp</finalName>
+    <finalName>eximeebpms-webapp</finalName>
 
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.7.0</version>
+        <configuration>
+          <pomElements>
+            <organization />
+            <description />
+            <developers />
+            <scm />
+            <url />
+          </pomElements>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

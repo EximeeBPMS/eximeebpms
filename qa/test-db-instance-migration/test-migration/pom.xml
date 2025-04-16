@@ -2,34 +2,34 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.qa.upgrade</groupId>
-    <artifactId>camunda-qa-db-instance-migration</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+    <artifactId>eximeebpms-qa-db-instance-migration</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-upgrade-test-migration</artifactId>
+  <artifactId>eximeebpms-qa-upgrade-test-migration</artifactId>
   <packaging>jar</packaging>
-  <name>Camunda Platform - QA - upgrade - instance migration - test</name>
+  <name>EximeeBPMS - QA - upgrade - instance migration - test</name>
 
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <groupId>org.eximeebpms.spin</groupId>
+      <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-upgrade-scenario-util</artifactId>
+      <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+      <artifactId>eximeebpms-qa-upgrade-scenario-util</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -118,8 +118,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
+                      <groupId>org.eximeebpms.bpm.distro</groupId>
+                      <artifactId>eximeebpms-sql-scripts</artifactId>
                       <version>${project.version}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>
@@ -142,7 +142,7 @@
                   <goal>dropAll</goal>
                 </goals>
                 <configuration>
-                  <changeLogFile>camunda-changelog.xml</changeLogFile>
+                  <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
                   <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
                 </configuration>
               </execution>
@@ -181,8 +181,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
+                      <groupId>org.eximeebpms.bpm.distro</groupId>
+                      <artifactId>eximeebpms-sql-scripts</artifactId>
                       <version>${project.version}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>
@@ -205,7 +205,7 @@
                   <goal>dropAll</goal>
                 </goals>
                 <configuration>
-                  <changeLogFile>camunda-changelog.xml</changeLogFile>
+                  <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
                   <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
                 </configuration>
               </execution>

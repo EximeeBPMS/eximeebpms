@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  precheck:
+    name: Precheck
+    runs-on: self-hosted
+    steps:
+    - name: Setup Maven settings.xml
+      run: |
+        mkdir -p /tmp
+        echo "<settings>
+               <servers>
+                <server>
+                  <id>github</id>
+                  <username>${{ github.actor }}</username>
+                  <password>${{ secrets.GITHUB_TOKEN }}</password>
+                </server>
+              </servers>
+            </settings>" > /tmp/maven-settings.xml
+        export MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
+
+    - name: Maven Build
+      env:
+        MAVEN_SETTINGS_PATH: /tmp/maven-settings.xml
+      run: |
+        PROJECT_ROOT=$(pwd)
+        
+        ./mvnw \
+          -Pdistro,distro-run,distro-tomcat,distro-wildfly,distro-webjar,distro-starter,distro-serverless,h2-in-memory \
+          install \
+          -DskipTests \
+          versions:dependency-updates-aggregate-report \
+          versions:plugin-updates-aggregate-report \
+          -Dsave=true -Ddisplay=false io.github.orhankupusoglu:sloc-maven-plugin:sloc \
+          -Dbuildplan.appendOutput=true -Dbuildplan.outputFile=$PROJECT_ROOT/target/reports/buildplan.txt fr.jcgay.maven.plugins:buildplan-maven-plugin:list
+        
+        .github/scripts/prepare-reports.sh
+        
+        ./mvnw -DskipTests=true -Dskip.frontend.build=true deploy
+        
+        find target -name maven-metadata.* -delete

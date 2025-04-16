@@ -40,8 +40,8 @@ Contents:
         This directory contains all resources to configure the distro.
         Find a detailed guide on how to use this directory on the following
         documentation pages:
-        https://docs.camunda.org/manual/latest/installation/camunda-bpm-run/
-        https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/
+        https://docs.eximeebpms.org/manual/latest/installation/camunda-bpm-run/
+        https://docs.eximeebpms.org/manual/latest/user-guide/camunda-bpm-run/
 
 ==================
 

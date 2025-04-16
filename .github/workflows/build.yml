@@ -1,0 +1,85 @@
+name: build
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - '.github/scripts/**'
+      - '.github/workflows/**'
+      - '!.github/workflows/build.yml'
+      - '.github/jreleaser/changelog.tpl'
+      - '**/*.md'
+      - 'distro/**'
+      - 'settings/**'
+      - '.gitingore'
+      - 'LICENSE'
+      - 'NOTICE'
+
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          overwrite-settings: false
+
+      - name: Create custom settings.xml 
+        run: |
+            mkdir -p ~/.m2
+            cat <<EOF > ~/.m2/settings.xml
+            <settings>
+              <servers>
+                <server>
+                  <id>github</id>
+                  <username>${GITHUB_ACTOR}</username>
+                  <password>${GITHUB_TOKEN}</password>
+                </server>
+              </servers>
+            </settings>
+            EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Maven Build
+        id: maven-build
+        shell: bash
+        run: |
+          .github/scripts/jacoco-create-flag-files.sh
+          ./mvnw verify \
+          ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Test Report
+        if: always()
+        # https://github.com/marketplace/actions/junit-report-action
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
+          require_passed_tests: true
+
+      - name: Upload Surefire Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: ${{ github.workspace }}/**/target/surefire-reports/**
+          retention-days: 30

@@ -14,35 +14,35 @@
 
   <logger name="org.springframework" level="info" />
 
-  <logger name="org.camunda" level="info" />
+  <logger name="org.eximeebpms" level="info" />
 
-  <logger name="org.camunda.bpm.engine.test" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.test" level="debug" />
 
 <!--
-  <logger name="org.camunda.bpm.engine.impl.persistence.entity" level="debug" />
-  <logger name="org.camunda.bpm.engine.history" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.impl.persistence.entity" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.history" level="debug" />
 
-  <logger name="org.camunda.bpm.engine.bpmn.parser" level="debug" />
-  <logger name="org.camunda.bpm.engine.bpmn.behavior" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.bpmn.parser" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.bpmn.behavior" level="debug" />
 
-  <logger name="org.camunda.bpm.engine.cmmn.transformer" level="debug" />
-  <logger name="org.camunda.bpm.engine.cmmn.behavior" level="debug" />
-  <logger name="org.camunda.bpm.engine.cmmn.operation" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.cmmn.transformer" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.cmmn.behavior" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.cmmn.operation" level="debug" />
 
-  <logger name="org.camunda.bpm.engine.cmd" level="debug" />
-  <logger name="org.camunda.bpm.engine.persistence" level="debug" />
-  <logger name="org.camunda.bpm.engine.tx" level="debug" />
-  <logger name="org.camunda.bpm.engine.cfg" level="debug" />
-  <logger name="org.camunda.bpm.engine.jobexecutor" level="debug" />
-  <logger name="org.camunda.bpm.engine.context" level="debug" />
-  <logger name="org.camunda.bpm.engine.core" level="debug" />
-  <logger name="org.camunda.bpm.engine.pvm" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.cmd" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.persistence" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.tx" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.cfg" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.jobexecutor" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.context" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.core" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.pvm" level="debug" />
 
-  <logger name="org.camunda.bpm.engine.metrics" level="debug" />
-  <logger name="org.camunda.bpm.engine.util" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.metrics" level="debug" />
+  <logger name="org.eximeebpms.bpm.engine.util" level="debug" />
 
-  <logger name="org.camunda.bpm.application" level="debug" />
-  <logger name="org.camunda.bpm.container" level="debug" />
+  <logger name="org.eximeebpms.bpm.application" level="debug" />
+  <logger name="org.eximeebpms.bpm.container" level="debug" />
 -->
 
   <root level="debug">

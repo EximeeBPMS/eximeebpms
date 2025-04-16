@@ -1,1 +1,1 @@
-org.camunda.bpm.container.impl.jboss.extension.BpmPlatformExtension
+org.eximeebpms.bpm.container.impl.jboss.extension.BpmPlatformExtension

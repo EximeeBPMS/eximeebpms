@@ -1,0 +1,196 @@
+name: Slack Notifications
+
+on:
+  workflow_dispatch:
+  fork:
+  discussion:
+  discussion_comment:
+  issues:
+  issue_comment:
+  pull_request_review_comment:
+  pull_request_review:
+  pull_request:
+  watch:
+
+jobs:
+  notify_slack:
+    runs-on: self-hosted
+    steps:
+      - name: Set Event Message
+        run: |
+          set -u
+           
+          msg="🔔 New event of type *${{ github.event_name }}* detected!"
+          details="Details: ${{ github.event.html_url || '-' }}"
+               
+          case "${{ github.event_name }}" in
+            fork)     msg="🍴 Repository was forked!";;
+            watch)    msg="⭐ *<${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>* starred the repository!";;
+
+            discussion_comment)
+              case "${{ github.event.action }}" in
+                created)
+                  msg="💬 New comment was added to the discussion by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>."
+                  details="Discussion ${{ github.event.discussion.html_url }}, comment ${{ github.event.comment.html_url }}"
+                ;;
+          
+                edited)       
+                  msg="️️✏️ An existing comment in the discussion was edited by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>."
+                  details="Discussion ${{ github.event.discussion.html_url }}, comment ${{ github.event.comment.html_url }}"
+                ;;
+          
+                deleted)      
+                  msg="🗑 A comment was removed from the discussion by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>"
+                  details="Discussion ${{ github.event.discussion.html_url }}"
+                ;;
+              esac
+            ;;
+          
+            issues)
+              case "${{ github.event.action }}" in
+                opened) 
+                  msg="🐛 New Issue Created by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+          
+                reopened) 
+                  msg="🔄 Issue Reopened by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+          
+                closed) 
+                  msg="✅ Issue Closed by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+
+                *)
+                  msg="🐛 Issue Event *${{ github.event.action }}* by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+              esac
+            ;;
+          
+            issue_comment)
+              case "${{ github.event.action }}" in
+                created) 
+                  msg="💬 New Issue Comment added by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+          
+                edited) 
+                  msg="✏️ Issue Comment modified by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+          
+                deleted) 
+                  msg="🗑️ Issue Comment deleted by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.issue.html_url }}"
+                ;;
+              esac
+            ;;
+          
+          
+            pull_request)
+              case "${{ github.event.action }}" in
+                opened) 
+                  msg="🔀 New Pull Request was created by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.pull_request.html_url }}"
+                ;;
+          
+                reopened) 
+                  msg="♻️ Pull Request Reopened by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.pull_request.html_url }}"
+                ;;
+          
+                edited) 
+                  msg="✏️ Pull Request Modified by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="${{ github.event.pull_request.html_url }}"
+                ;;
+          
+                closed) 
+                  if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+                    msg="🎉 Pull Request Merged by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  else
+                    msg="❌ Pull Request Closed by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  fi
+                  details="${{ github.event.pull_request.html_url }}"
+                ;;
+
+                *)
+                  msg="🔀 Pull Request Event: *${{ github.event.action }}*!"
+                  details="${{ github.event.pull_request.html_url }}"
+                ;;
+              esac
+            ;;
+          
+            pull_request_review)
+              case "${{ github.event.action }}" in
+                submitted) 
+                  msg="💬️ A review was added to the Pull Request by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="<${{ github.event.pull_request_review_comment.html_url }}|Review Comment>"
+                ;;
+          
+                edited) 
+                  msg="✏️️ Pull Request review was modified by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="<${{ github.event.pull_request_review_comment.html_url }}|Review Comment>"
+                ;;
+              esac
+            ;;
+          
+            pull_request_comment)
+              case "${{ github.event.action }}" in
+                submitted) 
+                  msg="💬️ A new comment was added to the Pull Request by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}>!"
+                  details="<${{ github.event.pull_request_review_comment.html_url }}|Review Comment>"
+                ;;
+          
+                edited) 
+                  msg="✏️️ A comment has been modified by <${{ github.server_url }}/${{ github.event.sender.login }}|${{ github.event.sender.login }}> in the Pull Request!"
+                  details="<${{ github.event.pull_request_review_comment.html_url }}|Review Comment>"
+                ;;
+              esac
+            ;;
+          esac
+                  
+          echo "EVENT_MSG=$msg" >> $GITHUB_ENV
+          echo "DETAILS=$details" >> $GITHUB_ENV
+
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🔔 *New event* ${{ github.event.created_at }} 🔔"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ env.EVENT_MSG }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Repository:* <${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ env.DETAILS }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

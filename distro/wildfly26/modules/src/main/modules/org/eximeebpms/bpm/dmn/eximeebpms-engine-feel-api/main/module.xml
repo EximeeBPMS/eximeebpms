@@ -1,0 +1,5 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.bpm.dmn.eximeebpms-engine-feel-api">
+  <resources>
+    <resource-root path="eximeebpms-engine-feel-api-@project.version@.jar" />
+  </resources>
+</module>

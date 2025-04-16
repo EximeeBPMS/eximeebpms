@@ -3,48 +3,48 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.dmn</groupId>
-    <artifactId>camunda-engine-dmn-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm.dmn</groupId>
+    <artifactId>eximeebpms-engine-dmn-root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-engine-dmn</artifactId>
-  <name>camunda DMN - engine</name>
+  <artifactId>eximeebpms-engine-dmn</artifactId>
+  <name>EximeeBPMS DMN - engine</name>
   <properties>
-    <camunda.artifact>org.camunda.bpm.dmn.engine</camunda.artifact>
-    <camunda.osgi.import.additional>
+    <eximeebpms.artifact>org.eximeebpms.bpm.dmn.engine</eximeebpms.artifact>
+    <eximeebpms.osgi.import.additional>
       org.junit.*;resolution:=optional
-    </camunda.osgi.import.additional>
+    </eximeebpms.osgi.import.additional>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-utils</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-utils</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-typed-values</artifactId>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-typed-values</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-dmn-model</artifactId>
+      <groupId>org.eximeebpms.bpm.model</groupId>
+      <artifactId>eximeebpms-dmn-model</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-api</artifactId>
+      <groupId>org.eximeebpms.bpm.dmn</groupId>
+      <artifactId>eximeebpms-engine-feel-api</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-juel</artifactId>
+      <groupId>org.eximeebpms.bpm.dmn</groupId>
+      <artifactId>eximeebpms-engine-feel-juel</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-scala</artifactId>
+      <groupId>org.eximeebpms.bpm.dmn</groupId>
+      <artifactId>eximeebpms-engine-feel-scala</artifactId>
     </dependency>
 
     <dependency>
@@ -54,8 +54,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.juel</groupId>
-      <artifactId>camunda-juel</artifactId>
+      <groupId>org.eximeebpms.bpm.juel</groupId>
+      <artifactId>eximeebpms-juel</artifactId>
     </dependency>
 
     <dependency>
@@ -107,8 +107,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -121,7 +121,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>org.eximeebpms.bpm:eximeebpms-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -154,10 +154,10 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/dmn/engine/impl/**</exclude>
+                <exclude>org/eximeebpms/bpm/dmn/engine/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

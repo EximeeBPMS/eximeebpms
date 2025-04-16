@@ -19,8 +19,8 @@
 
 var template = require('./cam-cockpit-source.html?raw');
 
-var angular = require('camunda-commons-ui/vendor/angular');
-require('camunda-commons-ui/vendor/prism');
+var angular = require('eximeebpms-commons-ui/vendor/angular');
+require('eximeebpms-commons-ui/vendor/prism');
 
 module.exports = [
   '$window',

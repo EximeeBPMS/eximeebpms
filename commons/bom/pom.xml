@@ -1,44 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- HEADS-UP: Do not use camunda-parent as parent,
+  <!-- HEADS-UP: Do not use eximeebpms-parent as parent,
   it would introduce a cyclic dependency to this bom -->
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.camunda.commons</groupId>
-  <artifactId>camunda-commons-bom</artifactId>
-  <name>camunda Commons - Bom</name>
+  <groupId>org.eximeebpms.commons</groupId>
+  <artifactId>eximeebpms-commons-bom</artifactId>
+  <name>EximeeBPMS Commons - Bom</name>
   <packaging>pom</packaging>
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.commons</groupId>
-        <artifactId>camunda-commons-logging</artifactId>
+        <groupId>org.eximeebpms.commons</groupId>
+        <artifactId>eximeebpms-commons-logging</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.commons</groupId>
-        <artifactId>camunda-commons-utils</artifactId>
+        <groupId>org.eximeebpms.commons</groupId>
+        <artifactId>eximeebpms-commons-utils</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.commons</groupId>
-        <artifactId>camunda-commons-testing</artifactId>
+        <groupId>org.eximeebpms.commons</groupId>
+        <artifactId>eximeebpms-commons-testing</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.commons</groupId>
-        <artifactId>camunda-commons-typed-values</artifactId>
+        <groupId>org.eximeebpms.commons</groupId>
+        <artifactId>eximeebpms-commons-typed-values</artifactId>
         <version>${project.version}</version>
       </dependency>
 

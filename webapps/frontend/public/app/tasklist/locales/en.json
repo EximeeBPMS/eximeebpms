@@ -129,7 +129,6 @@
     "AddUserLink": "Add User Link",
     "Assign": "Assign",
     "BACK": "Back",
-    "BANNER_CE_EOL_TEXT": "It is time to migrate to Camunda 8. The last release of Camunda 7 CE will be in October 2025. Please have a look at our <a href=\"https://docs.camunda.io/docs/guides/migrating-from-camunda-7/\">migration guide</a>.",
     "BEFORE": "before",
     "BOOLEAN": "Boolean",
     "BUSINESS_KEY": "Business Key",
@@ -317,7 +316,7 @@
     "FILTER_VARIABLE_NAME_PLACEHOLDER": "Machine name of variable",
     "FINISHED": "Finished",
     "FIRST_LOGIN_HEADING": "Welcome to Camunda",
-    "FIRST_LOGIN_INFO": "It looks like this is your first time using the webapps. Check out the <a href=\"/camunda-welcome\">Camunda Welcome Page</a> for a quick overview.",
+    "FIRST_LOGIN_INFO": "It looks like this is your first time using the webapps. Check out the <a href=\"/eximeebpms-welcome\">EximeeBPMS Welcome Page</a> for a quick overview.",
     "FOLLOW_UP": "Follow-up",
     "FOLLOW_UP_DATE": "Follow-up date",
     "FORM": "Form",
@@ -425,6 +424,10 @@
     "SAVE": "Save",
     "SAVE_HINT": "Save the current state of the form to complete it later",
     "SEARCH_BY_TASK_NAME": "Search by task name, case sensitive.",
+    "SEARCH_GREATER_THAN": ">",
+    "SEARCH_GREATER_THAN_EQUALS": ">=",
+    "SEARCH_LESS_THAN": "<",
+    "SEARCH_LESS_THAN_EQUALS": "<=",
     "SEARCH_PLACEHOLDER": "Filter Tasks",
     "SEARCH_PROCESS_BY_NAME": "Search by process name.",
     "SEARCH_TASK_BY_NAME": "Search by task name, case sensitive.",
@@ -498,10 +501,6 @@
     "name": "Name",
     "owner": "Owner",
     "parentTask": "Parent task",
-    "priority": "Priority",
-    "SEARCH_LESS_THAN": "<",
-    "SEARCH_LESS_THAN_EQUALS": "<=",
-    "SEARCH_GREATER_THAN": ">",
-    "SEARCH_GREATER_THAN_EQUALS": ">="
+    "priority": "Priority"
   }
 }

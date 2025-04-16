@@ -1,4 +1,41 @@
 {
+  "operators": {
+    "date": [
+      {
+        "key": "lteq",
+        "value": "REPOSITORY_SEARCH_TYPE_BEFORE"
+      },
+      {
+        "key": "gteq",
+        "value": "REPOSITORY_SEARCH_TYPE_AFTER"
+      }
+    ],
+    "string": [
+      {
+        "key": "eq",
+        "value": "="
+      },
+      {
+        "key": "like",
+        "value": "REPOSITORY_SEARCH_TYPE_OPERATOR_LIKE"
+      }
+    ],
+    "undefined": [
+      {
+        "key": "eq",
+        "value": "="
+      }
+    ]
+  },
+  "tooltips": {
+    "deleteSearch": "REPOSITORY_SEARCH_DELETE_SEARCH",
+    "inputPlaceholder": "REPOSITORY_SEARCH_ADD_CRITERIA",
+    "invalid": "REPOSITORY_SEARCH_INVALID",
+    "name": "REPOSITORY_SEARCH_NAME",
+    "operator": "REPOSITORY_SEARCH_OPERATOR",
+    "type": "REPOSITORY_SEARCH_TYPE",
+    "value": "REPOSITORY_SEARCH_VALUE"
+  },
   "types": [
     {
       "id": {
@@ -85,42 +122,5 @@
       },
       "basic": true
     }
-  ],
-  "operators": {
-    "undefined":  [
-      {
-        "key": "eq",
-        "value": "="
-      }
-    ],
-    "string":     [
-      {
-        "key": "eq",
-        "value": "="
-      },
-      {
-        "key": "like",
-        "value": "REPOSITORY_SEARCH_TYPE_OPERATOR_LIKE"
-      }
-    ],
-    "date":       [
-      {
-        "key": "lteq",
-        "value": "REPOSITORY_SEARCH_TYPE_BEFORE"
-      },
-      {
-        "key": "gteq",
-        "value": "REPOSITORY_SEARCH_TYPE_AFTER"
-      }
-    ]
-  },
-  "tooltips": {
-    "inputPlaceholder": "REPOSITORY_SEARCH_ADD_CRITERIA",
-    "invalid": "REPOSITORY_SEARCH_INVALID",
-    "deleteSearch": "REPOSITORY_SEARCH_DELETE_SEARCH",
-    "type": "REPOSITORY_SEARCH_TYPE",
-    "name": "REPOSITORY_SEARCH_NAME",
-    "operator": "REPOSITORY_SEARCH_OPERATOR",
-    "value": "REPOSITORY_SEARCH_VALUE"
-  }
+  ]
 }

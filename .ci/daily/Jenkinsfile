@@ -42,10 +42,10 @@ pipeline {
           runSteps: {
             cambpmCopyArtifacts(params.UPSTREAM_PROJECT_NAME, params.UPSTREAM_BUILD_NUMBER)
             cambpmStash("platform-stash-runtime",
-                        ".m2/org/camunda/**/*-SNAPSHOT/**",
+                        ".m2/org/eximeebpms/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                        ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                        ".m2/org/eximeebpms/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/eximeebpms/bpm/**/*qa*/**/*-SNAPSHOT/**",
                         "**/*.zip,**/*.tar.gz")
           }
         ])
@@ -121,7 +121,7 @@ pipeline {
               cloud "kubernetes"
               label "${utils.envPrefix()}ci-infra-camunda-cloud-build_${env.JOB_BASE_NAME.take(15)}-${env.BUILD_ID}"
               defaultContainer 'alpine'
-              yaml org.camunda.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
+              yaml org.eximeebpms.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
                   useStableNodePool: false
               ])
             }

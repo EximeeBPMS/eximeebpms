@@ -1,45 +1,45 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- HEADS-UP: Do not use camunda-parent as parent,
+  <!-- HEADS-UP: Do not use eximeebpms-parent as parent,
   it would introduce a cyclic dependency to this bom -->
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>org.eximeebpms.bpm</groupId>
+    <artifactId>eximeebpms-root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.camunda.connect</groupId>
-  <artifactId>camunda-connect-bom</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
-  <name>Camunda Platform - connect - bom</name>
+  <groupId>org.eximeebpms.connect</groupId>
+  <artifactId>eximeebpms-connect-bom</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>EximeeBPMS - connect - bom</name>
   <packaging>pom</packaging>
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-core</artifactId>
+        <groupId>org.eximeebpms.connect</groupId>
+        <artifactId>eximeebpms-connect-core</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-http-client</artifactId>
+        <groupId>org.eximeebpms.connect</groupId>
+        <artifactId>eximeebpms-connect-http-client</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-soap-http-client</artifactId>
+        <groupId>org.eximeebpms.connect</groupId>
+        <artifactId>eximeebpms-connect-soap-http-client</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-connectors-all</artifactId>
+        <groupId>org.eximeebpms.connect</groupId>
+        <artifactId>eximeebpms-connect-connectors-all</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -47,9 +47,9 @@
   </dependencyManagement>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/EximeeBPMS/eximeebpms</url>
+    <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
+    <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

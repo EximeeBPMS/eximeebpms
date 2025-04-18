@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: |
           .github/scripts/jacoco-create-flag-files.sh
-          ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
+          ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

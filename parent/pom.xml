@@ -54,7 +54,7 @@
     <version.testcontainers>1.16.0</version.testcontainers>
 
     <version.commonj>1.1.0</version.commonj>
-    <version.bouncycastle>1.47</version.bouncycastle>
+    <version.bouncycastle>1.70</version.bouncycastle>
 
     <!-- application servers -->
     <version.wildfly>35.0.0.Final</version.wildfly>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <camunda:process-application
-  xmlns:camunda="http://www.camunda.org/schema/1.0/ProcessApplication"
+  xmlns:camunda="http://camunda.org/schema/1.0/ProcessApplication"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.camunda.org/schema/1.0/ProcessApplication http://www.camunda.org/schema/1.0/ProcessApplication ">
+  xsi:schemaLocation="http://camunda.org/schema/1.0/ProcessApplication http://camunda.org/schema/1.0/ProcessApplication ">
   
   <camunda:process-engine name="engine1">
     <camunda:job-acquisition>default</camunda:job-acquisition>

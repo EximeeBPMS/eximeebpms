@@ -55,7 +55,7 @@ import org.junit.runner.RunWith;
 public class TestWarDeploymentWithMultiplePasAsSubdeployment3 extends AbstractFoxPlatformIntegrationTest {
   
   public final static String PROCESSES_XML =       
-    "<process-application xmlns=\"http://camunda.org/schema/1.0/ProcessApplication\">" +
+    "<process-application xmlns=\"http://www.camunda.org/schema/1.0/ProcessApplication\">" +
           
       "<process-archive name=\"PA_NAME\">" +
         "<properties>" +        

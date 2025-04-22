@@ -95,8 +95,6 @@
         <module>engine-plugins</module>
 
         <module>distro/license-book</module>
-        <module>distro/jboss</module>
-        <module>distro/tomcat</module>
         <module>distro/sql-script</module>
         <module>distro/run</module>
 
@@ -120,8 +118,6 @@
         <module>spring-boot-starter</module>
 
         <module>distro/license-book</module>
-        <module>distro/jboss</module>
-        <module>distro/tomcat</module>
         <module>distro/run</module>
       </modules>
     </profile>
@@ -193,7 +189,7 @@
     <profile>
       <id>distro-wildfly</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>javaee/ejb-client</module>

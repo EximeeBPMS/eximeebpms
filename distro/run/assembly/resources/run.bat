@@ -149,7 +149,7 @@ REM remove argument
 SHIFT
 
 REM shut down Camunda Run
-ECHO Camunda Run is shutting down.
+ECHO EximeeBPMS Run is shutting down.
 TASKKILL /FI "WINDOWTITLE eq %APPNAME%"
 
 GOTO End

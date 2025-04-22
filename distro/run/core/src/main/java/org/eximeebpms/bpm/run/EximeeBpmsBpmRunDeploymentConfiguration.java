@@ -31,11 +31,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CamundaBpmRunDeploymentConfiguration extends DefaultDeploymentConfiguration {
+public class EximeeBpmsBpmRunDeploymentConfiguration extends DefaultDeploymentConfiguration {
 
   private final String deploymentDir;
 
-  public CamundaBpmRunDeploymentConfiguration(String deploymentDir) {
+  public EximeeBpmsBpmRunDeploymentConfiguration(String deploymentDir) {
     this.deploymentDir = deploymentDir;
   }
 

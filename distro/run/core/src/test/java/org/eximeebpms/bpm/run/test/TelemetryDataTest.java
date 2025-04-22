@@ -24,7 +24,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
 public class TelemetryDataTest {
 
   @Autowired

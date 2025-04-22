@@ -135,7 +135,7 @@ elif [ "$1" = "stop" ] ; then
     # remove process ID file
     rm "$PID_PATH"
 
-    echo "Camunda Run is shutting down."
+    echo "EximeeBPMS Run is shutting down."
   else
     echo "There is no instance of Camunda Run to shut down."
     exit 1

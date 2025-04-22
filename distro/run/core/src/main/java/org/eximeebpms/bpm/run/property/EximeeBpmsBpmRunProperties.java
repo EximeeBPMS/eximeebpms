@@ -23,85 +23,85 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-@ConfigurationProperties(CamundaBpmRunProperties.PREFIX)
-public class CamundaBpmRunProperties {
+@ConfigurationProperties(EximeeBpmsBpmRunProperties.PREFIX)
+public class EximeeBpmsBpmRunProperties {
 
   public static final String PREFIX = CamundaBpmProperties.PREFIX + ".run";
 
   @NestedConfigurationProperty
-  protected CamundaBpmRunAuthenticationProperties auth = new CamundaBpmRunAuthenticationProperties();
+  protected EximeeBpmsBpmRunAuthenticationProperties auth = new EximeeBpmsBpmRunAuthenticationProperties();
 
   @NestedConfigurationProperty
-  protected CamundaBpmRunCorsProperty cors = new CamundaBpmRunCorsProperty();
+  protected EximeeBpmsBpmRunCorsProperty cors = new EximeeBpmsBpmRunCorsProperty();
 
   @NestedConfigurationProperty
-  protected CamundaBpmRunLdapProperties ldap = new CamundaBpmRunLdapProperties();
+  protected EximeeBpmsBpmRunLdapProperties ldap = new EximeeBpmsBpmRunLdapProperties();
 
   @NestedConfigurationProperty
-  protected List<CamundaBpmRunProcessEnginePluginProperty> processEnginePlugins = new ArrayList<>();
+  protected List<EximeeBpmsBpmRunProcessEnginePluginProperty> processEnginePlugins = new ArrayList<>();
 
   @NestedConfigurationProperty
-  protected CamundaBpmRunRestProperties rest = new CamundaBpmRunRestProperties();
+  protected EximeeBpmsBpmRunRestProperties rest = new EximeeBpmsBpmRunRestProperties();
 
   @NestedConfigurationProperty
-  protected CamundaBpmRunDeploymentProperties deployment = new CamundaBpmRunDeploymentProperties();
+  protected EximeeBpmsBpmRunDeploymentProperties deployment = new EximeeBpmsBpmRunDeploymentProperties();
 
-  protected CamundaBpmRunAdministratorAuthorizationProperties adminAuth
-      = new CamundaBpmRunAdministratorAuthorizationProperties();
+  protected EximeeBpmsBpmRunAdministratorAuthorizationProperties adminAuth
+      = new EximeeBpmsBpmRunAdministratorAuthorizationProperties();
 
-  public CamundaBpmRunAuthenticationProperties getAuth() {
+  public EximeeBpmsBpmRunAuthenticationProperties getAuth() {
     return auth;
   }
 
-  public void setAuth(CamundaBpmRunAuthenticationProperties auth) {
+  public void setAuth(EximeeBpmsBpmRunAuthenticationProperties auth) {
     this.auth = auth;
   }
 
-  public CamundaBpmRunCorsProperty getCors() {
+  public EximeeBpmsBpmRunCorsProperty getCors() {
     return cors;
   }
 
-  public void setCors(CamundaBpmRunCorsProperty cors) {
+  public void setCors(EximeeBpmsBpmRunCorsProperty cors) {
     this.cors = cors;
   }
 
-  public CamundaBpmRunLdapProperties getLdap() {
+  public EximeeBpmsBpmRunLdapProperties getLdap() {
     return ldap;
   }
 
-  public void setLdap(CamundaBpmRunLdapProperties ldap) {
+  public void setLdap(EximeeBpmsBpmRunLdapProperties ldap) {
     this.ldap = ldap;
   }
 
-  public CamundaBpmRunAdministratorAuthorizationProperties getAdminAuth() {
+  public EximeeBpmsBpmRunAdministratorAuthorizationProperties getAdminAuth() {
     return adminAuth;
   }
 
-  public void setAdminAuth(CamundaBpmRunAdministratorAuthorizationProperties adminAuth) {
+  public void setAdminAuth(EximeeBpmsBpmRunAdministratorAuthorizationProperties adminAuth) {
     this.adminAuth = adminAuth;
   }
 
-  public List<CamundaBpmRunProcessEnginePluginProperty> getProcessEnginePlugins() {
+  public List<EximeeBpmsBpmRunProcessEnginePluginProperty> getProcessEnginePlugins() {
     return processEnginePlugins;
   }
 
-  public void setProcessEnginePlugins(List<CamundaBpmRunProcessEnginePluginProperty> processEnginePlugins) {
+  public void setProcessEnginePlugins(List<EximeeBpmsBpmRunProcessEnginePluginProperty> processEnginePlugins) {
     this.processEnginePlugins = processEnginePlugins;
   }
 
-  public CamundaBpmRunRestProperties getRest() {
+  public EximeeBpmsBpmRunRestProperties getRest() {
     return rest;
   }
 
-  public void setRest(CamundaBpmRunRestProperties rest) {
+  public void setRest(EximeeBpmsBpmRunRestProperties rest) {
     this.rest = rest;
   }
 
-  public CamundaBpmRunDeploymentProperties getDeployment() {
+  public EximeeBpmsBpmRunDeploymentProperties getDeployment() {
     return deployment;
   }
 
-  public void setDeployment(CamundaBpmRunDeploymentProperties deployment) {
+  public void setDeployment(EximeeBpmsBpmRunDeploymentProperties deployment) {
     this.deployment = deployment;
   }
 

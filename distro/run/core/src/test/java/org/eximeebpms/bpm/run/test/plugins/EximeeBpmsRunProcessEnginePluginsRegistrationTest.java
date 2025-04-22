@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 import org.eximeebpms.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProperties;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProcessEnginePluginProperty;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,15 +40,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
 @ActiveProfiles(profiles = { "test-new-plugins" }, inheritProfiles = true)
-public class CamundaRunProcessEnginePluginsRegistrationTest {
+public class EximeeBpmsRunProcessEnginePluginsRegistrationTest {
 
   @Autowired
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
 
   @Autowired
-  protected CamundaBpmRunProperties properties;
+  protected EximeeBpmsBpmRunProperties properties;
 
   protected List<ProcessEnginePlugin> plugins;
 
@@ -63,25 +63,25 @@ public class CamundaRunProcessEnginePluginsRegistrationTest {
     String pluginOne = "org.eximeebpms.bpm.run.test.plugins.TestFirstPlugin";
     String pluginTwo = "org.eximeebpms.bpm.run.test.plugins.TestSecondPlugin";
     String pluginThree = "org.eximeebpms.bpm.run.test.plugins.TestDefaultValuesPlugin";
-    List<CamundaBpmRunProcessEnginePluginProperty> pluginConfigs = properties
+    List<EximeeBpmsBpmRunProcessEnginePluginProperty> pluginConfigs = properties
         .getProcessEnginePlugins();
 
     // then
     // assert that all plugin configuration properties were mapped properly
     assertThat(pluginConfigs).hasSize(3);
     List<String> pluginClasses = pluginConfigs.stream()
-        .map(CamundaBpmRunProcessEnginePluginProperty::getPluginClass)
+        .map(EximeeBpmsBpmRunProcessEnginePluginProperty::getPluginClass)
         .collect(Collectors.toList());
     assertThat(pluginClasses)
         .contains(pluginOne, pluginTwo, pluginThree);
 
-    CamundaBpmRunProcessEnginePluginProperty firstPlugin = pluginConfigs.get(0);
+    EximeeBpmsBpmRunProcessEnginePluginProperty firstPlugin = pluginConfigs.get(0);
     Map<String, Object> firstPluginParameters = firstPlugin.getPluginParameters();
     assertThat(firstPluginParameters).containsOnly(
         entry("parameterOne", "valueOne"),
         entry("parameterTwo", true));
 
-    CamundaBpmRunProcessEnginePluginProperty secondPlugin = properties.getProcessEnginePlugins().get(1);
+    EximeeBpmsBpmRunProcessEnginePluginProperty secondPlugin = properties.getProcessEnginePlugins().get(1);
     Map<String, Object> secondPluginParameters = secondPlugin.getPluginParameters();
     assertThat(secondPluginParameters).containsOnly(
         entry("parameterOne", 1.222),

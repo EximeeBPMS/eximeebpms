@@ -20,9 +20,9 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
 import org.eximeebpms.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunLdapProperties;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAdministratorAuthorizationProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunLdapProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -33,38 +33,38 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@EnableConfigurationProperties(CamundaBpmRunProperties.class)
+@EnableConfigurationProperties(EximeeBpmsBpmRunProperties.class)
 @Configuration
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
-public class CamundaBpmRunConfiguration {
+public class EximeeBpmsBpmRunConfiguration {
 
   @Bean
-  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunLdapProperties.PREFIX)
-  public LdapIdentityProviderPlugin ldapIdentityProviderPlugin(CamundaBpmRunProperties properties) {
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBpmsBpmRunLdapProperties.PREFIX)
+  public LdapIdentityProviderPlugin ldapIdentityProviderPlugin(EximeeBpmsBpmRunProperties properties) {
     return properties.getLdap();
   }
 
   @Bean
-  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunAdministratorAuthorizationProperties.PREFIX)
-  public AdministratorAuthorizationPlugin administratorAuthorizationPlugin(CamundaBpmRunProperties properties) {
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBpmsBpmRunAdministratorAuthorizationProperties.PREFIX)
+  public AdministratorAuthorizationPlugin administratorAuthorizationPlugin(EximeeBpmsBpmRunProperties properties) {
     return properties.getAdminAuth();
   }
 
   @Bean
   public ProcessEngineConfigurationImpl processEngineConfigurationImpl(List<ProcessEnginePlugin> processEnginePluginsFromContext,
-                                                                       CamundaBpmRunProperties properties,
-                                                                       CamundaBpmRunDeploymentConfiguration deploymentConfig) {
+                                                                       EximeeBpmsBpmRunProperties properties,
+                                                                       EximeeBpmsBpmRunDeploymentConfiguration deploymentConfig) {
     String normalizedDeploymentDir = deploymentConfig.getNormalizedDeploymentDir();
     boolean deployChangedOnly = properties.getDeployment().isDeployChangedOnly();
     var processEnginePluginsFromYaml = properties.getProcessEnginePlugins();
 
-    return new CamundaBpmRunProcessEngineConfiguration(normalizedDeploymentDir, deployChangedOnly,
+    return new EximeeBpmsBpmRunProcessEngineConfiguration(normalizedDeploymentDir, deployChangedOnly,
         processEnginePluginsFromContext, processEnginePluginsFromYaml);
   }
 
   @Bean
-  public CamundaBpmRunDeploymentConfiguration camundaDeploymentConfiguration(@Value("${eximeebpms.deploymentDir:#{null}}") String deploymentDir) {
-    return new CamundaBpmRunDeploymentConfiguration(deploymentDir);
+  public EximeeBpmsBpmRunDeploymentConfiguration camundaDeploymentConfiguration(@Value("${eximeebpms.deploymentDir:#{null}}") String deploymentDir) {
+    return new EximeeBpmsBpmRunDeploymentConfiguration(deploymentDir);
   }
 
 }

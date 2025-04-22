@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.eximeebpms.bpm.run.property.CamundaBpmRunCorsProperty;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunCorsProperty;
 import org.eximeebpms.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -39,7 +39,7 @@ import org.springframework.test.context.TestPropertySource;
  * @see https://jira.camunda.com/browse/CAM-11290
  */
 @ActiveProfiles(profiles = { "test-cors-enabled" }, inheritProfiles = true)
-@TestPropertySource(properties = {CamundaBpmRunCorsProperty.PREFIX + ".preflight-maxage=2600"})
+@TestPropertySource(properties = {EximeeBpmsBpmRunCorsProperty.PREFIX + ".preflight-maxage=2600"})
 public class CorsConfigurationPreflightMaxAgeTest extends AbstractRestTest {
 
   @Test

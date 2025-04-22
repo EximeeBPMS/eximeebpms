@@ -19,9 +19,9 @@ package org.eximeebpms.bpm.run;
 import jakarta.servlet.Filter;
 import org.apache.catalina.filters.CorsFilter;
 import org.eximeebpms.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunAuthenticationProperties;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunCorsProperty;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAuthenticationProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunCorsProperty;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
 import org.eximeebpms.bpm.spring.boot.starter.rest.CamundaJerseyResourceConfig;
@@ -37,14 +37,14 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
 
-@EnableConfigurationProperties(CamundaBpmRunProperties.class)
+@EnableConfigurationProperties(EximeeBpmsBpmRunProperties.class)
 @Configuration
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
 @ConditionalOnClass(CamundaBpmRestInitializer.class)
-public class CamundaBpmRunRestConfiguration {
+public class EximeeBpmsBpmRunRestConfiguration {
 
   @Autowired
-  CamundaBpmRunProperties camundaBpmRunProperties;
+  EximeeBpmsBpmRunProperties eximeeBpmsBpmRunProperties;
 
   /*
    * The CORS and Authentication filters need to run before other camunda
@@ -63,7 +63,7 @@ public class CamundaBpmRunRestConfiguration {
   private static int AUTH_FILTER_PRECEDENCE = 1;
 
   @Bean
-  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunAuthenticationProperties.PREFIX)
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBpmsBpmRunAuthenticationProperties.PREFIX)
   public FilterRegistrationBean<Filter> processEngineAuthenticationFilter(JerseyApplicationPath applicationPath) {
     FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
     registration.setName("eximeebpms-auth");
@@ -74,15 +74,15 @@ public class CamundaBpmRunRestConfiguration {
     registration.addUrlPatterns(restApiPathPattern);
 
     // if nothing is set, use Http Basic authentication
-    CamundaBpmRunAuthenticationProperties properties = camundaBpmRunProperties.getAuth();
-    if (properties.getAuthentication() == null || CamundaBpmRunAuthenticationProperties.DEFAULT_AUTH.equals(properties.getAuthentication())) {
+    EximeeBpmsBpmRunAuthenticationProperties properties = eximeeBpmsBpmRunProperties.getAuth();
+    if (properties.getAuthentication() == null || EximeeBpmsBpmRunAuthenticationProperties.DEFAULT_AUTH.equals(properties.getAuthentication())) {
       registration.addInitParameter("authentication-provider", "org.eximeebpms.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
     }
     return registration;
   }
 
   @Bean
-  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunCorsProperty.PREFIX)
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBpmsBpmRunCorsProperty.PREFIX)
   public FilterRegistrationBean<Filter> corsFilter(JerseyApplicationPath applicationPath) {
     FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
     registration.setName("eximeebpms-cors");
@@ -94,17 +94,17 @@ public class CamundaBpmRunRestConfiguration {
     registration.addUrlPatterns(restApiPathPattern);
 
     registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_ORIGINS,
-                                  camundaBpmRunProperties.getCors().getAllowedOrigins());
+                                  eximeeBpmsBpmRunProperties.getCors().getAllowedOrigins());
     registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_METHODS,
-                                  CamundaBpmRunCorsProperty.DEFAULT_HTTP_METHODS);
+                                  EximeeBpmsBpmRunCorsProperty.DEFAULT_HTTP_METHODS);
     registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_HEADERS,
-                                  camundaBpmRunProperties.getCors().getAllowedHeaders());
+                                  eximeeBpmsBpmRunProperties.getCors().getAllowedHeaders());
     registration.addInitParameter(CorsFilter.PARAM_CORS_EXPOSED_HEADERS,
-                                  camundaBpmRunProperties.getCors().getExposedHeaders());
+                                  eximeeBpmsBpmRunProperties.getCors().getExposedHeaders());
     registration.addInitParameter(CorsFilter.PARAM_CORS_SUPPORT_CREDENTIALS,
-                                  String.valueOf(camundaBpmRunProperties.getCors().getAllowCredentials()));
+                                  String.valueOf(eximeeBpmsBpmRunProperties.getCors().getAllowCredentials()));
     registration.addInitParameter(CorsFilter.PARAM_CORS_PREFLIGHT_MAXAGE,
-                                  camundaBpmRunProperties.getCors().getPreflightMaxAge());
+                                  eximeeBpmsBpmRunProperties.getCors().getPreflightMaxAge());
 
     return registration;
   }
@@ -112,7 +112,7 @@ public class CamundaBpmRunRestConfiguration {
   @Bean
   public CamundaJerseyResourceConfig camundaRunJerseyResourceConfig() {
     CamundaJerseyResourceConfig camundaJerseyResourceConfig = new CamundaJerseyResourceConfig();
-    camundaJerseyResourceConfig.setProperties(Collections.singletonMap("jersey.config.server.wadl.disableWadl", camundaBpmRunProperties.getRest().isDisableWadl()));
+    camundaJerseyResourceConfig.setProperties(Collections.singletonMap("jersey.config.server.wadl.disableWadl", eximeeBpmsBpmRunProperties.getRest().isDisableWadl()));
     return camundaJerseyResourceConfig;
   }
 

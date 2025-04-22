@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.run.property;
 import java.util.Collections;
 import java.util.Map;
 
-public class CamundaBpmRunProcessEnginePluginProperty {
+public class EximeeBpmsBpmRunProcessEnginePluginProperty {
 
   protected String pluginClass;
   protected Map<String, Object> pluginParameters = Collections.EMPTY_MAP;

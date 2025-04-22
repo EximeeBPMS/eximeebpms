@@ -18,9 +18,9 @@ package org.eximeebpms.bpm.run.property;
 
 import org.eximeebpms.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
 
-public class CamundaBpmRunLdapProperties extends LdapIdentityProviderPlugin {
+public class EximeeBpmsBpmRunLdapProperties extends LdapIdentityProviderPlugin {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".ldap";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".ldap";
 
   boolean enabled = true;
 

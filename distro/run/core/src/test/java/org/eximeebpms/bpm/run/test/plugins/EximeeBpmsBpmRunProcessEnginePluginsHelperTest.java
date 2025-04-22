@@ -21,30 +21,29 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
-import org.eximeebpms.bpm.run.utils.CamundaBpmRunProcessEnginePluginHelper;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProcessEnginePluginProperty;
+import org.eximeebpms.bpm.run.utils.EximeeBpmsBpmRunProcessEnginePluginHelper;
 import org.junit.Test;
 
-public class CamundaBpmRunProcessEnginePluginsHelperTest {
+public class EximeeBpmsBpmRunProcessEnginePluginsHelperTest {
 
   @Test
   public void shouldReportMissingPluginClass() {
     // given
     // a process engine plugins map with a class not on the classpath
-    CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
+    EximeeBpmsBpmRunProcessEnginePluginProperty pluginConfig = new EximeeBpmsBpmRunProcessEnginePluginProperty();
     pluginConfig.setPluginClass("org.eximeebpms.bpm.run.test.plugins.TestThirdPlugin");
     pluginConfig.setPluginParameters(Collections.EMPTY_MAP);
     // a process engine plugins map with a plugin not configured properly
-    List<CamundaBpmRunProcessEnginePluginProperty> plugins =
+    List<EximeeBpmsBpmRunProcessEnginePluginProperty> plugins =
         Collections.singletonList(pluginConfig);
     List<ProcessEnginePlugin> pluginList = Collections.EMPTY_LIST;
 
     // when
-    assertThatThrownBy(() -> CamundaBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
+    assertThatThrownBy(() -> EximeeBpmsBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
                                                                                         plugins))
         // then
         // an exception is thrown with a user-friendly message asking to check the plugin class
@@ -57,16 +56,16 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
   public void shouldReportWrongPluginClass() {
     // given
     // a process engine plugins map with a class not implementing the ProcessEnginePlugin interface
-    CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
+    EximeeBpmsBpmRunProcessEnginePluginProperty pluginConfig = new EximeeBpmsBpmRunProcessEnginePluginProperty();
     pluginConfig.setPluginClass("org.eximeebpms.bpm.run.test.plugins.TestFalsePlugin");
     pluginConfig.setPluginParameters(Collections.EMPTY_MAP);
     // a process engine plugins map with a plugin not configured properly
-    List<CamundaBpmRunProcessEnginePluginProperty> plugins =
+    List<EximeeBpmsBpmRunProcessEnginePluginProperty> plugins =
         Collections.singletonList(pluginConfig);
     List<ProcessEnginePlugin> pluginList = Collections.EMPTY_LIST;
 
     // when
-    assertThatThrownBy(() -> CamundaBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
+    assertThatThrownBy(() -> EximeeBpmsBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
                                                                                         plugins))
         // then
         // an exception is thrown with a user-friendly message asking to check the plugin class
@@ -78,16 +77,16 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
   @Test
   public void shouldReportMissingPluginConfigurationProperty() {
     // given
-    CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
+    EximeeBpmsBpmRunProcessEnginePluginProperty pluginConfig = new EximeeBpmsBpmRunProcessEnginePluginProperty();
     pluginConfig.setPluginClass("org.eximeebpms.bpm.run.test.plugins.TestFirstPlugin");
     pluginConfig.setPluginParameters(Collections.singletonMap("wrongKey", "wrongValue"));
     // a process engine plugins map with a plugin not configured properly
-    List<CamundaBpmRunProcessEnginePluginProperty> plugins =
+    List<EximeeBpmsBpmRunProcessEnginePluginProperty> plugins =
         Collections.singletonList(pluginConfig);
     List<ProcessEnginePlugin> pluginList = new ArrayList<>();
 
     // when
-    assertThatThrownBy(() -> CamundaBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
+    assertThatThrownBy(() -> EximeeBpmsBpmRunProcessEnginePluginHelper.registerYamlPlugins(pluginList,
                                                                                         plugins))
         // then
         // an exception is thrown with a user-friendly message asking to check the config options

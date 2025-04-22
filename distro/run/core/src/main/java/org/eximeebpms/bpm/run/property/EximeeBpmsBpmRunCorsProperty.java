@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.run.property;
 
-public class CamundaBpmRunCorsProperty {
+public class EximeeBpmsBpmRunCorsProperty {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".cors";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".cors";
   public static final String DEFAULT_ORIGINS = "*";
   public static final String DEFAULT_HTTP_METHODS = "GET,POST,HEAD,OPTIONS,PUT,DELETE";
 
@@ -39,7 +39,7 @@ public class CamundaBpmRunCorsProperty {
   String preflightMaxAge;
 
 
-  public CamundaBpmRunCorsProperty() {
+  public EximeeBpmsBpmRunCorsProperty() {
     this.allowedOrigins = DEFAULT_ORIGINS;
     this.allowedHeaders = DEFAULT_ALLOWED_HTTP_HEADERS;
     this.exposedHeaders = DEFAULT_EXPOSED_HEADERS;

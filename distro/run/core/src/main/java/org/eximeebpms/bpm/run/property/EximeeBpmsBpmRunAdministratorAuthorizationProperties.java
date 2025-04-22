@@ -18,9 +18,9 @@ package org.eximeebpms.bpm.run.property;
 
 import org.eximeebpms.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
 
-public class CamundaBpmRunAdministratorAuthorizationProperties extends AdministratorAuthorizationPlugin {
+public class EximeeBpmsBpmRunAdministratorAuthorizationProperties extends AdministratorAuthorizationPlugin {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".admin-auth";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".admin-auth";
 
   boolean enabled = true;
 

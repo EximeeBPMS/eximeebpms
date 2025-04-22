@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.run.property;
 
-public class CamundaBpmRunDeploymentProperties {
+public class EximeeBpmsBpmRunDeploymentProperties {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".deployment";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".deployment";
 
   protected boolean deployChangedOnly = true;
 

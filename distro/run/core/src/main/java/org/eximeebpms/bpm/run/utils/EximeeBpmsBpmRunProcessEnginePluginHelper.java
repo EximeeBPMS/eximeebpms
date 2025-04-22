@@ -23,18 +23,18 @@ import java.util.Optional;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.util.ReflectUtil;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProcessEnginePluginProperty;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootStarterException;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootStarterPropertyHelper;
 
-public class CamundaBpmRunProcessEnginePluginHelper {
+public class EximeeBpmsBpmRunProcessEnginePluginHelper {
 
-  protected static final CamundaBpmRunLogger LOG = CamundaBpmRunLogger.LOG;
+  protected static final EximeeBpmsBpmRunLogger LOG = EximeeBpmsBpmRunLogger.LOG;
 
   public static void registerYamlPlugins(List<ProcessEnginePlugin> processEnginePlugins,
-                                         List<CamundaBpmRunProcessEnginePluginProperty> pluginsInfo) {
+                                         List<EximeeBpmsBpmRunProcessEnginePluginProperty> pluginsInfo) {
 
-    for (CamundaBpmRunProcessEnginePluginProperty pluginInfo : pluginsInfo) {
+    for (EximeeBpmsBpmRunProcessEnginePluginProperty pluginInfo : pluginsInfo) {
       String className = pluginInfo.getPluginClass();
       ProcessEnginePlugin plugin = getOrCreatePluginInstance(processEnginePlugins, className);
 

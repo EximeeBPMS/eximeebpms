@@ -19,9 +19,9 @@ package org.eximeebpms.bpm.run.property;
 import java.util.Arrays;
 import java.util.List;
 
-public class CamundaBpmRunAuthenticationProperties {
+public class EximeeBpmsBpmRunAuthenticationProperties {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".auth";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".auth";
   public static final String DEFAULT_AUTH = "basic";
   public static final List<String> AUTH_METHODS = Arrays.asList(DEFAULT_AUTH);
 

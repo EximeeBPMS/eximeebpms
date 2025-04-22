@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.run.property;
 
-public class CamundaBpmRunRestProperties {
+public class EximeeBpmsBpmRunRestProperties {
 
-  public static final String PREFIX = CamundaBpmRunProperties.PREFIX + ".rest";
+  public static final String PREFIX = EximeeBpmsBpmRunProperties.PREFIX + ".rest";
 
   protected boolean disableWadl;
 

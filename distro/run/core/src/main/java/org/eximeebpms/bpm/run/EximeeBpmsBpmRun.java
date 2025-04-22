@@ -20,8 +20,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CamundaBpmRun {
+public class EximeeBpmsBpmRun {
   public static void main(String... args) {
-    SpringApplication.run(CamundaBpmRun.class, args);
+    SpringApplication.run(EximeeBpmsBpmRun.class, args);
   }
 }

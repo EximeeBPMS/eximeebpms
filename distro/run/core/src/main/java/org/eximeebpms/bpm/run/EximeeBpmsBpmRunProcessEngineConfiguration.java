@@ -21,22 +21,22 @@ import org.eximeebpms.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
-import org.eximeebpms.bpm.run.utils.CamundaBpmRunProcessEnginePluginHelper;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProcessEnginePluginProperty;
+import org.eximeebpms.bpm.run.utils.EximeeBpmsBpmRunProcessEnginePluginHelper;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-public class CamundaBpmRunProcessEngineConfiguration extends SpringProcessEngineConfiguration {
+public class EximeeBpmsBpmRunProcessEngineConfiguration extends SpringProcessEngineConfiguration {
 
   private final String normalizedDeploymentDir;
 
-  public CamundaBpmRunProcessEngineConfiguration(String normalizedDeploymentDir,
-                                                 boolean deployChangedOnly,
-                                                 List<ProcessEnginePlugin> processEnginePluginsFromContext,
-                                                 List<CamundaBpmRunProcessEnginePluginProperty> processEnginePluginsFromYaml) {
+  public EximeeBpmsBpmRunProcessEngineConfiguration(String normalizedDeploymentDir,
+                                                    boolean deployChangedOnly,
+                                                    List<ProcessEnginePlugin> processEnginePluginsFromContext,
+                                                    List<EximeeBpmsBpmRunProcessEnginePluginProperty> processEnginePluginsFromYaml) {
     this.normalizedDeploymentDir = normalizedDeploymentDir;
 
     setDeployChangedOnly(deployChangedOnly);
@@ -64,9 +64,9 @@ public class CamundaBpmRunProcessEngineConfiguration extends SpringProcessEngine
   }
 
   protected void configureProcessEnginePlugins(List<ProcessEnginePlugin> processEnginePluginsFromContext,
-                                               List<CamundaBpmRunProcessEnginePluginProperty> processEnginePluginsFromYaml) {
+                                               List<EximeeBpmsBpmRunProcessEnginePluginProperty> processEnginePluginsFromYaml) {
     // register process engine plugins defined in yaml
-    CamundaBpmRunProcessEnginePluginHelper.registerYamlPlugins(processEnginePluginsFromContext, processEnginePluginsFromYaml);
+    EximeeBpmsBpmRunProcessEnginePluginHelper.registerYamlPlugins(processEnginePluginsFromContext, processEnginePluginsFromYaml);
 
     this.processEnginePlugins.add(new CompositeProcessEnginePlugin(processEnginePluginsFromContext));
   }

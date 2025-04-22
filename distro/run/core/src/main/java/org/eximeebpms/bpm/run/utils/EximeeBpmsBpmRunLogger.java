@@ -19,13 +19,13 @@ package org.eximeebpms.bpm.run.utils;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.commons.logging.BaseLogger;
 
-public class CamundaBpmRunLogger extends BaseLogger {
+public class EximeeBpmsBpmRunLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "RUN";
   public static final String PROJECT_ID = "CR";
   public static final String PACKAGE = "org.eximeebpms.bpm.run";
 
-  public static final CamundaBpmRunLogger LOG = createLogger(CamundaBpmRunLogger.class, PROJECT_CODE, PACKAGE, PROJECT_ID);
+  public static final EximeeBpmsBpmRunLogger LOG = createLogger(EximeeBpmsBpmRunLogger.class, PROJECT_CODE, PACKAGE, PROJECT_ID);
 
   public void processEnginePluginRegistered(String pluginClass) {
       logInfo("001",

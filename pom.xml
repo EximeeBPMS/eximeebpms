@@ -23,9 +23,9 @@
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
     <!-- These properties are used in both the BOM as well as eximeebpms-parent and subprojects -->
-    <version.mybatis>3.5.15</version.mybatis>
-    <version.joda-time>2.12.5</version.joda-time>
-    <version.uuid-generator>4.3.0</version.uuid-generator>
+    <version.mybatis>3.5.19</version.mybatis>
+    <version.joda-time>2.14.0</version.joda-time>
+    <version.uuid-generator>5.1.0</version.uuid-generator>
     <version.feel-scala>1.19.3</version.feel-scala>
     <sonar.organization>eximeebpms</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>

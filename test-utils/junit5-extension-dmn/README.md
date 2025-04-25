@@ -9,8 +9,8 @@ Add the dependency to your pom.xml
 
 ```xml
     <dependency>
-      <groupId>org.eximeebpms.bpm.dmn</groupId>
-      <artifactId>eximeebpms-dmn-junit5</artifactId>
+      <groupId>org.camunda.bpm.dmn</groupId>
+      <artifactId>camunda-dmn-junit5</artifactId>
       <version>7.20.0</version>
       <scope>test</scope>
     </dependency>

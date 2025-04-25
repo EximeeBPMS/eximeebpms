@@ -29,18 +29,18 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.eximeebpms.spin</groupId>
-      <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
+      <groupId>org.camunda.spin</groupId>
+      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
@@ -101,8 +101,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.eximeebpms.bpm.distro</groupId>
-                      <artifactId>eximeebpms-sql-scripts</artifactId>
+                      <groupId>org.camunda.bpm.distro</groupId>
+                      <artifactId>camunda-sql-scripts</artifactId>
                       <version>7.20.0</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>

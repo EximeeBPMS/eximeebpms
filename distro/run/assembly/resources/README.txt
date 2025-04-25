@@ -34,17 +34,17 @@ Contents:
 
   internal/
         This directory contains the Java application and optional components
-        that Camunda Platform Run consists of.
+        that EximeeBPMS Run consists of.
 
   configuration/
         This directory contains all resources to configure the distro.
         Find a detailed guide on how to use this directory on the following
         documentation pages:
-        https://docs.eximeebpms.org/manual/latest/installation/camunda-bpm-run/
-        https://docs.eximeebpms.org/manual/latest/user-guide/camunda-bpm-run/
+        https://docs.eximeebpms.org/manual/latest/installation/eximeebpms-bpm-run/
+        https://docs.eximeebpms.org/manual/latest/user-guide/eximeebpms-bpm-run/
 
 ==================
 
-Camunda Platform version: ${project.version}
+EximeeBPMS version: ${project.version}
 
 =================

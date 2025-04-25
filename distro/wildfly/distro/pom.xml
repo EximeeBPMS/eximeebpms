@@ -20,7 +20,7 @@
       <artifactId>eximeebpms-qa</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

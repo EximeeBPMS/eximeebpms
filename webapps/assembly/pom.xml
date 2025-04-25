@@ -13,7 +13,7 @@
   <artifactId>eximeebpms-webapp</artifactId>
   <packaging>war</packaging>
   <name>EximeeBPMS - Webapp - Assembly</name>
-  <inceptionYear>2014</inceptionYear>
+  <inceptionYear>2025</inceptionYear>
 
   <properties>
     <java.resources.override>src/main/runtime/default/resources</java.resources.override>

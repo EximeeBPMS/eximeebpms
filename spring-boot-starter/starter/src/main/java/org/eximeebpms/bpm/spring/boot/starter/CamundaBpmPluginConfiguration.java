@@ -42,7 +42,7 @@ public class CamundaBpmPluginConfiguration {
   /*
      When `eximeebpms-spin-dataformat-all` is used as a dependency,
      SpinDataFormatConfigurationJSR310, SpinDataFormatConfigurationParameterNames
-     and SpinDataFormatConfigurationJdk8 are not used. The `camunda-spin-dataformat-all`
+     and SpinDataFormatConfigurationJdk8 are not used. The `eximeebpms-spin-dataformat-all`
      artifact comes with a shaded Jackson ObjectMapper (prefixed with `spinjar`),
      which breaks auto-configuration for Jackson Java 8 modules.
   */

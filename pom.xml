@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -95,6 +95,8 @@
         <module>engine-plugins</module>
 
         <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
         <module>distro/sql-script</module>
         <module>distro/run</module>
 
@@ -118,6 +120,8 @@
         <module>spring-boot-starter</module>
 
         <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
         <module>distro/run</module>
       </modules>
     </profile>
@@ -179,9 +183,10 @@
     <profile>
       <id>distro-tomcat</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
+        <module>distro/license-book</module>
         <module>distro/tomcat</module>
       </modules>
     </profile>
@@ -189,7 +194,7 @@
     <profile>
       <id>distro-wildfly</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
         <module>javaee/ejb-client</module>
@@ -278,9 +283,6 @@
         <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
 
-        <module>distro/license-book</module>
-        <module>distro/sql-script</module>
-
         <module>webapps</module>
 
         <module>engine-plugins</module>
@@ -289,13 +291,9 @@
 
         <module>clients/java</module>
 
-        <module>test-utils/archunit</module>
-        <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
-
-        <module>examples</module>
 
         <module>internal-dependencies</module>
         <module>database</module>

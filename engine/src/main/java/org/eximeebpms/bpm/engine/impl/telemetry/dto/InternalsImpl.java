@@ -31,7 +31,7 @@ import com.google.gson.annotations.SerializedName;
 public class InternalsImpl implements Internals {
 
   public static final String SERIALIZED_APPLICATION_SERVER = "application-server";
-  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "eximeebpms-integration";
+  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "camunda-integration";
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 

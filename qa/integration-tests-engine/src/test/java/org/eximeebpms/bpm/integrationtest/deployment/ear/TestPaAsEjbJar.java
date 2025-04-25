@@ -51,7 +51,7 @@ public class TestPaAsEjbJar extends AbstractFoxPlatformIntegrationTest {
    *        |-- META-INF/processes.xml
    *        |-- META-INF/beans.xml
    *
-   *    |-- camunda-engine-cdi.jar
+   *    |-- eximeebpms-engine-cdi.jar
    *        |-- META-INF/MANIFEST.MF
    *
    */

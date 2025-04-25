@@ -31,21 +31,21 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eximeebpms.spin</groupId>
-      <artifactId>eximeebpms-spin-core</artifactId>
+      <groupId>org.camunda.spin</groupId>
+      <artifactId>camunda-spin-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.eximeebpms.spin</groupId>
-      <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
+      <groupId>org.camunda.spin</groupId>
+      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>

@@ -12,7 +12,7 @@
   <packaging>jar</packaging>
 
   <name>EximeeBPMS - CMMN Model API</name>
-  <inceptionYear>2014</inceptionYear>
+  <inceptionYear>2025</inceptionYear>
   <properties>
     <eximeebpms.artifact>org.eximeebpms.bpm.model.cmmn</eximeebpms.artifact>
     <eximeebpms.osgi.export>
@@ -93,10 +93,10 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
+              <comparisonVersion>${camunda.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/eximeebpms/bpm/model/cmmn/impl/**</exclude>
+                <exclude>org/camunda/bpm/model/cmmn/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

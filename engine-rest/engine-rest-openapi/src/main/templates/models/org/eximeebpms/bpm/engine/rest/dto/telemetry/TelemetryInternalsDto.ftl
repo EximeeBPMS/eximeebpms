@@ -26,7 +26,7 @@
         name = "camunda-integration"
         type = "array"
         itemType = "string"
-        desc = "List of Camunda integrations used (e.g., Camunda Spring Boot Starter, Camunda Run, WildFly/JBoss subsystem, Camunda EJB)."/>
+        desc = "List of EximeeBPMS integrations used (e.g., EximeeBPMS Spring Boot Starter, EximeeBPMS Run, WildFly/JBoss subsystem, EximeeBPMS EJB)."/>
 
     <@lib.property
         name = "commands"

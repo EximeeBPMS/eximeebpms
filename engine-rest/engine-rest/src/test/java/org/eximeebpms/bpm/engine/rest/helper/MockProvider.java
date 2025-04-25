@@ -420,7 +420,7 @@ public abstract class MockProvider {
   public static final String EXAMPLE_DEPLOYMENT_TXT_RESOURCE_NAME = "a-txt-resource.txt";
 
   public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_ID = "aDeploymentCamundaFormResourceId";
-  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_NAME = "a-camunda-form-resource.form";
+  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_NAME = "a-eximeebpms-form-resource.form";
 
   public static final String EXAMPLE_DEPLOYMENT_RESOURCE_FILENAME_ID = "aDeploymentResourceFilenameId";
   public static final String EXAMPLE_DEPLOYMENT_RESOURCE_FILENAME_PATH = "my/path/to/my/bpmn/";
@@ -993,7 +993,7 @@ public abstract class MockProvider {
 
   // Telemetry
   public static final String EXAMPLE_TELEMETRY_INSTALLATION_ID = "8343cc7a-8ad1-42d4-97d2-43452c0bdfa3";
-  public static final String EXAMPLE_TELEMETRY_PRODUCT_NAME = "Camunda BPM Runtime";
+  public static final String EXAMPLE_TELEMETRY_PRODUCT_NAME = "EximeeBPMS BPM Runtime";
   public static final String EXAMPLE_TELEMETRY_PRODUCT_VERSION = "7.14.0";
   public static final String EXAMPLE_TELEMETRY_PRODUCT_EDITION = "enterprise";
   public static final String EXAMPLE_TELEMETRY_DB_VENDOR = "h2";
@@ -1008,7 +1008,7 @@ public abstract class MockProvider {
   public static final String EXAMPLE_TELEMETRY_LICENSE_VALID_UNTIL = "2022-09-30";
   public static final boolean EXAMPLE_TELEMETRY_LICENSE_UNLIMITED = false;
   public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("camundaBPM", "true");
-  public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;camundaBPM=true;optimize=false;cawemo=false";
+  public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;eximeebpmsBPM=true;optimize=false;cawemo=false";
   public static final String EXAMPLE_TELEMETRY_JDK_VERSION = "14.0.2";
   public static final String EXAMPLE_TELEMETRY_JDK_VENDOR = "Oracle Corporation";
   public static final String EXAMPLE_TELEMETRY_DATA_COLLECTION_START_DATE = withTimezone("2022-01-01T00:00:00");

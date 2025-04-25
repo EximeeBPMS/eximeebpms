@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
     <artifactId>eximeebpms-qa-db-instance-migration</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-qa-upgrade-test-fixture-710</artifactId>
@@ -32,17 +32,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.eximeebpms.spin</groupId>
-      <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
+      <groupId>org.camunda.spin</groupId>
+      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>

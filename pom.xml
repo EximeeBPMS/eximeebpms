@@ -159,7 +159,6 @@
       <id>distro-serverless</id>
       <modules>
         <module>qa</module>
-
         <module>engine</module>
         <module>engine-cdi</module>
         <module>engine-spring</module>
@@ -315,6 +314,16 @@
     </profile>
   </profiles>
 
+  <repositories>
+    <repository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <licenses>
     <license>

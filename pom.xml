@@ -46,13 +46,8 @@
   </build>
 
   <profiles>
-    <!-- distro profile is default and builds the complete distribution.
-         Does not run integration tests. -->
     <profile>
       <id>distro</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <!-- This profile is run in the CI as the first step (platform-ASSEMBLY); It must not activate
           any modules that have a dependency to the webapps. See also the referenced POMs,
@@ -111,9 +106,6 @@
 
     <profile>
       <id>distro-ce</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <!-- This profile is run in the CI after the webapps were built (platform-ASSEMBLY);
           It should activate any module that has a dependency to the webapps -->
@@ -181,9 +173,6 @@
 
     <profile>
       <id>distro-tomcat</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <module>distro/license-book</module>
         <module>distro/tomcat</module>
@@ -192,9 +181,6 @@
 
     <profile>
       <id>distro-wildfly</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
@@ -206,9 +192,6 @@
 
     <profile>
       <id>distro-webjar</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <module>distro/webjar</module>
       </modules>
@@ -216,9 +199,6 @@
 
     <profile>
       <id>distro-run</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <module>distro/run</module>
       </modules>
@@ -302,6 +282,68 @@
     </profile>
 
     <profile>
+      <!-- full profile is default and builds the complete distribution. Does not run integration tests. -->
+      <id>full</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>spring-boot-starter</module>
+
+        <module>quarkus-extension</module>
+
+        <module>qa</module>
+
+        <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client</module>
+        <module>javaee/ejb-client-jakarta</module>
+        <module>javaee/jobexecutor-ra</module>
+        <module>javaee/jobexecutor-rar</module>
+
+        <module>model-api</module>
+        <module>engine-dmn</module>
+        <module>connect</module>
+        <module>juel</module>
+        <module>spin</module>
+        <module>commons</module>
+        <module>freemarker-template-engine</module>
+
+        <module>test-utils/testcontainers</module>
+        <module>test-utils/junit5-extension</module>
+        <module>test-utils/junit5-extension-dmn</module>
+        <module>test-utils/assert</module>
+        <module>test-utils/archunit</module>
+
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
+
+        <module>webapps</module>
+
+        <module>examples</module>
+
+        <module>engine-plugins</module>
+
+        <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
+        <module>distro/wildfly</module>
+        <module>distro/wildfly26</module>
+        <module>distro/sql-script</module>
+        <module>distro/run</module>
+        <module>distro/webjar</module>
+
+        <module>clients/java</module>
+
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
+      </modules>
+    </profile>
+
+    <profile>
       <id>license-header-check</id>
       <build>
         <plugins>
@@ -313,17 +355,6 @@
       </build>
     </profile>
   </profiles>
-
-  <repositories>
-    <repository>
-      <id>maven-central</id>
-      <name>Maven Central</name>
-      <url>https://repo1.maven.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 
   <licenses>
     <license>

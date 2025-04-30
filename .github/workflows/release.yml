@@ -127,3 +127,18 @@ jobs:
             with commit message: ${{ github.event.head_commit.message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  Invoking snapshot release to provide the necessary snapshots for testing in CustomJacksonDateFormatTest
+  call-snapshot-release:
+    permissions:
+      contents: write
+      packages: write
+
+    uses: ./.github/workflows/snapshot-release.yml
+
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
+      CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
+      SECRET_PAT_USER: ${{ secrets.SECRET_PAT_userlogin }}

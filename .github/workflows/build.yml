@@ -2,18 +2,7 @@ name: build
 
 on:
   pull_request:
-    branches: ["main"]
-    paths-ignore:
-      - '.github/scripts/**'
-      - '.github/workflows/**'
-      - '!.github/workflows/build.yml'
-      - '.github/jreleaser/changelog.tpl'
-      - '**/*.md'
-      - 'distro/**'
-      - 'settings/**'
-      - '.gitingore'
-      - 'LICENSE'
-      - 'NOTICE'
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -25,10 +14,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check:
+    name: Check
+    runs-on: self-hosted
+    outputs:
+      skip_build: ${{ steps.set-output.outputs.skip_build }}
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get list of changed files
+        id: changes
+        run: |
+          echo "Checking for relevant file changes..."
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+          echo "$CHANGED_FILES" > changed_files.txt
+          
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          
+          # files ignored for build
+          RELEVANT_FILES=$(echo "$CHANGED_FILES" | grep -Ev '^(\.github/scripts/|\.github/workflows/|\.github/jreleaser/changelog\.tpl$|.*\.md$|^distro/|^settings/|^\.gitingore$|^LICENSE$|^NOTICE$)' || true)
+          
+          if [ -z "$RELEVANT_FILES" ]; then
+            echo "No relevant files changed — skipping build."
+            echo "skip_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "Relevant files found — proceeding with build."
+            echo "skip_build=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Stop early if no relevant files
+        if: steps.changes.outputs.skip_build == 'true'
+        run: |
+          echo "Nothing to do. Exiting early."
+          exit 0
+
   build:
+    needs: check
+    if: needs.changes.outputs.skip_build == 'false'
     name: Build
     runs-on: self-hosted
     steps:
+
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -41,20 +70,20 @@ jobs:
           distribution: 'temurin'
           overwrite-settings: false
 
-      - name: Create custom settings.xml 
+      - name: Create custom settings.xml
         run: |
-            mkdir -p ~/.m2
-            cat <<EOF > ~/.m2/settings.xml
-            <settings>
-              <servers>
-                <server>
-                  <id>github</id>
-                  <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
-                </server>
-              </servers>
-            </settings>
-            EOF
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${GITHUB_ACTOR}</username>
+                <password>${GITHUB_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           

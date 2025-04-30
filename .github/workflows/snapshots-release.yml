@@ -19,6 +19,10 @@ on:
 
 jobs:
   snapshot-release:
+    permissions:
+      contents: write
+      packages: write
+
     runs-on: self-hosted
     steps:
       - name: Determine user and set secret

@@ -26,7 +26,7 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 /**
  * <p>An embedded process application is a ProcessApplication that uses an embedded
  * process engine. An embedded process engine is loaded by the same classloader as
- * the process application which usually means that the <code>camunda-engine.jar</code>
+ * the process application which usually means that the <code>eximeebpms-engine.jar</code>
  * is deployed as a web application library (in case of WAR deployments) or as an
  * application library (in case of EAR deployments).</p>
  *

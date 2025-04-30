@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.run.test.config.identity;
 
-import org.eximeebpms.bpm.run.property.CamundaBpmRunAuthenticationProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAuthenticationProperties;
 import org.eximeebpms.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
     "test-auth-enabled"
 })
 @TestPropertySource(properties = {
-    CamundaBpmRunAuthenticationProperties.PREFIX + "=basic"
+    EximeeBpmsBpmRunAuthenticationProperties.PREFIX + "=basic"
 })
 public class AuthenticationWithChangedContextPathTest extends AbstractRestTest {
 

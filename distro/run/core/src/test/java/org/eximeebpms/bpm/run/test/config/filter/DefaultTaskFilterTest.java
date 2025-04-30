@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.eximeebpms.bpm.engine.rest.dto.runtime.FilterDto;
 import org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
 import org.eximeebpms.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = { "test-default-task-filter" }, inheritProfiles = true)
 public class DefaultTaskFilterTest extends AbstractRestTest{
 

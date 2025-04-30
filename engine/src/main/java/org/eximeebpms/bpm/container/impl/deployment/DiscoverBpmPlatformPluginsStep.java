@@ -52,7 +52,7 @@ public class DiscoverBpmPlatformPluginsStep extends DeploymentOperationStep {
 
     ClassLoader pluginsClassLoader = ClassLoaderUtil.getContextClassloader();
     if(pluginsClassLoader == null) {
-      // if context classloader is null, use classloader which loaded the camunda-engine jar.
+      // if context classloader is null, use classloader which loaded the eximeebpms-engine jar.
       pluginsClassLoader = BpmPlatform.class.getClassLoader();
     }
 

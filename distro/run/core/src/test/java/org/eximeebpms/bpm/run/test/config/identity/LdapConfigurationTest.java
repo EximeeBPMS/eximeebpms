@@ -19,8 +19,8 @@ package org.eximeebpms.bpm.run.test.config.identity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eximeebpms.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunLdapProperties;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunLdapProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
 @ActiveProfiles(profiles = { "test-auth-disabled" , "test-ldap-enabled", "test-ldap-auth-exception" })
 public class LdapConfigurationTest {
 
   @Autowired
-  CamundaBpmRunLdapProperties props;
+  EximeeBpmsBpmRunLdapProperties props;
 
   @Autowired
   LdapIdentityProviderPlugin plugin;

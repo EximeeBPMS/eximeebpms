@@ -19,9 +19,9 @@ package org.eximeebpms.bpm.run.test.config.identity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eximeebpms.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunProperties;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAdministratorAuthorizationProperties;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
 @ActiveProfiles(profiles = { "test-auth-enabled" , "test-admin-auth-enabled" })
 public class AdminAuthorizationConfigurationTest {
 
@@ -40,12 +40,12 @@ public class AdminAuthorizationConfigurationTest {
   protected AdministratorAuthorizationPlugin authorizationPlugin;
 
   @Autowired
-  protected CamundaBpmRunProperties properties;
+  protected EximeeBpmsBpmRunProperties properties;
 
   @Test
   public void shouldPickUpConfiguration() {
     // given
-    CamundaBpmRunAdministratorAuthorizationProperties adminProps = properties.getAdminAuth();
+    EximeeBpmsBpmRunAdministratorAuthorizationProperties adminProps = properties.getAdminAuth();
 
     // then
     assertThat(adminProps.isEnabled()).isTrue();

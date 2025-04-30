@@ -25,8 +25,8 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.User;
 import org.eximeebpms.bpm.engine.identity.UserQuery;
 import org.eximeebpms.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.eximeebpms.bpm.run.CamundaBpmRun;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunLdapProperties;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunLdapProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
 @ActiveProfiles(profiles = { "test-auth-disabled", "test-demo-user" })
 public class DemoUserConfigurationTest {
 
@@ -47,7 +47,7 @@ public class DemoUserConfigurationTest {
   IdentityService identityService;
 
   @Autowired(required = false)
-  CamundaBpmRunLdapProperties props;
+  EximeeBpmsBpmRunLdapProperties props;
 
   @Autowired(required = false)
   LdapIdentityProviderPlugin ldapPlugin;

@@ -54,7 +54,7 @@
     <version.testcontainers>1.16.0</version.testcontainers>
 
     <version.commonj>1.1.0</version.commonj>
-    <version.bouncycastle>1.47</version.bouncycastle>
+    <version.bouncycastle>1.70</version.bouncycastle>
 
     <!-- application servers -->
     <version.wildfly>35.0.0.Final</version.wildfly>
@@ -67,7 +67,7 @@
     <version.tomcat>10.1.36</version.tomcat>
 
     <version.arquillian>1.1.10.Final</version.arquillian>
-    <version.shrinkwrap.resolvers>2.2.2</version.shrinkwrap.resolvers>
+    <version.shrinkwrap.resolvers>2.2.7</version.shrinkwrap.resolvers>
     <version.selenium>4.10.0</version.selenium>
     <version.freemarker>2.3.31</version.freemarker>
 
@@ -205,7 +205,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.9.1</version>
+          <version>3.6.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
@@ -317,7 +317,7 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <configuration>
-            <!-- https://github.com/EximeeBPMS/eximeebpms/issues/3996 -->
+            <!-- https://github.com/camunda/camunda-bpm-platform/issues/3996 -->
             <wait>750</wait>
           </configuration>
         </plugin>

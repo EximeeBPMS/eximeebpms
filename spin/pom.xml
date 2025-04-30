@@ -11,7 +11,7 @@
   <groupId>org.eximeebpms.spin</groupId>
   <artifactId>eximeebpms-spin-root</artifactId>
   <name>EximeeBPMS Spin - root</name>
-  <inceptionYear>2014</inceptionYear>
+  <inceptionYear>2025</inceptionYear>
   <packaging>pom</packaging>
 
   <modules>
@@ -27,7 +27,7 @@
     <powermock.version>2.0.9</powermock.version>
     <mockito.version>3.3.3</mockito.version>
     <spin.version.old>7.23.0</spin.version.old>
-    <plugin.version.javadoc>3.3.1</plugin.version.javadoc>
+    <plugin.version.javadoc>3.11.2</plugin.version.javadoc>
 
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
     <additionalparam>-Xdoclint:none</additionalparam>

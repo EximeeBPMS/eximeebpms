@@ -48,7 +48,7 @@ public class TestPaAnnotatedEjb extends AbstractFoxPlatformIntegrationTest {
    *        |-- deployment-descriptor-with-custom-filename.xml
    *        |-- META-INF/beans.xml
    *
-   *    |-- camunda-engine-cdi.jar
+   *    |-- eximeebpms-engine-cdi.jar
    *        |-- META-INF/MANIFEST.MF
    *
    */

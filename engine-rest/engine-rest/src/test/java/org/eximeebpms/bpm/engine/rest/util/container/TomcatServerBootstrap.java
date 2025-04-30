@@ -149,7 +149,7 @@ public abstract class TomcatServerBootstrap extends AbstractServerBootstrap {
    *
    * Why?
    *
-   * - The BOM is imported in the dependencyManagement section of this pom (via camunda-parent)
+   * - The BOM is imported in the dependencyManagement section of this pom (via eximeebpms-parent)
    * - As the BOM is part of the reactor, it will not be fetched from remote by the Maven build
    * - As we do not run "install", Maven does not put the BOM into the local repository
    * - Shrinkwrap will not be able to resolve the BOM then; note: this is different if a pom is referenced

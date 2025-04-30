@@ -73,7 +73,7 @@ jobs:
       - name: Release prepare
         run: |
           ./mvnw release:prepare -B -Darguments="-DskipTests" \
-            -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
+            -Prelease,full,javadocs,distro-starter \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \

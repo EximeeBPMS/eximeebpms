@@ -540,7 +540,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.2.0</version>
         <executions>
           <execution>
             <id>add-jakarta-test-source</id>
@@ -696,7 +695,7 @@
                 <exclude>**/ManagedJobExecutorTest.java</exclude>
 
                 <!-- TODO Please delete the following exclusions after the Tomcat 10 issue with Arquillian -->
-                <!-- See Relevant issue: https://github.com/EximeeBPMS/eximeebpms/issues/4434 -->
+                <!-- See Relevant issue: https://github.com/camunda/camunda-bpm-platform/issues/4434 -->
                 <exclude>**/CallActivityContextSwitchTest.java</exclude>
                 <exclude>**/CdiBeanCallActivityResolutionTest.java</exclude>
 

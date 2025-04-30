@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.run.test.config.deploy;
 
-import org.eximeebpms.bpm.run.CamundaBpmRunProcessEngineConfiguration;
-import org.eximeebpms.bpm.run.property.CamundaBpmRunDeploymentProperties;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRunProcessEngineConfiguration;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunDeploymentProperties;
 import org.eximeebpms.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,11 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource(properties = { CamundaBpmRunDeploymentProperties.PREFIX + ".deploy-changed-only=true" })
+@TestPropertySource(properties = { EximeeBpmsBpmRunDeploymentProperties.PREFIX + ".deploy-changed-only=true" })
 public class DeployChangedOnlyEnabledTest extends AbstractRestTest {
 
   @Autowired
-  private CamundaBpmRunProcessEngineConfiguration engineConfig;
+  private EximeeBpmsBpmRunProcessEngineConfiguration engineConfig;
 
   @Test
   public void shouldEnableDeployChangedOnlyOnCamundaRunProperty() {

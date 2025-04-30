@@ -101,8 +101,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.eximeebpms.bpm.distro</groupId>
-                      <artifactId>eximeebpms-sql-scripts</artifactId>
+                      <groupId>org.camunda.bpm.distro</groupId>
+                      <artifactId>camunda-sql-scripts</artifactId>
                       <version>7.20.0</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>

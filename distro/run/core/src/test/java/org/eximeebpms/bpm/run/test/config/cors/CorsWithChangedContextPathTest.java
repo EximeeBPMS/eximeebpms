@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.run.test.config.cors;
 
-import org.eximeebpms.bpm.run.property.CamundaBpmRunCorsProperty;
+import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunCorsProperty;
 import org.eximeebpms.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
     "test-changed-rest-context-path"
 })
 @TestPropertySource(properties = {
-    CamundaBpmRunCorsProperty.PREFIX + ".allowed-origins=http://other.origin:8081"
+    EximeeBpmsBpmRunCorsProperty.PREFIX + ".allowed-origins=http://other.origin:8081"
 })
 /*
  * The purpose of the test is to check if the path of the CORS filter can be changed.

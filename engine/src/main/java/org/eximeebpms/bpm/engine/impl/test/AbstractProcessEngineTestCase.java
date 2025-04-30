@@ -64,10 +64,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
   /**
    * This class isn't used in the Process Engine test suite anymore.
    * However, some Test classes in the following modules still use it:
-   *   * camunda-engine-plugin-spin
-   *   * camunda-engine-plugin-connect
-   *   * camunda-engine-spring
-   *   * camunda-identity-ldap
+   *   * eximeebpms-engine-plugin-spin
+   *   * eximeebpms-engine-plugin-connect
+   *   * eximeebpms-engine-spring
+   *   * eximeebpms-identity-ldap
    *
    * It should be removed once those Test classes are migrated to JUnit 4.
    */

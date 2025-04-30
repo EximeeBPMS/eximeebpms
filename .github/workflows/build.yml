@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
+  check:
+    name: Check
     runs-on: self-hosted
     steps:
       - name: Checkout PR code
@@ -48,6 +48,12 @@ jobs:
         run: |
           echo "Nothing to do. Exiting early."
           exit 0
+
+  build:
+    if: steps.changes.outputs.skip_build == 'false'
+    name: Build
+    runs-on: self-hosted
+    steps:
 
       - name: Checkout Code
         uses: actions/checkout@v4

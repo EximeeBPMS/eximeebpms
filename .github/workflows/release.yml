@@ -130,6 +130,10 @@ jobs:
 
 #  Invoking snapshot release to provide the necessary snapshots for testing in CustomJacksonDateFormatTest
   call-snapshot-release:
+    permissions:
+      contents: write
+      packages: write
+
     uses: ./.github/workflows/snapshot-release.yml
 
     secrets:

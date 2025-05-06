@@ -62,6 +62,6 @@ jobs:
 
       - name: Build and deploy snapshots
         run: |
-          ./mvnw clean deploy -B -Prelease,sonatype-oss-release -DskipTests
+          ./mvnw clean deploy -X -B -Prelease,sonatype-oss-release -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

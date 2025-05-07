@@ -36,8 +36,8 @@ jobs:
 
       - name: Create custom settings.xml
         run: |
-          mkdir -p .m2-snapshot-release
-          cat <<EOF > .m2-snapshot-release/settings.xml
+          mkdir -p ~/.m2-snapshot-release
+          cat <<EOF > ~/.m2-snapshot-release/settings.xml
           <settings>
             <servers>
               <server>
@@ -48,7 +48,7 @@ jobs:
             </servers>
           </settings>
           EOF
-          cat .m2-snapshot-release/settings.xml
+          cat ~/.m2-snapshot-release/settings.xml
         env:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
@@ -62,6 +62,6 @@ jobs:
 
       - name: Build and deploy snapshots
         run: |
-          ./mvnw clean deploy -X -B -Prelease,sonatype-oss-release -DskipTests --settings .m2-snapshot-release/settings.xml
+          ./mvnw clean deploy -X -B -Prelease,sonatype-oss-release -DskipTests --settings ~/.m2-snapshot-release/settings.xml
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

@@ -62,6 +62,8 @@ jobs:
 
       - name: Build and deploy snapshot of bom module
         run: |
+          ./mvnw versions:set -DnewVersion=1.1.1-SNAPSHOT
           ./mvnw clean deploy -B -Prelease,snapshot-bom -DskipTests --settings ~/.m2-snapshot-release/settings.xml
+          ./mvnw versions:revert
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

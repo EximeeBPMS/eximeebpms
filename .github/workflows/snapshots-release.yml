@@ -60,8 +60,8 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
-      - name: Build and deploy snapshot of bom module
+      - name: Build and deploy snapshots
         run: |
-          ./mvnw clean deploy -B -Prelease,snapshot-bom -DskipTests --settings ~/.m2-snapshot-release/settings.xml
+          ./mvnw clean deploy -X -B -Prelease,sonatype-oss-release -DskipTests --settings ~/.m2-snapshot-release/settings.xml
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

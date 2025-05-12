@@ -44,7 +44,22 @@
     </dependency>
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-only-bom</artifactId>
+      <artifactId>eximeebpms-engine-spring</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-cdi</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-plugin-spin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-test-utils-testcontainers</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

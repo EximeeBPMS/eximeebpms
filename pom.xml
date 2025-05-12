@@ -344,14 +344,6 @@
     </profile>
 
     <profile>
-      <!-- bom artifact in snapshots is necessary for CustomJacksonDateFormatTest -->
-      <id>snapshot-bom</id>
-      <modules>
-        <module>bom</module>
-      </modules>
-    </profile>
-
-    <profile>
       <id>license-header-check</id>
       <build>
         <plugins>

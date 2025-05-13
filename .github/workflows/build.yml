@@ -18,7 +18,7 @@ jobs:
     name: Check
     runs-on: self-hosted
     outputs:
-      skip_build: ${{ steps.changes.outputs.skip_build }}
+      skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get list of changed files
-        id: changes
+        id: verify
         run: |
           echo "Checking for relevant file changes..."
           
@@ -82,7 +82,7 @@ jobs:
             echo "skip_build=false" >> $GITHUB_OUTPUT
           fi
       - name: Stop early if no relevant files
-        if: steps.changes.outputs.skip_build == 'true'
+        if: steps.verify.outputs.skip_build == 'true'
         run: |
           echo "Nothing to do. Exiting early."
           exit 0
@@ -90,7 +90,7 @@ jobs:
   build:
     name: Build
     needs: check
-    if: needs.changes.outputs.skip_build == 'false'
+    if: needs.check.outputs.skip_build == 'false'
     runs-on: self-hosted
 
     steps:

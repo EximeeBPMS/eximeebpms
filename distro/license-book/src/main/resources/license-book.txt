@@ -1333,7 +1333,7 @@ from the source code management (SCM) system project uses.
 Licensed under Apache 2.0
 
 ===========================================================================================
-com.fasterxml.uuid:java-uuid-generator:jar:4.3.0
+com.fasterxml.uuid:java-uuid-generator:jar:5.1.0
 https://github.com/cowtowncoder/java-uuid-generator
 Java UUID generator library has been written by Tatu Saloranta (tatu.saloranta@iki.fi)
 
@@ -1795,7 +1795,7 @@ Copyright (c) 1997, 2024 Oracle and/or its affiliates. All rights reserved.
 Licensed under EPL 2.0
 
 ===========================================================================================
-joda-time:joda-time:jar:2.12.5
+joda-time:joda-time:jar:2.14.0
 https://github.com/JodaOrg/joda-time
 =============================================================================
 = NOTICE file corresponding to section 4d of the Apache License Version 2.0 =

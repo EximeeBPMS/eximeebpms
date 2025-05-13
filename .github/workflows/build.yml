@@ -18,7 +18,7 @@ jobs:
     name: Check
     runs-on: self-hosted
     outputs:
-      skip_build: ${{ steps.set-output.outputs.skip_build }}
+      skip_build: ${{ steps.changes.outputs.skip_build }}
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
@@ -88,12 +88,12 @@ jobs:
           exit 0
 
   build:
+    name: Build
     needs: check
     if: needs.changes.outputs.skip_build == 'false'
-    name: Build
     runs-on: self-hosted
-    steps:
 
+    steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:

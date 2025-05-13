@@ -14,8 +14,6 @@ on:
         required: true
       CPP_PASSWORD:
         required: true
-      SECRET_PAT_USER:
-        required: true
 
 jobs:
   snapshot-release:
@@ -25,46 +23,36 @@ jobs:
 
     runs-on: self-hosted
     steps:
-      - name: Determine user and set secret
-        run: |
-          echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
-          
       - name: Check out the code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Create custom settings.xml 
+      - name: Create custom settings.xml
         run: |
-            mkdir -p ~/.m2
-            cat <<EOF > ~/.m2/settings.xml
-            <settings>
-              <servers>
-                <server>
-                  <id>central</id>
-                  <username>${CPP_USERNAME}</username>
-                  <password>${CPP_PASSWORD}</password>
-                </server>
-                <server>
-                  <id>github</id>
-                  <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
-                </server>
-              </servers>
-            </settings>
-            EOF
-            cat ~/.m2/settings.xml
+          mkdir -p ~/.m2-snapshot-release
+          cat <<EOF > ~/.m2-snapshot-release/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${CPP_USERNAME}</username>
+                <password>${CPP_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          cat ~/.m2-snapshot-release/settings.xml
         env:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
+
       - name: Import GPG key
         run: |
           echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
@@ -72,19 +60,8 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
-      - name: Add GitHub SSH host to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts          
-
-      - name: Configure Git user
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions@github.com'
-
       - name: Build and deploy snapshots
         run: |
-          ./mvnw clean deploy -B -Prelease,full -DskipTests
+          ./mvnw clean deploy -B -Prelease,sonatype-oss-release -DskipTests --settings ~/.m2-snapshot-release/settings.xml
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}

@@ -29,16 +29,52 @@ jobs:
         id: changes
         run: |
           echo "Checking for relevant file changes..."
+          
+          git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
-          echo "$CHANGED_FILES" > changed_files.txt
           
           echo "Changed files:"
           echo "$CHANGED_FILES"
           
-          # files ignored for build
-          RELEVANT_FILES=$(echo "$CHANGED_FILES" | grep -Ev '^(\.github/scripts/|\.github/workflows/|\.github/jreleaser/changelog\.tpl$|.*\.md$|^distro/|^settings/|^\.gitingore$|^LICENSE$|^NOTICE$)' || true)
+          IGNORED_PATTERNS=(
+            ".github/scripts/"
+            ".github/workflows/"     
+            ".github/jreleaser/changelog.tpl"
+            ".md"
+            "distro/"
+            "settings/"
+            ".gitignore"
+            "LICENSE"
+            "NOTICE"
+          )
           
-          if [ -z "$RELEVANT_FILES" ]; then
+          RELEVANT_FILES=()
+          
+          for FILE in $CHANGED_FILES; do
+            SKIP=false
+          
+            # exception for build.yml
+            if [[ "$FILE" == ".github/workflows/build.yml" ]]; then
+              RELEVANT_FILES+=("$FILE")
+              continue
+            fi
+          
+            for PATTERN in "${IGNORED_PATTERNS[@]}"; do
+              if [[ "$FILE" == "$PATTERN"* ]] || [[ "$FILE" == *"$PATTERN" ]]; then
+                SKIP=true
+                break
+              fi
+            done
+          
+            if [ "$SKIP" = false ]; then
+              RELEVANT_FILES+=("$FILE")
+            fi
+          done
+          
+          echo "Relevant files:"
+          printf "%s\n" "${RELEVANT_FILES[@]}"
+          
+          if [ ${#RELEVANT_FILES[@]} -eq 0 ]; then
             echo "No relevant files changed — skipping build."
             echo "skip_build=true" >> $GITHUB_OUTPUT
           else

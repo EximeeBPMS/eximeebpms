@@ -75,7 +75,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.inputs.branch || 'main' }}
       - name: Remove corrupted Maven metadata
-        run: rm -rf ~/.m2/repository/org/eximeebpms/bpm/license-book
+        run: rm -rf ~/.m2/repository/org/eximeebpms #temporary
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:

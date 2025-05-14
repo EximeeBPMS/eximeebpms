@@ -6,7 +6,7 @@ TEST_SUITE="engine"
 DATABASE="h2"
 DISTRO="tomcat"
 VALID_TEST_SUITES=("engine" "webapps")
-VALID_DISTROS=("tomcat" "wildfly")
+VALID_DISTROS=("tomcat")
 VALID_DATABASES=("h2" "postgresql")
 
 ##########################################################################
@@ -61,9 +61,9 @@ run_build () {
   if [[ "$DISTRO" == "tomcat" ]]; then
     PROFILES+=(tomcat distro-tomcat)
   fi
-  if [[ "$DISTRO" == "wildfly" ]]; then
-    PROFILES+=(wildfly distro-wildfly)
-  fi
+#  if [[ "$DISTRO" == "wildfly" ]]; then
+#    PROFILES+=(wildfly distro-wildfly)
+#  fi
 
   echo "ℹ️ Building $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
   echo "./mvnw -DskipTests -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
@@ -97,10 +97,10 @@ run_tests () {
       PROFILES+=(tomcat)
       QA_DIR=qa
       ;;
-    wildfly)
-      PROFILES+=(wildfly)
-      QA_DIR=qa
-      ;;
+#    wildfly)
+#      PROFILES+=(wildfly)
+#      QA_DIR=qa
+#      ;;
   esac
 
   case "$DATABASE" in

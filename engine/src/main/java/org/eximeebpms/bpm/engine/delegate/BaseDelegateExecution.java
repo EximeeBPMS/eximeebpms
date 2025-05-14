@@ -23,7 +23,7 @@ package org.eximeebpms.bpm.engine.delegate;
  * @author Sebastian Menski
  *
  */
-public interface BaseDelegateExecution extends VariableScope {
+public interface BaseDelegateExecution extends VariableScope  {
 
   /** Unique id of this path of execution that can be used as a handle to provide external signals back into the engine after wait states. */
   String getId();

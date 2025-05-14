@@ -547,7 +547,7 @@
             <client-config name="Standard-Client-Config"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:weld:5.0"/>
-        <subsystem xmlns="urn:org.eximeebpms.bpm.jboss:1.1">
+        <subsystem xmlns="urn:org.camunda.bpm.jboss:1.1">
             <process-engines>
                 <process-engine name="default" default="true">
                     <datasource>java:jboss/datasources/ProcessEngine</datasource>

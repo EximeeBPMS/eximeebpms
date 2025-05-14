@@ -30,7 +30,7 @@ public enum Namespace {
    */
   UNKNOWN((String) null),
   
-  CAMUNDA_BPM_PLATFORM_1_1("urn:org.eximeebpms.bpm.jboss:1.1");
+  CAMUNDA_BPM_PLATFORM_1_1("urn:org.camunda.bpm.jboss:1.1");
   
   /**
    * The current namespace version.

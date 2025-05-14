@@ -1,4 +1,4 @@
-<subsystem xmlns="urn:org.eximeebpms.bpm.jboss:1.1">
+<subsystem xmlns="urn:org.camunda.bpm.jboss:1.1">
 	<process-engines>
 		<process-engine name="__test" default="${org.eximeebpms.bpm.jboss.process-engine.test.isDefault}">
 			<datasource>${org.eximeebpms.bpm.jboss.process-engine.test.datasource}</datasource>

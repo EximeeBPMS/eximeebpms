@@ -7,7 +7,7 @@ DATABASE="h2"
 DISTRO="tomcat"
 VALID_TEST_SUITES=("engine" "webapps")
 VALID_DISTROS=("tomcat")
-VALID_DATABASES=("h2" "postgresql")
+VALID_DATABASES=("h2")
 
 ##########################################################################
 check_valid_values() {
@@ -53,13 +53,19 @@ parse_args() {
 }
 
 run_build () {
-  PROFILES=(distro distro-webjar h2-in-memory)
+  PROFILES=(distro distro-webjar)
 
   if [[ "$DISTRO" == "eximeebpms" ]]; then
     PROFILES+=(distro-run integration-test-eximeebpms-run)
   fi
   if [[ "$DISTRO" == "tomcat" ]]; then
     PROFILES+=(tomcat distro-tomcat)
+  fi
+  if [[ "$DATABASE" == "h2" ]]; then
+    PROFILES+=(h2-in-memory)
+  fi
+  if [[ "$DATABASE" == "postgresql" ]]; then
+    PROFILES+=(postgresql)
   fi
 #  if [[ "$DISTRO" == "wildfly" ]]; then
 #    PROFILES+=(wildfly distro-wildfly)

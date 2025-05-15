@@ -61,7 +61,6 @@ jobs:
   build:
     name: Integration Tests
     runs-on: self-hosted
-    container: mcr.microsoft.com/playwright/java:focal
     strategy:
       fail-fast: false
       matrix:
@@ -81,6 +80,23 @@ jobs:
 #          path: ~/.m2
 #          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
 #          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install Google Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get update
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+      - name: Check Chrome and Chromedriver versions
+        run: |
+          google-chrome --version || true
+          chromedriver --version || true    
+
+      - name: Start Xvfb
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+
       - name: Set up Java
         uses: actions/setup-java@v3
         with:

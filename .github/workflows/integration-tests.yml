@@ -87,6 +87,13 @@ jobs:
           java-version: ${{ matrix.java }}
           overwrite-settings: false
 
+      - name: Install specific Chrome version
+        run: |
+          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/135.0.7049.52/linux64/chrome-linux64.zip
+          unzip chrome-linux64.zip
+          sudo mv chrome-linux64 /opt/chrome
+          sudo ln -s /opt/chrome/chrome /usr/bin/google-chrome
+
       - name: Maven Build
         id: maven-build
         shell: bash

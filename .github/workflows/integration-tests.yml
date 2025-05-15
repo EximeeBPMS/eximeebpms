@@ -89,7 +89,7 @@ jobs:
 
       - name: Install Google Chrome
         run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.debtesting/135.0.7049.52/linux64/chrome-linux64.zip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
       - name: Maven Build

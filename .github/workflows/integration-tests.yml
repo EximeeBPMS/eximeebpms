@@ -87,10 +87,11 @@ jobs:
           java-version: ${{ matrix.java }}
           overwrite-settings: false
 
-      - name: Install Google Chrome
-        run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Check Chrome version
+        run: google-chrome --version
 
       - name: Maven Build
         id: maven-build

@@ -61,6 +61,7 @@ jobs:
   build:
     name: Integration Tests
     runs-on: self-hosted
+    container: mcr.microsoft.com/playwright/java:focal
     strategy:
       fail-fast: false
       matrix:
@@ -86,12 +87,6 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
           overwrite-settings: false
-
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-
-      - name: Check Chrome version
-        run: google-chrome --version
 
       - name: Maven Build
         id: maven-build

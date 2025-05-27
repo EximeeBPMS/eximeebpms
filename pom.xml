@@ -308,9 +308,6 @@
 
         <module>qa</module>
 
-        <module>javaee/ejb-service</module>
-        <module>javaee/ejb-client</module>
-        <module>javaee/ejb-client-jakarta</module>
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
 
@@ -340,8 +337,6 @@
         <module>engine-plugins</module>
 
         <module>distro/license-book</module>
-        <module>distro/wildfly</module>
-        <module>distro/wildfly26</module>
         <module>distro/sql-script</module>
         <module>distro/run</module>
         <module>distro/webjar</module>

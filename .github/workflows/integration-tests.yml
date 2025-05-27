@@ -81,13 +81,11 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
           overwrite-settings: false
-
       - name: Maven Build
         id: maven-build
         shell: bash
         run: |
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-test
-
       - name: Execute Integration Tests
         id: maven-integration-tests
         shell: bash
@@ -97,12 +95,6 @@ jobs:
             exit 0
           fi
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-build
-#      - name: Publish Test Report
-#        if: always()
-#        uses: mikepenz/action-junit-report@v4
-#        with:
-#          report_paths: ${{ github.workspace }}/**/target/*-reports/*.xml
-#          require_passed_tests: true
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4

@@ -41,6 +41,7 @@ on:
         options:
           - '["h2"]'
           - '["postgresql"]'
+          - '["h2", "postgresql"]'
 
 permissions:
   contents: read

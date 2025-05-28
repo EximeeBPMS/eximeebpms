@@ -134,7 +134,6 @@ jobs:
         id: maven-build
         shell: bash
         run: |
-          .github/scripts/jacoco-create-flag-files.sh
           ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
@@ -143,7 +142,6 @@ jobs:
 
       - name: Publish Test Report
         if: always()
-        # https://github.com/marketplace/actions/junit-report-action
         uses: mikepenz/action-junit-report@v4
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml

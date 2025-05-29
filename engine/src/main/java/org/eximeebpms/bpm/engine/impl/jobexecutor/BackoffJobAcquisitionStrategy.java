@@ -278,21 +278,15 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
   }
 
   protected long calculateBackoffTime() {
-    long backoffTime = 0;
+    if (backoffLevel <= 0) return 0;
+    if (backoffLevel >= maxBackoffLevel) return maxBackoffWaitTime;
 
-    if (backoffLevel <= 0) {
-      backoffTime = 0;
-    } else if (backoffLevel >= maxBackoffLevel) {
-      backoffTime = maxBackoffWaitTime;
-    }
-    else {
-      backoffTime = (long) (baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, backoffLevel - 1));
-    }
+    long backoffTime = (long)(baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, backoffLevel - 1));
 
     if (applyJitter) {
       // add a bounded random jitter to avoid multiple job acquisitions getting exactly the same
       // polling interval
-      backoffTime += Math.random() * (backoffTime / 2);
+      backoffTime += (long)(Math.random() * ((double) backoffTime / 2));
     }
 
     return backoffTime;

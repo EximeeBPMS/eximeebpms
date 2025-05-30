@@ -132,7 +132,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
     if (baseIdleWaitTime > 0 && maxIdleWaitTime > 0 && idleIncreaseFactor > 0 && maxIdleWaitTime >= baseIdleWaitTime) {
       // the maximum level that produces an idle time <= maxIdleTime:
       // see class docs for an explanation
-      maxIdleLevel = (int) log(idleIncreaseFactor, maxIdleWaitTime / baseIdleWaitTime) + 1;
+      maxIdleLevel = (int) log(idleIncreaseFactor, maxIdleWaitTime  / baseIdleWaitTime) + 1;
 
       // + 1 to get the minimum level that produces an idle time > maxIdleTime
       maxIdleLevel += 1;

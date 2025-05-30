@@ -1,5 +1,10 @@
 name: Slack Notifications
 
+permissions:
+  issues: read
+  pull-requests: read
+  discussions: read
+
 on:
   workflow_dispatch:
   fork:

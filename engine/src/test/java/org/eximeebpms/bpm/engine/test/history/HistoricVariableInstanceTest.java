@@ -2639,7 +2639,7 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
         .hasMessage("Variable names is null");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoricVariableInstanceTest.testCallSimpleSubProcess.bpmn20.xml", "org/camunda/bpm/engine/test/history/simpleSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/history/HistoricVariableInstanceTest.testCallSimpleSubProcess.bpmn20.xml", "org/eximeebpms/bpm/engine/test/history/simpleSubProcess.bpmn20.xml" })
   @Test
   public void shouldBeCorrectlySortedWhenSortingByVariableId() {
     // given

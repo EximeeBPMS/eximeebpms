@@ -18,12 +18,18 @@ package org.eximeebpms.bpm.engine.rest.dto.externaltask;
 
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 
 /**
  * @author Thorben Lindhauer
  *
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class ExternalTaskDto {
 
   protected String activityId;
@@ -44,63 +50,6 @@ public class ExternalTaskDto {
   protected String tenantId;
   protected long priority;
   protected String businessKey;
-
-  public String getActivityId() {
-    return activityId;
-  }
-  public String getActivityInstanceId() {
-    return activityInstanceId;
-  }
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-  public String getExecutionId() {
-    return executionId;
-  }
-  public String getId() {
-    return id;
-  }
-  public Date getLockExpirationTime() {
-    return lockExpirationTime;
-  }
-  public Date getCreateTime() {
-    return createTime;
-  }
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
-  }
-  public String getProcessDefinitionKey() {
-    return processDefinitionKey;
-  }
-  public String getProcessDefinitionVersionTag() {
-    return processDefinitionVersionTag;
-  }
-  public String getProcessInstanceId() {
-    return processInstanceId;
-  }
-  public Integer getRetries() {
-    return retries;
-  }
-  public boolean isSuspended() {
-    return suspended;
-  }
-  public String getWorkerId() {
-    return workerId;
-  }
-  public String getTopicName() {
-    return topicName;
-  }
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public long getPriority() {
-    return priority;
-  }
-
-  public String getBusinessKey() {
-    return businessKey;
-  }
 
   public static ExternalTaskDto fromExternalTask(ExternalTask task) {
     ExternalTaskDto dto = new ExternalTaskDto();

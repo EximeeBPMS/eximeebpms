@@ -77,6 +77,7 @@
     <version.eirslett.frontend.maven.plugin>1.12.1</version.eirslett.frontend.maven.plugin>
     <version.nodejs>20.14.0</version.nodejs>
     <version.npm>10.7.0</version.npm>
+    <version.lombok>1.18.36</version.lombok>
 
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />

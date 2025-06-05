@@ -34,7 +34,7 @@ module.exports = Base.extend({
     return element(by.binding('{{ processInstance.id }}'))
       .getText()
       .then(function(fullString) {
-        return fullString.replace('<', '').replace('>', '');
+        return fullString.replace(/</g, '').replace(/>/g, '');
       });
   },
 
@@ -48,7 +48,7 @@ module.exports = Base.extend({
     return element(by.binding('{{ processInstance.id }}'))
       .getText()
       .then(function(fullString) {
-        return fullString.replace('<', '').replace('>', '');
+        return fullString.replace(/</g, '').replace(/>/g, '');
       });
   },
 
@@ -56,7 +56,7 @@ module.exports = Base.extend({
     return element(by.binding('{{ processInstance.businessKey}}'))
       .getText()
       .then(function(fullString) {
-        return fullString.replace('<', '').replace('>', '');
+        return fullString.replace(/</g, '').replace(/>/g, '');
       });
   },
 

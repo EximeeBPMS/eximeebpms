@@ -16,28 +16,13 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.property;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
-
+@Data
 public class RestApiProperty {
 
   @NestedConfigurationProperty
   protected FetchAndLockProperties fetchAndLock = new FetchAndLockProperties();
-
-  public FetchAndLockProperties getFetchAndLock() {
-    return fetchAndLock;
-  }
-
-  public void setFetchAndLock(FetchAndLockProperties fetchAndLock) {
-    this.fetchAndLock = fetchAndLock;
-  }
-
-  @Override
-  public String toString() {
-    return joinOn(this.getClass())
-      .add("fetchAndLock='" + fetchAndLock + '\'')
-      .toString();
-  }
 
 }

@@ -18,10 +18,9 @@ package org.eximeebpms.bpm.spring.boot.starter.property;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
+import lombok.Data;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
-
+@Data
 public class FetchAndLockProperties {
 
   protected boolean uniqueWorkerRequest = false;
@@ -39,33 +38,6 @@ public class FetchAndLockProperties {
     }
 
     return initParams;
-  }
-
-
-  public boolean isUniqueWorkerRequest() {
-    return uniqueWorkerRequest;
-  }
-
-  public void setUniqueWorkerRequest(boolean uniqueWorkerRequest) {
-    this.uniqueWorkerRequest = uniqueWorkerRequest;
-  }
-
-  public Integer getQueueCapacity() {
-    return queueCapacity;
-  }
-
-  public void setQueueCapacity(Integer queueCapacity) {
-    this.queueCapacity = queueCapacity;
-  }
-
-  @Override
-  public String toString() {
-    StringJoiner joinedString = joinOn(this.getClass())
-
-            .add("uniqueWorkerRequest=" + uniqueWorkerRequest)
-            .add("queueCapacity=" + queueCapacity);
-
-    return joinedString.toString();
   }
 
 }

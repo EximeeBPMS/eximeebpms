@@ -16,59 +16,32 @@
  */
 package org.eximeebpms.bpm.engine.impl.persistence.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.eximeebpms.bpm.engine.runtime.Incident;
 import org.eximeebpms.bpm.engine.runtime.TransitionInstance;
-
-import java.util.Arrays;
 
 /**
  * @author Daniel Meyer
  *
  */
+@Getter
+@Setter
+@ToString
 public class TransitionInstanceImpl extends ProcessElementInstanceImpl implements TransitionInstance {
 
   protected String executionId;
   protected String activityId;
   protected String activityName;
   protected String activityType;
+  protected String subProcessInstanceId;
 
   protected String[] incidentIds = NO_IDS;
   protected Incident[] incidents = new Incident[0];
 
-  public String getActivityId() {
-    return activityId;
-  }
-
-  public void setActivityId(String activityId) {
-    this.activityId = activityId;
-  }
-
   public String getTargetActivityId() {
     return activityId;
-  }
-
-  public String getExecutionId() {
-    return executionId;
-  }
-
-  public void setExecutionId(String executionId) {
-    this.executionId = executionId;
-  }
-
-  public String getActivityType() {
-    return activityType;
-  }
-
-  public void setActivityType(String activityType) {
-    this.activityType = activityType;
-  }
-
-  public String getActivityName() {
-    return activityName;
-  }
-
-  public void setActivityName(String activityName) {
-    this.activityName = activityName;
   }
 
   @Override
@@ -76,32 +49,9 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
     return incidentIds;
   }
 
-  public void setIncidentIds(String[] incidentIds) {
-    this.incidentIds = incidentIds;
-  }
-
   @Override
   public Incident[] getIncidents() {
     return incidents;
-  }
-
-  public void setIncidents(Incident[] incidents) {
-    this.incidents = incidents;
-  }
-
-  public String toString() {
-    return this.getClass().getSimpleName()
-           + "[executionId=" + executionId
-           + ", targetActivityId=" + activityId
-           + ", activityName=" + activityName
-           + ", activityType=" + activityType
-           + ", id=" + id
-           + ", parentActivityInstanceId=" + parentActivityInstanceId
-           + ", processInstanceId=" + processInstanceId
-           + ", processDefinitionId=" + processDefinitionId
-           + ", incidentIds=" + Arrays.toString(incidentIds)
-           + ", incidents=" + Arrays.toString(incidents)
-           + "]";
   }
 
 }

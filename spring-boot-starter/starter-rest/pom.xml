@@ -14,7 +14,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter</artifactId>
       <version>${project.version}</version>
     </dependency>

@@ -30,6 +30,11 @@
         <artifactId>lombok</artifactId>
         <version>${version.lombok}</version>
       </dependency>
+      <dependency>
+        <groupId>org.eximeebpms.bpm.extension.monitor</groupId>
+        <artifactId>eximeebpms-bpm-spring-boot-monitor</artifactId>
+        <version>${version.eximeebpms-monitor}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   

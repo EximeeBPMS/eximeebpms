@@ -49,7 +49,7 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
     String appPath = trimChar(applicationPath, '/');
     if (requestUri.equals(appPath)) {
       // only redirect from index ("/") if index redirect is enabled
-      if(!requestUri.isEmpty() || webappProperty.isIndexRedirectEnabled()) {
+      if (!requestUri.isEmpty() || webappProperty.isIndexRedirectEnabled()) {
         response.sendRedirect(String.format("%s%s/app/%s/", contextPath, applicationPath, DEFAULT_REDIRECT_APP));
         return;
       }
@@ -60,16 +60,12 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
 
   @Override
   protected String getWebResourceContents(String name) throws IOException {
-    InputStream is = null;
 
-    try {
-      Resource resource = resourceLoader.getResource("classpath:"+webappProperty.getWebjarClasspath() + name);
-      is = resource.getInputStream();
-
+    try (InputStream is = resourceLoader.getResource("classpath:" + webappProperty.getWebjarClasspath() + name).getInputStream()) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
       StringWriter writer = new StringWriter();
-      String line = null;
+      String line;
 
       while ((line = reader.readLine()) != null) {
         writer.write(line);
@@ -77,13 +73,6 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
       }
 
       return writer.toString();
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-        }
-      }
     }
   }
 
@@ -95,8 +84,7 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
   }
 
   /**
-   * @param resourceLoader
-   *          the resourceLoader to set
+   * @param resourceLoader the resourceLoader to set
    */
   public void setResourceLoader(ResourceLoader resourceLoader) {
     this.resourceLoader = resourceLoader;
@@ -106,19 +94,18 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
    * @return the webappProperty
    */
   public WebappProperty getWebappProperty() {
-        return webappProperty;
-    }
+    return webappProperty;
+  }
 
   /**
-   * @param webappProperty
-   *          webappProperty to set
+   * @param webappProperty webappProperty to set
    */
   public void setWebappProperty(WebappProperty webappProperty) {
     this.webappProperty = webappProperty;
   }
 
   /**
-   * @param input - String to trim
+   * @param input      - String to trim
    * @param charachter - Char to trim
    * @return the trimmed String
    */

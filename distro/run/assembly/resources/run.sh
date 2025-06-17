@@ -77,7 +77,7 @@ if [ "$1" = "start" ] ; then
                      ;;
       # the background flag shouldn't influence the optional component flags
       --detached )   detachProcess=true
-                     echo Camunda Run will start in the background. Use the shutdown.sh script to stop it
+                     echo EximeeBPMS Run will start in the background. Use the shutdown.sh script to stop it
                      ;;
       --help )       printf "%s" "$OPTIONS_HELP"
                      exit 0

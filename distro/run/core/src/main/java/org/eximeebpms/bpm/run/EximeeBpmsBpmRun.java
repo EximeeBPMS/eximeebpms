@@ -16,10 +16,12 @@
  */
 package org.eximeebpms.bpm.run;
 
+import org.eximeebpms.bpm.extension.monitor.EnableMonitoring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@EnableMonitoring
 public class EximeeBpmsBpmRun {
   public static void main(String... args) {
     SpringApplication.run(EximeeBpmsBpmRun.class, args);

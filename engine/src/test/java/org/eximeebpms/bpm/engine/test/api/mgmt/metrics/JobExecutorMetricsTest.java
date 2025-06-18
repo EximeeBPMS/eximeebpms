@@ -209,7 +209,7 @@ public class JobExecutorMetricsTest extends AbstractMetricsTest {
     // then all of them were rejected by the job executor which is reflected by the metric
     long numRejectedJobs = managementService.createMetricsQuery().name(Metrics.JOB_EXECUTION_REJECTED).sum();
 
-    assertEquals(3, numRejectedJobs);
+    assertEquals(6, numRejectedJobs);
   }
 
   public static class RejectingJobExecutor extends DefaultJobExecutor {

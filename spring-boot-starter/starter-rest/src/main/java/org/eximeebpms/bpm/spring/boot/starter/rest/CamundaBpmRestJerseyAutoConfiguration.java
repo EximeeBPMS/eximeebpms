@@ -18,6 +18,8 @@ package org.eximeebpms.bpm.spring.boot.starter.rest;
 
 import org.eximeebpms.bpm.engine.rest.impl.FetchAndLockContextListener;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.commons.utils.ExcludeFromTestCoverage;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,6 +27,7 @@ import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
 import org.springframework.context.annotation.Bean;
 
+@ExcludeFromTestCoverage(reason = "Configuration class")
 @AutoConfigureBefore({ JerseyAutoConfiguration.class })
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
 public class CamundaBpmRestJerseyAutoConfiguration {
@@ -41,7 +44,7 @@ public class CamundaBpmRestJerseyAutoConfiguration {
   }
 
   @Bean
-  public CamundaBpmRestInitializer camundaBpmRestInitializer(JerseyApplicationPath applicationPath) {
-    return new CamundaBpmRestInitializer(applicationPath);
+  public CamundaBpmRestInitializer camundaBpmRestInitializer(JerseyApplicationPath applicationPath, CamundaBpmProperties props) {
+    return new CamundaBpmRestInitializer(applicationPath, props);
   }
 }

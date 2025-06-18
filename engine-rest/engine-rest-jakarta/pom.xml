@@ -119,6 +119,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!--
       needed for offline shrinkwrap (in particular CustomJacksonDateFormatTest),
       BOMs must be installed before this module is built

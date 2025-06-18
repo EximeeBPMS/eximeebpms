@@ -78,7 +78,7 @@
     <version.nodejs>20.14.0</version.nodejs>
     <version.npm>10.7.0</version.npm>
 
-    <version.eximeebpms-monitor>1.0.0</version.eximeebpms-monitor>
+    <version.eximeebpms-monitor>1.2.0</version.eximeebpms-monitor>
 
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />

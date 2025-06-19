@@ -39,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class })
-@ActiveProfiles(profiles = { "test-auth-disabled", "test-demo-user" })
+@ActiveProfiles(profiles = { "test-auth-disabled", "test-demo-user", "test-monitoring-disabled" })
 public class DemoUserConfigurationTest {
 
   @Autowired

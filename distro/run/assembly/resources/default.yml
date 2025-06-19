@@ -42,13 +42,13 @@ management:
         include: prometheus,*
   endpoint:
     prometheus:
-      enabled: true
+      enabled: false
   metrics:
     export:
       prometheus:
-        enabled: true
+        enabled: false
 eximeebpms:
   monitoring:
     snapshot:
-      enabled: true
+      enabled: false
       updateRate: 10000

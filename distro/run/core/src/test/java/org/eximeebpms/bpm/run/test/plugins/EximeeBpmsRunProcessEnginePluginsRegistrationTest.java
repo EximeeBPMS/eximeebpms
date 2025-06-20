@@ -41,7 +41,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class })
-@ActiveProfiles(profiles = { "test-new-plugins" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-new-plugins", "test-monitoring-disabled" }, inheritProfiles = true)
 public class EximeeBpmsRunProcessEnginePluginsRegistrationTest {
 
   @Autowired

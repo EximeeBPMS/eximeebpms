@@ -1,0 +1,4 @@
+eximeebpms:
+  monitoring:
+    snapshot:
+      enabled: false

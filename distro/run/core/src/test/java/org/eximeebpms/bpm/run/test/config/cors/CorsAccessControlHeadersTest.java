@@ -36,7 +36,7 @@ import org.springframework.test.context.ActiveProfiles;
  * 
  * @see https://jira.camunda.com/browse/CAM-11290
  */
-@ActiveProfiles(profiles = { "test-cors-enabled" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-cors-enabled", "test-monitoring-disabled" }, inheritProfiles = true)
 public class CorsAccessControlHeadersTest extends AbstractRestTest {
 
   @Autowired

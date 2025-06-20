@@ -34,7 +34,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles(profiles = {
     "test-changed-rest-context-path",
-    "test-auth-enabled"
+    "test-auth-enabled",
+    "test-monitoring-disabled"
 })
 @TestPropertySource(properties = {
     EximeeBpmsBpmRunAuthenticationProperties.PREFIX + "=basic"

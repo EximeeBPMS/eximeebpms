@@ -38,7 +38,7 @@ import org.springframework.test.context.TestPropertySource;
  *
  * @see https://jira.camunda.com/browse/CAM-11290
  */
-@ActiveProfiles(profiles = { "test-cors-enabled" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-cors-enabled", "test-monitoring-disabled" }, inheritProfiles = true)
 @TestPropertySource(properties = {
     EximeeBpmsBpmRunCorsProperty.PREFIX + ".allowed-origins=http://other.origin:8081",
     EximeeBpmsBpmRunCorsProperty.PREFIX + ".allow-credentials=true"})

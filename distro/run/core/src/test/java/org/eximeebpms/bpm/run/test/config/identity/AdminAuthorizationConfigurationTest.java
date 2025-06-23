@@ -33,7 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class })
-@ActiveProfiles(profiles = { "test-auth-enabled" , "test-admin-auth-enabled" })
+@ActiveProfiles(profiles = { "test-auth-enabled" , "test-admin-auth-enabled", "test-monitoring-disabled" })
 public class AdminAuthorizationConfigurationTest {
 
   @Autowired

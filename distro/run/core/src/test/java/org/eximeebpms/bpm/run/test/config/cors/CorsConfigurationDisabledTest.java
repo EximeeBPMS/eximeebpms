@@ -39,7 +39,7 @@ import org.springframework.test.context.TestPropertySource;
  * 
  * @see https://jira.camunda.com/browse/CAM-11290
  */
-@ActiveProfiles(profiles = { "test-cors-enabled" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-cors-enabled", "test-monitoring-disabled" }, inheritProfiles = true)
 @TestPropertySource(properties = { EximeeBpmsBpmRunCorsProperty.PREFIX + ".enabled=false" })
 public class CorsConfigurationDisabledTest extends AbstractRestTest {
 

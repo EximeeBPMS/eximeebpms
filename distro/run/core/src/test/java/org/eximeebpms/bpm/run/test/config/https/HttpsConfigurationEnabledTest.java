@@ -37,7 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.ResourceAccessException;
 
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class }, webEnvironment = WebEnvironment.DEFINED_PORT)
-@ActiveProfiles(profiles = { "test-https-enabled" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-https-enabled", "test-monitoring-disabled" }, inheritProfiles = true)
 public class HttpsConfigurationEnabledTest extends AbstractRestTest {
   
   @Rule

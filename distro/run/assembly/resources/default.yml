@@ -33,3 +33,22 @@ spring.datasource:
 # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-spring-mvc-static-content
 spring.web.resources:
   static-locations: NULL
+
+# monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,*
+  endpoint:
+    prometheus:
+      enabled: false
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+eximeebpms:
+  monitoring:
+    snapshot:
+      enabled: false
+      updateRate: 10000

@@ -79,6 +79,8 @@
     <version.npm>10.7.0</version.npm>
     <version.lombok>1.18.36</version.lombok>
 
+    <version.eximeebpms-monitor>1.2.0</version.eximeebpms-monitor>
+
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />
     <eximeebpms.osgi.import.eximeebpms.spin.version>version="[$(version;==;${eximeebpms.spin.version.clean}),$(version;=+;${eximeebpms.spin.version.clean}))"</eximeebpms.osgi.import.eximeebpms.spin.version>

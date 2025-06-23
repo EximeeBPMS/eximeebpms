@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = { "test-auth-disabled" })
+@ActiveProfiles(profiles = { "test-auth-disabled", "test-monitoring-disabled" })
 public abstract class AbstractRestTest {
 
   public static String CONTEXT_PATH = "/engine-rest";

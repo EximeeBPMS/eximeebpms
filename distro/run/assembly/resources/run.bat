@@ -158,11 +158,11 @@ GOTO End
 ECHO Usage: run.bat [start^|stop] (options...)
 :ArgsHelp
 ECHO Options:
-ECHO   --webapps    - Enables the Camunda Platform Webapps
-ECHO   --oauth2     - Enables the Camunda Platform Spring Security OAuth2 integration
+ECHO   --webapps    - Enables the EximeeBPMS Platform Webapps
+ECHO   --oauth2     - Enables the EximeeBPMS Platform Spring Security OAuth2 integration
 ECHO   --rest       - Enables the REST API
 ECHO   --example    - Enables the example application
 ECHO   --production - Applies the production.yaml configuration file
-ECHO   --detached   - Starts Camunda Run as a detached process
+ECHO   --detached   - Starts EximeeBPMS Run as a detached process
 
 :End

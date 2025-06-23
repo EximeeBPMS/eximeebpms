@@ -64,35 +64,35 @@ module.exports = (_env, argv = {}) => {
         directory: path.resolve(__dirname, './public'),
         publicPath: '/app'
       },
-      https: false,
-      proxy: {
-        '/api': {
+      proxy: [
+        {
+          context: ['/api'],
           target: 'http://localhost:8080/eximeebpms/api',
           logLevel: 'debug',
-          pathRewrite: {
-            '^/api': ''
-          }
+          pathRewrite: { '^/api': '' }
         },
-        '/eximeebpms-welcome': {
+        {
+          context: ['/eximeebpms-welcome'],
           target: 'http://localhost:8080/',
           logLevel: 'debug'
         },
-        ...addEngines(['default', 'engine2', 'engine3']),
-        '/eximeebpms/*': {
+        ...Object.entries(addEngines(['default', 'engine2', 'engine3'])).map(([context, config]) => ({
+          context,
+          ...config
+        })),
+        {
+          context: ['/eximeebpms/api'],
           target: 'http://localhost:8081/',
           logLevel: 'debug',
-          pathRewrite: path => {
-            return path.replace('/eximeebpms', '');
-          }
+          pathRewrite: path => path.replace('/eximeebpms', '')
         },
-        '/eximeebpms/api/*': {
+        {
+          context: ['/eximeebpms'],
           target: 'http://localhost:8081/',
           logLevel: 'debug',
-          pathRewrite: path => {
-            return path.replace('/eximeebpms', '');
-          }
+          pathRewrite: path => path.replace('/eximeebpms', '')
         }
-      },
+      ],
       open: ['/eximeebpms/app/cockpit/default/']
     }
   };

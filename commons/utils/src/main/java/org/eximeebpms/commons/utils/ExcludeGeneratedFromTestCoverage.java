@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD, CONSTRUCTOR})
-public @interface ExcludeFromTestCoverage {
+public @interface ExcludeGeneratedFromTestCoverage {
   String reason() default "";
 }

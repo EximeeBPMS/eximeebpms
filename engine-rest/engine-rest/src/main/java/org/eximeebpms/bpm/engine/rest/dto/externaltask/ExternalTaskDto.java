@@ -22,7 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
-import org.eximeebpms.commons.utils.ExcludeFromTestCoverage;
+import org.eximeebpms.commons.utils.ExcludeGeneratedFromTestCoverage;
 
 /**
  * @author Thorben Lindhauer
@@ -52,7 +52,7 @@ public class ExternalTaskDto {
   protected long priority;
   protected String businessKey;
 
-  @ExcludeFromTestCoverage(reason = "Simple mapping")
+  @ExcludeGeneratedFromTestCoverage(reason = "Simple mapping")
   public static ExternalTaskDto fromExternalTask(ExternalTask task) {
     ExternalTaskDto dto = new ExternalTaskDto();
     dto.activityId = task.getActivityId();

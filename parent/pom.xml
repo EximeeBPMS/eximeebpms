@@ -21,7 +21,7 @@
     <version.quarkus>3.20.0</version.quarkus>
     <version.spring.framework>5.3.39</version.spring.framework>
     <version.spring.framework6>6.2.4</version.spring.framework6>
-    <version.spring-boot>3.4.4</version.spring-boot>
+    <version.spring-boot>3.5.0</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
@@ -32,7 +32,7 @@
     <!-- json-smart and accessors-smart are runtime dependencies of json-path -->
     <version.json-path>2.9.0</version.json-path>
     <version.json-smart>2.5.2</version.json-smart>
-    <version.accessors-smart>2.5.0</version.accessors-smart>
+    <version.accessors-smart>2.5.2</version.accessors-smart>
     <version.gson>2.8.9</version.gson>
     <version.openjpa>2.4.3</version.openjpa>
     <version.hibernate>5.6.5.Final</version.hibernate>
@@ -77,6 +77,7 @@
     <version.eirslett.frontend.maven.plugin>1.12.1</version.eirslett.frontend.maven.plugin>
     <version.nodejs>20.14.0</version.nodejs>
     <version.npm>10.7.0</version.npm>
+    <version.lombok>1.18.36</version.lombok>
 
     <version.eximeebpms-monitor>1.2.0</version.eximeebpms-monitor>
 
@@ -341,6 +342,12 @@
               <goals>
                 <goal>report</goal>
               </goals>
+              <configuration>
+                <excludes>
+                  <exclude>**/org/eximeebpms/bpm/engine/rest/dto/externaltask/ExternalTaskDto.class</exclude>
+                  <exclude>**/org/eximeebpms/bpm/spring/boot/starter/rest/CamundaBpmRestJerseyAutoConfiguration.class</exclude>
+                </excludes>
+              </configuration>
             </execution>
           </executions>
         </plugin>

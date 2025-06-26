@@ -14,7 +14,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -40,6 +40,16 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
       <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.bpm.extension.monitor</groupId>
+      <artifactId>eximeebpms-bpm-spring-boot-monitor</artifactId>
     </dependency>
 
     <dependency>

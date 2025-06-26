@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EximeeBpmsBpmRun.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = { "test-default-task-filter" }, inheritProfiles = true)
+@ActiveProfiles(profiles = { "test-default-task-filter", "test-monitoring-disabled" }, inheritProfiles = true)
 public class DefaultTaskFilterTest extends AbstractRestTest{
 
   @Test

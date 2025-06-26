@@ -33,7 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles(profiles = {
     "test-cors-enabled",
-    "test-changed-rest-context-path"
+    "test-changed-rest-context-path",
+    "test-monitoring-disabled"
 })
 @TestPropertySource(properties = {
     EximeeBpmsBpmRunCorsProperty.PREFIX + ".allowed-origins=http://other.origin:8081"

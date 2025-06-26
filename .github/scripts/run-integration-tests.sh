@@ -8,7 +8,6 @@ DISTRO="tomcat"
 VALID_TEST_SUITES=("engine" "webapps")
 VALID_DISTROS=("tomcat" "wildfly")
 VALID_DATABASES=("h2" "postgresql")
-MAVEN_SETTINGS_PATH=/tmp/maven-settings.xml
 
 ##########################################################################
 check_valid_values() {
@@ -67,8 +66,8 @@ run_build () {
   fi
 
   echo "ℹ️ Building $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -s $MAVEN_SETTINGS_PATH -DskipTests -P$(IFS=,; echo "${PROFILES[*]}") clean install"
-  ./mvnw -DskipTests -P$(IFS=,; echo "${PROFILES[*]}") clean install
+  echo "./mvnw -DskipTests -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
+  ./mvnw -DskipTests -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null
@@ -114,8 +113,8 @@ run_tests () {
   esac
 
   echo "ℹ️ Running $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -s $MAVEN_SETTINGS_PATH -P$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR"
-  ./mvnw -P$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR
+  echo "./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR"
+  ./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null

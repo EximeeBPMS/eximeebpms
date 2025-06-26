@@ -64,6 +64,12 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- provided deps -->
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>

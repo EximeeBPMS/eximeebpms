@@ -112,6 +112,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <artifactId>eximeebpms-bpm-spring-boot-starter-test</artifactId>
       <groupId>${project.groupId}</groupId>
       <version>${project.version}</version>

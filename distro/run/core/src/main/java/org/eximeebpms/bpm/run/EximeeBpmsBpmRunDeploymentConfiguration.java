@@ -18,6 +18,8 @@ package org.eximeebpms.bpm.run;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultDeploymentConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EximeeBpmsBpmRunDeploymentConfiguration extends DefaultDeploymentConfiguration {
-
+  private final Logger logger = LoggerFactory.getLogger(EximeeBpmsBpmRunDeploymentConfiguration.class);
   private final String deploymentDir;
 
   public EximeeBpmsBpmRunDeploymentConfiguration(String deploymentDir) {
@@ -45,9 +47,12 @@ public class EximeeBpmsBpmRunDeploymentConfiguration extends DefaultDeploymentCo
       Path resourceDir = Paths.get(deploymentDir);
 
       try (Stream<Path> stream = Files.walk(resourceDir)) {
-        return stream.filter(file -> !Files.isDirectory(file)).map(FileSystemResource::new).collect(Collectors.toSet());
+        return stream
+                .filter(file -> !Files.isDirectory(file))
+                .map(FileSystemResource::new)
+                .collect(Collectors.toSet());
       } catch (IOException e) {
-        e.printStackTrace();
+          logger.error("Failed to load deployment resources from {}", resourceDir);
       }
     }
     return Collections.emptySet();

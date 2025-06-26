@@ -22,5 +22,6 @@ faces-config.NavData
 **/node_modules
 eximeebpms-h2-dbs
 **/.flattened-pom.xml
+**/.jython_cache
 
 *.DS_Store

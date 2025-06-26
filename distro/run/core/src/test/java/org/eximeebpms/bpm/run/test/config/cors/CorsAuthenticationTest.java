@@ -45,7 +45,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @see https://jira.camunda.com/browse/CAM-11290
  */
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles(profiles = { "test-cors-enabled", "test-auth-enabled", "test-demo-user" }, inheritProfiles = false)
+@ActiveProfiles(profiles = { "test-cors-enabled", "test-auth-enabled", "test-demo-user", "test-monitoring-disabled" }, inheritProfiles = false)
 public class CorsAuthenticationTest extends AbstractRestTest {
 
   TestRestTemplate authTestRestTemplate;

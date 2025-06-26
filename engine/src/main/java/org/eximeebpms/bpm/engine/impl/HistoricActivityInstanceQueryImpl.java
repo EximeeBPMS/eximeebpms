@@ -18,9 +18,11 @@ package org.eximeebpms.bpm.engine.impl;
 
 import static org.eximeebpms.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
+import java.io.Serial;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstance;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstanceQuery;
@@ -35,25 +37,42 @@ import org.eximeebpms.bpm.engine.impl.util.CompareUtil;
 public class HistoricActivityInstanceQueryImpl extends AbstractQuery<HistoricActivityInstanceQuery, HistoricActivityInstance>
     implements HistoricActivityInstanceQuery {
 
+  @Serial
   private static final long serialVersionUID = 1L;
+  @Getter
   protected String activityInstanceId;
+  @Getter
   protected String processInstanceId;
+  @Getter
   protected String executionId;
+  @Getter
   protected String processDefinitionId;
+  @Getter
   protected String activityId;
+  @Getter
   protected String activityName;
   protected String activityNameLike;
+  @Getter
   protected String activityType;
+  @Getter
   protected String assignee;
+  @Getter
   protected boolean finished;
+  @Getter
   protected boolean unfinished;
+  @Getter
   protected Date startedBefore;
+  @Getter
   protected Date startedAfter;
+  @Getter
   protected Date finishedBefore;
+  @Getter
   protected Date finishedAfter;
+  @Getter
   protected ActivityInstanceState activityInstanceState;
   protected String[] tenantIds;
   protected boolean isTenantIdSet;
+  protected String activityInstanceIdAfter;
 
   public HistoricActivityInstanceQueryImpl() {
   }
@@ -76,6 +95,15 @@ public class HistoricActivityInstanceQueryImpl extends AbstractQuery<HistoricAct
     return commandContext
       .getHistoricActivityInstanceManager()
       .findHistoricActivityInstancesByQueryCriteria(this, page);
+  }
+
+  public HistoricActivityInstanceQueryImpl idAfter(String id) {
+    this.activityInstanceIdAfter = id;
+    return this;
+  }
+
+  public String getIdAfter() {
+    return activityInstanceIdAfter;
   }
 
   public HistoricActivityInstanceQueryImpl processInstanceId(String processInstanceId) {
@@ -254,51 +282,6 @@ public class HistoricActivityInstanceQueryImpl extends AbstractQuery<HistoricAct
 
   // getters and setters //////////////////////////////////////////////////////
 
-  public String getProcessInstanceId() {
-    return processInstanceId;
-  }
-  public String getExecutionId() {
-    return executionId;
-  }
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
-  }
-  public String getActivityId() {
-    return activityId;
-  }
-  public String getActivityName() {
-    return activityName;
-  }
-  public String getActivityType() {
-    return activityType;
-  }
-  public String getAssignee() {
-    return assignee;
-  }
-  public boolean isFinished() {
-    return finished;
-  }
-  public boolean isUnfinished() {
-    return unfinished;
-  }
-  public String getActivityInstanceId() {
-    return activityInstanceId;
-  }
-  public Date getStartedAfter() {
-    return startedAfter;
-  }
-  public Date getStartedBefore() {
-    return startedBefore;
-  }
-  public Date getFinishedAfter() {
-    return finishedAfter;
-  }
-  public Date getFinishedBefore() {
-    return finishedBefore;
-  }
-  public ActivityInstanceState getActivityInstanceState() {
-    return activityInstanceState;
-  }
   public boolean isTenantIdSet() {
     return isTenantIdSet;
   }

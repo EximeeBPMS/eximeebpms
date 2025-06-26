@@ -10,12 +10,12 @@ REST_PATH=$BASEDIR/rest/
 EXAMPLE_PATH=$BASEDIR/example
 PID_PATH=$BASEDIR/run.pid
 OPTIONS_HELP="Options:
-  --webapps    - Enables the Camunda Platform Webapps
-  --oauth2     - Enables the Camunda Platform Spring Security OAuth2 integration
+  --webapps    - Enables the EximeeBPMS Platform Webapps
+  --oauth2     - Enables the EximeeBPMS Platform Spring Security OAuth2 integration
   --rest       - Enables the REST API
   --example    - Enables the example application
   --production - Applies the production.yaml configuration file
-  --detached   - Starts Camunda Run as a detached process
+  --detached   - Starts EximeeBPMS Run as a detached process
 "
 
 # set environment parameters
@@ -77,7 +77,7 @@ if [ "$1" = "start" ] ; then
                      ;;
       # the background flag shouldn't influence the optional component flags
       --detached )   detachProcess=true
-                     echo Camunda Run will start in the background. Use the shutdown.sh script to stop it
+                     echo EximeeBPMS Run will start in the background. Use the shutdown.sh script to stop it
                      ;;
       --help )       printf "%s" "$OPTIONS_HELP"
                      exit 0

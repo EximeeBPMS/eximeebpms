@@ -19,6 +19,7 @@ package org.eximeebpms.bpm.engine.impl.jobexecutor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>Determines the number of jobs to acquire and the time to wait between acquisition cycles
@@ -48,7 +49,7 @@ import java.util.Map;
  */
 public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
 
-  public static long DEFAULT_EXECUTION_SATURATION_WAIT_TIME = 100;
+  public static final long DEFAULT_EXECUTION_SATURATION_WAIT_TIME = 100;
 
   /*
    * all wait times are in milliseconds
@@ -82,7 +83,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
 
   protected int baseNumJobsToAcquire;
 
-  protected Map<String, Integer> jobsToAcquire = new HashMap<String, Integer>();
+  protected Map<String, Integer> jobsToAcquire = new HashMap<>();
 
   /*
    * Backing off when the execution resources (queue) are saturated
@@ -132,7 +133,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
     if (baseIdleWaitTime > 0 && maxIdleWaitTime > 0 && idleIncreaseFactor > 0 && maxIdleWaitTime >= baseIdleWaitTime) {
       // the maximum level that produces an idle time <= maxIdleTime:
       // see class docs for an explanation
-      maxIdleLevel = (int) log(idleIncreaseFactor, maxIdleWaitTime  / baseIdleWaitTime) + 1;
+      maxIdleLevel = (int) log(idleIncreaseFactor, (double) maxIdleWaitTime / baseIdleWaitTime) + 1;
 
       // + 1 to get the minimum level that produces an idle time > maxIdleTime
       maxIdleLevel += 1;
@@ -145,7 +146,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
         && maxBackoffWaitTime >= baseBackoffWaitTime) {
       // the maximum level that produces a backoff time < maxBackoffTime:
       // see class docs for an explanation
-      maxBackoffLevel = (int) log(backoffIncreaseFactor, maxBackoffWaitTime / baseBackoffWaitTime) + 1;
+      maxBackoffLevel = (int) log(backoffIncreaseFactor, (double) maxBackoffWaitTime / baseBackoffWaitTime) + 1;
 
       // + 1 to get the minimum level that produces a backoff time > maxBackoffTime
       maxBackoffLevel += 1;
@@ -273,26 +274,23 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
       return maxIdleWaitTime;
     }
     else {
-      return (long) (baseIdleWaitTime * Math.pow(idleIncreaseFactor, idleLevel - 1));
+      return (long) (baseIdleWaitTime * Math.pow(idleIncreaseFactor, (double) idleLevel - 1));
     }
   }
 
   protected long calculateBackoffTime() {
-    long backoffTime = 0;
+    if (backoffLevel <= 0) return 0;
+    if (backoffLevel >= maxBackoffLevel) return maxBackoffWaitTime;
 
-    if (backoffLevel <= 0) {
-      backoffTime = 0;
-    } else if (backoffLevel >= maxBackoffLevel) {
-      backoffTime = maxBackoffWaitTime;
-    }
-    else {
-      backoffTime = (long) (baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, backoffLevel - 1));
-    }
+    double exponent = (backoffLevel - 1);
+    long backoffTime = (long)(baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, exponent));
 
     if (applyJitter) {
       // add a bounded random jitter to avoid multiple job acquisitions getting exactly the same
       // polling interval
-      backoffTime += Math.random() * (backoffTime / 2);
+      @SuppressWarnings("squid:S2245") // Safe here: randomness is not security-sensitive
+      long jitter = ThreadLocalRandom.current().nextLong(backoffTime / 2);
+      backoffTime += jitter;
     }
 
     return backoffTime;
@@ -301,11 +299,9 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
   @Override
   public int getNumJobsToAcquire(String processEngine) {
     Integer numJobsToAcquire = jobsToAcquire.get(processEngine);
-    if (numJobsToAcquire != null) {
-      return numJobsToAcquire;
-    }
-    else {
+    if (numJobsToAcquire == null) {
       return baseNumJobsToAcquire;
     }
+    return numJobsToAcquire;
   }
 }

@@ -342,6 +342,12 @@
               <goals>
                 <goal>report</goal>
               </goals>
+              <configuration>
+                <excludes>
+                  <exclude>**/org/eximeebpms/bpm/engine/rest/dto/externaltask/ExternalTaskDto.class</exclude>
+                  <exclude>**/org/eximeebpms/bpm/spring/boot/starter/rest/CamundaBpmRestJerseyAutoConfiguration.class</exclude>
+                </excludes>
+              </configuration>
             </execution>
           </executions>
         </plugin>

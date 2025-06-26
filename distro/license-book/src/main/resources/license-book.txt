@@ -1517,7 +1517,7 @@ The Apache Software Foundation (https://www.apache.org/).
 Licensed under Apache 2.0
 
 ===========================================================================================
-commons-fileupload:commons-fileupload:jar:1.5
+commons-fileupload:commons-fileupload:jar:1.6.0
 https://commons.apache.org/proper/commons-fileupload/download_fileupload.cgi
 Notice file
 Apache Commons FileUpload

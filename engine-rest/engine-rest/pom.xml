@@ -298,7 +298,7 @@
           <systemPropertyVariables>
             <restEasyVersion>${version.resteasy}</restEasyVersion>
           </systemPropertyVariables>
-          <argLine>-Xmx2g</argLine>
+          <argLine>${argLine} -Xmx2g</argLine>
         </configuration>
       </plugin>
 
@@ -313,6 +313,10 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

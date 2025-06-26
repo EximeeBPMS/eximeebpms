@@ -23,8 +23,8 @@ module.exports = function(page, rootScope, $translate) {
   page.breadcrumbsClear();
 
   page.breadcrumbsAdd({
-    label: $translate.instant('BATCHES_BREAD_BATCHES')
+    label: $translate.instant('OPERATION_LOG_BREAD_CRUMB')
   });
 
-  page.titleSet($translate.instant('BATCHES_TITLE_BATCHES'));
+  page.titleSet($translate.instant('OPERATION_LOG_BREAD_CRUMB'));
 };

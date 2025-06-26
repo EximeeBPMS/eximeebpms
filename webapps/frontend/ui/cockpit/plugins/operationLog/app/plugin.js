@@ -15,13 +15,18 @@
  * limitations under the License.
  */
 
+/**
+ * @namespace cam.cockpit.plugin
+ */
+
+/**
+ * @namespace cam.cockpit.plugin.operationLog
+ */
 'use strict';
 
-var Ctrl = require('../components/delete');
+var angular = require('angular'),
+  viewsModule = require('./views/main');
 
-module.exports = [
-  '$scope',
-  function($scope) {
-    $scope.ctrl = new Ctrl($scope.ctrl.getSelectionType());
-  }
-];
+module.exports = angular.module('cockpit.plugin.operationLog', [
+  viewsModule.name
+]);

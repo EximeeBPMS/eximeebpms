@@ -17,21 +17,15 @@
 
 'use strict';
 
-import 'ui/cockpit/plugins/styles.less';
-
 var angular = require('angular'),
-  base = require('./base/app/plugin'),
-  decisionList = require('./decisionList/app/plugin'),
-  jobDefinition = require('./jobDefinition/app/plugin'),
-  tasks = require('./tasks/app/plugin'),
-  externalTasksTab = require('./external-tasks-process-instance-runtime-tab'),
-  operationLog = require('./operationLog/app/plugin');
+  dashboard = require('./dashboard'),
+  // operation log table
+  operationLogTable = require('./operationLogTable/operation-log-table');
 
-export default angular.module('cockpit.plugin.cockpitPlugins', [
-  base.name,
-  decisionList.name,
-  jobDefinition.name,
-  tasks.name,
-  externalTasksTab.name,
-  operationLog.name
+var ngModule = angular.module('cockpit.operationLog.dashboard', [
+  dashboard.name
 ]);
+
+ngModule.config(operationLogTable);
+
+module.exports = ngModule;

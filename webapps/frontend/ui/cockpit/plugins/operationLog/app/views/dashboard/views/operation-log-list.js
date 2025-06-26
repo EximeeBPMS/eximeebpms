@@ -17,21 +17,17 @@
 
 'use strict';
 
-import 'ui/cockpit/plugins/styles.less';
+var template = require('./operation-log-list.html?raw');
 
-var angular = require('angular'),
-  base = require('./base/app/plugin'),
-  decisionList = require('./decisionList/app/plugin'),
-  jobDefinition = require('./jobDefinition/app/plugin'),
-  tasks = require('./tasks/app/plugin'),
-  externalTasksTab = require('./external-tasks-process-instance-runtime-tab'),
-  operationLog = require('./operationLog/app/plugin');
-
-export default angular.module('cockpit.plugin.cockpitPlugins', [
-  base.name,
-  decisionList.name,
-  jobDefinition.name,
-  tasks.name,
-  externalTasksTab.name,
-  operationLog.name
-]);
+module.exports = [
+  'ViewsProvider',
+  function(ViewsProvider) {
+    ViewsProvider.registerDefaultView('cockpit.operationLog.dashboard', {
+      id: 'operation-log-list',
+      label: 'Operation Log Table',
+      template: template,
+      controller: 'OperationLogListController',
+      priority: -5 // display below the process definition list
+    });
+  }
+];

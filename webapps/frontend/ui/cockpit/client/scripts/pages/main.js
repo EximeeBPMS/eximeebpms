@@ -22,6 +22,7 @@ var angular = require('eximeebpms-commons-ui/vendor/angular'),
   processes = require('./processes'),
   decisions = require('./decisions'),
   tasks = require('./tasks'),
+  operationLogs = require('./operation-log'),
   processDefinitionModule = require('./processDefinition'),
   processInstanceModule = require('./processInstance'),
   decisionDefinitionModule = require('./decisionDefinition'),
@@ -38,5 +39,6 @@ pagesModule.config(dashboard);
 pagesModule.config(processes);
 pagesModule.config(decisions);
 pagesModule.config(tasks);
+pagesModule.config(operationLogs);
 
 module.exports = pagesModule;

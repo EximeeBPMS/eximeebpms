@@ -59,6 +59,7 @@ export function init(pluginDependencies) {
     require('./resources/main').name,
     require('./services/main').name,
     require('./navigation/main').name
+    // require('./operationLog/main').name
   ].concat(
     pluginDependencies.map(function(el) {
       return el.ngModuleName;

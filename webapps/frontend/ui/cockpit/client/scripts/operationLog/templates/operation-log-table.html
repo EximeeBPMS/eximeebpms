@@ -1,0 +1,61 @@
+<section>
+  <div class="inner">
+    <header ng-if="operationLogCount">
+      <h1 class="section-title"
+          ng-if="operationLogCount > 1"
+          translate="PLUGIN_OPERATION_LOG_TABLE_TITLE"
+          translate-values='{count: operationLogCount}'></h1>
+
+      <h1 class="section-title"
+          ng-if="operationLogCount <= 1"
+          translate="PLUGIN_DECISION_TABLE_TITLE_DEFINITION"
+          translate-values='{count: operationLogCount}'></h1>
+    </header>
+
+    <header class='header-empty' ng-if="!operationLogCount">
+      <h1 class="section-title">{{ 'PLUGIN_DECISION_TABLE_NO_DECISION_TABLES_DEPLOYED' | translate }}</h1>
+    </header>
+
+    <table class="operation-log-list cam-table"
+           ng-if="operationLogCount">
+
+      <thead sortable-table-head
+             head-columns="headColumns"
+             on-sort-change="onSortChange(sortObj)"
+             default-sort="sortObj">
+      </thead>
+
+      <tbody>
+      <tr ng-repeat="operationLog in operationLogs">
+        <td class="name">
+          <a href="#/operationLog/{{ operationLog.id }}">
+            {{ operationLog.name || operationLog.key }}
+          </a>
+        </td>
+        <td class="tenant-id">
+          {{ operationLog.tenantId }}
+        </td>
+        <td class="drd" ng-if="isDrdAvailable">
+          <a href="#/operationLog-requirement/{{ operationLog.drd.id }}">
+            {{ operationLog.drd.name || operationLog.drd.key }}
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ul uib-pagination ng-if="pagination.operationLogPages.total > pagination.operationLogPages.size"
+        class="pagination-sm"
+
+        page="pagination.operationLogPages.current"
+        ng-model="pagination.operationLogPages.current"
+        ng-change="pagination.changeOperationLogPage(pagination.operationLogPages)"
+
+        total-items="pagination.operationLogPages.total"
+        items-per-page="pagination.operationLogPages.size"
+
+        max-size="7"
+        boundary-links="true"></ul>
+
+  </div>
+</section>

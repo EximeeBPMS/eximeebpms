@@ -17,4 +17,31 @@
 
 'use strict';
 
-module.exports = function() {};
+var Ctrl = require('../components/operation-log');
+
+module.exports = [
+  '$scope',
+  'page',
+  'camAPI',
+  '$location',
+  '$uibModal',
+  '$translate',
+  'Notifications',
+  'localConf',
+  'configuration',
+  function(
+    $scope,
+    page,
+    camAPI,
+    $location,
+    $modal,
+    $translate,
+    Notifications,
+    localConf,
+    configuration
+  ) {
+    require('../components/breadcrumbs')(page, $scope.$root, $translate);
+
+    $scope.ctrl = new Ctrl(camAPI, localConf, configuration);
+  }
+];

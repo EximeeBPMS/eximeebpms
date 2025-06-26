@@ -1,0 +1,128 @@
+<!-- # CE - ui/cockpit/plugins/operationLog/app/views/dashboard/operation-logs.html -->
+<section class="operation-log-dashboard"
+         ng-class="{'section-collapsed': !activeSection}">
+  <div class="inner">
+    <button uib-tooltip="Toggle this section"
+            class="section-toggle btn btn-link btn-sm"
+            ng-click="toggleSection()">
+      <span class="glyphicon"
+            ng-class="{'glyphicon-menu-down': !activeSection, 'glyphicon-menu-up': activeSection}"></span>
+    </button>
+    <header ng-if="operationLogCount">
+      <div class="row">
+        <h1 class="col-xs-6 section-title">{{'PLUGIN_OPERATION_LOG_TABLE_TITLE' | translate}}</h1>
+
+        <div class="col-xs-6 text-right" ng-if="activeSection">
+          <ul class="nav nav-tabs">
+            <li ng-class="{active: activeTab === 'list'}">
+              <a ng-click="selectTab('list')">{{'PLUGIN_PROCESS_DEF_LIST' | translate}}</a>
+            </li>
+            <li ng-class="{active: activeTab === 'previews'}">
+              <a ng-click="selectTab('previews')">{{'PLUGIN_PROCESS_DEF_PREVIEWS' | translate}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div ng-if="activeSection">
+
+      <div cam-widget-loader
+           loading-state="{{mainLoadingState}}"
+           text-empty="{{ 'PLUGIN_PROCESS_DEF_NO_PROCESS_DEF' | translate }}">
+
+        <div cam-widget-search
+             cam-widget-search-id='logSearch'
+             cam-widget-search-total="SearchController.pages.total"
+             cam-widget-search-valid-searches="SearchController.config.searches"
+             cam-widget-search-translations="SearchController.config.tooltips"
+             cam-widget-search-types="SearchController.config.types"
+             cam-widget-search-operators="SearchController.config.operators"
+             cam-widget-search-mode="search"
+             cam-widget-search-storage-group="'log'">
+        </div>
+
+        <div cam-widget-loader
+             loading-state="{{loadingState}}"
+             class="deployed-processes"
+             text-empty="{{ 'PLUGIN_PROCESS_DEF_NO_PROCESS_DEF' | translate }}">
+
+          <table class="operation-log-list cam-table search-results">
+            <thead sortable-table-head
+                   head-columns="headColumns"
+                   on-sort-change="onSortChange(null, null, sortBy)"
+                   default-sort="sortBy">
+            </thead>
+            <tbody>
+            <tr ng-repeat="log in operationLogs">
+              <td ng-if="log.userId >= 0" class="user">
+                {{ log.userId }}
+              </td>
+              <td class="user">
+                <span ng-if="!log.userId || !hasSearchPlugin">{{ log.userId }}</span>
+              </td>
+
+              <td ng-if="log.operationType" class="operation">
+                {{ log.operationType }}
+              </td>
+              <td ng-if="log.operationType == undefined">
+                <span class="glyphicon glyphicon-refresh animate-spin"></span>
+              </td>
+
+              <td ng-if="log.entityType" class="entity">
+                {{ log.entityType }}
+              </td>
+              <td ng-if="log.entityType == undefined">
+                <span class="glyphicon glyphicon-refresh animate-spin"></span>
+              </td>
+
+              <td class="key" cam-widget-clipboard="log.key">
+                <a href="#/process-definition/{{ log.processDefinitionId }}">
+                  {{ log.processDefinitionKey }}
+                </a>
+              </td>
+
+              <td class="change-time"
+                  cam-widget-clipboard="log.timestamp | camDate">
+                {{ log.timestamp | camDate }}
+              </td>
+
+              <td class="property">
+                {{ log.property }}
+              </td>
+
+              <td class="new-value">
+                {{ log.newValue }}
+              </td>
+
+              <td class="annotation">
+                {{ log.annotation }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <ul uib-pagination
+              ng-if="SearchController.pages.total > SearchController.pages.size"
+              class="pagination-sm"
+              pagination-id="logPage"
+
+              page="SearchController.pages.current"
+              ng-model="SearchController.pages.current"
+
+              total-items="SearchController.pages.total"
+              items-per-page="SearchController.pages.size"
+
+              max-size="7"
+              boundary-links="true"></ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- / CE - ui/cockpit/plugins/operationLog/app/views/dashboard/operation-logs.html -->

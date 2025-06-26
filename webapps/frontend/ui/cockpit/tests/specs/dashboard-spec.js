@@ -49,6 +49,9 @@ describe('Cockpit Dashboard Spec', function() {
     expect(dashboardPage.navbarDropDownItem(1).getText()).to.eventually.eql(
       'Batches'
     );
+    expect(dashboardPage.navbarDropDownItem(2).getText()).to.eventually.eql(
+        'Operation Log'
+    );
   });
 
   it('should display information about actual state', function() {

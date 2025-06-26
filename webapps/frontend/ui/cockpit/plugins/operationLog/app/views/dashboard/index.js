@@ -17,23 +17,20 @@
 
 'use strict';
 
-var events = require('./events');
+var angular = require('angular');
+var camCommon = require('ui/common/scripts/module/index');
+var operationLogList = require('./views/operation-log-list');
+var OperationLogListController = require('./controllers/operation-log-list');
+var operationLogListService = require('./services/operation-log-list');
 
-var Delete = function(type) {
-  this.cascade = false;
-  this.disable = false;
-  this.type = type;
-};
+var ngModule = angular.module('cockpit.plugin.operationLog.views.dashboard', [
+  camCommon.name
+]);
 
-Delete.prototype.cancel = function() {
-  events.emit('delete:cancel');
-};
+ngModule.config(operationLogList);
 
-Delete.prototype.confirm = function() {
-  this.disable = true;
-  events.emit('delete:confirm', {
-    cascade: this.cascade
-  });
-};
+ngModule.factory('operationLogList', operationLogListService);
 
-module.exports = Delete;
+ngModule.controller('OperationLogListController', OperationLogListController);
+
+module.exports = ngModule;

@@ -22,7 +22,7 @@ var ctrl = require('../controllers/view-ctrl');
 module.exports = [
   '$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/operation-log', {
+    $routeProvider.when('/operationLog', {
       template: '',
       controller: ctrl,
       authentication: 'required',

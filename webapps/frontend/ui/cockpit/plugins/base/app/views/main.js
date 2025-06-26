@@ -31,6 +31,7 @@ var angular = require('angular'),
   dashboardProcesses = require('./dashboard/processes'),
   dashboardDecisions = require('./dashboard/decisions'),
   dashboardTasks = require('./dashboard/tasks'),
+  dashboardOperationLog = require('./dashboard/operationLog'),
   // processes dashboard
   processDefinitions = require('./processesDashboard/process-definitions'),
   // process definition
@@ -69,6 +70,7 @@ ngModule.config(dashboardBatches);
 ngModule.config(dashboardProcesses);
 ngModule.config(dashboardDecisions);
 ngModule.config(dashboardTasks);
+ngModule.config(dashboardOperationLog);
 
 ngModule.config(processDefinitions);
 

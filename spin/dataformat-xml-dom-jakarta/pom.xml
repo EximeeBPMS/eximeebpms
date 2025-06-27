@@ -151,7 +151,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <argLine>
-                -XX:MetaspaceSize=128m
+                ${argLine} -XX:MetaspaceSize=128m
               </argLine>
               <excludes combine.children="append">
                 <exclude>**/nashorn/**</exclude>

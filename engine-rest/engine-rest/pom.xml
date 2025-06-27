@@ -314,10 +314,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
     </plugins>
   </build>
 
@@ -399,7 +395,7 @@
                 </goals>
                 <configuration>
                   <!-- Ensures that endpoints work with other encodings than UTF-8 (cf. CAM-6983) -->
-                  <argLine>-Dfile.encoding=ISO-8859-1</argLine>
+                  <argLine>${argLine} -Dfile.encoding=ISO-8859-1</argLine>
                   <includes>
                     <include>**/ProcessDefinitionRestServiceInteractionTest.java</include>
                     <include>**/TaskRestServiceInteractionTest.java</include>
@@ -497,7 +493,7 @@
                 </goals>
                 <configuration>
                   <!-- Ensures that endpoints work with other encodings than UTF-8 (cf. CAM-6983) -->
-                  <argLine>-Dfile.encoding=ISO-8859-1</argLine>
+                  <argLine>${argLine} -Dfile.encoding=ISO-8859-1</argLine>
                   <includes>
                     <include>**/ProcessDefinitionRestServiceInteractionTest.java</include>
                     <include>**/TaskRestServiceInteractionTest.java</include>
@@ -600,7 +596,7 @@
                 </goals>
                 <configuration>
                   <!-- Ensures that endpoints work with other encodings than UTF-8 (cf. CAM-6983) -->
-                  <argLine>-Dfile.encoding=ISO-8859-1</argLine>
+                  <argLine>${argLine} -Dfile.encoding=ISO-8859-1</argLine>
                   <includes>
                     <include>**/ProcessDefinitionRestServiceInteractionTest.java</include>
                     <include>**/TaskRestServiceInteractionTest.java</include>

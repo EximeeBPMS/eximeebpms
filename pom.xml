@@ -349,6 +349,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>coverage-report</module>
       </modules>
     </profile>
 

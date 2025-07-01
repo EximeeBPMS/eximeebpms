@@ -17,18 +17,18 @@
 package org.eximeebpms.bpm.admin.impl.plugin.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.UriInfo;
 import org.eximeebpms.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto;
 import org.eximeebpms.bpm.admin.impl.plugin.base.dto.MetricsAggregatedResultDto;
 import org.eximeebpms.bpm.admin.resource.AbstractAdminPluginResource;
 import org.eximeebpms.bpm.engine.impl.metrics.util.MetricsUtil;
 import org.eximeebpms.bpm.engine.management.Metrics;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 

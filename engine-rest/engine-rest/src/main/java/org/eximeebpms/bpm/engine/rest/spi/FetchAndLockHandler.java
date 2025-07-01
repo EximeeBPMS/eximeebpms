@@ -16,11 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.rest.spi;
 
+import jakarta.servlet.ServletContextEvent;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
 
-import javax.servlet.ServletContextEvent;
-import javax.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.container.AsyncResponse;
 
 /**
  * SPI supposed to replace the default implementation of the long-polling fetch and lock handler

@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 import org.eximeebpms.bpm.engine.rest.util.EngineUtil;

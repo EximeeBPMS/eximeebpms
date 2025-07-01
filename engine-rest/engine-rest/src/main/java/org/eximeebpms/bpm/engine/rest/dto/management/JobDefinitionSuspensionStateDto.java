@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.dto.management;
 
 import java.util.Date;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;

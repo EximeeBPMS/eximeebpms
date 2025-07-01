@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.rest.dto.history;
 import java.util.Date;
 import java.util.Map;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;

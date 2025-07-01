@@ -16,8 +16,7 @@
  */
 package org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.query;
 
-import javax.ws.rs.core.MultivaluedMap;
-
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
 
 public class CalledProcessInstanceQueryDto extends AbstractProcessInstanceQueryDto<CalledProcessInstanceDto> {

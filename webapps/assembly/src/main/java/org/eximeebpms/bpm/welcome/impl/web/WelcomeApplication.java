@@ -16,19 +16,17 @@
  */
 package org.eximeebpms.bpm.welcome.impl.web;
 
+import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
+import jakarta.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.ws.rs.core.Application;
 
 import org.eximeebpms.bpm.engine.rest.exception.ExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.exception.RestExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.eximeebpms.bpm.welcome.Welcome;
 import org.eximeebpms.bpm.welcome.plugin.spi.WelcomePlugin;
-
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 /**
  * The rest api exposed by the welcome application

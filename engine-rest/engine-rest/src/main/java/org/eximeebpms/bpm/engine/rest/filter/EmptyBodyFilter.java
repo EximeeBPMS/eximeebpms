@@ -16,17 +16,20 @@
  */
 package org.eximeebpms.bpm.engine.rest.filter;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.ReadListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PushbackInputStream;
 import java.io.InputStream;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Tassilo Weidner
  */
+@Slf4j
 public class EmptyBodyFilter extends AbstractEmptyBodyFilter {
 
   @Override
@@ -37,6 +40,26 @@ public class EmptyBodyFilter extends AbstractEmptyBodyFilter {
       public ServletInputStream getInputStream() throws IOException {
 
         return new ServletInputStream() {
+
+          @Override
+          public boolean isFinished() {
+            return false;
+          }
+
+          @Override
+          public boolean isReady() {
+            try {
+              return inputStream.available() == 1;
+            } catch (IOException e) {
+              // TODO
+              return false;
+            }
+          }
+
+          @Override
+          public void setReadListener(ReadListener readListener) {
+
+          }
 
           final InputStream inputStream = getRequestBody(isBodyEmpty, requestBody);
 
@@ -69,7 +92,6 @@ public class EmptyBodyFilter extends AbstractEmptyBodyFilter {
           public boolean markSupported() {
             return inputStream.markSupported();
           }
-
         };
       }
 

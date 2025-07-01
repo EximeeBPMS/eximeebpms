@@ -16,8 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.spring.application;
 
-import javax.servlet.ServletContext;
-
+import jakarta.servlet.ServletContext;
 import org.eximeebpms.bpm.application.ProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationInfo;
 import org.springframework.web.context.ServletContextAware;

@@ -16,10 +16,10 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.impl;
 
+import jakarta.servlet.ServletContext;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
 import org.eximeebpms.bpm.webapp.impl.util.ServletFilterUtil;
 
-import javax.servlet.ServletContext;
 import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;

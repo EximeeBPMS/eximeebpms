@@ -16,11 +16,11 @@
  */
 package org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.query;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
 import java.util.Map;
 

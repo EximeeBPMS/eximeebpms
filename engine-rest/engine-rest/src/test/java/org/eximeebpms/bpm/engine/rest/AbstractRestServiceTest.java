@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest;
 
+import jakarta.ws.rs.core.MediaType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,6 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
-import javax.ws.rs.core.MediaType;
 
 import org.apache.http.entity.ContentType;
 import org.eximeebpms.bpm.engine.ProcessEngine;

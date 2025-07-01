@@ -20,7 +20,7 @@ import static org.eximeebpms.bpm.engine.impl.util.ExceptionUtil.PERSISTENCE_CONN
 import static org.eximeebpms.bpm.engine.impl.util.ExceptionUtil.getExceptionStacktrace;
 
 import java.sql.SQLException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.eximeebpms.bpm.engine.ProcessEnginePersistenceException;
 import org.eximeebpms.commons.logging.BaseLogger;
 

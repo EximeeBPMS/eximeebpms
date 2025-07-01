@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.hal.identitylink;
 
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.eximeebpms.bpm.engine.rest.GroupRestService;
 import org.eximeebpms.bpm.engine.rest.TaskRestService;

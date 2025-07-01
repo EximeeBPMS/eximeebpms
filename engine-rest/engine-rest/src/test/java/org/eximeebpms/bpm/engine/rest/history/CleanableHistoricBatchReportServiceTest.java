@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.AuthorizationException;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricBatchReport;

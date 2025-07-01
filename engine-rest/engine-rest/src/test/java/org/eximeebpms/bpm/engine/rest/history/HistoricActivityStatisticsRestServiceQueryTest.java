@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatistics;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatisticsQuery;

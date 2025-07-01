@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.rest.dto.converter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 import org.eximeebpms.bpm.engine.task.DelegationState;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 public class DelegationStateConverter extends JacksonAwareStringToTypeConverter<DelegationState> {
 

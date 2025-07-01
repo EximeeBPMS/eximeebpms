@@ -16,10 +16,9 @@
  */
 package org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.query;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.ws.rs.core.MultivaluedMap;
 
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;

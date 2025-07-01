@@ -66,9 +66,15 @@
     </dependency>
     
     <!-- servlet API -->
+<!--    <dependency>-->
+<!--      <groupId>org.jboss.spec.javax.servlet</groupId>-->
+<!--      <artifactId>jboss-servlet-api_3.0_spec</artifactId>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
       <scope>provided</scope>
     </dependency>
     

@@ -16,8 +16,7 @@
  */
 package org.eximeebpms.bpm.tasklist.impl.plugin.resources;
 
-import javax.ws.rs.Path;
-
+import jakarta.ws.rs.Path;
 import org.eximeebpms.bpm.tasklist.impl.plugin.TasklistPlugins;
 import org.eximeebpms.bpm.tasklist.resource.AbstractTasklistPluginRootResource;
 

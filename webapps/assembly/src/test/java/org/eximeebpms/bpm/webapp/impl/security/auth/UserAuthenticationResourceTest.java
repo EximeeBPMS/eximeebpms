@@ -19,9 +19,9 @@ package org.eximeebpms.bpm.webapp.impl.security.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mockStatic;
 
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.Date;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.ProcessEngine;

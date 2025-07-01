@@ -16,10 +16,9 @@
  */
 package org.eximeebpms.bpm.webapp.impl.engine;
 
+import jakarta.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.ws.rs.core.Application;
 
 import org.eximeebpms.bpm.engine.rest.impl.CamundaRestResources;
 import org.eximeebpms.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;

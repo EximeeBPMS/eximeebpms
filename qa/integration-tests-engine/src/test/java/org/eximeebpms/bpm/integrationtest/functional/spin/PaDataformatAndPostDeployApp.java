@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.eximeebpms.bpm.application.PostDeploy;
 import org.eximeebpms.bpm.application.ProcessApplication;
+import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 
 
@@ -29,7 +30,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
  */
 @ProcessApplication(PaDataformatAndPostDeployApp.PA_NAME)
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class PaDataformatAndPostDeployApp extends org.eximeebpms.bpm.application.impl.ServletProcessApplication {
+public class PaDataformatAndPostDeployApp extends ServletProcessApplication {
 
   public final static String PA_NAME  = "PaDataformatAndPostDeployApp";
 

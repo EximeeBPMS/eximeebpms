@@ -18,6 +18,8 @@ package org.eximeebpms.bpm.webapp.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.webapp.db.QueryParameters;
 import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.JacksonAwareStringToTypeConverter;
@@ -26,8 +28,6 @@ import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 import org.eximeebpms.bpm.engine.rest.exception.RestException;
 import org.eximeebpms.bpm.engine.variable.Variables;
 
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response.Status;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

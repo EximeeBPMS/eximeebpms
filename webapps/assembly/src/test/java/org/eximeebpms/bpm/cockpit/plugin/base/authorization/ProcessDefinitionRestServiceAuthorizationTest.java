@@ -16,6 +16,9 @@
  */
 package org.eximeebpms.bpm.cockpit.plugin.base.authorization;
 
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.UriInfo;
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
 import org.eximeebpms.bpm.cockpit.impl.plugin.resources.ProcessDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.dto.CountResultDto;
@@ -24,9 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

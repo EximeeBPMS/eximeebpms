@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;

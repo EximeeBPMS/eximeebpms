@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.dto.runtime;
 
 import java.util.Map;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.EntityTypes;
 import org.eximeebpms.bpm.engine.ProcessEngine;

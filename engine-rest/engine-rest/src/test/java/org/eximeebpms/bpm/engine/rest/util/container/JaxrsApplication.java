@@ -16,11 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.rest.util.container;
 
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 
 import org.eximeebpms.bpm.engine.rest.impl.CamundaRestResources;
 

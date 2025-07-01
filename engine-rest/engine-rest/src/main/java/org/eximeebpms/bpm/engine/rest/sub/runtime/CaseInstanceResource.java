@@ -20,8 +20,8 @@ import org.eximeebpms.bpm.engine.rest.dto.runtime.CaseExecutionTriggerDto;
 import org.eximeebpms.bpm.engine.rest.dto.runtime.CaseInstanceDto;
 import org.eximeebpms.bpm.engine.rest.sub.VariableResource;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  *

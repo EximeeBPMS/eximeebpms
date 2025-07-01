@@ -23,11 +23,11 @@ import org.eximeebpms.bpm.engine.rest.hal.Hal;
 import org.eximeebpms.bpm.engine.rest.sub.task.TaskReportResource;
 import org.eximeebpms.bpm.engine.rest.sub.task.TaskResource;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Produces(MediaType.APPLICATION_JSON)

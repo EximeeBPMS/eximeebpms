@@ -16,11 +16,11 @@
  */
 package org.eximeebpms.bpm.admin.impl.plugin.resources;
 
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import org.eximeebpms.bpm.admin.impl.plugin.AdminPlugins;
 import org.eximeebpms.bpm.admin.resource.AbstractAdminPluginRootResource;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 
 /**
  * @author vale

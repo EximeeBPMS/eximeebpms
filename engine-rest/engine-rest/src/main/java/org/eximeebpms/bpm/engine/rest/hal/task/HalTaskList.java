@@ -16,6 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.rest.hal.task;
 
+import static jakarta.ws.rs.core.UriBuilder.fromPath;
+
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.TaskRestService;
 import org.eximeebpms.bpm.engine.rest.hal.HalCollectionResource;
@@ -25,7 +27,6 @@ import org.eximeebpms.bpm.engine.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
 
 /**
  * @author Daniel Meyer

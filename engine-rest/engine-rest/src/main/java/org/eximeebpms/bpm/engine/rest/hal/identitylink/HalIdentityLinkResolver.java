@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.hal.identitylink;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.TaskService;

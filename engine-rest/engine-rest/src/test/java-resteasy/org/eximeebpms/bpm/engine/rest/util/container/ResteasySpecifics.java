@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.rest.util.container;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.core.Application;
 
 import org.eximeebpms.bpm.engine.rest.CustomJacksonDateFormatTest;
 import org.eximeebpms.bpm.engine.rest.ExceptionHandlerTest;

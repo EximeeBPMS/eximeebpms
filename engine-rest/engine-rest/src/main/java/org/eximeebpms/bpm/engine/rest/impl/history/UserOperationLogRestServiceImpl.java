@@ -18,8 +18,8 @@ package org.eximeebpms.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AnnotationDto;

@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.query;
 
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.impl.QueryVariableValue;
@@ -27,8 +28,6 @@ import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.VariableListConverter;
-
-import javax.ws.rs.core.MultivaluedMap;
 
 import java.util.*;
 

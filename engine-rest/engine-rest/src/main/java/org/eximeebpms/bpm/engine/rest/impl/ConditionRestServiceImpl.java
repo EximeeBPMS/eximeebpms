@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.rest.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.rest.ConditionRestService;

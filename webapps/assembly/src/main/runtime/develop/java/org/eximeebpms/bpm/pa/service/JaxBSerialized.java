@@ -16,8 +16,6 @@
  */
 package org.eximeebpms.bpm.pa.service;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * @author Daniel Meyer
  *

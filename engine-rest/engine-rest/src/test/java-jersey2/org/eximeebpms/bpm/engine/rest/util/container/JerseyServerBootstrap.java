@@ -16,12 +16,12 @@
  */
 package org.eximeebpms.bpm.engine.rest.util.container;
 
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.UriBuilder;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;

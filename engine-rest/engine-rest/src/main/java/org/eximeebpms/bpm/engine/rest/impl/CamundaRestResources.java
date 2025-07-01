@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.rest.impl;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
+import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 import org.eximeebpms.bpm.engine.rest.exception.ExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.exception.JsonMappingExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.exception.JsonParseExceptionHandler;

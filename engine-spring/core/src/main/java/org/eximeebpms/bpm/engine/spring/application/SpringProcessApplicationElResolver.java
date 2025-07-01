@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.engine.spring.application;
 
+import jakarta.servlet.ServletContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationElResolver;
 import org.eximeebpms.bpm.application.impl.EjbProcessApplication;

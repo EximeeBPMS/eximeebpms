@@ -22,14 +22,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity;
 import org.eximeebpms.bpm.engine.management.SchemaLogEntry;

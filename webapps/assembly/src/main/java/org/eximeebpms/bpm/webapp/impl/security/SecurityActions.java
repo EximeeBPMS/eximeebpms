@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 

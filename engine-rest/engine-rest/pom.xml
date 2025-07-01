@@ -13,7 +13,7 @@
 
   <properties>
     <!-- pin tomcat version for engine-rest -->
-    <version.tomcat>7.0.50</version.tomcat>
+    <version.tomcat>9.0.0.M6</version.tomcat>
     <rest.http.port>38080</rest.http.port>
     <javax.activation.version>1.1.1</javax.activation.version>
   </properties>
@@ -36,22 +36,15 @@
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.jaxrs</groupId>
-      <artifactId>jackson-jaxrs-json-provider</artifactId>
-      <!--
-      * Since version 2.10.0 this dependency comes with transitive Jakarta dependencies
-      * These trans-deps are directly included in JDKs <= Java 8 * For Java >= 9 compatible containers, we make sure to include these dependencies
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>jakarta.activation</groupId>
-          <artifactId>jakarta.activation-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>jakarta.xml.bind</groupId>
-          <artifactId>jakarta.xml.bind-api</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+      <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+      <version>2.19.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.activation</groupId>
+      <artifactId>jakarta.activation-api</artifactId>
+      <version>2.1.3</version>
     </dependency>
 
     <dependency>
@@ -71,9 +64,15 @@
     </dependency>
 
     <!-- provided deps -->
+<!--    <dependency>-->
+<!--      <groupId>org.jboss.spec.javax.servlet</groupId>-->
+<!--      <artifactId>jboss-servlet-api_3.0_spec</artifactId>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -95,12 +94,12 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>${javax.activation.version}</version>
-      <scope>provided</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>javax.activation</groupId>-->
+<!--      <artifactId>activation</artifactId>-->
+<!--      <version>${javax.activation.version}</version>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
@@ -132,6 +131,20 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>4.0.5</version>
       <scope>test</scope>
     </dependency>
 
@@ -236,7 +249,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-logging-juli</artifactId>
-      <version>${version.tomcat}</version>
+      <version>9.0.0.M6</version>
       <scope>test</scope>
     </dependency>
 
@@ -321,11 +334,11 @@
     <profile>
       <id>distro</id>
       <dependencies>
-        <dependency>
-          <groupId>org.jboss.spec.javax.ws.rs</groupId>
-          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-          <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--          <groupId>org.jboss.spec.javax.ws.rs</groupId>-->
+<!--          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>-->
+<!--          <scope>provided</scope>-->
+<!--        </dependency>-->
       </dependencies>
       <build>
         <plugins>
@@ -346,11 +359,11 @@
         <version.netty>4.1.42.Final</version.netty>
       </properties>
       <dependencies>
-        <dependency>
-          <groupId>org.jboss.spec.javax.ws.rs</groupId>
-          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-          <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--          <groupId>org.jboss.spec.javax.ws.rs</groupId>-->
+<!--          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>-->
+<!--          <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
           <groupId>org.jboss.resteasy</groupId>
           <artifactId>resteasy-jaxrs</artifactId>
@@ -449,11 +462,16 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>javax.ws.rs</groupId>
-          <artifactId>javax.ws.rs-api</artifactId>
-          <version>2.0.1</version>
-          <scope>provided</scope>
+          <groupId>jakarta.ws.rs</groupId>
+          <artifactId>jakarta.ws.rs-api</artifactId>
+          <version>4.0.0</version>
         </dependency>
+<!--        <dependency>-->
+<!--          <groupId>javax.ws.rs</groupId>-->
+<!--          <artifactId>javax.ws.rs-api</artifactId>-->
+<!--          <version>2.0.1</version>-->
+<!--          <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
           <groupId>org.glassfish.jersey.containers</groupId>
           <artifactId>jersey-container-grizzly2-http</artifactId>
@@ -469,6 +487,12 @@
         <dependency>
           <groupId>org.glassfish.jersey.inject</groupId>
           <artifactId>jersey-hk2</artifactId>
+          <version>${version.jersey2}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.glassfish.jersey.media</groupId>
+          <artifactId>jersey-media-json-jackson</artifactId>
           <version>${version.jersey2}</version>
           <scope>test</scope>
         </dependency>
@@ -549,11 +573,11 @@
       </properties>
 
       <dependencies>
-        <dependency>
-          <groupId>org.jboss.spec.javax.ws.rs</groupId>
-          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-          <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--          <groupId>org.jboss.spec.javax.ws.rs</groupId>-->
+<!--          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>-->
+<!--          <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <dependency>
           <groupId>org.jboss.resteasy</groupId>

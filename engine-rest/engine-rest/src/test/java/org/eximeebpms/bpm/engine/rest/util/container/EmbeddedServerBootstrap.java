@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.rest.util.container;
 
+import jakarta.ws.rs.core.Application;
 import java.net.BindException;
-import javax.ws.rs.core.Application;
 
 public abstract class EmbeddedServerBootstrap extends AbstractServerBootstrap {
 

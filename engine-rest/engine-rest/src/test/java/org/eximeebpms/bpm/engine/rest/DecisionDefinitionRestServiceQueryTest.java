@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;

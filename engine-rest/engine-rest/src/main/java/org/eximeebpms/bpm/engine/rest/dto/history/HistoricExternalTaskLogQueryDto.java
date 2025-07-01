@@ -27,7 +27,7 @@ import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.LongConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

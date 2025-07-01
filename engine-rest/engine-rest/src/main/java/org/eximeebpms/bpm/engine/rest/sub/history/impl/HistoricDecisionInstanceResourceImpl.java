@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.sub.history.impl;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ProcessEngine;

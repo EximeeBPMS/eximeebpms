@@ -16,14 +16,14 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto;
 
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.digest._apacheCommonsCodec.Base64;

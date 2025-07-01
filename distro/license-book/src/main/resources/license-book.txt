@@ -1717,7 +1717,7 @@ Copyright (c) Eclipse Jakarta Dependency Injection project. All content is the p
 Licensed under Apache 2.0
 
 ===========================================================================================
-jakarta.servlet:jakarta.servlet-api:jar:6.0.0
+jakarta.servlet:jakarta.servlet-api:jar:6.1.0
 https://github.com/jakartaee/servlet/tree/6.0.0-RELEASE
 Copyright (c) 1997, 2021 Oracle and/or its affiliates. All rights reserved.
 Licensed under EPL 2.0
@@ -2056,32 +2056,32 @@ Copyright 2011 LMAX Ltd.
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.apache.tomcat.embed:tomcat-embed-core:jar:10.1.39
-https://github.com/apache/tomcat/tree/10.1.39
+org.apache.tomcat.embed:tomcat-embed-core:jar:11.0.8
+https://github.com/apache/tomcat/tree/11.0.8
 
 Copyright 1999-2025 The Apache Software Foundation
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.apache.tomcat.embed:tomcat-embed-el:jar:10.1.39
-https://github.com/apache/tomcat/tree/10.1.39
+org.apache.tomcat.embed:tomcat-embed-el:jar:11.0.8
+https://github.com/apache/tomcat/tree/11.0.8
 
 Copyright 1999-2025 The Apache Software Foundation
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.apache.tomcat.embed:tomcat-embed-websocket:jar:10.1.39
-https://github.com/apache/tomcat/tree/10.1.39
+org.apache.tomcat.embed:tomcat-embed-websocket:jar:11.0.8
+https://github.com/apache/tomcat/tree/11.0.8
 
 Copyright 1999-2025 The Apache Software Foundation
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.apache.tomcat:tomcat:tar.gz:10.1.36
-https://github.com/apache/tomcat/tree/10.1.36
+org.apache.tomcat:tomcat:tar.gz:11.0.8
+https://github.com/apache/tomcat/tree/11.0.8
 
 Copyright 1999-2025 The Apache Software Foundation
 

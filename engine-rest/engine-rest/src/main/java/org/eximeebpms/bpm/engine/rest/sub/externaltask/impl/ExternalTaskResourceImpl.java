@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.sub.externaltask.impl;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.ExternalTaskService;

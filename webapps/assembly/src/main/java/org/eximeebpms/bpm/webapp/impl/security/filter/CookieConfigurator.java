@@ -16,9 +16,8 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter;
 
+import jakarta.servlet.FilterConfig;
 import java.util.Arrays;
-
-import javax.servlet.FilterConfig;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.webapp.impl.security.filter.util.CookieConstants;

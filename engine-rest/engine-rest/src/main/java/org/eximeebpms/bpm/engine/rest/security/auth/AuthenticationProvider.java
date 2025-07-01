@@ -16,11 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.rest.security.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * A provider to handle the authentication of {@link HttpServletRequest}s.

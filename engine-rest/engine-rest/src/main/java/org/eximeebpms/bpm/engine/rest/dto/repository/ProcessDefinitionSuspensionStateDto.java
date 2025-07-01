@@ -22,7 +22,7 @@ import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
 import org.eximeebpms.bpm.engine.rest.dto.SuspensionStateDto;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.Date;
 
 /**

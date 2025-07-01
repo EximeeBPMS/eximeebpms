@@ -96,10 +96,24 @@
       </exclusions>
     </dependency>
 
+<!--    <dependency>-->
+<!--      <groupId>javax.enterprise.concurrent</groupId>-->
+<!--      <artifactId>javax.enterprise.concurrent-api</artifactId>-->
+<!--      <version>1.0</version>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
+
     <dependency>
-      <groupId>javax.enterprise.concurrent</groupId>
-      <artifactId>javax.enterprise.concurrent-api</artifactId>
-      <version>1.0</version>
+      <groupId>jakarta.enterprise.concurrent</groupId>
+      <artifactId>jakarta.enterprise.concurrent-api</artifactId>
+      <version>3.0.3</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
       <scope>provided</scope>
     </dependency>
 

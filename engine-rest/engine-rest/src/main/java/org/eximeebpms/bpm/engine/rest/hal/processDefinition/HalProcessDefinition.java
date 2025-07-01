@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.hal.processDefinition;
 
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;

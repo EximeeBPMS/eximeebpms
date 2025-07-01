@@ -20,13 +20,13 @@ import static org.eximeebpms.bpm.engine.authorization.Permissions.ACCESS;
 import static org.eximeebpms.bpm.engine.authorization.Resources.APPLICATION;
 import static org.eximeebpms.bpm.webapp.impl.security.filter.util.HttpSessionMutexListener.AUTH_TIME_SESSION_MUTEX;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.Group;

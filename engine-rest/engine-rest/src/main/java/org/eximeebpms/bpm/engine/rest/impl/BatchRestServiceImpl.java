@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.rest.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.UriInfo;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.batch.Batch;
 import org.eximeebpms.bpm.engine.batch.BatchQuery;

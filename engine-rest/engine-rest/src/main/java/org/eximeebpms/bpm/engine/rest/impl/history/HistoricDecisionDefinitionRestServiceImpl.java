@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.UriInfo;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricDecisionInstanceReport;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricDecisionInstanceReportResult;

@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collection;
-import javax.servlet.http.HttpServletResponse;
 
 import org.eximeebpms.bpm.webapp.impl.security.auth.Authentication;
 import org.eximeebpms.bpm.webapp.impl.security.auth.UserAuthentication;

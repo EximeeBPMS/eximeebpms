@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.engine.impl.util;
 
+import jakarta.servlet.ServletContextEvent;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import javax.servlet.ServletContextEvent;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 
 /**

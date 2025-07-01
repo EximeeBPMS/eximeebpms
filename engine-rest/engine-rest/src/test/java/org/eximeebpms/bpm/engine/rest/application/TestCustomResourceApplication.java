@@ -16,16 +16,16 @@
  */
 package org.eximeebpms.bpm.engine.rest.application;
 
-import com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper;
-import com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper;
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.fasterxml.jackson.jakarta.rs.base.JsonMappingExceptionMapper;
+import com.fasterxml.jackson.jakarta.rs.base.JsonParseExceptionMapper;
+import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 import org.eximeebpms.bpm.engine.rest.exception.ExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.exception.ProcessEngineExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.exception.RestExceptionHandler;
 import org.eximeebpms.bpm.engine.rest.mapper.JacksonConfigurator;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 

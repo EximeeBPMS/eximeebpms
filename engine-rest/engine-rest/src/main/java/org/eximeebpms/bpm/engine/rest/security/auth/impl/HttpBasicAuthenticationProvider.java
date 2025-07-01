@@ -16,14 +16,14 @@
  */
 package org.eximeebpms.bpm.engine.rest.security.auth.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
 import org.eximeebpms.bpm.engine.rest.security.auth.AuthenticationProvider;
 import org.eximeebpms.bpm.engine.rest.security.auth.AuthenticationResult;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.HttpHeaders;
 
 /**
  * <p>

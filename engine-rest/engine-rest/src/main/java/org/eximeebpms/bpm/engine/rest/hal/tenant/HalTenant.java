@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.hal.tenant;
 
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.eximeebpms.bpm.engine.identity.Tenant;
 import org.eximeebpms.bpm.engine.rest.TenantRestService;

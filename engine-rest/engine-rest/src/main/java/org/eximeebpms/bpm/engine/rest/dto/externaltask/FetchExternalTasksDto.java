@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto.externaltask;
 
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 import static java.lang.Boolean.TRUE;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.util.Collections;
 import java.util.HashMap;

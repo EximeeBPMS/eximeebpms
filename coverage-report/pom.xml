@@ -35,42 +35,12 @@
     <dependencies>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-bom</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-bom-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-only-bom</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-core-internal-dependencies</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-test-utils-testcontainers</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.dmn</groupId>
-            <artifactId>eximeebpms-dmn-junit5</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-bpm-archunit</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-bpm-assert-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -90,32 +60,12 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-engine-rest-openapi-generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-engine-rest-openapi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>docs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-engine-rest-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-engine-rest-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -135,22 +85,12 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.run</groupId>
-            <artifactId>eximeebpms-bpm-run-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.run</groupId>
             <artifactId>eximeebpms-bpm-run-modules-oauth2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.run</groupId>
             <artifactId>eximeebpms-bpm-run-modules-example-invoice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.run</groupId>
-            <artifactId>eximeebpms-bpm-run-modules</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -199,21 +139,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly26</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly26-modules</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly26-subsystem</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.eximeebpms.bpm.webapp</groupId>
             <artifactId>eximeebpms-webapp</artifactId>
             <version>${project.version}</version>
@@ -229,38 +154,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-bpm-wildfly</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.eximeebpms.bpm.webapp</groupId>
             <artifactId>eximeebpms-webapp-jakarta</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.webapp</groupId>
-            <artifactId>eximeebpms-webapp-wildfly</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly-modules</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly-assembly</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.wildfly</groupId>
-            <artifactId>eximeebpms-wildfly-subsystem</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -289,38 +184,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>license-book</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.eximeebpms.bpm.distro</groupId>
             <artifactId>eximeebpms-sql-scripts</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.javaee</groupId>
-            <artifactId>eximeebpms-ejb-client-jakarta</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.javaee</groupId>
-            <artifactId>eximeebpms-ejb-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.javaee</groupId>
-            <artifactId>eximeebpms-jobexecutor-ra</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.javaee</groupId>
-            <artifactId>eximeebpms-jobexecutor-rar</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.javaee</groupId>
-            <artifactId>eximeebpms-ejb-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -330,17 +195,7 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-cdi-compatibility-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-engine-cdi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.connect</groupId>
-            <artifactId>eximeebpms-connect-bom</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -355,17 +210,7 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.connect</groupId>
-            <artifactId>eximeebpms-connect-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.connect</groupId>
             <artifactId>eximeebpms-connect-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.connect</groupId>
-            <artifactId>eximeebpms-connect-connectors-all</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -385,32 +230,12 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.model</groupId>
-            <artifactId>eximeebpms-model-apis</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.model</groupId>
             <artifactId>eximeebpms-xml-model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-engine-spring-6</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-spring-compatibility-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
             <artifactId>eximeebpms-engine-spring</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -475,11 +300,6 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.commons</groupId>
-            <artifactId>eximeebpms-commons-bom</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.commons</groupId>
             <artifactId>eximeebpms-commons-logging</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -495,27 +315,12 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.commons</groupId>
-            <artifactId>eximeebpms-commons-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.commons</groupId>
             <artifactId>eximeebpms-commons-typed-values</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.dmn</groupId>
-            <artifactId>eximeebpms-engine-dmn-bom</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.dmn</groupId>
             <artifactId>eximeebpms-engine-feel-juel</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.dmn</groupId>
-            <artifactId>eximeebpms-engine-dmn-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -554,11 +359,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-external-task-client-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.eximeebpms.bpm.qa</groupId>
             <artifactId>eximeebpms-external-task-client-qa</artifactId>
             <version>${project.version}</version>
@@ -566,11 +366,6 @@
         <dependency>
             <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
             <artifactId>eximeebpms-qa-upgrade-scenario-util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.qa</groupId>
-            <artifactId>eximeebpms-qa-tomcat9-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -665,11 +460,6 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.qa</groupId>
-            <artifactId>eximeebpms-qa-integration-tests-webapps-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.qa</groupId>
             <artifactId>eximeebpms-qa-integration-tests-webapps-shared-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -696,11 +486,6 @@
         <dependency>
             <groupId>org.eximeebpms.bpm.springboot</groupId>
             <artifactId>eximeebpms-bpm-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.springboot.project</groupId>
-            <artifactId>eximeebpms-bpm-spring-boot-starter-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -785,11 +570,6 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.spin</groupId>
-            <artifactId>eximeebpms-spin-bom</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.spin</groupId>
             <artifactId>eximeebpms-spin-dataformat-xml-dom</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -801,11 +581,6 @@
         <dependency>
             <groupId>org.eximeebpms.spin</groupId>
             <artifactId>eximeebpms-spin-dataformat-all</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.spin</groupId>
-            <artifactId>eximeebpms-spin-root</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -825,17 +600,7 @@
         </dependency>
         <dependency>
             <groupId>org.eximeebpms.bpm.example</groupId>
-            <artifactId>eximeebpms-example-root</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm.example</groupId>
             <artifactId>eximeebpms-example-invoice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eximeebpms.bpm</groupId>
-            <artifactId>eximeebpms-parent</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.batch.history.HistoricBatchQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
 
@@ -60,27 +60,27 @@ public class HistoricBatchQueryDto extends AbstractQueryDto<HistoricBatchQuery> 
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("batchId")
+  @EximeeBPMSQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @CamundaQueryParam("type")
+  @EximeeBPMSQueryParam("type")
   public void setType(String type) {
     this.type = type;
   }
 
-  @CamundaQueryParam(value = "completed", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "completed", converter = BooleanConverter.class)
   public void setCompleted(Boolean completed) {
     this.completed = completed;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

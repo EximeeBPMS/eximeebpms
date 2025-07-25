@@ -24,7 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatisticsQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -60,47 +60,47 @@ public class HistoricActivityStatisticsQueryDto extends AbstractQueryDto<Histori
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "canceled", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "canceled", converter = BooleanConverter.class)
   public void setIncludeCanceled(Boolean includeCanceled) {
     this.includeCanceled = includeCanceled;
   }
 
-  @CamundaQueryParam(value = "finished", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "finished", converter = BooleanConverter.class)
   public void setIncludeFinished(Boolean includeFinished) {
     this.includeFinished = includeFinished;
   }
 
-  @CamundaQueryParam(value = "completeScope", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "completeScope", converter = BooleanConverter.class)
   public void setIncludeCompleteScope(Boolean includeCompleteScope) {
     this.includeCompleteScope = includeCompleteScope;
   }
 
-  @CamundaQueryParam(value = "incidents", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "incidents", converter = BooleanConverter.class)
   public void setIncludeIncidents(Boolean includeClosedIncidents) {
     this.includeIncidents = includeClosedIncidents;
   }
 
-  @CamundaQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @CamundaQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @CamundaQueryParam(value = "finishedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "finishedAfter", converter = DateConverter.class)
   public void setFinishedAfter(Date finishedAfter) {
     this.finishedAfter = finishedAfter;
   }
 
-  @CamundaQueryParam(value = "finishedBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "finishedBefore", converter = DateConverter.class)
   public void setFinishedBefore(Date finishedBefore) {
     this.finishedBefore = finishedBefore;
   }
 
-  @CamundaQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }

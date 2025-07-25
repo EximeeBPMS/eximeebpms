@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLogQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.LongConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -93,97 +93,97 @@ public class HistoricExternalTaskLogQueryDto extends AbstractQueryDto<HistoricEx
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("logId")
+  @EximeeBPMSQueryParam("logId")
   public void setLogId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam("externalTaskId")
+  @EximeeBPMSQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @CamundaQueryParam("topicName")
+  @EximeeBPMSQueryParam("topicName")
   public void setTopicName(String topicName) {
     this.topicName = topicName;
   }
 
-  @CamundaQueryParam("workerId")
+  @EximeeBPMSQueryParam("workerId")
   public void setWorkerId(String workerId) {
     this.workerId = workerId;
   }
 
-  @CamundaQueryParam("errorMessage")
+  @EximeeBPMSQueryParam("errorMessage")
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIds) {
     this.activityIds = activityIds;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIds) {
     this.activityInstanceIds = activityInstanceIds;
   }
 
-  @CamundaQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
   public void setExecutionIdIn(String[] executionIds) {
     this.executionIds = executionIds;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
   public void setPriorityHigherThanOrEquals(Long priorityHigherThanOrEquals) {
     this.priorityHigherThanOrEquals = priorityHigherThanOrEquals;
   }
 
-  @CamundaQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
   public void setPriorityLowerThanOrEquals(Long priorityLowerThanOrEquals) {
     this.priorityLowerThanOrEquals = priorityLowerThanOrEquals;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value="creationLog", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="creationLog", converter = BooleanConverter.class)
   public void setCreationLog(Boolean creationLog) {
     this.creationLog = creationLog;
   }
 
-  @CamundaQueryParam(value="failureLog", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="failureLog", converter = BooleanConverter.class)
   public void setFailureLog(Boolean failureLog) {
     this.failureLog = failureLog;
   }
 
-  @CamundaQueryParam(value="successLog", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="successLog", converter = BooleanConverter.class)
   public void setSuccessLog(Boolean successLog) {
     this.successLog = successLog;
   }
 
-  @CamundaQueryParam(value="deletionLog", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="deletionLog", converter = BooleanConverter.class)
   public void setDeletionLog(Boolean deletionLog) {
     this.deletionLog = deletionLog;
   }

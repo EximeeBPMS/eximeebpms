@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -80,92 +80,92 @@ public class ExecutionQueryDto extends AbstractQueryDto<ExecutionQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("businessKey")
+  @EximeeBPMSQueryParam("businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("activityId")
+  @EximeeBPMSQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @CamundaQueryParam("signalEventSubscriptionName")
+  @EximeeBPMSQueryParam("signalEventSubscriptionName")
   public void setSignalEventSubscriptionName(String signalEventSubscriptionName) {
     this.signalEventSubscriptionName = signalEventSubscriptionName;
   }
 
-  @CamundaQueryParam("messageEventSubscriptionName")
+  @EximeeBPMSQueryParam("messageEventSubscriptionName")
   public void setMessageEventSubscriptionName(String messageEventSubscriptionName) {
     this.messageEventSubscriptionName = messageEventSubscriptionName;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
 
-  @CamundaQueryParam(value = "processVariables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @CamundaQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }
   
-  @CamundaQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "incidentId")
+  @EximeeBPMSQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @CamundaQueryParam(value = "incidentType")
+  @EximeeBPMSQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @CamundaQueryParam(value = "incidentMessage")
+  @EximeeBPMSQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @CamundaQueryParam(value = "incidentMessageLike")
+  @EximeeBPMSQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }

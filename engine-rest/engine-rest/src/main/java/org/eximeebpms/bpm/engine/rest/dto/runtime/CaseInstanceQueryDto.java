@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -84,87 +84,87 @@ public class CaseInstanceQueryDto extends AbstractQueryDto<CaseInstanceQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @EximeeBPMSQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam("businessKey")
+  @EximeeBPMSQueryParam("businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
 
-  @CamundaQueryParam("caseDefinitionKey")
+  @EximeeBPMSQueryParam("caseDefinitionKey")
   public void setCaseDefinitionKey(String caseDefinitionKey) {
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @EximeeBPMSQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam("superProcessInstance")
+  @EximeeBPMSQueryParam("superProcessInstance")
   public void setSuperProcessInstance(String superProcessInstance) {
     this.superProcessInstance = superProcessInstance;
   }
 
-  @CamundaQueryParam("subProcessInstance")
+  @EximeeBPMSQueryParam("subProcessInstance")
   public void setSubProcessInstance(String subProcessInstance) {
     this.subProcessInstance = subProcessInstance;
   }
 
-  @CamundaQueryParam("superCaseInstance")
+  @EximeeBPMSQueryParam("superCaseInstance")
   public void setSuperCaseInstance(String superCaseInstance) {
     this.superCaseInstance = superCaseInstance;
   }
 
-  @CamundaQueryParam("subCaseInstance")
+  @EximeeBPMSQueryParam("subCaseInstance")
   public void setSubCaseInstance(String subCaseInstance) {
     this.subCaseInstance = subCaseInstance;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "completed", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "completed", converter = BooleanConverter.class)
   public void setCompleted(Boolean completed) {
     this.completed = completed;
   }
 
-  @CamundaQueryParam(value = "terminated", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "terminated", converter = BooleanConverter.class)
   public void setTerminated(Boolean terminated) {
     this.terminated = terminated;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
 
-  @CamundaQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @CamundaQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }

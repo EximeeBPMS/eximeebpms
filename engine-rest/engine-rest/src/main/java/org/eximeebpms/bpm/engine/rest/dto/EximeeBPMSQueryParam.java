@@ -26,8 +26,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-
-public @interface CamundaQueryParam {
+public @interface EximeeBPMSQueryParam {
   public String value();
   public Class<? extends JacksonAwareStringToTypeConverter<?>> converter() default StringConverter.class;
 }

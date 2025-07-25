@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.util.CollectionUtil;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.ConditionListConverter;
@@ -104,132 +104,132 @@ public class JobQueryDto extends AbstractQueryDto<JobQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("activityId")
+  @EximeeBPMSQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @CamundaQueryParam("failedActivityId")
+  @EximeeBPMSQueryParam("failedActivityId")
   public void setFailedActivityId(String activityId) {
     this.failedActivityId = activityId;
   }
 
-  @CamundaQueryParam("jobId")
+  @EximeeBPMSQueryParam("jobId")
   public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  @CamundaQueryParam(value = "jobIds", converter = StringSetConverter.class)
+  @EximeeBPMSQueryParam(value = "jobIds", converter = StringSetConverter.class)
   public void setJobIds(Set<String> jobIds) {
     this.jobIds = jobIds;
   }
 
-  @CamundaQueryParam("executionId")
+  @EximeeBPMSQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
+  @EximeeBPMSQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
   public void setProcessInstanceIds(Set<String> processInstanceIds) {
     this.processInstanceIds = processInstanceIds;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam(value="withRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="withRetriesLeft", converter = BooleanConverter.class)
   public void setWithRetriesLeft(Boolean withRetriesLeft) {
     this.withRetriesLeft = withRetriesLeft;
   }
 
-  @CamundaQueryParam(value="executable", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="executable", converter = BooleanConverter.class)
   public void setExecutable(Boolean executable) {
     this.executable = executable;
   }
 
-  @CamundaQueryParam(value="timers", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="timers", converter = BooleanConverter.class)
   public void setTimers(Boolean timers) {
     this.timers = timers;
   }
 
-  @CamundaQueryParam(value="withException", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="withException", converter = BooleanConverter.class)
   public void setWithException(Boolean withException) {
     this.withException = withException;
   }
 
-  @CamundaQueryParam(value="messages", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="messages", converter = BooleanConverter.class)
   public void setMessages(Boolean messages) {
     this.messages = messages;
   }
 
-  @CamundaQueryParam("exceptionMessage")
+  @EximeeBPMSQueryParam("exceptionMessage")
   public void setExceptionMessage(String exceptionMessage) {
     this.exceptionMessage = exceptionMessage;
   }
 
-  @CamundaQueryParam(value = "dueDates", converter = ConditionListConverter.class)
+  @EximeeBPMSQueryParam(value = "dueDates", converter = ConditionListConverter.class)
   public void setDueDates(List<ConditionQueryParameterDto> dueDates) {
     this.dueDates = dueDates;
   }
 
-  @CamundaQueryParam(value = "createTimes", converter = ConditionListConverter.class)
+  @EximeeBPMSQueryParam(value = "createTimes", converter = ConditionListConverter.class)
   public void setCreateTimes(List<ConditionQueryParameterDto> createTimes) {
     this.createTimes = createTimes;
   }
 
-  @CamundaQueryParam(value="noRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="noRetriesLeft", converter = BooleanConverter.class)
   public void setNoRetriesLeft(Boolean noRetriesLeft) {
     this.noRetriesLeft = noRetriesLeft;
   }
 
-  @CamundaQueryParam(value="active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value="suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
   public void setPriorityHigherThanOrEquals(Long priorityHigherThanOrEquals) {
     this.priorityHigherThanOrEquals = priorityHigherThanOrEquals;
   }
 
-  @CamundaQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
   public void setPriorityLowerThanOrEquals(Long priorityLowerThanOrEquals) {
     this.priorityLowerThanOrEquals = priorityLowerThanOrEquals;
   }
 
-  @CamundaQueryParam("jobDefinitionId")
+  @EximeeBPMSQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeJobsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeJobsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeJobsWithoutTenantId(Boolean includeJobsWithoutTenantId) {
     this.includeJobsWithoutTenantId = includeJobsWithoutTenantId;
   }

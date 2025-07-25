@@ -21,7 +21,7 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.webapp.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.impl.metrics.util.MetricsUtil;
 import org.eximeebpms.bpm.engine.management.Metrics;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -67,7 +67,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     maxResultsLimitEnabled = false;
   }
 
-  @CamundaQueryParam("groupBy")
+  @EximeeBPMSQueryParam("groupBy")
   public void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
@@ -76,7 +76,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return groupBy;
   }
 
-  @CamundaQueryParam(value = "metrics", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "metrics", converter = StringListConverter.class)
   public void setMetrics(List<String> metrics) {
     boolean valid = new HashSet<>(VALID_METRIC_VALUES).containsAll(metrics);
     if (!valid) {
@@ -89,7 +89,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return metrics;
   }
 
-  @CamundaQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
   public void setSubscriptionStartDate(Date subscriptionStartDate) {
     this.subscriptionStartDate = subscriptionStartDate;
 
@@ -102,12 +102,12 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     }
   }
 
-  @CamundaQueryParam(value = "startDate", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startDate", converter = DateConverter.class)
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
-  @CamundaQueryParam(value = "endDate", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "endDate", converter = DateConverter.class)
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }

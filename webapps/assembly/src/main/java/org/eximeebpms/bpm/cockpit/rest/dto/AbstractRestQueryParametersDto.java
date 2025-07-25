@@ -19,8 +19,7 @@ package org.eximeebpms.bpm.cockpit.rest.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eximeebpms.bpm.cockpit.db.QueryParameters;
-import org.eximeebpms.bpm.engine.impl.db.sql.MybatisJoinHelper;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringToTypeConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 import org.eximeebpms.bpm.engine.rest.exception.RestException;
@@ -74,7 +73,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     }
   }
 
-  @CamundaQueryParam("sortBy")
+  @EximeeBPMSQueryParam("sortBy")
   public void setSortBy(String sortBy) {
     if (!isValidSortByValue(sortBy)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortBy parameter has invalid value: " + sortBy);
@@ -82,7 +81,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     this.sortBy = sortBy;
   }
 
-  @CamundaQueryParam("sortOrder")
+  @EximeeBPMSQueryParam("sortOrder")
   public void setSortOrder(String sortOrder) {
     if (!VALID_SORT_ORDER_VALUES.contains(sortOrder)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortOrder parameter has invalid value: " + sortOrder);
@@ -127,7 +126,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
   }
 
   /**
-   * Finds the methods that are annotated with a {@link CamundaQueryParam} with a value that matches the key parameter.
+   * Finds the methods that are annotated with a {@link EximeeBPMSQueryParam} with a value that matches the key parameter.
    * Before invoking these methods, the annotated {@link StringToTypeConverter} is used to convert the String value to the desired Java type.
    * @param key
    * @param value
@@ -167,8 +166,8 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
 
       for (int j = 0; j < methodAnnotations.length; j++) {
         Annotation annotation = methodAnnotations[j];
-        if (annotation instanceof CamundaQueryParam) {
-          CamundaQueryParam parameterAnnotation = (CamundaQueryParam) annotation;
+        if (annotation instanceof EximeeBPMSQueryParam) {
+          EximeeBPMSQueryParam parameterAnnotation = (EximeeBPMSQueryParam) annotation;
           if (parameterAnnotation.value().equals(parameterName)) {
             result.add(method);
           }
@@ -183,8 +182,8 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
 
     for (int j = 0; j < methodAnnotations.length; j++) {
       Annotation annotation = methodAnnotations[j];
-      if (annotation instanceof CamundaQueryParam) {
-        CamundaQueryParam parameterAnnotation = (CamundaQueryParam) annotation;
+      if (annotation instanceof EximeeBPMSQueryParam) {
+        EximeeBPMSQueryParam parameterAnnotation = (EximeeBPMSQueryParam) annotation;
         return parameterAnnotation.converter();
       }
     }

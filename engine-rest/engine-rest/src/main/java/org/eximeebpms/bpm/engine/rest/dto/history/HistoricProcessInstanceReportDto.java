@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstanceReport;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractReportDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -57,22 +57,22 @@ public class HistoricProcessInstanceReportDto extends AbstractReportDto<Historic
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionIdIn(String[] processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @CamundaQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @CamundaQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }

@@ -26,7 +26,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTaskQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.LongConverter;
@@ -79,62 +79,62 @@ public class ExternalTaskQueryDto extends AbstractQueryDto<ExternalTaskQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("externalTaskId")
+  @EximeeBPMSQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @CamundaQueryParam(value = "externalTaskIdIn", converter = StringSetConverter.class)
+  @EximeeBPMSQueryParam(value = "externalTaskIdIn", converter = StringSetConverter.class)
   public void setExternalTaskIdIn(Set<String> externalTaskIds) {
     this.externalTaskIds = externalTaskIds;
   }
 
-  @CamundaQueryParam("activityId")
+  @EximeeBPMSQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @CamundaQueryParam(value = "activityIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "activityIdIn", converter = StringListConverter.class)
   public void setActivityIdIn(List<String> activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @CamundaQueryParam(value = "lockExpirationBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "lockExpirationBefore", converter = DateConverter.class)
   public void setLockExpirationBefore(Date lockExpirationBefore) {
     this.lockExpirationBefore = lockExpirationBefore;
   }
 
-  @CamundaQueryParam(value = "lockExpirationAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "lockExpirationAfter", converter = DateConverter.class)
   public void setLockExpirationAfter(Date lockExpirationAfter) {
     this.lockExpirationAfter = lockExpirationAfter;
   }
 
-  @CamundaQueryParam("topicName")
+  @EximeeBPMSQueryParam("topicName")
   public void setTopicName(String topicName) {
     this.topicName = topicName;
   }
 
-  @CamundaQueryParam(value = "locked", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "locked", converter = BooleanConverter.class)
   public void setLocked(Boolean locked) {
     this.locked = locked;
   }
 
-  @CamundaQueryParam(value = "notLocked", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "notLocked", converter = BooleanConverter.class)
   public void setNotLocked(Boolean notLocked) {
     this.notLocked = notLocked;
   }
 
-  @CamundaQueryParam("executionId")
+  @EximeeBPMSQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam(value="processInstanceIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringListConverter.class)
   public void setProcessInstanceIdIn(List<String> processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
@@ -143,46 +143,46 @@ public class ExternalTaskQueryDto extends AbstractQueryDto<ExternalTaskQuery> {
     return processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "withRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withRetriesLeft", converter = BooleanConverter.class)
   public void setWithRetriesLeft(Boolean withRetriesLeft) {
     this.withRetriesLeft = withRetriesLeft;
   }
 
-  @CamundaQueryParam(value = "noRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "noRetriesLeft", converter = BooleanConverter.class)
   public void setNoRetriesLeft(Boolean noRetriesLeft) {
     this.noRetriesLeft = noRetriesLeft;
   }
 
-  @CamundaQueryParam("workerId")
+  @EximeeBPMSQueryParam("workerId")
   public void setWorkerId(String workerId) {
     this.workerId = workerId;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
-  @CamundaQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
   public void setPriorityHigherThanOrEquals(Long priorityHigherThanOrEquals) {
     this.priorityHigherThanOrEquals = priorityHigherThanOrEquals;
   }
 
-  @CamundaQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
+  @EximeeBPMSQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
   public void setPriorityLowerThanOrEquals(Long priorityLowerThanOrEquals) {
     this.priorityLowerThanOrEquals = priorityLowerThanOrEquals;
   }

@@ -16,47 +16,34 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Map;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.rest.dto.VariableValueDto;
 import org.eximeebpms.bpm.engine.task.Task;
 
+@Setter
+@Getter
 @NoArgsConstructor
-public class TaskWithAttachmentAndCommentDto extends TaskWithVariablesDto {
+public class TaskWithVariablesDto extends TaskDto {
 
-  private boolean hasAttachment;
-  private boolean hasComment;
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+  private Map<String, VariableValueDto> variables;
 
-  public TaskWithAttachmentAndCommentDto(Task task, Map<String, VariableValueDto> variables) {
-    super(task, variables);
-  }
-
-  public TaskWithAttachmentAndCommentDto(Task task) {
+  public TaskWithVariablesDto(Task task, Map<String, VariableValueDto> variables) {
     super(task);
-  }
-  public boolean getAttachment() {
-    return hasAttachment;
-  }
-  public void setAttachment(boolean hasAttachment) {
-    this.hasAttachment = hasAttachment;
+    this.variables = variables;
   }
 
-  public boolean getComment() {
-    return hasComment;
-  }
-
-  public void setComment(boolean hasComment) {
-    this.hasComment = hasComment;
+  public TaskWithVariablesDto(Task task) {
+    super(task);
   }
 
   public static TaskDto fromEntity(Task task, Map<String, VariableValueDto> variables) {
-    TaskWithAttachmentAndCommentDto result = new TaskWithAttachmentAndCommentDto(task, variables);
-    result.hasAttachment = task.hasAttachment();
-    result.hasComment = task.hasComment();
+    TaskWithVariablesDto result = new TaskWithVariablesDto(task);
+    result.setVariables(variables);
     return result;
-  }
-
-  public static TaskDto fromEntity(Task task) {
-    return fromEntity(task, null);
   }
 }

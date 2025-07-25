@@ -25,7 +25,7 @@ import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.impl.QueryVariableValue;
 import org.eximeebpms.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -57,7 +57,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return parentProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value="parentProcessDefinitionId")
+  @EximeeBPMSQueryParam(value="parentProcessDefinitionId")
   public void setParentProcessDefinitionId(String parentProcessDefinitionId) {
     this.parentProcessDefinitionId = parentProcessDefinitionId;
   }
@@ -66,7 +66,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return superProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value="superProcessDefinitionId")
+  @EximeeBPMSQueryParam(value="superProcessDefinitionId")
   public void setSuperProcessDefinitionId(String superProcessDefinitionId) {
     this.superProcessDefinitionId = superProcessDefinitionId;
   }
@@ -75,7 +75,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return activityIdIn;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
@@ -84,12 +84,12 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return businessKey;
   }
 
-  @CamundaQueryParam(value="businessKey")
+  @EximeeBPMSQueryParam(value="businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }

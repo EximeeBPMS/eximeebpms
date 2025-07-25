@@ -2,7 +2,7 @@ eximeebpms-connect
 ===============
 
 <p>
-  <a href="http://eximeebpms.com/">Home</a> |
+  <a href="https://eximeebpms.com/">Home</a> |
   <a href="https://docs.eximeebpms.org/manual/latest/reference/connect/">Documentation</a> |
   <!-- <a href="https://forum.camunda.org/">Forum</a> | -->
   <!-- <a href="https://jira.camunda.com/browse/CAM">Issues</a> | -->
@@ -12,10 +12,10 @@ eximeebpms-connect
 
 Simple API for connecting HTTP Services and other things.
 
-# List of connectors
+# List of Connectors
 
-* HTTP Connector
-* SOAP HTTP Connector
+* HTTP Connector (using Apache HttpClient 5.x)
+* SOAP HTTP Connector (using Apache HttpClient 5.x)
 
 # Using a Connector
 
@@ -27,7 +27,7 @@ process engine and standalone usage via API. Please see the [official documentat
 Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
-# License:
+# License
 
 The source files in this repository are made available under the <a href="../LICENSE">Apache License, Version 2.0</a>.
 

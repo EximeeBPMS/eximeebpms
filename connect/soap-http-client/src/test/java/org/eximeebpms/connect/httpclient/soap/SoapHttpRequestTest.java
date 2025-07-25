@@ -16,11 +16,25 @@
  */
 package org.eximeebpms.connect.httpclient.soap;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.eximeebpms.connect.Connectors;
-import org.eximeebpms.connect.spi.Connector;
+import org.junit.Before;
+import org.junit.Test;
 
-public interface SoapHttpConnector extends Connector<SoapHttpRequest> {
+public class SoapHttpRequestTest {
 
-  String ID = Connectors.SOAP_HTTP_CONNECTOR_ID;
+  private SoapHttpConnector connector;
+
+  @Before
+  public void createRequest() {
+    connector = Connectors.getConnector(SoapHttpConnector.ID);
+  }
+
+  @Test
+  public void shouldSetSoapAction() {
+    SoapHttpRequest request = connector.createRequest().soapAction("test");
+    assertThat(request.getSoapAction()).isEqualTo("test");
+  }
 
 }

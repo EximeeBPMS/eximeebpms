@@ -14,29 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eximeebpms.connect.soap.httpclient;
+package org.eximeebpms.connect.httpclient.soap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.eximeebpms.connect.Connectors;
-import org.eximeebpms.connect.httpclient.soap.SoapHttpConnector;
-import org.eximeebpms.connect.httpclient.soap.SoapHttpRequest;
+import org.eximeebpms.connect.httpclient.soap.impl.SoapHttpConnectorImpl;
+import org.eximeebpms.connect.impl.DebugRequestInterceptor;
+import org.eximeebpms.connect.spi.Connector;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SoapHttpRequestTest {
+public class SoapHttpConnectorTest {
 
-  private SoapHttpConnector connector;
+  public SoapHttpConnector connector;
 
   @Before
-  public void createRequest() {
-    connector = Connectors.getConnector(SoapHttpConnector.ID);
+  public void createConnector() {
+    connector = new SoapHttpConnectorImpl();
   }
 
   @Test
-  public void shouldSetSoapAction() {
-    SoapHttpRequest request = connector.createRequest().soapAction("test");
-    assertThat(request.getSoapAction()).isEqualTo("test");
+  public void shouldDiscoverConnector() {
+    Connector soap = Connectors.getConnector(SoapHttpConnector.ID);
+    assertThat(soap).isNotNull();
+  }
+
+  @Test
+  public void shouldCreateHttpPostRequestByDefault() {
+    DebugRequestInterceptor interceptor = new DebugRequestInterceptor(false);
+    connector.addRequestInterceptor(interceptor);
+    connector.createRequest().url("http://camunda.org").payload("test").soapAction("as").execute();
+
+    Object target = interceptor.getTarget();
+    assertThat(target).isInstanceOf(HttpPost.class);
   }
 
 }

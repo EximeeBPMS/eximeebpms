@@ -17,8 +17,8 @@
 package org.eximeebpms.connect.impl;
 
 import org.eximeebpms.connect.spi.ConnectorInvocation;
-import org.eximeebpms.connect.spi.ConnectorRequestInterceptor;
 import org.eximeebpms.connect.spi.ConnectorRequest;
+import org.eximeebpms.connect.spi.ConnectorRequestInterceptor;
 
 /**
  * <p>
@@ -60,8 +60,7 @@ public class DebugRequestInterceptor implements ConnectorRequestInterceptor {
     target = invocation.getTarget();
     if (proceed) {
       return invocation.proceed();
-    }
-    else {
+    } else {
       return response;
     }
   }

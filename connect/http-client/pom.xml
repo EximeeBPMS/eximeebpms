@@ -19,15 +19,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
     </dependency>
-    <!-- commons-codec is a transitive dependency of httpclient;
-      we override its version here in order to update the default commons-codec
-      version which has known vulnerabilities, see https://jira.camunda.com/browse/CAM-12774 -->
+
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${version.lombok}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

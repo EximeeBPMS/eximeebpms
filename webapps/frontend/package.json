@@ -60,7 +60,7 @@
     "q": "1.5.1",
     "requirejs": "2.3.7",
     "requirejs-angular-define": "github:camunda/requirejs-angular-define#20f44d0a7b29d70e240defbfa843decce2bc4550",
-    "superagent": "10.2.0"
+    "superagent": "10.2.3"
   },
   "devDependencies": {
     "@babel/core": "7.26.10",

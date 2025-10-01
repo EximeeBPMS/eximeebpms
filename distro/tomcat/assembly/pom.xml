@@ -3,7 +3,7 @@
 
   <description>
     Assembles the EximeeBPMS and makes it ready for qa.
-    The assembly is installed to maven later in the reactor, if the integration tests pass sucessfully
+    The assembly is installed to maven later in the reactor, if the integration tests pass successfully.
   </description>
 
   <artifactId>eximeebpms-tomcat-assembly</artifactId>

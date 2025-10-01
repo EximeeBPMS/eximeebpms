@@ -12,7 +12,7 @@
   <artifactId>eximeebpms-bpm-run-qa-runtime</artifactId>
   <name>EximeeBPMS - Run - QA - Runtime</name>
   <packaging>jar</packaging>
-  
+
   <properties>
     <run-home>${project.build.directory}/run/eximeebpms-bpm-run-distro</run-home>
     <example-plugin-home>${project.build.directory}/run/example-plugin</example-plugin-home>

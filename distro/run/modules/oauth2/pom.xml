@@ -12,7 +12,7 @@
   <artifactId>eximeebpms-bpm-run-modules-oauth2</artifactId>
   <name>EximeeBPMS - Run - Module Spring Security</name>
   <packaging>pom</packaging>
-  
+
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
     Note: Every compile time dependency will end up in the license book. Please

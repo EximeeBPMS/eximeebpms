@@ -12,7 +12,9 @@
   <artifactId>eximeebpms-database-settings</artifactId>
   <packaging>pom</packaging>
   <name>EximeeBPMS - database settings</name>
-  <description>Provides general dependencies and profiles for database testing</description>
+  <description>
+    Provides general dependencies and profiles for database testing.
+  </description>
 
   <properties>
 

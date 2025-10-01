@@ -288,8 +288,8 @@
 
       <dependency>
         <groupId>org.apache.tomcat</groupId>
-        <artifactId>catalina</artifactId>
-        <version>6.0.37</version>
+        <artifactId>tomcat-catalina</artifactId>
+        <version>${version.tomcat}</version>
       </dependency>
 
       <dependency>
@@ -393,6 +393,12 @@
         <artifactId>lombok</artifactId>
         <version>${version.lombok}</version>
         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.cronutils</groupId>
+        <artifactId>cron-utils</artifactId>
+        <version>${version.cronutils}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

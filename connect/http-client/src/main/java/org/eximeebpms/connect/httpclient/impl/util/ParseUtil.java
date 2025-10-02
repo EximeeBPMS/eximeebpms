@@ -18,14 +18,17 @@ package org.eximeebpms.connect.httpclient.impl.util;
 
 import java.util.Map;
 
-import org.apache.http.client.config.RequestConfig.Builder;
-import org.eximeebpms.connect.httpclient.impl.RequestConfigOption;
-import org.eximeebpms.connect.httpclient.impl.HttpConnectorLogger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.apache.hc.client5.http.config.RequestConfig.Builder;
 import org.eximeebpms.connect.httpclient.impl.HttpLogger;
+import org.eximeebpms.connect.httpclient.impl.HttpConnectorLogger;
+import org.eximeebpms.connect.httpclient.impl.RequestConfigOption;
 
-public class ParseUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ParseUtil {
 
-  protected static HttpConnectorLogger LOG = HttpLogger.HTTP_LOGGER;
+  private static final HttpConnectorLogger LOG = HttpLogger.HTTP_LOGGER;
 
   public static void parseConfigOptions(Map<String, Object> configOptions, Builder configBuilder) {
     for (RequestConfigOption option : RequestConfigOption.values()) {

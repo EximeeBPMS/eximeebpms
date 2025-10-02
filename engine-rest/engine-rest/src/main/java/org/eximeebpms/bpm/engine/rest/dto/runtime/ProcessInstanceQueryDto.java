@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.ProcessInstanceQueryImpl;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -101,7 +101,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("orQueries")
+  @EximeeBPMSQueryParam("orQueries")
   public void setOrQueries(List<ProcessInstanceQueryDto> orQueries) {
     this.orQueries = orQueries;
   }
@@ -110,7 +110,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return processInstanceIds;
   }
 
-  @CamundaQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
+  @EximeeBPMSQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
   public void setProcessInstanceIds(Set<String> processInstanceIds) {
 		this.processInstanceIds = processInstanceIds;
   }
@@ -119,7 +119,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return deploymentId;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
@@ -128,7 +128,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return processDefinitionKey;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
@@ -137,7 +137,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return processDefinitionKeys;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringListConverter.class)
   public void setProcessDefinitionKeyIn(List<String> processDefinitionKeys) {
     this.processDefinitionKeys = processDefinitionKeys;
   }
@@ -146,7 +146,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return processDefinitionKeyNotIn;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyNotIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyNotIn", converter = StringListConverter.class)
   public void setProcessDefinitionKeyNotIn(List<String> processDefinitionKeys) {
     this.processDefinitionKeyNotIn = processDefinitionKeys;
   }
@@ -155,7 +155,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return businessKey;
   }
 
-  @CamundaQueryParam("businessKey")
+  @EximeeBPMSQueryParam("businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
@@ -164,7 +164,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return businessKeyLike;
   }
 
-  @CamundaQueryParam("businessKeyLike")
+  @EximeeBPMSQueryParam("businessKeyLike")
   public void setBusinessKeyLike(String businessKeyLike) {
     this.businessKeyLike = businessKeyLike;
   }
@@ -173,7 +173,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return caseInstanceId;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @EximeeBPMSQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
@@ -182,7 +182,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
@@ -191,7 +191,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return superProcessInstance;
   }
 
-  @CamundaQueryParam("superProcessInstance")
+  @EximeeBPMSQueryParam("superProcessInstance")
   public void setSuperProcessInstance(String superProcessInstance) {
     this.superProcessInstance = superProcessInstance;
   }
@@ -200,7 +200,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return subProcessInstance;
   }
 
-  @CamundaQueryParam("subProcessInstance")
+  @EximeeBPMSQueryParam("subProcessInstance")
   public void setSubProcessInstance(String subProcessInstance) {
     this.subProcessInstance = subProcessInstance;
   }
@@ -209,7 +209,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return superCaseInstance;
   }
 
-  @CamundaQueryParam("superCaseInstance")
+  @EximeeBPMSQueryParam("superCaseInstance")
   public void setSuperCaseInstance(String superCaseInstance) {
     this.superCaseInstance = superCaseInstance;
   }
@@ -218,7 +218,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return subCaseInstance;
   }
 
-  @CamundaQueryParam("subCaseInstance")
+  @EximeeBPMSQueryParam("subCaseInstance")
   public void setSubCaseInstance(String subCaseInstance) {
     this.subCaseInstance = subCaseInstance;
   }
@@ -227,7 +227,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return active;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
@@ -236,7 +236,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return suspended;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
@@ -245,7 +245,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return variables;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
@@ -254,7 +254,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return variableNamesIgnoreCase;
   }
 
-  @CamundaQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesCaseInsensitive) {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
   }
@@ -263,7 +263,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return variableValuesIgnoreCase;
   }
 
-  @CamundaQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesCaseInsensitive) {
     this.variableValuesIgnoreCase = variableValuesCaseInsensitive;
   }
@@ -272,7 +272,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return withIncident;
   }
 
-  @CamundaQueryParam(value = "withIncident", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withIncident", converter = BooleanConverter.class)
   public void setWithIncident(Boolean withIncident) {
     this.withIncident = withIncident;
   }
@@ -281,7 +281,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return incidentId;
   }
 
-  @CamundaQueryParam(value = "incidentId")
+  @EximeeBPMSQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
@@ -290,7 +290,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return rootProcessInstanceId;
   }
 
-  @CamundaQueryParam("rootProcessInstanceId")
+  @EximeeBPMSQueryParam("rootProcessInstanceId")
   public void setRootProcessInstanceId(String rootProcessInstanceId) {
     this.rootProcessInstanceId = rootProcessInstanceId;
   }
@@ -299,7 +299,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return incidentType;
   }
 
-  @CamundaQueryParam(value = "incidentType")
+  @EximeeBPMSQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
@@ -308,7 +308,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return incidentMessage;
   }
 
-  @CamundaQueryParam(value = "incidentMessage")
+  @EximeeBPMSQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
@@ -317,7 +317,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return incidentMessageLike;
   }
 
-  @CamundaQueryParam(value = "incidentMessageLike")
+  @EximeeBPMSQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
@@ -326,7 +326,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return tenantIds;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
@@ -335,7 +335,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
@@ -344,7 +344,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return activityIds;
   }
 
-  @CamundaQueryParam(value = "activityIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "activityIdIn", converter = StringListConverter.class)
   public void setActivityIdIn(List<String> activityIds) {
     this.activityIds = activityIds;
   }
@@ -353,7 +353,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return rootProcessInstances;
   }
 
-  @CamundaQueryParam(value = "rootProcessInstances", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "rootProcessInstances", converter = BooleanConverter.class)
   public void setRootProcessInstances(Boolean rootProcessInstances) {
     this.rootProcessInstances = rootProcessInstances;
   }
@@ -363,7 +363,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return leafProcessInstances;
   }
 
-  @CamundaQueryParam(value = "leafProcessInstances", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "leafProcessInstances", converter = BooleanConverter.class)
   public void setLeafProcessInstances(Boolean leafProcessInstances) {
     this.leafProcessInstances = leafProcessInstances;
   }
@@ -372,7 +372,7 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     return isProcessDefinitionWithoutTenantId;
   }
 
-  @CamundaQueryParam(value = "processDefinitionWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionWithoutTenantId", converter = BooleanConverter.class)
   public void setProcessDefinitionWithoutTenantId(Boolean isProcessDefinitionWithoutTenantId) {
     this.isProcessDefinitionWithoutTenantId = isProcessDefinitionWithoutTenantId;
   }

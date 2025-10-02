@@ -29,7 +29,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.batch.BatchStatisticsQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -65,52 +65,52 @@ public class BatchStatisticsQueryDto extends AbstractQueryDto<BatchStatisticsQue
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("batchId")
+  @EximeeBPMSQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @CamundaQueryParam("type")
+  @EximeeBPMSQueryParam("type")
   public void setType(String type) {
     this.type = type;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value="suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value="createdBy")
+  @EximeeBPMSQueryParam(value="createdBy")
   public void setCreateUserId(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @CamundaQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @CamundaQueryParam(value = "withFailures", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withFailures", converter = BooleanConverter.class)
   public void setWithFailures(final Boolean withFailures) {
     this.withFailures = withFailures;
   }
 
-  @CamundaQueryParam(value = "withoutFailures", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutFailures", converter = BooleanConverter.class)
   public void setWithoutFailures(final Boolean withoutFailures) {
     this.withoutFailures = withoutFailures;
   }

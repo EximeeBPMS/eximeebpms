@@ -18,8 +18,6 @@ package org.eximeebpms.connect.spi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Set;
-
 import org.eximeebpms.connect.Connectors;
 import org.eximeebpms.connect.dummy.DummyConnector;
 import org.junit.Test;

@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
@@ -96,117 +96,117 @@ public class DecisionDefinitionQueryDto extends AbstractQueryDto<DecisionDefinit
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("decisionDefinitionId")
+  @EximeeBPMSQueryParam("decisionDefinitionId")
   public void setDecisionDefinitionId(String decisionDefinitionId) {
     this.decisionDefinitionId = decisionDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "decisionDefinitionIdIn", converter = StringListConverter.class)
   public void setDecisionDefinitionIdIn(List<String> decisionDefinitionIdIn) {
     this.decisionDefinitionIdIn = decisionDefinitionIdIn;
   }
 
-  @CamundaQueryParam("category")
+  @EximeeBPMSQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam("categoryLike")
+  @EximeeBPMSQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @CamundaQueryParam("name")
+  @EximeeBPMSQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @EximeeBPMSQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam(value = "deployedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "deployedAfter", converter = DateConverter.class)
   public void setDeployedAfter(Date deployedAfter) {
     this.deployedAfter = deployedAfter;
   }
 
-  @CamundaQueryParam(value = "deployedAt", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "deployedAt", converter = DateConverter.class)
   public void setDeployedAt(Date deployedAt) {
     this.deployedAt = deployedAt;
   }
 
-  @CamundaQueryParam("key")
+  @EximeeBPMSQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
-  @CamundaQueryParam("keyLike")
+  @EximeeBPMSQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
 
-  @CamundaQueryParam("resourceName")
+  @EximeeBPMSQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @CamundaQueryParam("resourceNameLike")
+  @EximeeBPMSQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @CamundaQueryParam(value = "version", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
 
-  @CamundaQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionId")
+  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionId")
   public void setDecisionRequirementsDefinitionId(String decisionRequirementsDefinitionId) {
     this.decisionRequirementsDefinitionId = decisionRequirementsDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionKey")
+  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionKey")
   public void setDecisionRequirementsDefinitionKey(String decisionRequirementsDefinitionKey) {
     this.decisionRequirementsDefinitionKey = decisionRequirementsDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "withoutDecisionRequirementsDefinition", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutDecisionRequirementsDefinition", converter = BooleanConverter.class)
   public void setWithoutDecisionRequirementsDefinition(Boolean withoutDecisionRequirementsDefinition) {
     this.withoutDecisionRequirementsDefinition = withoutDecisionRequirementsDefinition;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeDecisionDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeDecisionDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeDecisionDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }
 
-  @CamundaQueryParam(value = "versionTag")
+  @EximeeBPMSQueryParam(value = "versionTag")
   public void setVersionTag(String versionTag) {
     this.versionTag = versionTag;
   }
 
-  @CamundaQueryParam(value = "versionTagLike")
+  @EximeeBPMSQueryParam(value = "versionTagLike")
   public void setVersionTagLike(String versionTagLike) {
     this.versionTagLike = versionTagLike;
   }

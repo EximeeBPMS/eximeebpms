@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricProcessInstanceReport;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -55,27 +55,27 @@ public class CleanableHistoricProcessInstanceReportDto extends AbstractQueryDto<
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionIdIn(String[] processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "compact", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "compact", converter = BooleanConverter.class)
   public void setCompact(Boolean compact) {
     this.compact = compact;
   }

@@ -24,7 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -156,117 +156,117 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
     }
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("executionId")
+  @EximeeBPMSQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @EximeeBPMSQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @EximeeBPMSQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam("caseExecutionId")
+  @EximeeBPMSQueryParam("caseExecutionId")
   public void setCaseExecutionId(String caseExecutionId) {
     this.caseExecutionId = caseExecutionId;
   }
 
-  @CamundaQueryParam("taskId")
+  @EximeeBPMSQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @CamundaQueryParam("jobId")
+  @EximeeBPMSQueryParam("jobId")
   public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  @CamundaQueryParam("jobDefinitionId")
+  @EximeeBPMSQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @CamundaQueryParam("batchId")
+  @EximeeBPMSQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @CamundaQueryParam("userId")
+  @EximeeBPMSQueryParam("userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam("operationId")
+  @EximeeBPMSQueryParam("operationId")
   public void setOperationId(String operationId) {
     this.operationId = operationId;
   }
   
-  @CamundaQueryParam("externalTaskId")
+  @EximeeBPMSQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @CamundaQueryParam("operationType")
+  @EximeeBPMSQueryParam("operationType")
   public void setOperationType(String operationType) {
     this.operationType = operationType;
   }
 
-  @CamundaQueryParam("entityType")
+  @EximeeBPMSQueryParam("entityType")
   public void setEntityType(String entityType) {
     this.entityType = entityType;
   }
 
-  @CamundaQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
   public void setEntityTypeIn(String[] entityTypes) {
     this.entityTypes = entityTypes;
   }
   
-  @CamundaQueryParam("category")
+  @EximeeBPMSQueryParam("category")
   public void setcategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
   public void setCategoryIn(String[] categories) {
     this.categories = categories;
   }
   
-  @CamundaQueryParam("property")
+  @EximeeBPMSQueryParam("property")
   public void setProperty(String property) {
     this.property = property;
   }
 
-  @CamundaQueryParam(value = "afterTimestamp", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "afterTimestamp", converter = DateConverter.class)
   public void setAfterTimestamp(Date after) {
     this.afterTimestamp = after;
   }
 
-  @CamundaQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
   public void setBeforeTimestamp(Date before) {
     this.beforeTimestamp = before;
   }

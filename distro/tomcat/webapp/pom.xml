@@ -11,7 +11,7 @@
   <groupId>org.eximeebpms.bpm.webapp</groupId>
   <artifactId>eximeebpms-webapp-tomcat</artifactId>
   <packaging>war</packaging>
-  
+
   <properties>
     <skip-third-party-bom>false</skip-third-party-bom>
   </properties>

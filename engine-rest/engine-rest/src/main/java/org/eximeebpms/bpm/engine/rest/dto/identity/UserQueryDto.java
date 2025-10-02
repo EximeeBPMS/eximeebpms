@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.UserQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,57 +70,57 @@ public class UserQueryDto extends AbstractQueryDto<UserQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @EximeeBPMSQueryParam("id")
   public void setId(String userId) {
     this.id = userId;
   }
 
-  @CamundaQueryParam(value = "idIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "idIn", converter = StringArrayConverter.class)
   public void setIdIn(String[] ids) {
     this.idIn = ids;
   }
 
-  @CamundaQueryParam("firstName")
+  @EximeeBPMSQueryParam("firstName")
   public void setFirstName(String userFirstName) {
     this.firstName = userFirstName;
   }
 
-  @CamundaQueryParam("firstNameLike")
+  @EximeeBPMSQueryParam("firstNameLike")
   public void setFirstNameLike(String userFirstNameLike) {
     this.firstNameLike = userFirstNameLike;
   }
 
-  @CamundaQueryParam("lastName")
+  @EximeeBPMSQueryParam("lastName")
   public void setLastName(String userLastName) {
     this.lastName = userLastName;
   }
 
-  @CamundaQueryParam("lastNameLike")
+  @EximeeBPMSQueryParam("lastNameLike")
   public void setLastNameLike(String userLastNameLike) {
     this.lastNameLike = userLastNameLike;
   }
 
-  @CamundaQueryParam("email")
+  @EximeeBPMSQueryParam("email")
   public void setEmail(String userEmail) {
     this.email = userEmail;
   }
 
-  @CamundaQueryParam("emailLike")
+  @EximeeBPMSQueryParam("emailLike")
   public void setEmailLike(String userEmailLike) {
     this.emailLike = userEmailLike;
   }
 
-  @CamundaQueryParam("memberOfGroup")
+  @EximeeBPMSQueryParam("memberOfGroup")
   public void setMemberOfGroup(String memberOfGroup) {
     this.memberOfGroup = memberOfGroup;
   }
 
-  @CamundaQueryParam("potentialStarter")
+  @EximeeBPMSQueryParam("potentialStarter")
   public void setPotentialStarter(String potentialStarter) {
     this.potentialStarter = potentialStarter;
   }
 
-  @CamundaQueryParam("memberOfTenant")
+  @EximeeBPMSQueryParam("memberOfTenant")
   public void setMemberOfTenant(String tenantId) {
     this.tenantId = tenantId;
   }

@@ -27,7 +27,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -86,62 +86,62 @@ public class CaseDefinitionQueryDto extends AbstractQueryDto<CaseDefinitionQuery
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @EximeeBPMSQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam(value = "caseDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "caseDefinitionIdIn", converter = StringListConverter.class)
   public void setCaseDefinitionIdIn(List<String> caseDefinitionIdIn) {
     this.caseDefinitionIdIn = caseDefinitionIdIn;
   }
 
-  @CamundaQueryParam("category")
+  @EximeeBPMSQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam("categoryLike")
+  @EximeeBPMSQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @CamundaQueryParam("name")
+  @EximeeBPMSQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @EximeeBPMSQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam("key")
+  @EximeeBPMSQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
-  @CamundaQueryParam("keyLike")
+  @EximeeBPMSQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
 
-  @CamundaQueryParam("resourceName")
+  @EximeeBPMSQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @CamundaQueryParam("resourceNameLike")
+  @EximeeBPMSQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @CamundaQueryParam(value = "version", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
@@ -150,27 +150,27 @@ public class CaseDefinitionQueryDto extends AbstractQueryDto<CaseDefinitionQuery
    * @deprecated use {@link #setLatestVersion(Boolean)}
    */
   @Deprecated
-  @CamundaQueryParam(value = "latest", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "latest", converter = BooleanConverter.class)
   public void setLatest(Boolean latest) {
     setLatestVersion(latest);
   }
 
-  @CamundaQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeCaseDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeCaseDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeCaseDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }

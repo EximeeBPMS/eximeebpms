@@ -5,11 +5,12 @@
 
   <dependencies>
     <module name="java.base" />
+    <module name="org.slf4j" />
     <module name="org.eximeebpms.commons.eximeebpms-commons-logging" />
     <module name="org.eximeebpms.commons.eximeebpms-commons-utils" />
 
     <module name="org.eximeebpms.connect.eximeebpms-connect-core" />
 
-    <module name="org.apache.httpcomponents.httpclient" />
+    <module name="org.apache.httpcomponents.client5.httpclient5" />
   </dependencies>
 </module>

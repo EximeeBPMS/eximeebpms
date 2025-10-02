@@ -11,7 +11,7 @@
   <name>EximeeBPMS - webapp - JBoss</name>
   <artifactId>eximeebpms-webapp-jboss</artifactId>
   <packaging>war</packaging>
-  
+
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
     Note: Every compile time dependency will end up in the license book. Please

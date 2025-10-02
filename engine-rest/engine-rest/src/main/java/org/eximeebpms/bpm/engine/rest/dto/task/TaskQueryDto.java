@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.QueryEntityRelationCondition;
 import org.eximeebpms.bpm.engine.impl.QueryOrderingProperty;
@@ -39,7 +41,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.SuspensionState;
 import org.eximeebpms.bpm.engine.query.Query;
 import org.eximeebpms.bpm.engine.query.QueryProperty;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.SortingDto;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.VariableValueDto;
@@ -61,6 +63,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Getter
+@NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
@@ -137,6 +141,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   private Boolean includeAssignedTasks;
   private String taskDefinitionKey;
   private String[] taskDefinitionKeyIn;
+  private String[] taskDefinitionKeyNotIn;
   private String taskDefinitionKeyLike;
   private String taskId;
   private String[] taskIdIn;
@@ -215,510 +220,525 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
   private Boolean withCommentAttachmentInfo;
 
-  public TaskQueryDto() {
+  private Boolean withTaskVariablesInReturn;
 
-  }
+  private Boolean withTaskLocalVariablesInReturn;
 
   public TaskQueryDto(ObjectMapper objectMapper, MultivaluedMap<String, String> queryParameters) {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("orQueries")
+  @EximeeBPMSQueryParam("orQueries")
   public void setOrQueries(List<TaskQueryDto> orQueries) {
     this.orQueries = orQueries;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKey")
+  @EximeeBPMSQueryParam("processInstanceBusinessKey")
   public void setProcessInstanceBusinessKey(String businessKey) {
     this.processInstanceBusinessKey = businessKey;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyExpression")
+  @EximeeBPMSQueryParam("processInstanceBusinessKeyExpression")
   public void setProcessInstanceBusinessKeyExpression(String businessKeyExpression) {
     this.processInstanceBusinessKeyExpression = businessKeyExpression;
   }
 
-  @CamundaQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
   public void setProcessInstanceBusinessKeyIn(String[] processInstanceBusinessKeyIn) {
     this.processInstanceBusinessKeyIn = processInstanceBusinessKeyIn;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyLike")
+  @EximeeBPMSQueryParam("processInstanceBusinessKeyLike")
   public void setProcessInstanceBusinessKeyLike(String businessKeyLike) {
     this.processInstanceBusinessKeyLike = businessKeyLike;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyLikeExpression")
+  @EximeeBPMSQueryParam("processInstanceBusinessKeyLikeExpression")
   public void setProcessInstanceBusinessKeyLikeExpression(String businessKeyLikeExpression) {
     this.processInstanceBusinessKeyLikeExpression = businessKeyLikeExpression;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("executionId")
+  @EximeeBPMSQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @CamundaQueryParam(value="tenantIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam("processDefinitionName")
+  @EximeeBPMSQueryParam("processDefinitionName")
   public void setProcessDefinitionName(String processDefinitionName) {
     this.processDefinitionName = processDefinitionName;
   }
 
-  @CamundaQueryParam("processDefinitionNameLike")
+  @EximeeBPMSQueryParam("processDefinitionNameLike")
   public void setProcessDefinitionNameLike(String processDefinitionNameLike) {
     this.processDefinitionNameLike = processDefinitionNameLike;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
 
-  @CamundaQueryParam("assignee")
+  @EximeeBPMSQueryParam("assignee")
   public void setAssignee(String assignee) {
     this.assignee = assignee;
   }
 
-  @CamundaQueryParam("assigneeExpression")
+  @EximeeBPMSQueryParam("assigneeExpression")
   public void setAssigneeExpression(String assigneeExpression) {
     this.assigneeExpression = assigneeExpression;
   }
 
-  @CamundaQueryParam("assigneeLike")
+  @EximeeBPMSQueryParam("assigneeLike")
   public void setAssigneeLike(String assigneeLike) {
     this.assigneeLike = assigneeLike;
   }
 
-  @CamundaQueryParam(value = "assigneeIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "assigneeIn", converter = StringArrayConverter.class)
   public void setAssigneeIn(String[] assigneeIn) {
     this.assigneeIn = assigneeIn;
   }
 
-  @CamundaQueryParam(value = "assigneeNotIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "assigneeNotIn", converter = StringArrayConverter.class)
   public void setAssigneeNotIn(String[] assigneeNotIn) {
     this.assigneeNotIn = assigneeNotIn;
   }
 
-  @CamundaQueryParam("assigneeLikeExpression")
+  @EximeeBPMSQueryParam("assigneeLikeExpression")
   public void setAssigneeLikeExpression(String assigneeLikeExpression) {
     this.assigneeLikeExpression = assigneeLikeExpression;
   }
 
-  @CamundaQueryParam("candidateGroup")
+  @EximeeBPMSQueryParam("candidateGroup")
   public void setCandidateGroup(String candidateGroup) {
     this.candidateGroup = candidateGroup;
   }
 
-  @CamundaQueryParam("candidateGroupExpression")
+  @EximeeBPMSQueryParam("candidateGroupExpression")
   public void setCandidateGroupExpression(String candidateGroupExpression) {
     this.candidateGroupExpression = candidateGroupExpression;
   }
 
-  @CamundaQueryParam("candidateGroupLike")
+  @EximeeBPMSQueryParam("candidateGroupLike")
   public void setCandidateGroupLike(String candidateGroupLike) {
     this.candidateGroupLike = candidateGroupLike;
   }
 
-  @CamundaQueryParam(value = "withCandidateGroups", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withCandidateGroups", converter = BooleanConverter.class)
   public void setWithCandidateGroups(Boolean withCandidateGroups) {
     this.withCandidateGroups = withCandidateGroups;
   }
 
-  @CamundaQueryParam(value = "withoutCandidateGroups", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutCandidateGroups", converter = BooleanConverter.class)
   public void setWithoutCandidateGroups(Boolean withoutCandidateGroups) {
     this.withoutCandidateGroups = withoutCandidateGroups;
   }
 
-  @CamundaQueryParam(value = "withCandidateUsers", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withCandidateUsers", converter = BooleanConverter.class)
   public void setWithCandidateUsers(Boolean withCandidateUsers) {
     this.withCandidateUsers = withCandidateUsers;
   }
 
-  @CamundaQueryParam(value = "withoutCandidateUsers", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutCandidateUsers", converter = BooleanConverter.class)
   public void setWithoutCandidateUsers(Boolean withoutCandidateUsers) {
     this.withoutCandidateUsers = withoutCandidateUsers;
   }
 
-  @CamundaQueryParam("candidateUser")
+  @EximeeBPMSQueryParam("candidateUser")
   public void setCandidateUser(String candidateUser) {
     this.candidateUser = candidateUser;
   }
 
-  @CamundaQueryParam("candidateUserExpression")
+  @EximeeBPMSQueryParam("candidateUserExpression")
   public void setCandidateUserExpression(String candidateUserExpression) {
     this.candidateUserExpression = candidateUserExpression;
   }
 
-  @CamundaQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
   public void setIncludeAssignedTasks(Boolean includeAssignedTasks){
     this.includeAssignedTasks = includeAssignedTasks;
   }
 
-  @CamundaQueryParam("taskId")
+  @EximeeBPMSQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @CamundaQueryParam(value = "taskIdIn", converter= StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "taskIdIn", converter= StringArrayConverter.class)
   public void setTaskIdIn(String[] taskIdIn) {
     this.taskIdIn = taskIdIn;
   }
 
-  @CamundaQueryParam("taskDefinitionKey")
+  @EximeeBPMSQueryParam("taskDefinitionKey")
   public void setTaskDefinitionKey(String taskDefinitionKey) {
     this.taskDefinitionKey = taskDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "taskDefinitionKeyIn", converter= StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "taskDefinitionKeyIn", converter= StringArrayConverter.class)
   public void setTaskDefinitionKeyIn(String[] taskDefinitionKeyIn) {
     this.taskDefinitionKeyIn = taskDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("taskDefinitionKeyLike")
+  @EximeeBPMSQueryParam(value = "taskDefinitionKeyNotIn", converter= StringArrayConverter.class)
+  public void setTaskDefinitionKeyNotIn(String[] taskDefinitionKeyNotIn) {
+    this.taskDefinitionKeyNotIn = taskDefinitionKeyNotIn;
+  }
+
+  @EximeeBPMSQueryParam("taskDefinitionKeyLike")
   public void setTaskDefinitionKeyLike(String taskDefinitionKeyLike) {
     this.taskDefinitionKeyLike = taskDefinitionKeyLike;
   }
 
-  @CamundaQueryParam("description")
+  @EximeeBPMSQueryParam("description")
   public void setDescription(String description) {
     this.description = description;
   }
 
-  @CamundaQueryParam("descriptionLike")
+  @EximeeBPMSQueryParam("descriptionLike")
   public void setDescriptionLike(String descriptionLike) {
     this.descriptionLike = descriptionLike;
   }
 
-  @CamundaQueryParam("involvedUser")
+  @EximeeBPMSQueryParam("involvedUser")
   public void setInvolvedUser(String involvedUser) {
     this.involvedUser = involvedUser;
   }
 
-  @CamundaQueryParam("involvedUserExpression")
+  @EximeeBPMSQueryParam("involvedUserExpression")
   public void setInvolvedUserExpression(String involvedUserExpression) {
     this.involvedUserExpression = involvedUserExpression;
   }
 
-  @CamundaQueryParam(value = "maxPriority", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "maxPriority", converter = IntegerConverter.class)
   public void setMaxPriority(Integer maxPriority) {
     this.maxPriority = maxPriority;
   }
 
-  @CamundaQueryParam(value = "minPriority", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "minPriority", converter = IntegerConverter.class)
   public void setMinPriority(Integer minPriority) {
     this.minPriority = minPriority;
   }
 
-  @CamundaQueryParam("name")
+  @EximeeBPMSQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameNotEqual")
+  @EximeeBPMSQueryParam("nameNotEqual")
   public void setNameNotEqual(String nameNotEqual) {
     this.nameNotEqual = nameNotEqual;
   }
 
-  @CamundaQueryParam("nameLike")
+  @EximeeBPMSQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("nameNotLike")
+  @EximeeBPMSQueryParam("nameNotLike")
   public void setNameNotLike(String nameNotLike) {
     this.nameNotLike = nameNotLike;
   }
 
-  @CamundaQueryParam("owner")
+  @EximeeBPMSQueryParam("owner")
   public void setOwner(String owner) {
     this.owner = owner;
   }
 
-  @CamundaQueryParam("ownerExpression")
+  @EximeeBPMSQueryParam("ownerExpression")
   public void setOwnerExpression(String ownerExpression) {
     this.ownerExpression = ownerExpression;
   }
 
-  @CamundaQueryParam(value = "priority", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "priority", converter = IntegerConverter.class)
   public void setPriority(Integer priority) {
     this.priority = priority;
   }
 
-  @CamundaQueryParam("parentTaskId")
+  @EximeeBPMSQueryParam("parentTaskId")
   public void setParentTaskId(String parentTaskId) {
     this.parentTaskId = parentTaskId;
   }
 
-  @CamundaQueryParam(value = "assigned", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "assigned", converter = BooleanConverter.class)
   public void setAssigned(Boolean assigned) {
     this.assigned = assigned;
   }
 
-  @CamundaQueryParam(value = "unassigned", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "unassigned", converter = BooleanConverter.class)
   public void setUnassigned(Boolean unassigned) {
     this.unassigned = unassigned;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "dueAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "dueAfter", converter = DateConverter.class)
   public void setDueAfter(Date dueAfter) {
     this.dueAfter = dueAfter;
   }
 
-  @CamundaQueryParam(value = "dueAfterExpression")
+  @EximeeBPMSQueryParam(value = "dueAfterExpression")
   public void setDueAfterExpression(String dueAfterExpression) {
     this.dueAfterExpression = dueAfterExpression;
   }
 
-  @CamundaQueryParam(value = "dueBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "dueBefore", converter = DateConverter.class)
   public void setDueBefore(Date dueBefore) {
     this.dueBefore = dueBefore;
   }
 
-  @CamundaQueryParam(value = "dueBeforeExpression")
+  @EximeeBPMSQueryParam(value = "dueBeforeExpression")
   public void setDueBeforeExpression(String dueBeforeExpression) {
     this.dueBeforeExpression = dueBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "dueDate", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "dueDate", converter = DateConverter.class)
   public void setDueDate(Date dueDate) {
     this.dueDate = dueDate;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "due", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "due", converter = DateConverter.class)
   public void setDue(Date dueDate) {
     this.dueDate = dueDate;
   }
 
-  @CamundaQueryParam(value = "dueDateExpression")
+  @EximeeBPMSQueryParam(value = "dueDateExpression")
   public void setDueDateExpression(String dueDateExpression) {
     this.dueDateExpression = dueDateExpression;
   }
 
-  @CamundaQueryParam(value = "withoutDueDate", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutDueDate", converter = BooleanConverter.class)
   public void setWithoutDueDate(Boolean withoutDueDate) {
     this.withoutDueDate = withoutDueDate;
   }
 
-  @CamundaQueryParam(value = "followUpAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "followUpAfter", converter = DateConverter.class)
   public void setFollowUpAfter(Date followUpAfter) {
     this.followUpAfter = followUpAfter;
   }
 
-  @CamundaQueryParam(value = "followUpAfterExpression")
+  @EximeeBPMSQueryParam(value = "followUpAfterExpression")
   public void setFollowUpAfterExpression(String followUpAfterExpression) {
     this.followUpAfterExpression = followUpAfterExpression;
   }
 
-  @CamundaQueryParam(value = "followUpBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "followUpBefore", converter = DateConverter.class)
   public void setFollowUpBefore(Date followUpBefore) {
     this.followUpBefore = followUpBefore;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeOrNotExistentExpression")
+  @EximeeBPMSQueryParam(value = "followUpBeforeOrNotExistentExpression")
   public void setFollowUpBeforeOrNotExistentExpression(String followUpBeforeExpression) {
     this.followUpBeforeOrNotExistentExpression = followUpBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeOrNotExistent", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "followUpBeforeOrNotExistent", converter = DateConverter.class)
   public void setFollowUpBeforeOrNotExistent(Date followUpBefore) {
     this.followUpBeforeOrNotExistent = followUpBefore;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeExpression")
+  @EximeeBPMSQueryParam(value = "followUpBeforeExpression")
   public void setFollowUpBeforeExpression(String followUpBeforeExpression) {
     this.followUpBeforeExpression = followUpBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "followUpDate", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "followUpDate", converter = DateConverter.class)
   public void setFollowUpDate(Date followUpDate) {
     this.followUpDate = followUpDate;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "followUp", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "followUp", converter = DateConverter.class)
   public void setFollowUp(Date followUpDate) {
     this.followUpDate = followUpDate;
   }
 
-  @CamundaQueryParam(value = "followUpDateExpression")
+  @EximeeBPMSQueryParam(value = "followUpDateExpression")
   public void setFollowUpDateExpression(String followUpDateExpression) {
     this.followUpDateExpression = followUpDateExpression;
   }
 
-  @CamundaQueryParam(value = "createdAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "createdAfter", converter = DateConverter.class)
   public void setCreatedAfter(Date createdAfter) {
     this.createdAfter = createdAfter;
   }
 
-  @CamundaQueryParam(value = "createdAfterExpression")
+  @EximeeBPMSQueryParam(value = "createdAfterExpression")
   public void setCreatedAfterExpression(String createdAfterExpression) {
     this.createdAfterExpression = createdAfterExpression;
   }
 
-  @CamundaQueryParam(value = "createdBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "createdBefore", converter = DateConverter.class)
   public void setCreatedBefore(Date createdBefore) {
     this.createdBefore = createdBefore;
   }
 
-  @CamundaQueryParam(value = "createdBeforeExpression")
+  @EximeeBPMSQueryParam(value = "createdBeforeExpression")
   public void setCreatedBeforeExpression(String createdBeforeExpression) {
     this.createdBeforeExpression = createdBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "createdOn", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "createdOn", converter = DateConverter.class)
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "created", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "created", converter = DateConverter.class)
   public void setCreated(Date createdOn) {
     this.createdOn = createdOn;
   }
 
-  @CamundaQueryParam(value = "createdOnExpression")
+  @EximeeBPMSQueryParam(value = "createdOnExpression")
   public void setCreatedOnExpression(String createdOnExpression) {
     this.createdOnExpression = createdOnExpression;
   }
 
-  @CamundaQueryParam(value = "updatedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "updatedAfter", converter = DateConverter.class)
   public void setUpdatedAfter(Date updatedAfter) {
     this.updatedAfter = updatedAfter;
   }
 
-  @CamundaQueryParam(value = "updatedAfterExpression")
+  @EximeeBPMSQueryParam(value = "updatedAfterExpression")
   public void setUpdatedAfterExpression(String updatedAfterExpression) {
     this.updatedAfterExpression = updatedAfterExpression;
   }
 
-  @CamundaQueryParam(value = "delegationState")
+  @EximeeBPMSQueryParam(value = "delegationState")
   public void setDelegationState(String taskDelegationState) {
     this.delegationState = taskDelegationState;
   }
 
-  @CamundaQueryParam(value = "candidateGroups", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "candidateGroups", converter = StringListConverter.class)
   public void setCandidateGroups(List<String> candidateGroups) {
     this.candidateGroups = candidateGroups;
   }
 
-  @CamundaQueryParam(value = "candidateGroupsExpression")
+  @EximeeBPMSQueryParam(value = "candidateGroupsExpression")
   public void setCandidateGroupsExpression(String candidateGroupsExpression) {
     this.candidateGroupsExpression = candidateGroupsExpression;
   }
 
-  @CamundaQueryParam(value = "taskVariables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "taskVariables", converter = VariableListConverter.class)
   public void setTaskVariables(List<VariableQueryParameterDto> taskVariables) {
     this.taskVariables = taskVariables;
   }
 
-  @CamundaQueryParam(value = "processVariables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @EximeeBPMSQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseDefinitionKey")
+  @EximeeBPMSQueryParam("caseDefinitionKey")
   public void setCaseDefinitionKey(String caseDefinitionKey) {
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
-  @CamundaQueryParam("caseDefinitionName")
+  @EximeeBPMSQueryParam("caseDefinitionName")
   public void setCaseDefinitionName(String caseDefinitionName) {
     this.caseDefinitionName = caseDefinitionName;
   }
 
-  @CamundaQueryParam("caseDefinitionNameLike")
+  @EximeeBPMSQueryParam("caseDefinitionNameLike")
   public void setCaseDefinitionNameLike(String caseDefinitionNameLike) {
     this.caseDefinitionNameLike = caseDefinitionNameLike;
   }
 
-  @CamundaQueryParam("caseExecutionId")
+  @EximeeBPMSQueryParam("caseExecutionId")
   public void setCaseExecutionId(String caseExecutionId) {
     this.caseExecutionId = caseExecutionId;
   }
 
-  @CamundaQueryParam("caseInstanceBusinessKey")
+  @EximeeBPMSQueryParam("caseInstanceBusinessKey")
   public void setCaseInstanceBusinessKey(String caseInstanceBusinessKey) {
     this.caseInstanceBusinessKey = caseInstanceBusinessKey;
   }
 
-  @CamundaQueryParam("caseInstanceBusinessKeyLike")
+  @EximeeBPMSQueryParam("caseInstanceBusinessKeyLike")
   public void setCaseInstanceBusinessKeyLike(String caseInstanceBusinessKeyLike) {
     this.caseInstanceBusinessKeyLike = caseInstanceBusinessKeyLike;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @EximeeBPMSQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam(value = "caseInstanceVariables", converter = VariableListConverter.class)
+  @EximeeBPMSQueryParam(value = "caseInstanceVariables", converter = VariableListConverter.class)
   public void setCaseInstanceVariables(List<VariableQueryParameterDto> caseInstanceVariables) {
     this.caseInstanceVariables = caseInstanceVariables;
   }
 
-  @CamundaQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesCaseInsensitive) {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
   }
 
-  @CamundaQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesCaseInsensitive) {
     this.variableValuesIgnoreCase = variableValuesCaseInsensitive;
   }
 
-  @CamundaQueryParam(value = "withCommentAttachmentInfo", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withCommentAttachmentInfo", converter = BooleanConverter.class)
   public void setWithCommentAttachmentInfo(Boolean withCommentAttachmentInfo) {
     this.withCommentAttachmentInfo = withCommentAttachmentInfo;
+  }
+
+  @EximeeBPMSQueryParam(value = "withTaskVariablesInReturn", converter = BooleanConverter.class)
+  public void setWithTaskVariablesInReturn(Boolean withTaskVariablesInReturn) {
+    this.withTaskVariablesInReturn = withTaskVariablesInReturn;
+  }
+
+  @EximeeBPMSQueryParam(value = "withTaskLocalVariablesInReturn", converter = BooleanConverter.class)
+  public void setWithTaskLocalVariablesInReturn(Boolean withTaskLocalVariablesInReturn) {
+    this.withTaskLocalVariablesInReturn = withTaskLocalVariablesInReturn;
   }
 
   @Override
@@ -730,372 +750,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   protected TaskQuery createNewQuery(ProcessEngine engine) {
     return engine.getTaskService().createTaskQuery();
   }
-
-  public String getProcessInstanceBusinessKey() {
-    return processInstanceBusinessKey;
-  }
-
-  public String getProcessInstanceBusinessKeyExpression() {
-    return processInstanceBusinessKeyExpression;
-  }
-
-  public String[] getProcessInstanceBusinessKeyIn() {
-    return processInstanceBusinessKeyIn;
-  }
-
-  public String getProcessInstanceBusinessKeyLike() {
-    return processInstanceBusinessKeyLike;
-  }
-
-  public String getProcessInstanceBusinessKeyLikeExpression() {
-    return processInstanceBusinessKeyLikeExpression;
-  }
-
-  public String getProcessDefinitionKey() {
-    return processDefinitionKey;
-  }
-
-  public String[] getProcessDefinitionKeyIn() {
-    return processDefinitionKeyIn;
-  }
-
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
-  }
-
-  public String getExecutionId() {
-    return executionId;
-  }
-
-  public String[] getActivityInstanceIdIn() {
-    return activityInstanceIdIn;
-  }
-
-  public String[] getTenantIdIn() {
-    return tenantIdIn;
-  }
-
-  public Boolean getWithoutTenantId() {
-    return withoutTenantId;
-  }
-
-  public String getProcessDefinitionName() {
-    return processDefinitionName;
-  }
-
-  public String getProcessDefinitionNameLike() {
-    return processDefinitionNameLike;
-  }
-
-  public String getProcessInstanceId() {
-    return processInstanceId;
-  }
-
-  public String[] getProcessInstanceIdIn() {
-    return processInstanceIdIn;
-  }
-
-  public String getAssignee() {
-    return assignee;
-  }
-
-  public String getAssigneeExpression() {
-    return assigneeExpression;
-  }
-
-  public String getAssigneeLike() {
-    return assigneeLike;
-  }
-
-  public String[] getAssigneeIn() {
-    return assigneeIn;
-  }
-
-  public String[] getAssigneeNotIn() {
-    return assigneeNotIn;
-  }
-
-  public String getAssigneeLikeExpression() {
-    return assigneeLikeExpression;
-  }
-
-  public String getCandidateGroup() {
-    return candidateGroup;
-  }
-
-  public String getCandidateGroupExpression() {
-    return candidateGroupExpression;
-  }
-
-  public String getCandidateGroupLike() {
-    return candidateGroupLike;
-  }
-
-  public String getCandidateUser() {
-    return candidateUser;
-  }
-
-  public String getCandidateUserExpression() {
-    return candidateUserExpression;
-  }
-
-  public Boolean getIncludeAssignedTasks(){
-    return includeAssignedTasks;
-  }
-
-  public String[] getTaskIdIn() {
-    return taskIdIn;
-  }
-
-  public String getTaskId() {
-    return taskId;
-  }
-
-  public String[] getTaskDefinitionKeyIn() {
-    return taskDefinitionKeyIn;
-  }
-
-  public String getTaskDefinitionKey() {
-    return taskDefinitionKey;
-  }
-
-  public String getTaskDefinitionKeyLike() {
-    return taskDefinitionKeyLike;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getDescriptionLike() {
-    return descriptionLike;
-  }
-
-  public String getInvolvedUser() {
-    return involvedUser;
-  }
-
-  public String getInvolvedUserExpression() {
-    return involvedUserExpression;
-  }
-
-  public Integer getMaxPriority() {
-    return maxPriority;
-  }
-
-  public Integer getMinPriority() {
-    return minPriority;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getNameNotEqual() {
-    return nameNotEqual;
-  }
-
-  public String getNameLike() {
-    return nameLike;
-  }
-
-  public String getNameNotLike() {
-    return nameNotLike;
-  }
-
-  public String getOwner() {
-    return owner;
-  }
-
-  public String getOwnerExpression() {
-    return ownerExpression;
-  }
-
-  public Integer getPriority() {
-    return priority;
-  }
-
-  public String getParentTaskId() {
-    return parentTaskId;
-  }
-
-  public Boolean getAssigned() {
-    return assigned;
-  }
-
-  public Boolean getUnassigned() {
-    return unassigned;
-  }
-
-  public Boolean getActive() {
-    return active;
-  }
-
-  public Boolean getSuspended() {
-    return suspended;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseDefinitionName() {
-    return caseDefinitionName;
-  }
-
-  public String getCaseDefinitionNameLike() {
-    return caseDefinitionNameLike;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseInstanceBusinessKey() {
-    return caseInstanceBusinessKey;
-  }
-
-  public String getCaseInstanceBusinessKeyLike() {
-    return caseInstanceBusinessKeyLike;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public Date getDueAfter() {
-    return dueAfter;
-  }
-
-  public String getDueAfterExpression() {
-    return dueAfterExpression;
-  }
-
-  public Date getDueBefore() {
-    return dueBefore;
-  }
-
-  public String getDueBeforeExpression() {
-    return dueBeforeExpression;
-  }
-
-  public Date getDueDate() {
-    return dueDate;
-  }
-
-  public String getDueDateExpression() {
-    return dueDateExpression;
-  }
-
-  public Boolean getWithoutDueDate() {
-    return withoutDueDate;
-  }
-
-  public Date getFollowUpAfter() {
-    return followUpAfter;
-  }
-
-  public String getFollowUpAfterExpression() {
-    return followUpAfterExpression;
-  }
-
-  public Date getFollowUpBefore() {
-    return followUpBefore;
-  }
-
-  public String getFollowUpBeforeExpression() {
-    return followUpBeforeExpression;
-  }
-
-  public Date getFollowUpBeforeOrNotExistent() {
-    return followUpBeforeOrNotExistent;
-  }
-
-  public String getFollowUpBeforeOrNotExistentExpression() {
-    return followUpBeforeOrNotExistentExpression;
-  }
-
-  public Date getFollowUpDate() {
-    return followUpDate;
-  }
-
-  public String getFollowUpDateExpression() {
-    return followUpDateExpression;
-  }
-
-  public Date getCreatedAfter() {
-    return createdAfter;
-  }
-
-  public String getCreatedAfterExpression() {
-    return createdAfterExpression;
-  }
-
-  public Date getCreatedBefore() {
-    return createdBefore;
-  }
-
-  public String getCreatedBeforeExpression() {
-    return createdBeforeExpression;
-  }
-
-  public Date getCreatedOn() {
-    return createdOn;
-  }
-
-  public String getCreatedOnExpression() {
-    return createdOnExpression;
-  }
-
-  public Date getUpdatedAfter() {
-    return updatedAfter;
-  }
-
-  public String getUpdatedAfterExpression() {
-    return updatedAfterExpression;
-  }
-
-  public String getDelegationState() {
-    return delegationState;
-  }
-
-  public List<String> getCandidateGroups() {
-    return candidateGroups;
-  }
-
-  public String getCandidateGroupsExpression() {
-    return candidateGroupsExpression;
-  }
-
-  public List<VariableQueryParameterDto> getTaskVariables() {
-    return taskVariables;
-  }
-
-  public List<VariableQueryParameterDto> getProcessVariables() {
-    return processVariables;
-  }
-
-  public List<VariableQueryParameterDto> getCaseInstanceVariables() {
-    return caseInstanceVariables;
-  }
-
-  public List<TaskQueryDto> getOrQueries() {
-    return orQueries;
-  }
-
-  public Boolean isVariableNamesIgnoreCase() {
-    return variableNamesIgnoreCase;
-  }
-
-  public Boolean isVariableValuesIgnoreCase() {
-    return variableValuesIgnoreCase;
-  }
-
-  public Boolean getWithCommentAttachmentInfo() { return withCommentAttachmentInfo;}
 
   @Override
   protected void applyFilters(TaskQuery query) {
@@ -1208,6 +862,9 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     }
     if (taskDefinitionKeyIn != null && taskDefinitionKeyIn.length > 0) {
       query.taskDefinitionKeyIn(taskDefinitionKeyIn);
+    }
+    if (taskDefinitionKeyNotIn != null && taskDefinitionKeyNotIn.length > 0) {
+      query.taskDefinitionKeyNotIn(taskDefinitionKeyNotIn);
     }
     if (taskDefinitionKey != null) {
       query.taskDefinitionKey(taskDefinitionKey);
@@ -1615,6 +1272,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     dto.assigneeLike = taskQuery.getAssigneeLike();
     dto.taskDefinitionKey = taskQuery.getKey();
     dto.taskDefinitionKeyIn = taskQuery.getKeys();
+    dto.taskDefinitionKeyNotIn = taskQuery.getKeyNotIn();
     dto.taskDefinitionKeyLike = taskQuery.getKeyLike();
     dto.description = taskQuery.getDescription();
     dto.descriptionLike = taskQuery.getDescriptionLike();

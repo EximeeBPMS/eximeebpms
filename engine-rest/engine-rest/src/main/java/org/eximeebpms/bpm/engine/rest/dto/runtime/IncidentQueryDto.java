@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -93,87 +93,87 @@ public class IncidentQueryDto extends AbstractQueryDto<IncidentQuery>{
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("incidentId")
+  @EximeeBPMSQueryParam("incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @CamundaQueryParam("incidentType")
+  @EximeeBPMSQueryParam("incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @CamundaQueryParam("incidentMessage")
+  @EximeeBPMSQueryParam("incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @CamundaQueryParam("incidentMessageLike")
+  @EximeeBPMSQueryParam("incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("executionId")
+  @EximeeBPMSQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam(value="incidentTimestampAfter", converter= DateConverter.class)
+  @EximeeBPMSQueryParam(value="incidentTimestampAfter", converter= DateConverter.class)
   public void setIncidentTimestampAfter(Date incidentTimestampAfter) {
     this.incidentTimestampAfter = incidentTimestampAfter;
   }
 
-  @CamundaQueryParam(value="incidentTimestampBefore", converter= DateConverter.class)
+  @EximeeBPMSQueryParam(value="incidentTimestampBefore", converter= DateConverter.class)
   public void setIncidentTimestampBefore(Date incidentTimestampBefore) {
     this.incidentTimestampBefore = incidentTimestampBefore;
   }
 
-  @CamundaQueryParam("activityId")
+  @EximeeBPMSQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @CamundaQueryParam("failedActivityId")
+  @EximeeBPMSQueryParam("failedActivityId")
   public void setFailedActivityId(String activityId) {
     this.failedActivityId = activityId;
   }
 
-  @CamundaQueryParam("causeIncidentId")
+  @EximeeBPMSQueryParam("causeIncidentId")
   public void setCauseIncidentId(String causeIncidentId) {
     this.causeIncidentId = causeIncidentId;
   }
 
-  @CamundaQueryParam("rootCauseIncidentId")
+  @EximeeBPMSQueryParam("rootCauseIncidentId")
   public void setRootCauseIncidentId(String rootCauseIncidentId) {
     this.rootCauseIncidentId = rootCauseIncidentId;
   }
 
-  @CamundaQueryParam("configuration")
+  @EximeeBPMSQueryParam("configuration")
   public void setConfiguration(String configuration) {
     this.configuration = configuration;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "jobDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "jobDefinitionIdIn", converter = StringListConverter.class)
   public void setJobDefinitionIdIn(List<String> jobDefinitionIds) {
     this.jobDefinitionIds = jobDefinitionIds;
   }

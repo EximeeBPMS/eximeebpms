@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.TenantQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,32 +57,32 @@ public class TenantQueryDto extends AbstractQueryDto<TenantQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @EximeeBPMSQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam("name")
+  @EximeeBPMSQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @EximeeBPMSQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("userMember")
+  @EximeeBPMSQueryParam("userMember")
   public void setUserMember(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam("groupMember")
+  @EximeeBPMSQueryParam("groupMember")
   public void setGroupMember(String groupId) {
     this.groupId = groupId;
   }
 
-  @CamundaQueryParam(value = "includingGroupsOfUser", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includingGroupsOfUser", converter = BooleanConverter.class)
   public void setIncludingGroupsOfUser(Boolean includingGroupsOfUser) {
     this.includingGroupsOfUser = includingGroupsOfUser;
   }

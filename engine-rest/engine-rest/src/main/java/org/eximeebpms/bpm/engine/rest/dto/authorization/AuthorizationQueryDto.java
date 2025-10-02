@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.authorization.AuthorizationQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -62,32 +62,32 @@ public class AuthorizationQueryDto extends AbstractQueryDto<AuthorizationQuery> 
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @EximeeBPMSQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam(value="type", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value="type", converter = IntegerConverter.class)
   public void setType(Integer type) {
     this.type = type;
   }
 
-  @CamundaQueryParam(value="userIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="userIdIn", converter = StringArrayConverter.class)
   public void setUserIdIn(String[] userIdIn) {
     this.userIdIn = userIdIn;
   }
 
-  @CamundaQueryParam(value="groupIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="groupIdIn", converter = StringArrayConverter.class)
   public void setGroupIdIn(String[] groupIdIn) {
     this.groupIdIn = groupIdIn;
   }
 
-  @CamundaQueryParam(value="resourceType", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value="resourceType", converter = IntegerConverter.class)
   public void setResourceType(int resourceType) {
     this.resourceType = resourceType;
   }
 
-  @CamundaQueryParam("resourceId")
+  @EximeeBPMSQueryParam("resourceId")
   public void setResourceId(String resourceId) {
     this.resourceId = resourceId;
   }

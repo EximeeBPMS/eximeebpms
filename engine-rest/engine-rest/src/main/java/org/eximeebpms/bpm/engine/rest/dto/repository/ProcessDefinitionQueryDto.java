@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
@@ -103,63 +103,63 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
   public void setProcessDefinitionIdIn(List<String> processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @CamundaQueryParam("category")
+  @EximeeBPMSQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam("categoryLike")
+  @EximeeBPMSQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @CamundaQueryParam("name")
+  @EximeeBPMSQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @EximeeBPMSQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @EximeeBPMSQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam(value = "deployedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "deployedAfter", converter = DateConverter.class)
   public void setDeployedAfter(Date deployedAfter) {
     this.deployedAfter = deployedAfter;
   }
 
-  @CamundaQueryParam(value = "deployedAt", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "deployedAt", converter = DateConverter.class)
   public void setDeployedAt(Date deployedAt) {
     this.deployedAt = deployedAt;
   }
 
-  @CamundaQueryParam("key")
+  @EximeeBPMSQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
 
-  @CamundaQueryParam(value = "keysIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "keysIn", converter = StringListConverter.class)
   public void setKeysIn(List<String> keys) {
     this.keys = keys;
   }
 
-  @CamundaQueryParam("keyLike")
+  @EximeeBPMSQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
@@ -168,12 +168,12 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setVersion(Integer)}
    */
   @Deprecated
-  @CamundaQueryParam(value = "ver", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "ver", converter = IntegerConverter.class)
   public void setVer(Integer ver) {
     setVersion(ver);
   }
 
-  @CamundaQueryParam(value = "version", converter = IntegerConverter.class)
+  @EximeeBPMSQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
@@ -182,102 +182,102 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setLatestVersion(Boolean)}
    */
   @Deprecated
-  @CamundaQueryParam(value = "latest", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "latest", converter = BooleanConverter.class)
   public void setLatest(Boolean latest) {
     setLatestVersion(latest);
   }
 
-  @CamundaQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @CamundaQueryParam("resourceName")
+  @EximeeBPMSQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @CamundaQueryParam("resourceNameLike")
+  @EximeeBPMSQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @CamundaQueryParam("startableBy")
+  @EximeeBPMSQueryParam("startableBy")
   public void setStartableBy(String startableBy) {
     this.startableBy = startableBy;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "incidentId")
+  @EximeeBPMSQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @CamundaQueryParam(value = "incidentType")
+  @EximeeBPMSQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @CamundaQueryParam(value = "incidentMessage")
+  @EximeeBPMSQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @CamundaQueryParam(value = "incidentMessageLike")
+  @EximeeBPMSQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeProcessDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }
 
-  @CamundaQueryParam(value = "versionTag")
+  @EximeeBPMSQueryParam(value = "versionTag")
   public void setVersionTag(String versionTag) {
     this.versionTag = versionTag;
   }
 
-  @CamundaQueryParam(value = "versionTagLike")
+  @EximeeBPMSQueryParam(value = "versionTagLike")
   public void setVersionTagLike(String versionTagLike) {
     this.versionTagLike = versionTagLike;
   }
 
-  @CamundaQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
   public void setWithoutVersionTag(Boolean withoutVersionTag) {
     this.withoutVersionTag = withoutVersionTag;
   }
 
-  @CamundaQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
   public void setStartableInTasklist(Boolean startableInTasklist) {
     this.startableInTasklist = startableInTasklist;
   }
 
-  @CamundaQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
   public void setNotStartableInTasklist(Boolean notStartableInTasklist) {
     this.notStartableInTasklist = notStartableInTasklist;
   }
 
-  @CamundaQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
   public void setStartablePermissionCheck(Boolean startablePermissionCheck) {
     this.startablePermissionCheck = startablePermissionCheck;
   }

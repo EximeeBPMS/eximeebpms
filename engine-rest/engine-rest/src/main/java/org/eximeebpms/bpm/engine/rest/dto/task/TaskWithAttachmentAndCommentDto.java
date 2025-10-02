@@ -16,14 +16,19 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto.task;
 
+import java.util.Map;
+import lombok.NoArgsConstructor;
+import org.eximeebpms.bpm.engine.rest.dto.VariableValueDto;
 import org.eximeebpms.bpm.engine.task.Task;
 
-public class TaskWithAttachmentAndCommentDto extends TaskDto {
+@NoArgsConstructor
+public class TaskWithAttachmentAndCommentDto extends TaskWithVariablesDto {
 
   private boolean hasAttachment;
   private boolean hasComment;
 
-  public TaskWithAttachmentAndCommentDto() {
+  public TaskWithAttachmentAndCommentDto(Task task, Map<String, VariableValueDto> variables) {
+    super(task, variables);
   }
 
   public TaskWithAttachmentAndCommentDto(Task task) {
@@ -44,11 +49,14 @@ public class TaskWithAttachmentAndCommentDto extends TaskDto {
     this.hasComment = hasComment;
   }
 
-  public static TaskDto fromEntity(Task task) {
-    TaskWithAttachmentAndCommentDto result = new TaskWithAttachmentAndCommentDto(task);
-
+  public static TaskDto fromEntity(Task task, Map<String, VariableValueDto> variables) {
+    TaskWithAttachmentAndCommentDto result = new TaskWithAttachmentAndCommentDto(task, variables);
     result.hasAttachment = task.hasAttachment();
     result.hasComment = task.hasComment();
     return result;
+  }
+
+  public static TaskDto fromEntity(Task task) {
+    return fromEntity(task, null);
   }
 }

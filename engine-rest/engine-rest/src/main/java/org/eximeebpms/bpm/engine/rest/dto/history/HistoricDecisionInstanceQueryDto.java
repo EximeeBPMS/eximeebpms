@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.CamundaQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -89,147 +89,147 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("decisionInstanceId")
+  @EximeeBPMSQueryParam("decisionInstanceId")
   public void setDecisionInstanceId(String decisionInstanceId) {
     this.decisionInstanceId = decisionInstanceId;
   }
 
-  @CamundaQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
   public void setDecisionInstanceIdIn(String[] decisionInstanceIdIn) {
     this.decisionInstanceIdIn = decisionInstanceIdIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionId")
+  @EximeeBPMSQueryParam("decisionDefinitionId")
   public void setDecisionDefinitionId(String decisionDefinitionId) {
     this.decisionDefinitionId = decisionDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionIdIn(String[] decisionDefinitionIdIn) {
     this.decisionDefinitionIdIn = decisionDefinitionIdIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionKey")
+  @EximeeBPMSQueryParam("decisionDefinitionKey")
   public void setDecisionDefinitionKey(String decisionDefinitionKey) {
     this.decisionDefinitionKey = decisionDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionKeyIn(String[] decisionDefinitionKeyIn) {
     this.decisionDefinitionKeyIn = decisionDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionName")
+  @EximeeBPMSQueryParam("decisionDefinitionName")
   public void setDecisionDefinitionName(String decisionDefinitionName) {
     this.decisionDefinitionName = decisionDefinitionName;
   }
 
-  @CamundaQueryParam("decisionDefinitionNameLike")
+  @EximeeBPMSQueryParam("decisionDefinitionNameLike")
   public void setDecisionDefinitionNameLike(String decisionDefinitionNameLike) {
     this.decisionDefinitionNameLike = decisionDefinitionNameLike;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @EximeeBPMSQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @EximeeBPMSQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseDefinitionKey")
+  @EximeeBPMSQueryParam("caseDefinitionKey")
   public void setCaseDefinitionKey(String caseDefinitionKey) {
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @EximeeBPMSQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @CamundaQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
   public void setEvaluatedBefore(Date evaluatedBefore) {
     this.evaluatedBefore = evaluatedBefore;
   }
 
-  @CamundaQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
+  @EximeeBPMSQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
   public void setEvaluatedAfter(Date evaluatedAfter) {
     this.evaluatedAfter = evaluatedAfter;
   }
 
-  @CamundaQueryParam(value = "userId")
+  @EximeeBPMSQueryParam(value = "userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam(value = "includeInputs", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeInputs", converter = BooleanConverter.class)
   public void setIncludeInputs(Boolean includeInputs) {
     this.includeInputs = includeInputs;
   }
 
-  @CamundaQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
   public void setIncludeOutputs(Boolean includeOutputs) {
     this.includeOutputs = includeOutputs;
   }
 
-  @CamundaQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
   public void setDisableBinaryFetching(Boolean disableBinaryFetching) {
     this.disableBinaryFetching = disableBinaryFetching;
   }
 
-  @CamundaQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
   public void setDisableCustomObjectDeserialization(Boolean disableCustomObjectDeserialization) {
     this.disableCustomObjectDeserialization = disableCustomObjectDeserialization;
   }
 
-  @CamundaQueryParam(value = "rootDecisionInstanceId")
+  @EximeeBPMSQueryParam(value = "rootDecisionInstanceId")
   public void setRootDecisionInstanceId(String rootDecisionInstanceId) {
     this.rootDecisionInstanceId = rootDecisionInstanceId;
   }
 
-  @CamundaQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
   public void setRootDecisionInstancesOnly(Boolean rootDecisionInstancesOnly) {
     this.rootDecisionInstancesOnly = rootDecisionInstancesOnly;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionId")
+  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionId")
   public void setDecisionRequirementsDefinitionId(String decisionRequirementsDefinitionId) {
     this.decisionRequirementsDefinitionId = decisionRequirementsDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionKey")
+  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionKey")
   public void setDecisionRequirementsDefinitionKey(String decisionRequirementsDefinitionKey) {
     this.decisionRequirementsDefinitionKey = decisionRequirementsDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

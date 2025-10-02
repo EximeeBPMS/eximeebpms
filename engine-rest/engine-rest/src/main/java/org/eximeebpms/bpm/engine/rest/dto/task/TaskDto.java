@@ -18,41 +18,57 @@ package org.eximeebpms.bpm.engine.rest.dto.task;
 
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.form.CamundaFormRef;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DelegationStateConverter;
-import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.DelegationState;
 import org.eximeebpms.bpm.engine.task.Task;
 
+@Getter
 public class TaskDto {
 
+  @Setter
   private String id;
+  @Setter
   private String name;
+  @Setter
   private String assignee;
   private Date created;
+  @Setter
   private Date due;
+  @Setter
   private Date followUp;
+  @Setter
   private Date lastUpdated;
+  @Setter
   private String delegationState;
+  @Setter
   private String description;
   private String executionId;
+  @Setter
   private String owner;
+  @Setter
   private String parentTaskId;
+  @Setter
   private int priority;
   private String processDefinitionId;
   private String processInstanceId;
   private String taskDefinitionKey;
   private String caseExecutionId;
+  @Setter
   private String caseInstanceId;
   private String caseDefinitionId;
   private boolean suspended;
   private String formKey;
   private CamundaFormRef camundaFormRef;
+  @Setter
   private String tenantId;
   /**
    * Returns task State of task
    */
+  @Setter
   private String taskState;
 
   public TaskDto() {
@@ -92,156 +108,6 @@ public class TaskDto {
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)
     }
-  }
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getAssignee() {
-    return assignee;
-  }
-
-  public void setAssignee(String assignee) {
-    this.assignee = assignee;
-  }
-
-  public Date getCreated() {
-    return created;
-  }
-
-  public Date getDue() {
-    return due;
-  }
-
-  public void setDue(Date due) {
-    this.due = due;
-  }
-
-  public String getDelegationState() {
-    return delegationState;
-  }
-
-  public void setDelegationState(String delegationState) {
-    this.delegationState = delegationState;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getExecutionId() {
-    return executionId;
-  }
-
-  public String getOwner() {
-    return owner;
-  }
-
-  public void setOwner(String owner) {
-    this.owner = owner;
-  }
-
-  public String getParentTaskId() {
-    return parentTaskId;
-  }
-
-  public void setParentTaskId(String parentTaskId) {
-    this.parentTaskId = parentTaskId;
-  }
-
-  public int getPriority() {
-    return priority;
-  }
-
-  public void setPriority(int priority) {
-    this.priority = priority;
-  }
-
-  public String getProcessDefinitionId() {
-    return processDefinitionId;
-  }
-
-  public String getProcessInstanceId() {
-    return processInstanceId;
-  }
-
-  public String getTaskDefinitionKey() {
-    return taskDefinitionKey;
-  }
-
-  public Date getFollowUp() {
-    return followUp;
-  }
-
-  public void setFollowUp(Date followUp) {
-    this.followUp = followUp;
-  }
-
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  public boolean isSuspended() {
-    return suspended;
-  }
-
-  public String getFormKey() {
-    return formKey;
-  }
-
-  public CamundaFormRef getCamundaFormRef() {
-    return camundaFormRef;
-  }
-
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  public String getTaskState() {
-    return taskState;
-  }
-  public void setTaskState(String taskState) {
-    this.taskState = taskState;
   }
 
   public static TaskDto fromEntity(Task task) {

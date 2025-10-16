@@ -16,13 +16,13 @@
  */
 package org.eximeebpms.bpm.container.impl.jboss.extension.handler;
 
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.ALLOW_CORE_TIMEOUT;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.CORE_THREADS;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.JOB_EXECUTOR_ATTRIBUTES;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.KEEPALIVE_TIME;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.MAX_THREADS;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.QUEUE_LENGTH;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.THREAD_POOL_NAME;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.ALLOW_CORE_TIMEOUT;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.CORE_THREADS;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.JOB_EXECUTOR_ATTRIBUTES;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.KEEPALIVE_TIME;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.MAX_THREADS;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.QUEUE_LENGTH;
+import static org.eximeebpms.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.THREAD_POOL_NAME;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;

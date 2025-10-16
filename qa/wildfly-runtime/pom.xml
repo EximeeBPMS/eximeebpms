@@ -23,6 +23,7 @@
       <dependency>
         <groupId>org.eximeebpms.bpm</groupId>
         <artifactId>eximeebpms-engine</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

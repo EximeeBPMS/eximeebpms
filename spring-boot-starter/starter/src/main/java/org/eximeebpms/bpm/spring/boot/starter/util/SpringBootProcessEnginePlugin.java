@@ -23,8 +23,8 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEnginePlugin;
 
-import static org.eximeebpms.bpm.spring.boot.starter.util.CamundaSpringBootUtil.processEngineImpl;
-import static org.eximeebpms.bpm.spring.boot.starter.util.CamundaSpringBootUtil.springProcessEngineConfiguration;
+import static org.eximeebpms.bpm.spring.boot.starter.util.EximeeBPMSSpringBootUtil.processEngineImpl;
+import static org.eximeebpms.bpm.spring.boot.starter.util.EximeeBPMSSpringBootUtil.springProcessEngineConfiguration;
 
 /**
  * Convenience class that specializes {@link AbstractProcessEnginePlugin} to

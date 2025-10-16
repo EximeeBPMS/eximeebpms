@@ -26,7 +26,7 @@ import static org.eximeebpms.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPD
 import static org.eximeebpms.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE;
 import static org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_CREATE;
 import static org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_DROP_CREATE;
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 public class DatabaseProperty {
   public static final List<String> SCHEMA_UPDATE_VALUES = Arrays.asList(

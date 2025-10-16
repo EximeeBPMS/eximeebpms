@@ -19,14 +19,14 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 import javax.sql.DataSource;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDatasourceConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSDatasourceConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.DatabaseProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
 
-public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration implements CamundaDatasourceConfiguration {
+public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration implements EximeeBPMSDatasourceConfiguration {
 
   @Autowired
   protected PlatformTransactionManager transactionManager;
@@ -44,7 +44,7 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    final DatabaseProperty database = camundaBpmProperties.getDatabase();
+    final DatabaseProperty database = eximeeBPMSBpmProperties.getDatabase();
 
     if (camundaTransactionManager == null) {
       configuration.setTransactionManager(transactionManager);

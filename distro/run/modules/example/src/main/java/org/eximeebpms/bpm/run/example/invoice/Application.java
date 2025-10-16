@@ -22,7 +22,7 @@ import org.eximeebpms.bpm.example.invoice.InvoiceApplicationHelper;
 import org.eximeebpms.bpm.example.invoice.InvoiceProcessApplication;
 import org.eximeebpms.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.eximeebpms.bpm.spring.boot.starter.event.PostDeployEvent;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmProperties.PREFIX + ".run.example")
+@ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBPMSBpmProperties.PREFIX + ".run.example")
 @Configuration
 @EnableProcessApplication("invoiceProcessApplicationSpringBoot")
 public class Application implements WebMvcConfigurer {

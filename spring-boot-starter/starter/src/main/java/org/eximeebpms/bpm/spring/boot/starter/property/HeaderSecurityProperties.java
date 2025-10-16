@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 public class HeaderSecurityProperties {
 

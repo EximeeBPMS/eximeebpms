@@ -22,13 +22,6 @@ import org.eximeebpms.bpm.spring.boot.starter.configuration.Ordering;
 import org.eximeebpms.bpm.spring.boot.starter.property.GenericProperties;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootStarterPropertyHelper;
-import org.springframework.boot.context.properties.bind.BindHandler;
-import org.springframework.boot.context.properties.bind.Bindable;
-import org.springframework.boot.context.properties.bind.Binder;
-import org.springframework.boot.context.properties.bind.handler.NoUnboundElementsBindHandler;
-import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
-import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
-import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.CollectionUtils;
 
@@ -39,7 +32,7 @@ public class GenericPropertiesConfiguration extends AbstractCamundaConfiguration
 
   @Override
   public void preInit(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
-    GenericProperties genericProperties = camundaBpmProperties.getGenericProperties();
+    GenericProperties genericProperties = eximeeBPMSBpmProperties.getGenericProperties();
     final Map<String, Object> properties = genericProperties.getProperties();
 
     if (!CollectionUtils.isEmpty(properties)) {

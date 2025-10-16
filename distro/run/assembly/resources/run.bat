@@ -8,7 +8,7 @@ SET WEBAPPS_PATH=%BASEDIR%webapps
 SET OAUTH2_PATH=%BASEDIR%oauth2
 SET REST_PATH=%BASEDIR%rest
 SET EXAMPLE_PATH=%BASEDIR%example
-SET APPNAME=Camunda Run
+SET APPNAME=EximeeBPMS Run
 
 IF [%~1]==[start] GOTO Startup
 IF [%~1]==[stop] GOTO Stop
@@ -50,7 +50,7 @@ SET JAVA_VERSION=%JAVA_VERSION:"=%
 ECHO Java version is %JAVA_VERSION%
 FOR /f "delims=. tokens=1" %%v in ("%JAVA_VERSION%") do (
   IF %%v LSS %EXPECTED_JAVA_VERSION% (
-    ECHO You must use at least JDK 17 to start Camunda Platform Run.
+    ECHO You must use at least JDK 17 to start EximeeBPMS Platform Run.
     GOTO :EOF
   )
 )
@@ -148,7 +148,7 @@ GOTO End
 REM remove argument
 SHIFT
 
-REM shut down Camunda Run
+REM shut down EximeeBPMS Run
 ECHO EximeeBPMS Run is shutting down.
 TASKKILL /FI "WINDOWTITLE eq %APPNAME%"
 

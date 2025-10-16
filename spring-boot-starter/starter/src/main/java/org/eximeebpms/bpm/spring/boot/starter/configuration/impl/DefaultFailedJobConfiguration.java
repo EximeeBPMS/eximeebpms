@@ -19,14 +19,14 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.DefaultFailedJobCommandFactory;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaFailedJobConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSFailedJobConfiguration;
 
 import java.util.ArrayList;
 
 /**
  * Register parseListener to setup failed job retry specification.
  */
-public class DefaultFailedJobConfiguration extends AbstractCamundaConfiguration implements CamundaFailedJobConfiguration {
+public class DefaultFailedJobConfiguration extends AbstractCamundaConfiguration implements EximeeBPMSFailedJobConfiguration {
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {

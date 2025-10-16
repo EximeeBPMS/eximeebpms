@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -32,11 +32,11 @@ public class DefaultProcessEngineConfigurationTest {
 
   private final DefaultProcessEngineConfiguration instance = new DefaultProcessEngineConfiguration();
   private final SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
-  private final CamundaBpmProperties properties = new CamundaBpmProperties();
+  private final EximeeBPMSBpmProperties properties = new EximeeBPMSBpmProperties();
 
   @Before
   public void setUp() throws Exception {
-    ReflectionTestUtils.setField(instance, "camundaBpmProperties", properties);
+    ReflectionTestUtils.setField(instance, "eximeeBPMSBpmProperties", properties);
     initIdGenerator(null);
   }
 

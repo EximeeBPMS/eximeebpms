@@ -44,7 +44,7 @@ if [ "$1" = "start" ] ; then
   JAVA_VERSION=$("$JAVA" -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^0\./s///' | cut -d'.' -f1)
   echo Java version is $("$JAVA" -version 2>&1 | head -1 | cut -d'"' -f2)
   if [[ "$JAVA_VERSION" -lt "$EXPECTED_JAVA_VERSION" ]]; then
-    echo You must use at least JDK 17 to start Camunda Platform Run.
+    echo You must use at least JDK 17 to start EximeeBPMS Platform Run.
     exit 1
   fi
 
@@ -108,16 +108,16 @@ if [ "$1" = "start" ] ; then
   # start the application
   if [ "$detachProcess" = "true" ]; then
 
-    # check if a Camunda Run instance is already in operation
+    # check if a EximeeBPMS Run instance is already in operation
     if [ -s "$PID_PATH" ]; then
       echo "
-A Camunda Run instance is already in operation (process id $(cat $PID_PATH)).
+A EximeeBPMS Run instance is already in operation (process id $(cat $PID_PATH)).
 
 Please stop it or remove the file $PID_PATH."
       exit 1
     fi
 
-    # start Camunda Run detached
+    # start EximeeBPMS Run detached
     "$JAVA" -Dloader.path="$classPath" -Deximeebpms.deploymentDir="$DEPLOYMENT_DIR" $JAVA_OPTS -jar "$BASEDIR/eximeebpms-bpm-run-core.jar" --spring.config.location=file:"$configuration" &
     # store the process id
     echo $! > "$PID_PATH"

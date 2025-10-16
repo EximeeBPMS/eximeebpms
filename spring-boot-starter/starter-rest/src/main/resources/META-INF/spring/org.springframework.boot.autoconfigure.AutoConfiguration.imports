@@ -1,1 +1,1 @@
-org.eximeebpms.bpm.spring.boot.starter.rest.CamundaBpmRestJerseyAutoConfiguration
+org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBPMSBpmRestJerseyAutoConfiguration

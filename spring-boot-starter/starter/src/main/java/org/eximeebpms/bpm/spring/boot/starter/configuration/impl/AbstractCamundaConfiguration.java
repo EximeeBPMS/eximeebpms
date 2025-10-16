@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.spring.boot.starter.configuration.Ordering;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEnginePlugin;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public abstract class AbstractCamundaConfiguration extends SpringBootProcessEngi
   protected final Logger logger = getLogger(this.getClass());
 
   @Autowired
-  protected CamundaBpmProperties camundaBpmProperties;
+  protected EximeeBPMSBpmProperties eximeeBPMSBpmProperties;
 
 
 }

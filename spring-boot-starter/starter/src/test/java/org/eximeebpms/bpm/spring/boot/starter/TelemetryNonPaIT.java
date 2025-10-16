@@ -37,7 +37,7 @@ import org.springframework.test.context.junit4.SpringRunner;
   classes = {TestApplication.class},
   webEnvironment = WebEnvironment.RANDOM_PORT
 )
-public class TelemetryNonPaIT extends AbstractCamundaAutoConfigurationIT {
+public class TelemetryNonPaIT extends AbstractEximeeBPMSAutoConfigurationIT {
 
   @Test
   public void shouldSubmitApplicationServerData() {

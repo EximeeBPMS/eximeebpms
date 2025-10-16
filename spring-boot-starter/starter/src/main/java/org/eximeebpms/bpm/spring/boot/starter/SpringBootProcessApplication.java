@@ -32,10 +32,10 @@ import org.eximeebpms.bpm.container.RuntimeContainerDelegate;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.spring.application.SpringProcessApplication;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSDeploymentConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.eximeebpms.bpm.spring.boot.starter.event.PreUndeployEvent;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -50,8 +50,8 @@ import org.springframework.web.context.ServletContextAware;
 public class SpringBootProcessApplication extends SpringProcessApplication {
 
   @Bean
-  public static CamundaDeploymentConfiguration deploymentConfiguration() {
-    return new CamundaDeploymentConfiguration() {
+  public static EximeeBPMSDeploymentConfiguration deploymentConfiguration() {
+    return new EximeeBPMSDeploymentConfiguration() {
       @Override
       public Set<Resource> getDeploymentResources() {
         return Collections.emptySet();
@@ -75,7 +75,7 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
   protected String contextPath = "/";
 
   @Autowired
-  protected CamundaBpmProperties camundaBpmProperties;
+  protected EximeeBPMSBpmProperties eximeeBPMSBpmProperties;
 
   @Autowired
   protected ProcessEngine processEngine;
@@ -89,8 +89,8 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
       .apply(springApplicationName)
       .ifPresent(this::setBeanName);
 
-    if (camundaBpmProperties.getGenerateUniqueProcessApplicationName()) {
-      setBeanName(CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_APPLICATION_NAME_PREFIX));
+    if (eximeeBPMSBpmProperties.getGenerateUniqueProcessApplicationName()) {
+      setBeanName(EximeeBPMSBpmProperties.getUniqueName(EximeeBPMSBpmProperties.UNIQUE_APPLICATION_NAME_PREFIX));
     }
 
     String processEngineName = processEngine.getName();

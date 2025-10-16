@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.run.property;
 
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -26,7 +26,7 @@ import java.util.List;
 @ConfigurationProperties(EximeeBpmsBpmRunProperties.PREFIX)
 public class EximeeBpmsBpmRunProperties {
 
-  public static final String PREFIX = CamundaBpmProperties.PREFIX + ".run";
+  public static final String PREFIX = EximeeBPMSBpmProperties.PREFIX + ".run";
 
   @NestedConfigurationProperty
   protected EximeeBpmsBpmRunAuthenticationProperties auth = new EximeeBpmsBpmRunAuthenticationProperties();

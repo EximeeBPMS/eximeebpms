@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.spring.boot.starter.event;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.EventingProperty;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEnginePlugin;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class EventPublisherPlugin extends SpringBootProcessEnginePlugin {
   private final EventingProperty property;
   private final ApplicationEventPublisher publisher;
 
-  public EventPublisherPlugin(final CamundaBpmProperties properties, final ApplicationEventPublisher publisher) {
+  public EventPublisherPlugin(final EximeeBPMSBpmProperties properties, final ApplicationEventPublisher publisher) {
     this(properties.getEventing(), publisher);
   }
 

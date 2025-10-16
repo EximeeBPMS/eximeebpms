@@ -76,7 +76,7 @@ jobs:
           git config --global user.email 'github-actions@github.com'
       - name: Release prepare
         run: |
-          ./mvnw release:prepare -B -Darguments="-DskipTests" \
+          ./mvnw release:prepare -B -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
             -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \

@@ -34,7 +34,7 @@ import org.eximeebpms.bpm.cockpit.impl.web.CockpitApplication;
 import org.eximeebpms.bpm.cockpit.impl.web.bootstrap.CockpitContainerBootstrap;
 import org.eximeebpms.bpm.engine.rest.filter.CacheControlFilter;
 import org.eximeebpms.bpm.engine.rest.filter.EmptyBodyFilter;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.WebappProperty;
 import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.AppendTrailingSlashFilter;
 import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.LazyProcessEnginesFilter;
@@ -60,17 +60,17 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
  * https://groups.google.com/forum/#!msg/eximeebpms-bpm-users/BQHdcLIivzs
  * /iNVix8GkhYAJ (Christoph Berg)
  */
-public class CamundaBpmWebappInitializer implements ServletContextInitializer {
+public class EximeeBPMSBpmWebappInitializer implements ServletContextInitializer {
 
-  private static final Logger log = LoggerFactory.getLogger(CamundaBpmWebappInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(EximeeBPMSBpmWebappInitializer.class);
 
   private static final EnumSet<DispatcherType> DISPATCHER_TYPES = EnumSet.of(DispatcherType.REQUEST);
 
   private ServletContext servletContext;
 
-  private final CamundaBpmProperties properties;
+  private final EximeeBPMSBpmProperties properties;
 
-  public CamundaBpmWebappInitializer(CamundaBpmProperties properties) {
+  public EximeeBPMSBpmWebappInitializer(EximeeBPMSBpmProperties properties) {
     this.properties = properties;
   }
 

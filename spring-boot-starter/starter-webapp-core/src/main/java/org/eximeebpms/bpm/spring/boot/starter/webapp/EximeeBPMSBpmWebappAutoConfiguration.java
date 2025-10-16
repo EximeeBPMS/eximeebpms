@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.webapp;
 
-import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.EximeeBPMSBpmAutoConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.WebappProperty;
 import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
 import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.LazyInitRegistration;
@@ -36,21 +36,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ConditionalOnProperty(prefix = WebappProperty.PREFIX, name = "enabled", matchIfMissing = true)
-@ConditionalOnBean(CamundaBpmProperties.class)
+@ConditionalOnBean(EximeeBPMSBpmProperties.class)
 @ConditionalOnWebApplication
-@AutoConfigureAfter(CamundaBpmAutoConfiguration.class)
-public class CamundaBpmWebappAutoConfiguration implements WebMvcConfigurer {
+@AutoConfigureAfter(EximeeBPMSBpmAutoConfiguration.class)
+public class EximeeBPMSBpmWebappAutoConfiguration implements WebMvcConfigurer {
 
   @Autowired
   private ResourceLoader resourceLoader;
 
   @Autowired
-  private CamundaBpmProperties properties;
+  private EximeeBPMSBpmProperties properties;
 
 
   @Bean
-  public CamundaBpmWebappInitializer camundaBpmWebappInitializer() {
-    return new CamundaBpmWebappInitializer(properties);
+  public EximeeBPMSBpmWebappInitializer camundaBpmWebappInitializer() {
+    return new EximeeBPMSBpmWebappInitializer(properties);
   }
 
   @Bean(name = "resourceLoaderDependingInitHook")

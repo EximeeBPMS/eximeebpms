@@ -138,7 +138,7 @@ jobs:
       contents: write
       packages: write
 
-    uses: ./.github/workflows/snapshot-release.yml
+    uses: .github/workflows/snapshot-release.yml
 
     secrets:
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}

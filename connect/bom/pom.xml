@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-root</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>org.eximeebpms.connect</groupId>
   <artifactId>eximeebpms-connect-bom</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0-SNAPSHOT</version>
   <name>EximeeBPMS - connect - bom</name>
   <packaging>pom</packaging>
 
@@ -50,7 +50,7 @@
     <url>https://github.com/EximeeBPMS/eximeebpms</url>
     <connection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</connection>
     <developerConnection>scm:git:git@github.com:EximeeBPMS/eximeebpms.git</developerConnection>
-    <tag>v1.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
 </project>

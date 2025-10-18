@@ -101,31 +101,6 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
-      - name: Deploy distro Tomcat
-        run: |
-          cd target/checkout/distro/tomcat
-          ../.././mvnw deploy -Prelease,distro,distro-ce -B -DskipTests
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
-      - name: Deploy distro Wildfly
-        run: |
-          cd target/checkout/distro/wildfly
-          ../.././mvnw deploy -Prelease,distro -B -DskipTests
-          ../.././mvnw deploy -Prelease,distro-ce -B -DskipTests
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}    
-
-      - name: Deploy distro Run
-        run: |
-          cd target/checkout/distro/run
-          ../.././mvnw deploy -Prelease,distro,distro-ce -B -DskipTests
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}  
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

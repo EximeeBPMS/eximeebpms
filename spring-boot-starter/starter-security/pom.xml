@@ -36,10 +36,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
     <dependency>
       <artifactId>eximeebpms-bpm-spring-boot-starter-test</artifactId>

@@ -27,82 +27,98 @@
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-spring-6</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- Spring dependencies required by eximeebpms-engine-spring -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
+      <version>${version.spring.framework6}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
+      <version>${version.spring.framework6}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
+      <version>${version.spring.framework6}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
+      <version>${version.spring.framework6}</version>
     </dependency>
 
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-plugin-spin</artifactId>
+      <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.eximeebpms.spin</groupId>
       <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
+      <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-plugin-connect</artifactId>
+      <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jersey</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
+      <version>${version.spring-boot}</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
@@ -127,6 +143,7 @@
     <dependency>
       <groupId>org.eximeebpms.commons</groupId>
       <artifactId>eximeebpms-commons-testing</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -152,6 +169,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-websocket</artifactId>
+      <version>${version.spring-boot}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

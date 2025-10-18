@@ -25,7 +25,6 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter-rest</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
   </dependencies>

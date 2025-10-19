@@ -28,6 +28,7 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.webapp</groupId>
       <artifactId>eximeebpms-webapp-webjar</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>

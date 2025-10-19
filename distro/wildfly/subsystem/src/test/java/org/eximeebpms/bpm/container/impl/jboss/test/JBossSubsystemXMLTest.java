@@ -65,7 +65,6 @@ import org.jboss.msc.service.ServiceName;
 import org.jboss.threads.EnhancedQueueExecutor;
 import org.junit.Test;
 
-
 /**
  *
  * @author nico.rehwaldt@camunda.com

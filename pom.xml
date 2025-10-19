@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -277,9 +277,15 @@
         <module>javaee/ejb-client-jakarta</module>
 
         <module>webapps</module>
+        <module>examples</module>
 
         <module>engine-plugins</module>
 
+        <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
+        <module>distro/sql-script</module>
+        <module>distro/run</module>
         <module>distro/webjar</module>
 
         <module>clients/java</module>
@@ -287,6 +293,9 @@
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
+        <module>test-utils/testcontainers</module>
+
+        <module>qa</module>
 
         <module>internal-dependencies</module>
         <module>database</module>

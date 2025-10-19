@@ -23,6 +23,7 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter-webapp</artifactId>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
 

@@ -20,6 +20,7 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.webapp</groupId>
       <artifactId>eximeebpms-webapp-jakarta</artifactId>
+      <version>${project.version}</version>
       <type>jar</type>
       <classifier>classes</classifier>
     </dependency>
@@ -27,22 +28,26 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.webapp</groupId>
       <artifactId>eximeebpms-webapp-webjar</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jersey</artifactId>
+      <version>${version.spring-boot}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+      <version>${version.spring-boot}</version>
       <optional>true</optional>
     </dependency>
 

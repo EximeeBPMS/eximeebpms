@@ -15,108 +15,10 @@ on:
         required: true
 
 jobs:
-  release:
-    runs-on: self-hosted
-    steps:
-      - name: Determine user and set secret
-        run: |
-          echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
-          
-      - name: Check out the code
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
 
-      - name: Create custom settings.xml 
-        run: |
-            mkdir -p ~/.m2
-            cat <<EOF > ~/.m2/settings.xml
-            <settings>
-              <servers>
-                <server>
-                  <id>central</id>
-                  <username>${CPP_USERNAME}</username>
-                  <password>${CPP_PASSWORD}</password>
-                </server>
-                <server>
-                  <id>github</id>
-                  <username>${GITHUB_ACTOR}</username>
-                  <password>${GITHUB_TOKEN}</password>
-                </server>
-              </servers>
-            </settings>
-            EOF
-            cat ~/.m2/settings.xml
-        env:
-          CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
-          CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
-      - name: Import GPG key
-        run: |
-          echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
-          gpg --batch --import private.key
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
-      - name: Add GitHub SSH host to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts          
-
-      - name: Configure Git user
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions@github.com'
-
-      - name: Release prepare
-        run: |
-          ./mvnw release:prepare -B -Darguments="-DskipTests" \
-            -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
-            -DtagNameFormat=v@{project.version} \
-            -DreleaseVersion=${{ github.event.inputs.release_version }} \
-            -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
-      - name: Release perform
-        run: |
-          ./mvnw release:perform -Dgoals=""
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
-      - name: Deploy base libs
-        run: |
-          cd target/checkout
-          ./mvnw deploy -Prelease,sonatype-oss-release -B -DskipTests
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Release v${{ github.event.inputs.release_version }}
-          tag_name: v${{ github.event.inputs.release_version }}
-          draft: false
-          prerelease: false
-          body: |
-            Release generated on ${{ github.event.head_commit.timestamp }}
-            with commit message: ${{ github.event.head_commit.message }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #  Invoking snapshot release to provide the necessary snapshots for testing in CustomJacksonDateFormatTest
   call-snapshot-release:
-    needs: release
     permissions:
       contents: write
       packages: write

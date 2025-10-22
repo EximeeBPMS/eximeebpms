@@ -57,7 +57,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.8.1</version>
+        <version>${version.commons-lang3}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -67,7 +67,7 @@
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
-        <version>1.5</version>
+        <version>1.6.0</version>
       </dependency>
 
       <dependency>
@@ -140,6 +140,12 @@
         <groupId>org.apache.openjpa</groupId>
         <artifactId>openjpa</artifactId>
         <version>${version.openjpa}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- groovy script engine dependencies -->
@@ -290,6 +296,12 @@
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-catalina</artifactId>
         <version>${version.tomcat}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -346,6 +358,16 @@
         <artifactId>wiremock</artifactId>
         <version>${version.wiremock}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>

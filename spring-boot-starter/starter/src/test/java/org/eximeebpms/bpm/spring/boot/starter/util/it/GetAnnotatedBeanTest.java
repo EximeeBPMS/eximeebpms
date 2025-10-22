@@ -72,6 +72,6 @@ public class GetAnnotatedBeanTest {
   public void gets_annotated_bean() throws Exception {
     Optional<GetProcessApplicationNameFromAnnotation.AnnotatedBean> bean = GetProcessApplicationNameFromAnnotation.getAnnotatedBean.apply(ctx);
 
-    assertThat(bean.isPresent()).isTrue();
+    assertThat(bean).isPresent();
   }
 }

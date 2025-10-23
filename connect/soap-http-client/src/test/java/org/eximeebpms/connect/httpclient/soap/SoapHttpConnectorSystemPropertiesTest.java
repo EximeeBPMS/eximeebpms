@@ -18,7 +18,7 @@ package org.eximeebpms.connect.httpclient.soap;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
@@ -55,7 +55,7 @@ public class SoapHttpConnectorSystemPropertiesTest {
   @Before
   public void setUp() {
     updatedSystemProperties = new HashSet<>();
-    wireMockRule.stubFor(get(urlEqualTo("/")).willReturn(aResponse().withStatus(200)));
+    wireMockRule.stubFor(post(urlEqualTo("/")).willReturn(aResponse().withStatus(200)));
   }
 
   @After

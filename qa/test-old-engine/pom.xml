@@ -194,7 +194,7 @@
         <dependency>
           <groupId>org.apache.commons</groupId>
           <artifactId>commons-lang3</artifactId>
-          <version>3.8.1</version>
+          <version>${version.commons-lang3}</version>
           <scope>test</scope>
         </dependency>
 
@@ -215,6 +215,16 @@
           <groupId>com.github.tomakehurst</groupId>
           <artifactId>wiremock</artifactId>
           <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>org.apache.commons</groupId>
+              <artifactId>commons-lang3</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.jayway.jsonpath</groupId>
+              <artifactId>json-path</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         
         <dependency>
@@ -244,8 +254,18 @@
         <dependency>
           <groupId>com.github.h-thurow</groupId>
           <artifactId>simple-jndi</artifactId>
-          <version>0.24.0</version>
+          <version>0.25.0</version>
           <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>commons-lang</groupId>
+              <artifactId>commons-lang</artifactId>
+            </exclusion>
+            <exclusion>
+              <artifactId>commons-lang3</artifactId>
+              <groupId>org.apache.commons</groupId>
+            </exclusion>
+          </exclusions>
         </dependency>
 
         <dependency>

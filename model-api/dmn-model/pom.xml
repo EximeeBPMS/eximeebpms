@@ -99,12 +99,12 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/model/dmn/impl/**</exclude>
-                <exclude>org/camunda/bpm/model/dmn/instance/Binding</exclude>
-                <exclude>org/camunda/bpm/model/dmn/instance/ParameterReference</exclude>
+                <exclude>org/eximeebpms/bpm/model/dmn/impl/**</exclude>
+                <exclude>org/eximeebpms/bpm/model/dmn/instance/Binding</exclude>
+                <exclude>org/eximeebpms/bpm/model/dmn/instance/ParameterReference</exclude>
               </excludes>
             </configuration>
             <executions>

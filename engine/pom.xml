@@ -534,11 +534,11 @@
           <relocations>
             <relocation>
               <pattern>com.google.gson</pattern>
-              <shadedPattern>camundajar.impl.com.google.gson</shadedPattern>
+              <shadedPattern>eximeebpms.impl.com.google.gson</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.cronutils</pattern>
-              <shadedPattern>camundajar.impl.com.cronutils</shadedPattern>
+              <shadedPattern>eximeebpms.impl.com.cronutils</shadedPattern>
             </relocation>
           </relocations>
           <transformers>
@@ -753,12 +753,12 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/*/impl/**</exclude>
-                <exclude>org/camunda/bpm/engine/test/ProcessEngineRule</exclude>
-                <exclude>camundajar/**/*</exclude>
+                <exclude>org/eximeebpms/bpm/*/impl/**</exclude>
+                <exclude>org/eximeebpms/bpm/engine/test/ProcessEngineRule</exclude>
+                <exclude>eximeebpms/**/*</exclude>
               </excludes>
             </configuration>
             <executions>

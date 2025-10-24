@@ -125,8 +125,8 @@
               <goal>parse-version</goal>
             </goals>
             <configuration>
-              <propertyPrefix>camunda.old</propertyPrefix>
-              <versionString>${camunda.version.old}</versionString>
+              <propertyPrefix>eximeebpms.old</propertyPrefix>
+              <versionString>${eximeebpms.version.old}</versionString>
             </configuration>
           </execution>
         </executions>
@@ -281,8 +281,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="db2_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="db2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="db2_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- h2 patches -->
@@ -290,8 +290,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="h2_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="h2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="h2_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- mssql patches -->
@@ -299,8 +299,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mssql_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mssql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mssql_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- mysql patches -->
@@ -308,8 +308,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mysql_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/eximeebpms-test/sql/upgrade/mysql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mysql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/eximeebpms-test/sql/upgrade/mysql_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="mysql_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- oracle patches -->
@@ -317,8 +317,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="oracle_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="oracle_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="oracle_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- postgres patches -->
@@ -326,8 +326,8 @@
                   <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="postgres_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="postgres_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/eximeebpms-engine-${project.version}/org/eximeebpms/bpm/engine/db/upgrade" includes="postgres_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <copy todir="target/upgrade-test/sql/upgrade">
@@ -418,9 +418,9 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
-                      <version>${camunda.version.old}</version>
+                      <groupId>org.eximeebpms.bpm.distro</groupId>
+                      <artifactId>eximeebpms-sql-scripts</artifactId>
+                      <version>${eximeebpms.version.old}</version>
                       <outputDirectory>${project.build.directory}/test-classes/scripts-old</outputDirectory>
                       <overWrite>true</overWrite>
                     </artifactItem>
@@ -445,7 +445,7 @@
                     <!-- create the SQL scripts so that the files exist even if they do not exist in the distribution.
                     (this can be the case if there are no db upgrades (yet) for a particular release ) -->
 
-                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${eximeebpms.old.majorVersion}.${eximeebpms.old.minorVersion}_patch.sql" />
                     <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${eximeebpms.current.majorVersion}.${eximeebpms.current.minorVersion}_patch.sql" />
 
                   </target>

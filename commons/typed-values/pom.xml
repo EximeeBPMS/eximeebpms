@@ -71,10 +71,10 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
         <configuration>
-          <comparisonVersion>${camunda.version.old}</comparisonVersion>
+          <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
           <logResults>true</logResults>
           <excludes>
-            <exclude>org/camunda/bpm/engine/impl/**</exclude>
+            <exclude>org/eximeebpms/bpm/engine/impl/**</exclude>
           </excludes>
         </configuration>
         <executions>

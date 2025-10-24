@@ -128,4 +128,4 @@ jobs:
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
       CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
-      SECRET_PAT_USER: ${{ secrets.SECRET_PAT_userlogin }}
+      SECRET_PAT_USER: ${{ secrets[env.GITHUB_PAT_USER] }}

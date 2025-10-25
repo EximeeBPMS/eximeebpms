@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.spin</groupId>
     <artifactId>eximeebpms-spin-root</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-spin-dataformat-all</artifactId>

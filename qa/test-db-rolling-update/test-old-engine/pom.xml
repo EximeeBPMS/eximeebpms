@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
     <artifactId>eximeebpms-qa-db-rolling-update</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.2-SNAPSHOT</version>
   </parent>
 
 

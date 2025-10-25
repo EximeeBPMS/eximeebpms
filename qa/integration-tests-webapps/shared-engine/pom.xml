@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.qa</groupId>
     <artifactId>eximeebpms-qa-integration-tests-webapps-root</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.1.2</version>
     <relativePath>../</relativePath>
   </parent>
 

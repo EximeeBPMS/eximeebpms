@@ -70,7 +70,7 @@
   </build>
 
   <dependencies>
-    <!-- Camunda dependencies -->
+    <!-- EximeeBPMS dependencies -->
 
     <dependency>
       <groupId>org.eximeebpms.bpm.quarkus</groupId>

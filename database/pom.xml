@@ -31,6 +31,7 @@
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.23.0</camunda.version.old>
+    <eximeebpms.version.old>1.0.0</eximeebpms.version.old>
 
     <!-- Testcontainers JDBC URL parameters. By default, an empty string -->
     <database.tc.params />

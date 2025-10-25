@@ -20,7 +20,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- managed by camunda internal dependencies -->
+    <!-- managed by eximeebpms internal dependencies -->
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine</artifactId>

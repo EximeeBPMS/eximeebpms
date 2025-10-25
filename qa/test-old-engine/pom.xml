@@ -12,7 +12,7 @@
   <name>EximeeBPMS - QA - test new schema with old engine</name>
 
   <properties>
-    <eximeebpms.old.engine.version>7.23.0</eximeebpms.old.engine.version>
+    <eximeebpms.old.engine.version>1.0.0</eximeebpms.old.engine.version>
   </properties>
 
   <build>
@@ -295,9 +295,9 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm</groupId>
-                      <artifactId>camunda-engine</artifactId>
-                      <version>${camunda.old.engine.version}</version>
+                      <groupId>org.eximeebpms.bpm</groupId>
+                      <artifactId>eximeebpms-engine</artifactId>
+                      <version>${eximeebpms.old.engine.version}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
                     </artifactItem>

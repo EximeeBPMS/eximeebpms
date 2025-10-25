@@ -15,7 +15,7 @@
 
   <dependencies>
 
-    <!-- Camunda dependencies -->
+    <!-- EximeeBPMS dependencies -->
     <dependency>
       <groupId>org.eximeebpms.bpm.quarkus</groupId>
       <artifactId>eximeebpms-bpm-quarkus-engine</artifactId>

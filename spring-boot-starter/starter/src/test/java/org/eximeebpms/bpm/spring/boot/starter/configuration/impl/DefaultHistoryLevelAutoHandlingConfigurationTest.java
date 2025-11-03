@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.jdbc.HistoryLevelDeterminator;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,15 +39,15 @@ public class DefaultHistoryLevelAutoHandlingConfigurationTest {
   @Mock
   private HistoryLevelDeterminator historyLevelDeterminator;
 
-  private CamundaBpmProperties camundaBpmProperties;
+  private EximeeBPMSBpmProperties eximeeBPMSBpmProperties;
 
   private DefaultHistoryLevelAutoHandlingConfiguration historyLevelAutoHandlingConfiguration;
 
   @Before
   public void before() {
-    camundaBpmProperties = new CamundaBpmProperties();
+    eximeeBPMSBpmProperties = new EximeeBPMSBpmProperties();
     historyLevelAutoHandlingConfiguration = new DefaultHistoryLevelAutoHandlingConfiguration();
-    historyLevelAutoHandlingConfiguration.camundaBpmProperties = camundaBpmProperties;
+    historyLevelAutoHandlingConfiguration.eximeeBPMSBpmProperties = eximeeBPMSBpmProperties;
     historyLevelAutoHandlingConfiguration.historyLevelDeterminator = historyLevelDeterminator;
   }
 

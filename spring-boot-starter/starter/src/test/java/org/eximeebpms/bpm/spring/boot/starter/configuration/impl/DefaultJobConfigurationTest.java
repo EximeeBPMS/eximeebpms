@@ -29,7 +29,7 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.JobHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.NotifyAcquisitionRejectedJobsHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.RejectedJobsHandler;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,14 +49,14 @@ public class DefaultJobConfigurationTest {
 
   private final SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
   private final DefaultJobConfiguration jobConfiguration = new DefaultJobConfiguration();
-  private final CamundaBpmProperties properties = new CamundaBpmProperties();
+  private final EximeeBPMSBpmProperties properties = new EximeeBPMSBpmProperties();
 
   @Autowired
   JobExecutor jobExecutor;
 
   @Before
   public void setUp() {
-    setField(jobConfiguration, "camundaBpmProperties", properties);
+    setField(jobConfiguration, "eximeeBPMSBpmProperties", properties);
   }
 
   @Test

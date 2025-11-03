@@ -16,8 +16,7 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.runlistener;
 
-import org.eximeebpms.bpm.spring.boot.starter.util.CamundaBpmVersion;
-import org.eximeebpms.bpm.spring.boot.starter.util.CamundaBpmVersionTest;
+import org.eximeebpms.bpm.spring.boot.starter.util.EximeeBPMSBpmVersion;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,7 +59,7 @@ public class PropertiesListenerTest {
 
   @Test
   public void addPropertiesPropertySource() throws Exception {
-    final CamundaBpmVersion version = new CamundaBpmVersion();
+    final EximeeBPMSBpmVersion version = new EximeeBPMSBpmVersion();
 
     new PropertiesListener(version).onApplicationEvent(event);
 

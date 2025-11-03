@@ -28,12 +28,12 @@ import jakarta.annotation.PostConstruct;
 @ContextConfiguration(classes = ParsePropertiesHelper.TestConfig.class)
 public abstract class ParsePropertiesHelper {
 
-  @EnableConfigurationProperties(CamundaBpmProperties.class)
+  @EnableConfigurationProperties(EximeeBPMSBpmProperties.class)
   public static class TestConfig {
   }
 
   @Autowired
-  protected CamundaBpmProperties properties;
+  protected EximeeBPMSBpmProperties properties;
 
   protected MetricsProperty metrics;
   protected WebappProperty webapp;

@@ -16,13 +16,13 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.webapp.filter.util;
 
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(CamundaBpmProperties.class)
+@EnableConfigurationProperties(EximeeBPMSBpmProperties.class)
 public class FilterTestApp {
 
   public static void main(String[] args) {

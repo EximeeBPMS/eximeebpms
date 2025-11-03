@@ -30,7 +30,6 @@ import org.eximeebpms.bpm.spring.boot.starter.property.AdminUserProperty;
 import org.springframework.beans.BeanUtils;
 
 import jakarta.annotation.PostConstruct;
-import java.util.Collections;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -45,7 +44,7 @@ public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
 
   @PostConstruct
   void init() {
-    adminUser = Optional.ofNullable(camundaBpmProperties.getAdminUser())
+    adminUser = Optional.ofNullable(eximeeBPMSBpmProperties.getAdminUser())
       .map(AdminUserProperty::init)
       .orElseThrow(fail("adminUser not configured!"));
   }

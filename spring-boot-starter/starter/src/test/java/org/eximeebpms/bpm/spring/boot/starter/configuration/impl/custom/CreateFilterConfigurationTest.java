@@ -30,7 +30,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.filter.Filter;
 import org.eximeebpms.bpm.engine.filter.FilterQuery;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import org.eximeebpms.commons.testing.ProcessEngineLoggingRule;
@@ -43,16 +43,16 @@ import java.util.List;
 
 public class CreateFilterConfigurationTest {
 
-  private final CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private final EximeeBPMSBpmProperties eximeeBPMSBpmProperties = new EximeeBPMSBpmProperties();
 
   {
-    camundaBpmProperties.getFilter().setCreate("All");
+    eximeeBPMSBpmProperties.getFilter().setCreate("All");
   }
 
   private final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
 
   {
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "eximeeBPMSBpmProperties", eximeeBPMSBpmProperties);
     configuration.init();
   }
 
@@ -74,9 +74,9 @@ public class CreateFilterConfigurationTest {
   @Test
   public void fail_if_not_configured_onInit() throws Exception {
     thrown.expect(IllegalStateException.class);
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+    EximeeBPMSBpmProperties eximeeBPMSBpmProperties = new EximeeBPMSBpmProperties();
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "eximeeBPMSBpmProperties", eximeeBPMSBpmProperties);
     configuration.init();
   }
 
@@ -84,10 +84,10 @@ public class CreateFilterConfigurationTest {
   public void fail_if_not_configured_onExecution() throws Exception {
     thrown.expect(NullPointerException.class);
 
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
-    camundaBpmProperties.getFilter().setCreate("All");
+    EximeeBPMSBpmProperties eximeeBPMSBpmProperties = new EximeeBPMSBpmProperties();
+    eximeeBPMSBpmProperties.getFilter().setCreate("All");
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "eximeeBPMSBpmProperties", eximeeBPMSBpmProperties);
     configuration.init();
     configuration.filterName = null;
 
@@ -96,10 +96,10 @@ public class CreateFilterConfigurationTest {
 
   @Test
   public void do_not_create_when_already_exist() throws Exception {
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
-    camundaBpmProperties.getFilter().setCreate("All");
+    EximeeBPMSBpmProperties eximeeBPMSBpmProperties = new EximeeBPMSBpmProperties();
+    eximeeBPMSBpmProperties.getFilter().setCreate("All");
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "eximeeBPMSBpmProperties", eximeeBPMSBpmProperties);
     configuration.init();
 
     ProcessEngine engine = mock(ProcessEngine.class);

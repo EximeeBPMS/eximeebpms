@@ -18,17 +18,17 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.engine.impl.history.handler.HistoryEventHandler;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaHistoryConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSHistoryConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DefaultHistoryConfiguration extends AbstractCamundaConfiguration implements CamundaHistoryConfiguration {
+public class DefaultHistoryConfiguration extends AbstractCamundaConfiguration implements EximeeBPMSHistoryConfiguration {
 
   @Autowired(required = false)
   protected HistoryEventHandler historyEventHandler;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    String historyLevel = camundaBpmProperties.getHistoryLevel();
+    String historyLevel = eximeeBPMSBpmProperties.getHistoryLevel();
     if (historyLevel != null) {
       configuration.setHistory(historyLevel);
     }

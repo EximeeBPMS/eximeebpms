@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaHistoryLevelAutoHandlingConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSHistoryLevelAutoHandlingConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.Ordering;
 import org.eximeebpms.bpm.spring.boot.starter.jdbc.HistoryLevelDeterminator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
 @Order(Ordering.DEFAULT_ORDER + 1)
-public class DefaultHistoryLevelAutoHandlingConfiguration extends AbstractCamundaConfiguration implements CamundaHistoryLevelAutoHandlingConfiguration {
+public class DefaultHistoryLevelAutoHandlingConfiguration extends AbstractCamundaConfiguration implements EximeeBPMSHistoryLevelAutoHandlingConfiguration {
 
   @Autowired
   protected HistoryLevelDeterminator historyLevelDeterminator;

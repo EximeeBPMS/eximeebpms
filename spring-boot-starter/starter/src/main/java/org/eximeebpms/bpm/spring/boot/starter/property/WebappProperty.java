@@ -18,13 +18,13 @@ package org.eximeebpms.bpm.spring.boot.starter.property;
 
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 public class WebappProperty {
 
   public static final String DEFAULT_APP_PATH = "/eximeebpms";
 
-  public static final String PREFIX = CamundaBpmProperties.PREFIX + ".webapp";
+  public static final String PREFIX = EximeeBPMSBpmProperties.PREFIX + ".webapp";
 
   protected boolean indexRedirectEnabled = true;
 

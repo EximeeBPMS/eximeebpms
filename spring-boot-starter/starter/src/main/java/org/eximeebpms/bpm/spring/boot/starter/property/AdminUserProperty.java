@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eximeebpms.bpm.engine.identity.User;
 
 import static java.util.Objects.requireNonNull;
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 
 public class AdminUserProperty implements User {

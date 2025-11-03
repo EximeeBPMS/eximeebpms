@@ -17,18 +17,18 @@
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaMetricsConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBPMSMetricsConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.MetricsProperty;
 
 import jakarta.annotation.PostConstruct;
 
-public class DefaultMetricsConfiguration extends AbstractCamundaConfiguration implements CamundaMetricsConfiguration {
+public class DefaultMetricsConfiguration extends AbstractCamundaConfiguration implements EximeeBPMSMetricsConfiguration {
 
   private MetricsProperty metrics;
 
   @PostConstruct
   void init() {
-    metrics = camundaBpmProperties.getMetrics();
+    metrics = eximeeBPMSBpmProperties.getMetrics();
   }
 
   @Override

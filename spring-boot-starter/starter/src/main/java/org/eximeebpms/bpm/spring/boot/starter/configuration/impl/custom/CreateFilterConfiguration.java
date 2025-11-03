@@ -32,7 +32,7 @@ public class CreateFilterConfiguration extends AbstractCamundaConfiguration {
 
   @PostConstruct
   public void init() {
-    filterName = Optional.ofNullable(camundaBpmProperties.getFilter())
+    filterName = Optional.ofNullable(eximeeBPMSBpmProperties.getFilter())
         .map(FilterProperty::getCreate)
         .orElseThrow(fail("filter.create not configured!"));
   }

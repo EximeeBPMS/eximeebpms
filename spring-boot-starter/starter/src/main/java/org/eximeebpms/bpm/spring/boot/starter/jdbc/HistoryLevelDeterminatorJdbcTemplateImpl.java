@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataAccessException;
@@ -35,9 +35,9 @@ public class HistoryLevelDeterminatorJdbcTemplateImpl implements HistoryLevelDet
   
   private static final Logger log = org.slf4j.LoggerFactory.getLogger(HistoryLevelDeterminatorJdbcTemplateImpl.class);
 
-  public static HistoryLevelDeterminator createHistoryLevelDeterminator(CamundaBpmProperties camundaBpmProperties, JdbcTemplate jdbcTemplate) {
+  public static HistoryLevelDeterminator createHistoryLevelDeterminator(EximeeBPMSBpmProperties eximeeBPMSBpmProperties, JdbcTemplate jdbcTemplate) {
     final HistoryLevelDeterminatorJdbcTemplateImpl determinator = new HistoryLevelDeterminatorJdbcTemplateImpl();
-    determinator.setCamundaBpmProperties(camundaBpmProperties);
+    determinator.setEximeeBPMSBpmProperties(eximeeBPMSBpmProperties);
     determinator.setJdbcTemplate(jdbcTemplate);
     return determinator;
   }
@@ -55,7 +55,7 @@ public class HistoryLevelDeterminatorJdbcTemplateImpl implements HistoryLevelDet
 
   protected boolean ignoreDataAccessException = true;
 
-  protected CamundaBpmProperties camundaBpmProperties;
+  protected EximeeBPMSBpmProperties eximeeBPMSBpmProperties;
 
   public String getDefaultHistoryLevel() {
     return defaultHistoryLevel;
@@ -81,19 +81,19 @@ public class HistoryLevelDeterminatorJdbcTemplateImpl implements HistoryLevelDet
     this.ignoreDataAccessException = ignoreDataAccessException;
   }
 
-  public CamundaBpmProperties getCamundaBpmProperties() {
-    return camundaBpmProperties;
+  public EximeeBPMSBpmProperties getEximeeBPMSBpmProperties() {
+    return eximeeBPMSBpmProperties;
   }
 
-  public void setCamundaBpmProperties(CamundaBpmProperties camundaBpmProperties) {
-    this.camundaBpmProperties = camundaBpmProperties;
+  public void setEximeeBPMSBpmProperties(EximeeBPMSBpmProperties eximeeBPMSBpmProperties) {
+    this.eximeeBPMSBpmProperties = eximeeBPMSBpmProperties;
   }
 
   @Override
   public void afterPropertiesSet() throws Exception {
     Assert.notNull(jdbcTemplate, "a jdbc template must be set");
-    Assert.notNull(camundaBpmProperties, "Camunda Platform properties must be set");
-    String historyLevelDefault = camundaBpmProperties.getHistoryLevelDefault();
+    Assert.notNull(eximeeBPMSBpmProperties, "Camunda Platform properties must be set");
+    String historyLevelDefault = eximeeBPMSBpmProperties.getHistoryLevelDefault();
     if (StringUtils.hasText(historyLevelDefault)) {
       defaultHistoryLevel = historyLevelDefault;
     }
@@ -117,7 +117,7 @@ public class HistoryLevelDeterminatorJdbcTemplateImpl implements HistoryLevelDet
   }
 
   protected String getSql() {
-    String tablePrefix = camundaBpmProperties.getDatabase().getTablePrefix();
+    String tablePrefix = eximeeBPMSBpmProperties.getDatabase().getTablePrefix();
     if (tablePrefix == null) {
       tablePrefix = "";
     }

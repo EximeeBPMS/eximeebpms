@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.spring.boot.starter.property;
 
 import org.apache.commons.lang3.BooleanUtils;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 /**
  * Properties controlling spring eventing.

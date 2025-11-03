@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.spring.boot.starter.multitask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eximeebpms.bpm.spring.boot.starter.AbstractCamundaAutoConfigurationIT;
+import org.eximeebpms.bpm.spring.boot.starter.AbstractEximeeBPMSAutoConfigurationIT;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultJobConfiguration.JobConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { MultipleTaskExecutorsIT.MultipleTaskExecutorsConfig.class })
-public class MultipleTaskExecutorsIT extends AbstractCamundaAutoConfigurationIT {
+public class MultipleTaskExecutorsIT extends AbstractEximeeBPMSAutoConfigurationIT {
 
   @Autowired
   private TaskExecutor[] taskExecutors;

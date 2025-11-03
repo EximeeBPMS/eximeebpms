@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.runlistener;
 
-import org.eximeebpms.bpm.spring.boot.starter.util.CamundaBpmVersion;
+import org.eximeebpms.bpm.spring.boot.starter.util.EximeeBPMSBpmVersion;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -25,15 +25,15 @@ import org.springframework.context.ApplicationListener;
  */
 public class PropertiesListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
-  private final CamundaBpmVersion version;
+  private final EximeeBPMSBpmVersion version;
 
   /**
    * Default constructor, used when initializing via spring.factories.
    *
-   * @see PropertiesListener#PropertiesListener(CamundaBpmVersion)
+   * @see PropertiesListener#PropertiesListener(EximeeBPMSBpmVersion)
    */
   public PropertiesListener() {
-    this(new CamundaBpmVersion());
+    this(new EximeeBPMSBpmVersion());
   }
 
   /**
@@ -41,7 +41,7 @@ public class PropertiesListener implements ApplicationListener<ApplicationEnviro
    *
    * @param version the current camundaBpmVersion instance.
    */
-  PropertiesListener(CamundaBpmVersion version) {
+  PropertiesListener(EximeeBPMSBpmVersion version) {
     this.version = version;
   }
 

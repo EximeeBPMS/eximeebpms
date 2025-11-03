@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.spring.boot.starter.property;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties.joinOn;
 
 public class GenericProperties {
 

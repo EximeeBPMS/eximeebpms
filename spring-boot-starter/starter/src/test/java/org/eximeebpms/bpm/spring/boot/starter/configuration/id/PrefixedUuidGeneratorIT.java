@@ -18,9 +18,9 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.id;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBPMSBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
-import org.eximeebpms.bpm.spring.boot.starter.util.CamundaSpringBootUtil;
+import org.eximeebpms.bpm.spring.boot.starter.util.EximeeBPMSSpringBootUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class PrefixedUuidGeneratorIT {
   private IdGenerator idGenerator;
 
   @Autowired
-  private CamundaBpmProperties properties;
+  private EximeeBPMSBpmProperties properties;
 
   @Autowired
   private ProcessEngine processEngine;
@@ -54,7 +54,7 @@ public class PrefixedUuidGeneratorIT {
 
   @Test
   public void configured_idGenerator_is_uuid() throws Exception {
-    final IdGenerator idGenerator = CamundaSpringBootUtil.get(processEngine).getIdGenerator();
+    final IdGenerator idGenerator = EximeeBPMSSpringBootUtil.get(processEngine).getIdGenerator();
 
     assertThat(idGenerator).isOfAnyClassIn(PrefixedUuidGenerator.class);
   }

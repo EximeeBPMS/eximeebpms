@@ -69,22 +69,28 @@ module.exports = (_env, argv = {}) => {
           context: ['/api'],
           target: 'http://localhost:8080/eximeebpms/api',
           logLevel: 'debug',
-          pathRewrite: { '^/api': '' }
+          pathRewrite: {
+            '^/api': ''
+          }
         },
         {
           context: ['/eximeebpms-welcome'],
           target: 'http://localhost:8080/',
           logLevel: 'debug'
         },
-        ...Object.entries(addEngines(['default', 'engine2', 'engine3'])).map(([context, config]) => ({
-          context,
-          ...config
-        })),
+        ...Object.entries(addEngines(['default', 'engine2', 'engine3'])).map(
+          ([context, config]) => ({
+            context,
+            ...config
+          })
+        ),
         {
           context: ['/eximeebpms/api'],
-          target: 'http://localhost:8081/',
+          target: 'http://localhost:8080/eximeebpms/api',
           logLevel: 'debug',
-          pathRewrite: path => path.replace('/eximeebpms', '')
+          pathRewrite: {
+            '^/eximeebpms/api': ''
+          }
         },
         {
           context: ['/eximeebpms'],

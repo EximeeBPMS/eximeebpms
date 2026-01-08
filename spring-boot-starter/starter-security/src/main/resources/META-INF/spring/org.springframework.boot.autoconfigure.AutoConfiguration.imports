@@ -1,2 +1,2 @@
-org.eximeebpms.bpm.spring.boot.starter.security.oauth2.CamundaBpmSpringSecurityDisableAutoConfiguration
-org.eximeebpms.bpm.spring.boot.starter.security.oauth2.CamundaSpringSecurityOAuth2AutoConfiguration
+org.eximeebpms.bpm.spring.boot.starter.security.oauth2.EximeeBPMSBpmSpringSecurityDisableAutoConfiguration
+org.eximeebpms.bpm.spring.boot.starter.security.oauth2.EximeeBPMSSpringSecurityOAuth2AutoConfiguration

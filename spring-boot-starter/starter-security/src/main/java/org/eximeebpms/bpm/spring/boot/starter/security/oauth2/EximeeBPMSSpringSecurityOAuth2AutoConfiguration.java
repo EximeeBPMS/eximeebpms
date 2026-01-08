@@ -54,19 +54,19 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.Map;
 
-@AutoConfigureOrder(CamundaSpringSecurityOAuth2AutoConfiguration.CAMUNDA_OAUTH2_ORDER)
+@AutoConfigureOrder(EximeeBPMSSpringSecurityOAuth2AutoConfiguration.CAMUNDA_OAUTH2_ORDER)
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class })
 @ConditionalOnBean(CamundaBpmProperties.class)
 @Conditional(ClientsConfiguredCondition.class)
 @EnableConfigurationProperties(OAuth2Properties.class)
-public class CamundaSpringSecurityOAuth2AutoConfiguration {
+public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
 
-  private static final Logger logger = LoggerFactory.getLogger(CamundaSpringSecurityOAuth2AutoConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(EximeeBPMSSpringSecurityOAuth2AutoConfiguration.class);
   public static final int CAMUNDA_OAUTH2_ORDER = Ordered.HIGHEST_PRECEDENCE + 100;
   private final OAuth2Properties oAuth2Properties;
   private final String webappPath;
 
-  public CamundaSpringSecurityOAuth2AutoConfiguration(CamundaBpmProperties properties,
+  public EximeeBPMSSpringSecurityOAuth2AutoConfiguration(CamundaBpmProperties properties,
                                                       OAuth2Properties oAuth2Properties) {
     this.oAuth2Properties = oAuth2Properties;
     WebappProperty webapp = properties.getWebapp();

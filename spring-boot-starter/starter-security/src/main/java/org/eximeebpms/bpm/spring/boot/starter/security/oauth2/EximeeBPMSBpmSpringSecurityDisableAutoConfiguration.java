@@ -26,9 +26,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 
 @Conditional(ClientsNotConfiguredCondition.class)
-public class CamundaBpmSpringSecurityDisableAutoConfiguration {
+public class EximeeBPMSBpmSpringSecurityDisableAutoConfiguration {
 
-  private static final Logger logger = LoggerFactory.getLogger(CamundaBpmSpringSecurityDisableAutoConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(EximeeBPMSBpmSpringSecurityDisableAutoConfiguration.class);
 
   @Bean
   public SecurityFilterChain filterChainPermitAll(HttpSecurity http) throws Exception {

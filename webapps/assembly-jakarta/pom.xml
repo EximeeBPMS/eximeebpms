@@ -19,7 +19,7 @@
     <jakarta.runtime>${project.build.directory}/generated-resources/jakarta-runtime</jakarta.runtime>
 
     <version.resteasy>6.2.8.Final</version.resteasy>
-    <version.jetty>11.0.14</version.jetty>
+    <version.jetty>11.0.26</version.jetty>
     <version.jersey2>3.1.1</version.jersey2>
 
     <web.resources.override>${jakarta.runtime}/default/webapp</web.resources.override>
@@ -661,10 +661,6 @@
       <activation>
         <jdk>[17,)</jdk>
       </activation>
-
-      <properties>
-        <version.spring.framework>${version.spring.framework6}</version.spring.framework>
-      </properties>
 
       <dependencies>
         <dependency>

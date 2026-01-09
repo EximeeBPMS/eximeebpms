@@ -33,6 +33,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>${version.jakarta-servlet-api}</version>
+        <scope>provided</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -703,10 +709,6 @@
       <activation>
         <jdk>[17,)</jdk>
       </activation>
-
-      <properties>
-        <version.spring.framework>${version.spring.framework6}</version.spring.framework>
-      </properties>
 
       <dependencies>
         <dependency>

@@ -35,7 +35,7 @@ public class EnvScriptResolutionTest extends AbstractScriptEnvironmentTest {
 
   @Override
   protected ScriptEnvResolver getResolver() {
-    return language -> ECMASCRIPT_LANGUAGE.equals(language) ? new String[] { ENV_SCRIPT } : null;
+    return language -> ECMASCRIPT_LANGUAGE.equals(language) ? new String[]{ENV_SCRIPT} : null;
   }
 
   @Override
@@ -56,10 +56,10 @@ public class EnvScriptResolutionTest extends AbstractScriptEnvironmentTest {
     // then
     Map<String, List<ExecutableScript>> environmentScripts = processApplication.getEnvironmentScripts();
     assertThat(environmentScripts)
-      .hasSize(1)
-      .containsKey(ECMASCRIPT_LANGUAGE)
-      .extracting(ECMASCRIPT_LANGUAGE)
-        .hasSize(1);
+        .hasSize(1)
+        .containsKey(ECMASCRIPT_LANGUAGE)
+        .extracting(ECMASCRIPT_LANGUAGE)
+        .isNotNull();
 
     repositoryService.deleteDeployment(deployment.getId(), true);
   }
@@ -77,11 +77,11 @@ public class EnvScriptResolutionTest extends AbstractScriptEnvironmentTest {
     // then
     Map<String, List<ExecutableScript>> environmentScripts = processApplication.getEnvironmentScripts();
     assertThat(environmentScripts)
-      .hasSize(2)
-      .containsKeys(ECMASCRIPT_LANGUAGE, SCRIPT_LANGUAGE)
-      .containsEntry(SCRIPT_LANGUAGE, Collections.emptyList())
-      .extracting(ECMASCRIPT_LANGUAGE)
-        .hasSize(1);
+        .hasSize(2)
+        .containsKeys(ECMASCRIPT_LANGUAGE, SCRIPT_LANGUAGE)
+        .containsEntry(SCRIPT_LANGUAGE, Collections.emptyList())
+        .extracting(ECMASCRIPT_LANGUAGE)
+        .isNotNull();
 
     repositoryService.deleteDeployment(deployment.getId(), true);
   }

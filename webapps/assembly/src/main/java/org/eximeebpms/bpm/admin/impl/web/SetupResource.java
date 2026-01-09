@@ -21,10 +21,10 @@ import static org.eximeebpms.bpm.engine.authorization.Authorization.AUTH_TYPE_GR
 import static org.eximeebpms.bpm.engine.authorization.Permissions.ALL;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
-import javax.servlet.ServletException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

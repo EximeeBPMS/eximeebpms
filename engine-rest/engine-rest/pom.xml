@@ -75,6 +75,7 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- TODO rmastalerek -->
     <!-- provided deps -->
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>
@@ -220,6 +221,13 @@
           <artifactId>spring-jcl</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${version.jakarta-servlet-api}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Tomcat for resteasy and wink -->

@@ -16,10 +16,10 @@
  */
 package org.eximeebpms.bpm.engine.rest.spi;
 
+import jakarta.servlet.ServletContextEvent;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
 
-import javax.servlet.ServletContextEvent;
 import javax.ws.rs.container.AsyncResponse;
 
 /**

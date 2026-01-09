@@ -19,10 +19,10 @@
 
   <properties>
     <version.quarkus>3.28.4</version.quarkus>
-    <version.spring.framework>5.3.39</version.spring.framework>
-    <version.spring.framework6>6.2.11</version.spring.framework6>
-    <version.spring-boot>3.5.6</version.spring-boot>
+    <version.spring.framework>6.2.15</version.spring.framework>
+    <version.spring-boot>3.5.9</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
+    <version.rest-assured>6.0.0</version.rest-assured>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
     <version.jaxrs.api>2.0.1.Final</version.jaxrs.api>
@@ -35,7 +35,7 @@
     <version.accessors-smart>2.5.2</version.accessors-smart>
     <version.gson>2.8.9</version.gson>
     <version.openjpa>2.4.3</version.openjpa>
-    <version.hibernate>5.6.5.Final</version.hibernate>
+    <version.hibernate>7.2.0.Final</version.hibernate>
     <version.hikaricp>4.0.3</version.hikaricp>
     <version.jackson>2.15.2</version.jackson>
     <version.xml.bind-api>2.3.3</version.xml.bind-api>
@@ -49,11 +49,13 @@
     <version.slf4j>1.7.26</version.slf4j>
     <version.logback>1.2.11</version.logback>
     <version.junit>4.13.1</version.junit>
-    <version.assertj>2.9.1</version.assertj>
+    <version.assertj>3.27.6</version.assertj>
     <version.mockito>5.10.0</version.mockito>
     <version.wiremock>2.27.2</version.wiremock>
     <version.testcontainers>1.16.0</version.testcontainers>
     <version.unirest-java>2.3.10</version.unirest-java>
+    <version.jakarta-servlet-api>6.1.0</version.jakarta-servlet-api>
+    <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
 
     <version.commonj>1.1.0</version.commonj>
     <version.bouncycastle>1.70</version.bouncycastle>
@@ -70,7 +72,7 @@
 
     <version.arquillian>1.1.10.Final</version.arquillian>
     <version.shrinkwrap.resolvers>2.2.7</version.shrinkwrap.resolvers>
-    <version.selenium>4.10.0</version.selenium>
+    <version.selenium>4.39.0</version.selenium>
     <version.freemarker>2.3.31</version.freemarker>
 
     <version.jboss-javaee-spec>3.0.2.Final</version.jboss-javaee-spec>

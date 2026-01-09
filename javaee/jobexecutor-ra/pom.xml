@@ -11,11 +11,6 @@
     <version>1.2.2-SNAPSHOT</version>
   </parent>
 
-  <properties>
-    <!-- TODO: move to parent -->
-    <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
-  </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>

@@ -34,22 +34,22 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>${version.spring.framework6}</version>
+      <version>${version.spring.framework}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>${version.spring.framework6}</version>
+      <version>${version.spring.framework}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>${version.spring.framework6}</version>
+      <version>${version.spring.framework}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>${version.spring.framework6}</version>
+      <version>${version.spring.framework}</version>
     </dependency>
 
     <dependency>

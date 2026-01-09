@@ -44,7 +44,7 @@ import org.slf4j.Logger;
  */
 public abstract class AbstractCompetingTransactionsOptimisticLockingTest {
 
-  private static Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
+  private static final Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
 
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected RuntimeService runtimeService;
@@ -83,8 +83,9 @@ public abstract class AbstractCompetingTransactionsOptimisticLockingTest {
     thread1.proceedAndWaitTillDone();
 
     // then
-    assertThat(thread1.exception).isNotNull();
-    assertThat(thread1.exception).isInstanceOf(OptimisticLockingException.class);
+    assertThat(thread1.exception)
+        .isNotNull()
+        .isInstanceOf(OptimisticLockingException.class);
   }
 
   @Deployment(resources = "org/eximeebpms/bpm/engine/test/concurrency/AbstractCompetingTransactionsOptimisticLockingTest.shouldDetectConcurrentDeletionOfExecutionForTaskInsert.bpmn20.xml")
@@ -117,7 +118,7 @@ public abstract class AbstractCompetingTransactionsOptimisticLockingTest {
     assertThat(thread1.exception)
       .isInstanceOf(ProcessEngineException.class)
       .extracting("code")
-      .contains(BuiltinExceptionCode.FOREIGN_KEY_CONSTRAINT_VIOLATION.getCode());
+      .isEqualTo(BuiltinExceptionCode.FOREIGN_KEY_CONSTRAINT_VIOLATION.getCode());
   }
 
   public class CompleteTaskThread extends ControllableThread {

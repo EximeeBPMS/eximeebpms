@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 
@@ -93,7 +93,7 @@ public class SecurityActions {
   }
 
   public static interface SecurityAction<T> {
-    public T execute() throws IOException, ServletException;
+    public T execute() throws IOException, ServletException, jakarta.servlet.ServletException;
   }
 
 }

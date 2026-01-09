@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import   static org.assertj.core.api.Assertions.assertThat;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.webapp.impl.util.HeaderRule;

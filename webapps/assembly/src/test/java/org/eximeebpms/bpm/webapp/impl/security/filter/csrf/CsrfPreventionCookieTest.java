@@ -16,8 +16,7 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter.csrf;
 
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.http.HttpServletResponse;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.webapp.impl.util.HeaderRule;
 import org.junit.Rule;

@@ -40,4 +40,9 @@ public class DmnDecisionTableResultAssert extends AbstractListAssert<DmnDecision
 
     return new DmnDecisionRuleResultAssert(value);
   }
+
+  @Override
+  protected DmnDecisionTableResultAssert newAbstractIterableAssert(Iterable<? extends DmnDecisionRuleResult> iterable) {
+    throw new UnsupportedOperationException("Iterable assertions are not supported for DmnDecisionTableResult");
+  }
 }

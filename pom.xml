@@ -38,6 +38,8 @@
         <artifactId>license-maven-plugin</artifactId>
         <version>2.4.0</version>
         <configuration>
+          <acceptPomPackaging>true</acceptPomPackaging>
+          <excludedScopes>test</excludedScopes>
           <outputDirectory>${project.build.directory}</outputDirectory>
           <thirdPartyFilename>THIRD-PARTY.txt</thirdPartyFilename>
         </configuration>
@@ -373,6 +375,10 @@
       <id>license-header-check</id>
       <build>
         <plugins>
+          <plugin>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+          </plugin>
         </plugins>
       </build>
     </profile>

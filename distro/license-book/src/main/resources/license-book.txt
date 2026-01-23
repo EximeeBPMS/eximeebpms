@@ -2826,8 +2826,8 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-aop:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-aop
+org.springframework:spring-aop:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-aop
 
 Copyright: various authors
 
@@ -2842,16 +2842,16 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-beans:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-beans
+org.springframework:spring-beans:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-beans
 
 Copyright: various authors
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-beans:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-beans
+org.springframework:spring-beans:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-beans
 
 Copyright: various authors
 
@@ -2866,8 +2866,8 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-context:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-context
+org.springframework:spring-context:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-context
 
 Copyright: various authors
 
@@ -2882,16 +2882,16 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-core:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-core
+org.springframework:spring-core:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-core
 
 Copyright: various authors
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-core:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-core
+org.springframework:spring-core:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-core
 
 Copyright: various authors
 
@@ -2906,8 +2906,8 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-expression:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-expression
+org.springframework:spring-expression:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-expression
 
 Copyright: various authors
 
@@ -2922,16 +2922,16 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-jcl:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-jcl
+org.springframework:spring-jcl:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-jcl
 
 Copyright: various authors
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-jcl:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-jcl
+org.springframework:spring-jcl:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-jcl
 
 Copyright: various authors
 
@@ -2946,8 +2946,8 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-jdbc:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-jdbc
+org.springframework:spring-jdbc:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-jdbc
 
 Copyright: various authors
 
@@ -2962,8 +2962,8 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-orm:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-orm
+org.springframework:spring-orm:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-orm
 
 Copyright: various authors
 
@@ -2978,24 +2978,24 @@ Copyright: various authors
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-tx:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-tx
+org.springframework:spring-tx:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-tx
 
 Copyright: various authors
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-web:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-web
+org.springframework:spring-web:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-web
 
 Copyright: various authors
 
 Licensed under Apache 2.0
 
 ===========================================================================================
-org.springframework:spring-webmvc:jar:6.2.11
-https://github.com/spring-projects/spring-framework/tree/v6.2.11/spring-webmvc
+org.springframework:spring-webmvc:jar:6.2.15
+https://github.com/spring-projects/spring-framework/tree/v6.2.15/spring-webmvc
 
 Copyright: various authors
 

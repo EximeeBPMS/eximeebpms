@@ -31,9 +31,9 @@ import org.springframework.context.annotation.Bean;
 public class CamundaBpmRestJerseyAutoConfiguration {
 
   @Bean
-  @ConditionalOnMissingBean(CamundaJerseyResourceConfig.class)
-  public CamundaJerseyResourceConfig createRestConfig() {
-    return new CamundaJerseyResourceConfig();
+  @ConditionalOnMissingBean(EximeeBPMSJerseyResourceConfig.class)
+  public EximeeBPMSJerseyResourceConfig createRestConfig() {
+    return new EximeeBPMSJerseyResourceConfig();
   }
 
   @Bean

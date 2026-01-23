@@ -69,6 +69,12 @@
     </dependency>
 
     <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${version.jakarta-servlet-api}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.wildfly.core</groupId>
       <artifactId>wildfly-subsystem-test-framework</artifactId>
       <version>${version.wildfly26.core}</version>

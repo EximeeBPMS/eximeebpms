@@ -83,8 +83,8 @@ public class CamundaBpmSecurityAutoConfigOauth2ApplicationIT extends AbstractSpr
   public void testSpringSecurityAutoConfigurationCorrectlySet() {
     // given oauth2 client configured
     // when retrieving config beans then only OAuth2AutoConfiguration is present
-    assertThat(getBeanForClass(CamundaSpringSecurityOAuth2AutoConfiguration.class, mockMvc.getDispatcherServlet().getWebApplicationContext())).isNotNull();
-    assertThat(getBeanForClass(CamundaBpmSpringSecurityDisableAutoConfiguration.class, mockMvc.getDispatcherServlet().getWebApplicationContext())).isNull();
+    assertThat(getBeanForClass(EximeeBPMSSpringSecurityOAuth2AutoConfiguration.class, mockMvc.getDispatcherServlet().getWebApplicationContext())).isNotNull();
+    assertThat(getBeanForClass(EximeeBPMSBpmSpringSecurityDisableAutoConfiguration.class, mockMvc.getDispatcherServlet().getWebApplicationContext())).isNull();
   }
 
   @Test

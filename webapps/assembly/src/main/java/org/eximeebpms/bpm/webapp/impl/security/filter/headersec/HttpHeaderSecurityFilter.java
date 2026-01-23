@@ -16,19 +16,19 @@
  */
 package org.eximeebpms.bpm.webapp.impl.security.filter.headersec;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentTypeOptionsProvider;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider;
 import org.eximeebpms.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionProvider;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

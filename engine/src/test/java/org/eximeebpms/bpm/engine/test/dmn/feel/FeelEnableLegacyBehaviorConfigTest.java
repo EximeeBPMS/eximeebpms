@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelSyntaxException;
 import org.eximeebpms.bpm.engine.DecisionService;
-import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineTestRule;
@@ -87,7 +86,7 @@ public class FeelEnableLegacyBehaviorConfigTest {
         Variables.putValue("cellInput", 6)).getSingleEntry())
       .hasCauseInstanceOf(FeelSyntaxException.class)
       .extracting("cause.message")
-      .contains("FEEL-01010 Syntax error in expression 'for x in 1..3 return x * 2'");
+      .isEqualTo("FEEL-01010 Syntax error in expression 'for x in 1..3 return x * 2'");
   }
 
   @Test

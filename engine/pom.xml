@@ -26,7 +26,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
-        <version>${version.spring.framework6}</version>
+        <version>${version.spring.framework}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -411,6 +411,7 @@
       org.junit*;resolution:=optional,
       com.sun*;resolution:=optional,
       javax.persistence*;resolution:=optional,
+      <!-- TODO rmastalerek -->
       javax.servlet*;resolution:=optional,
       javax.transaction*;resolution:=optional,
       javax.ejb*;resolution:=optional,

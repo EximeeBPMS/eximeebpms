@@ -1,1 +1,2 @@
 org.eximeebpms.bpm.application.impl.JakartaServletProcessApplicationDeployer
+org.eximeebpms.bpm.application.impl.ServletProcessApplicationDeployer

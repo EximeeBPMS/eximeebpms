@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.application.impl.web;
 
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import javax.ejb.EJB;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
 import org.eximeebpms.bpm.application.ProcessApplicationInfo;
 import org.eximeebpms.bpm.application.ProcessApplicationInterface;

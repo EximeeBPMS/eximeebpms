@@ -24,24 +24,24 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 @ApplicationPath("/engine-rest")
-public class CamundaJerseyResourceConfig extends ResourceConfig implements InitializingBean {
+public class EximeeBPMSJerseyResourceConfig extends ResourceConfig implements InitializingBean {
 
-  private static final Logger log = org.slf4j.LoggerFactory.getLogger(CamundaJerseyResourceConfig.class);
+  private static final Logger log = org.slf4j.LoggerFactory.getLogger(EximeeBPMSJerseyResourceConfig.class);
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    registerCamundaRestResources();
+    registerEximeeBPMSRestResources();
     registerAdditionalResources();
   }
 
-  protected void registerCamundaRestResources() {
-    log.info("Configuring camunda rest api.");
+  protected void registerEximeeBPMSRestResources() {
+    log.info("Configuring EximeeBPMS REST API.");
 
     this.registerClasses(CamundaRestResources.getResourceClasses());
     this.registerClasses(CamundaRestResources.getConfigurationClasses());
     this.register(JacksonFeature.class);
 
-    log.info("Finished configuring camunda rest api.");
+    log.info("Finished configuring EximeeBPMS REST API.");
   }
 
   protected void registerAdditionalResources() {

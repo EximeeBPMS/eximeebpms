@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
-        <version>4.10.0</version>
+        <version>${version.selenium}</version>
       </dependency>
 
       <!-- using 4.13 in order to have @BeforeParam/@AfterParam for parameterized 
@@ -48,6 +48,13 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${version.junit}</version>
+      </dependency>
+
+      <!-- REST -->
+      <dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <version>${version.rest-assured}</version>
       </dependency>
 
     </dependencies>

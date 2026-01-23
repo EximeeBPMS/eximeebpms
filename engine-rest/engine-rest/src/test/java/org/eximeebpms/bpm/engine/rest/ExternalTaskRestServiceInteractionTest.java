@@ -40,11 +40,11 @@ import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 import io.restassured.http.ContentType;
+import jakarta.servlet.ServletContextEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.ServletContextEvent;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.AuthorizationException;

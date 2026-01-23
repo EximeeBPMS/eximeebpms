@@ -16,9 +16,8 @@
  */
 package org.eximeebpms.bpm.cockpit.impl.web.bootstrap;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import org.eximeebpms.bpm.cockpit.Cockpit;
 import org.eximeebpms.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
 import org.eximeebpms.bpm.container.RuntimeContainerDelegate;

@@ -82,7 +82,7 @@ public class ExternalTaskRestServiceQueryTest extends AbstractRestServiceTest {
 
   @Test
   public void testInvalidDateParameter() {
-    given().queryParams("lockExpirationBefore", "anInvalidDate")
+    given().queryParam("lockExpirationBefore", "anInvalidDate")
       .header("accept", MediaType.APPLICATION_JSON)
       .expect().statusCode(Status.BAD_REQUEST.getStatusCode()).contentType(ContentType.JSON)
       .body("type", equalTo(InvalidRequestException.class.getSimpleName()))

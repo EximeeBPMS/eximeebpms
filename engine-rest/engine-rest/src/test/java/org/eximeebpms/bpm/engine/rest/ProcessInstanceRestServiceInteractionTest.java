@@ -1500,7 +1500,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceSkipCustomListeners() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipCustomListeners", true).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipCustomListeners", true).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, true, true, false, false);
@@ -1508,7 +1508,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceWithCustomListeners() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipCustomListeners", false).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipCustomListeners", false).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, false, true, false, false);
@@ -1516,7 +1516,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceSkipIoMappings() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipIoMappings", true).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipIoMappings", true).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, false, true, true, false);
@@ -1524,7 +1524,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceWithoutSkipingIoMappings() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipIoMappings", false).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipIoMappings", false).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, false, true, false, false);
@@ -1532,7 +1532,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceSkipSubprocesses() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipSubprocesses", true).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipSubprocesses", true).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, false, true, false, true);
@@ -1540,7 +1540,7 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
 
   @Test
   public void testDeleteProcessInstanceWithoutSkipSubprocesses() {
-    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParams("skipSubprocesses", false).then().expect()
+    given().pathParam("id", MockProvider.EXAMPLE_PROCESS_INSTANCE_ID).queryParam("skipSubprocesses", false).then().expect()
         .statusCode(Status.NO_CONTENT.getStatusCode()).when().delete(SINGLE_PROCESS_INSTANCE_URL);
 
     verify(runtimeServiceMock).deleteProcessInstance(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, null, false, true, false, false);

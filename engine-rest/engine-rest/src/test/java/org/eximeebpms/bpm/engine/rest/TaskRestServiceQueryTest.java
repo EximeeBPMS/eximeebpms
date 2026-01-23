@@ -119,7 +119,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
 
   @Test
   public void testInvalidDateParameter() {
-    given().queryParams("due", "anInvalidDate")
+    given().queryParam("due", "anInvalidDate")
       .header("accept", MediaType.APPLICATION_JSON)
       .expect().statusCode(Status.BAD_REQUEST.getStatusCode()).contentType(ContentType.JSON)
       .body("type", equalTo(InvalidRequestException.class.getSimpleName()))
@@ -709,7 +709,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     candidateGroups.add("worker");
     String queryParam = candidateGroups.get(0) + "," + candidateGroups.get(1);
 
-    given().queryParams("candidateGroups", queryParam)
+    given().queryParam("candidateGroups", queryParam)
       .header("accept", MediaType.APPLICATION_JSON)
       .expect().statusCode(Status.OK.getStatusCode())
       .when().get(TASK_QUERY_URL);
@@ -719,14 +719,14 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
 
   @Test
   public void testDelegationState() {
-    given().queryParams("delegationState", "PENDING")
+    given().queryParam("delegationState", "PENDING")
       .header("accept", MediaType.APPLICATION_JSON)
       .expect().statusCode(Status.OK.getStatusCode())
       .when().get(TASK_QUERY_URL);
 
     verify(mockQuery).taskDelegationState(DelegationState.PENDING);
 
-    given().queryParams("delegationState", "RESOLVED")
+    given().queryParam("delegationState", "RESOLVED")
     .header("accept", MediaType.APPLICATION_JSON)
     .expect().statusCode(Status.OK.getStatusCode())
     .when().get(TASK_QUERY_URL);
@@ -736,7 +736,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
 
   @Test
   public void testLowerCaseDelegationStateParam() {
-    given().queryParams("delegationState", "resolved")
+    given().queryParam("delegationState", "resolved")
     .header("accept", MediaType.APPLICATION_JSON)
     .expect().statusCode(Status.OK.getStatusCode())
     .when().get(TASK_QUERY_URL);

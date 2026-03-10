@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
 
 import java.util.Map;
+import org.springframework.boot.jersey.autoconfigure.JerseyApplicationPath;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

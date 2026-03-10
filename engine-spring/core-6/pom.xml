@@ -37,6 +37,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>${version.jakarta-persistence-api}</version>
+        <scope>test</scope>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -91,6 +97,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
       <scope>test</scope>
@@ -132,8 +144,8 @@
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core-jakarta</artifactId>
-      <version>5.6.15.Final</version>
+      <artifactId>hibernate-core</artifactId>
+      <version>7.2.5.Final</version>
       <scope>test</scope>
       <exclusions>
         <!-- hibernate uses an older slf4j version -->

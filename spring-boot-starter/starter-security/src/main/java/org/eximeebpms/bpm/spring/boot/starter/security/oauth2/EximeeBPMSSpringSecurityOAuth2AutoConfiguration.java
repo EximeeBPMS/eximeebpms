@@ -36,12 +36,11 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.security.autoconfigure.web.servlet.SecurityFilterProperties;
+import org.springframework.boot.security.oauth2.client.autoconfigure.ConditionalOnOAuth2ClientRegistrationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.core.Ordered;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,7 +56,7 @@ import java.util.Map;
 @AutoConfigureOrder(EximeeBPMSSpringSecurityOAuth2AutoConfiguration.CAMUNDA_OAUTH2_ORDER)
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class })
 @ConditionalOnBean(CamundaBpmProperties.class)
-@Conditional(ClientsConfiguredCondition.class)
+@ConditionalOnOAuth2ClientRegistrationProperties
 @EnableConfigurationProperties(OAuth2Properties.class)
 public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
 
@@ -81,7 +80,7 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
     filterRegistration.setInitParameters(Map.of(
         ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM, OAuth2AuthenticationProvider.class.getName()));
     // make sure the filter is registered after the Spring Security Filter Chain
-    filterRegistration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER + 1);
+    filterRegistration.setOrder(SecurityFilterProperties.DEFAULT_FILTER_ORDER + 1);
     filterRegistration.addUrlPatterns(webappPath + "/app/*", webappPath + "/api/*");
     filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
     return filterRegistration;

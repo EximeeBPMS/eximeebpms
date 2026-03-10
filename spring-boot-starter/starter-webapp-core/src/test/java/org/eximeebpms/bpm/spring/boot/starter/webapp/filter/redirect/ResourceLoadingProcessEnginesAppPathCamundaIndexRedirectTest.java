@@ -30,12 +30,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { FilterTestApp.class},
+@SpringBootTest(classes = {FilterTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
         "eximeebpms.bpm.webapp.application-path=/eximeebpms",
         "eximeebpms.bpm.webapp.index-redirect-enabled=true",
-        "eximeebpms.bpm.admin-user.id=admin" })
+        "eximeebpms.bpm.admin-user.id=admin"})
 @DirtiesContext
 public class ResourceLoadingProcessEnginesAppPathCamundaIndexRedirectTest {
 

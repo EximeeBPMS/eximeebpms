@@ -16,14 +16,14 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.rest;
 
-import org.eximeebpms.bpm.engine.rest.impl.FetchAndLockContextListener;
+import  org.eximeebpms.bpm.engine.rest.impl.FetchAndLockContextListener;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
+import org.springframework.boot.jersey.autoconfigure.JerseyApplicationPath;
+import org.springframework.boot.jersey.autoconfigure.JerseyAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfigureBefore({ JerseyAutoConfiguration.class })

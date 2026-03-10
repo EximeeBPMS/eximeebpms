@@ -28,7 +28,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -41,7 +41,7 @@ import org.springframework.test.context.ActiveProfiles;
  * Note: To run this test via an IDE you must set the system property
  * {@code sun.net.http.allowRestrictedHeaders} to {@code true}.
  * (e.g. System.setProperty("sun.net.http.allowRestrictedHeaders", "true");)
- * 
+ *
  * @see https://jira.camunda.com/browse/CAM-11290
  */
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -90,7 +90,7 @@ public class CorsAuthenticationTest extends AbstractRestTest {
     headers.add(HttpHeaders.ORIGIN, origin);
 
     Group group = new GroupEntity("groupId");
-    
+
     // create group
     processEngine.getIdentityService().saveGroup(new GroupEntity("groupId"));
 

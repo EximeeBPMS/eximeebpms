@@ -411,7 +411,6 @@
       org.junit*;resolution:=optional,
       com.sun*;resolution:=optional,
       javax.persistence*;resolution:=optional,
-      <!-- TODO rmastalerek -->
       javax.servlet*;resolution:=optional,
       javax.transaction*;resolution:=optional,
       javax.ejb*;resolution:=optional,

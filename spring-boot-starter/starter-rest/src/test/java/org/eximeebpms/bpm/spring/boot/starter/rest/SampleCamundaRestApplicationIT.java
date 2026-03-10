@@ -31,8 +31,8 @@ import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +42,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import my.own.custom.spring.boot.project.SampleCamundaRestApplication;
 
@@ -60,14 +59,14 @@ public class SampleCamundaRestApplicationIT {
   private CamundaBpmProperties camundaBpmProperties;
 
   @Test
-  public void restApiIsAvailable() throws Exception {
+  public void restApiIsAvailable() {
     ResponseEntity<String> entity = testRestTemplate.getForEntity("/engine-rest/engine/", String.class);
     assertEquals(HttpStatus.OK, entity.getStatusCode());
     assertEquals("[{\"name\":\"testEngine\"}]", entity.getBody());
   }
 
   @Test
-  public void startProcessInstanceByCustomResource() throws Exception {
+  public void startProcessInstanceByCustomResource() {
     ResponseEntity<ProcessInstanceDto> entity = testRestTemplate.postForEntity("/engine-rest/process/start", HttpEntity.EMPTY, ProcessInstanceDto.class);
     assertEquals(HttpStatus.OK, entity.getStatusCode());
     assertNotNull(entity.getBody());
@@ -78,7 +77,7 @@ public class SampleCamundaRestApplicationIT {
   }
 
   @Test
-  public void multipartFileUploadCamundaRestIsWorking() throws Exception {
+  public void multipartFileUploadCamundaRestIsWorking() {
     final String variableName = "testvariable";
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("TestProcess");
     LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -101,7 +100,7 @@ public class SampleCamundaRestApplicationIT {
   }
 
   @Test
-  public void fetchAndLockExternalTaskWithLongPollingIsRunning() throws Exception {
+  public void fetchAndLockExternalTaskWithLongPollingIsRunning() {
 
     String requestJson = "{"
       + "  \"workerId\":\"aWorkerId\","
@@ -113,7 +112,7 @@ public class SampleCamundaRestApplicationIT {
       + "}";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<String> requestEntity = new HttpEntity<String>(requestJson, headers);
+    HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
     ResponseEntity<String> entity = testRestTemplate.postForEntity("/engine-rest/engine/{enginename}/external-task/fetchAndLock", requestEntity, String.class,
       camundaBpmProperties.getProcessEngineName());
     assertEquals(HttpStatus.OK, entity.getStatusCode());

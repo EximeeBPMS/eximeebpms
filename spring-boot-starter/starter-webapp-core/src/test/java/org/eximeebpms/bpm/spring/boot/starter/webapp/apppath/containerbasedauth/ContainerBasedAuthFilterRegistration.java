@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.spring.boot.starter.webapp.apppath.containerbasedauth;
 
 import org.eximeebpms.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.servlet.filter.OrderedFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import java.util.Collections;
 
 @Configuration
-@Order(SecurityProperties.BASIC_AUTH_ORDER - 15)
+@Order(OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER - 15)
 public class ContainerBasedAuthFilterRegistration {
 
     @Bean

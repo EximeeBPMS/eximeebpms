@@ -21,7 +21,7 @@ import org.eximeebpms.bpm.engine.rest.filter.EmptyBodyFilter;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
+import org.springframework.boot.jersey.autoconfigure.JerseyApplicationPath;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 
 import jakarta.servlet.DispatcherType;

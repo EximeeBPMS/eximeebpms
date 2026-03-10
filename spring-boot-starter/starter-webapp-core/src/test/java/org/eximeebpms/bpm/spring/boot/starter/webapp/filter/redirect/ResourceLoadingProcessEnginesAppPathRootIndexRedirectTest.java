@@ -20,9 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-
-import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.util.HttpClientRule;
 import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.util.FilterTestApp;
+import org.eximeebpms.bpm.spring.boot.starter.webapp.filter.util.HttpClientRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +31,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { FilterTestApp.class},
+@SpringBootTest(classes = {FilterTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
         "eximeebpms.bpm.webapp.application-path=/",
         "eximeebpms.bpm.webapp.index-redirect-enabled=true",
-        "eximeebpms.bpm.admin-user.id=admin" })
+        "eximeebpms.bpm.admin-user.id=admin"})
 @DirtiesContext
 public class ResourceLoadingProcessEnginesAppPathRootIndexRedirectTest {
 
@@ -48,7 +47,7 @@ public class ResourceLoadingProcessEnginesAppPathRootIndexRedirectTest {
   public int port;
 
   @Test
-  public void shouldRedirectToTasklist() throws IOException {
+  public void shouldRedirectToTasklist() {
     // when
     // send GET request to /
     HttpURLConnection con = rule.performRequest("http://localhost:" + port + "/");

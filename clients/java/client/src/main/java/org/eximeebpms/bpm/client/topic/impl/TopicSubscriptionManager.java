@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
@@ -71,6 +73,10 @@ public class TopicSubscriptionManager implements Runnable {
 
   protected long clientLockDuration;
 
+  protected ExternalTaskExecutionStats executionStats;
+  
+  protected ScheduledExecutorService statsScheduler;
+
   public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration) {
     this.engineClient = engineClient;
     this.subscriptions = new CopyOnWriteArrayList<>();
@@ -80,6 +86,7 @@ public class TopicSubscriptionManager implements Runnable {
     this.typedValues = typedValues;
     this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
     this.isBackoffStrategyDisabled = new AtomicBoolean(false);
+    this.executionStats = new ExternalTaskExecutionStats();
   }
 
   public void run() {
@@ -151,12 +158,16 @@ public class TopicSubscriptionManager implements Runnable {
     Map<String, VariableValue> wrappedVariables = typedValues.wrapVariables(task, variables);
     task.setReceivedVariableMap(wrappedVariables);
 
+    long startTime = System.currentTimeMillis();
     try {
       taskHandler.execute(task, externalTaskService);
     } catch (ExternalTaskClientException e) {
       LOG.exceptionOnExternalTaskServiceMethodInvocation(task.getTopicName(), e);
     } catch (Throwable e) {
       LOG.exceptionWhileExecutingExternalTaskHandler(task.getTopicName(), e);
+    } finally {
+      long executionTime = System.currentTimeMillis() - startTime;
+      executionStats.recordExecution(task.getProcessDefinitionKey(), task.getTopicName(), executionTime);
     }
   }
 
@@ -170,6 +181,19 @@ public class TopicSubscriptionManager implements Runnable {
         Thread.currentThread().interrupt();
         LOG.exceptionWhileShuttingDown(e);
       }
+      
+      // Shutdown the stats scheduler
+      if (statsScheduler != null) {
+        statsScheduler.shutdown();
+        try {
+          if (!statsScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+            statsScheduler.shutdownNow();
+          }
+        } catch (InterruptedException e) {
+          statsScheduler.shutdownNow();
+          Thread.currentThread().interrupt();
+        }
+      }
     }
   }
 
@@ -177,6 +201,24 @@ public class TopicSubscriptionManager implements Runnable {
     if (isRunning.compareAndSet(false, true)) {
       thread = new Thread(this, TopicSubscriptionManager.class.getSimpleName());
       thread.start();
+      
+      // Start scheduled task for stats logging and cleanup every 5 minutes
+      statsScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread t = new Thread(r, "ExternalTaskStatsLogger");
+        t.setDaemon(true);
+        return t;
+      });
+      
+      statsScheduler.scheduleAtFixedRate(() -> {
+        try {
+          // Log current statistics
+          ExternalTaskExecutionStatsLogger.logStats(executionStats);
+          // Reset statistics for next period
+          executionStats.reset();
+        } catch (Exception e) {
+          LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
+        }
+      }, 5, 5, TimeUnit.MINUTES);
     }
   }
 
@@ -257,6 +299,10 @@ public class TopicSubscriptionManager implements Runnable {
 
   public void disableBackoffStrategy() {
     this.isBackoffStrategyDisabled.set(true);
+  }
+
+  public ExternalTaskExecutionStats getExecutionStats() {
+    return executionStats;
   }
 
 }

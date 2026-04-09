@@ -115,6 +115,10 @@ public class EngineClient {
   }
 
   public List<ExternalTask> fetchAndLock(List<TopicRequestDto> topics) {
+    return fetchAndLock(topics, maxTasks);
+  }
+
+  public List<ExternalTask> fetchAndLock(List<TopicRequestDto> topics, int maxTasks) {
     FetchAndLockRequestDto payload = new FetchAndLockRequestDto(workerId, maxTasks, asyncResponseTimeout, topics,
         usePriority, orderingConfig);
 
@@ -208,5 +212,9 @@ public class EngineClient {
 
   public boolean isUsePriority() {
     return usePriority;
+  }
+
+  public void setRequestExecutor(RequestExecutor requestExecutor) {
+    this.engineInteraction = requestExecutor;
   }
 }

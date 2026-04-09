@@ -138,6 +138,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   private String candidateGroupLike;
   private String candidateUser;
   private String candidateUserExpression;
+  private Boolean candidateUserAndGroup;
   private Boolean includeAssignedTasks;
   private String taskDefinitionKey;
   private String[] taskDefinitionKeyIn;
@@ -386,6 +387,11 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   @EximeeBPMSQueryParam("candidateUserExpression")
   public void setCandidateUserExpression(String candidateUserExpression) {
     this.candidateUserExpression = candidateUserExpression;
+  }
+
+  @EximeeBPMSQueryParam(value = "candidateUserAndGroup", converter = BooleanConverter.class)
+  public void setCandidateUserAndGroup(Boolean candidateUserAndGroup) {
+    this.candidateUserAndGroup = candidateUserAndGroup;
   }
 
   @EximeeBPMSQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
@@ -827,6 +833,9 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     if (assigneeNotIn != null && assigneeNotIn.length > 0) {
       query.taskAssigneeNotIn(assigneeNotIn);
     }
+    if (TRUE.equals(candidateUserAndGroup)) {
+      query.candidateUserAndGroup();
+    }
     if (candidateGroup != null) {
       query.taskCandidateGroup(candidateGroup);
     }
@@ -994,7 +1003,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       DelegationState state = converter.convertQueryParameterToType(delegationState);
       query.taskDelegationState(state);
     }
-    if (candidateGroups != null) {
+    if (candidateGroups != null && !candidateGroups.isEmpty()) {
       query.taskCandidateGroupIn(candidateGroups);
     }
     if (candidateGroupsExpression != null) {
@@ -1241,6 +1250,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     dto.candidateUser = taskQuery.getCandidateUser();
     dto.candidateGroup = taskQuery.getCandidateGroup();
     dto.candidateGroupLike = taskQuery.getCandidateGroupLike();
+    dto.candidateUserAndGroup = taskQuery.isCandidateUserAndGroup();
     dto.candidateGroups = taskQuery.getCandidateGroupsInternal();
     dto.includeAssignedTasks = taskQuery.isIncludeAssignedTasksInternal();
     dto.withCandidateGroups = taskQuery.isWithCandidateGroups();

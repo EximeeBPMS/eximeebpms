@@ -1135,4 +1135,14 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
    * it might slow down the query in case of tables having high volume of data.
    */
   TaskQuery withCommentAttachmentInfo();
+
+  /**
+   * Enables strict candidate matching for queries that define both
+   * {@link #taskCandidateUser(String)} and {@link #taskCandidateGroup(String)}.
+   *
+   * When enabled, a task matches only if it has both:
+   * - the given candidate user
+   * - the given candidate group
+   */
+  TaskQuery candidateUserAndGroup();
 }

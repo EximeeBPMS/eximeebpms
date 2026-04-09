@@ -179,6 +179,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   protected List<TaskQueryImpl> queries = new ArrayList<>(Arrays.asList(this));
   protected boolean isOrQueryActive = false;
   protected boolean withCommentAttachmentInfo;
+  protected Boolean candidateUserAndGroup;
 
   public TaskQueryImpl() {
   }
@@ -352,7 +353,8 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public TaskQueryImpl taskCandidateUser(String candidateUser) {
     ensureNotNull("Candidate user", candidateUser);
-    if (!isOrQueryActive) {
+
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
       if (candidateGroup != null || expressions.containsKey("taskCandidateGroup")) {
         throw new ProcessEngineException("Invalid query usage: cannot set both candidateUser and candidateGroup");
       }
@@ -370,11 +372,13 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery taskCandidateUserExpression(String candidateUserExpression) {
     ensureNotNull("Candidate user expression", candidateUserExpression);
 
-    if (candidateGroup != null || expressions.containsKey("taskCandidateGroup")) {
-      throw new ProcessEngineException("Invalid query usage: cannot set both candidateUser and candidateGroup");
-    }
-    if (candidateGroups != null || expressions.containsKey("taskCandidateGroupIn")) {
-      throw new ProcessEngineException("Invalid query usage: cannot set both candidateUser and candidateGroupIn");
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
+      if (candidateGroup != null || expressions.containsKey("taskCandidateGroup")) {
+        throw new ProcessEngineException("Invalid query usage: cannot set both candidateUser and candidateGroup");
+      }
+      if (candidateGroups != null || expressions.containsKey("taskCandidateGroupIn")) {
+        throw new ProcessEngineException("Invalid query usage: cannot set both candidateUser and candidateGroupIn");
+      }
     }
 
     expressions.put("taskCandidateUser", candidateUserExpression);
@@ -428,7 +432,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQueryImpl taskCandidateGroup(String candidateGroup) {
     ensureNotNull("Candidate group", candidateGroup);
 
-    if (!isOrQueryActive) {
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
       if (candidateUser != null || expressions.containsKey("taskCandidateUser")) {
         throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroup and candidateUser");
       }
@@ -443,7 +447,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery taskCandidateGroupExpression(String candidateGroupExpression) {
     ensureNotNull("Candidate group expression", candidateGroupExpression);
 
-    if (!isOrQueryActive) {
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
       if (candidateUser != null || expressions.containsKey("taskCandidateUser")) {
         throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroup and candidateUser");
       }
@@ -457,8 +461,10 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery taskCandidateGroupLike(String candidateGroupLike) {
     ensureNotNull("Candidate group like", candidateGroupLike);
 
-    if (!isOrQueryActive && (candidateUser != null || expressions.containsKey("taskCandidateUser"))) {
-      throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroupLike and candidateUser");
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
+      if (candidateUser != null || expressions.containsKey("taskCandidateUser")) {
+        throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroupLike and candidateUser");
+      }
     }
 
     this.candidateGroupLike = candidateGroupLike;
@@ -469,7 +475,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery taskCandidateGroupIn(List<String> candidateGroups) {
     ensureNotEmpty("Candidate group list", candidateGroups);
 
-    if (!isOrQueryActive) {
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
       if (candidateUser != null || expressions.containsKey("taskCandidateUser")) {
         throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroupIn and candidateUser");
       }
@@ -484,7 +490,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery taskCandidateGroupInExpression(String candidateGroupsExpression) {
     ensureNotEmpty("Candidate group list expression", candidateGroupsExpression);
 
-    if (!isOrQueryActive) {
+    if (!isOrQueryActive && !TRUE.equals(candidateUserAndGroup)) {
       if (candidateUser != null || expressions.containsKey("taskCandidateUser")) {
         throw new ProcessEngineException("Invalid query usage: cannot set both candidateGroupIn and candidateUser");
       }
@@ -1118,7 +1124,33 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     return this;
   }
 
+  @Override
+  public TaskQuery candidateUserAndGroup() {
+    this.candidateUserAndGroup = true;
+    return this;
+  }
+
+  public boolean isCandidateUserAndGroup() {
+    return TRUE.equals(candidateUserAndGroup);
+  }
+
   public List<String> getCandidateGroups() {
+    if (TRUE.equals(candidateUserAndGroup)) {
+      if (candidateGroup != null && candidateGroups != null) {
+        List<String> result = new ArrayList<>(candidateGroups);
+        if (!result.contains(candidateGroup)) {
+          result.add(candidateGroup);
+        }
+        return result;
+      } else if (candidateGroup != null) {
+        return Collections.singletonList(candidateGroup);
+      } else if (candidateGroups != null) {
+        return candidateGroups;
+      } else {
+        return null;
+      }
+    }
+
     if (cachedCandidateGroups != null) {
       return cachedCandidateGroups;
     }
@@ -1453,8 +1485,8 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
 
     resetCachedCandidateGroups();
 
-    //check if candidateGroup and candidateGroups intersect
-    if (getCandidateGroup() != null && getCandidateGroupsInternal() != null && getCandidateGroups().isEmpty()) {
+    // old intersection logic applies only to legacy behavior, not candidateUserAndGroup mode
+    if (!isCandidateUserAndGroup() && getCandidateGroup() != null && getCandidateGroupsInternal() != null && getCandidateGroups().isEmpty()) {
       return Collections.emptyList();
     }
 
@@ -1489,8 +1521,8 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
 
     resetCachedCandidateGroups();
 
-    //check if candidateGroup and candidateGroups intersect
-    if (getCandidateGroup() != null && getCandidateGroupsInternal() != null && getCandidateGroups().isEmpty()) {
+    // old intersection logic applies only to legacy behavior, not candidateUserAndGroup mode
+    if (!isCandidateUserAndGroup() && getCandidateGroup() != null && getCandidateGroupsInternal() != null && getCandidateGroups().isEmpty()) {
       return 0;
     }
 
@@ -1852,7 +1884,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public TaskQuery extend(TaskQuery extending) {
     TaskQueryImpl extendingQuery = (TaskQueryImpl) extending;
-    TaskQueryImpl extendedQuery = new TaskQueryImpl();
+    TaskQueryImpl extendedQuery = new TaskQueryImpl(commandExecutor);
 
     // only add the base query's validators to the new query;
     // this is because the extending query's validators may not be applicable to the base
@@ -1947,6 +1979,10 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     }
     else if (this.getDelegationState() != null) {
       extendedQuery.taskDelegationState(this.getDelegationState());
+    }
+
+    if (extendingQuery.isCandidateUserAndGroup() || this.isCandidateUserAndGroup()) {
+      extendedQuery.candidateUserAndGroup();
     }
 
     if (extendingQuery.getCandidateUser() != null) {
@@ -2089,10 +2125,10 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
       extendedQuery.taskCreatedAfter(this.getCreateTimeAfter());
     }
 
-    if(extendingQuery.getUpdatedAfter() != null) {
+    if (extendingQuery.getUpdatedAfter() != null) {
       extendedQuery.taskUpdatedAfter(extendingQuery.getUpdatedAfter());
     }
-    else if(this.getUpdatedAfter() != null) {
+    else if (this.getUpdatedAfter() != null) {
       extendedQuery.taskUpdatedAfter(this.getUpdatedAfter());
     }
 
@@ -2116,7 +2152,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     else if (this.getKeys() != null) {
       extendedQuery.taskDefinitionKeyIn(this.getKeys());
     }
-    
+
     if (extendingQuery.getKeyNotIn() != null) {
       extendedQuery.taskDefinitionKeyNotIn(extendingQuery.getKeyNotIn());
     }

@@ -5925,6 +5925,231 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
     assertTrue(taskResult.hasComment());
     assertTrue(taskResult.hasAttachment());
   }
+
+  @Test
+  public void testTaskCandidateUserAndGroup() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales");
+
+    Task task2 = taskService.newTask("task2");
+    taskService.saveTask(task2);
+    taskIds.add(task2.getId());
+    taskService.addCandidateUser("task2", "demo");
+
+    Task task3 = taskService.newTask("task3");
+    taskService.saveTask(task3);
+    taskIds.add(task3.getId());
+    taskService.addCandidateGroup("task3", "sales");
+
+    Task task4 = taskService.newTask("task4");
+    taskService.saveTask(task4);
+    taskIds.add(task4.getId());
+    taskService.addCandidateUser("task4", "john");
+    taskService.addCandidateGroup("task4", "sales");
+
+    // when
+    List<Task> tasks = taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo")
+        .taskCandidateGroup("sales")
+        .list();
+
+    // then
+    assertEquals(1, tasks.size());
+    assertEquals("task1", tasks.get(0).getId());
+  }
+
+  @Test
+  public void testTaskCandidateUserAndGroupIn() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales");
+
+    Task task2 = taskService.newTask("task2");
+    taskService.saveTask(task2);
+    taskIds.add(task2.getId());
+    taskService.addCandidateUser("task2", "demo");
+    taskService.addCandidateGroup("task2", "hr");
+
+    Task task3 = taskService.newTask("task3");
+    taskService.saveTask(task3);
+    taskIds.add(task3.getId());
+    taskService.addCandidateGroup("task3", "sales");
+
+    Task task4 = taskService.newTask("task4");
+    taskService.saveTask(task4);
+    taskIds.add(task4.getId());
+    taskService.addCandidateUser("task4", "demo");
+    taskService.addCandidateGroup("task4", "it");
+
+    // when
+    List<Task> tasks = taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo")
+        .taskCandidateGroupIn(Arrays.asList("sales", "it"))
+        .list();
+
+    // then
+    assertEquals(2, tasks.size());
+
+    List<String> ids = tasks.stream()
+        .map(Task::getId)
+        .sorted()
+        .toList();
+
+    assertEquals(Arrays.asList("task1", "task4"), ids);
+  }
+
+  @Test
+  public void testTaskCandidateUserAndGroupLike() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales-emea");
+
+    Task task2 = taskService.newTask("task2");
+    taskService.saveTask(task2);
+    taskIds.add(task2.getId());
+    taskService.addCandidateUser("task2", "demo");
+    taskService.addCandidateGroup("task2", "hr-emea");
+
+    Task task3 = taskService.newTask("task3");
+    taskService.saveTask(task3);
+    taskIds.add(task3.getId());
+    taskService.addCandidateUser("task3", "john");
+    taskService.addCandidateGroup("task3", "sales-emea");
+
+    // when
+    List<Task> tasks = taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo")
+        .taskCandidateGroupLike("sales%")
+        .list();
+
+    // then
+    assertEquals(1, tasks.size());
+    assertEquals("task1", tasks.get(0).getId());
+  }
+
+  @Test
+  public void testTaskCandidateUserAndGroupIncludeAssignedTasks() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    task1.setAssignee("kermit");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales");
+
+    // when
+    List<Task> tasksWithoutIncludeAssigned = taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo")
+        .taskCandidateGroup("sales")
+        .list();
+
+    List<Task> tasksWithIncludeAssigned = taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo")
+        .taskCandidateGroup("sales")
+        .includeAssignedTasks()
+        .list();
+
+    // then
+    assertEquals(0, tasksWithoutIncludeAssigned.size());
+    assertEquals(1, tasksWithIncludeAssigned.size());
+    assertEquals("task1", tasksWithIncludeAssigned.get(0).getId());
+  }
+
+  @Test
+  public void testCandidateUserAndCandidateGroupInNotAllowedWithoutFlag() {
+    assertThrows(ProcessEngineException.class, () ->
+        taskService.createTaskQuery()
+            .taskCandidateUser("demo")
+            .taskCandidateGroupIn(Arrays.asList("sales"))
+            .list()
+    );
+  }
+
+  @Test
+  public void testExtendTaskQueryWithCandidateUserAndGroup() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales");
+
+    Task task2 = taskService.newTask("task2");
+    taskService.saveTask(task2);
+    taskIds.add(task2.getId());
+    taskService.addCandidateUser("task2", "demo");
+
+    TaskQueryImpl baseQuery = (TaskQueryImpl) taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo");
+
+    TaskQueryImpl extendingQuery = (TaskQueryImpl) taskService.createTaskQuery()
+        .taskCandidateGroup("sales");
+
+    // when
+    TaskQuery extendedQuery = baseQuery.extend(extendingQuery);
+    List<Task> tasks = extendedQuery.list();
+
+    // then
+    assertEquals(1, tasks.size());
+    assertEquals("task1", tasks.get(0).getId());
+  }
+
+  @Test
+  public void testExtendTaskQueryWithCandidateUserAndGroupIn() {
+    // given
+    Task task1 = taskService.newTask("task1");
+    taskService.saveTask(task1);
+    taskIds.add(task1.getId());
+    taskService.addCandidateUser("task1", "demo");
+    taskService.addCandidateGroup("task1", "sales");
+
+    Task task2 = taskService.newTask("task2");
+    taskService.saveTask(task2);
+    taskIds.add(task2.getId());
+    taskService.addCandidateUser("task2", "demo");
+    taskService.addCandidateGroup("task2", "it");
+
+    Task task3 = taskService.newTask("task3");
+    taskService.saveTask(task3);
+    taskIds.add(task3.getId());
+    taskService.addCandidateUser("task3", "demo");
+    taskService.addCandidateGroup("task3", "hr");
+
+    TaskQueryImpl baseQuery = (TaskQueryImpl) taskService.createTaskQuery()
+        .candidateUserAndGroup()
+        .taskCandidateUser("demo");
+
+    TaskQueryImpl extendingQuery = (TaskQueryImpl) taskService.createTaskQuery()
+        .taskCandidateGroupIn(Arrays.asList("sales", "it"));
+
+    // when
+    TaskQuery extendedQuery = baseQuery.extend(extendingQuery);
+    List<Task> tasks = extendedQuery.list();
+
+    // then
+    List<String> ids = tasks.stream()
+        .map(Task::getId)
+        .sorted()
+        .toList();
+
+    assertEquals(Arrays.asList("task1", "task2"), ids);
+  }
   // ---------------------- HELPER ------------------------------
 
   // make sure that time passes between two fast operations

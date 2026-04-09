@@ -102,6 +102,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     when(sampleTaskQuery.list()).thenReturn(mockedTasks);
     when(sampleTaskQuery.count()).thenReturn((long) mockedTasks.size());
     when(sampleTaskQuery.taskCandidateGroup(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.candidateUserAndGroup()).thenReturn(sampleTaskQuery);
 
     when(processEngine.getTaskService().createTaskQuery()).thenReturn(sampleTaskQuery);
 
@@ -549,6 +550,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     parameters.put("withoutCandidateUsers", true);
     parameters.put("withoutDueDate", true);
     parameters.put("withCommentAttachmentInfo", true);
+    parameters.put("candidateUserAndGroup", true);
 
     return parameters;
   }
@@ -616,6 +618,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     verify(mockQuery).withoutCandidateUsers();
     verify(mockQuery).withoutDueDate();
     verify(mockQuery).withCommentAttachmentInfo();
+    verify(mockQuery).candidateUserAndGroup();
   }
 
   @Test
@@ -2300,4 +2303,101 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     assertEquals(MockProvider.EXAMPLE_TASK_DESCRIPTION, argument.getValue().getDescription());
   }
 
+  @Test
+  public void testCandidateUserAndGroup() {
+    given()
+        .queryParam("candidateUserAndGroup", true)
+        .accept(MediaType.APPLICATION_JSON)
+        .then()
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .get(TASK_QUERY_URL);
+
+    verify(mockQuery).candidateUserAndGroup();
+  }
+
+  @Test
+  public void testNeverCandidateUserAndGroup() {
+    given()
+        .queryParam("candidateUserAndGroup", false)
+        .accept(MediaType.APPLICATION_JSON)
+        .then()
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .get(TASK_QUERY_URL);
+
+    verify(mockQuery, never()).candidateUserAndGroup();
+  }
+
+  @Test
+  public void testCandidateUserAndGroupPost() {
+    Map<String, Object> queryParameters = new HashMap<>();
+    queryParameters.put("candidateUserAndGroup", true);
+    queryParameters.put("candidateUser", "aCandidate");
+    queryParameters.put("candidateGroup", "aCandidateGroup");
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .body(queryParameters)
+        .header("accept", MediaType.APPLICATION_JSON)
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    InOrder inOrder = inOrder(mockQuery);
+    inOrder.verify(mockQuery).candidateUserAndGroup();
+    inOrder.verify(mockQuery).taskCandidateGroup("aCandidateGroup");
+    inOrder.verify(mockQuery).taskCandidateUser("aCandidate");
+  }
+
+  @Test
+  public void testCandidateUserAndGroupWithCandidateGroupsPost() {
+    List<String> candidateGroups = new ArrayList<>();
+    candidateGroups.add("boss");
+    candidateGroups.add("worker");
+
+    Map<String, Object> queryParameters = new HashMap<>();
+    queryParameters.put("candidateUserAndGroup", true);
+    queryParameters.put("candidateUser", "aCandidate");
+    queryParameters.put("candidateGroups", candidateGroups);
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .body(queryParameters)
+        .header("accept", MediaType.APPLICATION_JSON)
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    InOrder inOrder = inOrder(mockQuery);
+    inOrder.verify(mockQuery).candidateUserAndGroup();
+    inOrder.verify(mockQuery).taskCandidateUser("aCandidate");
+    inOrder.verify(mockQuery).taskCandidateGroupIn(argThat(new EqualsList(candidateGroups)));
+  }
+
+  @Test
+  public void testCandidateUserAndGroupWithCandidateGroupLikePost() {
+    Map<String, Object> queryParameters = new HashMap<>();
+    queryParameters.put("candidateUserAndGroup", true);
+    queryParameters.put("candidateUser", "aCandidate");
+    queryParameters.put("candidateGroupLike", "sales%");
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .body(queryParameters)
+        .header("accept", MediaType.APPLICATION_JSON)
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    InOrder inOrder = inOrder(mockQuery);
+    inOrder.verify(mockQuery).candidateUserAndGroup();
+    inOrder.verify(mockQuery).taskCandidateGroupLike("sales%");
+    inOrder.verify(mockQuery).taskCandidateUser("aCandidate");
+  }
 }

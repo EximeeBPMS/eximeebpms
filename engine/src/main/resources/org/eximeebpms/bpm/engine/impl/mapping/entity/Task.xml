@@ -250,7 +250,7 @@
       <if test="query.isOrQueryActive">
         <bind name="JOIN_TYPE" value="'left join'" />
       </if>
-      <if test="query != null &amp;&amp; (query.candidateUser != null || query.candidateGroups != null  || query.candidateGroupLike != null || query.involvedUser != null || query.withCandidateGroups || query.withCandidateUsers)">
+      <if test="query != null &amp;&amp; (query.candidateUser != null || query.candidateGroup != null || query.candidateGroups != null || query.candidateGroupLike != null || query.involvedUser != null || query.withCandidateGroups || query.withCandidateUsers)">
         <bind name="I_JOIN" value="true" />
       </if>
       <!-- the process definition table is joined if
@@ -584,38 +584,110 @@
             <if test="query.isWithoutTenantId">
               ${queryType} RES.TENANT_ID_ is null
             </if>
-            <if test="query.candidateUser != null || query.candidateGroups != null || query.candidateGroupLike != null || query.withCandidateGroups || query.withCandidateUsers">
+            <!-- candidateUserAndGroup: strict AND semantics -->
+            <if test="query.candidateUserAndGroup and query.candidateUser != null and (query.candidateGroup != null || (query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0) || query.candidateGroupLike != null)">
+                ${queryType}
+              <trim prefixOverrides="and" prefix="(" suffix=")">
+                <if test="!query.includeAssignedTasks">
+                  and RES.ASSIGNEE_ is null
+                </if>
+
+                and EXISTS (
+                select 1
+                from ${prefix}ACT_RU_IDENTITYLINK I_USER
+                where I_USER.TASK_ID_ = RES.ID_
+                and I_USER.TYPE_ = 'candidate'
+                and I_USER.USER_ID_ = #{query.candidateUser}
+                )
+
+                <if test="query.candidateGroup != null">
+                  and EXISTS (
+                  select 1
+                  from ${prefix}ACT_RU_IDENTITYLINK I_GROUP
+                  where I_GROUP.TASK_ID_ = RES.ID_
+                  and I_GROUP.TYPE_ = 'candidate'
+                  and I_GROUP.GROUP_ID_ = #{query.candidateGroup}
+                  )
+                </if>
+
+                <if test="query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0">
+                  and EXISTS (
+                  select 1
+                  from ${prefix}ACT_RU_IDENTITYLINK I_GROUPS
+                  where I_GROUPS.TASK_ID_ = RES.ID_
+                  and I_GROUPS.TYPE_ = 'candidate'
+                  and I_GROUPS.GROUP_ID_ IN
+                  <foreach item="group" index="index" collection="query.candidateGroups"
+                    open="(" separator="," close=")">
+                    #{group}
+                  </foreach>
+                  )
+                </if>
+
+                <if test="query.withCandidateGroups">
+                  and EXISTS (
+                  select 1
+                  from ${prefix}ACT_RU_IDENTITYLINK I_WCG
+                  where I_WCG.TASK_ID_ = RES.ID_
+                  and I_WCG.TYPE_ = 'candidate'
+                  and I_WCG.GROUP_ID_ is not null
+                  )
+                </if>
+
+                <if test="query.withCandidateUsers">
+                  and EXISTS (
+                  select 1
+                  from ${prefix}ACT_RU_IDENTITYLINK I_WCU
+                  where I_WCU.TASK_ID_ = RES.ID_
+                  and I_WCU.TYPE_ = 'candidate'
+                  and I_WCU.USER_ID_ is not null
+                  )
+                </if>
+
+                <if test="query.candidateGroupLike != null">
+                  and EXISTS (
+                  select 1
+                  from ${prefix}ACT_RU_IDENTITYLINK I_GROUPLIKE
+                  where I_GROUPLIKE.TASK_ID_ = RES.ID_
+                  and I_GROUPLIKE.TYPE_ = 'candidate'
+                  and I_GROUPLIKE.GROUP_ID_ LIKE #{query.candidateGroupLike} ESCAPE ${escapeChar}
+                  )
+                </if>
+              </trim>
+            </if>
+
+            <!-- legacy candidate semantics: candidate user OR candidate group(s) -->
+            <if test="!query.candidateUserAndGroup and (query.candidateUser != null || query.candidateGroup != null || query.candidateGroups != null || query.candidateGroupLike != null || query.withCandidateGroups || query.withCandidateUsers)">
               ${queryType}
               <trim prefixOverrides="and" prefix="(" suffix=")">
                 <if test="!query.includeAssignedTasks">
                   and RES.ASSIGNEE_ is null
                 </if>
                 and I.TYPE_ = 'candidate'
-                <if test="query.candidateUser != null || query.candidateGroups != null || query.candidateGroupLike != null">
+
+                <if test="query.candidateUser != null || query.candidateGroup != null || query.candidateGroups != null || query.candidateGroupLike != null">
                   and
-                  (
-                  <if test="query.candidateUser != null">
-                    I.USER_ID_ = #{query.candidateUser}
-                  </if>
-                  <if test="query.candidateUser != null &amp;&amp; query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0">
-                    or
-                  </if>
-                  <if test="query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0">
-                    I.GROUP_ID_ IN
-                    <foreach item="group" index="index" collection="query.candidateGroups"
-                             open="(" separator="," close=")">
-                      #{group}
-                    </foreach>
-                  </if>
-                  <!-- If we need to add the candidateGroupsLike statement and there have been previous statements
-                   in the candidates block, then we need to add an "or" first -->
-                  <if test="query.candidateGroupLike != null &amp;&amp; (query.candidateUser != null || (query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0))">
-                    or
-                  </if>
-                  <if test="query.candidateGroupLike != null">
-                    I.GROUP_ID_ LIKE #{query.candidateGroupLike}
-                  </if>
-                  )
+                  <trim prefix="(" suffix=")" prefixOverrides="or">
+                    <if test="query.candidateUser != null">
+                      or I.USER_ID_ = #{query.candidateUser}
+                    </if>
+
+                    <if test="query.candidateGroup != null">
+                      or I.GROUP_ID_ = #{query.candidateGroup}
+                    </if>
+
+                    <if test="query.candidateGroups != null &amp;&amp; query.candidateGroups.size &gt; 0">
+                      or I.GROUP_ID_ IN
+                      <foreach item="group" index="index" collection="query.candidateGroups"
+                        open="(" separator="," close=")">
+                        #{group}
+                      </foreach>
+                    </if>
+
+                    <if test="query.candidateGroupLike != null">
+                      or I.GROUP_ID_ LIKE #{query.candidateGroupLike} ESCAPE ${escapeChar}
+                    </if>
+                  </trim>
                 </if>
 
                 <if test="query.withCandidateGroups">

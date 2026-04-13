@@ -754,11 +754,16 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   @Override
   protected void applyFilters(TaskQuery query) {
     if (orQueries != null) {
-      for (TaskQueryDto orQueryDto: orQueries) {
-        TaskQueryImpl orQuery = new TaskQueryImpl();
-        orQuery.setOrQueryActive();
+      TaskQueryImpl rootQuery = (TaskQueryImpl) query;
+
+      for (TaskQueryDto orQueryDto : orQueries) {
+        if (isEmptyOrQuery(orQueryDto)) {
+          continue;
+        }
+
+        TaskQueryImpl orQuery = (TaskQueryImpl) rootQuery.or();
         orQueryDto.applyFilters(orQuery);
-        ((TaskQueryImpl) query).addOrQuery(orQuery);
+        rootQuery = (TaskQueryImpl) orQuery.endOr();
       }
     }
     if (processInstanceBusinessKey != null) {
@@ -1547,5 +1552,107 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       }
     }
     return parameters;
+  }
+
+  private boolean isEmptyOrQuery(TaskQueryDto dto) {
+    return dto == null
+        || (
+        dto.getProcessInstanceBusinessKey() == null
+            && dto.getProcessInstanceBusinessKeyExpression() == null
+            && (dto.getProcessInstanceBusinessKeyIn() == null || dto.getProcessInstanceBusinessKeyIn().length == 0)
+            && dto.getProcessInstanceBusinessKeyLike() == null
+            && dto.getProcessInstanceBusinessKeyLikeExpression() == null
+            && dto.getProcessDefinitionKey() == null
+            && (dto.getProcessDefinitionKeyIn() == null || dto.getProcessDefinitionKeyIn().length == 0)
+            && dto.getProcessDefinitionId() == null
+            && dto.getExecutionId() == null
+            && (dto.getActivityInstanceIdIn() == null || dto.getActivityInstanceIdIn().length == 0)
+            && dto.getProcessDefinitionName() == null
+            && dto.getProcessDefinitionNameLike() == null
+            && dto.getProcessInstanceId() == null
+            && (dto.getProcessInstanceIdIn() == null || dto.getProcessInstanceIdIn().length == 0)
+            && dto.getAssignee() == null
+            && dto.getAssigneeExpression() == null
+            && dto.getAssigneeLike() == null
+            && dto.getAssigneeLikeExpression() == null
+            && (dto.getAssigneeIn() == null || dto.getAssigneeIn().length == 0)
+            && (dto.getAssigneeNotIn() == null || dto.getAssigneeNotIn().length == 0)
+            && dto.getCandidateGroup() == null
+            && dto.getCandidateGroupExpression() == null
+            && dto.getCandidateGroupLike() == null
+            && dto.getCandidateUser() == null
+            && dto.getCandidateUserExpression() == null
+            && dto.getIncludeAssignedTasks() == null
+            && dto.getTaskDefinitionKey() == null
+            && (dto.getTaskDefinitionKeyIn() == null || dto.getTaskDefinitionKeyIn().length == 0)
+            && (dto.getTaskDefinitionKeyNotIn() == null || dto.getTaskDefinitionKeyNotIn().length == 0)
+            && dto.getTaskDefinitionKeyLike() == null
+            && dto.getTaskId() == null
+            && (dto.getTaskIdIn() == null || dto.getTaskIdIn().length == 0)
+            && dto.getDescription() == null
+            && dto.getDescriptionLike() == null
+            && dto.getInvolvedUser() == null
+            && dto.getInvolvedUserExpression() == null
+            && dto.getMaxPriority() == null
+            && dto.getMinPriority() == null
+            && dto.getName() == null
+            && dto.getNameNotEqual() == null
+            && dto.getNameLike() == null
+            && dto.getNameNotLike() == null
+            && dto.getOwner() == null
+            && dto.getOwnerExpression() == null
+            && dto.getPriority() == null
+            && dto.getParentTaskId() == null
+            && dto.getAssigned() == null
+            && dto.getUnassigned() == null
+            && dto.getActive() == null
+            && dto.getSuspended() == null
+            && dto.getCaseDefinitionKey() == null
+            && dto.getCaseDefinitionId() == null
+            && dto.getCaseDefinitionName() == null
+            && dto.getCaseDefinitionNameLike() == null
+            && dto.getCaseInstanceId() == null
+            && dto.getCaseInstanceBusinessKey() == null
+            && dto.getCaseInstanceBusinessKeyLike() == null
+            && dto.getCaseExecutionId() == null
+            && dto.getDueAfter() == null
+            && dto.getDueAfterExpression() == null
+            && dto.getDueBefore() == null
+            && dto.getDueBeforeExpression() == null
+            && dto.getDueDate() == null
+            && dto.getDueDateExpression() == null
+            && dto.getWithoutDueDate() == null
+            && dto.getFollowUpAfter() == null
+            && dto.getFollowUpAfterExpression() == null
+            && dto.getFollowUpBefore() == null
+            && dto.getFollowUpBeforeExpression() == null
+            && dto.getFollowUpBeforeOrNotExistent() == null
+            && dto.getFollowUpBeforeOrNotExistentExpression() == null
+            && dto.getFollowUpDate() == null
+            && dto.getFollowUpDateExpression() == null
+            && dto.getCreatedAfter() == null
+            && dto.getCreatedAfterExpression() == null
+            && dto.getCreatedBefore() == null
+            && dto.getCreatedBeforeExpression() == null
+            && dto.getCreatedOn() == null
+            && dto.getCreatedOnExpression() == null
+            && dto.getUpdatedAfter() == null
+            && dto.getUpdatedAfterExpression() == null
+            && dto.getDelegationState() == null
+            && (dto.getTenantIdIn() == null || dto.getTenantIdIn().length == 0)
+            && dto.getWithoutTenantId() == null
+            && (dto.getCandidateGroups() == null || dto.getCandidateGroups().isEmpty())
+            && dto.getCandidateGroupsExpression() == null
+            && dto.getWithCandidateGroups() == null
+            && dto.getWithoutCandidateGroups() == null
+            && dto.getWithCandidateUsers() == null
+            && dto.getWithoutCandidateUsers() == null
+            && (dto.getTaskVariables() == null || dto.getTaskVariables().isEmpty())
+            && (dto.getProcessVariables() == null || dto.getProcessVariables().isEmpty())
+            && (dto.getCaseInstanceVariables() == null || dto.getCaseInstanceVariables().isEmpty())
+            && dto.getVariableNamesIgnoreCase() == null
+            && dto.getVariableValuesIgnoreCase() == null
+            && dto.getWithCommentAttachmentInfo() == null
+    );
   }
 }

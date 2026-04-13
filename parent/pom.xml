@@ -157,7 +157,8 @@
             <argLine>@{argLine} -Xmx968m -Duser.language=en -Duser.region=US -XX:+HeapDumpOnOutOfMemoryError
               -XX:HeapDumpPath=${project.build.directory}/heap_dump.hprof
               --add-opens=java.base/java.util=ALL-UNNAMED
-              --add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
+              --add-opens=java.base/java.lang=ALL-UNNAMED
+              -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
           </configuration>
         </plugin>
@@ -166,7 +167,7 @@
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>2.16</version>
           <configuration>
-            <argLine>-Xmx968m</argLine>
+            <argLine>-Xmx968m -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
             <runOrder>hourly</runOrder>
           </configuration>
           <executions>

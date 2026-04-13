@@ -14,7 +14,7 @@ import org.eximeebpms.bpm.client.variable.impl.TypedValues;
 
 public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionManager {
 
-    public static final int SLEEP_TIME_MS = 20;
+    private final int busyThreadsSleepTimeMs;
     private final ThreadPoolExecutor executor;
     /**
      * Max fetched tasks in relation to core pool size
@@ -24,10 +24,11 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
     private final double maxFetchedTasksMultiplier;
 
     public MultithreadedTopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                                                 ThreadPoolTaskExecutorSupplier executorSupplier, double maxFetchedTasksMultiplier) {
+                                                 ThreadPoolTaskExecutorSupplier executorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs) {
         super(engineClient, typedValues, clientLockDuration);
         this.executor = executorSupplier.get();
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
+        this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
     }
 
     @Override
@@ -77,9 +78,9 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
         return new FetchAndLockResponseDto(externalTasks);
     }
 
-    private static void sleep() {
+    private void sleep() {
         try {
-            Thread.sleep(SLEEP_TIME_MS);
+            Thread.sleep(busyThreadsSleepTimeMs);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

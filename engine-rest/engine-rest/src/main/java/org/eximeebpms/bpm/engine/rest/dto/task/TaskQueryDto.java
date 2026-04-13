@@ -754,16 +754,22 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   @Override
   protected void applyFilters(TaskQuery query) {
     if (orQueries != null) {
-      TaskQueryImpl rootQuery = (TaskQueryImpl) query;
+      List<TaskQueryDto> nonEmptyOrQueries = new ArrayList<>();
 
       for (TaskQueryDto orQueryDto : orQueries) {
-        if (isEmptyOrQuery(orQueryDto)) {
-          continue;
+        if (!isEmptyOrQuery(orQueryDto)) {
+          nonEmptyOrQueries.add(orQueryDto);
+        }
+      }
+
+      if (!nonEmptyOrQueries.isEmpty()) {
+        TaskQueryImpl orQuery = (TaskQueryImpl) query.or();
+
+        for (TaskQueryDto orQueryDto : nonEmptyOrQueries) {
+          orQueryDto.applyFilters(orQuery);
         }
 
-        TaskQueryImpl orQuery = (TaskQueryImpl) rootQuery.or();
-        orQueryDto.applyFilters(orQuery);
-        rootQuery = (TaskQueryImpl) orQuery.endOr();
+        orQuery.endOr();
       }
     }
     if (processInstanceBusinessKey != null) {

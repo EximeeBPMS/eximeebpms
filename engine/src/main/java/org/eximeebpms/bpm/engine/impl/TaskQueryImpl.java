@@ -1448,7 +1448,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public List<Task> executeList(CommandContext commandContext, Page page) {
     ensureOrExpressionsEvaluated();
-    normalizeQueries();
     ensureVariablesInitialized();
     checkQueryOk();
 
@@ -1485,7 +1484,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public long executeCount(CommandContext commandContext) {
     ensureOrExpressionsEvaluated();
-    normalizeQueries();
     ensureVariablesInitialized();
     checkQueryOk();
 
@@ -2477,107 +2475,5 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
       variable.setVariableValueIgnoreCase(true);
     }
     return this;
-  }
-
-  public boolean hasExposedCriteria() {
-    return taskId != null
-        || (taskIdIn != null && taskIdIn.length > 0)
-        || name != null
-        || nameNotEqual != null
-        || nameLike != null
-        || nameNotLike != null
-        || description != null
-        || descriptionLike != null
-        || priority != null
-        || minPriority != null
-        || maxPriority != null
-        || assignee != null
-        || assigneeLike != null
-        || (assigneeIn != null && !assigneeIn.isEmpty())
-        || (assigneeNotIn != null && !assigneeNotIn.isEmpty())
-        || involvedUser != null
-        || owner != null
-        || Boolean.TRUE.equals(unassigned)
-        || Boolean.TRUE.equals(assigned)
-        || noDelegationState
-        || delegationState != null
-        || candidateUser != null
-        || candidateGroup != null
-        || candidateGroupLike != null
-        || (candidateGroups != null && !candidateGroups.isEmpty())
-        || Boolean.TRUE.equals(withCandidateGroups)
-        || Boolean.TRUE.equals(withoutCandidateGroups)
-        || Boolean.TRUE.equals(withCandidateUsers)
-        || Boolean.TRUE.equals(withoutCandidateUsers)
-        || Boolean.TRUE.equals(includeAssignedTasks)
-        || processInstanceId != null
-        || (processInstanceIdIn != null && processInstanceIdIn.length > 0)
-        || executionId != null
-        || (activityInstanceIdIn != null && activityInstanceIdIn.length > 0)
-        || createTime != null
-        || createTimeBefore != null
-        || createTimeAfter != null
-        || updatedAfter != null
-        || key != null
-        || keyLike != null
-        || (taskDefinitionKeys != null && taskDefinitionKeys.length > 0)
-        || (taskDefinitionKeyNotIn != null && taskDefinitionKeyNotIn.length > 0)
-        || processDefinitionKey != null
-        || (processDefinitionKeys != null && processDefinitionKeys.length > 0)
-        || processDefinitionId != null
-        || processDefinitionName != null
-        || processDefinitionNameLike != null
-        || processInstanceBusinessKey != null
-        || (processInstanceBusinessKeys != null && processInstanceBusinessKeys.length > 0)
-        || processInstanceBusinessKeyLike != null
-        || (variables != null && !variables.isEmpty())
-        || dueDate != null
-        || dueBefore != null
-        || dueAfter != null
-        || followUpDate != null
-        || followUpBefore != null
-        || followUpAfter != null
-        || followUpNullAccepted
-        || excludeSubtasks
-        || suspensionState != null
-        || parentTaskId != null
-        || isWithoutTenantId
-        || isWithoutDueDate
-        || (tenantIds != null && tenantIds.length > 0)
-        || caseDefinitionKey != null
-        || caseDefinitionId != null
-        || caseDefinitionName != null
-        || caseDefinitionNameLike != null
-        || caseInstanceId != null
-        || caseInstanceBusinessKey != null
-        || caseInstanceBusinessKeyLike != null
-        || caseExecutionId != null
-        || (expressions != null && !expressions.isEmpty());
-  }
-
-  protected void normalizeQueries() {
-    if (queries == null || queries.isEmpty()) {
-      return;
-    }
-
-    List<TaskQueryImpl> normalized = new ArrayList<>();
-
-    for (TaskQueryImpl query : queries) {
-      if (query != null && query.hasExposedCriteria()) {
-        normalized.add(query);
-      }
-    }
-
-    if (normalized.isEmpty()) {
-      normalized.add(this);
-    }
-
-    for (int i = 0; i < normalized.size(); i++) {
-      TaskQueryImpl query = normalized.get(i);
-      query.queries = normalized;
-      query.isOrQueryActive = i > 0;
-    }
-
-    this.queries = normalized;
   }
 }

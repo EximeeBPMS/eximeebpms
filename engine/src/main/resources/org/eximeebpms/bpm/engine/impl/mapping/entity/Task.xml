@@ -250,7 +250,7 @@
       <if test="query.isOrQueryActive">
         <bind name="JOIN_TYPE" value="'left join'" />
       </if>
-      <if test="query != null &amp;&amp; (query.candidateUser != null || (query.candidateGroups != null &amp;&amp; query.candidateGroups.size > 0) || query.candidateGroupLike != null || query.involvedUser != null || query.withCandidateGroups || query.withCandidateUsers)">
+      <if test="query != null &amp;&amp; (query.candidateUser != null || query.candidateGroups != null  || query.candidateGroupLike != null || query.involvedUser != null || query.withCandidateGroups || query.withCandidateUsers)">
         <bind name="I_JOIN" value="true" />
       </if>
       <!-- the process definition table is joined if
@@ -332,18 +332,17 @@
     </foreach>
     <where>
       <foreach collection="queries" item="query" index="i">
-        <if test="query.hasExposedCriteria">
         <choose>
           <when test="i == 0">
-            <bind name="queryOuterType" value="'and'" />
+            <bind name="queryType" value="'and'" />
           </when>
           <otherwise>
-            <bind name="queryOuterType" value="'or'" />
+            <bind name="queryType" value="'or'" />
           </otherwise>
         </choose>
-        <bind name="queryType" value="'and'" />
-        ${queryOuterType} (
-        <trim suffixOverrides="and|or">
+        and (
+        <trim suffixOverrides="and">
+          1 = 1 and
           <trim prefixOverrides="or|and">
             <if test="query.taskId != null">
               ${queryType} RES.ID_ = #{query.taskId}
@@ -585,7 +584,8 @@
             <if test="query.isWithoutTenantId">
               ${queryType} RES.TENANT_ID_ is null
             </if>
-            <if test="query.candidateUser != null || (query.candidateGroups != null &amp;&amp; query.candidateGroups.size > 0) || query.candidateGroupLike != null || query.withCandidateGroups || query.withCandidateUsers">              ${queryType}
+            <if test="query.candidateUser != null || query.candidateGroups != null || query.candidateGroupLike != null || query.withCandidateGroups || query.withCandidateUsers">
+              ${queryType}
               <trim prefixOverrides="and" prefix="(" suffix=")">
                 <if test="!query.includeAssignedTasks">
                   and RES.ASSIGNEE_ is null
@@ -716,7 +716,6 @@
           </trim>
         </trim>
         )
-        </if>
       </foreach>
       
       <!-- Task query does not use left join if cmmn is disabled, 
@@ -724,7 +723,7 @@
       <bind name="applyAuthorizationCheckForCaseInstances" value="authCheck.useLeftJoin" />
       <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" />
       <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
-
+ 
     </where>
   </sql>
 

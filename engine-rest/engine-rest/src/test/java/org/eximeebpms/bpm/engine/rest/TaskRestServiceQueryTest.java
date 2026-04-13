@@ -36,6 +36,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -101,7 +102,16 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     TaskQuery sampleTaskQuery = mock(TaskQueryImpl.class);
     when(sampleTaskQuery.list()).thenReturn(mockedTasks);
     when(sampleTaskQuery.count()).thenReturn((long) mockedTasks.size());
+
+    when(sampleTaskQuery.or()).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.endOr()).thenReturn(sampleTaskQuery);
+
+    when(sampleTaskQuery.taskName(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskDescription(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskCandidateUser(anyString())).thenReturn(sampleTaskQuery);
     when(sampleTaskQuery.taskCandidateGroup(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskCandidateGroupIn(any())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.includeAssignedTasks()).thenReturn(sampleTaskQuery);
 
     when(processEngine.getTaskService().createTaskQuery()).thenReturn(sampleTaskQuery);
 
@@ -2294,10 +2304,58 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     .when()
       .post(TASK_QUERY_URL);
 
-    ArgumentCaptor<TaskQueryImpl> argument = ArgumentCaptor.forClass(TaskQueryImpl.class);
-    verify(((TaskQueryImpl) mockQuery)).addOrQuery(argument.capture());
-    assertEquals(MockProvider.EXAMPLE_TASK_NAME, argument.getValue().getName());
-    assertEquals(MockProvider.EXAMPLE_TASK_DESCRIPTION, argument.getValue().getDescription());
+    verify(((TaskQueryImpl) mockQuery)).or();
+    verify(mockQuery).taskName(MockProvider.EXAMPLE_TASK_NAME);
+    verify(mockQuery).taskDescription(MockProvider.EXAMPLE_TASK_DESCRIPTION);
+    verify(((TaskQueryImpl) mockQuery)).endOr();
   }
 
+  @Test
+  public void testOrQueryWithCandidateUserAndCandidateGroups() {
+    Map<String, Object> candidateGroupOrQuery = new HashMap<>();
+    candidateGroupOrQuery.put("candidateGroups", Arrays.asList("DEV_TESTERS"));
+
+    Map<String, Object> candidateUserOrQuery = new HashMap<>();
+    candidateUserOrQuery.put("candidateUser", "rmastalerek");
+
+    Map<String, Object> body = new HashMap<>();
+    body.put("orQueries", Arrays.asList(candidateGroupOrQuery, candidateUserOrQuery));
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .header(ACCEPT_JSON_HEADER)
+        .body(body)
+        .then().expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).or();
+    verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).endOr();
+
+    verify(mockQuery).taskCandidateGroupIn(argThat(new EqualsList(Arrays.asList("DEV_TESTERS"))));
+    verify(mockQuery).taskCandidateUser("rmastalerek");
+  }
+
+  @Test
+  public void testOrQueryWithEmptyOrQueryAndCandidateUser() {
+    Map<String, Object> emptyOrQuery = new HashMap<>();
+
+    Map<String, Object> candidateUserOrQuery = new HashMap<>();
+    candidateUserOrQuery.put("candidateUser", "rmastalerek");
+
+    Map<String, Object> body = new HashMap<>();
+    body.put("orQueries", Arrays.asList(emptyOrQuery, candidateUserOrQuery));
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .header(ACCEPT_JSON_HEADER)
+        .body(body)
+        .then().expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    verify(mockQuery).taskCandidateUser("rmastalerek");
+  }
 }

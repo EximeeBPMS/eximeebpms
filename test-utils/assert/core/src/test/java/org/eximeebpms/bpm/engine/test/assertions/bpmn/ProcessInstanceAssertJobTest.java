@@ -184,13 +184,13 @@ public class ProcessInstanceAssertJobTest extends ProcessAssertTestCase {
     );
     // And
     Mocks.register("serviceTask_1", "someService");
-    execute(jobQuery().list().get(0));
+    execute(jobQuery().activityId("ServiceTask_1").singleResult());
     // And
     Mocks.register("serviceTask_2", "someService");
-    execute(jobQuery().list().get(0));
+    execute(jobQuery().activityId("ServiceTask_2").singleResult());
     // And
     Mocks.register("serviceTask_3", "someService");
-    execute(jobQuery().list().get(0));
+    execute(jobQuery().activityId("ServiceTask_3").singleResult());
     // Then
     expect(new Failure() {
       @Override

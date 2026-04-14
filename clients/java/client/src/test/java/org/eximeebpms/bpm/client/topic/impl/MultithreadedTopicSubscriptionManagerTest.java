@@ -101,19 +101,21 @@ public class MultithreadedTopicSubscriptionManagerTest {
         // Expected: maxTasks = (10 * 1.5) - 5 = 10
 
         // Simulate 5 active threads by submitting blocking tasks
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch blockingLatch = new CountDownLatch(1);
+        CountDownLatch threadsStartedLatch = new CountDownLatch(5);
         for (int i = 0; i < 5; i++) {
             executor.submit(() -> {
                 try {
-                    latch.await();
+                    threadsStartedLatch.countDown(); // Signal that this thread has started
+                    blockingLatch.await();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             });
         }
 
-        // Wait for tasks to be active
-        Thread.sleep(100);
+        // Wait for all 5 tasks to actually start
+        assertTrue("All 5 threads should start", threadsStartedLatch.await(1, TimeUnit.SECONDS));
 
         List<ExternalTask> mockTasks = createMockTasks(3);
         when(engineClient.fetchAndLock(anyList(), eq(10)))
@@ -129,7 +131,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
         verify(engineClient).fetchAndLock(anyList(), eq(10));
 
         // Cleanup
-        latch.countDown();
+        blockingLatch.countDown();
         executor.shutdown();
     }
 
@@ -151,7 +153,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
     }
 
     @Test
-    public void shouldHandleOneTaskReturned() throws Exception {
+    public void shouldHandleOneTaskReturned() {
         // Given
         List<ExternalTask> mockTasks = createMockTasks(1);
         when(engineClient.fetchAndLock(anyList(), anyInt()))
@@ -164,7 +166,6 @@ public class MultithreadedTopicSubscriptionManagerTest {
         manager.acquire();
 
         // Then
-        Thread.sleep(100); // Wait for async execution
         verify(taskHandler, timeout(1000)).execute(any(ExternalTask.class), any());
     }
 
@@ -276,13 +277,15 @@ public class MultithreadedTopicSubscriptionManagerTest {
     @Test
     public void shouldNotFetchWhenAllThreadsBusy() throws Exception {
         // Given: All threads are busy (activeCount >= corePoolSize)
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch blockingLatch = new CountDownLatch(1);
+        CountDownLatch threadsStartedLatch = new CountDownLatch(15);
 
         // Fill the executor with blocking tasks
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 15; i++) {
             executor.submit(() -> {
                 try {
-                    latch.await();
+                    threadsStartedLatch.countDown(); // Signal that this thread has started
+                    blockingLatch.await();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -290,7 +293,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
         }
 
         // Wait for all threads to be active
-        Thread.sleep(200);
+        assertTrue("All 15 threads should start", threadsStartedLatch.await(2, TimeUnit.SECONDS));
 
         TopicSubscription subscription = createSubscription("testTopic");
         manager.subscribe(subscription);
@@ -302,7 +305,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
         verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
 
         // Cleanup
-        latch.countDown();
+        blockingLatch.countDown();
     }
 
     @Test
@@ -324,7 +327,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
     }
 
     @Test
-    public void shouldHandleMultipleSubscriptions() throws Exception {
+    public void shouldHandleMultipleSubscriptions() {
         // Given
         List<ExternalTask> mockTasks1 = createMockTasks(3, "topic1");
         List<ExternalTask> mockTasks2 = createMockTasks(2, "topic2");
@@ -348,7 +351,6 @@ public class MultithreadedTopicSubscriptionManagerTest {
         manager.acquire();
 
         // Then
-        Thread.sleep(200);
         verify(handler1, timeout(1000).times(3)).execute(any(ExternalTask.class), any());
         verify(handler2, timeout(1000).times(2)).execute(any(ExternalTask.class), any());
     }

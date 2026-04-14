@@ -74,7 +74,7 @@ public class TopicSubscriptionManager implements Runnable {
   protected long clientLockDuration;
 
   protected ExternalTaskExecutionStats executionStats;
-  
+
   protected ScheduledExecutorService statsScheduler;
 
   public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration) {
@@ -160,6 +160,9 @@ public class TopicSubscriptionManager implements Runnable {
 
     long startTime = System.currentTimeMillis();
     try {
+        if (checkLockExpired(task)) {
+            return;
+        }
       taskHandler.execute(task, externalTaskService);
     } catch (ExternalTaskClientException e) {
       LOG.exceptionOnExternalTaskServiceMethodInvocation(task.getTopicName(), e);
@@ -169,6 +172,15 @@ public class TopicSubscriptionManager implements Runnable {
       long executionTime = System.currentTimeMillis() - startTime;
       executionStats.recordExecution(task.getProcessDefinitionKey(), task.getTopicName(), executionTime);
     }
+  }
+
+  private static boolean checkLockExpired(ExternalTaskImpl task) {
+    long timeUntilLockExpires = task.getLockExpirationTime().getTime() - System.currentTimeMillis();
+    if (timeUntilLockExpires <= 0) {
+      LOG.taskLockAlreadyExpired(task.getId(), task.getTopicName(), task.getLockExpirationTime());
+      return true;
+    }
+    return false;
   }
 
   public synchronized void stop() {
@@ -181,7 +193,7 @@ public class TopicSubscriptionManager implements Runnable {
         Thread.currentThread().interrupt();
         LOG.exceptionWhileShuttingDown(e);
       }
-      
+
       // Shutdown the stats scheduler
       if (statsScheduler != null) {
         statsScheduler.shutdown();
@@ -201,14 +213,14 @@ public class TopicSubscriptionManager implements Runnable {
     if (isRunning.compareAndSet(false, true)) {
       thread = new Thread(this, TopicSubscriptionManager.class.getSimpleName());
       thread.start();
-      
+
       // Start scheduled task for stats logging and cleanup every 5 minutes
       statsScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "ExternalTaskStatsLogger");
         t.setDaemon(true);
         return t;
       });
-      
+
       statsScheduler.scheduleAtFixedRate(() -> {
         try {
           // Log current statistics
@@ -254,8 +266,7 @@ public class TopicSubscriptionManager implements Runnable {
   protected void runBackoffStrategy(FetchAndLockResponseDto fetchAndLockResponse) {
     try {
       List<ExternalTask> externalTasks = fetchAndLockResponse.getExternalTasks();
-      if (backoffStrategy instanceof ErrorAwareBackoffStrategy) {
-        ErrorAwareBackoffStrategy errorAwareBackoffStrategy = ((ErrorAwareBackoffStrategy) backoffStrategy);
+      if (backoffStrategy instanceof ErrorAwareBackoffStrategy errorAwareBackoffStrategy) {
         ExternalTaskClientException exception = fetchAndLockResponse.getError();
         errorAwareBackoffStrategy.reconfigure(externalTasks, exception);
 

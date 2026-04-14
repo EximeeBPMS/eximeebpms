@@ -15,7 +15,7 @@ import org.eximeebpms.bpm.client.variable.impl.TypedValues;
 public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionManager {
 
     private final int busyThreadsSleepTimeMs;
-    private final ThreadPoolExecutor executor;
+    private final ThreadPoolTaskExecutorSupplier taskExecutorSupplier;
     /**
      * Max fetched tasks in relation to core pool size
      * 1.5 means that if the core pool size is 10, up to 15 tasks will be fetched and locked.
@@ -24,9 +24,9 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
     private final double maxFetchedTasksMultiplier;
 
     public MultithreadedTopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                                                 ThreadPoolTaskExecutorSupplier executorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs) {
+                                                 ThreadPoolTaskExecutorSupplier taskExecutorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs) {
         super(engineClient, typedValues, clientLockDuration);
-        this.executor = executorSupplier.get();
+        this.taskExecutorSupplier = taskExecutorSupplier;
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
         this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
     }
@@ -36,10 +36,12 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
         taskTopicRequests.clear();
         externalTaskHandlers.clear();
         subscriptions.forEach(this::prepareAcquisition);
-
+        ThreadPoolExecutor taskExecutor = taskExecutorSupplier.get();
         if (!taskTopicRequests.isEmpty()) {
-            if (executor.getActiveCount() < executor.getCorePoolSize()) {
-                int maxTasksToFetch = (int) (executor.getCorePoolSize() * maxFetchedTasksMultiplier) - executor.getActiveCount();
+            int maxTasks = (int) (taskExecutor.getCorePoolSize() * maxFetchedTasksMultiplier);
+            int tasksInProgress = taskExecutor.getActiveCount() + taskExecutor.getQueue().size();
+            int maxTasksToFetch = maxTasks - tasksInProgress;
+            if (maxTasksToFetch > 0) {
                 FetchAndLockResponseDto fetchAndLockResponse = fetchAndLock(taskTopicRequests, maxTasksToFetch);
 
                 fetchAndLockResponse.getExternalTasks().forEach(externalTask -> {
@@ -47,7 +49,8 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
                     ExternalTaskHandler taskHandler = externalTaskHandlers.get(topicName);
 
                     if (taskHandler != null) {
-                        CompletableFuture.runAsync(() -> handleExternalTask(externalTask, taskHandler), executor);
+                        CompletableFuture.runAsync(() -> handleExternalTask(externalTask, taskHandler),
+                                taskExecutor);
                     } else {
                         LOG.taskHandlerIsNull(topicName);
                     }
@@ -57,7 +60,7 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
                     runBackoffStrategy(fetchAndLockResponse);
                 }
             } else {
-                LOG.allThreadsAreBusy(executor.getActiveCount(), executor.getQueue().size());
+                LOG.allThreadsAreBusy(taskExecutor.getActiveCount(), taskExecutor.getQueue().size());
                 sleep();
             }
         }

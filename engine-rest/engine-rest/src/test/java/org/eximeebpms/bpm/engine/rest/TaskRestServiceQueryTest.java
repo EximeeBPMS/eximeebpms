@@ -2311,10 +2311,10 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
   @Test
   public void testOrQueryWithCandidateUserAndCandidateGroups() {
     Map<String, Object> candidateGroupOrQuery = new HashMap<>();
-    candidateGroupOrQuery.put("candidateGroups", Arrays.asList("DEV_TESTERS"));
+    candidateGroupOrQuery.put("candidateGroups", List.of("testGroup"));
 
     Map<String, Object> candidateUserOrQuery = new HashMap<>();
-    candidateUserOrQuery.put("candidateUser", "rmastalerek");
+    candidateUserOrQuery.put("candidateUser", "testUser");
 
     Map<String, Object> body = new HashMap<>();
     body.put("orQueries", Arrays.asList(candidateGroupOrQuery, candidateUserOrQuery));
@@ -2331,8 +2331,8 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).or();
     verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).endOr();
 
-    verify(mockQuery).taskCandidateGroupIn(argThat(new EqualsList(Arrays.asList("DEV_TESTERS"))));
-    verify(mockQuery).taskCandidateUser("rmastalerek");
+    verify(mockQuery).taskCandidateGroupIn(argThat(new EqualsList(List.of("testGroup"))));
+    verify(mockQuery).taskCandidateUser("testUser");
   }
 
   @Test
@@ -2340,7 +2340,7 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     Map<String, Object> emptyOrQuery = new HashMap<>();
 
     Map<String, Object> candidateUserOrQuery = new HashMap<>();
-    candidateUserOrQuery.put("candidateUser", "rmastalerek");
+    candidateUserOrQuery.put("candidateUser", "testUser");
 
     Map<String, Object> body = new HashMap<>();
     body.put("orQueries", Arrays.asList(emptyOrQuery, candidateUserOrQuery));
@@ -2354,6 +2354,6 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
         .when()
         .post(TASK_QUERY_URL);
 
-    verify(mockQuery).taskCandidateUser("rmastalerek");
+    verify(mockQuery).taskCandidateUser("testUser");
   }
 }

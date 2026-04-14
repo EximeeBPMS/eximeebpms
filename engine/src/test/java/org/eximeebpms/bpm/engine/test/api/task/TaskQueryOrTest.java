@@ -1470,4 +1470,35 @@ public class TaskQueryOrTest {
         .contains(task2.getId(), task3.getId());
   }
 
+  @Test
+  public void shouldReturnTasksWithTaskCandidateGroupOrTaskCandidateUser() {
+    // given
+    Task task1 = taskService.newTask();
+    taskService.saveTask(task1);
+    taskService.addCandidateUser(task1.getId(), "John Doe");
+
+    Task task2 = taskService.newTask();
+    taskService.saveTask(task2);
+    taskService.addCandidateUser(task2.getId(), "John Doe");
+    taskService.addCandidateGroup(task2.getId(), "Controlling");
+
+    Task task3 = taskService.newTask();
+    taskService.saveTask(task3);
+    taskService.addCandidateGroup(task3.getId(), "Controlling");
+
+    // when
+    List<Task> tasks = taskService.createTaskQuery()
+          .or()
+            .taskCandidateGroupIn(List.of("Controlling"))
+            .taskCandidateUser("John Doe")
+          .endOr()
+        .list();
+
+    // then
+    assertEquals(3, tasks.size());
+    assertThat(tasks)
+        .extracting(Task::getId)
+        .contains(task1.getId(), task2.getId(), task3.getId());
+  }
+
 }

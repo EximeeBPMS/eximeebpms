@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.engine.rest.util.DateTimeUtils.withTimezone;
 import static org.eximeebpms.bpm.engine.rest.util.QueryParamUtils.arrayAsCommaSeperatedList;
@@ -73,7 +72,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 

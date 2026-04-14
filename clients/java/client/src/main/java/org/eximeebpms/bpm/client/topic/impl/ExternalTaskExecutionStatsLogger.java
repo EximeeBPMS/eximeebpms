@@ -31,25 +31,23 @@ public class ExternalTaskExecutionStatsLogger {
 
         StringBuilder sb = new StringBuilder();
         sb.append("\n=== External Task Execution Statistics ===\n");
-        sb.append(String.format("%-40s %-30s %8s %10s %10s %10s %10s\n",
+        sb.append(String.format("%-40s %-30s %8s %10s %10s %10s %10s%n",
                 "Process Definition Key", "Topic Name", "Count", "Total(ms)", "Min(ms)", "Max(ms)", "Avg(ms)"));
         sb.append("-".repeat(130)).append("\n");
 
         allStats.values().stream()
                 .sorted((a, b) -> Long.compare(b.getCount(), a.getCount()))
-                .forEach(taskStats -> {
-                    sb.append(String.format("%-40s %-30s %8d %10d %10d %10d %10.2f\n",
-                            truncate(taskStats.getProcessDefinitionKey(), 40),
-                            truncate(taskStats.getTopicName(), 30),
-                            taskStats.getCount(),
-                            taskStats.getTotalTimeMs(),
-                            taskStats.getMinTimeMs(),
-                            taskStats.getMaxTimeMs(),
-                            taskStats.getAverageTimeMs()));
-                });
+                .forEach(taskStats -> sb.append(String.format("%-40s %-30s %8d %10d %10d %10d %10.2f%n",
+                        truncate(taskStats.getProcessDefinitionKey(), 40),
+                        truncate(taskStats.getTopicName(), 30),
+                        taskStats.getCount(),
+                        taskStats.getTotalTimeMs(),
+                        taskStats.getMinTimeMs(),
+                        taskStats.getMaxTimeMs(),
+                        taskStats.getAverageTimeMs())));
 
         sb.append("=".repeat(130)).append("\n");
-        LOGGER.info(sb.toString());
+        LOGGER.info(sb::toString);
     }
 
     private static String truncate(String value, int maxLength) {

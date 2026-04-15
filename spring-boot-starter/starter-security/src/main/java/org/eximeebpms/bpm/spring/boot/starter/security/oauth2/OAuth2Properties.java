@@ -16,11 +16,15 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.security.oauth2;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+@Getter
+@Setter
 @ConfigurationProperties(OAuth2Properties.PREFIX)
 public class OAuth2Properties {
 
@@ -38,6 +42,14 @@ public class OAuth2Properties {
   @NestedConfigurationProperty
   private OAuth2IdentityProviderProperties identityProvider = new OAuth2IdentityProviderProperties();
 
+  /**
+   * OAuth2 Endpoint properties.
+   */
+  @NestedConfigurationProperty
+  private OAuth2EndpointProperties endpoints = new OAuth2EndpointProperties();
+
+  @Getter
+  @Setter
   public static class OAuth2SSOLogoutProperties {
     /**
      * Enable SSO Logout. Default {@code false}.
@@ -48,24 +60,10 @@ public class OAuth2Properties {
      * URI the user is redirected after SSO logout from the provider. Default {@code {baseUrl}}.
      */
     private String postLogoutRedirectUri = "{baseUrl}";
-
-    public boolean isEnabled() {
-      return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-      this.enabled = enabled;
-    }
-
-    public String getPostLogoutRedirectUri() {
-      return postLogoutRedirectUri;
-    }
-
-    public void setPostLogoutRedirectUri(String postLogoutRedirectUri) {
-      this.postLogoutRedirectUri = postLogoutRedirectUri;
-    }
   }
 
+  @Getter
+  @Setter
   public static class OAuth2IdentityProviderProperties {
     /**
      * Enable {@link OAuth2IdentityProvider}. Default {@code true}.
@@ -81,45 +79,24 @@ public class OAuth2Properties {
      * Group name attribute delimiter. Only used if the {@link #groupNameAttribute} is a {@link String}.
      */
     private String groupNameDelimiter = ",";
-
-    public boolean isEnabled() {
-      return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-      this.enabled = enabled;
-    }
-
-    public String getGroupNameAttribute() {
-      return groupNameAttribute;
-    }
-
-    public void setGroupNameAttribute(String groupNameAttribute) {
-      this.groupNameAttribute = groupNameAttribute;
-    }
-
-    public String getGroupNameDelimiter() {
-      return groupNameDelimiter;
-    }
-
-    public void setGroupNameDelimiter(String groupNameDelimiter) {
-      this.groupNameDelimiter = groupNameDelimiter;
-    }
   }
 
-  public OAuth2SSOLogoutProperties getSsoLogout() {
-    return ssoLogout;
-  }
+  @Getter
+  @Setter
+  public static class OAuth2EndpointProperties {
+    /**
+     * Base URI used to initiate the OAuth2 authorization flow.
+     * Default {@code /oauth2/authorization}.
+     */
+    private String authorizationBaseUri = "/oauth2/authorization";
 
-  public void setSsoLogout(OAuth2SSOLogoutProperties ssoLogout) {
-    this.ssoLogout = ssoLogout;
-  }
-
-  public OAuth2IdentityProviderProperties getIdentityProvider() {
-    return identityProvider;
-  }
-
-  public void setIdentityProvider(OAuth2IdentityProviderProperties identityProvider) {
-    this.identityProvider = identityProvider;
+    /**
+     * Base URI used for the OAuth2 authorization response (redirection/callback).
+     * Default {@code /login/oauth2/code/*}.
+     *
+     * <p>Must be aligned with
+     * {@code spring.security.oauth2.client.registration.*.redirect-uri}.
+     */
+    private String redirectionBaseUri = "/login/oauth2/code/*";
   }
 }

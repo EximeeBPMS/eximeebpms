@@ -102,12 +102,6 @@
       </dependencyManagement>
 
       <dependencies>
-       <dependency>
-          <groupId>com.fasterxml.uuid</groupId>
-          <artifactId>java-uuid-generator</artifactId>
-          <scope>test</scope>
-        </dependency>
-
         <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>

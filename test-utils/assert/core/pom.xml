@@ -56,12 +56,6 @@
       <version>${version.h2}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.fasterxml.uuid</groupId>
-      <artifactId>java-uuid-generator</artifactId>
-      <version>${version.uuid-generator}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
 </project>

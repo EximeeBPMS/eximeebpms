@@ -1333,32 +1333,6 @@ from the source code management (SCM) system project uses.
 Licensed under Apache 2.0
 
 ===========================================================================================
-com.fasterxml.uuid:java-uuid-generator:jar:5.1.0
-https://github.com/cowtowncoder/java-uuid-generator
-Java UUID generator library has been written by Tatu Saloranta (tatu.saloranta@iki.fi)
-
-Other developers who have contributed code are:
-
-* Eric Bie contributed extensive unit test suite which has helped ensure high implementation
-  quality
-Licensed under Apache 2.0
-
-===========================================================================================
-com.fasterxml.uuid:java-uuid-generator:jar:5.1.0
-https://github.com/cowtowncoder/java-uuid-generator/tree/java-uuid-generator-5.1.0
-
-Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
-
-Java UUID generator library has been written by Tatu Saloranta (tatu.saloranta@iki.fi)
-
-Other developers who have contributed code are:
-
-* Eric Bie contributed extensive unit test suite which has helped ensure high implementation
-  quality
-
-Licensed under Apache 2.0
-
-===========================================================================================
 com.fasterxml:classmate:jar:1.7.0
 https://github.com/FasterXML/java-classmate/tree/classmate-1.7.0
 Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)

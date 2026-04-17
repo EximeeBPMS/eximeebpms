@@ -289,8 +289,12 @@ public class TopicSubscriptionManager implements Runnable {
     if (waitTime > 0 && isRunning.get()) {
       acquisitionMonitor.lock();
       try {
-        if (isRunning.get()) {
-          waitCondition.await(waitTime, TimeUnit.MILLISECONDS);
+        while (isRunning.get()) {
+          if (!waitCondition.await(waitTime, TimeUnit.MILLISECONDS)) {
+            break; // timeout elapsed — backoff finished normally
+          }
+          break; // signalled early by resume() — proceed with acquisition
+          // spurious wakeup: neither case is reached, loop re-checks isRunning
         }
       } catch (InterruptedException e) {
         LOG.exceptionWhileExecutingBackoffStrategyMethod(e);

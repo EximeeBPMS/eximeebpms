@@ -188,8 +188,12 @@ public class ExecutorRunner implements Runnable {
         if (waitTime > 0 && isRunning.get()) {
             acquisitionMonitor.lock();
             try {
-                if (isRunning.get()) {
-                    isWaiting.await(waitTime, TimeUnit.MILLISECONDS);
+                while (isRunning.get()) {
+                    if (!isWaiting.await(waitTime, TimeUnit.MILLISECONDS)) {
+                        break; // timeout elapsed — backoff finished normally
+                    }
+                    break; // signalled early by resume() — proceed with acquisition
+                    // spurious wakeup: neither case is reached, loop re-checks isRunning
                 }
             } catch (InterruptedException e) {
                 LOG.exceptionWhileExecutingBackoffStrategyMethod(e);

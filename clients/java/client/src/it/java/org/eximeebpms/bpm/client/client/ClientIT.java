@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eximeebpms.bpm.client.ExternalTaskClient;
 import org.eximeebpms.bpm.client.ExternalTaskClientBuilder;
-import org.eximeebpms.bpm.client.UrlResolver;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.backoff.ErrorAwareBackoffStrategy;
 import org.eximeebpms.bpm.client.dto.ProcessDefinitionDto;
@@ -83,14 +82,14 @@ public class ClientIT {
   @Rule
   public RuleChain ruleChain = RuleChain.outerRule(engineRule).around(clientRule).around(thrown);
 
-  protected ExternalTaskClient client;
+  protected ExternalTaskClient externalTaskClient;
 
   protected ProcessDefinitionDto processDefinition;
   protected RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler();
 
   @Before
-  public void setup() throws Exception {
-    client = clientRule.client();
+  public void setup() {
+    externalTaskClient = clientRule.client();
     handler.clear();
     processDefinition = engineRule.deploy(BPMN_ERROR_EXTERNAL_TASK_PROCESS).get(0);
   }
@@ -310,22 +309,22 @@ public class ClientIT {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
 
-    ClientRule clientRule = new ClientRule(() -> ExternalTaskClient.create()
+    ClientRule customClientRule = new ClientRule(() -> ExternalTaskClient.create()
       .baseUrl(BASE_URL)
       .workerId("aWorkerId"));
 
     try {
-      clientRule.before();
+      customClientRule.before();
 
       // when
-      clientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      customClientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
       // then
-      clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+      customClientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
     } finally {
-      clientRule.after();
+      customClientRule.after();
     }
 
     ExternalTask task = handler.getHandledTasks().get(0);
@@ -361,7 +360,7 @@ public class ClientIT {
     engineRule.startProcessInstance(processDefinition.getId());
 
     // when
-    TopicSubscription topicSubscription = client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    TopicSubscription topicSubscription = externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
       .handler(handler)
       .open();
 
@@ -380,23 +379,23 @@ public class ClientIT {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
 
-    ClientRule clientRule = new ClientRule(() -> ExternalTaskClient.create()
+    ClientRule customClientRule = new ClientRule(() -> ExternalTaskClient.create()
       .baseUrl(BASE_URL)
       .lockDuration(1000 * 60 * 30));
 
     TopicSubscription topicSubscription = null;
     try {
-      clientRule.before();
+      customClientRule.before();
 
       // when
-      topicSubscription = clientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      topicSubscription = customClientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
       // then
-      clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+      customClientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
     } finally {
-      clientRule.after();
+      customClientRule.after();
     }
 
     assertThat(topicSubscription.getLockDuration()).isNull();
@@ -463,22 +462,22 @@ public class ClientIT {
       }
     };
 
-    ClientRule clientRule = new ClientRule(() -> ExternalTaskClient.create()
+    ClientRule customClientRule = new ClientRule(() -> ExternalTaskClient.create()
       .baseUrl(BASE_URL)
       .backoffStrategy(backOffStrategy));
 
     try {
-      clientRule.before();
+      customClientRule.before();
 
       // when
-      clientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      customClientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
       // then
-      clientRule.waitForFetchAndLockUntil(isBackoffPerformed::get);
+      customClientRule.waitForFetchAndLockUntil(isBackoffPerformed::get);
     } finally {
-      clientRule.after();
+      customClientRule.after();
     }
 
     assertThat(isBackoffPerformed.get()).isTrue();
@@ -495,24 +494,24 @@ public class ClientIT {
       }
     };
 
-    ClientRule clientRule = new ClientRule(() -> ExternalTaskClient.create()
+    ClientRule customClientRule = new ClientRule(() -> ExternalTaskClient.create()
       .baseUrl(BASE_URL)
       .backoffStrategy(backOffStrategy));
 
     try {
-      clientRule.before();
+      customClientRule.before();
 
       // when
-      clientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      customClientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
       engineRule.startProcessInstance(processDefinition.getId());
 
       // then
-      clientRule.waitForFetchAndLockUntil(isBackoffReset::get);
+      customClientRule.waitForFetchAndLockUntil(isBackoffReset::get);
     } finally {
-      clientRule.after();
+      customClientRule.after();
     }
 
     // then
@@ -530,30 +529,30 @@ public class ClientIT {
       }
     };
 
-    ClientRule clientRule = new ClientRule(() -> ExternalTaskClient.create()
+    ClientRule customClientRule = new ClientRule(() -> ExternalTaskClient.create()
       .baseUrl(BASE_URL)
       .disableBackoffStrategy()
       .backoffStrategy(backoffStrategy));
 
     try {
-      clientRule.before();
+      customClientRule.before();
 
-      clientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      customClientRule.client().subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
       engineRule.startProcessInstance(processDefinition.getId());
 
       // At this point TopicSubscriptionManager#acquire might not have been executed completely
-      clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 1);
+      customClientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 1);
 
       engineRule.startProcessInstance(processDefinition.getId());
 
       // when
       // At this point TopicSubscriptionManager#acquire have been executed completely at least once
-      clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
+      customClientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
     } finally {
-      clientRule.after();
+      customClientRule.after();
     }
 
     // then
@@ -674,16 +673,16 @@ public class ClientIT {
         .defaultSerializationFormat("application/x-java-serialized-object")
         .build();
 
-      RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((t, s) -> s.complete(t));
+      RecordingExternalTaskHandler recordingExternalTaskHandler = new RecordingExternalTaskHandler((t, s) -> s.complete(t));
       client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-        .handler(handler)
+        .handler(recordingExternalTaskHandler)
         .open();
 
       // when
-      clientRule.waitForFetchAndLockUntil(handler::isFailed);
+      clientRule.waitForFetchAndLockUntil(recordingExternalTaskHandler::isFailed);
 
       // then
-      assertThat(handler.getException().getType()).isEqualTo("ScriptEvaluationException");
+      assertThat(recordingExternalTaskHandler.getException().getType()).isEqualTo("ScriptEvaluationException");
     } finally {
       if (client != null) {
         client.stop();
@@ -732,7 +731,7 @@ public class ClientIT {
       // then
       EngineException exception = (EngineException) ex.get();
       assertThat(exception).isInstanceOf(EngineException.class);
-      assertThat(exception.getCode()).isEqualTo(0);
+      assertThat(exception.getCode()).isZero();
       assertThat(exception.getType()).isEqualTo("ProcessEngineException");
       assertThat(exception.getMessage()).isEqualTo("TASK/CLIENT-03009 Exception while fetching and locking task: Object values cannot be used to query");
       assertThat(exception.getHttpStatusCode()).isEqualTo(500);
@@ -755,7 +754,7 @@ public class ClientIT {
     engineRule.startProcessInstance(processId).getId();
 
     // when
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
         .handler(handler)
         .open();
 
@@ -774,7 +773,7 @@ public class ClientIT {
 
     try {
       // given
-      engineRule.startProcessInstance(processId).getId();
+      engineRule.startProcessInstance(processId);
 
       client = ExternalTaskClient.create()
                                  .baseUrl(" " + BASE_URL + " ")
@@ -1054,13 +1053,13 @@ public class ClientIT {
       assertThat(tasks.get(1).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY + 1000L);
 
       // given the same priority (elements 0 & 1), their date should be Descending ordered
-      assertThat(tasks.get(0).getCreateTime()).isAfterOrEqualsTo(tasks.get(1).getCreateTime());
+      assertThat(tasks.get(0).getCreateTime()).isAfterOrEqualTo(tasks.get(1).getCreateTime());
 
       assertThat(tasks.get(2).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY);
       assertThat(tasks.get(3).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY);
 
       // given the same priority (elements 2 & 3), their date should be Descending ordered
-      assertThat(tasks.get(2).getCreateTime()).isAfterOrEqualsTo(tasks.get(3).getCreateTime());
+      assertThat(tasks.get(2).getCreateTime()).isAfterOrEqualTo(tasks.get(3).getCreateTime());
     }
     finally {
       if (client != null) {
@@ -1107,13 +1106,13 @@ public class ClientIT {
       assertThat(tasks.get(1).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY + 1000L);
 
       // given the same priority (elements 0 & 1), their date should be Ascending ordered
-      assertThat(tasks.get(0).getCreateTime()).isBeforeOrEqualsTo(tasks.get(1).getCreateTime());
+      assertThat(tasks.get(0).getCreateTime()).isBeforeOrEqualTo(tasks.get(1).getCreateTime());
 
       assertThat(tasks.get(2).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY);
       assertThat(tasks.get(3).getPriority()).isEqualTo(EXTERNAL_TASK_PRIORITY);
 
       // given the same priority (elements 2 & 3), their date should be Ascending ordered
-      assertThat(tasks.get(2).getCreateTime()).isBeforeOrEqualsTo(tasks.get(3).getCreateTime());
+      assertThat(tasks.get(2).getCreateTime()).isBeforeOrEqualTo(tasks.get(3).getCreateTime());
     }
     finally {
       if (client != null) {

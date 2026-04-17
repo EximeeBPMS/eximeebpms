@@ -28,6 +28,7 @@ public class BackOffStrategyBean implements BackoffStrategy {
 
   @Override
   public void reconfigure(List<ExternalTask> externalTasks) {
+    // constant backoff time, no need to reconfigure
   }
 
   @Override

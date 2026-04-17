@@ -143,14 +143,14 @@ public class ExternalTaskExecutionStatsLoggerTest {
         List<String> messages = logHandler.getMessages();
         assertFalse("Should have captured log messages", messages.isEmpty());
         String logOutput = messages.get(0);
-        
+
         // Debug: print actual output
         System.out.println("Actual log output: " + logOutput);
-        
+
         // Should be truncated to 37 chars + "..." OR the full key might be displayed
         // Just verify the key is present in some form
-        assertTrue("Should contain process key (truncated or full)", 
-            logOutput.contains("this-is-a-very-long-process-definit") || 
+        assertTrue("Should contain process key (truncated or full)",
+            logOutput.contains("this-is-a-very-long-process-definit") ||
             logOutput.contains(longProcessKey));
     }
 
@@ -302,14 +302,14 @@ public class ExternalTaskExecutionStatsLoggerTest {
         private final List<String> messages = new ArrayList<>();
 
         @Override
-        public void publish(LogRecord record) {
-            if (record.getMessage() != null) {
+        public void publish(LogRecord logRecord) {
+            if (logRecord.getMessage() != null) {
                 // Format the message properly, handling message suppliers
                 String formatted;
                 if (getFormatter() != null) {
-                    formatted = getFormatter().formatMessage(record);
+                    formatted = getFormatter().formatMessage(logRecord);
                 } else {
-                    formatted = record.getMessage();
+                    formatted = logRecord.getMessage();
                 }
                 messages.add(formatted);
             }

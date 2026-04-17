@@ -456,6 +456,7 @@ public class ClientIT {
     // given
     AtomicBoolean   isBackoffPerformed = new AtomicBoolean(false);
     BackoffStrategy backOffStrategy = new BackOffStrategyBean() {
+      @Override
       public long calculateBackoffTime() {
         isBackoffPerformed.set(true);
         return 1000L;
@@ -719,10 +720,10 @@ public class ClientIT {
         })
         .build();
 
-      RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((t, s) -> s.complete(t));
+      RecordingExternalTaskHandler recordingExternalTaskHandler = new RecordingExternalTaskHandler((t, s) -> s.complete(t));
       client.subscribe("something")
         .processVariableEquals("foo", new MyPojo())
-        .handler(handler)
+        .handler(recordingExternalTaskHandler)
         .open();
 
       // when
@@ -751,7 +752,7 @@ public class ClientIT {
     String processId = engineRule.deploy(TWO_PRIORITISED_EXTERNAL_TASKS_PROCESS).get(0).getId();
 
     // given
-    engineRule.startProcessInstance(processId).getId();
+    engineRule.startProcessInstance(processId);
 
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
@@ -922,49 +923,6 @@ public class ClientIT {
       assertThat(tasks)
           .extracting("createTime", Date.class)
           .isSortedAccordingTo(Comparator.naturalOrder());
-    }
-    finally {
-      if (client != null) {
-        client.stop();
-      }
-    }
-  }
-
-  @Test
-  public void shouldUseDescOrderOnFetchAndLockWithUseCreateTimeTrue() {
-    String process1 = engineRule.deploy(TWO_PRIORITISED_EXTERNAL_TASKS_PROCESS).get(0).getId();
-
-    ExternalTaskClient client = null;
-
-    try {
-      // given
-      engineRule.startProcessInstance(process1);
-      incrementClock(60_000);
-      engineRule.startProcessInstance(process1);
-      incrementClock(60_000);
-
-      client = ExternalTaskClient.create()
-          .baseUrl(" " + BASE_URL + " ")
-          .maxTasks(3)
-          .usePriority(false)
-          // when
-          .useCreateTime(true)
-          .build();
-
-      client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-          .handler(handler)
-          .open();
-
-      clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 4);
-
-      // then tasks are fetched in creation time DESC order
-      assertThat(handler.getHandledTasks()).hasSize(4);
-
-      var tasks = handler.getHandledTasks();
-
-      assertThat(tasks)
-          .extracting("createTime", Date.class)
-          .isSortedAccordingTo(Comparator.reverseOrder());
     }
     finally {
       if (client != null) {

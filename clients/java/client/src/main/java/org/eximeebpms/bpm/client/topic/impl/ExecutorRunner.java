@@ -164,10 +164,8 @@ public class ExecutorRunner implements Runnable {
             if (backoffStrategy instanceof ErrorAwareBackoffStrategy errorAwareBackoffStrategy) {
                 ExternalTaskClientException exception = fetchAndLockResponse.getError();
                 errorAwareBackoffStrategy.reconfigure(externalTasks, exception);
-
             } else {
                 backoffStrategy.reconfigure(externalTasks);
-
             }
 
             long waitTime = backoffStrategy.calculateBackoffTime();
@@ -192,8 +190,7 @@ public class ExecutorRunner implements Runnable {
                     if (!isWaiting.await(waitTime, TimeUnit.MILLISECONDS)) {
                         break; // timeout elapsed — backoff finished normally
                     }
-                    break; // signalled early by resume() — proceed with acquisition
-                    // spurious wakeup: neither case is reached, loop re-checks isRunning
+                    return; // signalled early by resume() — finally still runs, lock is released
                 }
             } catch (InterruptedException e) {
                 LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
@@ -217,7 +214,7 @@ public class ExecutorRunner implements Runnable {
         ExternalTaskImpl task = (ExternalTaskImpl) externalTask;
 
         Map<String, TypedValueField> variables = task.getVariables();
-        Map<String, VariableValue> wrappedVariables = typedValues.wrapVariables(task, variables);
+        Map<String, VariableValue<?>> wrappedVariables = typedValues.wrapVariables(task, variables);
         task.setReceivedVariableMap(wrappedVariables);
 
         long startTime = System.currentTimeMillis();

@@ -68,10 +68,10 @@ public class TypedValues {
   }
 
   @SuppressWarnings("rawtypes")
-  public Map<String, VariableValue> wrapVariables(ExternalTask externalTask, Map<String, TypedValueField> variables) {
+  public Map<String, VariableValue<?>> wrapVariables(ExternalTask externalTask, Map<String, TypedValueField> variables) {
     String executionId = externalTask.getExecutionId();
 
-    Map<String, VariableValue> result = new HashMap<>();
+    Map<String, VariableValue<?>> result = new HashMap<>();
 
     if (variables != null) {
       variables.forEach((variableName, variableValue) -> {

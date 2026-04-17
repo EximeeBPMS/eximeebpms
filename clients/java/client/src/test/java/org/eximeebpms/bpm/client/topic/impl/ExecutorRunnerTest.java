@@ -1,10 +1,13 @@
 package org.eximeebpms.bpm.client.topic.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -591,7 +594,235 @@ public class ExecutorRunnerTest {
         blockingLatch.countDown();
     }
 
-    // Helper methods
+    @Test
+    public void shouldStartAcquisitionLoopOnDedicatedThread() throws Exception {
+        // Given
+        CountDownLatch acquireLatch = new CountDownLatch(1);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    acquireLatch.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+
+        // When
+        runner.start();
+
+        // Then: acquisition loop runs on its own thread
+        assertTrue("Acquisition loop should call fetchAndLock within 2s",
+                acquireLatch.await(2, TimeUnit.SECONDS));
+        assertTrue("Runner should report isRunning=true", runner.isRunning.get());
+
+        runner.isRunning.set(false);
+        runner.resume();
+    }
+
+    @Test
+    public void shouldBeIdempotent_startCalledTwice() throws Exception {
+        // Given
+        CountDownLatch acquireLatch = new CountDownLatch(1);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    acquireLatch.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+
+        // When: start() called twice
+        runner.start();
+        Thread firstThread = runner.thread;
+        runner.start(); // second call must be a no-op
+
+        // Then: same thread, only one loop running
+        assertTrue("Should have been called at least once", acquireLatch.await(2, TimeUnit.SECONDS));
+        assertSame("Second start() should not replace the thread", firstThread, runner.thread);
+
+        runner.isRunning.set(false);
+        runner.resume();
+    }
+
+    @Test
+    public void shouldNotBeRunningBeforeStart() {
+        assertFalse("Runner should not be running before start()", runner.isRunning.get());
+    }
+
+    @Test
+    public void shouldContinuouslyAcquireAfterStart() throws Exception {
+        // Given: acquisition loop runs multiple cycles
+        CountDownLatch threeCyclesLatch = new CountDownLatch(3);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    threeCyclesLatch.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+
+        // When
+        runner.start();
+
+        // Then: at least 3 acquisition cycles complete
+        assertTrue("Should complete 3 acquisition cycles within 3s",
+                threeCyclesLatch.await(3, TimeUnit.SECONDS));
+
+        verify(engineClient, atLeastOnce()).fetchAndLock(anyList(), anyInt());
+
+        runner.isRunning.set(false);
+        runner.resume();
+    }
+
+    @Test
+    public void shouldSuspendForBackoffDuration() throws Exception {
+        // Given: backoff returns a measurable delay (200ms)
+        ExponentialBackoffStrategy delayBackoff = spy(new ExponentialBackoffStrategy(200L, 2, 5000L));
+        when(delayBackoff.copy()).thenReturn(delayBackoff);
+        runner.setBackoffStrategy(delayBackoff);
+
+        // Force level=1 so calculateBackoffTime() returns 200ms
+        delayBackoff.reconfigure(Collections.emptyList());
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(Collections.emptyList());
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+
+        runner.start();
+
+        long before = System.currentTimeMillis();
+        // Wait long enough for at least one full acquire+suspend cycle
+        Thread.sleep(350);
+        long elapsed = System.currentTimeMillis() - before;
+
+        // Then: at least one full 200ms backoff must have occurred, so elapsed >= 200ms
+        assertTrue("Should have waited at least 200ms due to backoff", elapsed >= 200);
+
+        runner.isRunning.set(false);
+        runner.resume();
+    }
+
+    @Test
+    public void shouldWakeEarlyWhenResumedDuringSuspend() throws Exception {
+        // Given: very long backoff (10s) — resume() must interrupt it early
+        ExponentialBackoffStrategy longBackoff = spy(new ExponentialBackoffStrategy(10_000L, 1, 60_000L));
+        when(longBackoff.copy()).thenReturn(longBackoff);
+
+        // Force level=1 so calculateBackoffTime() returns 10_000ms
+        longBackoff.reconfigure(Collections.emptyList());
+
+        // Use a subclass that signals exactly when suspend() is entered — no Thread.sleep needed
+        CountDownLatch suspendEntered = new CountDownLatch(1);
+        ExecutorRunner testRunner = new ExecutorRunner(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, BUSY_THREADS_SLEEP_TIME,
+                () -> executor, DEFAULT_MULTIPLIER) {
+            @Override
+            protected void suspend(long waitTime) {
+                suspendEntered.countDown();
+                super.suspend(waitTime);
+            }
+        };
+        testRunner.setBackoffStrategy(longBackoff);
+
+        CountDownLatch secondFetchDone = new CountDownLatch(1);
+        // first answer: triggers first acquire cycle; second answer: confirms early wake-up
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(Collections.emptyList())
+                .thenAnswer(inv -> {
+                    secondFetchDone.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        testRunner.subscribe(subscription);
+        testRunner.start();
+
+        // Wait until the runner has actually entered suspend()
+        assertTrue("Runner should enter suspend()", suspendEntered.await(2, TimeUnit.SECONDS));
+
+        long wakeStart = System.currentTimeMillis();
+        // Signal resume() to interrupt the suspend
+        testRunner.resume();
+
+        // Then: second cycle starts well before the 10s backoff would expire
+        assertTrue("Runner should wake early after resume()", secondFetchDone.await(5, TimeUnit.SECONDS));
+        long wakeElapsed = System.currentTimeMillis() - wakeStart;
+        assertTrue("Wake-up should happen in well under 10s", wakeElapsed < 5_000);
+
+        testRunner.isRunning.set(false);
+        testRunner.resume();
+    }
+
+    @Test
+    public void shouldNotSuspendWhenBackoffTimeIsZero() throws Exception {
+        // Given: backoff returns 0 — suspend() must skip the wait entirely
+        ExponentialBackoffStrategy zeroBackoff = spy(new ExponentialBackoffStrategy(0L, 1, 0L));
+        when(zeroBackoff.copy()).thenReturn(zeroBackoff);
+        runner.setBackoffStrategy(zeroBackoff);
+
+        CountDownLatch threeCycles = new CountDownLatch(3);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    threeCycles.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+
+        long start = System.currentTimeMillis();
+        runner.start();
+
+        // Then: 3 cycles complete quickly because there is no backoff delay
+        assertTrue("3 cycles should complete quickly without backoff",
+                threeCycles.await(1, TimeUnit.SECONDS));
+        assertTrue("Elapsed should be << 1s with zero backoff",
+                System.currentTimeMillis() - start < 1_000);
+
+        runner.isRunning.set(false);
+        runner.resume();
+    }
+
+    @Test
+    public void shouldExitSuspendImmediatelyWhenStopCalledDuringSuspend() throws Exception {
+        // Given: long backoff so the runner will be in suspend when we stop it
+        ExponentialBackoffStrategy longBackoff = spy(new ExponentialBackoffStrategy(10_000L, 1, 60_000L));
+        when(longBackoff.copy()).thenReturn(longBackoff);
+        runner.setBackoffStrategy(longBackoff);
+        longBackoff.reconfigure(Collections.emptyList()); // level=1 → 10s wait
+
+        CountDownLatch enteringSuspend = new CountDownLatch(1);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    enteringSuspend.countDown();
+                    return Collections.emptyList();
+                });
+
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+        runner.start();
+
+        // Wait until runner has entered suspend
+        assertTrue("Runner should start first acquire cycle", enteringSuspend.await(2, TimeUnit.SECONDS));
+
+        long stopStart = System.currentTimeMillis();
+
+        // When: stop the runner while it is suspended
+        runner.isRunning.set(false);
+        runner.resume(); // mirrors what a real stop() would do
+
+        // Give the thread time to react
+        runner.thread.join(2_000);
+
+        // Then: thread exits well before the 10s backoff would have elapsed
+        long stopElapsed = System.currentTimeMillis() - stopStart;
+        assertFalse("Runner thread should have exited", runner.thread.isAlive());
+        assertTrue("Thread should stop well under 10s", stopElapsed < 5_000);
+    }
 
     private List<ExternalTask> createMockTasks(int count) {
         return createMockTasks(count, "testTopic");

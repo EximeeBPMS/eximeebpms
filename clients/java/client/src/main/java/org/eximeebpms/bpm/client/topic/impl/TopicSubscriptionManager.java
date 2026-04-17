@@ -150,12 +150,11 @@ public class TopicSubscriptionManager implements Runnable {
     return new FetchAndLockResponseDto(externalTasks);
   }
 
-  @SuppressWarnings("rawtypes")
   protected void handleExternalTask(ExternalTask externalTask, ExternalTaskHandler taskHandler) {
     ExternalTaskImpl task = (ExternalTaskImpl) externalTask;
 
     Map<String, TypedValueField> variables = task.getVariables();
-    Map<String, VariableValue> wrappedVariables = typedValues.wrapVariables(task, variables);
+    Map<String, VariableValue<?>> wrappedVariables = typedValues.wrapVariables(task, variables);
     task.setReceivedVariableMap(wrappedVariables);
 
     long startTime = System.currentTimeMillis();
@@ -272,12 +271,9 @@ public class TopicSubscriptionManager implements Runnable {
       if (backoffStrategy instanceof ErrorAwareBackoffStrategy errorAwareBackoffStrategy) {
         ExternalTaskClientException exception = fetchAndLockResponse.getError();
         errorAwareBackoffStrategy.reconfigure(externalTasks, exception);
-
       } else {
         backoffStrategy.reconfigure(externalTasks);
-
       }
-
       long waitTime = backoffStrategy.calculateBackoffTime();
       suspend(waitTime);
     } catch (Exception e) {
@@ -293,8 +289,7 @@ public class TopicSubscriptionManager implements Runnable {
           if (!waitCondition.await(waitTime, TimeUnit.MILLISECONDS)) {
             break; // timeout elapsed — backoff finished normally
           }
-          break; // signalled early by resume() — proceed with acquisition
-          // spurious wakeup: neither case is reached, loop re-checks isRunning
+          return; // signalled early by resume() — finally still runs, lock is released
         }
       } catch (InterruptedException e) {
         LOG.exceptionWhileExecutingBackoffStrategyMethod(e);

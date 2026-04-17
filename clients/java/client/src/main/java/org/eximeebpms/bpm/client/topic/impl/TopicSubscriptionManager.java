@@ -52,8 +52,8 @@ public class TopicSubscriptionManager implements Runnable {
 
   protected static final TopicSubscriptionManagerLogger LOG = ExternalTaskClientLogger.TOPIC_SUBSCRIPTION_MANAGER_LOGGER;
 
-  protected ReentrantLock ACQUISITION_MONITOR = new ReentrantLock(false);
-  protected Condition IS_WAITING = ACQUISITION_MONITOR.newCondition();
+  protected ReentrantLock acquisitionMonitor = new ReentrantLock(false);
+  protected Condition waitCondition = acquisitionMonitor.newCondition();
   protected AtomicBoolean isRunning = new AtomicBoolean(false);
 
   protected ExternalTaskServiceImpl externalTaskService;
@@ -94,7 +94,7 @@ public class TopicSubscriptionManager implements Runnable {
       try {
         acquire();
       }
-      catch (Throwable e) {
+      catch (Exception e) {
         LOG.exceptionWhileAcquiringTasks(e);
       }
     }
@@ -166,7 +166,7 @@ public class TopicSubscriptionManager implements Runnable {
       taskHandler.execute(task, externalTaskService);
     } catch (ExternalTaskClientException e) {
       LOG.exceptionOnExternalTaskServiceMethodInvocation(task.getTopicName(), e);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       LOG.exceptionWhileExecutingExternalTaskHandler(task.getTopicName(), e);
     } finally {
       long executionTime = System.currentTimeMillis() - startTime;
@@ -213,25 +213,28 @@ public class TopicSubscriptionManager implements Runnable {
     if (isRunning.compareAndSet(false, true)) {
       thread = new Thread(this, TopicSubscriptionManager.class.getSimpleName());
       thread.start();
-
-      // Start scheduled task for stats logging and cleanup every 5 minutes
-      statsScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-        Thread t = new Thread(r, "ExternalTaskStatsLogger");
-        t.setDaemon(true);
-        return t;
-      });
-
-      statsScheduler.scheduleAtFixedRate(() -> {
-        try {
-          // Log current statistics
-          ExternalTaskExecutionStatsLogger.logStats(executionStats);
-          // Reset statistics for next period
-          executionStats.reset();
-        } catch (Exception e) {
-          LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
-        }
-      }, 5, 5, TimeUnit.MINUTES);
+      startStatsScheduler();
     }
+  }
+
+  protected void startStatsScheduler() {
+    // Start scheduled task for stats logging and cleanup every 5 minutes
+    statsScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+      Thread t = new Thread(r, "ExternalTaskStatsLogger");
+      t.setDaemon(true);
+      return t;
+    });
+
+    statsScheduler.scheduleAtFixedRate(() -> {
+      try {
+        // Log current statistics
+        ExternalTaskExecutionStatsLogger.logStats(executionStats);
+        // Reset statistics for next period
+        executionStats.reset();
+      } catch (Exception e) {
+        LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
+      }
+    }, 5, 5, TimeUnit.MINUTES);
   }
 
   protected void subscribe(TopicSubscription subscription) {
@@ -277,34 +280,35 @@ public class TopicSubscriptionManager implements Runnable {
 
       long waitTime = backoffStrategy.calculateBackoffTime();
       suspend(waitTime);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
     }
   }
 
   protected void suspend(long waitTime) {
     if (waitTime > 0 && isRunning.get()) {
-      ACQUISITION_MONITOR.lock();
+      acquisitionMonitor.lock();
       try {
         if (isRunning.get()) {
-          IS_WAITING.await(waitTime, TimeUnit.MILLISECONDS);
+          waitCondition.await(waitTime, TimeUnit.MILLISECONDS);
         }
       } catch (InterruptedException e) {
         LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
+        Thread.currentThread().interrupt();
       }
       finally {
-        ACQUISITION_MONITOR.unlock();
+        acquisitionMonitor.unlock();
       }
     }
   }
 
   protected void resume() {
-    ACQUISITION_MONITOR.lock();
+    acquisitionMonitor.lock();
     try {
-      IS_WAITING.signal();
+      waitCondition.signal();
     }
     finally {
-      ACQUISITION_MONITOR.unlock();
+      acquisitionMonitor.unlock();
     }
   }
 

@@ -34,4 +34,11 @@ public class BackOffStrategyBean implements BackoffStrategy {
   public long calculateBackoffTime() {
     return 2000L;
   }
+
+  @Override
+  public BackoffStrategy copy() {
+    return this;
+  }
+
+
 }

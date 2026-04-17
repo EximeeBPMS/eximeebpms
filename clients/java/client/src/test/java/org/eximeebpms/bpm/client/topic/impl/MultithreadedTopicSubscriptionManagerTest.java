@@ -14,8 +14,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -27,8 +30,10 @@ import org.eximeebpms.bpm.client.impl.EngineClient;
 import org.eximeebpms.bpm.client.impl.EngineClientException;
 import org.eximeebpms.bpm.client.task.ExternalTask;
 import org.eximeebpms.bpm.client.task.ExternalTaskHandler;
+import org.eximeebpms.bpm.client.task.ExternalTaskHandlerWithSpecificExecutor;
 import org.eximeebpms.bpm.client.task.impl.ExternalTaskImpl;
 import org.eximeebpms.bpm.client.topic.TopicSubscription;
+import org.eximeebpms.bpm.client.topic.impl.dto.TopicRequestDto;
 import org.eximeebpms.bpm.client.variable.impl.TypedValues;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,7 +77,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
                 DEFAULT_MULTIPLIER,
                 20
         );
-
+        when(backoffStrategy.copy()).thenReturn(backoffStrategy);
         manager.setBackoffStrategy(backoffStrategy);
     }
 
@@ -276,15 +281,17 @@ public class MultithreadedTopicSubscriptionManagerTest {
 
     @Test
     public void shouldNotFetchWhenAllThreadsBusy() throws Exception {
-        // Given: All threads are busy (activeCount >= corePoolSize)
+        // Given: All threads are busy (activeCount + queueSize >= maxTasks)
+        // maxTasks = corePoolSize * multiplier = 10 * 1.5 = 15
+        // So we need activeCount + queueSize = 15
         CountDownLatch blockingLatch = new CountDownLatch(1);
-        CountDownLatch threadsStartedLatch = new CountDownLatch(15);
+        CountDownLatch threadsStartedLatch = new CountDownLatch(10);
 
-        // Fill the executor with blocking tasks
+        // Fill the executor: 10 will run (corePoolSize), 5 will be queued
         for (int i = 0; i < 15; i++) {
             executor.submit(() -> {
                 try {
-                    threadsStartedLatch.countDown(); // Signal that this thread has started
+                    threadsStartedLatch.countDown(); // Only first 10 will count down
                     blockingLatch.await();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -292,8 +299,8 @@ public class MultithreadedTopicSubscriptionManagerTest {
             });
         }
 
-        // Wait for all threads to be active
-        assertTrue("All 15 threads should start", threadsStartedLatch.await(2, TimeUnit.SECONDS));
+        // Wait for all core threads to start
+        assertTrue("All 10 core threads should start", threadsStartedLatch.await(2, TimeUnit.SECONDS));
 
         TopicSubscription subscription = createSubscription("testTopic");
         manager.subscribe(subscription);
@@ -301,7 +308,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
         // When
         manager.acquire();
 
-        // Then - should not call fetchAndLock
+        // Then - should not call fetchAndLock (maxTasks = 15 - (10 active + 5 queued) = 0)
         verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
 
         // Cleanup
@@ -378,8 +385,477 @@ public class MultithreadedTopicSubscriptionManagerTest {
         assertEquals(Integer.valueOf(15), capturedMaxTasks);
     }
 
-    // Helper methods
+    @Test
+    public void shouldHandleMixedHandlersWithDefaultAndSpecificExecutors() throws Exception {
+        // Given: Two executors - default and custom
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
 
+        // Mock tasks for both topics
+        List<ExternalTask> defaultTasks = createMockTasks(3, "defaultTopic");
+        List<ExternalTask> customTasks = createMockTasks(2, "customTopic");
+
+        // Configure engine client to return tasks based on maxTasks
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(invocation -> {
+                    List<TopicRequestDto> topics = invocation.getArgument(0);
+                    String topicName = topics.get(0).getTopicName();
+                    if ("defaultTopic".equals(topicName)) {
+                        return defaultTasks;
+                    } else if ("customTopic".equals(topicName)) {
+                        return customTasks;
+                    }
+                    return Collections.emptyList();
+                });
+
+        // Create handlers
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        CountDownLatch defaultLatch = new CountDownLatch(3);
+        CountDownLatch customLatch = new CountDownLatch(2);
+
+        doAnswer(inv -> {
+            defaultLatch.countDown();
+            return null;
+        }).when(defaultHandler).execute(any(), any());
+
+        doAnswer(inv -> {
+            customLatch.countDown();
+            return null;
+        }).when(customHandler).execute(any(), any());
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        assertTrue("All default tasks should be executed", defaultLatch.await(2, TimeUnit.SECONDS));
+        assertTrue("All custom tasks should be executed", customLatch.await(2, TimeUnit.SECONDS));
+
+        verify(defaultHandler, times(3)).execute(any(ExternalTask.class), any());
+        verify(customHandler, times(2)).execute(any(ExternalTask.class), any());
+
+        // Verify two separate fetch calls were made (one per executor)
+        verify(engineClient, times(2)).fetchAndLock(anyList(), anyInt());
+
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldFetchCorrectMaxTasksForEachExecutorSeparately() {
+        // Given: Default executor (10 core) and custom executor (5 core)
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+
+        ArgumentCaptor<Integer> maxTasksCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(Collections.emptyList());
+
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(() -> customExecutor);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        verify(engineClient, times(2)).fetchAndLock(anyList(), maxTasksCaptor.capture());
+        List<Integer> capturedMaxTasks = maxTasksCaptor.getAllValues();
+
+        // Default executor: (10 * 1.5) - 0 = 15
+        // Custom executor: (5 * 1.5) - 0 = 7 (rounded down from 7.5)
+        assertTrue("Should contain max tasks for default executor (15)",
+                capturedMaxTasks.contains(15));
+        assertTrue("Should contain max tasks for custom executor (7)",
+                capturedMaxTasks.contains(7));
+
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldNotFetchWhenOnlyCustomExecutorIsBusy() throws Exception {
+        // Given: Default executor free, custom executor fully busy
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+
+        // Fill custom executor with blocking tasks
+        CountDownLatch customBlockingLatch = new CountDownLatch(1);
+        CountDownLatch customThreadsStartedLatch = new CountDownLatch(5); // Only corePoolSize=5 can run
+        for (int i = 0; i < 8; i++) {
+            customExecutor.submit(() -> {
+                try {
+                    customThreadsStartedLatch.countDown();
+                    customBlockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Wait for custom threads to start
+        assertTrue("Custom executor threads should start",
+                customThreadsStartedLatch.await(2, TimeUnit.SECONDS));
+
+        List<ExternalTask> defaultTasks = createMockTasks(3, "defaultTopic");
+
+        ArgumentCaptor<List<TopicRequestDto>> topicRequestCaptor = ArgumentCaptor.forClass(List.class);
+        when(engineClient.fetchAndLock(topicRequestCaptor.capture(), anyInt()))
+                .thenReturn(defaultTasks);
+
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        // Only default executor should fetch (custom is busy)
+        verify(engineClient, times(1)).fetchAndLock(anyList(), anyInt());
+
+        // Verify the fetch was for default topic
+        List<TopicRequestDto> capturedRequests = topicRequestCaptor.getValue();
+        assertEquals(1, capturedRequests.size());
+        assertEquals("defaultTopic", capturedRequests.get(0).getTopicName());
+
+        verify(defaultHandler, timeout(1000).times(3)).execute(any(), any());
+        verify(customHandler, never()).execute(any(), any());
+
+        // Cleanup
+        customBlockingLatch.countDown();
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldNotFetchWhenOnlyDefaultExecutorIsBusy() throws Exception {
+        // Given: Default executor busy, custom executor free
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+
+        // Fill default executor with blocking tasks
+        CountDownLatch defaultBlockingLatch = new CountDownLatch(1);
+        CountDownLatch defaultThreadsStartedLatch = new CountDownLatch(10); // Only corePoolSize=10 can run
+        for (int i = 0; i < 15; i++) {
+            executor.submit(() -> {
+                try {
+                    defaultThreadsStartedLatch.countDown();
+                    defaultBlockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Wait for default threads to start
+        assertTrue("Default executor threads should start",
+                defaultThreadsStartedLatch.await(2, TimeUnit.SECONDS));
+
+        List<ExternalTask> customTasks = createMockTasks(2, "customTopic");
+
+        ArgumentCaptor<List<TopicRequestDto>> topicRequestCaptor = ArgumentCaptor.forClass(List.class);
+        when(engineClient.fetchAndLock(topicRequestCaptor.capture(), anyInt()))
+                .thenReturn(customTasks);
+
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        // Only custom executor should fetch (default is busy)
+        verify(engineClient, times(1)).fetchAndLock(anyList(), anyInt());
+
+        // Verify the fetch was for custom topic
+        List<TopicRequestDto> capturedRequests = topicRequestCaptor.getValue();
+        assertEquals(1, capturedRequests.size());
+        assertEquals("customTopic", capturedRequests.get(0).getTopicName());
+
+        verify(customHandler, timeout(1000).times(2)).execute(any(), any());
+        verify(defaultHandler, never()).execute(any(), any());
+
+        // Cleanup
+        defaultBlockingLatch.countDown();
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldNotFetchWhenAllExecutorsAreBusy() throws Exception {
+        // Given: Both default and custom executors busy
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+
+        // Fill default executor
+        CountDownLatch defaultBlockingLatch = new CountDownLatch(1);
+        CountDownLatch defaultThreadsStartedLatch = new CountDownLatch(10); // Only corePoolSize threads can run
+        for (int i = 0; i < 15; i++) {
+            executor.submit(() -> {
+                try {
+                    defaultThreadsStartedLatch.countDown();
+                    defaultBlockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Fill custom executor
+        CountDownLatch customBlockingLatch = new CountDownLatch(1);
+        CountDownLatch customThreadsStartedLatch = new CountDownLatch(5); // Only corePoolSize threads can run
+        for (int i = 0; i < 8; i++) {
+            customExecutor.submit(() -> {
+                try {
+                    customThreadsStartedLatch.countDown();
+                    customBlockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Wait for all threads to start
+        assertTrue("Default executor threads should start",
+                defaultThreadsStartedLatch.await(2, TimeUnit.SECONDS));
+        assertTrue("Custom executor threads should start",
+                customThreadsStartedLatch.await(2, TimeUnit.SECONDS));
+
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        // No fetch should happen (all executors busy)
+        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        verify(defaultHandler, never()).execute(any(), any());
+        verify(customHandler, never()).execute(any(), any());
+
+        // Cleanup
+        defaultBlockingLatch.countDown();
+        customBlockingLatch.countDown();
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldHandleMultipleTopicsOnSameCustomExecutor() throws Exception {
+        // Given: Two topics sharing the same custom executor
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+
+        List<ExternalTask> topic1Tasks = createMockTasks(2, "customTopic1");
+        List<ExternalTask> topic2Tasks = createMockTasks(3, "customTopic2");
+        List<ExternalTask> allCustomTasks = new ArrayList<>();
+        allCustomTasks.addAll(topic1Tasks);
+        allCustomTasks.addAll(topic2Tasks);
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(allCustomTasks);
+
+        ExternalTaskHandlerWithSpecificExecutor customHandler1 =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler1.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        ExternalTaskHandlerWithSpecificExecutor customHandler2 =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler2.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        CountDownLatch allTasksLatch = new CountDownLatch(5);
+        doAnswer(inv -> {
+            allTasksLatch.countDown();
+            return null;
+        }).when(customHandler1).execute(any(), any());
+
+        doAnswer(inv -> {
+            allTasksLatch.countDown();
+            return null;
+        }).when(customHandler2).execute(any(), any());
+
+        TopicSubscription subscription1 = createSubscription("customTopic1", customHandler1);
+        TopicSubscription subscription2 = createSubscription("customTopic2", customHandler2);
+
+        manager.subscribe(subscription1);
+        manager.subscribe(subscription2);
+
+        // When
+        manager.acquire();
+
+        // Then
+        assertTrue("All tasks should be executed", allTasksLatch.await(2, TimeUnit.SECONDS));
+
+        // Both topics should be included in a single fetch (same executor)
+        // Note: Current implementation creates separate entry per handler,
+        // but this tests the behavior
+        verify(customHandler1, timeout(1000).times(2)).execute(any(), any());
+        verify(customHandler2, timeout(1000).times(3)).execute(any(), any());
+
+        customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldHandlePartiallyBusyExecutorsInMixedScenario() throws Exception {
+        // Given: 3 executors - default (free), custom1 (busy), custom2 (free)
+        ThreadPoolExecutor customExecutor1 = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutor customExecutor2 = new ThreadPoolExecutor(
+                3, 6, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier1 = () -> customExecutor1;
+        ThreadPoolExecutorSupplier customExecutorSupplier2 = () -> customExecutor2;
+
+        // Fill only customExecutor1
+        CountDownLatch custom1BlockingLatch = new CountDownLatch(1);
+        CountDownLatch custom1ThreadsStartedLatch = new CountDownLatch(5);
+        for (int i = 0; i < 8; i++) {
+            customExecutor1.submit(() -> {
+                try {
+                    custom1ThreadsStartedLatch.countDown();
+                    custom1BlockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        assertTrue("Custom executor 1 threads should start",
+                custom1ThreadsStartedLatch.await(2, TimeUnit.SECONDS));
+
+        List<ExternalTask> defaultTasks = createMockTasks(2, "defaultTopic");
+        List<ExternalTask> custom2Tasks = createMockTasks(1, "customTopic2");
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(invocation -> {
+                    List<TopicRequestDto> topics = invocation.getArgument(0);
+                    String topicName = topics.get(0).getTopicName();
+                    if ("defaultTopic".equals(topicName)) {
+                        return defaultTasks;
+                    } else if ("customTopic2".equals(topicName)) {
+                        return custom2Tasks;
+                    }
+                    return Collections.emptyList();
+                });
+
+        ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
+        ExternalTaskHandlerWithSpecificExecutor customHandler1 =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler1.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier1);
+
+        ExternalTaskHandlerWithSpecificExecutor customHandler2 =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler2.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier2);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
+        TopicSubscription custom1Subscription = createSubscription("customTopic1", customHandler1);
+        TopicSubscription custom2Subscription = createSubscription("customTopic2", customHandler2);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(custom1Subscription);
+        manager.subscribe(custom2Subscription);
+
+        // When
+        manager.acquire();
+
+        // Then
+        // Should fetch for default and custom2 (but not custom1 which is busy)
+        verify(engineClient, times(2)).fetchAndLock(anyList(), anyInt());
+
+        verify(defaultHandler, timeout(1000).times(2)).execute(any(), any());
+        verify(customHandler1, never()).execute(any(), any());
+        verify(customHandler2, timeout(1000).times(1)).execute(any(), any());
+
+        // Cleanup
+        custom1BlockingLatch.countDown();
+        customExecutor1.shutdown();
+        customExecutor2.shutdown();
+    }
+
+    @Test
+    public void shouldDisableBackoffStrategyForAllRunners() {
+        // Given: Multiple subscriptions with different executors
+        ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
+                5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
+        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+
+        List<ExternalTask> mockTasks = createMockTasks(2);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(mockTasks);
+
+        ExternalTaskHandlerWithSpecificExecutor customHandler =
+                mock(ExternalTaskHandlerWithSpecificExecutor.class);
+        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+
+        TopicSubscription defaultSubscription = createSubscription("defaultTopic");
+        TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
+
+        manager.subscribe(defaultSubscription);
+        manager.subscribe(customSubscription);
+
+        // When: Disable backoff strategy
+        manager.disableBackoffStrategy();
+        manager.acquire();
+
+        // Then: Backoff strategy should NOT be invoked for any runner
+        // Note: We can't directly verify because each runner has a copy, but we verify
+        // that no backoff-related exceptions occur and tasks are processed normally
+        verify(engineClient, times(2)).fetchAndLock(anyList(), anyInt());
+
+        // Cleanup
+        customExecutor.shutdown();
+    }
+
+    // Helper methods
     private List<ExternalTask> createMockTasks(int count) {
         return createMockTasks(count, "testTopic");
     }
@@ -391,6 +867,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
             when(task.getTopicName()).thenReturn(topicName);
             when(task.getProcessDefinitionKey()).thenReturn("process-" + topicName);
             when(task.getVariables()).thenReturn(Collections.emptyMap());
+            when(task.getLockExpirationTime()).thenReturn(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)));
             tasks.add(task);
         }
         return tasks;
@@ -408,6 +885,3 @@ public class MultithreadedTopicSubscriptionManagerTest {
         return subscription;
     }
 }
-
-
-

@@ -197,10 +197,10 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create();
-      
+
       // then
       thrown.expect(ExternalTaskClientException.class);
-      
+
       // when
       client = externalTaskClientBuilder.build();
     }
@@ -218,10 +218,10 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create();
-      
+
       // then
       thrown.expect(ExternalTaskClientException.class);
-      
+
       // when
       client = externalTaskClientBuilder
           .baseUrl(null)
@@ -289,10 +289,10 @@ public class ClientIT {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create()
           .baseUrl("http://eximeebpms.com/engine-rest");
-      
+
       // then
       thrown.expect(ExternalTaskClientException.class);
-      
+
       // when
       client = externalTaskClientBuilder
           .maxTasks(0)
@@ -341,10 +341,10 @@ public class ClientIT {
       ExternalTaskClientBuilder clientBuilder = ExternalTaskClient.create()
           .baseUrl("http://eximeebpms.com/engine-rest")
           .asyncResponseTimeout(0);
-      
+
       // then
       thrown.expect(ExternalTaskClientException.class);
-      
+
       // when
       client = clientBuilder.build();
     }
@@ -415,10 +415,10 @@ public class ClientIT {
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create()
           .baseUrl("http://eximeebpms.com/engine-rest")
           .lockDuration(0);
-      
+
       // then
       thrown.expect(ExternalTaskClientException.class);
-      
+
       // when
       client = externalTaskClientBuilder.build();
     }
@@ -711,6 +711,11 @@ public class ClientIT {
           @Override
           public long calculateBackoffTime() {
             return 0;
+          }
+
+          @Override
+          public BackoffStrategy copy() {
+            return this;
           }
         })
         .build();

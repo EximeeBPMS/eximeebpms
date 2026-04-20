@@ -94,12 +94,13 @@ public class ExecutorRunner implements Runnable {
     protected AtomicBoolean isRunning = new AtomicBoolean(false);
 
     public ExecutorRunner(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                          int busyThreadsSleepTimeMs, ThreadPoolExecutorSupplier threadPoolExecutorSupplier, double maxFetchedTasksMultiplier) {
+                          int busyThreadsSleepTimeMs, ThreadPoolExecutorSupplier threadPoolExecutorSupplier, double maxFetchedTasksMultiplier,
+                          ExternalTaskExecutionStats executionStats) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
         this.typedValues = typedValues;
         this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
-        this.executionStats = new ExternalTaskExecutionStats();
+        this.executionStats = executionStats;
         this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
         this.threadPoolExecutorSupplier = threadPoolExecutorSupplier;
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;

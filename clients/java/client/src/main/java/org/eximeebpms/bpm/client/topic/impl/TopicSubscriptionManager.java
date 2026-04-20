@@ -179,7 +179,7 @@ public class TopicSubscriptionManager {
      */
     private ExecutorRunner prepareExecutorRunner(ThreadPoolExecutorSupplier supplier) {
         ExecutorRunner executorRunner = new ExecutorRunner(engineClient, typedValues,
-                clientLockDuration, busyThreadsSleepTimeMs, supplier, maxFetchedTasksMultiplier);
+                clientLockDuration, busyThreadsSleepTimeMs, supplier, maxFetchedTasksMultiplier, executionStats);
         executorRunner.setBackoffStrategy(backoffStrategy.copy());
         if (isBackoffStrategyDisabled.get()) {
             executorRunner.disableBackoffStrategy();

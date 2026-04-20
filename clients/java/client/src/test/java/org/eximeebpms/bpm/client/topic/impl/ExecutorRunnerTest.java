@@ -89,7 +89,8 @@ public class ExecutorRunnerTest {
                 CLIENT_LOCK_DURATION,
                 BUSY_THREADS_SLEEP_TIME,
                 () -> executor,
-                DEFAULT_MULTIPLIER
+                DEFAULT_MULTIPLIER,
+                new ExternalTaskExecutionStats()
         );
 
         runner.setBackoffStrategy(spyBackoffStrategy);
@@ -433,7 +434,8 @@ public class ExecutorRunnerTest {
                 CLIENT_LOCK_DURATION,
                 BUSY_THREADS_SLEEP_TIME,
                 () -> executor,
-                2.0 // Custom multiplier
+                2.0, // Custom multiplier
+                new ExternalTaskExecutionStats()
         );
         customRunner.setBackoffStrategy(spyBackoffStrategy);
 
@@ -719,7 +721,7 @@ public class ExecutorRunnerTest {
         CountDownLatch suspendEntered = new CountDownLatch(1);
         ExecutorRunner testRunner = new ExecutorRunner(
                 engineClient, typedValues, CLIENT_LOCK_DURATION, BUSY_THREADS_SLEEP_TIME,
-                () -> executor, DEFAULT_MULTIPLIER) {
+                () -> executor, DEFAULT_MULTIPLIER, new ExternalTaskExecutionStats()) {
             @Override
             protected void suspend(long waitTime) {
                 suspendEntered.countDown();

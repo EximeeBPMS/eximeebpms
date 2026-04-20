@@ -48,6 +48,9 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
                                                  ThreadPoolExecutorSupplier defaultThreadPoolExecutorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs) {
         super(engineClient, typedValues, clientLockDuration);
         this.defaultThreadPoolExecutorSupplier = defaultThreadPoolExecutorSupplier;
+        if (maxFetchedTasksMultiplier < 1) {
+            throw new IllegalArgumentException("maxFetchedTasksMultiplier parameter must be >=1");
+        }
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
         this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
     }
@@ -79,6 +82,39 @@ public class MultithreadedTopicSubscriptionManager extends TopicSubscriptionMana
     @Override
     protected void unsubscribe(TopicSubscriptionImpl subscription) {
         runnersByExecutor.values().forEach(runner -> runner.unsubscribe(subscription));
+    }
+
+    /**
+     * Stops all registered {@link ExecutorRunner}s and the statistics scheduler.
+     *
+     * <p>This method is idempotent: if the manager is not running the call has no effect.
+     * It is {@code synchronized} to prevent concurrent stop attempts.
+     */
+    @Override
+    public synchronized void stop() {
+        if (isRunning.compareAndSet(true, false)) {
+            runnersByExecutor.values().forEach(ExecutorRunner::stop);
+            if (statsScheduler != null) {
+                statsScheduler.shutdown();
+                try {
+                    if (!statsScheduler.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                        statsScheduler.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    statsScheduler.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    /**
+     * Disables the backoff strategy for this manager and all registered runners.
+     */
+    @Override
+    public void disableBackoffStrategy() {
+        super.disableBackoffStrategy();
+        runnersByExecutor.values().forEach(ExecutorRunner::disableBackoffStrategy);
     }
 
     /**

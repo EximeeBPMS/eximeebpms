@@ -20,24 +20,25 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
     private ExternalTaskExecutionStats stats;
     private TestLogHandler logHandler;
-    private Logger logger;
+    private Logger julLogger;
 
     @Before
     public void setUp() {
         stats = new ExternalTaskExecutionStats();
 
-        // Set up custom log handler to capture log messages
-        logger = Logger.getLogger(ExternalTaskExecutionStatsLogger.class.getName());
+        // slf4j-jdk14 routes SLF4J calls to java.util.logging.
+        // Attach a custom handler to the JUL logger for ExternalTaskExecutionStatsLogger.
+        julLogger = Logger.getLogger(ExternalTaskExecutionStatsLogger.class.getName());
         logHandler = new TestLogHandler();
-        logger.addHandler(logHandler);
-        logger.setLevel(Level.ALL);
         logHandler.setLevel(Level.ALL);
+        julLogger.addHandler(logHandler);
+        julLogger.setLevel(Level.ALL);
     }
 
     @After
     public void tearDown() {
-        if (logger != null && logHandler != null) {
-            logger.removeHandler(logHandler);
+        if (julLogger != null && logHandler != null) {
+            julLogger.removeHandler(logHandler);
         }
     }
 
@@ -330,7 +331,4 @@ public class ExternalTaskExecutionStatsLoggerTest {
         }
     }
 }
-
-
-
 

@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -26,6 +27,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
+import org.eximeebpms.bpm.client.backoff.ErrorAwareBackoffStrategy;
+import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;
 import org.eximeebpms.bpm.client.impl.EngineClient;
 import org.eximeebpms.bpm.client.impl.EngineClientException;
 import org.eximeebpms.bpm.client.task.ExternalTask;
@@ -853,6 +856,245 @@ public class MultithreadedTopicSubscriptionManagerTest {
 
         // Cleanup
         customExecutor.shutdown();
+    }
+
+    @Test
+    public void shouldInvokeBackoffStrategyAfterFetchingTasks() throws Exception {
+        // Given: backoff returns 0 so suspend() is a no-op
+        when(backoffStrategy.calculateBackoffTime()).thenReturn(0L);
+        List<ExternalTask> mockTasks = createMockTasks(3);
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenReturn(mockTasks);
+
+        CountDownLatch latch = new CountDownLatch(3);
+        doAnswer(inv -> { latch.countDown(); return null; }).when(taskHandler).execute(any(), any());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: reconfigure is called with the 3 fetched tasks, calculateBackoffTime is called
+        verify(backoffStrategy).reconfigure(mockTasks);
+        verify(backoffStrategy).calculateBackoffTime();
+    }
+
+    @Test
+    public void shouldInvokeBackoffStrategyWhenNoTasksReturned() {
+        // Given
+        when(backoffStrategy.calculateBackoffTime()).thenReturn(0L);
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenReturn(Collections.emptyList());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: reconfigure is called with empty list, calculateBackoffTime is called
+        verify(backoffStrategy).reconfigure(Collections.emptyList());
+        verify(backoffStrategy).calculateBackoffTime();
+    }
+
+    @Test
+    public void shouldNotInvokeBackoffStrategyWhenDisabled() {
+        // Given
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenReturn(Collections.emptyList());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+        manager.disableBackoffStrategy();
+
+        // When
+        manager.acquire();
+
+        // Then: backoff strategy should not be consulted at all
+        verify(backoffStrategy, never()).reconfigure(any());
+        verify(backoffStrategy, never()).calculateBackoffTime();
+    }
+
+    @Test
+    public void shouldNotInvokeBackoffStrategyWhenAllThreadsBusy() throws Exception {
+        // Given: fill executor so no fetch slots remain (maxTasks = 15, all 15 occupied)
+        CountDownLatch blockingLatch = new CountDownLatch(1);
+        CountDownLatch threadsStartedLatch = new CountDownLatch(10);
+        for (int i = 0; i < 15; i++) {
+            executor.submit(() -> {
+                try {
+                    threadsStartedLatch.countDown();
+                    blockingLatch.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        assertTrue("All 10 core threads should start", threadsStartedLatch.await(2, TimeUnit.SECONDS));
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: no fetch happened → backoff strategy should not be called
+        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        verify(backoffStrategy, never()).reconfigure(any());
+        verify(backoffStrategy, never()).calculateBackoffTime();
+
+        // Cleanup
+        blockingLatch.countDown();
+    }
+
+    @Test
+    public void shouldUseErrorAwareBackoffStrategyOnEngineClientException() {
+        // Given: an ErrorAwareBackoffStrategy mock
+        ErrorAwareBackoffStrategy errorAwareStrategy = mock(ErrorAwareBackoffStrategy.class);
+        when(errorAwareStrategy.copy()).thenReturn(errorAwareStrategy);
+        when(errorAwareStrategy.calculateBackoffTime()).thenReturn(0L);
+        manager.setBackoffStrategy(errorAwareStrategy);
+
+        EngineClientException engineException = mock(EngineClientException.class);
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenThrow(engineException);
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: error-aware reconfigure is called with empty task list and a non-null exception
+        verify(errorAwareStrategy).reconfigure(eq(Collections.emptyList()), any(ExternalTaskClientException.class));
+        verify(errorAwareStrategy).calculateBackoffTime();
+    }
+
+    @Test
+    public void shouldSuspendForBackoffWaitTime() throws Exception {
+        // Given: backoff requests a 100 ms wait.
+        // We measure the gap between the 1st and 2nd invocation of calculateBackoffTime()
+        // (i.e. between two consecutive acquisition cycles) to prove that suspend() actually
+        // waited rather than returning immediately.
+        CountDownLatch firstCycleLatch = new CountDownLatch(1);
+        CountDownLatch secondCycleLatch = new CountDownLatch(2); // fires after 2 invocations
+        long[] firstCallTime = {0};
+
+        when(backoffStrategy.calculateBackoffTime()).thenAnswer(inv -> {
+            if (firstCycleLatch.getCount() > 0) {
+                firstCallTime[0] = System.currentTimeMillis();
+                firstCycleLatch.countDown();
+            }
+            secondCycleLatch.countDown();
+            return 100L;
+        });
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenReturn(Collections.emptyList());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.start();
+        assertTrue("Second backoff cycle should complete", secondCycleLatch.await(3, TimeUnit.SECONDS));
+        manager.stop();
+
+        long gapBetweenCycles = System.currentTimeMillis() - firstCallTime[0];
+
+        // Then: the gap between the 1st and 2nd invocation must be at least 100 ms
+        verify(backoffStrategy, atLeastOnce()).calculateBackoffTime();
+        assertTrue("Runner should have suspended for at least 100 ms between cycles",
+                gapBetweenCycles >= 100);
+    }
+
+    @Test
+    public void shouldSkipTaskExecutionWhenLockExpired() throws Exception {
+        // Given: Task with lock already expired (in the past)
+        ExternalTaskImpl expiredTask = mock(ExternalTaskImpl.class);
+        when(expiredTask.getTopicName()).thenReturn("testTopic");
+        when(expiredTask.getProcessDefinitionKey()).thenReturn("process-testTopic");
+        when(expiredTask.getVariables()).thenReturn(Collections.emptyMap());
+        when(expiredTask.getId()).thenReturn("expired-task-id");
+        when(expiredTask.getLockExpirationTime()).thenReturn(Date.from(Instant.now().minus(1, ChronoUnit.HOURS)));
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(expiredTask));
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: handler should NOT be invoked because lock is already expired
+        verify(taskHandler, timeout(1000).times(0)).execute(any(ExternalTask.class), any());
+    }
+
+    @Test
+    public void shouldExecuteTaskWhenLockIsNotYetExpired() throws Exception {
+        // Given: Task with lock expiring in the future
+        ExternalTaskImpl validTask = mock(ExternalTaskImpl.class);
+        when(validTask.getTopicName()).thenReturn("testTopic");
+        when(validTask.getProcessDefinitionKey()).thenReturn("process-testTopic");
+        when(validTask.getVariables()).thenReturn(Collections.emptyMap());
+        when(validTask.getLockExpirationTime()).thenReturn(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)));
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(validTask));
+
+        CountDownLatch latch = new CountDownLatch(1);
+        doAnswer(inv -> {
+            latch.countDown();
+            return null;
+        }).when(taskHandler).execute(any(), any());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: handler should be invoked because lock is still valid
+        assertTrue("Task should be executed", latch.await(2, TimeUnit.SECONDS));
+        verify(taskHandler, times(1)).execute(any(ExternalTask.class), any());
+    }
+
+    @Test
+    public void shouldSkipExpiredTasksButExecuteValidOnes() throws Exception {
+        // Given: Mix of expired and valid tasks
+        ExternalTaskImpl expiredTask = mock(ExternalTaskImpl.class);
+        when(expiredTask.getTopicName()).thenReturn("testTopic");
+        when(expiredTask.getProcessDefinitionKey()).thenReturn("process-testTopic");
+        when(expiredTask.getVariables()).thenReturn(Collections.emptyMap());
+        when(expiredTask.getId()).thenReturn("expired-task-id");
+        when(expiredTask.getLockExpirationTime()).thenReturn(Date.from(Instant.now().minus(1, ChronoUnit.MINUTES)));
+
+        ExternalTaskImpl validTask1 = mock(ExternalTaskImpl.class);
+        when(validTask1.getTopicName()).thenReturn("testTopic");
+        when(validTask1.getProcessDefinitionKey()).thenReturn("process-testTopic");
+        when(validTask1.getVariables()).thenReturn(Collections.emptyMap());
+        when(validTask1.getLockExpirationTime()).thenReturn(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)));
+
+        ExternalTaskImpl validTask2 = mock(ExternalTaskImpl.class);
+        when(validTask2.getTopicName()).thenReturn("testTopic");
+        when(validTask2.getProcessDefinitionKey()).thenReturn("process-testTopic");
+        when(validTask2.getVariables()).thenReturn(Collections.emptyMap());
+        when(validTask2.getLockExpirationTime()).thenReturn(Date.from(Instant.now().plus(2, ChronoUnit.HOURS)));
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(expiredTask, validTask1, validTask2));
+
+        CountDownLatch latch = new CountDownLatch(2);
+        doAnswer(inv -> {
+            latch.countDown();
+            return null;
+        }).when(taskHandler).execute(any(), any());
+
+        TopicSubscription subscription = createSubscription("testTopic");
+        manager.subscribe(subscription);
+
+        // When
+        manager.acquire();
+
+        // Then: only 2 valid tasks should be executed, expired task is skipped
+        assertTrue("Both valid tasks should be executed", latch.await(2, TimeUnit.SECONDS));
+        verify(taskHandler, times(2)).execute(any(ExternalTask.class), any());
     }
 
     // Helper methods

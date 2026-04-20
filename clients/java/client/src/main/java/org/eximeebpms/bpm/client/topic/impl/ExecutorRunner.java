@@ -363,6 +363,26 @@ public class ExecutorRunner implements Runnable {
     }
 
     /**
+     * Stops the acquisition loop and waits for the runner's thread to finish.
+     *
+     * <p>If the runner is not running this method has no effect. It is {@code synchronized}
+     * to prevent concurrent stop attempts.
+     */
+    public synchronized void stop() {
+        if (isRunning.compareAndSet(true, false)) {
+            resume();
+            try {
+                if (thread != null) {
+                    thread.join();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                LOG.exceptionWhileShuttingDown(e);
+            }
+        }
+    }
+
+    /**
      * Sets the {@link BackoffStrategy} for this runner.
      *
      * <p>An independent copy of the provided strategy is stored via {@link BackoffStrategy#copy()},

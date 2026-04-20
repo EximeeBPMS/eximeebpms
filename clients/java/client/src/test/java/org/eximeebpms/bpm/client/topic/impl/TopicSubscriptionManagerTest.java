@@ -46,7 +46,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MultithreadedTopicSubscriptionManagerTest {
+public class TopicSubscriptionManagerTest {
 
     private static final long CLIENT_LOCK_DURATION = 10000L;
     private static final double DEFAULT_MULTIPLIER = 1.5;
@@ -59,7 +59,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
     @Mock
     private BackoffStrategy backoffStrategy;
     private ThreadPoolExecutor executor;
-    private MultithreadedTopicSubscriptionManager manager;
+    private TopicSubscriptionManager manager;
 
     @Before
     public void setUp() {
@@ -72,7 +72,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
                 new LinkedBlockingQueue<>()
         );
 
-        manager = new MultithreadedTopicSubscriptionManager(
+        manager = new TopicSubscriptionManager(
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,
@@ -258,7 +258,7 @@ public class MultithreadedTopicSubscriptionManagerTest {
         // Expected: maxTasks = (10 * 2.0) - 0 = 20
 
         executor = new ThreadPoolExecutor(10, 20, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        manager = new MultithreadedTopicSubscriptionManager(
+        manager = new TopicSubscriptionManager(
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,

@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -95,6 +97,9 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
   protected BackoffStrategy backoffStrategy;
   protected boolean isBackoffStrategyDisabled;
   protected UrlResolver urlResolver;
+  private int threadPoolSize;
+  private double maxFetchedTasksMultiplier;
+  private int busyThreadsSleepTimeMs;
 
   public ExternalTaskClientBuilderImpl() {
     // default values
@@ -108,6 +113,9 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
     this.isBackoffStrategyDisabled = false;
     this.httpClientBuilder = HttpClients.custom().useSystemProperties();
     this.urlResolver = new PermanentUrlResolver(null);
+    this.threadPoolSize = 1;
+    this.maxFetchedTasksMultiplier = 1;
+    this.busyThreadsSleepTimeMs = 20;
   }
 
   public ExternalTaskClientBuilder baseUrl(String baseUrl) {
@@ -200,6 +208,21 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
 
   public ExternalTaskClientBuilder customizeHttpClient(Consumer<HttpClientBuilder> httpClientConsumer) {
     httpClientConsumer.accept(httpClientBuilder);
+    return this;
+  }
+
+  public ExternalTaskClientBuilder threadPoolSize(int threadPoolSize) {
+    this.threadPoolSize = threadPoolSize;
+    return this;
+  }
+
+  public ExternalTaskClientBuilder maxFetchedTasksMultiplier(double maxFetchedTasksMultiplier) {
+    this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
+    return this;
+  }
+
+  public ExternalTaskClientBuilder busyThreadsSleepTimeMs(int busyThreadsSleepTimeMs) {
+    this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
     return this;
   }
 
@@ -318,7 +341,8 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
   }
 
   protected void initTopicSubscriptionManager() {
-    topicSubscriptionManager = new TopicSubscriptionManager(engineClient, typedValues, lockDuration);
+    topicSubscriptionManager = new TopicSubscriptionManager(engineClient, typedValues, lockDuration,
+            () -> (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSize), maxFetchedTasksMultiplier, busyThreadsSleepTimeMs);
     topicSubscriptionManager.setBackoffStrategy(getBackoffStrategy());
 
     if (isBackoffStrategyDisabled) {

@@ -7,7 +7,7 @@ import org.eximeebpms.bpm.client.topic.impl.ThreadPoolExecutorSupplier;
  * {@link java.util.concurrent.ThreadPoolExecutor} for task execution.
  *
  * <p>When a topic subscription uses an implementation of this interface, the
- * {@link org.eximeebpms.bpm.client.topic.impl.MultithreadedTopicSubscriptionManager}
+ * {@link org.eximeebpms.bpm.client.topic.impl.TopicSubscriptionManager}
  * will route all tasks belonging to that subscription to the executor provided by
  * {@link #getThreadPoolExecutorSupplier()}, instead of the client's default thread pool.
  *
@@ -34,7 +34,7 @@ import org.eximeebpms.bpm.client.topic.impl.ThreadPoolExecutorSupplier;
  *
  * @see ExternalTaskHandler
  * @see ThreadPoolExecutorSupplier
- * @see org.eximeebpms.bpm.client.topic.impl.MultithreadedTopicSubscriptionManager
+ * @see org.eximeebpms.bpm.client.topic.impl.TopicSubscriptionManager
  */
 public interface ExternalTaskHandlerWithSpecificExecutor extends ExternalTaskHandler {
 

@@ -16,188 +16,127 @@
  */
 package org.eximeebpms.bpm.client.topic.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
-import org.eximeebpms.bpm.client.backoff.ErrorAwareBackoffStrategy;
-import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;
 import org.eximeebpms.bpm.client.impl.EngineClient;
-import org.eximeebpms.bpm.client.impl.EngineClientException;
 import org.eximeebpms.bpm.client.impl.ExternalTaskClientLogger;
-import org.eximeebpms.bpm.client.task.ExternalTask;
-import org.eximeebpms.bpm.client.task.ExternalTaskHandler;
-import org.eximeebpms.bpm.client.task.impl.ExternalTaskImpl;
+import org.eximeebpms.bpm.client.task.ExternalTaskHandlerWithSpecificExecutor;
 import org.eximeebpms.bpm.client.task.impl.ExternalTaskServiceImpl;
 import org.eximeebpms.bpm.client.topic.TopicSubscription;
-import org.eximeebpms.bpm.client.topic.impl.dto.FetchAndLockResponseDto;
-import org.eximeebpms.bpm.client.topic.impl.dto.TopicRequestDto;
-import org.eximeebpms.bpm.client.variable.impl.TypedValueField;
 import org.eximeebpms.bpm.client.variable.impl.TypedValues;
-import org.eximeebpms.bpm.client.variable.impl.VariableValue;
 
 /**
+ * Manager that supports multiple, independent
+ * {@link java.util.concurrent.ThreadPoolExecutor}s for parallel external task processing.
+ *
+ * Maintains one {@link ExecutorRunner} per distinct
+ * {@link ThreadPoolExecutorSupplier}. Each runner has its own fetch-and-lock cycle,
+ * thread pool, and {@link BackoffStrategy} copy, so executors do not block or interfere
+ * with each other.
+ *
+ * <p>Subscription routing works as follows:
+ * <ul>
+ *   <li>If the handler implements {@link ExternalTaskHandlerWithSpecificExecutor}, the
+ *       subscription is assigned to the executor returned by
+ *       {@link ExternalTaskHandlerWithSpecificExecutor#getThreadPoolExecutorSupplier()}.</li>
+ *   <li>Otherwise the subscription is assigned to the shared
+ *       {@code defaultThreadPoolExecutorSupplier}.</li>
+ * </ul>
+ *
+ * <p>Two handlers that return the <em>same</em> {@link ThreadPoolExecutorSupplier} instance
+ * share a single {@link ExecutorRunner} and thread pool. Two handlers that return
+ * different supplier instances each get their own runner.
+ *
  * @author Tassilo Weidner
+ *
+ * @see ExecutorRunner
+ * @see ExternalTaskHandlerWithSpecificExecutor
  */
-public class TopicSubscriptionManager implements Runnable {
+public class TopicSubscriptionManager {
 
   protected static final TopicSubscriptionManagerLogger LOG = ExternalTaskClientLogger.TOPIC_SUBSCRIPTION_MANAGER_LOGGER;
 
-  protected ReentrantLock acquisitionMonitor = new ReentrantLock(false);
-  protected Condition waitCondition = acquisitionMonitor.newCondition();
   protected AtomicBoolean isRunning = new AtomicBoolean(false);
+  protected final ExternalTaskServiceImpl externalTaskService;
+  protected final EngineClient engineClient;
+  protected TypedValues typedValues;
+  protected long clientLockDuration;
 
-  protected ExternalTaskServiceImpl externalTaskService;
+  protected final int busyThreadsSleepTimeMs;
+  protected final ThreadPoolExecutorSupplier defaultThreadPoolExecutorSupplier;
+  protected final double maxFetchedTasksMultiplier;
 
-  protected EngineClient engineClient;
-
-  protected CopyOnWriteArrayList<TopicSubscription> subscriptions;
-  protected List<TopicRequestDto> taskTopicRequests;
-  protected Map<String, ExternalTaskHandler> externalTaskHandlers;
-
-  protected Thread thread;
+  protected Map<ThreadPoolExecutorSupplier, ExecutorRunner> runnersByExecutor = new ConcurrentHashMap<>();
 
   protected BackoffStrategy backoffStrategy;
   protected AtomicBoolean isBackoffStrategyDisabled;
 
-  protected TypedValues typedValues;
-
-  protected long clientLockDuration;
-
   protected ExternalTaskExecutionStats executionStats;
-
   protected ScheduledExecutorService statsScheduler;
 
-  public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration) {
+  public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
+                                  ThreadPoolExecutorSupplier defaultThreadPoolExecutorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs) {
     this.engineClient = engineClient;
-    this.subscriptions = new CopyOnWriteArrayList<>();
-    this.taskTopicRequests = new ArrayList<>();
-    this.externalTaskHandlers = new HashMap<>();
     this.clientLockDuration = clientLockDuration;
     this.typedValues = typedValues;
     this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
     this.isBackoffStrategyDisabled = new AtomicBoolean(false);
     this.executionStats = new ExternalTaskExecutionStats();
+    this.defaultThreadPoolExecutorSupplier = defaultThreadPoolExecutorSupplier;
+    if (maxFetchedTasksMultiplier < 1) {
+      throw new IllegalArgumentException("maxFetchedTasksMultiplier parameter must be >=1");
+    }
+    this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
+    this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
   }
 
-  public void run() {
-    while (isRunning.get()) {
-      try {
-        acquire();
-      }
-      catch (Exception e) {
-        LOG.exceptionWhileAcquiringTasks(e);
-      }
+  /**
+   * Routes the subscription to the appropriate {@link ExecutorRunner} based on its handler type.
+   *
+   * <p>If the handler implements {@link ExternalTaskHandlerWithSpecificExecutor} the
+   * subscription is assigned to the executor declared by that handler; otherwise it is
+   * assigned to the default executor. A new runner is created lazily the first time a
+   * given executor supplier is encountered.
+   *
+   * @param subscription the subscription to register; must not be {@code null}
+   */
+  protected void subscribe(TopicSubscription subscription) {
+    if (subscription.getExternalTaskHandler() instanceof ExternalTaskHandlerWithSpecificExecutor externalTaskHandlerWithSpecificExecutor) {
+      addSubscription(externalTaskHandlerWithSpecificExecutor.getThreadPoolExecutorSupplier(), subscription);
+    } else {
+      addSubscription(defaultThreadPoolExecutorSupplier, subscription);
     }
   }
 
-  protected void acquire() {
-    taskTopicRequests.clear();
-    externalTaskHandlers.clear();
-    subscriptions.forEach(this::prepareAcquisition);
-
-    if (!taskTopicRequests.isEmpty()) {
-      FetchAndLockResponseDto fetchAndLockResponse = fetchAndLock(taskTopicRequests);
-
-      fetchAndLockResponse.getExternalTasks().forEach(externalTask -> {
-        String topicName = externalTask.getTopicName();
-        ExternalTaskHandler taskHandler = externalTaskHandlers.get(topicName);
-
-        if (taskHandler != null) {
-          handleExternalTask(externalTask, taskHandler);
-        }
-        else {
-          LOG.taskHandlerIsNull(topicName);
-        }
-      });
-
-      if (!isBackoffStrategyDisabled.get()) {
-        runBackoffStrategy(fetchAndLockResponse);
-      }
-    }
+  private void addSubscription(ThreadPoolExecutorSupplier threadPoolExecutorSupplier, TopicSubscription subscription) {
+    runnersByExecutor.computeIfAbsent(threadPoolExecutorSupplier,
+            k -> prepareExecutorRunner(threadPoolExecutorSupplier)).subscribe(subscription);
   }
 
-  protected void prepareAcquisition(TopicSubscription subscription) {
-    TopicRequestDto taskTopicRequest = TopicRequestDto.fromTopicSubscription(subscription, clientLockDuration);
-    taskTopicRequests.add(taskTopicRequest);
-
-    String topicName = subscription.getTopicName();
-    ExternalTaskHandler externalTaskHandler = subscription.getExternalTaskHandler();
-    externalTaskHandlers.put(topicName, externalTaskHandler);
+  protected void unsubscribe(TopicSubscriptionImpl subscription) {
+    runnersByExecutor.values().forEach(runner -> runner.unsubscribe(subscription));
   }
 
-  protected FetchAndLockResponseDto fetchAndLock(List<TopicRequestDto> subscriptions) {
-    List<ExternalTask> externalTasks = null;
-
-    try {
-      LOG.fetchAndLock(subscriptions);
-      externalTasks = engineClient.fetchAndLock(subscriptions);
-
-    } catch (EngineClientException ex) {
-      LOG.exceptionWhilePerformingFetchAndLock(ex);
-      return new FetchAndLockResponseDto(LOG.handledEngineClientException("fetching and locking task", ex));
-    }
-
-    return new FetchAndLockResponseDto(externalTasks);
-  }
-
-  protected void handleExternalTask(ExternalTask externalTask, ExternalTaskHandler taskHandler) {
-    ExternalTaskImpl task = (ExternalTaskImpl) externalTask;
-
-    Map<String, TypedValueField> variables = task.getVariables();
-    Map<String, VariableValue<?>> wrappedVariables = typedValues.wrapVariables(task, variables);
-    task.setReceivedVariableMap(wrappedVariables);
-
-    long startTime = System.currentTimeMillis();
-    try {
-        if (checkLockExpired(task)) {
-            return;
-        }
-      taskHandler.execute(task, externalTaskService);
-    } catch (ExternalTaskClientException e) {
-      LOG.exceptionOnExternalTaskServiceMethodInvocation(task.getTopicName(), e);
-    } catch (Exception e) {
-      LOG.exceptionWhileExecutingExternalTaskHandler(task.getTopicName(), e);
-    } finally {
-      long executionTime = System.currentTimeMillis() - startTime;
-      executionStats.recordExecution(task.getProcessDefinitionKey(), task.getTopicName(), executionTime);
-    }
-  }
-
-  private static boolean checkLockExpired(ExternalTaskImpl task) {
-    long timeUntilLockExpires = task.getLockExpirationTime().getTime() - System.currentTimeMillis();
-    if (timeUntilLockExpires <= 0) {
-      LOG.taskLockAlreadyExpired(task.getId(), task.getTopicName(), task.getLockExpirationTime());
-      return true;
-    }
-    return false;
-  }
-
+  /**
+   * Stops all registered {@link ExecutorRunner}s and the statistics scheduler.
+   *
+   * <p>This method is idempotent: if the manager is not running the call has no effect.
+   * It is {@code synchronized} to prevent concurrent stop attempts.
+   */
   public synchronized void stop() {
     if (isRunning.compareAndSet(true, false)) {
-      resume();
-
-      try {
-        thread.join();
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        LOG.exceptionWhileShuttingDown(e);
-      }
-
-      // Shutdown the stats scheduler
+      runnersByExecutor.values().forEach(ExecutorRunner::stop);
       if (statsScheduler != null) {
         statsScheduler.shutdown();
         try {
-          if (!statsScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+          if (!statsScheduler.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
             statsScheduler.shutdownNow();
           }
         } catch (InterruptedException e) {
@@ -208,13 +147,70 @@ public class TopicSubscriptionManager implements Runnable {
     }
   }
 
+  /**
+   * Disables the backoff strategy for this manager and all registered runners.
+   */
+  public void disableBackoffStrategy() {
+    this.isBackoffStrategyDisabled.set(true);
+    runnersByExecutor.values().forEach(ExecutorRunner::disableBackoffStrategy);
+  }
+
+  /**
+   * Starts all registered {@link ExecutorRunner}s and the statistics scheduler.
+   *
+   * <p>This method is idempotent: if the manager is already running the call has no
+   * effect. It is {@code synchronized} to prevent concurrent start attempts.
+   */
   public synchronized void start() {
     if (isRunning.compareAndSet(false, true)) {
-      thread = new Thread(this, TopicSubscriptionManager.class.getSimpleName());
-      thread.start();
+      runnersByExecutor.values().forEach(ExecutorRunner::start);
       startStatsScheduler();
     }
   }
+
+  /**
+   * Creates and configures a new {@link ExecutorRunner} for the given executor supplier.
+   *
+   * <p>The runner receives an independent copy of the current {@link BackoffStrategy}
+   * via {@link BackoffStrategy#copy()}, ensuring isolated backoff state per executor.
+   * If the manager is already running, the runner is started immediately.
+   */
+  private ExecutorRunner prepareExecutorRunner(ThreadPoolExecutorSupplier supplier) {
+    ExecutorRunner executorRunner = new ExecutorRunner(engineClient, typedValues,
+            clientLockDuration, busyThreadsSleepTimeMs, supplier, maxFetchedTasksMultiplier);
+    executorRunner.setBackoffStrategy(backoffStrategy.copy());
+    if (isBackoffStrategyDisabled.get()) {
+      executorRunner.disableBackoffStrategy();
+    }
+    if (isRunning.get()) {
+      executorRunner.start();
+    }
+    return executorRunner;
+  }
+
+  /**
+   * Updates the {@link BackoffStrategy} for this manager and propagates it to all
+   * existing runners.
+   *
+   * <p>Each runner receives an independent copy via
+   * {@link ExecutorRunner#setBackoffStrategy(BackoffStrategy)}, which internally calls
+   * {@link BackoffStrategy#copy()}, so runners never share mutable backoff state.
+   */
+  public void setBackoffStrategy(BackoffStrategy backOffStrategy) {
+    this.backoffStrategy = backOffStrategy;
+    runnersByExecutor.values().forEach(runner -> runner.setBackoffStrategy(backOffStrategy));
+  }
+
+  /**
+   * Triggers one acquisition cycle on every registered {@link ExecutorRunner}.
+   *
+   * <p><strong>For testing only.</strong> In production the runners drive their own
+   * loops internally via {@link ExecutorRunner#run()}.
+   */
+  protected void acquire() {
+    runnersByExecutor.values().forEach(ExecutorRunner::acquire);
+  }
+
 
   protected void startStatsScheduler() {
     // Start scheduled task for stats logging and cleanup every 5 minutes
@@ -236,83 +232,18 @@ public class TopicSubscriptionManager implements Runnable {
     }, 5, 5, TimeUnit.MINUTES);
   }
 
-  protected void subscribe(TopicSubscription subscription) {
-    if (!subscriptions.addIfAbsent(subscription)) {
-      String topicName = subscription.getTopicName();
-      throw LOG.topicNameAlreadySubscribedException(topicName);
-    }
-
-    resume();
-  }
-
-  protected void unsubscribe(TopicSubscriptionImpl subscription) {
-    subscriptions.remove(subscription);
-  }
-
   public EngineClient getEngineClient() {
     return engineClient;
   }
 
   public List<TopicSubscription> getSubscriptions() {
-    return subscriptions;
+    return runnersByExecutor.values().stream()
+            .flatMap(runner -> runner.getSubscriptions().stream())
+            .toList();
   }
 
   public boolean isRunning() {
     return isRunning.get();
-  }
-
-  public void setBackoffStrategy(BackoffStrategy backOffStrategy) {
-    this.backoffStrategy = backOffStrategy;
-  }
-
-  protected void runBackoffStrategy(FetchAndLockResponseDto fetchAndLockResponse) {
-    try {
-      List<ExternalTask> externalTasks = fetchAndLockResponse.getExternalTasks();
-      if (backoffStrategy instanceof ErrorAwareBackoffStrategy errorAwareBackoffStrategy) {
-        ExternalTaskClientException exception = fetchAndLockResponse.getError();
-        errorAwareBackoffStrategy.reconfigure(externalTasks, exception);
-      } else {
-        backoffStrategy.reconfigure(externalTasks);
-      }
-      long waitTime = backoffStrategy.calculateBackoffTime();
-      suspend(waitTime);
-    } catch (Exception e) {
-      LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
-    }
-  }
-
-  protected void suspend(long waitTime) {
-    if (waitTime > 0 && isRunning.get()) {
-      acquisitionMonitor.lock();
-      try {
-        while (isRunning.get()) {
-          if (!waitCondition.await(waitTime, TimeUnit.MILLISECONDS)) {
-            break; // timeout elapsed — backoff finished normally
-          }
-          return; // signalled early by resume() — finally still runs, lock is released
-        }
-      } catch (InterruptedException e) {
-        LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
-        Thread.currentThread().interrupt();
-      }
-      finally {
-        acquisitionMonitor.unlock();
-      }
-    }
-  }
-
-  protected void resume() {
-    acquisitionMonitor.lock();
-    try {
-      waitCondition.signal();
-    }
-    finally {
-      acquisitionMonitor.unlock();
-    }
-  }
-
-  public void disableBackoffStrategy() {
-    this.isBackoffStrategyDisabled.set(true);
   }
 
   public ExternalTaskExecutionStats getExecutionStats() {

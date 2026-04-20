@@ -53,7 +53,7 @@ import org.eximeebpms.bpm.client.variable.impl.VariableValue;
  * <p>Each {@code ExecutorRunner} holds its own <em>copy</em> of the {@link BackoffStrategy},
  * ensuring that multiple runners do not interfere with each other's backoff state.
  *
- * @see MultithreadedTopicSubscriptionManager
+ * @see TopicSubscriptionManager
  * @see BackoffStrategy
  */
 public class ExecutorRunner implements Runnable {
@@ -401,5 +401,9 @@ public class ExecutorRunner implements Runnable {
      */
     public void disableBackoffStrategy() {
         this.isBackoffStrategyDisabled.set(true);
+    }
+
+    public List<TopicSubscription> getSubscriptions() {
+        return subscriptions;
     }
 }

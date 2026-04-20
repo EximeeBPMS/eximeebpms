@@ -44,7 +44,7 @@ public class BackoffStrategyIsolationTest {
         ThreadPoolExecutor executor1 = new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         ThreadPoolExecutor executor2 = new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
-        MultithreadedTopicSubscriptionManager manager = new MultithreadedTopicSubscriptionManager(
+        TopicSubscriptionManager manager = new TopicSubscriptionManager(
                 engineClient, typedValues, CLIENT_LOCK_DURATION, () -> executor1, 1.5, 50
         );
 
@@ -103,7 +103,7 @@ public class BackoffStrategyIsolationTest {
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
-        MultithreadedTopicSubscriptionManager manager = new MultithreadedTopicSubscriptionManager(
+        TopicSubscriptionManager manager = new TopicSubscriptionManager(
                 engineClient, typedValues, CLIENT_LOCK_DURATION, () -> executor, 1.5, 50
         );
 

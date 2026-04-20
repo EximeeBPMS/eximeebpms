@@ -18,15 +18,17 @@ package org.eximeebpms.bpm.engine.rest.dto.task;
 
 import static java.lang.Boolean.TRUE;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.eximeebpms.bpm.engine.ProcessEngine;
@@ -59,10 +61,6 @@ import org.eximeebpms.bpm.engine.task.TaskQuery;
 import org.eximeebpms.bpm.engine.variable.type.ValueType;
 import org.eximeebpms.bpm.engine.variable.type.ValueTypeResolver;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Getter
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
@@ -91,6 +89,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   public static final String SORT_BY_CASE_EXECUTION_VARIABLE = "caseExecutionVariable";
 
   public static final List<String> VALID_SORT_BY_VALUES;
+
   static {
     VALID_SORT_BY_VALUES = new ArrayList<>();
     VALID_SORT_BY_VALUES.add(SORT_BY_PROCESS_INSTANCE_ID_VALUE);
@@ -278,12 +277,12 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="tenantIdIn", converter = StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
@@ -389,7 +388,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   }
 
   @EximeeBPMSQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
-  public void setIncludeAssignedTasks(Boolean includeAssignedTasks){
+  public void setIncludeAssignedTasks(Boolean includeAssignedTasks) {
     this.includeAssignedTasks = includeAssignedTasks;
   }
 
@@ -398,7 +397,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.taskId = taskId;
   }
 
-  @EximeeBPMSQueryParam(value = "taskIdIn", converter= StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "taskIdIn", converter = StringArrayConverter.class)
   public void setTaskIdIn(String[] taskIdIn) {
     this.taskIdIn = taskIdIn;
   }
@@ -408,12 +407,12 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.taskDefinitionKey = taskDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "taskDefinitionKeyIn", converter= StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "taskDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setTaskDefinitionKeyIn(String[] taskDefinitionKeyIn) {
     this.taskDefinitionKeyIn = taskDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam(value = "taskDefinitionKeyNotIn", converter= StringArrayConverter.class)
+  @EximeeBPMSQueryParam(value = "taskDefinitionKeyNotIn", converter = StringArrayConverter.class)
   public void setTaskDefinitionKeyNotIn(String[] taskDefinitionKeyNotIn) {
     this.taskDefinitionKeyNotIn = taskDefinitionKeyNotIn;
   }
@@ -721,7 +720,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
   }
 
-  @EximeeBPMSQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBPMSQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesCaseInsensitive) {
     this.variableValuesIgnoreCase = variableValuesCaseInsensitive;
   }
@@ -754,11 +753,22 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   @Override
   protected void applyFilters(TaskQuery query) {
     if (orQueries != null) {
-      for (TaskQueryDto orQueryDto: orQueries) {
-        TaskQueryImpl orQuery = new TaskQueryImpl();
-        orQuery.setOrQueryActive();
-        orQueryDto.applyFilters(orQuery);
-        ((TaskQueryImpl) query).addOrQuery(orQuery);
+      List<TaskQueryDto> nonEmptyOrQueries = new ArrayList<>();
+
+      for (TaskQueryDto orQueryDto : orQueries) {
+        if (!isEmptyOrQuery(orQueryDto)) {
+          nonEmptyOrQueries.add(orQueryDto);
+        }
+      }
+
+      if (!nonEmptyOrQueries.isEmpty()) {
+        TaskQueryImpl orQuery = (TaskQueryImpl) query.or();
+
+        for (TaskQueryDto orQueryDto : nonEmptyOrQueries) {
+          orQueryDto.applyFilters(orQuery);
+        }
+
+        orQuery.endOr();
       }
     }
     if (processInstanceBusinessKey != null) {
@@ -1000,7 +1010,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     if (candidateGroupsExpression != null) {
       query.taskCandidateGroupInExpression(candidateGroupsExpression);
     }
-    if (includeAssignedTasks != null && includeAssignedTasks){
+    if (includeAssignedTasks != null && includeAssignedTasks) {
       query.includeAssignedTasks();
     }
     if (active != null && active) {
@@ -1033,10 +1043,10 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     if (caseInstanceId != null) {
       query.caseInstanceId(caseInstanceId);
     }
-    if(variableValuesIgnoreCase != null && variableValuesIgnoreCase) {
+    if (variableValuesIgnoreCase != null && variableValuesIgnoreCase) {
       query.matchVariableValuesIgnoreCase();
     }
-    if(variableNamesIgnoreCase != null && variableNamesIgnoreCase) {
+    if (variableNamesIgnoreCase != null && variableNamesIgnoreCase) {
       query.matchVariableNamesIgnoreCase();
     }
 
@@ -1221,7 +1231,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
     if (!isOrQueryActive) {
       dto.orQueries = new ArrayList<>();
-      for (TaskQueryImpl orQuery: taskQuery.getQueries()) {
+      for (TaskQueryImpl orQuery : taskQuery.getQueries()) {
         if (orQuery.isOrQueryActive()) {
           dto.orQueries.add(fromQuery(orQuery, true));
         }
@@ -1258,7 +1268,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     dto.processDefinitionName = taskQuery.getProcessDefinitionName();
     dto.processDefinitionNameLike = taskQuery.getProcessDefinitionNameLike();
     dto.processInstanceId = taskQuery.getProcessInstanceId();
-    if(taskQuery.getProcessInstanceIdIn() != null) {
+    if (taskQuery.getProcessInstanceIdIn() != null) {
       dto.processInstanceIdIn = taskQuery.getProcessInstanceIdIn();
     }
 
@@ -1425,8 +1435,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       SortingDto sortingDto;
       if (orderingProperty instanceof VariableOrderProperty) {
         sortingDto = convertVariableOrderPropertyToSortingDto((VariableOrderProperty) orderingProperty);
-      }
-      else {
+      } else {
         sortingDto = convertQueryOrderingPropertyToSortingDto(orderingProperty);
       }
       sortingDtos.add(sortingDto);
@@ -1452,50 +1461,35 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   public static String sortByValueForQueryProperty(QueryProperty queryProperty) {
     if (TaskQueryProperty.ASSIGNEE.equals(queryProperty)) {
       return SORT_BY_ASSIGNEE_VALUE;
-    }
-    else if (TaskQueryProperty.CASE_EXECUTION_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.CASE_EXECUTION_ID.equals(queryProperty)) {
       return SORT_BY_CASE_EXECUTION_ID_VALUE;
-    }
-    else if (TaskQueryProperty.CASE_INSTANCE_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.CASE_INSTANCE_ID.equals(queryProperty)) {
       return SORT_BY_CASE_INSTANCE_ID_VALUE;
-    }
-    else if (TaskQueryProperty.CREATE_TIME.equals(queryProperty)) {
+    } else if (TaskQueryProperty.CREATE_TIME.equals(queryProperty)) {
       return SORT_BY_CREATE_TIME_VALUE;
-    }
-    else if (TaskQueryProperty.LAST_UPDATED.equals(queryProperty)) {
+    } else if (TaskQueryProperty.LAST_UPDATED.equals(queryProperty)) {
       return SORT_BY_LAST_UPDATED_VALUE;
-    }
-    else if (TaskQueryProperty.DESCRIPTION.equals(queryProperty)) {
+    } else if (TaskQueryProperty.DESCRIPTION.equals(queryProperty)) {
       return SORT_BY_DESCRIPTION_VALUE;
-    }
-    else if (TaskQueryProperty.DUE_DATE.equals(queryProperty)) {
+    } else if (TaskQueryProperty.DUE_DATE.equals(queryProperty)) {
       return SORT_BY_DUE_DATE_VALUE;
-    }
-    else if (TaskQueryProperty.EXECUTION_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.EXECUTION_ID.equals(queryProperty)) {
       return SORT_BY_EXECUTION_ID_VALUE;
-    }
-    else if (TaskQueryProperty.FOLLOW_UP_DATE.equals(queryProperty)) {
+    } else if (TaskQueryProperty.FOLLOW_UP_DATE.equals(queryProperty)) {
       return SORT_BY_FOLLOW_UP_VALUE;
-    }
-    else if (TaskQueryProperty.NAME.equals(queryProperty)) {
+    } else if (TaskQueryProperty.NAME.equals(queryProperty)) {
       return SORT_BY_NAME_VALUE;
-    }
-    else if (TaskQueryProperty.NAME_CASE_INSENSITIVE.equals(queryProperty)) {
+    } else if (TaskQueryProperty.NAME_CASE_INSENSITIVE.equals(queryProperty)) {
       return SORT_BY_NAME_CASE_INSENSITIVE_VALUE;
-    }
-    else if (TaskQueryProperty.PRIORITY.equals(queryProperty)) {
+    } else if (TaskQueryProperty.PRIORITY.equals(queryProperty)) {
       return SORT_BY_PRIORITY_VALUE;
-    }
-    else if (TaskQueryProperty.PROCESS_INSTANCE_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.PROCESS_INSTANCE_ID.equals(queryProperty)) {
       return SORT_BY_PROCESS_INSTANCE_ID_VALUE;
-    }
-    else if (TaskQueryProperty.TASK_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.TASK_ID.equals(queryProperty)) {
       return SORT_BY_ID_VALUE;
-    }
-    else if (TaskQueryProperty.TENANT_ID.equals(queryProperty)) {
+    } else if (TaskQueryProperty.TENANT_ID.equals(queryProperty)) {
       return SORT_BY_TENANT_ID_VALUE;
-    }
-    else {
+    } else {
       throw new RestException("Unknown query property for task query " + queryProperty);
     }
   }
@@ -1515,37 +1509,149 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     QueryProperty property = relationCondition.getProperty();
     QueryProperty comparisonProperty = relationCondition.getComparisonProperty();
     if (VariableInstanceQueryProperty.EXECUTION_ID.equals(property) && TaskQueryProperty.PROCESS_INSTANCE_ID.equals(comparisonProperty)) {
-        return SORT_BY_PROCESS_VARIABLE;
-    }
-    else if (VariableInstanceQueryProperty.EXECUTION_ID.equals(property) && TaskQueryProperty.EXECUTION_ID.equals(comparisonProperty)) {
+      return SORT_BY_PROCESS_VARIABLE;
+    } else if (VariableInstanceQueryProperty.EXECUTION_ID.equals(property) && TaskQueryProperty.EXECUTION_ID.equals(comparisonProperty)) {
       return SORT_BY_EXECUTION_VARIABLE;
-    }
-    else if (VariableInstanceQueryProperty.TASK_ID.equals(property) && TaskQueryProperty.TASK_ID.equals(comparisonProperty)) {
+    } else if (VariableInstanceQueryProperty.TASK_ID.equals(property) && TaskQueryProperty.TASK_ID.equals(comparisonProperty)) {
       return SORT_BY_TASK_VARIABLE;
-    }
-    else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_INSTANCE_ID.equals(comparisonProperty)) {
+    } else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_INSTANCE_ID.equals(comparisonProperty)) {
       return SORT_BY_CASE_INSTANCE_VARIABLE;
-    }
-    else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_EXECUTION_ID.equals(comparisonProperty))  {
+    } else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_EXECUTION_ID.equals(comparisonProperty)) {
       return SORT_BY_CASE_EXECUTION_VARIABLE;
-    }
-    else {
+    } else {
       throw new RestException("Unknown relation condition for task query  with query property " + property + " and comparison property " + comparisonProperty);
     }
   }
 
-  public static Map<String,Object> sortParametersForVariableOrderProperty(VariableOrderProperty variableOrderProperty) {
+  public static Map<String, Object> sortParametersForVariableOrderProperty(VariableOrderProperty variableOrderProperty) {
     Map<String, Object> parameters = new HashMap<>();
     for (QueryEntityRelationCondition relationCondition : variableOrderProperty.getRelationConditions()) {
       QueryProperty property = relationCondition.getProperty();
       if (VariableInstanceQueryProperty.VARIABLE_NAME.equals(property)) {
         parameters.put(SORT_PARAMETERS_VARIABLE_NAME, relationCondition.getScalarValue());
-      }
-      else if (VariableInstanceQueryProperty.VARIABLE_TYPE.equals(property)) {
+      } else if (VariableInstanceQueryProperty.VARIABLE_TYPE.equals(property)) {
         String type = VariableValueDto.toRestApiTypeName((String) relationCondition.getScalarValue());
         parameters.put(SORT_PARAMETERS_VALUE_TYPE, type);
       }
     }
     return parameters;
+  }
+
+  private boolean isEmptyOrQuery(TaskQueryDto dto) {
+    return dto == null || allTrue(
+        dto.getProcessInstanceBusinessKey() == null,
+        dto.getProcessInstanceBusinessKeyExpression() == null,
+        isEmpty(dto.getProcessInstanceBusinessKeyIn()),
+        dto.getProcessInstanceBusinessKeyLike() == null,
+        dto.getProcessInstanceBusinessKeyLikeExpression() == null,
+        dto.getProcessDefinitionKey() == null,
+        isEmpty(dto.getProcessDefinitionKeyIn()),
+        dto.getProcessDefinitionId() == null,
+        dto.getExecutionId() == null,
+        isEmpty(dto.getActivityInstanceIdIn()),
+        dto.getProcessDefinitionName() == null,
+        dto.getProcessDefinitionNameLike() == null,
+        dto.getProcessInstanceId() == null,
+        isEmpty(dto.getProcessInstanceIdIn()),
+        dto.getAssignee() == null,
+        dto.getAssigneeExpression() == null,
+        dto.getAssigneeLike() == null,
+        dto.getAssigneeLikeExpression() == null,
+        isEmpty(dto.getAssigneeIn()),
+        isEmpty(dto.getAssigneeNotIn()),
+        dto.getCandidateGroup() == null,
+        dto.getCandidateGroupExpression() == null,
+        dto.getCandidateGroupLike() == null,
+        dto.getCandidateUser() == null,
+        dto.getCandidateUserExpression() == null,
+        dto.getIncludeAssignedTasks() == null,
+        dto.getTaskDefinitionKey() == null,
+        isEmpty(dto.getTaskDefinitionKeyIn()),
+        isEmpty(dto.getTaskDefinitionKeyNotIn()),
+        dto.getTaskDefinitionKeyLike() == null,
+        dto.getTaskId() == null,
+        isEmpty(dto.getTaskIdIn()),
+        dto.getDescription() == null,
+        dto.getDescriptionLike() == null,
+        dto.getInvolvedUser() == null,
+        dto.getInvolvedUserExpression() == null,
+        dto.getMaxPriority() == null,
+        dto.getMinPriority() == null,
+        dto.getName() == null,
+        dto.getNameNotEqual() == null,
+        dto.getNameLike() == null,
+        dto.getNameNotLike() == null,
+        dto.getOwner() == null,
+        dto.getOwnerExpression() == null,
+        dto.getPriority() == null,
+        dto.getParentTaskId() == null,
+        dto.getAssigned() == null,
+        dto.getUnassigned() == null,
+        dto.getActive() == null,
+        dto.getSuspended() == null,
+        dto.getCaseDefinitionKey() == null,
+        dto.getCaseDefinitionId() == null,
+        dto.getCaseDefinitionName() == null,
+        dto.getCaseDefinitionNameLike() == null,
+        dto.getCaseInstanceId() == null,
+        dto.getCaseInstanceBusinessKey() == null,
+        dto.getCaseInstanceBusinessKeyLike() == null,
+        dto.getCaseExecutionId() == null,
+        dto.getDueAfter() == null,
+        dto.getDueAfterExpression() == null,
+        dto.getDueBefore() == null,
+        dto.getDueBeforeExpression() == null,
+        dto.getDueDate() == null,
+        dto.getDueDateExpression() == null,
+        dto.getWithoutDueDate() == null,
+        dto.getFollowUpAfter() == null,
+        dto.getFollowUpAfterExpression() == null,
+        dto.getFollowUpBefore() == null,
+        dto.getFollowUpBeforeExpression() == null,
+        dto.getFollowUpBeforeOrNotExistent() == null,
+        dto.getFollowUpBeforeOrNotExistentExpression() == null,
+        dto.getFollowUpDate() == null,
+        dto.getFollowUpDateExpression() == null,
+        dto.getCreatedAfter() == null,
+        dto.getCreatedAfterExpression() == null,
+        dto.getCreatedBefore() == null,
+        dto.getCreatedBeforeExpression() == null,
+        dto.getCreatedOn() == null,
+        dto.getCreatedOnExpression() == null,
+        dto.getUpdatedAfter() == null,
+        dto.getUpdatedAfterExpression() == null,
+        dto.getDelegationState() == null,
+        isEmpty(dto.getTenantIdIn()),
+        dto.getWithoutTenantId() == null,
+        isEmpty(dto.getCandidateGroups()),
+        dto.getCandidateGroupsExpression() == null,
+        dto.getWithCandidateGroups() == null,
+        dto.getWithoutCandidateGroups() == null,
+        dto.getWithCandidateUsers() == null,
+        dto.getWithoutCandidateUsers() == null,
+        isEmpty(dto.getTaskVariables()),
+        isEmpty(dto.getProcessVariables()),
+        isEmpty(dto.getCaseInstanceVariables()),
+        dto.getVariableNamesIgnoreCase() == null,
+        dto.getVariableValuesIgnoreCase() == null,
+        dto.getWithCommentAttachmentInfo() == null
+    );
+  }
+
+  private boolean allTrue(boolean... conditions) {
+    for (boolean condition : conditions) {
+      if (!condition) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean isEmpty(Object[] values) {
+    return values == null || values.length == 0;
+  }
+
+  private boolean isEmpty(Collection<?> values) {
+    return values == null || values.isEmpty();
   }
 }

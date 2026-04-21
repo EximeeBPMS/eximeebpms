@@ -56,7 +56,6 @@ public class ExecutorRunnerTest {
 
     private static final long CLIENT_LOCK_DURATION = 10000L;
     private static final double DEFAULT_MULTIPLIER = 1.5;
-    private static final int BUSY_THREADS_SLEEP_TIME = 50;
 
     @Mock
     private EngineClient engineClient;
@@ -89,7 +88,6 @@ public class ExecutorRunnerTest {
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,
-                BUSY_THREADS_SLEEP_TIME,
                 executor,
                 DEFAULT_MULTIPLIER,
                 new ExternalTaskExecutionStats()
@@ -448,7 +446,6 @@ public class ExecutorRunnerTest {
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,
-                BUSY_THREADS_SLEEP_TIME,
                 executor,
                 2.0, // Custom multiplier
                 new ExternalTaskExecutionStats()

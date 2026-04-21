@@ -48,8 +48,8 @@ import org.eximeebpms.bpm.client.variable.impl.VariableValue;
  * <p>The number of tasks fetched per cycle is bounded by
  * {@code floor(corePoolSize * maxFetchedTasksMultiplier) - tasksInProgress}, preventing
  * task flooding when threads are busy. If the pool is fully occupied (no fetch slots
- * remaining), the runner sleeps for {@code busyThreadsSleepTimeMs} milliseconds instead
- * of polling the engine.
+ * remaining), the runner waits for a thread to become available by submitting a no-op
+ * task and joining on it, then retries in the next cycle.
  *
  * <p>Each {@code ExecutorRunner} holds its own <em>copy</em> of the {@link BackoffStrategy},
  * ensuring that multiple runners do not interfere with each other's backoff state.
@@ -63,7 +63,6 @@ public class ExecutorRunner implements Runnable {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
 
     private final String threadName;
-    private final int busyThreadsSleepTimeMs;
     private final ThreadPoolExecutor taskExecutor;
 
     protected ExternalTaskServiceImpl externalTaskService;
@@ -98,14 +97,13 @@ public class ExecutorRunner implements Runnable {
     protected AtomicBoolean isRunning = new AtomicBoolean(false);
 
     public ExecutorRunner(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                          int busyThreadsSleepTimeMs, ThreadPoolExecutor taskExecutor, double maxFetchedTasksMultiplier,
+                          ThreadPoolExecutor taskExecutor, double maxFetchedTasksMultiplier,
                           ExternalTaskExecutionStats executionStats) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
         this.typedValues = typedValues;
         this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
         this.executionStats = executionStats;
-        this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
         this.taskExecutor = taskExecutor;
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
         this.threadName = ExecutorRunner.class.getSimpleName() + "-" + INSTANCE_COUNTER.incrementAndGet();

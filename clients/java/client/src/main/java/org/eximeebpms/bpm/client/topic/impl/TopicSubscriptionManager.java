@@ -69,7 +69,6 @@ public class TopicSubscriptionManager {
     protected final TypedValues typedValues;
     protected final long clientLockDuration;
 
-    protected final int busyThreadsSleepTimeMs;
     protected final ThreadPoolExecutor defaultThreadPoolExecutor;
     protected final double maxFetchedTasksMultiplier;
 
@@ -81,7 +80,7 @@ public class TopicSubscriptionManager {
     private final boolean statsSchedulerEnabled;
 
     public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                                    ThreadPoolExecutor defaultThreadPoolExecutor, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs,
+                                    ThreadPoolExecutor defaultThreadPoolExecutor, double maxFetchedTasksMultiplier,
                                     boolean statsSchedulerEnabled) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
@@ -95,7 +94,6 @@ public class TopicSubscriptionManager {
             throw new IllegalArgumentException("maxFetchedTasksMultiplier parameter must be >=1");
         }
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
-        this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
     }
 
     /**
@@ -180,7 +178,7 @@ public class TopicSubscriptionManager {
      */
     private ExecutorRunner prepareExecutorRunner(ThreadPoolExecutor executor) {
         ExecutorRunner executorRunner = new ExecutorRunner(engineClient, typedValues,
-                clientLockDuration, busyThreadsSleepTimeMs, executor, maxFetchedTasksMultiplier, executionStats);
+                clientLockDuration, executor, maxFetchedTasksMultiplier, executionStats);
         executorRunner.setBackoffStrategy(backoffStrategy.copy());
         if (isBackoffStrategyDisabled.get()) {
             executorRunner.disableBackoffStrategy();

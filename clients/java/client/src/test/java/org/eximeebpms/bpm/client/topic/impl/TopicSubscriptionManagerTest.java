@@ -81,7 +81,6 @@ public class TopicSubscriptionManagerTest {
                 CLIENT_LOCK_DURATION,
                 executor,
                 DEFAULT_MULTIPLIER,
-                20,
                 false
         );
         when(backoffStrategy.copy()).thenReturn(backoffStrategy);
@@ -276,7 +275,6 @@ public class TopicSubscriptionManagerTest {
                 CLIENT_LOCK_DURATION,
                 executor,
                 2.0,
-                20,
                 false
         );
         manager.setBackoffStrategy(backoffStrategy);

@@ -101,7 +101,6 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
     protected UrlResolver urlResolver;
     private int threadPoolSize;
     private double maxFetchedTasksMultiplier;
-    private int busyThreadsSleepTimeMs;
     private boolean statsSchedulerEnabled;
 
     public ExternalTaskClientBuilderImpl() {
@@ -118,7 +117,6 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
         this.urlResolver = new PermanentUrlResolver(null);
         this.threadPoolSize = 1;
         this.maxFetchedTasksMultiplier = 1;
-        this.busyThreadsSleepTimeMs = 20;
         this.statsSchedulerEnabled = true;
     }
 
@@ -222,11 +220,6 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
 
     public ExternalTaskClientBuilder maxFetchedTasksMultiplier(double maxFetchedTasksMultiplier) {
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
-        return this;
-    }
-
-    public ExternalTaskClientBuilder busyThreadsSleepTimeMs(int busyThreadsSleepTimeMs) {
-        this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
         return this;
     }
 
@@ -353,7 +346,7 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
     protected void initTopicSubscriptionManager() {
         topicSubscriptionManager = new TopicSubscriptionManager(engineClient, typedValues, lockDuration,
                 (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSize), maxFetchedTasksMultiplier,
-                busyThreadsSleepTimeMs, statsSchedulerEnabled);
+                statsSchedulerEnabled);
         topicSubscriptionManager.setBackoffStrategy(getBackoffStrategy());
 
         if (isBackoffStrategyDisabled) {

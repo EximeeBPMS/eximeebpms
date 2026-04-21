@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +40,7 @@ import org.eximeebpms.bpm.client.task.impl.ExternalTaskImpl;
 import org.eximeebpms.bpm.client.topic.TopicSubscription;
 import org.eximeebpms.bpm.client.topic.impl.dto.TopicRequestDto;
 import org.eximeebpms.bpm.client.variable.impl.TypedValues;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +86,14 @@ public class TopicSubscriptionManagerTest {
         );
         when(backoffStrategy.copy()).thenReturn(backoffStrategy);
         manager.setBackoffStrategy(backoffStrategy);
+    }
+
+    @After
+    public void tearDown() {
+        if (manager.isRunning()) {
+            manager.stop();
+        }
+        executor.shutdownNow();
     }
 
     @Test
@@ -310,14 +321,15 @@ public class TopicSubscriptionManagerTest {
         TopicSubscription subscription = createSubscription("testTopic");
         manager.subscribe(subscription);
 
-        // When
-        manager.acquire();
+        // When: start the loop — runner blocks on join() while executor is full
+        manager.start();
 
         // Then - should not call fetchAndLock (maxTasks = 15 - (10 active + 5 queued) = 0)
-        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        verify(engineClient, after(500L).never()).fetchAndLock(anyList(), anyInt());
 
         // Cleanup
         blockingLatch.countDown();
+        manager.stop();
     }
 
     @Test
@@ -523,15 +535,29 @@ public class TopicSubscriptionManagerTest {
                 customThreadsStartedLatch.await(2, TimeUnit.SECONDS));
 
         List<ExternalTask> defaultTasks = createMockTasks(3, "defaultTopic");
+        CountDownLatch firstFetchDone = new CountDownLatch(1);
+        // Capture topic name inside thenAnswer — the list is mutable and reused each cycle,
+        // so reading it via ArgumentCaptor after the fact would see an empty (already-cleared) list.
+        String[] capturedTopicName = {null};
 
-        ArgumentCaptor<List<TopicRequestDto>> topicRequestCaptor = ArgumentCaptor.forClass(List.class);
-        when(engineClient.fetchAndLock(topicRequestCaptor.capture(), anyInt()))
-                .thenReturn(defaultTasks);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    List<TopicRequestDto> topics = inv.getArgument(0);
+                    if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
+                        capturedTopicName[0] = topics.get(0).getTopicName();
+                    }
+                    firstFetchDone.countDown();
+                    return defaultTasks;
+                })
+                .thenReturn(Collections.emptyList());
 
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
         when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
+
+        CountDownLatch defaultTasksLatch = new CountDownLatch(3);
+        doAnswer(inv -> { defaultTasksLatch.countDown(); return null; }).when(defaultHandler).execute(any(), any());
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -539,23 +565,20 @@ public class TopicSubscriptionManagerTest {
         manager.subscribe(defaultSubscription);
         manager.subscribe(customSubscription);
 
-        // When
-        manager.acquire();
+        // When: start — custom runner blocks on join(), default runner fetches freely
+        manager.start();
 
-        // Then
-        // Only default executor should fetch (custom is busy)
-        verify(engineClient, times(1)).fetchAndLock(anyList(), anyInt());
+        // Wait for first fetch and default task execution
+        assertTrue("First fetch should complete", firstFetchDone.await(2, TimeUnit.SECONDS));
+        assertTrue("All default tasks should be executed", defaultTasksLatch.await(2, TimeUnit.SECONDS));
 
-        // Verify the fetch was for default topic
-        List<TopicRequestDto> capturedRequests = topicRequestCaptor.getValue();
-        assertEquals(1, capturedRequests.size());
-        assertEquals("defaultTopic", capturedRequests.get(0).getTopicName());
-
-        verify(defaultHandler, timeout(1000).times(3)).execute(any(), any());
+        // Then: only default executor fetched, and it was for defaultTopic
+        assertEquals("defaultTopic", capturedTopicName[0]);
         verify(customHandler, never()).execute(any(), any());
 
         // Cleanup
         customBlockingLatch.countDown();
+        manager.stop();
         customExecutor.shutdown();
     }
 
@@ -586,15 +609,29 @@ public class TopicSubscriptionManagerTest {
                 defaultThreadsStartedLatch.await(2, TimeUnit.SECONDS));
 
         List<ExternalTask> customTasks = createMockTasks(2, "customTopic");
+        CountDownLatch firstFetchDone = new CountDownLatch(1);
+        // Capture topic name inside thenAnswer — the list is mutable and reused each cycle,
+        // so reading it via ArgumentCaptor after the fact would see an empty (already-cleared) list.
+        String[] capturedTopicName = {null};
 
-        ArgumentCaptor<List<TopicRequestDto>> topicRequestCaptor = ArgumentCaptor.forClass(List.class);
-        when(engineClient.fetchAndLock(topicRequestCaptor.capture(), anyInt()))
-                .thenReturn(customTasks);
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenAnswer(inv -> {
+                    List<TopicRequestDto> topics = inv.getArgument(0);
+                    if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
+                        capturedTopicName[0] = topics.get(0).getTopicName();
+                    }
+                    firstFetchDone.countDown();
+                    return customTasks;
+                })
+                .thenReturn(Collections.emptyList());
 
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
         when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
+
+        CountDownLatch customTasksLatch = new CountDownLatch(2);
+        doAnswer(inv -> { customTasksLatch.countDown(); return null; }).when(customHandler).execute(any(), any());
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -602,23 +639,20 @@ public class TopicSubscriptionManagerTest {
         manager.subscribe(defaultSubscription);
         manager.subscribe(customSubscription);
 
-        // When
-        manager.acquire();
+        // When: start — default runner blocks on join(), custom runner fetches freely
+        manager.start();
 
-        // Then
-        // Only custom executor should fetch (default is busy)
-        verify(engineClient, times(1)).fetchAndLock(anyList(), anyInt());
+        // Wait for first fetch and custom task execution
+        assertTrue("First fetch should complete", firstFetchDone.await(2, TimeUnit.SECONDS));
+        assertTrue("All custom tasks should be executed", customTasksLatch.await(2, TimeUnit.SECONDS));
 
-        // Verify the fetch was for custom topic
-        List<TopicRequestDto> capturedRequests = topicRequestCaptor.getValue();
-        assertEquals(1, capturedRequests.size());
-        assertEquals("customTopic", capturedRequests.get(0).getTopicName());
-
-        verify(customHandler, timeout(1000).times(2)).execute(any(), any());
+        // Then: only custom executor fetched, and it was for customTopic
+        assertEquals("customTopic", capturedTopicName[0]);
         verify(defaultHandler, never()).execute(any(), any());
 
         // Cleanup
         defaultBlockingLatch.countDown();
+        manager.stop();
         customExecutor.shutdown();
     }
 
@@ -675,18 +709,19 @@ public class TopicSubscriptionManagerTest {
         manager.subscribe(defaultSubscription);
         manager.subscribe(customSubscription);
 
-        // When
-        manager.acquire();
+        // When: start the loop — both runners block on join() while executors are full
+        manager.start();
 
-        // Then
-        // No fetch should happen (all executors busy)
-        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        // Then: while both executors are busy, no fetch should happen.
+        // after(500L) gives the runners time to enter acquire() and reach the join().
+        verify(engineClient, after(500L).never()).fetchAndLock(anyList(), anyInt());
         verify(defaultHandler, never()).execute(any(), any());
         verify(customHandler, never()).execute(any(), any());
 
         // Cleanup
         defaultBlockingLatch.countDown();
         customBlockingLatch.countDown();
+        manager.stop();
         customExecutor.shutdown();
     }
 
@@ -779,13 +814,17 @@ public class TopicSubscriptionManagerTest {
         List<ExternalTask> defaultTasks = createMockTasks(2, "defaultTopic");
         List<ExternalTask> custom2Tasks = createMockTasks(1, "customTopic2");
 
+        // Each runner loops continuously — return tasks only once per topic, then empty,
+        // so the call count stays bounded and we can verify exact numbers after stopping.
+        AtomicBoolean defaultFetched = new AtomicBoolean(false);
+        AtomicBoolean custom2Fetched = new AtomicBoolean(false);
         when(engineClient.fetchAndLock(anyList(), anyInt()))
                 .thenAnswer(invocation -> {
                     List<TopicRequestDto> topics = invocation.getArgument(0);
                     String topicName = topics.get(0).getTopicName();
-                    if ("defaultTopic".equals(topicName)) {
+                    if ("defaultTopic".equals(topicName) && defaultFetched.compareAndSet(false, true)) {
                         return defaultTasks;
-                    } else if ("customTopic2".equals(topicName)) {
+                    } else if ("customTopic2".equals(topicName) && custom2Fetched.compareAndSet(false, true)) {
                         return custom2Tasks;
                     }
                     return Collections.emptyList();
@@ -800,6 +839,11 @@ public class TopicSubscriptionManagerTest {
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
         when(customHandler2.getThreadPoolExecutor()).thenReturn(customExecutor2);
 
+        CountDownLatch defaultTasksDone = new CountDownLatch(2);
+        CountDownLatch custom2TasksDone = new CountDownLatch(1);
+        doAnswer(inv -> { defaultTasksDone.countDown(); return null; }).when(defaultHandler).execute(any(), any());
+        doAnswer(inv -> { custom2TasksDone.countDown(); return null; }).when(customHandler2).execute(any(), any());
+
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription custom1Subscription = createSubscription("customTopic1", customHandler1);
         TopicSubscription custom2Subscription = createSubscription("customTopic2", customHandler2);
@@ -808,19 +852,21 @@ public class TopicSubscriptionManagerTest {
         manager.subscribe(custom1Subscription);
         manager.subscribe(custom2Subscription);
 
-        // When
-        manager.acquire();
+        // When: start the loop — runner for customExecutor1 blocks on join(), others run freely
+        manager.start();
 
-        // Then
-        // Should fetch for default and custom2 (but not custom1 which is busy)
-        verify(engineClient, times(2)).fetchAndLock(anyList(), anyInt());
+        // Wait for both free runners to deliver their tasks
+        assertTrue("Default tasks should be executed", defaultTasksDone.await(2, TimeUnit.SECONDS));
+        assertTrue("Custom2 tasks should be executed", custom2TasksDone.await(2, TimeUnit.SECONDS));
 
-        verify(defaultHandler, timeout(1000).times(2)).execute(any(), any());
-        verify(customHandler1, never()).execute(any(), any());
-        verify(customHandler2, timeout(1000).times(1)).execute(any(), any());
-
-        // Cleanup
+        // Stop before verifying so the call counters are stable
         custom1BlockingLatch.countDown();
+        manager.stop();
+
+        // Then: only default and custom2 executed tasks; custom1 was always blocked
+        verify(defaultHandler, times(2)).execute(any(), any());
+        verify(customHandler1, never()).execute(any(), any());
+        verify(customHandler2, times(1)).execute(any(), any());
         customExecutor1.shutdown();
         customExecutor2.shutdown();
     }
@@ -935,16 +981,17 @@ public class TopicSubscriptionManagerTest {
         TopicSubscription subscription = createSubscription("testTopic");
         manager.subscribe(subscription);
 
-        // When
-        manager.acquire();
+        // When: start the loop — runner blocks on join() while executor is full
+        manager.start();
 
         // Then: no fetch happened → backoff strategy should not be called
-        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        verify(engineClient, after(500L).never()).fetchAndLock(anyList(), anyInt());
         verify(backoffStrategy, never()).reconfigure(any());
         verify(backoffStrategy, never()).calculateBackoffTime();
 
         // Cleanup
         blockingLatch.countDown();
+        manager.stop();
     }
 
     @Test

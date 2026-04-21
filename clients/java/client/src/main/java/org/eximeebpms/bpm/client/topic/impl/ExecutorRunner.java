@@ -155,7 +155,7 @@ public class ExecutorRunner implements Runnable {
             } else {
                 LOG.allThreadsAreBusy(taskExecutor.getActiveCount(), taskExecutor.getQueue().size(),
                         externalTaskHandlers.keySet().stream().sorted().collect(java.util.stream.Collectors.joining(", ")));
-                sleep();
+                CompletableFuture.runAsync(() ->{}, taskExecutor).join(); // wait for currently running tasks to complete
             }
         }
     }
@@ -287,14 +287,6 @@ public class ExecutorRunner implements Runnable {
         }
 
         return new FetchAndLockResponseDto(externalTasks);
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(busyThreadsSleepTimeMs);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     /**

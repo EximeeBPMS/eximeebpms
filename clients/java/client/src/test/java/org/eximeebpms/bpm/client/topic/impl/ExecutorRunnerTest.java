@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -37,6 +38,7 @@ import org.eximeebpms.bpm.client.task.ExternalTaskHandler;
 import org.eximeebpms.bpm.client.task.impl.ExternalTaskImpl;
 import org.eximeebpms.bpm.client.topic.TopicSubscription;
 import org.eximeebpms.bpm.client.variable.impl.TypedValues;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,6 +98,14 @@ public class ExecutorRunnerTest {
         runner.setBackoffStrategy(spyBackoffStrategy);
     }
 
+    @After
+    public void tearDown() {
+        if (runner.isRunning.get()) {
+            runner.stop();
+        }
+        executor.shutdownNow();
+    }
+
     @Test
     public void shouldExecuteBackoffStrategyWithFetchedTasks() {
         // Given: Tasks are available and fetched
@@ -138,7 +148,9 @@ public class ExecutorRunnerTest {
 
     @Test
     public void shouldNotExecuteBackoffStrategyWhenAllThreadsBusy() throws Exception {
-        // Given: All threads are busy (activeCount + queueSize >= maxTasks)
+        // Given: All threads are busy (activeCount + queueSize >= maxTasks = 15)
+        // acquire() now blocks on CompletableFuture.runAsync(..., taskExecutor).join()
+        // when all slots are taken, so we must use start() instead of acquire().
         CountDownLatch blockingLatch = new CountDownLatch(1);
         CountDownLatch threadsStartedLatch = new CountDownLatch(10);
 
@@ -160,16 +172,20 @@ public class ExecutorRunnerTest {
         TopicSubscription subscription = createSubscription("testTopic", taskHandler);
         runner.subscribe(subscription);
 
-        // When
-        runner.acquire();
+        // When: start the loop — it will block inside the busy-threads join()
+        runner.start();
 
-        // Then: Backoff strategy should NOT be invoked (busy threads path is taken instead)
+        // Then: while threads are busy the engine must never be contacted and
+        // backoff must not run. after(500) gives the runner enough time to enter
+        // acquire() and reach the join(); the verify still passes because it is
+        // stuck waiting for a free thread.
+        verify(engineClient, after(500L).never()).fetchAndLock(anyList(), anyInt());
         verify(spyBackoffStrategy, never()).reconfigure(anyList());
         verify(spyBackoffStrategy, never()).calculateBackoffTime();
-        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
 
-        // Cleanup
+        // Cleanup: release blocked threads so the runner can exit
         blockingLatch.countDown();
+        runner.stop();
     }
 
     @Test
@@ -548,14 +564,17 @@ public class ExecutorRunnerTest {
         runner.subscribe(subscription);
 
         // When
-        runner.acquire();
+        runner.start();
 
-        // Then: maxTasksToFetch = 15 - (10 + 5) = 0, so no fetch
-        verify(engineClient, never()).fetchAndLock(anyList(), anyInt());
+        // While all threads are busy the runner is stuck on join() and must
+        // never reach fetchAndLock. after(500) gives it time to enter acquire().
+        verify(engineClient, after(500L).never()).fetchAndLock(anyList(), anyInt());
         verify(spyBackoffStrategy, never()).reconfigure(anyList());
 
         // Cleanup
         blockingLatch.countDown();
+
+        runner.stop();
     }
 
     @Test

@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -59,8 +60,11 @@ import org.eximeebpms.bpm.client.variable.impl.VariableValue;
 public class ExecutorRunner implements Runnable {
     protected static final TopicSubscriptionManagerLogger LOG = ExternalTaskClientLogger.TOPIC_SUBSCRIPTION_MANAGER_LOGGER;
 
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+
+    private final String threadName;
     private final int busyThreadsSleepTimeMs;
-    private final ThreadPoolExecutorSupplier threadPoolExecutorSupplier;
+    private final ThreadPoolExecutor taskExecutor;
 
     protected ExternalTaskServiceImpl externalTaskService;
 
@@ -94,7 +98,7 @@ public class ExecutorRunner implements Runnable {
     protected AtomicBoolean isRunning = new AtomicBoolean(false);
 
     public ExecutorRunner(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                          int busyThreadsSleepTimeMs, ThreadPoolExecutorSupplier threadPoolExecutorSupplier, double maxFetchedTasksMultiplier,
+                          int busyThreadsSleepTimeMs, ThreadPoolExecutor taskExecutor, double maxFetchedTasksMultiplier,
                           ExternalTaskExecutionStats executionStats) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
@@ -102,8 +106,9 @@ public class ExecutorRunner implements Runnable {
         this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
         this.executionStats = executionStats;
         this.busyThreadsSleepTimeMs = busyThreadsSleepTimeMs;
-        this.threadPoolExecutorSupplier = threadPoolExecutorSupplier;
+        this.taskExecutor = taskExecutor;
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
+        this.threadName = ExecutorRunner.class.getSimpleName() + "-" + INSTANCE_COUNTER.incrementAndGet();
     }
 
     /**
@@ -125,7 +130,6 @@ public class ExecutorRunner implements Runnable {
         taskTopicRequests.clear();
         externalTaskHandlers.clear();
         subscriptions.forEach(this::prepareAcquisition);
-        ThreadPoolExecutor taskExecutor = threadPoolExecutorSupplier.get();
         if (!taskTopicRequests.isEmpty()) {
             int maxTasks = (int) (taskExecutor.getCorePoolSize() * maxFetchedTasksMultiplier);
             int tasksInProgress = taskExecutor.getActiveCount() + taskExecutor.getQueue().size();
@@ -149,7 +153,8 @@ public class ExecutorRunner implements Runnable {
                     runBackoffStrategy(fetchAndLockResponse);
                 }
             } else {
-                LOG.allThreadsAreBusy(taskExecutor.getActiveCount(), taskExecutor.getQueue().size());
+                LOG.allThreadsAreBusy(taskExecutor.getActiveCount(), taskExecutor.getQueue().size(),
+                        externalTaskHandlers.keySet().stream().sorted().collect(java.util.stream.Collectors.joining(", ")));
                 sleep();
             }
         }
@@ -358,7 +363,7 @@ public class ExecutorRunner implements Runnable {
      */
     public synchronized void start() {
         if (isRunning.compareAndSet(false, true)) {
-            thread = new Thread(this, ExecutorRunner.class.getSimpleName());
+            thread = new Thread(this, threadName);
             thread.start();
         }
     }

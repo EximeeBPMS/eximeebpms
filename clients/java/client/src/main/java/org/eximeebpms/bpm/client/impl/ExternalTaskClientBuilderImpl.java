@@ -352,7 +352,7 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
 
     protected void initTopicSubscriptionManager() {
         topicSubscriptionManager = new TopicSubscriptionManager(engineClient, typedValues, lockDuration,
-                () -> (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSize), maxFetchedTasksMultiplier,
+                (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSize), maxFetchedTasksMultiplier,
                 busyThreadsSleepTimeMs, statsSchedulerEnabled);
         topicSubscriptionManager.setBackoffStrategy(getBackoffStrategy());
 

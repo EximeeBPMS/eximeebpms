@@ -88,7 +88,7 @@ public class ExecutorRunnerTest {
                 typedValues,
                 CLIENT_LOCK_DURATION,
                 BUSY_THREADS_SLEEP_TIME,
-                () -> executor,
+                executor,
                 DEFAULT_MULTIPLIER,
                 new ExternalTaskExecutionStats()
         );
@@ -433,7 +433,7 @@ public class ExecutorRunnerTest {
                 typedValues,
                 CLIENT_LOCK_DURATION,
                 BUSY_THREADS_SLEEP_TIME,
-                () -> executor,
+                executor,
                 2.0, // Custom multiplier
                 new ExternalTaskExecutionStats()
         );
@@ -717,18 +717,7 @@ public class ExecutorRunnerTest {
         // Force level=1 so calculateBackoffTime() returns 10_000ms
         longBackoff.reconfigure(Collections.emptyList());
 
-        // Use a subclass that signals exactly when suspend() is entered — no Thread.sleep needed
-        CountDownLatch suspendEntered = new CountDownLatch(1);
-        ExecutorRunner testRunner = new ExecutorRunner(
-                engineClient, typedValues, CLIENT_LOCK_DURATION, BUSY_THREADS_SLEEP_TIME,
-                () -> executor, DEFAULT_MULTIPLIER, new ExternalTaskExecutionStats()) {
-            @Override
-            protected void suspend(long waitTime) {
-                suspendEntered.countDown();
-                super.suspend(waitTime);
-            }
-        };
-        testRunner.setBackoffStrategy(longBackoff);
+        runner.setBackoffStrategy(longBackoff);
 
         CountDownLatch secondFetchDone = new CountDownLatch(1);
         // first answer: triggers first acquire cycle; second answer: confirms early wake-up
@@ -740,23 +729,47 @@ public class ExecutorRunnerTest {
                 });
 
         TopicSubscription subscription = createSubscription("testTopic", taskHandler);
-        testRunner.subscribe(subscription);
-        testRunner.start();
+        runner.subscribe(subscription);
+        runner.start();
 
-        // Wait until the runner has actually entered suspend()
-        assertTrue("Runner should enter suspend()", suspendEntered.await(2, TimeUnit.SECONDS));
+        // Wait deterministically until the runner thread is actually parked on the condition.
+        // hasWaiters(...) returns true only AFTER the runner has executed isWaiting.await(...),
+        // which eliminates the race where resume() would otherwise signal an empty condition
+        // and the signal would be lost.
+        assertTrue("Runner should be waiting on the condition", awaitWaitingOnCondition(runner, 2_000));
 
         long wakeStart = System.currentTimeMillis();
         // Signal resume() to interrupt the suspend
-        testRunner.resume();
+        runner.resume();
 
         // Then: second cycle starts well before the 10s backoff would expire
         assertTrue("Runner should wake early after resume()", secondFetchDone.await(5, TimeUnit.SECONDS));
         long wakeElapsed = System.currentTimeMillis() - wakeStart;
         assertTrue("Wake-up should happen in well under 10s", wakeElapsed < 5_000);
+        runner.stop();
+    }
 
-        testRunner.isRunning.set(false);
-        testRunner.resume();
+    /**
+     * Polls until the given runner has entered {@code isWaiting.await(...)} on its
+     * acquisition monitor, or the timeout elapses. Returns {@code true} as soon as the
+     * runner is observed waiting. Uses {@link java.util.concurrent.locks.ReentrantLock#hasWaiters}
+     * which only reports {@code true} after the thread has actually suspended on the condition,
+     * so callers can safely call {@link ExecutorRunner#resume()} without losing the signal.
+     */
+    private static boolean awaitWaitingOnCondition(ExecutorRunner runner, long timeoutMs) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMs;
+        while (System.currentTimeMillis() < deadline) {
+            runner.acquisitionMonitor.lock();
+            try {
+                if (runner.acquisitionMonitor.hasWaiters(runner.isWaiting)) {
+                    return true;
+                }
+            } finally {
+                runner.acquisitionMonitor.unlock();
+            }
+            Thread.sleep(5);
+        }
+        return false;
     }
 
     @Test
@@ -808,8 +821,9 @@ public class ExecutorRunnerTest {
         runner.subscribe(subscription);
         runner.start();
 
-        // Wait until runner has entered suspend
+        // Wait until runner has entered suspend (deterministic — no race with await())
         assertTrue("Runner should start first acquire cycle", enteringSuspend.await(2, TimeUnit.SECONDS));
+        assertTrue("Runner should be waiting on the condition", awaitWaitingOnCondition(runner, 2_000));
 
         long stopStart = System.currentTimeMillis();
 

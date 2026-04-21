@@ -76,7 +76,7 @@ public class TopicSubscriptionManagerTest {
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,
-                () -> executor,
+                executor,
                 DEFAULT_MULTIPLIER,
                 20,
                 false
@@ -263,7 +263,7 @@ public class TopicSubscriptionManagerTest {
                 engineClient,
                 typedValues,
                 CLIENT_LOCK_DURATION,
-                () -> executor,
+                executor,
                 2.0,
                 20,
                 false
@@ -396,7 +396,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         // Mock tasks for both topics
         List<ExternalTask> defaultTasks = createMockTasks(3, "defaultTopic");
@@ -419,7 +419,7 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         CountDownLatch defaultLatch = new CountDownLatch(3);
         CountDownLatch customLatch = new CountDownLatch(2);
@@ -471,7 +471,7 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(() -> customExecutor);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -502,7 +502,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         // Fill custom executor with blocking tasks
         CountDownLatch customBlockingLatch = new CountDownLatch(1);
@@ -531,7 +531,7 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -565,7 +565,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         // Fill default executor with blocking tasks
         CountDownLatch defaultBlockingLatch = new CountDownLatch(1);
@@ -594,7 +594,7 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -628,7 +628,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         // Fill default executor
         CountDownLatch defaultBlockingLatch = new CountDownLatch(1);
@@ -667,7 +667,7 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);
@@ -696,7 +696,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         List<ExternalTask> topic1Tasks = createMockTasks(2, "customTopic1");
         List<ExternalTask> topic2Tasks = createMockTasks(3, "customTopic2");
@@ -709,11 +709,11 @@ public class TopicSubscriptionManagerTest {
 
         ExternalTaskHandlerWithSpecificExecutor customHandler1 =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler1.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler1.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         ExternalTaskHandlerWithSpecificExecutor customHandler2 =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler2.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler2.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         CountDownLatch allTasksLatch = new CountDownLatch(5);
         doAnswer(inv -> {
@@ -756,8 +756,8 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor2 = new ThreadPoolExecutor(
                 3, 6, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier1 = () -> customExecutor1;
-        ThreadPoolExecutorSupplier customExecutorSupplier2 = () -> customExecutor2;
+        // customExecutor1 used directly
+        // customExecutor2 used directly
 
         // Fill only customExecutor1
         CountDownLatch custom1BlockingLatch = new CountDownLatch(1);
@@ -794,11 +794,11 @@ public class TopicSubscriptionManagerTest {
         ExternalTaskHandler defaultHandler = mock(ExternalTaskHandler.class);
         ExternalTaskHandlerWithSpecificExecutor customHandler1 =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler1.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier1);
+        when(customHandler1.getThreadPoolExecutor()).thenReturn(customExecutor1);
 
         ExternalTaskHandlerWithSpecificExecutor customHandler2 =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler2.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier2);
+        when(customHandler2.getThreadPoolExecutor()).thenReturn(customExecutor2);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic", defaultHandler);
         TopicSubscription custom1Subscription = createSubscription("customTopic1", customHandler1);
@@ -831,7 +831,7 @@ public class TopicSubscriptionManagerTest {
         ThreadPoolExecutor customExecutor = new ThreadPoolExecutor(
                 5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>()
         );
-        ThreadPoolExecutorSupplier customExecutorSupplier = () -> customExecutor;
+        // customExecutor used directly
 
         List<ExternalTask> mockTasks = createMockTasks(2);
         when(engineClient.fetchAndLock(anyList(), anyInt()))
@@ -839,7 +839,7 @@ public class TopicSubscriptionManagerTest {
 
         ExternalTaskHandlerWithSpecificExecutor customHandler =
                 mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(customExecutorSupplier);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(customExecutor);
 
         TopicSubscription defaultSubscription = createSubscription("defaultTopic");
         TopicSubscription customSubscription = createSubscription("customTopic", customHandler);

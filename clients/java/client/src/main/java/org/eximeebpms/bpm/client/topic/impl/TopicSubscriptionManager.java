@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,22 +38,22 @@ import org.eximeebpms.bpm.client.variable.impl.TypedValues;
  * {@link java.util.concurrent.ThreadPoolExecutor}s for parallel external task processing.
  * <p>
  * Maintains one {@link ExecutorRunner} per distinct
- * {@link ThreadPoolExecutorSupplier}. Each runner has its own fetch-and-lock cycle,
- * thread pool, and {@link BackoffStrategy} copy, so executors do not block or interfere
- * with each other.
+ * {@link java.util.concurrent.ThreadPoolExecutor} instance. Each runner has its own
+ * fetch-and-lock cycle, thread pool, and {@link BackoffStrategy} copy, so executors do
+ * not block or interfere with each other.
  *
  * <p>Subscription routing works as follows:
  * <ul>
  *   <li>If the handler implements {@link ExternalTaskHandlerWithSpecificExecutor}, the
  *       subscription is assigned to the executor returned by
- *       {@link ExternalTaskHandlerWithSpecificExecutor#getThreadPoolExecutorSupplier()}.</li>
+ *       {@link ExternalTaskHandlerWithSpecificExecutor#getThreadPoolExecutor()}.</li>
  *   <li>Otherwise the subscription is assigned to the shared
- *       {@code defaultThreadPoolExecutorSupplier}.</li>
+ *       {@code defaultThreadPoolExecutor}.</li>
  * </ul>
  *
- * <p>Two handlers that return the <em>same</em> {@link ThreadPoolExecutorSupplier} instance
- * share a single {@link ExecutorRunner} and thread pool. Two handlers that return
- * different supplier instances each get their own runner.
+ * <p>Two handlers that return the <em>same</em> {@link java.util.concurrent.ThreadPoolExecutor}
+ * instance share a single {@link ExecutorRunner} and thread pool. Two handlers that return
+ * different executor instances each get their own runner.
  *
  * @author Tassilo Weidner
  * @see ExecutorRunner
@@ -69,18 +70,18 @@ public class TopicSubscriptionManager {
     protected final long clientLockDuration;
 
     protected final int busyThreadsSleepTimeMs;
-    protected final ThreadPoolExecutorSupplier defaultThreadPoolExecutorSupplier;
+    protected final ThreadPoolExecutor defaultThreadPoolExecutor;
     protected final double maxFetchedTasksMultiplier;
 
-    protected final Map<ThreadPoolExecutorSupplier, ExecutorRunner> runnersByExecutor = new ConcurrentHashMap<>();
+    protected final Map<ThreadPoolExecutor, ExecutorRunner> runnersByExecutor = new ConcurrentHashMap<>();
     protected final AtomicBoolean isBackoffStrategyDisabled;
     protected final ExternalTaskExecutionStats executionStats;
     protected BackoffStrategy backoffStrategy;
     protected ScheduledExecutorService statsScheduler;
-    private boolean statsSchedulerEnabled;
+    private final boolean statsSchedulerEnabled;
 
     public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
-                                    ThreadPoolExecutorSupplier defaultThreadPoolExecutorSupplier, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs,
+                                    ThreadPoolExecutor defaultThreadPoolExecutor, double maxFetchedTasksMultiplier, int busyThreadsSleepTimeMs,
                                     boolean statsSchedulerEnabled) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
@@ -89,7 +90,7 @@ public class TopicSubscriptionManager {
         this.statsSchedulerEnabled = statsSchedulerEnabled;
         this.isBackoffStrategyDisabled = new AtomicBoolean(false);
         this.executionStats = new ExternalTaskExecutionStats();
-        this.defaultThreadPoolExecutorSupplier = defaultThreadPoolExecutorSupplier;
+        this.defaultThreadPoolExecutor = defaultThreadPoolExecutor;
         if (maxFetchedTasksMultiplier < 1) {
             throw new IllegalArgumentException("maxFetchedTasksMultiplier parameter must be >=1");
         }
@@ -103,21 +104,21 @@ public class TopicSubscriptionManager {
      * <p>If the handler implements {@link ExternalTaskHandlerWithSpecificExecutor} the
      * subscription is assigned to the executor declared by that handler; otherwise it is
      * assigned to the default executor. A new runner is created lazily the first time a
-     * given executor supplier is encountered.
+     * given executor is encountered.
      *
      * @param subscription the subscription to register; must not be {@code null}
      */
     protected void subscribe(TopicSubscription subscription) {
-        if (subscription.getExternalTaskHandler() instanceof ExternalTaskHandlerWithSpecificExecutor externalTaskHandlerWithSpecificExecutor) {
-            addSubscription(externalTaskHandlerWithSpecificExecutor.getThreadPoolExecutorSupplier(), subscription);
+        if (subscription.getExternalTaskHandler() instanceof ExternalTaskHandlerWithSpecificExecutor handler) {
+            addSubscription(handler.getThreadPoolExecutor(), subscription);
         } else {
-            addSubscription(defaultThreadPoolExecutorSupplier, subscription);
+            addSubscription(defaultThreadPoolExecutor, subscription);
         }
     }
 
-    private void addSubscription(ThreadPoolExecutorSupplier threadPoolExecutorSupplier, TopicSubscription subscription) {
-        runnersByExecutor.computeIfAbsent(threadPoolExecutorSupplier,
-                k -> prepareExecutorRunner(threadPoolExecutorSupplier)).subscribe(subscription);
+    private void addSubscription(ThreadPoolExecutor executor, TopicSubscription subscription) {
+        runnersByExecutor.computeIfAbsent(executor,
+                k -> prepareExecutorRunner(executor)).subscribe(subscription);
     }
 
     protected void unsubscribe(TopicSubscriptionImpl subscription) {
@@ -171,15 +172,15 @@ public class TopicSubscriptionManager {
     }
 
     /**
-     * Creates and configures a new {@link ExecutorRunner} for the given executor supplier.
+     * Creates and configures a new {@link ExecutorRunner} for the given executor.
      *
      * <p>The runner receives an independent copy of the current {@link BackoffStrategy}
      * via {@link BackoffStrategy#copy()}, ensuring isolated backoff state per executor.
      * If the manager is already running, the runner is started immediately.
      */
-    private ExecutorRunner prepareExecutorRunner(ThreadPoolExecutorSupplier supplier) {
+    private ExecutorRunner prepareExecutorRunner(ThreadPoolExecutor executor) {
         ExecutorRunner executorRunner = new ExecutorRunner(engineClient, typedValues,
-                clientLockDuration, busyThreadsSleepTimeMs, supplier, maxFetchedTasksMultiplier, executionStats);
+                clientLockDuration, busyThreadsSleepTimeMs, executor, maxFetchedTasksMultiplier, executionStats);
         executorRunner.setBackoffStrategy(backoffStrategy.copy());
         if (isBackoffStrategyDisabled.get()) {
             executorRunner.disableBackoffStrategy();

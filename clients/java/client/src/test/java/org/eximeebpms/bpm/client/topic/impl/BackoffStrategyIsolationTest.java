@@ -45,7 +45,7 @@ public class BackoffStrategyIsolationTest {
         ThreadPoolExecutor executor2 = new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
         TopicSubscriptionManager manager = new TopicSubscriptionManager(
-                engineClient, typedValues, CLIENT_LOCK_DURATION, () -> executor1, 1.5, 50, false
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor1, 1.5, 50, false
         );
 
         manager.setBackoffStrategy(sharedStrategy);
@@ -56,7 +56,7 @@ public class BackoffStrategyIsolationTest {
 
         // Subscribe to custom executor
         ExternalTaskHandlerWithSpecificExecutor customHandler = mock(ExternalTaskHandlerWithSpecificExecutor.class);
-        when(customHandler.getThreadPoolExecutorSupplier()).thenReturn(() -> executor2);
+        when(customHandler.getThreadPoolExecutor()).thenReturn(executor2);
         TopicSubscription customSubscription = createSubscription("topic2", customHandler);
         manager.subscribe(customSubscription);
 
@@ -104,7 +104,7 @@ public class BackoffStrategyIsolationTest {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
         TopicSubscriptionManager manager = new TopicSubscriptionManager(
-                engineClient, typedValues, CLIENT_LOCK_DURATION, () -> executor, 1.5, 50, false
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, 1.5, 50, false
         );
 
         ExponentialBackoffStrategy initialStrategy = new ExponentialBackoffStrategy(100L, 2, 5000L);

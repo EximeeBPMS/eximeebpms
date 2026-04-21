@@ -82,6 +82,11 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.eximeebpms.bpm</groupId>
+        <artifactId>eximeebpms-engine-plugin-trusted-code</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.eximeebpms.bpm.javaee</groupId>
         <artifactId>eximeebpms-ejb-client</artifactId>
         <version>${project.version}</version>

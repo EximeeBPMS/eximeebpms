@@ -467,6 +467,9 @@
                             <plugin>
                                 <class>org.eximeebpms.connect.plugin.impl.ConnectProcessEnginePlugin</class>
                             </plugin>
+                            <plugin>
+                              <class>org.eximeebpms.trustedcode.plugin.TrustedCodePolicyProcessEnginePlugin</class>
+                            </plugin>
                         </plugins>
                     </process-engine>
                 </process-engines>

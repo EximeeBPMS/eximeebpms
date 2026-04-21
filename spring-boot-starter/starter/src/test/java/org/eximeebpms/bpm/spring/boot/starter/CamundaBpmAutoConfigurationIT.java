@@ -34,6 +34,7 @@ import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.eximeebpms.connect.plugin.impl.ConnectProcessEnginePlugin;
 import org.eximeebpms.spin.plugin.impl.SpinObjectValueSerializer;
 import org.eximeebpms.spin.plugin.impl.SpinProcessEnginePlugin;
+import org.eximeebpms.trustedcode.plugin.TrustedCodePolicyProcessEnginePlugin;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,19 @@ public class CamundaBpmAutoConfigurationIT {
 
     // then
     assertThat(plugins.stream().anyMatch(plugin -> plugin instanceof ConnectProcessEnginePlugin)).isTrue();
+  }
+
+  @Test
+  public void ensureTrustedCodeProcessEnginePluginIsCorrectlyLoaded() {
+    // given
+    List<ProcessEnginePlugin> plugins = processEngineConfiguration.getProcessEnginePlugins();
+
+    if (plugins.get(0) instanceof CompositeProcessEnginePlugin) {
+      plugins = ((CompositeProcessEnginePlugin) plugins.get(0)).getPlugins();
+    }
+
+    // then
+    assertThat(plugins.stream().anyMatch(plugin -> plugin instanceof TrustedCodePolicyProcessEnginePlugin)).isTrue();
   }
 
   private String convertToBeanName(Class<?> beanClass) {

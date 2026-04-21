@@ -29,6 +29,7 @@ import org.eximeebpms.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePl
 import org.eximeebpms.connect.plugin.impl.ConnectProcessEnginePlugin;
 import org.eximeebpms.spin.impl.json.jackson.format.JacksonJsonDataFormat;
 import org.eximeebpms.spin.plugin.impl.SpinProcessEnginePlugin;
+import org.eximeebpms.trustedcode.plugin.TrustedCodePolicyProcessEnginePlugin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -127,4 +128,14 @@ public class CamundaBpmPluginConfiguration {
   }
 
 
+  @ConditionalOnClass(TrustedCodePolicyProcessEnginePlugin.class)
+  @Configuration
+  static class TrustedCodeConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean(name = "trustedCodePolicyProcessEnginePlugin")
+    public static ProcessEnginePlugin trustedCodePolicyProcessEnginePlugin() {
+      return new TrustedCodePolicyProcessEnginePlugin();
+    }
+  }
 }

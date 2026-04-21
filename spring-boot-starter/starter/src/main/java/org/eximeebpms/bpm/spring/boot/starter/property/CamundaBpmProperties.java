@@ -159,6 +159,9 @@ public class CamundaBpmProperties {
   @NestedConfigurationProperty
   private FilterProperty filter = new FilterProperty();
 
+  @NestedConfigurationProperty
+  private TrustedCodeProperties trustedCode = new TrustedCodeProperties();
+
   public String getProcessEngineName() {
     return processEngineName;
   }
@@ -341,6 +344,14 @@ public class CamundaBpmProperties {
 
   public void setGenerateUniqueProcessApplicationName(Boolean generateUniqueProcessApplicationName) {
     this.generateUniqueProcessApplicationName = generateUniqueProcessApplicationName;
+  }
+
+  public TrustedCodeProperties getTrustedCode() {
+    return trustedCode;
+  }
+
+  public void setTrustedCode(TrustedCodeProperties trustedCode) {
+    this.trustedCode = trustedCode;
   }
 
   @Override

@@ -40,6 +40,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-plugin-trusted-code</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.eximeebpms.spin</groupId>
       <artifactId>eximeebpms-spin-dataformat-all</artifactId>
     </dependency>

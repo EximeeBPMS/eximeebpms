@@ -247,6 +247,10 @@
           <artifactId>eximeebpms-engine-plugin-connect</artifactId>
         </dependency>
         <dependency>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine-plugin-trusted-code</artifactId>
+        </dependency>
+        <dependency>
           <groupId>org.eximeebpms.bpm.identity</groupId>
           <artifactId>eximeebpms-identity-ldap</artifactId>
         </dependency>

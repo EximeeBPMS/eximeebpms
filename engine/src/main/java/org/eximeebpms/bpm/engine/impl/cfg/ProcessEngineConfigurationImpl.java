@@ -1069,6 +1069,50 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected boolean legacyJobRetryBehaviorEnabled = false;
 
   /**
+   * Indicates whether the trusted-code policy plugin is enabled.
+   *
+   * Default: true
+   */
+  protected boolean trustedCodeEnabled = true;
+
+  /**
+   * Defines the mode of the trusted-code policy.
+   * Possible values are OFF, AUDIT, ENFORCE.
+   *
+   * Default: ENFORCE
+   */
+  protected String trustedCodePolicyMode = "ENFORCE";
+
+  /**
+   * If true, script tasks are not allowed for untrusted deployments.
+   *
+   * Default: true
+   */
+  protected boolean trustedCodeBlockScriptTasks = true;
+
+  /**
+   * If true, execution listeners using scripts are not allowed for untrusted deployments.
+   *
+   * Default: true
+   */
+  protected boolean trustedCodeBlockScriptExecutionListeners = true;
+
+  /**
+   * If true, task listeners using scripts are not allowed for untrusted deployments.
+   *
+   * Default: true
+   */
+  protected boolean trustedCodeBlockScriptTaskListeners = true;
+
+  /**
+   * If true, usage of external script resources (e.g. via resource attribute) is not allowed
+   * for untrusted deployments.
+   *
+   * Default: true
+   */
+  protected boolean trustedCodeBlockExternalScriptResources = true;
+
+  /**
    * @return {@code true} if the exception code feature is disabled and vice-versa.
    */
   public boolean isDisableExceptionCode() {
@@ -5319,5 +5363,53 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   public ProcessEngineConfiguration setLegacyJobRetryBehaviorEnabled(boolean legacyJobRetryBehaviorEnabled) {
     this.legacyJobRetryBehaviorEnabled = legacyJobRetryBehaviorEnabled;
     return this;
+  }
+
+  public String getTrustedCodePolicyMode() {
+    return trustedCodePolicyMode;
+  }
+
+  public void setTrustedCodePolicyMode(String trustedCodePolicyMode) {
+    this.trustedCodePolicyMode = trustedCodePolicyMode;
+  }
+
+  public boolean isTrustedCodeBlockScriptTasks() {
+    return trustedCodeBlockScriptTasks;
+  }
+
+  public void setTrustedCodeBlockScriptTasks(boolean trustedCodeBlockScriptTasks) {
+    this.trustedCodeBlockScriptTasks = trustedCodeBlockScriptTasks;
+  }
+
+  public boolean isTrustedCodeBlockScriptExecutionListeners() {
+    return trustedCodeBlockScriptExecutionListeners;
+  }
+
+  public void setTrustedCodeBlockScriptExecutionListeners(boolean trustedCodeBlockScriptExecutionListeners) {
+    this.trustedCodeBlockScriptExecutionListeners = trustedCodeBlockScriptExecutionListeners;
+  }
+
+  public boolean isTrustedCodeBlockScriptTaskListeners() {
+    return trustedCodeBlockScriptTaskListeners;
+  }
+
+  public void setTrustedCodeBlockScriptTaskListeners(boolean trustedCodeBlockScriptTaskListeners) {
+    this.trustedCodeBlockScriptTaskListeners = trustedCodeBlockScriptTaskListeners;
+  }
+
+  public boolean isTrustedCodeBlockExternalScriptResources() {
+    return trustedCodeBlockExternalScriptResources;
+  }
+
+  public void setTrustedCodeBlockExternalScriptResources(boolean trustedCodeBlockExternalScriptResources) {
+    this.trustedCodeBlockExternalScriptResources = trustedCodeBlockExternalScriptResources;
+  }
+
+  public boolean isTrustedCodeEnabled() {
+    return trustedCodeEnabled;
+  }
+
+  public void setTrustedCodeEnabled(boolean trustedCodeEnabled) {
+    this.trustedCodeEnabled = trustedCodeEnabled;
   }
 }

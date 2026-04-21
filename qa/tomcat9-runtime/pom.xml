@@ -157,6 +157,11 @@
         </dependency>
 
         <dependency>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-engine-plugin-trusted-code</artifactId>
+        </dependency>
+
+        <dependency>
           <groupId>org.eximeebpms.connect</groupId>
           <artifactId>eximeebpms-connect-connectors-all</artifactId>
           <exclusions>

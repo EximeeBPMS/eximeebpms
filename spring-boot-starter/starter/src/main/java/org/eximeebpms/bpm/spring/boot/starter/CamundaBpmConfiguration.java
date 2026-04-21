@@ -35,6 +35,7 @@ import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaMetricsConfig
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.condition.NeedsHistoryAutoConfigurationCondition;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.TrustedCodePropertyConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.custom.CreateAdminUserConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.custom.CreateFilterConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultAuthorizationConfiguration;
@@ -177,5 +178,10 @@ public class CamundaBpmConfiguration {
   @Bean
   public CamundaIntegrationDeterminator camundaIntegrationDeterminator() {
     return new CamundaIntegrationDeterminator();
+  }
+
+  @Bean
+  public TrustedCodePropertyConfiguration trustedCodePropertyConfiguration() {
+    return new TrustedCodePropertyConfiguration();
   }
 }

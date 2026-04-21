@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="Examples">
+  <process id="externalScriptResourceProcess"
+           isExecutable="true"
+           camunda:historyTimeToLive="180">
+    <startEvent id="start">
+      <extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy" resource="classpath://evil.groovy" />
+        </camunda:executionListener>
+      </extensionElements>
+    </startEvent>
+    <sequenceFlow id="flow1" sourceRef="start" targetRef="userTask" />
+    <userTask id="userTask" name="Approve Request" />
+    <sequenceFlow id="flow2" sourceRef="userTask" targetRef="end" />
+    <endEvent id="end" />
+  </process>
+</definitions>

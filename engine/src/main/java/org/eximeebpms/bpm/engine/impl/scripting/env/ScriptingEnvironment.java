@@ -115,16 +115,15 @@ public class ScriptingEnvironment {
   }
 
   public Object execute(ExecutableScript script, VariableScope scope, Bindings bindings, ScriptEngine scriptEngine) {
-    Objects.requireNonNull(script, "script must not be null");
-    Objects.requireNonNull(bindings, "bindings must not be null");
-    Objects.requireNonNull(scriptEngine, "scriptEngine must not be null");
 
+    // first, evaluate the env scripts (if any)
     List<ExecutableScript> envScripts = getEnvScripts(script, scriptEngine);
     for (ExecutableScript envScript : envScripts) {
       enforceScriptSecurity(envScript, scope);
       envScript.execute(scriptEngine, scope, bindings);
     }
 
+    // next evaluate the actual script
     enforceScriptSecurity(script, scope);
     return script.execute(scriptEngine, scope, bindings);
   }

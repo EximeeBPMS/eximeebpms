@@ -11,6 +11,7 @@ public final class ScriptSecurityContext {
   private final String activityId;
   private final String processDefinitionId;
   private final String caseDefinitionId;
+  private final String processDefinitionName;
 
   private ScriptSecurityContext(Builder builder) {
     this.language = requireNonBlank(builder.language, "language");
@@ -19,6 +20,7 @@ public final class ScriptSecurityContext {
     this.activityId = normalize(builder.activityId).orElse(null);
     this.processDefinitionId = normalize(builder.processDefinitionId).orElse(null);
     this.caseDefinitionId = normalize(builder.caseDefinitionId).orElse(null);
+    this.processDefinitionName = normalize(builder.processDefinitionName).orElse(null);
   }
 
   public static Builder builder(String language) {
@@ -49,6 +51,10 @@ public final class ScriptSecurityContext {
     return Optional.ofNullable(caseDefinitionId);
   }
 
+  public Optional<String> getProcessDefinitionName() {
+    return Optional.ofNullable(processDefinitionName);
+  }
+
   public boolean hasSource() {
     return !source.isBlank();
   }
@@ -72,6 +78,7 @@ public final class ScriptSecurityContext {
         + ", activityId=" + activityId
         + ", processDefinitionId=" + processDefinitionId
         + ", caseDefinitionId=" + caseDefinitionId
+        + ", processDefinitionName=" + processDefinitionName
         + '}';
   }
 
@@ -83,6 +90,7 @@ public final class ScriptSecurityContext {
     private String activityId;
     private String processDefinitionId;
     private String caseDefinitionId;
+    private String processDefinitionName;
 
     private Builder(String language) {
       this.language = language;
@@ -110,6 +118,11 @@ public final class ScriptSecurityContext {
 
     public Builder caseDefinitionId(String caseDefinitionId) {
       this.caseDefinitionId = caseDefinitionId;
+      return this;
+    }
+
+    public Builder processDefinitionName(String processDefinitionName) {
+      this.processDefinitionName = processDefinitionName;
       return this;
     }
 

@@ -347,6 +347,9 @@ import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityBpmnParseListener;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.DatabaseImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.InternalsImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.JdkImpl;
@@ -599,6 +602,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<ScriptEnvResolver> scriptEnvResolvers;
   protected ScriptFactory scriptFactory;
   protected ScriptEngineResolver scriptEngineResolver;
+  protected ScriptSecurityPolicy scriptSecurityPolicy;
   protected String scriptEngineNameJavaScript;
   protected boolean autoStoreScriptVariables = false;
   protected boolean enableScriptCompilation = true;
@@ -1145,6 +1149,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initFormEngines();
     initFormTypes();
     initFormFieldValidators();
+    initScriptSecurityPolicy();
     initScripting();
     initDmnEngine();
     initBusinessCalendarManager();
@@ -2201,6 +2206,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
+
+    defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
+
     if (!HistoryLevel.HISTORY_LEVEL_NONE.equals(historyLevel)) {
       defaultListeners.add(new HistoryParseListener(historyEventProducer));
     }
@@ -2603,6 +2611,12 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   }
 
+  protected void initScriptSecurityPolicy() {
+    if (scriptSecurityPolicy == null) {
+      scriptSecurityPolicy = new DefaultScriptSecurityPolicy();
+    }
+  }
+
   protected void initScripting() {
     if (resolverFactories == null) {
       resolverFactories = new ArrayList<>();
@@ -2624,7 +2638,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       scriptEnvResolvers = new ArrayList<>();
     }
     if (scriptingEnvironment == null) {
-      scriptingEnvironment = new ScriptingEnvironment(scriptFactory, scriptEnvResolvers, scriptingEngines);
+      scriptingEnvironment = new ScriptingEnvironment(scriptFactory, scriptEnvResolvers, scriptingEngines, scriptSecurityPolicy);
     }
   }
 
@@ -4274,6 +4288,16 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (scriptingEngines != null) {
       scriptingEngines.setScriptEngineResolver(scriptEngineResolver);
     }
+    return this;
+  }
+
+  public ScriptSecurityPolicy getScriptSecurityPolicy() {
+    initScriptSecurityPolicy();
+    return scriptSecurityPolicy;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityPolicy(ScriptSecurityPolicy scriptSecurityPolicy) {
+    this.scriptSecurityPolicy = scriptSecurityPolicy;
     return this;
   }
 

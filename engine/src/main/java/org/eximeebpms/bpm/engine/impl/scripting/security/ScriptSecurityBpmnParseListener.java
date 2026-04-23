@@ -23,18 +23,23 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
 
   @Override
   public void parseProcess(Element processElement, ProcessDefinitionEntity processDefinition) {
+    String processKey = processDefinition != null ? processDefinition.getKey() : resolveProcessKey(processElement);
+    String processName = processDefinition != null && processDefinition.getName() != null && !processDefinition.getName().isBlank()
+        ? processDefinition.getName()
+        : resolveProcessName(processElement);
+
     validateExtensionListenerScripts(
         processElement,
-        processDefinition != null ? processDefinition.getId() : null,
-        resolveProcessName(processElement),
-        processElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_ID));
+        processKey,
+        processName,
+        null);
   }
 
   @Override
   public void parseStartEvent(Element startEventElement, ScopeImpl scope, ActivityImpl startEventActivity) {
     validateExtensionListenerScripts(
         startEventElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(startEventElement, startEventActivity));
   }
@@ -45,12 +50,12 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
         scriptTaskElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT),
         resolveScriptSource(scriptTaskElement),
         resolveActivityId(scriptTaskElement, activity),
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope));
 
     validateExtensionListenerScripts(
         scriptTaskElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(scriptTaskElement, activity));
   }
@@ -59,7 +64,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         serviceTaskElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(serviceTaskElement, activity));
   }
@@ -68,7 +73,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseTask(Element taskElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         taskElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(taskElement, activity));
   }
@@ -77,7 +82,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseUserTask(Element userTaskElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         userTaskElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(userTaskElement, activity));
   }
@@ -86,7 +91,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseSubProcess(Element subProcessElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         subProcessElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(subProcessElement, activity));
   }
@@ -95,7 +100,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseCallActivity(Element callActivityElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         callActivityElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(callActivityElement, activity));
   }
@@ -104,7 +109,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   public void parseEndEvent(Element endEventElement, ScopeImpl scope, ActivityImpl activity) {
     validateExtensionListenerScripts(
         endEventElement,
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope),
         resolveActivityId(endEventElement, activity));
   }
@@ -120,7 +125,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
         conditionExpression.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_LANGUAGE),
         conditionExpression.getText(),
         sequenceFlowElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_ID),
-        resolveScopeId(scope),
+        resolveProcessKey(scope),
         resolveProcessName(scope));
   }
 
@@ -137,7 +142,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
 
   protected void validateExtensionListenerScripts(
       Element element,
-      String processDefinitionId,
+      String processDefinitionKey,
       String processDefinitionName,
       String activityId) {
 
@@ -149,14 +154,14 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
     validateListenerScriptElements(
         extensionElements,
         BpmnModelConstants.CAMUNDA_ELEMENT_EXECUTION_LISTENER,
-        processDefinitionId,
+        processDefinitionKey,
         processDefinitionName,
         activityId);
 
     validateListenerScriptElements(
         extensionElements,
         BpmnModelConstants.CAMUNDA_ELEMENT_TASK_LISTENER,
-        processDefinitionId,
+        processDefinitionKey,
         processDefinitionName,
         activityId);
   }
@@ -184,7 +189,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   protected void validateListenerScriptElements(
       Element extensionElements,
       String listenerElementName,
-      String processDefinitionId,
+      String processDefinitionKey,
       String processDefinitionName,
       String activityId) {
 
@@ -196,7 +201,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
               scriptElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT),
               scriptElement.getText(),
               activityId,
-              processDefinitionId,
+              processDefinitionKey,
               processDefinitionName);
         }
       }
@@ -212,7 +217,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
               scriptElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT),
               scriptElement.getText(),
               resolveActivityId(activity),
-              resolveScopeId(activity != null ? activity.getProcessDefinition() : null),
+              resolveProcessKey(activity != null ? activity.getProcessDefinition() : null),
               resolveProcessName(activity != null ? activity.getProcessDefinition() : null));
         }
       }
@@ -237,7 +242,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
       String language,
       String source,
       String activityId,
-      String processDefinitionId,
+      String processDefinitionKey,
       String processDefinitionName) {
 
     if (source == null || source.isBlank()) {
@@ -248,7 +253,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
         .source(source)
         .sourceType(ScriptSourceType.INLINE_SOURCE)
         .activityId(activityId)
-        .processDefinitionId(processDefinitionId)
+        .processDefinitionKey(processDefinitionKey)
         .processDefinitionName(processDefinitionName)
         .build();
 
@@ -281,10 +286,6 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
     return activity != null ? activity.getId() : null;
   }
 
-  protected String resolveScopeId(ScopeImpl scope) {
-    return scope != null ? scope.getId() : null;
-  }
-
   protected String resolveProcessName(Element processElement) {
     if (processElement == null) {
       return null;
@@ -299,45 +300,73 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   }
 
   protected String resolveProcessName(ScopeImpl scope) {
+    ProcessDefinitionEntity processDefinition = resolveProcessDefinition(scope);
+    if (processDefinition == null) {
+      return null;
+    }
+
+    String name = processDefinition.getName();
+    if (name != null && !name.isBlank()) {
+      return name;
+    }
+
+    return processDefinition.getKey();
+  }
+
+  protected String resolveProcessKey(Element processElement) {
+    if (processElement == null) {
+      return null;
+    }
+
+    return processElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_ID);
+  }
+
+  protected String resolveProcessKey(ScopeImpl scope) {
+    ProcessDefinitionEntity processDefinition = resolveProcessDefinition(scope);
+    return processDefinition != null ? processDefinition.getKey() : null;
+  }
+
+  protected ProcessDefinitionEntity resolveProcessDefinition(ScopeImpl scope) {
     if (scope == null) {
       return null;
     }
 
-    Object processName = scope.getProperty(BpmnModelConstants.BPMN_ATTRIBUTE_NAME);
-    if (processName instanceof String name && !name.isBlank()) {
-      return name;
+    if (scope instanceof ProcessDefinitionEntity processDefinitionEntity) {
+      return processDefinitionEntity;
     }
 
-    return scope.getId();
+    ScopeImpl current = scope;
+    while (current != null) {
+      if (current instanceof ProcessDefinitionEntity processDefinitionEntity) {
+        return processDefinitionEntity;
+      }
+      current = current.getFlowScope();
+    }
+
+    return null;
   }
 
   protected String buildDeploymentExceptionMessage(ScriptSecurityContext context, ScriptSecurityDecision decision) {
     StringBuilder message = new StringBuilder("Process deployment blocked by script security policy");
 
+    context.getProcessDefinitionKey().ifPresent(processDefinitionKey -> message
+        .append(" for process '")
+        .append(processDefinitionKey)
+        .append("'"));
+
+    context.getProcessDefinitionName()
+        .filter(name -> !name.isBlank())
+        .ifPresent(name -> message
+            .append(" (name='")
+            .append(name)
+            .append("')"));
+
     context.getActivityId()
+        .filter(activityId -> !activityId.isBlank())
         .ifPresent(activityId -> message
-            .append(" for activity '")
+            .append(" at activity '")
             .append(activityId)
             .append("'"));
-
-    if (context.getProcessDefinitionName().isPresent()) {
-      message
-          .append(" in process '")
-          .append(context.getProcessDefinitionName().get())
-          .append("'");
-
-      context.getProcessDefinitionId()
-          .ifPresent(processDefinitionId -> message
-              .append(" [")
-              .append(processDefinitionId)
-              .append("]"));
-    } else {
-      context.getProcessDefinitionId()
-          .ifPresent(processDefinitionId -> message
-              .append(" in process definition '")
-              .append(processDefinitionId)
-              .append("'"));
-    }
 
     decision.getReason()
         .ifPresent(reason -> message

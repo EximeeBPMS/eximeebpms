@@ -10,6 +10,7 @@ public final class ScriptSecurityContext {
   private final ScriptSourceType sourceType;
   private final String activityId;
   private final String processDefinitionId;
+  private final String processDefinitionKey;
   private final String caseDefinitionId;
   private final String processDefinitionName;
 
@@ -19,6 +20,7 @@ public final class ScriptSecurityContext {
     this.sourceType = Objects.requireNonNullElse(builder.sourceType, ScriptSourceType.UNKNOWN);
     this.activityId = normalize(builder.activityId).orElse(null);
     this.processDefinitionId = normalize(builder.processDefinitionId).orElse(null);
+    this.processDefinitionKey = normalize(builder.processDefinitionKey).orElse(null);
     this.caseDefinitionId = normalize(builder.caseDefinitionId).orElse(null);
     this.processDefinitionName = normalize(builder.processDefinitionName).orElse(null);
   }
@@ -45,6 +47,10 @@ public final class ScriptSecurityContext {
 
   public Optional<String> getProcessDefinitionId() {
     return Optional.ofNullable(processDefinitionId);
+  }
+
+  public Optional<String> getProcessDefinitionKey() {
+    return Optional.ofNullable(processDefinitionKey);
   }
 
   public Optional<String> getCaseDefinitionId() {
@@ -76,8 +82,9 @@ public final class ScriptSecurityContext {
         + "language='" + language + '\''
         + ", sourceType=" + sourceType
         + ", activityId=" + activityId
-        + ", processDefinitionId=" + processDefinitionId
+        + ", processDefinitionKey=" + processDefinitionKey
         + ", caseDefinitionId=" + caseDefinitionId
+        + ", processDefinitionId=" + processDefinitionId
         + ", processDefinitionName=" + processDefinitionName
         + '}';
   }
@@ -89,6 +96,7 @@ public final class ScriptSecurityContext {
     private ScriptSourceType sourceType;
     private String activityId;
     private String processDefinitionId;
+    private String processDefinitionKey;
     private String caseDefinitionId;
     private String processDefinitionName;
 
@@ -113,6 +121,11 @@ public final class ScriptSecurityContext {
 
     public Builder processDefinitionId(String processDefinitionId) {
       this.processDefinitionId = processDefinitionId;
+      return this;
+    }
+
+    public Builder processDefinitionKey(String processDefinitionKey) {
+      this.processDefinitionKey = processDefinitionKey;
       return this;
     }
 

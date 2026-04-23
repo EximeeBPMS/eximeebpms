@@ -156,7 +156,7 @@ public class ConfigurationLogger extends ProcessEngineLogger {
 
   public void logScriptValidationDisabled() {
     logWarn(
-        "SCRIPT-SEC-001",
+        "021",
         "Script security is disabled. Script deployment and runtime validation are turned off."
     );
   }

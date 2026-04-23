@@ -2208,7 +2208,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
 
-    if (scriptSecurityEnabled) {
+    if (isScriptSecurityEnabled()) {
       defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
     }
 
@@ -2615,7 +2615,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   protected void initScriptSecurityPolicy() {
-    if (!scriptSecurityEnabled) {
+    if (!isScriptSecurityEnabled()) {
       LOG.logScriptValidationDisabled();
       scriptSecurityPolicy = null;
       return;
@@ -2623,16 +2623,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
     if (scriptSecurityPolicy == null) {
       scriptSecurityPolicy = new DefaultScriptSecurityPolicy();
-    }
-  }
-
-  protected void initScriptingEnvironment() {
-    if (this.scriptingEnvironment != null) {
-      this.scriptingEnvironment = new ScriptingEnvironment(
-          this.scriptFactory,
-          this.scriptEnvResolvers != null ? this.scriptEnvResolvers : new ArrayList<>(),
-          this.scriptingEngines,
-          this.scriptSecurityPolicy);
     }
   }
 

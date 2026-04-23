@@ -52,6 +52,7 @@
     <version.junit-jupiter>6.0.3</version.junit-jupiter>
     <version.junit>4.13.1</version.junit>
     <version.assertj>3.27.6</version.assertj>
+    <version.awaitility>4.2.2</version.awaitility>
     <version.mockito>5.10.0</version.mockito>
     <version.wiremock>2.27.2</version.wiremock>
     <version.testcontainers>1.16.0</version.testcontainers>

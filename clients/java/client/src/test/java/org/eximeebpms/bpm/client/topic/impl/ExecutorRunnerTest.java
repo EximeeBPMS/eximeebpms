@@ -1,5 +1,6 @@
 package org.eximeebpms.bpm.client.topic.impl;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -704,17 +705,23 @@ public class ExecutorRunnerTest {
         // Force level=1 so calculateBackoffTime() returns 200ms
         delayBackoff.reconfigure(Collections.emptyList());
 
+        // Latch fires on the 2nd fetchAndLock call — that call only happens AFTER the
+        // 200ms backoff has elapsed, so the gap between start and latch release >= 200ms.
+        CountDownLatch secondCycleLatch = new CountDownLatch(2);
         when(engineClient.fetchAndLock(anyList(), anyInt()))
-                .thenReturn(Collections.emptyList());
+                .thenAnswer(inv -> {
+                    secondCycleLatch.countDown();
+                    return Collections.emptyList();
+                });
 
         TopicSubscription subscription = createSubscription("testTopic", taskHandler);
         runner.subscribe(subscription);
 
+        long before = System.currentTimeMillis();
         runner.start();
 
-        long before = System.currentTimeMillis();
-        // Wait long enough for at least one full acquire+suspend cycle
-        Thread.sleep(350);
+        assertTrue("Second acquisition cycle should start within 3s",
+                secondCycleLatch.await(3, TimeUnit.SECONDS));
         long elapsed = System.currentTimeMillis() - before;
 
         // Then: at least one full 200ms backoff must have occurred, so elapsed >= 200ms
@@ -752,7 +759,12 @@ public class ExecutorRunnerTest {
         // hasWaiters(...) returns true only AFTER the runner has executed isWaiting.await(...),
         // which eliminates the race where resume() would otherwise signal an empty condition
         // and the signal would be lost.
-        assertTrue("Runner should be waiting on the condition", awaitWaitingOnCondition(runner, 2_000));
+        await("Runner should be waiting on the condition").atMost(2, TimeUnit.SECONDS)
+                .until(() -> {
+                    runner.acquisitionMonitor.lock();
+                    try { return runner.acquisitionMonitor.hasWaiters(runner.isWaiting); }
+                    finally { runner.acquisitionMonitor.unlock(); }
+                });
 
         long wakeStart = System.currentTimeMillis();
         // Signal resume() to interrupt the suspend
@@ -763,29 +775,6 @@ public class ExecutorRunnerTest {
         long wakeElapsed = System.currentTimeMillis() - wakeStart;
         assertTrue("Wake-up should happen in well under 10s", wakeElapsed < 5_000);
         runner.stop();
-    }
-
-    /**
-     * Polls until the given runner has entered {@code isWaiting.await(...)} on its
-     * acquisition monitor, or the timeout elapses. Returns {@code true} as soon as the
-     * runner is observed waiting. Uses {@link java.util.concurrent.locks.ReentrantLock#hasWaiters}
-     * which only reports {@code true} after the thread has actually suspended on the condition,
-     * so callers can safely call {@link ExecutorRunner#resume()} without losing the signal.
-     */
-    private static boolean awaitWaitingOnCondition(ExecutorRunner runner, long timeoutMs) throws InterruptedException {
-        long deadline = System.currentTimeMillis() + timeoutMs;
-        while (System.currentTimeMillis() < deadline) {
-            runner.acquisitionMonitor.lock();
-            try {
-                if (runner.acquisitionMonitor.hasWaiters(runner.isWaiting)) {
-                    return true;
-                }
-            } finally {
-                runner.acquisitionMonitor.unlock();
-            }
-            Thread.sleep(5);
-        }
-        return false;
     }
 
     @Test
@@ -839,7 +828,12 @@ public class ExecutorRunnerTest {
 
         // Wait until runner has entered suspend (deterministic — no race with await())
         assertTrue("Runner should start first acquire cycle", enteringSuspend.await(2, TimeUnit.SECONDS));
-        assertTrue("Runner should be waiting on the condition", awaitWaitingOnCondition(runner, 2_000));
+        await("Runner should be waiting on the condition").atMost(2, TimeUnit.SECONDS)
+                .until(() -> {
+                    runner.acquisitionMonitor.lock();
+                    try { return runner.acquisitionMonitor.hasWaiters(runner.isWaiting); }
+                    finally { runner.acquisitionMonitor.unlock(); }
+                });
 
         long stopStart = System.currentTimeMillis();
 

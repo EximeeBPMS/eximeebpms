@@ -52,11 +52,11 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
  * a user provided script. The environment may contain additional libraries or imports.</p>
  *
  * <p>The environment performs lazy initialization of scripts: the first time a script of a given
- * script language is executed, the environment will use the {@link ScriptEnvResolver ScriptEnvResolvers} for resolving the environment scripts for that
- * language. The scripts (if any) are then pre-compiled and cached for reuse.</p>
+ * script language is executed, the environment will use the {@link ScriptEnvResolver ScriptEnvResolvers}
+ * for resolving the environment scripts for that language. The scripts (if any) are then pre-compiled
+ * and cached for reuse.</p>
  *
  * @author Daniel Meyer
- *
  */
 public class ScriptingEnvironment {
 
@@ -100,15 +100,12 @@ public class ScriptingEnvironment {
    * execute a given script in the environment
    *
    * @param script the {@link ExecutableScript} to execute
-   * @param scope  the scope in which to execute the script
+   * @param scope the scope in which to execute the script
    * @return the result of the script evaluation
    */
   public Object execute(ExecutableScript script, VariableScope scope) {
 
-    // get script engine
     ScriptEngine scriptEngine = scriptingEngines.getScriptEngineForLanguage(script.getLanguage());
-
-    // create bindings
     Bindings bindings = scriptingEngines.createBindings(scriptEngine, scope);
 
     return execute(script, scope, bindings, scriptEngine);
@@ -116,20 +113,25 @@ public class ScriptingEnvironment {
 
   public Object execute(ExecutableScript script, VariableScope scope, Bindings bindings, ScriptEngine scriptEngine) {
 
-    // first, evaluate the env scripts (if any)
     List<ExecutableScript> envScripts = getEnvScripts(script, scriptEngine);
+    // first, evaluate the env scripts (if any)
     for (ExecutableScript envScript : envScripts) {
       enforceScriptSecurity(envScript, scope);
       envScript.execute(scriptEngine, scope, bindings);
     }
 
-    // next evaluate the actual script
     enforceScriptSecurity(script, scope);
+    // next evaluate the actual script
     return script.execute(scriptEngine, scope, bindings);
   }
 
   protected void enforceScriptSecurity(ExecutableScript script, VariableScope scope) {
-    ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(createSecurityContext(script, scope));
+    if (scriptSecurityPolicy == null) {
+      return;
+    }
+
+    ScriptSecurityContext context = createSecurityContext(script, scope);
+    ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(context);
     if (decision.isDenied()) {
       throw new ScriptSecurityException(
           buildSecurityExceptionMessage(scope, decision),
@@ -138,32 +140,32 @@ public class ScriptingEnvironment {
   }
 
   protected ScriptSecurityContext createSecurityContext(ExecutableScript script, VariableScope scope) {
-    final ScriptSecurityContext.Builder scriptSecurityContextBuilder = ScriptSecurityContext.builder(script.getLanguage())
+    ScriptSecurityContext.Builder builder = ScriptSecurityContext.builder(script.getLanguage())
         .source(resolveScriptSource(script, scope))
         .sourceType(resolveSourceType(script));
 
     if (scope instanceof DelegateExecution execution) {
-      scriptSecurityContextBuilder
+      builder
           .activityId(execution.getCurrentActivityId())
           .processDefinitionId(execution.getProcessDefinitionId());
     } else if (scope instanceof TaskEntity task) {
       if (task.getExecution() != null) {
-        scriptSecurityContextBuilder
+        builder
             .activityId(task.getExecution().getActivityId())
             .processDefinitionId(task.getProcessDefinitionId());
       }
       if (task.getCaseExecution() != null) {
-        scriptSecurityContextBuilder
+        builder
             .activityId(task.getCaseExecution().getActivityId())
             .caseDefinitionId(task.getCaseDefinitionId());
       }
     } else if (scope instanceof DelegateCaseExecution caseExecution) {
-      scriptSecurityContextBuilder
+      builder
           .activityId(caseExecution.getActivityId())
           .caseDefinitionId(caseExecution.getCaseDefinitionId());
     }
 
-    return scriptSecurityContextBuilder.build();
+    return builder.build();
   }
 
   protected String resolveScriptSource(ExecutableScript script, VariableScope scope) {
@@ -199,7 +201,7 @@ public class ScriptingEnvironment {
   }
 
   protected String buildSecurityExceptionMessage(VariableScope scope, ScriptSecurityDecision decision) {
-    final StringBuilder message = new StringBuilder("Script execution blocked by script security policy");
+    StringBuilder message = new StringBuilder("Script execution blocked by script security policy");
 
     decision.getReason().ifPresent(reason -> message.append(": ").append(reason));
     message.append(getScopeExceptionMessage(scope));

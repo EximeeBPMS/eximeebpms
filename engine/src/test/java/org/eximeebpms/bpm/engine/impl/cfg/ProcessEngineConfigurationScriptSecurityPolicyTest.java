@@ -2,9 +2,6 @@ package org.eximeebpms.bpm.engine.impl.cfg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.lang.reflect.Field;
-import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
-import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityDecision;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
@@ -26,17 +23,17 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
   }
 
   @Test
-  public void shouldInitializeDefaultScriptSecurityPolicy() {
+  public void shouldInitializeScriptSecurityPolicy() {
     // when
     ScriptSecurityPolicy policy = processEngineConfiguration.getScriptSecurityPolicy();
 
     // then
     assertThat(policy).isNotNull();
-    assertThat(policy).isInstanceOf(DefaultScriptSecurityPolicy.class);
+    assertThat(policy.evaluate(null)).isNotNull();
   }
 
   @Test
-  public void shouldPropagateConfiguredScriptSecurityPolicyToScriptingEnvironment() throws Exception {
+  public void shouldUseConfiguredScriptSecurityPolicy() {
     // given
     ScriptSecurityPolicy customPolicy = context -> ScriptSecurityDecision.allow();
 
@@ -47,12 +44,6 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
 
     // then
     assertThat(processEngineConfiguration.getScriptSecurityPolicy()).isSameAs(customPolicy);
-    assertThat(extractScriptSecurityPolicy(processEngineConfiguration.getScriptingEnvironment())).isSameAs(customPolicy);
-  }
-
-  protected ScriptSecurityPolicy extractScriptSecurityPolicy(ScriptingEnvironment scriptingEnvironment) throws Exception {
-    Field field = ScriptingEnvironment.class.getDeclaredField("scriptSecurityPolicy");
-    field.setAccessible(true);
-    return (ScriptSecurityPolicy) field.get(scriptingEnvironment);
+    assertThat(processEngineConfiguration.getScriptingEnvironment()).isNotNull();
   }
 }

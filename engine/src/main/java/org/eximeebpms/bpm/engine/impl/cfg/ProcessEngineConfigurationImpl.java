@@ -602,6 +602,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<ScriptEnvResolver> scriptEnvResolvers;
   protected ScriptFactory scriptFactory;
   protected ScriptEngineResolver scriptEngineResolver;
+  protected boolean scriptSecurityEnabled = true;
   protected ScriptSecurityPolicy scriptSecurityPolicy;
   protected String scriptEngineNameJavaScript;
   protected boolean autoStoreScriptVariables = false;
@@ -2207,7 +2208,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
 
-    defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
+    if (scriptSecurityEnabled) {
+      defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
+    }
 
     if (!HistoryLevel.HISTORY_LEVEL_NONE.equals(historyLevel)) {
       defaultListeners.add(new HistoryParseListener(historyEventProducer));
@@ -2612,8 +2615,24 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   protected void initScriptSecurityPolicy() {
+    if (!scriptSecurityEnabled) {
+      LOG.logScriptValidationDisabled();
+      scriptSecurityPolicy = null;
+      return;
+    }
+
     if (scriptSecurityPolicy == null) {
       scriptSecurityPolicy = new DefaultScriptSecurityPolicy();
+    }
+  }
+
+  protected void initScriptingEnvironment() {
+    if (this.scriptingEnvironment != null) {
+      this.scriptingEnvironment = new ScriptingEnvironment(
+          this.scriptFactory,
+          this.scriptEnvResolvers != null ? this.scriptEnvResolvers : new ArrayList<>(),
+          this.scriptingEngines,
+          this.scriptSecurityPolicy);
     }
   }
 
@@ -4291,8 +4310,16 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
+  public boolean isScriptSecurityEnabled() {
+    return scriptSecurityEnabled;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityEnabled(boolean scriptSecurityEnabled) {
+    this.scriptSecurityEnabled = scriptSecurityEnabled;
+    return this;
+  }
+
   public ScriptSecurityPolicy getScriptSecurityPolicy() {
-    initScriptSecurityPolicy();
     return scriptSecurityPolicy;
   }
 

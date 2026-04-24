@@ -114,8 +114,8 @@ public class EngineClient {
     this.orderingConfig = orderingConfig;
   }
 
-  public List<ExternalTask> fetchAndLock(List<TopicRequestDto> topics) {
-    FetchAndLockRequestDto payload = new FetchAndLockRequestDto(workerId, maxTasks, asyncResponseTimeout, topics,
+  public List<ExternalTask> fetchAndLock(List<TopicRequestDto> topics, int maxTasks) {
+    FetchAndLockRequestDto payload = new FetchAndLockRequestDto(workerId, Math.min(maxTasks, this.maxTasks), asyncResponseTimeout, topics,
         usePriority, orderingConfig);
 
     String resourceUrl = getBaseUrl() + FETCH_AND_LOCK_RESOURCE_PATH;
@@ -208,5 +208,9 @@ public class EngineClient {
 
   public boolean isUsePriority() {
     return usePriority;
+  }
+
+  public void setRequestExecutor(RequestExecutor requestExecutor) {
+    this.engineInteraction = requestExecutor;
   }
 }

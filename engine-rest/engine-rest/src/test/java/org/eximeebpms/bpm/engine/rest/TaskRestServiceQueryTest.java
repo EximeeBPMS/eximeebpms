@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.engine.rest.util.DateTimeUtils.withTimezone;
 import static org.eximeebpms.bpm.engine.rest.util.QueryParamUtils.arrayAsCommaSeperatedList;
@@ -36,6 +35,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -72,7 +72,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -101,7 +100,16 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     TaskQuery sampleTaskQuery = mock(TaskQueryImpl.class);
     when(sampleTaskQuery.list()).thenReturn(mockedTasks);
     when(sampleTaskQuery.count()).thenReturn((long) mockedTasks.size());
+
+    when(sampleTaskQuery.or()).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.endOr()).thenReturn(sampleTaskQuery);
+
+    when(sampleTaskQuery.taskName(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskDescription(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskCandidateUser(anyString())).thenReturn(sampleTaskQuery);
     when(sampleTaskQuery.taskCandidateGroup(anyString())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.taskCandidateGroupIn(any())).thenReturn(sampleTaskQuery);
+    when(sampleTaskQuery.includeAssignedTasks()).thenReturn(sampleTaskQuery);
 
     when(processEngine.getTaskService().createTaskQuery()).thenReturn(sampleTaskQuery);
 
@@ -2294,10 +2302,58 @@ public class TaskRestServiceQueryTest extends AbstractRestServiceTest {
     .when()
       .post(TASK_QUERY_URL);
 
-    ArgumentCaptor<TaskQueryImpl> argument = ArgumentCaptor.forClass(TaskQueryImpl.class);
-    verify(((TaskQueryImpl) mockQuery)).addOrQuery(argument.capture());
-    assertEquals(MockProvider.EXAMPLE_TASK_NAME, argument.getValue().getName());
-    assertEquals(MockProvider.EXAMPLE_TASK_DESCRIPTION, argument.getValue().getDescription());
+    verify(((TaskQueryImpl) mockQuery)).or();
+    verify(mockQuery).taskName(MockProvider.EXAMPLE_TASK_NAME);
+    verify(mockQuery).taskDescription(MockProvider.EXAMPLE_TASK_DESCRIPTION);
+    verify(((TaskQueryImpl) mockQuery)).endOr();
   }
 
+  @Test
+  public void testOrQueryWithCandidateUserAndCandidateGroups() {
+    Map<String, Object> candidateGroupOrQuery = new HashMap<>();
+    candidateGroupOrQuery.put("candidateGroups", List.of("testGroup"));
+
+    Map<String, Object> candidateUserOrQuery = new HashMap<>();
+    candidateUserOrQuery.put("candidateUser", "testUser");
+
+    Map<String, Object> body = new HashMap<>();
+    body.put("orQueries", Arrays.asList(candidateGroupOrQuery, candidateUserOrQuery));
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .header(ACCEPT_JSON_HEADER)
+        .body(body)
+        .then().expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).or();
+    verify(((TaskQueryImpl) mockQuery), Mockito.times(1)).endOr();
+
+    verify(mockQuery).taskCandidateGroupIn(argThat(new EqualsList(List.of("testGroup"))));
+    verify(mockQuery).taskCandidateUser("testUser");
+  }
+
+  @Test
+  public void testOrQueryWithEmptyOrQueryAndCandidateUser() {
+    Map<String, Object> emptyOrQuery = new HashMap<>();
+
+    Map<String, Object> candidateUserOrQuery = new HashMap<>();
+    candidateUserOrQuery.put("candidateUser", "testUser");
+
+    Map<String, Object> body = new HashMap<>();
+    body.put("orQueries", Arrays.asList(emptyOrQuery, candidateUserOrQuery));
+
+    given()
+        .contentType(POST_JSON_CONTENT_TYPE)
+        .header(ACCEPT_JSON_HEADER)
+        .body(body)
+        .then().expect()
+        .statusCode(Status.OK.getStatusCode())
+        .when()
+        .post(TASK_QUERY_URL);
+
+    verify(mockQuery).taskCandidateUser("testUser");
+  }
 }

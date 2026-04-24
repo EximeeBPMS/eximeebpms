@@ -46,4 +46,9 @@ public interface BackoffStrategy {
    * @return the back off time between fetch and lock requests in milliseconds
    */
   long calculateBackoffTime();
+
+  /**
+   * Copies the backoff strategy. This is required to ensure that each ExecutorRunner has its own instance of the backoff strategy.
+   */
+  BackoffStrategy copy();
 }

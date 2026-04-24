@@ -68,7 +68,7 @@ public class ExternalTaskImplTest {
   public void shouldDisplayAttributesFilledInToString() {
     // with basic attributes set, attributes should be displayed and separated by comma
     ExternalTaskImpl task = new ExternalTaskImpl();
-    
+
     Date date = new Date(0L);// January 1,1970, 00:00:00 GMT
     task.setActivityId("ai");
     task.setActivityInstanceId("aii");
@@ -88,7 +88,7 @@ public class ExternalTaskImplTest {
     task.setTenantId("ti");
     task.setTopicName("tn");
     task.setWorkerId("wi");
-    
+
     assertEquals("ExternalTaskImpl [activityId=ai, "
         + "activityInstanceId=aii, "
         + "businessKey=bk, "
@@ -108,10 +108,10 @@ public class ExternalTaskImplTest {
         + "tenantId=ti, "
         + "topicName=tn, "
         + "variables=null, "
-        + "workerId=wi]", 
+        + "workerId=wi]",
         task.toString());
   }
-  
+
   @SuppressWarnings("rawtypes")
   @Test
   public void shouldDisplayAttributesIncludingMapsInToString() {
@@ -138,7 +138,7 @@ public class ExternalTaskImplTest {
     task.setTopicName("tn");
     task.setWorkerId("wi");
 
-    Map<String, VariableValue> receivedVariables = new LinkedHashMap<>();
+    Map<String, VariableValue<?>> receivedVariables = new LinkedHashMap<>();
     receivedVariables.put("rv1", generateVariableValue(task.getExecutionId(), "variable1", ValueType.STRING.getName(), "value1", 42, "vi2"));
     receivedVariables.put("rv2", generateVariableValue(task.getExecutionId(), "variable2", ValueType.INTEGER.getName(), 99, 42, "vi2", 87L));
     task.setReceivedVariableMap(receivedVariables);
@@ -177,12 +177,12 @@ public class ExternalTaskImplTest {
         + "}, "
         + "workerId=wi]", task.toString());
   }
-  
+
   // helper methods and constants
-  
+
   @SuppressWarnings("rawtypes")
   private static final ValueMappers DEFAULT_MAPPERS = new DefaultValueMappers(Variables.SerializationDataFormats.JSON.getName());
-  
+
   @SuppressWarnings("rawtypes")
   private static VariableValue generateVariableValue(String executionId, String variableName,
       final String typeI, final Object valueI, Object... valueInfos) {
@@ -195,7 +195,6 @@ public class ExternalTaskImplTest {
     for (int i = 0; i < valueInfos.length; i++) {
       valueInfoI.put("vi" + (i + 1), valueInfos[i]);
     }
-    TypedValueField typedValueField = new TypedValueField() {{setType(typeI); setValue(valueI); setValueInfo(valueInfoI); }};
-    return typedValueField;
+      return new TypedValueField() {{setType(typeI); setValue(valueI); setValueInfo(valueInfoI); }};
   }
 }

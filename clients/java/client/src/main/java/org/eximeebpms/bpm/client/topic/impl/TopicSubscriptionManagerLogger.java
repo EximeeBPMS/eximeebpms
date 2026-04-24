@@ -72,4 +72,15 @@ public class TopicSubscriptionManagerLogger extends ExternalTaskClientLogger {
       String.format("Fetch and lock new external tasks for %d topics", subscriptions.size()));
   }
 
+  public void fetchAndLock(List<TopicRequestDto> subscriptions, int maxTasks) {
+    logDebug(
+            "010",
+            String.format("Fetch and lock new external tasks for %d topics with maxTasks %d", subscriptions.size(), maxTasks));
+  }
+
+    public void allThreadsAreBusy(int activeCount, int queueSize, String topics) {
+    logDebug(
+      "009",
+      String.format("All threads are busy for topics [%s]. Active threads: %d, queue size: %d", topics, activeCount, queueSize));
+    }
 }

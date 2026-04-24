@@ -18,6 +18,7 @@ package org.eximeebpms.bpm.client.impl;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 import org.eximeebpms.bpm.client.exception.ConnectionLostException;
 import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;
@@ -123,9 +124,7 @@ public class ExternalTaskClientLogger extends BaseLogger {
   public ExternalTaskClientException handledEngineClientException(String actionName, EngineClientException e) {
     Throwable causedException = e.getCause();
 
-    if (causedException instanceof RestException) {
-      RestException restException = (RestException) causedException;
-
+    if (causedException instanceof RestException restException) {
       String message = restException.getMessage();
       int httpStatusCode = restException.getHttpStatusCode();
 
@@ -142,8 +141,7 @@ public class ExternalTaskClientLogger extends BaseLogger {
       }
     }
 
-    if (causedException instanceof IOException) {
-      IOException ioException = (IOException) causedException;
+    if (causedException instanceof IOException ioException) {
       return new ConnectionLostException(exceptionMessage(
         "010", "Exception while {}: Connection could not be established with message: \"{}\"", actionName, ioException.getMessage()), ioException);
     }
@@ -252,4 +250,7 @@ public class ExternalTaskClientLogger extends BaseLogger {
         "030", "Null value is not allowed as '{}'", parameterName));
   }
 
+    public void taskLockAlreadyExpired(String taskId, String topicName, Date lockExpirationTime) {
+    logInfo("029", "Lock for task with id '{}' and topic '{}' has already expired on {}", taskId, topicName, lockExpirationTime);
+    }
 }

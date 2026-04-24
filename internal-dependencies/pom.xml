@@ -39,9 +39,9 @@
         <version>${version.hikaricp}</version>
         <exclusions>
           <!-- When building with Java 8, hikari has a dependency to SLF4j 1.7.
-          When building with Java 11 or higher, Hikari has a dependency to SLF4j 
+          When building with Java 11 or higher, Hikari has a dependency to SLF4j
           2.0.0-alpha1 instead. We are therefore excluding this dependency here
-          and assume that it comes from other dependencies where it is used 
+          and assume that it comes from other dependencies where it is used
           (for example eximeebpms-commons-logging). -->
           <exclusion>
             <groupId>org.slf4j</groupId>
@@ -100,6 +100,12 @@
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>${version.assertj}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.awaitility</groupId>
+        <artifactId>awaitility</artifactId>
+        <version>${version.awaitility}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>

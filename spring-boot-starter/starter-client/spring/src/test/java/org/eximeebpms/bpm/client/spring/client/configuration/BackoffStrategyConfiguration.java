@@ -36,6 +36,11 @@ public class BackoffStrategyConfiguration {
       public long calculateBackoffTime() {
         return 0;
       }
+
+      @Override
+      public BackoffStrategy copy() {
+        return this;
+      }
     };
   }
 

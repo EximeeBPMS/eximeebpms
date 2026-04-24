@@ -80,6 +80,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
       <scope>test</scope>
@@ -250,6 +256,12 @@
             <phase>post-integration-test</phase>
             <goals>
               <goal>stop</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>start-container-for-manual-tests</id>
+            <goals>
+              <goal>run</goal>
             </goals>
           </execution>
         </executions>

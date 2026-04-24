@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
-import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.SourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;

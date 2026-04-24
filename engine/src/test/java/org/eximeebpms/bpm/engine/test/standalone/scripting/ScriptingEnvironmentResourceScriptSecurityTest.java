@@ -9,7 +9,6 @@ import javax.script.ScriptEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.eximeebpms.bpm.engine.impl.scripting.DynamicResourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.ExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.ResourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;

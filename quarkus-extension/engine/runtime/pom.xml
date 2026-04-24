@@ -26,11 +26,6 @@
       <artifactId>eximeebpms-engine-cdi-jakarta</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.uuid</groupId>
-      <artifactId>java-uuid-generator</artifactId>
-    </dependency>
-
     <!-- Quarkus dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>

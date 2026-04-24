@@ -255,10 +255,6 @@
           <artifactId>h2</artifactId>
         </dependency>
         <dependency>
-          <groupId>com.fasterxml.uuid</groupId>
-          <artifactId>java-uuid-generator</artifactId>
-        </dependency>
-        <dependency>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-classic</artifactId>
         </dependency>
@@ -435,11 +431,6 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${version.h2}</version>
-              </dependency>
-              <dependency>
-                <groupId>com.fasterxml.uuid</groupId>
-                <artifactId>java-uuid-generator</artifactId>
-                <version>${version.uuid-generator}</version>
               </dependency>
             </dependencies>
           </plugin>

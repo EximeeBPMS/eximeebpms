@@ -41,11 +41,6 @@
         <artifactId>joda-time</artifactId>
         <version>${version.joda-time}</version>
       </dependency>
-      <dependency>
-        <groupId>com.fasterxml.uuid</groupId>
-        <artifactId>java-uuid-generator</artifactId>
-        <version>${version.uuid-generator}</version>
-      </dependency>
       <!-- EximeeBPMS public artifacts -->
       <dependency>
         <groupId>org.eximeebpms.bpm</groupId>

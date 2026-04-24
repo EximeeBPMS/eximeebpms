@@ -2,8 +2,10 @@ package org.eximeebpms.bpm.engine.impl.cfg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityDecision;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Before;
@@ -24,12 +26,18 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
 
   @Test
   public void shouldInitializeScriptSecurityPolicy() {
+    // given
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("1 + 1;")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .build();
+
     // when
     ScriptSecurityPolicy policy = processEngineConfiguration.getScriptSecurityPolicy();
 
     // then
     assertThat(policy).isNotNull();
-    assertThat(policy.evaluate(null)).isNotNull();
+    assertThat(policy.evaluate(context)).isNotNull();
   }
 
   @Test

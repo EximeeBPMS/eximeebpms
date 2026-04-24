@@ -1,3 +1,19 @@
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.List;
@@ -40,13 +56,16 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
       Rule.contains("packages.java.net.", "Network access is forbidden", "SCRIPT_SECURITY_PACKAGES_JAVA_NET"),
       Rule.contains("urlconnection", "Network access is forbidden", "SCRIPT_SECURITY_URL_CONNECTION"),
       Rule.contains("httpclient", "HTTP client access is forbidden", "SCRIPT_SECURITY_HTTP_CLIENT"),
-      Rule.contains("socket(", "Socket access is forbidden", "SCRIPT_SECURITY_SOCKET"),
+      // Matches `new Socket(` after whitespace normalisation (e.g. `new Socket("host", 80)`)
+      // while avoiding false positives on method names that merely contain the word "socket"
+      // (e.g. openSocket(), webSocket()). Fully-qualified usage is already blocked by java.net. above.
+      Rule.contains("newsocket(", "Socket access is forbidden", "SCRIPT_SECURITY_SOCKET"),
       Rule.contains("serversocket", "Server socket access is forbidden", "SCRIPT_SECURITY_SERVER_SOCKET"),
 
       // Script-engine / Groovy-specific escalation points
+      // The groovyshell rule also covers GroovyShell.evaluate() calls.
       Rule.contains("groovyshell", "Dynamic Groovy shell execution is forbidden", "SCRIPT_SECURITY_GROOVY_SHELL"),
-      Rule.contains("metaclass", "Groovy metaclass access is forbidden", "SCRIPT_SECURITY_GROOVY_METACLASS"),
-      Rule.contains("evaluate(", "Dynamic script evaluation is forbidden", "SCRIPT_SECURITY_DYNAMIC_EVALUATE")
+      Rule.contains("metaclass", "Groovy metaclass access is forbidden", "SCRIPT_SECURITY_GROOVY_METACLASS")
   );
 
   @Override

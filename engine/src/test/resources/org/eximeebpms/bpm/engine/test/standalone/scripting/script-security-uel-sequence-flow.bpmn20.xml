@@ -3,9 +3,7 @@
   <process id="sequenceFlowSecurityProcess" isExecutable="true">
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="end">
-      <conditionExpression xsi:type="tFormalExpression" language="javascript">
-        System.getenv('HOME');
-      </conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression">${foo == 'bar'}</conditionExpression>
     </sequenceFlow>
     <endEvent id="end" />
   </process>

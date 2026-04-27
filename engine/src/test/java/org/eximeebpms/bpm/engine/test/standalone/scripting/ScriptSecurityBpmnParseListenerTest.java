@@ -256,4 +256,18 @@ public class ScriptSecurityBpmnParseListenerTest {
       engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
     }
   }
+
+  @Test
+  public void shouldIgnoreUelSequenceFlowConditionExpression() {
+    Deployment deployment = engineRule.getRepositoryService()
+        .createDeployment()
+        .addClasspathResource("org/eximeebpms/bpm/engine/test/standalone/scripting/script-security-uel-sequence-flow.bpmn20.xml")
+        .deploy();
+
+    try {
+      assertThat(deployment).isNotNull();
+    } finally {
+      engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
+    }
+  }
 }

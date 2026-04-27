@@ -124,6 +124,6 @@ public class DefaultProcessEngineConfigurationTest {
   }
 
   private void initIdGenerator(IdGenerator idGenerator) {
-    ReflectionTestUtils.setField(instance, "idGenerator", Optional.ofNullable(idGenerator));
+    ReflectionTestUtils.setField(instance, "idGenerator", idGenerator);
   }
 }

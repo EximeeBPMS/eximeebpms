@@ -18,6 +18,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
@@ -25,8 +26,6 @@ import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.Optional;
 
 public class DefaultProcessEngineConfigurationTest {
 
@@ -111,7 +110,20 @@ public class DefaultProcessEngineConfigurationTest {
     assertThat(configuration.getDefaultNumberOfRetries()).isEqualTo(1);
   }
 
+  @Test
+  public void setScriptSecurityEnabled_default_true() {
+    instance.preInit(configuration);
+    assertThat(configuration.isScriptSecurityEnabled()).isTrue();
+  }
+
+  @Test
+  public void setScriptSecurityEnabled_false() {
+    properties.getScriptSecurity().setEnabled(false);
+    instance.preInit(configuration);
+    assertThat(configuration.isScriptSecurityEnabled()).isFalse();
+  }
+
   private void initIdGenerator(IdGenerator idGenerator) {
-    ReflectionTestUtils.setField(instance, "idGenerator", Optional.ofNullable(idGenerator));
+    ReflectionTestUtils.setField(instance, "idGenerator", idGenerator);
   }
 }

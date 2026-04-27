@@ -16,20 +16,23 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
+@Slf4j
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
 
   @Autowired
-  private Optional<IdGenerator> idGenerator;
+  private IdGenerator idGenerator;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -38,10 +41,11 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     setIdGenerator(configuration);
     setJobExecutorAcquireByPriority(configuration);
     setDefaultNumberOfRetries(configuration);
+    setScriptSecurity(configuration);
   }
 
   private void setIdGenerator(SpringProcessEngineConfiguration configuration) {
-    idGenerator.ifPresent(configuration::setIdGenerator);
+    Optional.ofNullable(idGenerator).ifPresent(configuration::setIdGenerator);
   }
 
   private void setDefaultSerializationFormat(SpringProcessEngineConfiguration configuration) {
@@ -49,7 +53,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     if (StringUtils.hasText(defaultSerializationFormat)) {
       configuration.setDefaultSerializationFormat(defaultSerializationFormat);
     } else {
-      logger.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
+      log.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
     }
   }
 
@@ -62,12 +66,12 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
             + "if a custom processEngineName is already set: %s", processEngineName));
         }
-        processEngineName = CamundaBpmProperties.getUniqueName(camundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
+        processEngineName = CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
       }
 
       configuration.setProcessEngineName(processEngineName);
     } else {
-      logger.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
+      log.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
     }
   }
 
@@ -79,5 +83,11 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
       .ifPresent(configuration::setDefaultNumberOfRetries);
+  }
+
+  private void setScriptSecurity(SpringProcessEngineConfiguration configuration) {
+    Optional.ofNullable(camundaBpmProperties.getScriptSecurity())
+        .map(ScriptSecurityProperty::isEnabled)
+        .ifPresent(configuration::setScriptSecurityEnabled);
   }
 }

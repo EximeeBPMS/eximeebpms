@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="Examples">
+  <process id="scriptSecurityProcess" isExecutable="true">
+    <startEvent id="start" />
+    <sequenceFlow id="flow1" sourceRef="start" targetRef="dangerousScriptTask" />
+    <scriptTask id="dangerousScriptTask" scriptFormat="javascript">
+      <script>System.getenv('HOME');</script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="dangerousScriptTask" targetRef="end" />
+    <endEvent id="end" />
+  </process>
+</definitions>

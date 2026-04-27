@@ -60,6 +60,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
 
   public static final int CAMUNDA_OAUTH2_ORDER = Ordered.HIGHEST_PRECEDENCE + 100;
+
+  private  static final String SLASH = "/";
+
   private final OAuth2Properties oAuth2Properties;
   private final String webappPath;
 
@@ -150,9 +153,32 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
   }
 
   private static String buildPath(String basePath, String suffix) {
-    if (basePath == null || basePath.isBlank()) {
-      return suffix;
+    String sanitizedBasePath = sanitizePath(basePath);
+    String sanitizedSuffix = sanitizePath(suffix);
+
+    if (sanitizedBasePath.isEmpty()) {
+      return sanitizedSuffix;
     }
-    return basePath + suffix;
+    if (sanitizedSuffix.isEmpty()) {
+      return sanitizedBasePath;
+    }
+    return sanitizedBasePath + sanitizedSuffix;
+  }
+
+  private static String sanitizePath(String path) {
+    if (path == null || path.isBlank()) {
+      return "";
+    }
+
+    String sanitizedPath = path.trim();
+    if (!sanitizedPath.startsWith(SLASH)) {
+      sanitizedPath = SLASH + sanitizedPath;
+    }
+
+    while (sanitizedPath.length() > 1 && sanitizedPath.endsWith(SLASH)) {
+      sanitizedPath = sanitizedPath.substring(0, sanitizedPath.length() - 1);
+    }
+
+    return sanitizedPath;
   }
 }

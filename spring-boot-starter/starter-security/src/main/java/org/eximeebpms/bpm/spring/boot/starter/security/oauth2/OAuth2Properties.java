@@ -86,16 +86,31 @@ public class OAuth2Properties {
   public static class OAuth2EndpointProperties {
     /**
      * Base URI used to initiate the OAuth2 authorization flow.
-     * Default {@code /oauth2/authorization}.
+     *
+     * <p>This value is a path relative to the configured web application path (`webappPath`).
+     * The final endpoint used at runtime is formed by joining `webappPath` and this value and
+     * normalizing the result (duplicate '/' characters are removed).
+     *
+     * <p>Default: {@code /oauth2/authorization}.
+     *
+     * <p>Examples:
+     * <ul>
+     *   <li>`webappPath = /app` + `authorizationBaseUri = /oauth2/authorization` -> `/app/oauth2/authorization`</li>
+     *   <li>`webappPath = /` + `authorizationBaseUri = /oauth2/authorization` -> `/oauth2/authorization`</li>
+     * </ul>
      */
     private String authorizationBaseUri = "/oauth2/authorization";
 
     /**
      * Base URI used for the OAuth2 authorization response (redirection/callback).
-     * Default {@code /login/oauth2/code/*}.
      *
-     * <p>Must be aligned with
-     * {@code spring.security.oauth2.client.registration.*.redirect-uri}.
+     * <p>This value is a path relative to `webappPath`. The final callback URI is formed by joining
+     * `webappPath` and this value and normalizing the result (duplicate '/' characters are removed).
+     *
+     * <p>Default: {@code /login/oauth2/code/*}.
+     *
+     * <p>Must be aligned with {@code spring.security.oauth2.client.registration.*.redirect-uri}.
+     * Wildcards (`*`) are preserved in the joined path.
      */
     private String redirectionBaseUri = "/login/oauth2/code/*";
   }

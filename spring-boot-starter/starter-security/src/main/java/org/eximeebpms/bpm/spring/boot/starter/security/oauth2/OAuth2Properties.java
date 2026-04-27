@@ -87,30 +87,25 @@ public class OAuth2Properties {
     /**
      * Base URI used to initiate the OAuth2 authorization flow.
      *
-     * <p>This value is a path relative to the configured web application path (`webappPath`).
-     * The final endpoint used at runtime is formed by joining `webappPath` and this value and
-     * normalizing the result (duplicate '/' characters are removed).
+     * <p>This is an absolute path that is passed directly to Spring Security as the authorization
+     * endpoint base URI. It will be sanitized at runtime: a leading {@code /} is ensured, any
+     * trailing {@code /} is stripped, and consecutive {@code /} characters are collapsed.
      *
-     * <p>Default: {@code /oauth2/authorization}.
-     *
-     * <p>Examples:
-     * <ul>
-     *   <li>`webappPath = /app` + `authorizationBaseUri = /oauth2/authorization` -> `/app/oauth2/authorization`</li>
-     *   <li>`webappPath = /` + `authorizationBaseUri = /oauth2/authorization` -> `/oauth2/authorization`</li>
-     * </ul>
+     * <p>Default: {@code /oauth2/authorization} (the Spring Security standard default).
      */
     private String authorizationBaseUri = "/oauth2/authorization";
 
     /**
      * Base URI used for the OAuth2 authorization response (redirection/callback).
      *
-     * <p>This value is a path relative to `webappPath`. The final callback URI is formed by joining
-     * `webappPath` and this value and normalizing the result (duplicate '/' characters are removed).
+     * <p>This is an absolute path that is passed directly to Spring Security as the redirection
+     * endpoint base URI. It will be sanitized at runtime: a leading {@code /} is ensured, any
+     * trailing {@code /} is stripped, and consecutive {@code /} characters are collapsed.
+     * Wildcards ({@code *}) are preserved.
      *
-     * <p>Default: {@code /login/oauth2/code/*}.
+     * <p>Default: {@code /login/oauth2/code/*} (the Spring Security standard default).
      *
      * <p>Must be aligned with {@code spring.security.oauth2.client.registration.*.redirect-uri}.
-     * Wildcards (`*`) are preserved in the joined path.
      */
     private String redirectionBaseUri = "/login/oauth2/code/*";
   }

@@ -119,7 +119,7 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
     log.info("Enabling Camunda Spring Security oauth2 integration");
 
     String authorizationBaseUri = sanitizePath(oAuth2Properties.getEndpoints().getAuthorizationBaseUri());
-    String redirectionBaseUri = buildPath(this.webappPath, oAuth2Properties.getEndpoints().getRedirectionBaseUri());
+    String redirectionBaseUri = sanitizePath(oAuth2Properties.getEndpoints().getRedirectionBaseUri());
 
     // @formatter:off
     http.authorizeHttpRequests(c -> c
@@ -152,31 +152,24 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
     return http.build();
   }
 
-  private static String buildPath(String basePath, String suffix) {
-    String sanitizedBasePath = sanitizePath(basePath);
-    String sanitizedSuffix = sanitizePath(suffix);
-
-    if (sanitizedBasePath.isEmpty()) {
-      return sanitizedSuffix;
-    }
-    if (sanitizedSuffix.isEmpty()) {
-      return sanitizedBasePath;
-    }
-    return sanitizedBasePath + sanitizedSuffix;
-  }
-
-  private static String sanitizePath(String path) {
+  static String sanitizePath(String path) {
     if (path == null || path.isBlank()) {
       return "";
     }
 
     String sanitizedPath = path.trim();
+    // Collapse consecutive slashes
+    sanitizedPath = sanitizedPath.replaceAll("/{2,}", SLASH);
+    // Ensure exactly one leading slash
     if (!sanitizedPath.startsWith(SLASH)) {
       sanitizedPath = SLASH + sanitizedPath;
     }
-
+    // Strip trailing slash(es); treat a bare "/" as empty (no meaningful path segment)
     while (sanitizedPath.length() > 1 && sanitizedPath.endsWith(SLASH)) {
       sanitizedPath = sanitizedPath.substring(0, sanitizedPath.length() - 1);
+    }
+    if (SLASH.equals(sanitizedPath)) {
+      return "";
     }
 
     return sanitizedPath;

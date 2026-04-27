@@ -118,7 +118,7 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
       @Nullable SsoLogoutSuccessHandler ssoLogoutSuccessHandler) throws Exception {
     log.info("Enabling Camunda Spring Security oauth2 integration");
 
-    String authorizationBaseUri = oAuth2Properties.getEndpoints().getAuthorizationBaseUri();
+    String authorizationBaseUri = sanitizePath(oAuth2Properties.getEndpoints().getAuthorizationBaseUri());
     String redirectionBaseUri = buildPath(this.webappPath, oAuth2Properties.getEndpoints().getRedirectionBaseUri());
 
     // @formatter:off

@@ -61,7 +61,7 @@ public class EximeeBPMSSpringSecurityOAuth2AutoConfiguration {
 
   public static final int CAMUNDA_OAUTH2_ORDER = Ordered.HIGHEST_PRECEDENCE + 100;
 
-  private  static final String SLASH = "/";
+  private static final String SLASH = "/";
 
   private final OAuth2Properties oAuth2Properties;
   private final String webappPath;

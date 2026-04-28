@@ -2,6 +2,7 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,6 +96,63 @@ public class DefaultScriptSecurityPolicyTest {
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Network access is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_NET");
+  }
+
+  @Test
+  public void shouldAllowForbiddenScriptForAllowlistedProcessDefinitionKey() {
+    // given
+    policy = new DefaultScriptSecurityPolicy(Set.of("legacyInvoiceProcess"));
+
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("System.getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .processDefinitionKey("legacyInvoiceProcess")
+        .build();
+
+    // when
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    // then
+    assertThat(decision.isAllowed()).isTrue();
+    assertThat(decision.getReason()).isEmpty();
+    assertThat(decision.getCode()).isEmpty();
+  }
+
+  @Test
+  public void shouldDenyForbiddenScriptForNonAllowlistedProcessDefinitionKey() {
+    // given
+    policy = new DefaultScriptSecurityPolicy(Set.of("legacyInvoiceProcess"));
+
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("System.getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .processDefinitionKey("newSecureProcess")
+        .build();
+
+    // when
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    // then
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
+  }
+
+  @Test
+  public void shouldMatchAllowlistedProcessDefinitionKeyIgnoringCaseAndWhitespace() {
+    // given
+    policy = new DefaultScriptSecurityPolicy(Set.of(" legacyInvoiceProcess "));
+
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("System.getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .processDefinitionKey("LEGACYinvoicePROCESS")
+        .build();
+
+    // when
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    // then
+    assertThat(decision.isAllowed()).isTrue();
   }
 
   protected ScriptSecurityContext context(String language, String source) {

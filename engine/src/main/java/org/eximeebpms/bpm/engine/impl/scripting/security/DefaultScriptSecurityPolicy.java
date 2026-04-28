@@ -4,10 +4,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
 
   private static final List<Rule> RULES = List.of(
+      // JavaScript / GraalJS / Nashorn host class lookup - block only dangerous classes
+      Rule.contains("java.type('java.lang.system'", "Access to JVM system APIs is forbidden", "SCRIPT_SECURITY_JAVA_LANG_SYSTEM"),
+      Rule.contains("java.type(\"java.lang.system\"", "Access to JVM system APIs is forbidden", "SCRIPT_SECURITY_JAVA_LANG_SYSTEM"),
+      Rule.contains("java.type('java.lang.runtime'", "Access to java.lang.Runtime is forbidden", "SCRIPT_SECURITY_RUNTIME"),
+      Rule.contains("java.type(\"java.lang.runtime\"", "Access to java.lang.Runtime is forbidden", "SCRIPT_SECURITY_RUNTIME"),
+      Rule.contains("java.type('java.lang.processbuilder'", "Process execution via ProcessBuilder is forbidden", "SCRIPT_SECURITY_PROCESS_BUILDER"),
+      Rule.contains("java.type(\"java.lang.processbuilder\"", "Process execution via ProcessBuilder is forbidden", "SCRIPT_SECURITY_PROCESS_BUILDER"),
+      Rule.contains("java.type('java.net.", "Network access is forbidden", "SCRIPT_SECURITY_JAVA_NET"),
+      Rule.contains("java.type(\"java.net.", "Network access is forbidden", "SCRIPT_SECURITY_JAVA_NET"),
+      Rule.contains("java.type('java.io.", "File system access is forbidden", "SCRIPT_SECURITY_JAVA_IO"),
+      Rule.contains("java.type(\"java.io.", "File system access is forbidden", "SCRIPT_SECURITY_JAVA_IO"),
+      Rule.contains("java.type('java.nio.", "NIO access is forbidden", "SCRIPT_SECURITY_JAVA_NIO"),
+      Rule.contains("java.type(\"java.nio.", "NIO access is forbidden", "SCRIPT_SECURITY_JAVA_NIO"),
+
       // Environment and JVM/system access
       Rule.contains("system.getenv", "Access to environment variables is forbidden", "SCRIPT_SECURITY_SYSTEM_GETENV"),
       Rule.contains("system.getproperty", "Access to JVM system properties is forbidden", "SCRIPT_SECURITY_SYSTEM_GET_PROPERTY"),
@@ -52,20 +67,20 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
       Rule.contains("metaclass", "Groovy metaclass access is forbidden", "SCRIPT_SECURITY_GROOVY_METACLASS")
   );
 
-  @Override
-  public ScriptSecurityDecision evaluate(ScriptSecurityContext context) {
-    Objects.requireNonNull(context, "context must not be null");
+  private final List<Rule> denyRules;
+  private final Set<String> allowlistedProcessDefinitionKeys;
 
-    String normalizedSource = normalize(context.getSource());
-    if (normalizedSource.isEmpty()) {
-      return ScriptSecurityDecision.allow();
-    }
+  public DefaultScriptSecurityPolicy() {
+    this(RULES, Set.of());
+  }
 
-    return RULES.stream()
-        .map(rule -> rule.evaluate(normalizedSource))
-        .flatMap(Optional::stream)
-        .findFirst()
-        .orElseGet(ScriptSecurityDecision::allow);
+  public DefaultScriptSecurityPolicy(Set<String> allowlistedProcessDefinitionKeys) {
+    this(RULES, allowlistedProcessDefinitionKeys);
+  }
+
+  DefaultScriptSecurityPolicy(List<Rule> denyRules, Set<String> allowlistedProcessDefinitionKeys) {
+    this.denyRules = List.copyOf(Objects.requireNonNull(denyRules, "denyRules must not be null"));
+    this.allowlistedProcessDefinitionKeys = normalizeProcessDefinitionKeys(allowlistedProcessDefinitionKeys);
   }
 
   private static String normalize(String source) {
@@ -88,13 +103,61 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
     return normalized.toString();
   }
 
+  private static Set<String> normalizeProcessDefinitionKeys(Set<String> processDefinitionKeys) {
+    if (processDefinitionKeys == null || processDefinitionKeys.isEmpty()) {
+      return Set.of();
+    }
+
+    return processDefinitionKeys.stream()
+        .map(DefaultScriptSecurityPolicy::normalizeProcessDefinitionKey)
+        .filter(key -> !key.isBlank())
+        .collect(java.util.stream.Collectors.toUnmodifiableSet());
+  }
+
+  private static String normalizeProcessDefinitionKey(String processDefinitionKey) {
+    return Optional.ofNullable(processDefinitionKey)
+        .map(String::trim)
+        .map(value -> value.toLowerCase(Locale.ROOT))
+        .orElse("");
+  }
+
+  @Override
+  public ScriptSecurityDecision evaluate(ScriptSecurityContext context) {
+    Objects.requireNonNull(context, "context must not be null");
+
+    if (isAllowlistedProcess(context)) {
+      return ScriptSecurityDecision.allow();
+    }
+
+    String normalizedSource = normalize(context.getSource());
+    if (normalizedSource.isEmpty()) {
+      return ScriptSecurityDecision.allow();
+    }
+
+    return denyRules.stream()
+        .map(rule -> rule.evaluate(normalizedSource))
+        .flatMap(Optional::stream)
+        .findFirst()
+        .orElseGet(ScriptSecurityDecision::allow);
+  }
+
+  private boolean isAllowlistedProcess(ScriptSecurityContext context) {
+    return context.getProcessDefinitionKey()
+        .map(DefaultScriptSecurityPolicy::normalizeProcessDefinitionKey)
+        .filter(allowlistedProcessDefinitionKeys::contains)
+        .isPresent();
+  }
+
   private record Rule(String token, String reason, String code) {
 
+    private Rule {
+      token = stripWhitespace(Objects.requireNonNull(token, "token must not be null").toLowerCase(Locale.ROOT));
+      Objects.requireNonNull(reason, "reason must not be null");
+      Objects.requireNonNull(code, "code must not be null");
+    }
+
     private static Rule contains(String token, String reason, String code) {
-      return new Rule(
-          stripWhitespace(Objects.requireNonNull(token, "token must not be null").toLowerCase(Locale.ROOT)),
-          Objects.requireNonNull(reason, "reason must not be null"),
-          Objects.requireNonNull(code, "code must not be null"));
+      return new Rule(token, reason, code);
     }
 
     private Optional<ScriptSecurityDecision> evaluate(String normalizedSource) {
@@ -104,4 +167,5 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
       return Optional.empty();
     }
   }
+
 }

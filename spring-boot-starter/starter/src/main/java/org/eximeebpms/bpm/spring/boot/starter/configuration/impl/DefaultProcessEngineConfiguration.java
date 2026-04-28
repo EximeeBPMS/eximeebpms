@@ -19,6 +19,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
@@ -82,12 +83,18 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
 
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
-      .ifPresent(configuration::setDefaultNumberOfRetries);
+        .ifPresent(configuration::setDefaultNumberOfRetries);
   }
 
   private void setScriptSecurity(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getScriptSecurity())
-        .map(ScriptSecurityProperty::isEnabled)
-        .ifPresent(configuration::setScriptSecurityEnabled);
+        .ifPresent(scriptSecurity -> configureScriptSecurity(configuration, scriptSecurity));
+  }
+
+  private void configureScriptSecurity(SpringProcessEngineConfiguration configuration, ScriptSecurityProperty scriptSecurity) {
+    configuration.setScriptSecurityEnabled(scriptSecurity.isEnabled());
+    if (scriptSecurity.isEnabled()) {
+      configuration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy(scriptSecurity.getAllowlistedProcessDefinitionKeys()));
+    }
   }
 }

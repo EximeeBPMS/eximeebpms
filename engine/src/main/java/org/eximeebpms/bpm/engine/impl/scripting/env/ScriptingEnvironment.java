@@ -134,6 +134,11 @@ public class ScriptingEnvironment {
     }
 
     ScriptSecurityContext context = createSecurityContext(script, scope);
+
+    if (context.getSource() == null || context.getSource().isBlank()) {
+      return;
+    }
+
     ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(context);
     if (decision.isDenied()) {
       throw new ScriptSecurityException(
@@ -152,11 +157,12 @@ public class ScriptingEnvironment {
           .activityId(execution.getCurrentActivityId())
           .processDefinitionId(execution.getProcessDefinitionId());
     } else if (scope instanceof TaskEntity task) {
+      builder.processDefinitionId(task.getProcessDefinitionId());
+
       if (task.getExecution() != null) {
-        builder
-            .activityId(task.getExecution().getActivityId())
-            .processDefinitionId(task.getProcessDefinitionId());
+        builder.activityId(task.getExecution().getActivityId());
       }
+
       if (task.getCaseExecution() != null) {
         builder
             .activityId(task.getCaseExecution().getActivityId())

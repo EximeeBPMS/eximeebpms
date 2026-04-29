@@ -1075,6 +1075,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
    */
   protected boolean legacyJobRetryBehaviorEnabled = false;
 
+  protected Set<String> scriptSecurityAllowlistedProcessDefinitionKeys = Set.of();
+
   /**
    * @return {@code true} if the exception code feature is disabled and vice-versa.
    */
@@ -2624,7 +2626,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
 
     if (scriptSecurityPolicy == null) {
-      scriptSecurityPolicy = new DefaultScriptSecurityPolicy();
+      scriptSecurityPolicy = new DefaultScriptSecurityPolicy(scriptSecurityAllowlistedProcessDefinitionKeys);
     }
   }
 
@@ -4337,6 +4339,20 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (scriptingEnvironment != null) {
       scriptingEnvironment.setScriptSecurityPolicy(scriptSecurityPolicy);
     }
+    return this;
+  }
+
+  public Set<String> getScriptSecurityAllowlistedProcessDefinitionKeys() {
+    return scriptSecurityAllowlistedProcessDefinitionKeys;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityAllowlistedProcessDefinitionKeys(
+      Set<String> scriptSecurityAllowlistedProcessDefinitionKeys) {
+    this.scriptSecurityAllowlistedProcessDefinitionKeys =
+        scriptSecurityAllowlistedProcessDefinitionKeys != null
+            ? Set.copyOf(scriptSecurityAllowlistedProcessDefinitionKeys)
+            : Set.of();
+
     return this;
   }
 

@@ -5,7 +5,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
 
   private static final List<Rule> RULES = List.of(
@@ -126,19 +128,28 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
     Objects.requireNonNull(context, "context must not be null");
 
     if (isAllowlistedProcess(context)) {
+      logAllowlisted(context);
       return ScriptSecurityDecision.allow();
     }
 
     String normalizedSource = normalize(context.getSource());
     if (normalizedSource.isEmpty()) {
+      logAllowed(context);
       return ScriptSecurityDecision.allow();
     }
 
-    return denyRules.stream()
+    final ScriptSecurityDecision decision = denyRules.stream()
         .map(rule -> rule.evaluate(normalizedSource))
         .flatMap(Optional::stream)
         .findFirst()
         .orElseGet(ScriptSecurityDecision::allow);
+
+    if (decision.isAllowed()) {
+      logAllowed(context);
+    } else {
+      logDenied(context, decision);
+    }
+    return decision;
   }
 
   private boolean isAllowlistedProcess(ScriptSecurityContext context) {
@@ -172,4 +183,31 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
     }
   }
 
+  private void logAllowlisted(ScriptSecurityContext context) {
+    log.info(
+        "Script security policy skipped for allowlisted processDefinitionKey. sourceType={}, language={}, processDefinitionKey={}",
+        context.getSourceType(),
+        context.getLanguage(),
+        context.getProcessDefinitionKey());
+  }
+
+  private void logAllowed(ScriptSecurityContext context) {
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Script security policy allowed execution. sourceType={}, language={}, processDefinitionKey={}",
+          context.getSourceType(),
+          context.getLanguage(),
+          context.getProcessDefinitionKey().orElse(null));
+    }
+  }
+
+  private void logDenied(ScriptSecurityContext context, ScriptSecurityDecision decision) {
+    log.warn(
+        "Script security policy denied execution. sourceType={}, language={}, processDefinitionKey={}, ruleCode={}, reason={}",
+        context.getSourceType(),
+        context.getLanguage(),
+        context.getProcessDefinitionKey(),
+        decision.getCode(),
+        decision.getReason());
+  }
 }

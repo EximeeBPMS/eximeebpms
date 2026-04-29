@@ -43,9 +43,8 @@ public class ScriptingEnvironmentScriptSecurityTest {
 
     processEngineConfiguration.setScriptSecurityEnabled(true);
 
-    if (processEngineConfiguration.getScriptSecurityPolicy() == null) {
-      processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
-    }
+    ScriptSecurityPolicy testScriptSecurityPolicy = new DefaultScriptSecurityPolicy();
+    processEngineConfiguration.setScriptSecurityPolicy(testScriptSecurityPolicy);
 
     scriptingEngines = processEngineConfiguration.getScriptingEngines();
 
@@ -55,7 +54,7 @@ public class ScriptingEnvironmentScriptSecurityTest {
             ? processEngineConfiguration.getEnvScriptResolvers()
             : new ArrayList<>(),
         scriptingEngines,
-        processEngineConfiguration.getScriptSecurityPolicy());
+        testScriptSecurityPolicy);
 
     processEngineConfiguration.setScriptingEnvironment(scriptingEnvironment);
   }

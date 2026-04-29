@@ -348,8 +348,10 @@ import org.eximeebpms.bpm.engine.impl.scripting.engine.VariableScopeResolverFact
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAware;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityBpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.SecureJuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.DatabaseImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.InternalsImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.JdkImpl;
@@ -1144,13 +1146,13 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initCmmnHistoryEventProducer();
     initDmnHistoryEventProducer();
     initHistoryEventHandler();
+    initScriptSecurityPolicy();
     initExpressionManager();
     initBeans();
     initArtifactFactory();
     initFormEngines();
     initFormTypes();
     initFormFieldValidators();
-    initScriptSecurityPolicy();
     initScripting();
     initDmnEngine();
     initBusinessCalendarManager();
@@ -2648,6 +2650,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
     if (scriptingEnvironment == null) {
       scriptingEnvironment = new ScriptingEnvironment(scriptFactory, scriptEnvResolvers, scriptingEngines, scriptSecurityPolicy);
+    } else {
+      scriptingEnvironment.setScriptSecurityPolicy(scriptSecurityPolicy);
     }
   }
 
@@ -2682,9 +2686,10 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected void initExpressionManager() {
     if (expressionManager == null) {
-      expressionManager = new JuelExpressionManager(beans);
+      expressionManager = createDefaultExpressionManager();
     }
 
+    configureExpressionManagerScriptSecurity(expressionManager);
 
     expressionManager.addFunction(CommandContextFunctions.CURRENT_USER,
         ReflectUtil.getMethod(CommandContextFunctions.class, CommandContextFunctions.CURRENT_USER));
@@ -2695,6 +2700,20 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.NOW));
     expressionManager.addFunction(DateTimeFunctions.DATE_TIME,
         ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.DATE_TIME));
+  }
+
+  protected ExpressionManager createDefaultExpressionManager() {
+    if (isScriptSecurityEnabled()) {
+      return new SecureJuelExpressionManager(beans, scriptSecurityPolicy);
+    }
+
+    return new JuelExpressionManager(beans);
+  }
+
+  protected void configureExpressionManagerScriptSecurity(ExpressionManager expressionManager) {
+    if (isScriptSecurityEnabled() && expressionManager instanceof ScriptSecurityAware scriptSecurityAware) {
+      scriptSecurityAware.setScriptSecurityPolicy(scriptSecurityPolicy);
+    }
   }
 
   protected void initBusinessCalendarManager() {

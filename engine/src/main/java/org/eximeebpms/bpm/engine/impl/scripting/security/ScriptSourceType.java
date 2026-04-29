@@ -5,5 +5,5 @@ public enum ScriptSourceType {
   DYNAMIC_SOURCE,
   RESOURCE,
   DYNAMIC_RESOURCE,
-  UNKNOWN
+  EXPRESSION, UNKNOWN
 }

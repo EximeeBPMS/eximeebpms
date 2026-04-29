@@ -155,6 +155,25 @@ public class DefaultScriptSecurityPolicyTest {
     assertThat(decision.isAllowed()).isTrue();
   }
 
+  @Test
+  public void shouldDenyForbiddenScriptWhenAllowlistIsEmptyAndProcessDefinitionKeyIsPresent() {
+    // given
+    DefaultScriptSecurityPolicy policy = new DefaultScriptSecurityPolicy(Set.of());
+
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("System.getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .processDefinitionKey("anyProcess")
+        .build();
+
+    // when
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    // then
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
+  }
+
   protected ScriptSecurityContext context(String language, String source) {
     return ScriptSecurityContext.builder(language)
         .source(source)

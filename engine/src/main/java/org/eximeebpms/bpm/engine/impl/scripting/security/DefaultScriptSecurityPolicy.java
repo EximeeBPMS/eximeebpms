@@ -142,6 +142,10 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
   }
 
   private boolean isAllowlistedProcess(ScriptSecurityContext context) {
+    if (allowlistedProcessDefinitionKeys.isEmpty()) {
+      return false;
+    }
+
     return context.getProcessDefinitionKey()
         .map(DefaultScriptSecurityPolicy::normalizeProcessDefinitionKey)
         .filter(allowlistedProcessDefinitionKeys::contains)

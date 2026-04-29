@@ -2,9 +2,12 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.Map;
 import java.util.Objects;
+import lombok.Getter;
 import org.eximeebpms.bpm.engine.impl.el.Expression;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpressionManager;
+import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
 
+@Getter
 public class SecureJuelExpressionManager extends JuelExpressionManager implements ScriptSecurityAware {
 
   private ScriptSecurityPolicy scriptSecurityPolicy;
@@ -22,24 +25,8 @@ public class SecureJuelExpressionManager extends JuelExpressionManager implement
 
   @Override
   public Expression createExpression(String expression) {
-    enforceExpressionSecurity(expression);
-    return super.createExpression(expression);
-  }
-
-  private void enforceExpressionSecurity(String expression) {
-    if (scriptSecurityPolicy == null) {
-      return;
-    }
-
-    ScriptSecurityContext context = ScriptSecurityContext.builder("juel")
-        .source(expression)
-        .sourceType(ScriptSourceType.EXPRESSION)
-        .build();
-
-    ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(context);
-
-    if (decision.isDenied()) {
-      throw new ScriptSecurityException("Expression blocked by script security policy: " + decision.getReason().orElse("unknown"));
-    }
+    ensureInitialized();
+    ValueExpression valueExpression = createValueExpression(expression);
+    return new SecureJuelExpression(valueExpression, this, expression, this::getScriptSecurityPolicy);
   }
 }

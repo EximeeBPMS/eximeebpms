@@ -172,33 +172,33 @@ public class ScriptingEnvironment {
   }
 
   protected String resolveScriptSource(ExecutableScript script, VariableScope scope) {
-    if (script instanceof ResourceExecutableScript resourceExecutableScript) {
-      return resourceExecutableScript.getResolvedScriptSource();
-    }
-    if (script instanceof SourceExecutableScript sourceExecutableScript) {
-      return sourceExecutableScript.getScriptSource();
-    }
     if (script instanceof DynamicResourceExecutableScript dynamicResourceExecutableScript) {
       return dynamicResourceExecutableScript.getScriptSource(scope);
     }
     if (script instanceof DynamicSourceExecutableScript dynamicSourceExecutableScript) {
       return dynamicSourceExecutableScript.getScriptSource(scope);
     }
+    if (script instanceof ResourceExecutableScript resourceExecutableScript) {
+      return resourceExecutableScript.getResolvedScriptSource();
+    }
+    if (script instanceof SourceExecutableScript sourceExecutableScript) {
+      return sourceExecutableScript.getScriptSource();
+    }
     return "";
   }
 
   protected ScriptSourceType resolveSourceType(ExecutableScript script) {
-    if (script instanceof ResourceExecutableScript) {
-      return ScriptSourceType.RESOURCE;
-    }
-    if (script instanceof SourceExecutableScript) {
-      return ScriptSourceType.INLINE_SOURCE;
-    }
     if (script instanceof DynamicResourceExecutableScript) {
       return ScriptSourceType.DYNAMIC_RESOURCE;
     }
     if (script instanceof DynamicSourceExecutableScript) {
       return ScriptSourceType.DYNAMIC_SOURCE;
+    }
+    if (script instanceof ResourceExecutableScript) {
+      return ScriptSourceType.RESOURCE;
+    }
+    if (script instanceof SourceExecutableScript) {
+      return ScriptSourceType.INLINE_SOURCE;
     }
     return ScriptSourceType.UNKNOWN;
   }

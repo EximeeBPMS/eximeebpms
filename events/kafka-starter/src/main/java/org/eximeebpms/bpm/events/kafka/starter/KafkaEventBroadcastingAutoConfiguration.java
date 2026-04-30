@@ -1,7 +1,6 @@
 package org.eximeebpms.bpm.events.kafka.starter;
 
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.events.kafka.plugin.KafkaEventBroadcastingProcessEnginePlugin;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

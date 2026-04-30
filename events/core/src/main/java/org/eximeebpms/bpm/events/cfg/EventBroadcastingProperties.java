@@ -36,14 +36,6 @@ public class EventBroadcastingProperties {
   @Builder.Default
   boolean async = true;
 
-  /**
-   * Event type switches.
-   *
-   * <p>All event families are enabled by default once broadcasting itself is enabled.</p>
-   */
-  @Builder.Default
-  EventTypeProperties eventTypes = EventTypeProperties.defaults();
-
   public static EventBroadcastingProperties disabled() {
     return EventBroadcastingProperties.builder().enabled(false).build();
   }

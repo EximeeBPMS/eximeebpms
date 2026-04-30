@@ -3,7 +3,6 @@ package org.eximeebpms.bpm.events.kafka.starter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.events.kafka.plugin.KafkaEventBroadcastingProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;

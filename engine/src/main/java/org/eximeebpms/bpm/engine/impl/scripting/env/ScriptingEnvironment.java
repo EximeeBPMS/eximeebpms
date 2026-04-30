@@ -185,7 +185,7 @@ public class ScriptingEnvironment {
       return dynamicSourceExecutableScript.getScriptSource(scope);
     }
     if (script instanceof ResourceExecutableScript resourceExecutableScript) {
-      return resourceExecutableScript.getResolvedScriptSource();
+      return resourceExecutableScript.resolveScriptSource();
     }
     if (script instanceof SourceExecutableScript sourceExecutableScript) {
       return sourceExecutableScript.getScriptSource();

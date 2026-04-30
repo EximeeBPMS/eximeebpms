@@ -140,20 +140,47 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
    */
   protected void configureGraalJsScriptEngine(ScriptEngine scriptEngine) {
     ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
-    if (config != null) {
-      if (config.isConfigureScriptEngineHostAccess()) {
-        // make sure Graal JS can provide access to the host and can lookup classes
-        scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", true, ScriptContext.ENGINE_SCOPE);
-        scriptEngine.getContext().setAttribute("polyglot.js.allowHostClassLookup", true, ScriptContext.ENGINE_SCOPE);
-      }
-      if (config.isEnableScriptEngineLoadExternalResources()) {
-        // make sure Graal JS can load external scripts
-        scriptEngine.getContext().setAttribute("polyglot.js.allowIO", true, ScriptContext.ENGINE_SCOPE);
-      }
-      if (config.isEnableScriptEngineNashornCompatibility()) {
-        // enable Nashorn compatibility mode
-        scriptEngine.getContext().setAttribute("polyglot.js.nashorn-compat", true, ScriptContext.ENGINE_SCOPE);
-      }
+
+    if (config == null) {
+      return;
+    }
+
+    if (config.isScriptSecurityEnabled()) {
+      applyGraalJsSecureDefaults(scriptEngine);
+    }
+
+    applyGraalJsConfiguredFlags(scriptEngine, config);
+  }
+
+  /**
+   * Apply secure defaults for Graal JS.
+   */
+  protected void applyGraalJsSecureDefaults(ScriptEngine scriptEngine) {
+    // secure defaults
+    scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", false, ScriptContext.ENGINE_SCOPE);
+    scriptEngine.getContext().setAttribute("polyglot.js.allowHostClassLookup", false, ScriptContext.ENGINE_SCOPE);
+    scriptEngine.getContext().setAttribute("polyglot.js.allowIO", false, ScriptContext.ENGINE_SCOPE);
+  }
+
+  /**
+   * Applies configuration flags from process engine configuration.
+   */
+  protected void applyGraalJsConfiguredFlags(ScriptEngine scriptEngine, ProcessEngineConfigurationImpl config) {
+
+    if (config.isConfigureScriptEngineHostAccess()) {
+      // make sure Graal JS can provide access to the host and can lookup classes
+      scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", true, ScriptContext.ENGINE_SCOPE);
+      scriptEngine.getContext().setAttribute("polyglot.js.allowHostClassLookup", true, ScriptContext.ENGINE_SCOPE);
+    }
+
+    if (config.isEnableScriptEngineLoadExternalResources()) {
+      // make sure Graal JS can load external scripts
+      scriptEngine.getContext().setAttribute("polyglot.js.allowIO", true, ScriptContext.ENGINE_SCOPE);
+    }
+
+    if (config.isEnableScriptEngineNashornCompatibility()) {
+      // enable Nashorn compatibility mode
+      scriptEngine.getContext().setAttribute("polyglot.js.nashorn-compat", true, ScriptContext.ENGINE_SCOPE);
     }
   }
 

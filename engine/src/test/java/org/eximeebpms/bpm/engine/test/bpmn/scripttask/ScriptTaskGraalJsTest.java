@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-
 import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
@@ -40,21 +40,64 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
-import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
-
 @RunWith(Parameterized.class)
 public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
 
   private static final String GRAALJS = "graal.js";
-
+  @Parameter(0)
+  public boolean configureHostAccess;
+  @Parameter(1)
+  public boolean enableExternalResources;
+  @Parameter(2)
+  public boolean enableNashornCompat;
+  @Parameter(3)
+  public boolean scriptSecurityEnabled;
   protected ScriptEngineResolver defaultScriptEngineResolver;
   protected boolean spinEnabled = false;
+  protected boolean previousEnableScriptEngineLoadExternalResources;
+  protected boolean previousConfigureScriptEngineHostAccess;
+  protected boolean previousEnableScriptEngineNashornCompatibility;
+  protected boolean previousScriptSecurityEnabled;
+
+  @Parameters(name = "{index}: host={0}, io={1}, nashorn={2}, security={3}")
+  public static Collection<Object[]> setups() {
+    return Arrays.asList(new Object[][]{
+        {false, false, false, true},
+        {true, false, false, true},
+        {false, true, false, true},
+        {false, false, true, true},
+        {true, true, false, true},
+        {true, false, true, true},
+        {false, true, true, true},
+        {true, true, true, true},
+
+        // backward compatibility: script security disabled
+        {false, false, false, false},
+        {true, false, false, false},
+        {false, true, false, false},
+        {false, false, true, false},
+        {true, true, false, false},
+        {true, false, true, false},
+        {false, true, true, false},
+        {true, true, true, false},
+    });
+  }
 
   @Before
   public void setup() {
+    processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+
+    previousEnableScriptEngineLoadExternalResources =
+        processEngineConfiguration.isEnableScriptEngineLoadExternalResources();
+    previousConfigureScriptEngineHostAccess =
+        processEngineConfiguration.isConfigureScriptEngineHostAccess();
+    previousEnableScriptEngineNashornCompatibility =
+        processEngineConfiguration.isEnableScriptEngineNashornCompatibility();
+    previousScriptSecurityEnabled =
+        processEngineConfiguration.isScriptSecurityEnabled();
+
     spinEnabled = processEngineConfiguration.getEnvScriptResolvers().stream()
-                    .anyMatch(resolver -> resolver.getClass().getSimpleName().equals("SpinScriptEnvResolver"));
+        .anyMatch(resolver -> resolver.getClass().getSimpleName().equals("SpinScriptEnvResolver"));
     defaultScriptEngineResolver = processEngineConfiguration.getScriptEngineResolver();
     processEngineConfiguration.setConfigureScriptEngineHostAccess(configureHostAccess);
     processEngineConfiguration.setEnableScriptEngineLoadExternalResources(enableExternalResources);
@@ -62,38 +105,17 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
     // create custom script engine lookup to receive a fresh GraalVM JavaScript engine
     processEngineConfiguration.setScriptEngineResolver(new TestScriptEngineResolver(
         processEngineConfiguration.getScriptEngineResolver().getScriptEngineManager()));
+    processEngineConfiguration.setScriptSecurityEnabled(scriptSecurityEnabled);
   }
 
   @After
   public void resetConfiguration() {
-    processEngineConfiguration.setConfigureScriptEngineHostAccess(true);
-    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(false);
-    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(false);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(previousEnableScriptEngineLoadExternalResources);
+    processEngineConfiguration.setConfigureScriptEngineHostAccess(previousConfigureScriptEngineHostAccess);
+    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(previousEnableScriptEngineNashornCompatibility);
     processEngineConfiguration.setScriptEngineResolver(defaultScriptEngineResolver);
   }
-
-  @Parameters
-  public static Collection<Object[]> setups() {
-    return Arrays.asList(new Object[][] {
-      {false, false, false},
-      {true, false, false},
-      {false, true, false},
-      {false, false, true},
-      {true, true, false},
-      {true, false, true},
-      {false, true, true},
-      {true, true, true},
-    });
-  }
-
-  @Parameter(0)
-  public boolean configureHostAccess;
-
-  @Parameter(1)
-  public boolean enableExternalResources;
-
-  @Parameter(2)
-  public boolean enableNashornCompat;
 
   @Test
   public void testJavascriptProcessVarVisibility() {
@@ -220,7 +242,12 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
         "execution.setVariable('date', new java.util.Date(0));"
       + "execution.setVariable('myVar', new org.eximeebpms.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
-    if (enableNashornCompat || configureHostAccess) {
+    // GraalJS behavior summary:
+    // - load(...) requires IO (allowIO / enableExternalResources)
+    // - Nashorn compatibility allows load() without host access
+    // - When script security is enabled, IO is still required, but either
+    //   Nashorn compatibility OR host access is enough for execution
+    if (shouldExecuteExternalScript(configureHostAccess, enableExternalResources, enableNashornCompat, scriptSecurityEnabled)) {
       // WHEN
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -253,7 +280,11 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
         + "execution.setVariable('foo', sum(3, 4));"
       );
 
-      if (enableNashornCompat || (enableExternalResources && configureHostAccess)) {
+    boolean shouldExecuteSuccessfully = !scriptSecurityEnabled
+            ? enableNashornCompat || (enableExternalResources && configureHostAccess)
+            : enableExternalResources && (enableNashornCompat || configureHostAccess);
+
+    if (shouldExecuteSuccessfully) {
         // WHEN
         // we start an instance of this process
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
@@ -292,6 +323,19 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
       }
       return super.getScriptEngine(language);
     }
+  }
+
+  private boolean shouldExecuteExternalScript(
+      boolean configureHostAccess,
+      boolean enableExternalResources,
+      boolean enableNashornCompat,
+      boolean scriptSecurityEnabled) {
+
+    if (!scriptSecurityEnabled) {
+      return enableNashornCompat || (enableExternalResources && configureHostAccess);
+    }
+
+    return enableExternalResources && (enableNashornCompat || configureHostAccess);
   }
 
 }

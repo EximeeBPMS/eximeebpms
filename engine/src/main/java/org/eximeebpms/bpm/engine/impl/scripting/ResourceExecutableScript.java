@@ -56,11 +56,10 @@ public class ResourceExecutableScript extends SourceExecutableScript {
     }
   }
 
-  public String getResolvedScriptSource() {
-    if (getScriptSource() == null) {
+  public String resolveScriptSource() {
+    if (scriptSource == null) {
       loadScriptSource();
     }
     return getScriptSource();
   }
-
 }

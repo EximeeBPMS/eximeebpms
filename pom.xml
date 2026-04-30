@@ -115,6 +115,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>events</module>
       </modules>
     </profile>
 
@@ -182,6 +183,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>events</module>
       </modules>
     </profile>
 
@@ -241,6 +243,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>events</module>
       </modules>
     </profile>
 
@@ -302,6 +305,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>events</module>
       </modules>
     </profile>
 
@@ -359,6 +363,7 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+        <module>events</module>
       </modules>
     </profile>
 

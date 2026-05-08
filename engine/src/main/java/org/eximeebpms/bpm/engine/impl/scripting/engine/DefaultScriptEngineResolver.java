@@ -24,14 +24,18 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
+import lombok.Getter;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 
 public class DefaultScriptEngineResolver implements ScriptEngineResolver {
 
+  @Getter
   protected final ScriptEngineManager scriptEngineManager;
 
   protected Map<String, ScriptEngine> cachedEngines = new HashMap<>();
+  protected GroovySecureAstCustomizerFactory groovySecureAstCustomizerFactory = new GroovySecureAstCustomizerFactory();
+  protected SecureGroovyScriptEngineFactory secureGroovyScriptEngineFactory = new SecureGroovyScriptEngineFactory(groovySecureAstCustomizerFactory);
 
   public DefaultScriptEngineResolver(ScriptEngineManager scriptEngineManager) {
     this.scriptEngineManager = scriptEngineManager;
@@ -41,10 +45,6 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
     scriptEngineManager.registerEngineName(scriptEngineFactory.getEngineName(), scriptEngineFactory);
   }
 
-  public ScriptEngineManager getScriptEngineManager() {
-    return scriptEngineManager;
-  }
-
   /**
    * Returns a cached script engine or creates a new script engine if no such engine is currently cached.
    *
@@ -52,32 +52,30 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
    * @return the cached engine or null if no script engine can be created for the given language
    */
   public ScriptEngine getScriptEngine(String language, boolean resolveFromCache) {
+    if (!resolveFromCache) {
+      return getScriptEngine(language);
+    }
 
-    ScriptEngine scriptEngine = null;
+    String cacheKey = getScriptEngineCacheKey(language);
+    ScriptEngine scriptEngine = cachedEngines.get(cacheKey);
 
-    if (resolveFromCache) {
-      scriptEngine = cachedEngines.get(language);
-
-      if (scriptEngine == null) {
-        scriptEngine = getScriptEngine(language);
-
-        if (scriptEngine != null && isCachable(scriptEngine)) {
-          cachedEngines.put(language, scriptEngine);
-        }
-      }
-
-    } else {
+    if (scriptEngine == null) {
       scriptEngine = getScriptEngine(language);
+
+      if (scriptEngine != null && isCachable(scriptEngine)) {
+        cachedEngines.put(cacheKey, scriptEngine);
+      }
     }
 
     return scriptEngine;
   }
 
   protected ScriptEngine getScriptEngine(String language) {
-    ScriptEngine scriptEngine = null;
-    if (ScriptingEngines.JAVASCRIPT_SCRIPTING_LANGUAGE.equalsIgnoreCase(language) ||
-        ScriptingEngines.ECMASCRIPT_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)) {
+    ScriptEngine scriptEngine;
+    if (isJavaScriptLanguage(language)) {
       scriptEngine = getJavaScriptScriptEngine(language);
+    } else if (isSecureGroovyScriptEngineRequired(language)) {
+      scriptEngine = secureGroovyScriptEngineFactory.createScriptEngine();
     } else {
       scriptEngine = scriptEngineManager.getEngineByName(language);
     }
@@ -86,6 +84,30 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
       configureScriptEngines(language, scriptEngine);
     }
     return scriptEngine;
+  }
+
+  protected String getScriptEngineCacheKey(String language) {
+    ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
+
+    if (config == null) {
+      return language;
+    }
+
+    return String.join(
+        ":",
+        language,
+        String.valueOf(config.isScriptSecurityEnabled()),
+        String.valueOf(config.isConfigureScriptEngineHostAccess()),
+        String.valueOf(config.isEnableScriptEngineLoadExternalResources()),
+        String.valueOf(config.isEnableScriptEngineNashornCompatibility())
+    );
+  }
+
+  protected boolean isJavaScriptLanguage(String language) {
+    return ScriptingEngines.JAVASCRIPT_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)
+        || ScriptingEngines.ECMASCRIPT_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)
+        || ScriptingEngines.NASHORN_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)
+        || ScriptingEngines.GRAAL_JS_SCRIPT_ENGINE_NAME.equalsIgnoreCase(language);
   }
 
   protected ScriptEngine getJavaScriptScriptEngine(String language) {
@@ -116,12 +138,12 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
   }
 
   protected void configureScriptEngines(String language, ScriptEngine scriptEngine) {
-    if (ScriptingEngines.GROOVY_SCRIPTING_LANGUAGE.equals(language)) {
+    if (ScriptingEngines.GROOVY_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)) {
       configureGroovyScriptEngine(scriptEngine);
     }
 
-    if (ScriptingEngines.GRAAL_JS_SCRIPT_ENGINE_NAME.equals(scriptEngine.getFactory().getEngineName())) {
-      configureGraalJsScriptEngine(scriptEngine);
+    if (ScriptingEngines.GRAAL_JS_SCRIPT_ENGINE_NAME.equalsIgnoreCase(scriptEngine.getFactory().getEngineName())) {
+      configureGraalJsScriptEngine(language, scriptEngine);
     }
   }
 
@@ -138,7 +160,7 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
    * Allows providing custom configuration for the Graal JS script engine.
    * @param scriptEngine the Graal JS script engine to configure.
    */
-  protected void configureGraalJsScriptEngine(ScriptEngine scriptEngine) {
+  protected void configureGraalJsScriptEngine(String language, ScriptEngine scriptEngine) {
     ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
 
     if (config == null) {
@@ -147,9 +169,29 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
 
     if (config.isScriptSecurityEnabled()) {
       applyGraalJsSecureDefaults(scriptEngine);
+      applyGraalJsSecureCompatibilityFlags(scriptEngine, config);
+      return;
+    }
+
+    if (ScriptingEngines.NASHORN_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)) {
+      configureNashornCompatibility(scriptEngine);
+      return;
     }
 
     applyGraalJsConfiguredFlags(scriptEngine, config);
+  }
+
+  protected void applyGraalJsSecureCompatibilityFlags(
+      ScriptEngine scriptEngine,
+      ProcessEngineConfigurationImpl config) {
+
+    if (config.isConfigureScriptEngineHostAccess()) {
+      scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", true, ScriptContext.ENGINE_SCOPE);
+    }
+
+    if (config.isEnableScriptEngineNashornCompatibility()) {
+      scriptEngine.getContext().setAttribute("polyglot.js.nashorn-compat", true, ScriptContext.ENGINE_SCOPE);
+    }
   }
 
   /**
@@ -184,4 +226,17 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
     }
   }
 
+  protected boolean isSecureGroovyScriptEngineRequired(String language) {
+    final ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
+    return ScriptingEngines.GROOVY_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)
+        && config != null
+        && config.isScriptSecurityEnabled();
+  }
+
+  protected void configureNashornCompatibility(ScriptEngine scriptEngine) {
+    scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", true, ScriptContext.ENGINE_SCOPE);
+    scriptEngine.getContext().setAttribute("polyglot.js.allowHostClassLookup", true, ScriptContext.ENGINE_SCOPE);
+    scriptEngine.getContext().setAttribute("polyglot.js.allowIO", true, ScriptContext.ENGINE_SCOPE);
+    scriptEngine.getContext().setAttribute("polyglot.js.nashorn-compat", true, ScriptContext.ENGINE_SCOPE);
+  }
 }

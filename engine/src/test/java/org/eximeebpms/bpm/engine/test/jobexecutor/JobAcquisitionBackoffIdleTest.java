@@ -33,6 +33,7 @@ import org.eximeebpms.bpm.engine.test.jobexecutor.RecordingAcquireJobsRunnable.R
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -48,6 +49,7 @@ public class JobAcquisitionBackoffIdleTest {
 
   protected ControllableJobExecutor jobExecutor;
   protected ThreadControl acquisitionThread;
+  protected boolean previousScriptSecurityEnabled;
 
   protected ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(configuration -> {
     jobExecutor = new ControllableJobExecutor(true);
@@ -62,10 +64,17 @@ public class JobAcquisitionBackoffIdleTest {
   @Rule
   public RuleChain ruleChain = RuleChain.outerRule(bootstrapRule).around(engineRule);
 
+  @Before
+  public void setUp() {
+    previousScriptSecurityEnabled = engineRule.getProcessEngineConfiguration().isScriptSecurityEnabled();
+    engineRule.getProcessEngineConfiguration().setScriptSecurityEnabled(false);
+  }
+
   @After
   public void shutdownJobExecutor() {
     ClockUtil.reset();
     jobExecutor.shutdown();
+    engineRule.getProcessEngineConfiguration().setScriptSecurityEnabled(previousScriptSecurityEnabled);
   }
 
   /**

@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.test.standalone.scripting;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.ArrayList;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
@@ -13,7 +14,9 @@ import org.eximeebpms.bpm.engine.impl.scripting.ExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.ResourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
@@ -40,6 +43,9 @@ public class ScriptingEnvironmentResourceScriptSecurityTest {
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected ScriptingEnvironment scriptingEnvironment;
   protected ScriptingEngines scriptingEngines;
+  protected boolean previousScriptSecurityEnabled;
+  protected ScriptSecurityPolicy previousScriptSecurityPolicy;
+  protected ScriptingEnvironment previousScriptingEnvironment;
 
   protected String deploymentId;
   protected String executionId;
@@ -47,8 +53,27 @@ public class ScriptingEnvironmentResourceScriptSecurityTest {
   @Before
   public void setUp() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    scriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
+
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
+    previousScriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
+
+    processEngineConfiguration.setScriptSecurityEnabled(true);
+
+    ScriptSecurityPolicy testScriptSecurityPolicy = new DefaultScriptSecurityPolicy();
+    processEngineConfiguration.setScriptSecurityPolicy(testScriptSecurityPolicy);
+
     scriptingEngines = processEngineConfiguration.getScriptingEngines();
+
+    scriptingEnvironment = new ScriptingEnvironment(
+        processEngineConfiguration.getScriptFactory(),
+        processEngineConfiguration.getEnvScriptResolvers() != null
+            ? processEngineConfiguration.getEnvScriptResolvers()
+            : new ArrayList<>(),
+        scriptingEngines,
+        testScriptSecurityPolicy);
+
+    processEngineConfiguration.setScriptingEnvironment(scriptingEnvironment);
 
     Deployment deployment = engineRule.getRepositoryService()
         .createDeployment()
@@ -74,7 +99,12 @@ public class ScriptingEnvironmentResourceScriptSecurityTest {
   public void tearDown() {
     if (deploymentId != null) {
       engineRule.getRepositoryService().deleteDeployment(deploymentId, true);
+      deploymentId = null;
     }
+
+    processEngineConfiguration.setScriptingEnvironment(previousScriptingEnvironment);
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
   }
 
   @Test

@@ -21,11 +21,29 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.util.Date;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ScriptTaskNashornTest extends AbstractScriptTaskTest {
 
   private static final String NASHORN = "nashorn";
+
+  protected boolean previousScriptSecurityEnabled;
+
+  @Before
+  public void setUp() {
+    processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    processEngineConfiguration.setScriptSecurityEnabled(false);
+  }
+
+  @After
+  public void tearDown() {
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    super.tearDown();
+  }
 
   @Test
   public void testJavascriptProcessVarVisibility() {

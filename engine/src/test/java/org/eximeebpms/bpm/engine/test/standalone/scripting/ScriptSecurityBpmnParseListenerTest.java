@@ -4,10 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -15,6 +20,27 @@ public class ScriptSecurityBpmnParseListenerTest {
 
   @Rule
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
+
+  protected ProcessEngineConfigurationImpl processEngineConfiguration;
+  protected boolean previousScriptSecurityEnabled;
+  protected ScriptSecurityPolicy previousScriptSecurityPolicy;
+
+  @Before
+  public void enableScriptSecurity() {
+    processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
+
+    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
+  }
+
+  @After
+  public void resetScriptSecurity() {
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+  }
 
   @Test
   public void shouldBlockDeploymentOfProcessWithForbiddenScriptTask() {

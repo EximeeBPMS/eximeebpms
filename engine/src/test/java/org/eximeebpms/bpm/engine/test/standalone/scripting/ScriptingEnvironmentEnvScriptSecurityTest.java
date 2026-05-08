@@ -4,10 +4,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ScriptingEnvironmentEnvScriptSecurityTest extends AbstractScriptEnvironmentTest {
+
+  protected boolean previousScriptSecurityEnabled;
+  protected ScriptSecurityPolicy previousScriptSecurityPolicy;
 
   @Override
   protected ScriptEnvResolver getResolver() {
@@ -17,6 +24,21 @@ public class ScriptingEnvironmentEnvScriptSecurityTest extends AbstractScriptEnv
   @Override
   protected String getScript() {
     return "1 + 1;";
+  }
+
+  @Before
+  public void enableScriptSecurity() {
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
+
+    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
+  }
+
+  @After
+  public void resetScriptSecurity() {
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
   }
 
   @Test

@@ -11,9 +11,12 @@ import org.eximeebpms.bpm.engine.impl.el.FixedValue;
 import org.eximeebpms.bpm.engine.impl.scripting.DynamicSourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,12 +29,27 @@ public class ScriptingEnvironmentDynamicSourceScriptSecurityTest {
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected ScriptingEnvironment scriptingEnvironment;
   protected ScriptingEngines scriptingEngines;
+  protected boolean previousScriptSecurityEnabled;
+  protected ScriptSecurityPolicy previousScriptSecurityPolicy;
 
   @Before
   public void setUp() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
+
+    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
+
     scriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
     scriptingEngines = processEngineConfiguration.getScriptingEngines();
+  }
+
+  @After
+  public void tearDown() {
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
   }
 
   @Test

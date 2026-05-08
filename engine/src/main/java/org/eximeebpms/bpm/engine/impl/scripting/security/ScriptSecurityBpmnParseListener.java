@@ -1,8 +1,9 @@
 package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.Objects;
-import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.variable.mapping.IoMapping;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -116,15 +117,23 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
 
   @Override
   public void parseSequenceFlow(Element sequenceFlowElement, ScopeImpl scope, TransitionImpl transition) {
-    final Element conditionExpression = sequenceFlowElement.element(BpmnModelConstants.BPMN_ELEMENT_CONDITION_EXPRESSION);
-    if (conditionExpression == null || !isScriptConditionExpression(conditionExpression)) {
+    Element conditionExpression = sequenceFlowElement.element(BpmnModelConstants.BPMN_ELEMENT_CONDITION_EXPRESSION);
+
+    if (conditionExpression == null) {
+      return;
+    }
+
+    String language = resolveConditionExpressionLanguage(conditionExpression);
+
+    if (language == null || language.isBlank()) {
       return;
     }
 
     validateDeploymentScript(
-        conditionExpression.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_LANGUAGE),
+        language,
         conditionExpression.getText(),
-        sequenceFlowElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_ID),
+        ScriptSourceType.EXPRESSION,
+        resolveTransitionId(sequenceFlowElement, transition),
         resolveProcessKey(scope),
         resolveProcessName(scope));
   }
@@ -140,9 +149,12 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
     validateScriptParameters(inputOutputElement, BpmnModelConstants.CAMUNDA_ELEMENT_OUTPUT_PARAMETER, activity);
   }
 
-  protected boolean isScriptConditionExpression(Element conditionExpression) {
-    final String language = conditionExpression.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_LANGUAGE);
-    return language != null && !language.isBlank();
+  protected String resolveTransitionId(Element sequenceFlowElement, TransitionImpl transition) {
+    if (transition != null && transition.getId() != null) {
+      return transition.getId();
+    }
+
+    return sequenceFlowElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_ID);
   }
 
   protected void validateExtensionListenerScripts(
@@ -172,9 +184,22 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   }
 
   protected Element resolveExtensionElements(Element element) {
-    return element != null
-        ? element.element(BpmnModelConstants.BPMN_ELEMENT_EXTENSION_ELEMENTS)
-        : null;
+    if (element == null) {
+      return null;
+    }
+
+    Element extensionElements = element.element(BpmnModelConstants.BPMN_ELEMENT_EXTENSION_ELEMENTS);
+    if (extensionElements != null) {
+      return extensionElements;
+    }
+
+    for (Element childElement : element.elements()) {
+      if (isTargetElement(childElement, BpmnModelConstants.BPMN_ELEMENT_EXTENSION_ELEMENTS)) {
+        return childElement;
+      }
+    }
+
+    return null;
   }
 
   protected Element resolveInputOutputElement(Element extensionElements) {
@@ -214,32 +239,50 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
   }
 
   protected void validateScriptParameters(Element inputOutputElement, String parameterElementName, ActivityImpl activity) {
+    String activityId = resolveActivityId(activity);
+    String processKey = resolveProcessKey(activity != null ? activity.getProcessDefinition() : null);
+    String processName = resolveProcessName(activity != null ? activity.getProcessDefinition() : null);
+
     for (Element parameterElement : inputOutputElement.elements()) {
-      if (isTargetElement(parameterElement, parameterElementName)) {
-        final Element scriptElement = findScriptElement(parameterElement);
-        if (scriptElement != null) {
-          validateDeploymentScript(
-              scriptElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT),
-              scriptElement.getText(),
-              resolveActivityId(activity),
-              resolveProcessKey(activity != null ? activity.getProcessDefinition() : null),
-              resolveProcessName(activity != null ? activity.getProcessDefinition() : null));
-        }
+      if (!isTargetElement(parameterElement, parameterElementName)) {
+        continue;
       }
+
+      Element scriptElement = findScriptElement(parameterElement);
+      if (scriptElement == null) {
+        continue;
+      }
+
+      validateDeploymentScript(
+          scriptElement.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT),
+          scriptElement.getText(),
+          activityId,
+          processKey,
+          processName);
     }
   }
 
   protected boolean isTargetElement(Element element, String expectedElementName) {
-    return expectedElementName.equals(element.getTagName());
+    if (element == null || expectedElementName == null) {
+      return false;
+    }
+
+    String tagName = element.getTagName();
+    return expectedElementName.equals(tagName) || tagName.endsWith(":" + expectedElementName);
   }
 
   protected Element findScriptElement(Element parentElement) {
+    if (parentElement == null) {
+      return null;
+    }
+
     for (Element childElement : parentElement.elements()) {
-      if (BpmnModelConstants.BPMN_ELEMENT_SCRIPT.equals(childElement.getTagName())
-          || BpmnModelConstants.CAMUNDA_ELEMENT_SCRIPT.equals(childElement.getTagName())) {
+      if (isTargetElement(childElement, BpmnModelConstants.BPMN_ELEMENT_SCRIPT)
+          || isTargetElement(childElement, BpmnModelConstants.CAMUNDA_ELEMENT_SCRIPT)) {
         return childElement;
       }
     }
+
     return null;
   }
 
@@ -250,33 +293,78 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
       String processDefinitionKey,
       String processDefinitionName) {
 
-    if (source == null || source.isBlank()) {
+    validateDeploymentScript(
+        language,
+        source,
+        ScriptSourceType.INLINE_SOURCE,
+        activityId,
+        processDefinitionKey,
+        processDefinitionName);
+  }
+
+  protected void validateDeploymentScript(
+      String language,
+      String source,
+      ScriptSourceType sourceType,
+      String activityId,
+      String processDefinitionKey,
+      String processDefinitionName) {
+
+    ScriptSecurityPolicy policy = resolveScriptSecurityPolicy();
+
+    if (policy == null || source == null || source.isBlank()) {
       return;
     }
 
-    final ScriptSecurityContext context = ScriptSecurityContext.builder(resolveLanguage(language))
+    ScriptSecurityContext context = ScriptSecurityContext.builder(resolveLanguage(language))
         .source(source)
-        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .sourceType(sourceType)
         .activityId(activityId)
         .processDefinitionKey(processDefinitionKey)
         .processDefinitionName(processDefinitionName)
         .build();
 
-    final ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(context);
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
     if (decision.isDenied()) {
-      throw new ProcessEngineException(buildDeploymentExceptionMessage(context, decision));
+      throw new ScriptSecurityException(
+          buildDeploymentSecurityExceptionMessage(activityId, processDefinitionKey, decision),
+          decision.getCode().orElse(null));
     }
   }
 
-  protected String resolveLanguage(String language) {
-    return language != null && !language.isBlank()
-        ? language
-        : UNSPECIFIED_LANGUAGE;
+  protected ScriptSecurityPolicy resolveScriptSecurityPolicy() {
+    ProcessEngineConfigurationImpl configuration = Context.getProcessEngineConfiguration();
+
+    if (configuration == null) {
+      return scriptSecurityPolicy;
+    }
+
+    if (!configuration.isScriptSecurityEnabled()) {
+      return null;
+    }
+
+    if (configuration.getScriptSecurityPolicy() != null) {
+      return configuration.getScriptSecurityPolicy();
+    }
+
+    return scriptSecurityPolicy;
   }
 
-  protected String resolveScriptSource(Element scriptTaskElement) {
-    final Element scriptElement = scriptTaskElement.element(BpmnModelConstants.BPMN_ELEMENT_SCRIPT);
-    return scriptElement != null ? scriptElement.getText() : "";
+  protected String resolveLanguage(String language) {
+    return language == null || language.isBlank()
+        ? UNSPECIFIED_LANGUAGE
+        : language;
+  }
+
+  protected String resolveScriptSource(Element element) {
+    Element scriptElement = element.element(BpmnModelConstants.BPMN_ELEMENT_SCRIPT);
+
+    if (scriptElement == null) {
+      return null;
+    }
+
+    return scriptElement.getText();
   }
 
   protected String resolveActivityId(Element activityElement, ActivityImpl activity) {
@@ -351,32 +439,32 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
     return null;
   }
 
-  protected String buildDeploymentExceptionMessage(ScriptSecurityContext context, ScriptSecurityDecision decision) {
-    final StringBuilder message = new StringBuilder("Process deployment blocked by script security policy");
+  protected String resolveConditionExpressionLanguage(Element conditionExpression) {
+    String language = conditionExpression.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_LANGUAGE);
 
-    context.getProcessDefinitionKey().ifPresent(processDefinitionKey -> message
-        .append(" for process '")
-        .append(processDefinitionKey)
-        .append("'"));
+    if (language != null && !language.isBlank()) {
+      return language;
+    }
 
-    context.getProcessDefinitionName()
-        .filter(name -> !name.isBlank())
-        .ifPresent(name -> message
-            .append(" (name='")
-            .append(name)
-            .append("')"));
+    return conditionExpression.attribute(BpmnModelConstants.BPMN_ATTRIBUTE_SCRIPT_FORMAT);
+  }
 
-    context.getActivityId()
-        .filter(activityId -> !activityId.isBlank())
-        .ifPresent(activityId -> message
-            .append(" at activity '")
-            .append(activityId)
-            .append("'"));
+  protected String buildDeploymentSecurityExceptionMessage(
+      String activityId,
+      String processDefinitionKey,
+      ScriptSecurityDecision decision) {
 
-    decision.getReason()
-        .ifPresent(reason -> message
-            .append(": ")
-            .append(reason));
+    StringBuilder message = new StringBuilder("Process deployment blocked by script security policy");
+
+    decision.getReason().ifPresent(reason -> message.append(": ").append(reason));
+
+    if (activityId != null && !activityId.isBlank()) {
+      message.append(" while parsing activity '").append(activityId).append("'");
+    }
+
+    if (processDefinitionKey != null && !processDefinitionKey.isBlank()) {
+      message.append(" in process definition '").append(processDefinitionKey).append("'");
+    }
 
     return message.toString();
   }

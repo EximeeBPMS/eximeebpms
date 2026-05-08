@@ -4336,9 +4336,13 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public ProcessEngineConfigurationImpl setScriptSecurityPolicy(ScriptSecurityPolicy scriptSecurityPolicy) {
     this.scriptSecurityPolicy = scriptSecurityPolicy;
+
     if (scriptingEnvironment != null) {
       scriptingEnvironment.setScriptSecurityPolicy(scriptSecurityPolicy);
     }
+
+    configureExpressionManagerScriptSecurity(expressionManager);
+
     return this;
   }
 

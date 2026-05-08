@@ -2,12 +2,19 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.Objects;
 import java.util.Optional;
+import lombok.Getter;
 
 public final class ScriptSecurityContext {
 
+  @Getter
   private final String language;
+  @Getter
   private final String source;
+  @Getter
   private final ScriptSourceType sourceType;
+  @Getter
+  private final ScriptOrigin origin;
+  private final String provider;
   private final String activityId;
   private final String processDefinitionId;
   private final String processDefinitionKey;
@@ -18,6 +25,8 @@ public final class ScriptSecurityContext {
     this.language = requireNonBlank(builder.language, "language");
     this.source = normalize(builder.source).orElse("");
     this.sourceType = Objects.requireNonNullElse(builder.sourceType, ScriptSourceType.UNKNOWN);
+    this.origin = Objects.requireNonNullElse(builder.origin, ScriptOrigin.USER);
+    this.provider = normalize(builder.provider).orElse(null);
     this.activityId = normalize(builder.activityId).orElse(null);
     this.processDefinitionId = normalize(builder.processDefinitionId).orElse(null);
     this.processDefinitionKey = normalize(builder.processDefinitionKey).orElse(null);
@@ -29,16 +38,8 @@ public final class ScriptSecurityContext {
     return new Builder(language);
   }
 
-  public String getLanguage() {
-    return language;
-  }
-
-  public String getSource() {
-    return source;
-  }
-
-  public ScriptSourceType getSourceType() {
-    return sourceType;
+  public Optional<String> getProvider() {
+    return Optional.ofNullable(provider);
   }
 
   public Optional<String> getActivityId() {
@@ -62,7 +63,19 @@ public final class ScriptSecurityContext {
   }
 
   public boolean hasSource() {
-    return !source.isBlank();
+    return source != null && !source.isBlank();
+  }
+
+  public boolean isPlatformOrigin() {
+    return origin == ScriptOrigin.PLATFORM;
+  }
+
+  public boolean isProcessApplicationOrigin() {
+    return origin == ScriptOrigin.PROCESS_APPLICATION;
+  }
+
+  public boolean isUserOrigin() {
+    return origin == ScriptOrigin.USER;
   }
 
   private static String requireNonBlank(String value, String fieldName) {
@@ -81,6 +94,8 @@ public final class ScriptSecurityContext {
     return "ScriptSecurityContext{"
         + "language='" + language + '\''
         + ", sourceType=" + sourceType
+        + ", origin=" + origin
+        + ", provider=" + provider
         + ", activityId=" + activityId
         + ", processDefinitionKey=" + processDefinitionKey
         + ", caseDefinitionId=" + caseDefinitionId
@@ -94,6 +109,8 @@ public final class ScriptSecurityContext {
     private final String language;
     private String source;
     private ScriptSourceType sourceType;
+    private ScriptOrigin origin;
+    private String provider;
     private String activityId;
     private String processDefinitionId;
     private String processDefinitionKey;
@@ -111,6 +128,16 @@ public final class ScriptSecurityContext {
 
     public Builder sourceType(ScriptSourceType sourceType) {
       this.sourceType = sourceType;
+      return this;
+    }
+
+    public Builder origin(ScriptOrigin origin) {
+      this.origin = origin;
+      return this;
+    }
+
+    public Builder provider(String provider) {
+      this.provider = provider;
       return this;
     }
 

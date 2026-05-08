@@ -12,5 +12,4 @@ public class ScriptSecurityAwareExpressionManager extends JuelExpressionManager 
   public void setScriptSecurityPolicy(ScriptSecurityPolicy scriptSecurityPolicy) {
     this.scriptSecurityPolicy = scriptSecurityPolicy;
   }
-
 }

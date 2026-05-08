@@ -16,7 +16,8 @@
  */
 package org.eximeebpms.spin.plugin.impl;
 
-import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
+import org.eximeebpms.bpm.engine.impl.scripting.env.ResolvedScriptEnvScript;
+import org.eximeebpms.bpm.engine.impl.scripting.env.TrustedScriptEnvResolver;
 import org.eximeebpms.spin.scripting.SpinScriptEnv;
 
 /**
@@ -25,14 +26,32 @@ import org.eximeebpms.spin.scripting.SpinScriptEnv;
  * @author Daniel Meyer
  *
  */
-public class SpinScriptEnvResolver implements ScriptEnvResolver {
+public class SpinScriptEnvResolver implements TrustedScriptEnvResolver {
 
-  public String[] resolve(String language) {
+  protected static final String PROVIDER = SpinScriptEnvResolver.class.getName();
+
+  @Override
+  public ResolvedScriptEnvScript[] resolveTrusted(String language) {
+    String[] scripts = resolveSpinScripts(language);
+
+    if (scripts == null) {
+      return null;
+    }
+
+    ResolvedScriptEnvScript[] resolvedScripts = new ResolvedScriptEnvScript[scripts.length];
+
+    for (int i = 0; i < scripts.length; i++) {
+      resolvedScripts[i] = ResolvedScriptEnvScript.platform(scripts[i], PROVIDER);
+    }
+
+    return resolvedScripts;
+  }
+
+  public String[] resolveSpinScripts(String language) {
     String envScript = SpinScriptEnv.get(language);
-    if(envScript != null) {
+    if (envScript != null) {
       return new String[] { envScript };
     }
     return null;
   }
-
 }

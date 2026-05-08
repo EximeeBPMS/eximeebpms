@@ -17,11 +17,12 @@
 package org.eximeebpms.bpm.engine.impl.scripting.env;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
+import lombok.Setter;
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
@@ -40,6 +41,8 @@ import org.eximeebpms.bpm.engine.impl.scripting.ResourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.ScriptFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.SourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptOrigin;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityDecision;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
@@ -60,9 +63,13 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 public class ScriptingEnvironment {
 
   /**
-   * the cached environment scripts per script language
+   * The cached platform environment scripts per script language.
+   *
+   * Process-application environment scripts are intentionally not stored here.
+   * They remain stored in AbstractProcessApplication#getEnvironmentScripts()
+   * as Map<String, List<ExecutableScript>> to preserve the existing public contract.
    */
-  protected Map<String, List<ExecutableScript>> env = new HashMap<>();
+  protected Map<String, List<ResolvedExecutableEnvScript>> env = new ConcurrentHashMap<>();
 
   /**
    * the resolvers
@@ -82,7 +89,15 @@ public class ScriptingEnvironment {
   /**
    * the script security policy
    */
+  @Setter
   protected ScriptSecurityPolicy scriptSecurityPolicy;
+
+  public ScriptingEnvironment(
+      ScriptFactory scriptFactory,
+      List<ScriptEnvResolver> scriptEnvResolvers,
+      ScriptingEngines scriptingEngines) {
+    this(scriptFactory, scriptEnvResolvers, scriptingEngines, null);
+  }
 
   public ScriptingEnvironment(
       ScriptFactory scriptFactory,
@@ -103,43 +118,54 @@ public class ScriptingEnvironment {
    * @return the result of the script evaluation
    */
   public Object execute(ExecutableScript script, VariableScope scope) {
-
     ScriptEngine scriptEngine = scriptingEngines.getScriptEngineForLanguage(script.getLanguage());
     Bindings bindings = scriptingEngines.createBindings(scriptEngine, scope);
-
     return execute(script, scope, bindings, scriptEngine);
   }
 
   public Object execute(ExecutableScript script, VariableScope scope, Bindings bindings, ScriptEngine scriptEngine) {
+    List<ResolvedExecutableEnvScript> envScripts = getEnvScripts(script, scriptEngine);
 
-    List<ExecutableScript> envScripts = getEnvScripts(script, scriptEngine);
     // first, evaluate the env scripts (if any)
-    for (ExecutableScript envScript : envScripts) {
-      enforceScriptSecurity(envScript, scope);
-      envScript.execute(scriptEngine, scope, bindings);
+    for (ResolvedExecutableEnvScript envScript : envScripts) {
+      enforceScriptSecurity(
+          envScript.executableScript(),
+          scope,
+          envScript.origin(),
+          envScript.provider());
+
+      envScript.executableScript().execute(scriptEngine, scope, bindings);
     }
 
-    enforceScriptSecurity(script, scope);
+    enforceScriptSecurity(script, scope, ScriptOrigin.USER, null);
+
     // next evaluate the actual script
     return script.execute(scriptEngine, scope, bindings);
   }
 
-  public void setScriptSecurityPolicy(ScriptSecurityPolicy scriptSecurityPolicy) {
-    this.scriptSecurityPolicy = scriptSecurityPolicy;
+  protected void enforceScriptSecurity(ExecutableScript script, VariableScope scope) {
+    enforceScriptSecurity(script, scope, ScriptOrigin.USER, null);
   }
 
-  protected void enforceScriptSecurity(ExecutableScript script, VariableScope scope) {
-    if (scriptSecurityPolicy == null) {
+  protected void enforceScriptSecurity(
+      ExecutableScript script,
+      VariableScope scope,
+      ScriptOrigin origin,
+      String provider) {
+    ScriptSecurityPolicy policy = resolveScriptSecurityPolicy();
+
+    if (policy == null) {
       return;
     }
 
-    ScriptSecurityContext context = createSecurityContext(script, scope);
+    ScriptSecurityContext context = createSecurityContext(script, scope, origin, provider);
+    String source = context.getSource();
 
-    if (context.getSource() == null || context.getSource().isBlank()) {
+    if (source == null || source.isBlank()) {
       return;
     }
 
-    ScriptSecurityDecision decision = scriptSecurityPolicy.evaluate(context);
+    ScriptSecurityDecision decision = policy.evaluate(context);
     if (decision.isDenied()) {
       throw new ScriptSecurityException(
           buildSecurityExceptionMessage(scope, decision),
@@ -147,17 +173,53 @@ public class ScriptingEnvironment {
     }
   }
 
-  protected ScriptSecurityContext createSecurityContext(ExecutableScript script, VariableScope scope) {
+  protected ScriptSecurityPolicy resolveScriptSecurityPolicy() {
+    ProcessEngineConfigurationImpl configuration = Context.getProcessEngineConfiguration();
+
+    if (configuration == null) {
+      return scriptSecurityPolicy;
+    }
+
+    if (!configuration.isScriptSecurityEnabled()) {
+      return null;
+    }
+
+    if (configuration.getScriptSecurityPolicy() != null) {
+      return configuration.getScriptSecurityPolicy();
+    }
+
+    if (scriptSecurityPolicy != null) {
+      return scriptSecurityPolicy;
+    }
+
+    return new DefaultScriptSecurityPolicy();
+  }
+
+  protected ScriptSecurityContext createSecurityContext(
+      ExecutableScript script,
+      VariableScope scope,
+      ScriptOrigin origin,
+      String provider) {
+
     ScriptSecurityContext.Builder builder = ScriptSecurityContext.builder(script.getLanguage())
         .source(resolveScriptSource(script, scope))
-        .sourceType(resolveSourceType(script));
+        .sourceType(resolveSourceType(script))
+        .origin(origin)
+        .provider(provider);
 
     if (scope instanceof DelegateExecution execution) {
+      final String processDefinitionId = execution.getProcessDefinitionId();
+
       builder
           .activityId(execution.getCurrentActivityId())
-          .processDefinitionId(execution.getProcessDefinitionId());
+          .processDefinitionId(processDefinitionId)
+          .processDefinitionKey(extractProcessDefinitionKey(processDefinitionId));
     } else if (scope instanceof TaskEntity task) {
-      builder.processDefinitionId(task.getProcessDefinitionId());
+      final String processDefinitionId = task.getProcessDefinitionId();
+
+      builder
+          .processDefinitionId(processDefinitionId)
+          .processDefinitionKey(extractProcessDefinitionKey(processDefinitionId));
 
       if (task.getExecution() != null) {
         builder.activityId(task.getExecution().getActivityId());
@@ -177,20 +239,35 @@ public class ScriptingEnvironment {
     return builder.build();
   }
 
+  protected String extractProcessDefinitionKey(String processDefinitionId) {
+    if (processDefinitionId == null) {
+      return null;
+    }
+
+    int separatorIndex = processDefinitionId.indexOf(':');
+    return separatorIndex < 0
+        ? processDefinitionId
+        : processDefinitionId.substring(0, separatorIndex);
+  }
+
   protected String resolveScriptSource(ExecutableScript script, VariableScope scope) {
     if (script instanceof DynamicResourceExecutableScript dynamicResourceExecutableScript) {
       return dynamicResourceExecutableScript.getScriptSource(scope);
     }
+
     if (script instanceof DynamicSourceExecutableScript dynamicSourceExecutableScript) {
       return dynamicSourceExecutableScript.getScriptSource(scope);
     }
+
     if (script instanceof ResourceExecutableScript resourceExecutableScript) {
       return resourceExecutableScript.resolveScriptSource();
     }
+
     if (script instanceof SourceExecutableScript sourceExecutableScript) {
       return sourceExecutableScript.getScriptSource();
     }
-    return "";
+
+    return null;
   }
 
   protected ScriptSourceType resolveSourceType(ExecutableScript script) {
@@ -246,18 +323,76 @@ public class ScriptingEnvironment {
     return " while executing activity '" + activityId + "'" + definitionIdMessage;
   }
 
-  protected Map<String, List<ExecutableScript>> getEnv(String language) {
+  protected List<ResolvedExecutableEnvScript> getEnvScripts(
+      ExecutableScript script,
+      ScriptEngine scriptEngine) {
+
+    List<ResolvedExecutableEnvScript> envScripts = getEnvScripts(script.getLanguage().toLowerCase());
+
+    if (envScripts.isEmpty()) {
+      envScripts = getEnvScripts(scriptEngine.getFactory().getLanguageName().toLowerCase());
+    }
+
+    return envScripts;
+  }
+
+  /**
+   * Returns the env scripts for the given language. Performs lazy initialization of the env scripts.
+   *
+   * Process application scripts keep the original PA cache contract:
+   * Map<String, List<ExecutableScript>>.
+   *
+   * Platform scripts use the resolved cache:
+   * Map<String, List<ResolvedExecutableEnvScript>>.
+   *
+   * @param scriptLanguage the language
+   * @return a list of executable environment scripts. Never null.
+   */
+  protected List<ResolvedExecutableEnvScript> getEnvScripts(String scriptLanguage) {
     ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
     ProcessApplicationReference processApplication = Context.getCurrentProcessApplication();
 
-    Map<String, List<ExecutableScript>> result = null;
-    if (config.isEnableFetchScriptEngineFromProcessApplication()) {
-      if (processApplication != null) {
-        result = getPaEnvScripts(processApplication);
+    if (config.isEnableFetchScriptEngineFromProcessApplication() && processApplication != null) {
+      Map<String, List<ExecutableScript>> processApplicationEnv = getPaEnvScripts(processApplication);
+
+      if (processApplicationEnv != null) {
+        return getProcessApplicationEnvScripts(processApplicationEnv, scriptLanguage);
       }
     }
 
-    return result != null ? result : env;
+    return getPlatformEnvScripts(scriptLanguage);
+  }
+
+  protected List<ResolvedExecutableEnvScript> getProcessApplicationEnvScripts(
+      Map<String, List<ExecutableScript>> environment,
+      String scriptLanguage) {
+
+    List<ExecutableScript> envScripts = environment.computeIfAbsent(
+        scriptLanguage,
+        this::initProcessApplicationEnvScriptsForLanguage);
+
+    return wrapEnvScripts(
+        envScripts,
+        ScriptOrigin.PROCESS_APPLICATION,
+        AbstractProcessApplication.class.getName());
+  }
+
+  protected List<ResolvedExecutableEnvScript> getPlatformEnvScripts(String scriptLanguage) {
+    return env.computeIfAbsent(scriptLanguage, this::initPlatformEnvScriptsForLanguage);
+  }
+
+  protected List<ResolvedExecutableEnvScript> wrapEnvScripts(
+      List<ExecutableScript> envScripts,
+      ScriptOrigin origin,
+      String provider) {
+
+    List<ResolvedExecutableEnvScript> resolvedScripts = new ArrayList<>();
+
+    for (ExecutableScript envScript : envScripts) {
+      resolvedScripts.add(new ResolvedExecutableEnvScript(envScript, origin, provider));
+    }
+
+    return resolvedScripts;
   }
 
   protected Map<String, List<ExecutableScript>> getPaEnvScripts(ProcessApplicationReference pa) {
@@ -274,45 +409,12 @@ public class ScriptingEnvironment {
     }
   }
 
-  protected List<ExecutableScript> getEnvScripts(ExecutableScript script, ScriptEngine scriptEngine) {
-    List<ExecutableScript> envScripts = getEnvScripts(script.getLanguage().toLowerCase());
-    if (envScripts.isEmpty()) {
-      envScripts = getEnvScripts(scriptEngine.getFactory().getLanguageName().toLowerCase());
-    }
-    return envScripts;
-  }
-
-  /**
-   * Returns the env scripts for the given language. Performs lazy initialization of the env scripts.
-   *
-   * @param scriptLanguage the language
-   * @return a list of executable environment scripts. Never null.
-   */
-  protected List<ExecutableScript> getEnvScripts(String scriptLanguage) {
-    Map<String, List<ExecutableScript>> environment = getEnv(scriptLanguage);
-    List<ExecutableScript> envScripts = environment.get(scriptLanguage);
-    if (envScripts == null) {
-      synchronized (this) {
-        envScripts = environment.get(scriptLanguage);
-        if (envScripts == null) {
-          envScripts = initEnvForLanguage(scriptLanguage);
-          environment.put(scriptLanguage, envScripts);
-        }
-      }
-    }
-    return envScripts;
-  }
-
-  /**
-   * Initializes the env scripts for a given language.
-   *
-   * @param language the language
-   * @return the list of env scripts. Never null.
-   */
-  protected List<ExecutableScript> initEnvForLanguage(String language) {
+  protected List<ExecutableScript> initProcessApplicationEnvScriptsForLanguage(String language) {
     List<ExecutableScript> scripts = new ArrayList<>();
+
     for (ScriptEnvResolver resolver : envResolvers) {
       String[] resolvedScripts = resolver.resolve(language);
+
       if (resolvedScripts != null) {
         for (String resolvedScript : resolvedScripts) {
           scripts.add(scriptFactory.createScriptFromSource(language, resolvedScript));
@@ -323,4 +425,37 @@ public class ScriptingEnvironment {
     return scripts;
   }
 
+  protected List<ResolvedExecutableEnvScript> initPlatformEnvScriptsForLanguage(String language) {
+    List<ResolvedExecutableEnvScript> scripts = new ArrayList<>();
+
+    for (ScriptEnvResolver resolver : envResolvers) {
+      if (resolver instanceof TrustedScriptEnvResolver trustedResolver) {
+        ResolvedScriptEnvScript[] resolvedScripts = trustedResolver.resolveTrusted(language);
+
+        if (resolvedScripts != null) {
+          for (ResolvedScriptEnvScript resolvedScript : resolvedScripts) {
+            scripts.add(new ResolvedExecutableEnvScript(
+                scriptFactory.createScriptFromSource(language, resolvedScript.getSource()),
+                resolvedScript.getOrigin(),
+                resolvedScript.getProvider()));
+          }
+        }
+
+        continue;
+      }
+
+      String[] resolvedScripts = resolver.resolve(language);
+
+      if (resolvedScripts != null) {
+        for (String resolvedScript : resolvedScripts) {
+          scripts.add(new ResolvedExecutableEnvScript(
+              scriptFactory.createScriptFromSource(language, resolvedScript),
+              ScriptOrigin.USER,
+              resolver.getClass().getName()));
+        }
+      }
+    }
+
+    return scripts;
+  }
 }

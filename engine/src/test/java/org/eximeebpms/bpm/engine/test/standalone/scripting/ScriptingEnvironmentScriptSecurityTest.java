@@ -61,9 +61,9 @@ public class ScriptingEnvironmentScriptSecurityTest {
 
   @After
   public void tearDown() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
-    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
     processEngineConfiguration.setScriptingEnvironment(previousScriptingEnvironment);
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
   }
 
   @Test

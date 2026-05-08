@@ -17,13 +17,10 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldAllowSafeScript() {
-    // given
     ScriptSecurityContext context = context("javascript", "1 + 1;");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isAllowed()).isTrue();
     assertThat(decision.getReason()).isEmpty();
     assertThat(decision.getCode()).isEmpty();
@@ -31,13 +28,10 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldBlockSystemGetenvAccess() {
-    // given
     ScriptSecurityContext context = context("javascript", "System.getenv('HOME');");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Access to environment variables is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
@@ -45,13 +39,10 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldBlockProcessBuilderAccess() {
-    // given
     ScriptSecurityContext context = context("groovy", "new ProcessBuilder('sh', '-c', 'id').start();");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Process execution via ProcessBuilder is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_PROCESS_BUILDER");
@@ -59,13 +50,10 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldBlockRuntimeAccess() {
-    // given
     ScriptSecurityContext context = context("groovy", "Runtime.getRuntime().exec('id');");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Runtime process execution is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_RUNTIME_EXEC");
@@ -73,26 +61,20 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldBlockWhitespaceObfuscatedSystemGetenvAccess() {
-    // given
     ScriptSecurityContext context = context("javascript", "System   .   getenv ( 'HOME' ) ;");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
   }
 
   @Test
   public void shouldBlockJavaNetAccess() {
-    // given
     ScriptSecurityContext context = context("groovy", "new java.net.Socket('127.0.0.1', 443);");
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Network access is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_NET");
@@ -100,7 +82,6 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldAllowForbiddenScriptForAllowlistedProcessDefinitionKey() {
-    // given
     policy = new DefaultScriptSecurityPolicy(Set.of("legacyInvoiceProcess"));
 
     ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
@@ -109,10 +90,8 @@ public class DefaultScriptSecurityPolicyTest {
         .processDefinitionKey("legacyInvoiceProcess")
         .build();
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isAllowed()).isTrue();
     assertThat(decision.getReason()).isEmpty();
     assertThat(decision.getCode()).isEmpty();
@@ -120,7 +99,6 @@ public class DefaultScriptSecurityPolicyTest {
 
   @Test
   public void shouldDenyForbiddenScriptForNonAllowlistedProcessDefinitionKey() {
-    // given
     policy = new DefaultScriptSecurityPolicy(Set.of("legacyInvoiceProcess"));
 
     ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
@@ -129,17 +107,14 @@ public class DefaultScriptSecurityPolicyTest {
         .processDefinitionKey("newSecureProcess")
         .build();
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
   }
 
   @Test
   public void shouldMatchAllowlistedProcessDefinitionKeyIgnoringCaseAndWhitespace() {
-    // given
     policy = new DefaultScriptSecurityPolicy(Set.of(" legacyInvoiceProcess "));
 
     ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
@@ -148,16 +123,13 @@ public class DefaultScriptSecurityPolicyTest {
         .processDefinitionKey("LEGACYinvoicePROCESS")
         .build();
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isAllowed()).isTrue();
   }
 
   @Test
   public void shouldDenyForbiddenScriptWhenAllowlistIsEmptyAndProcessDefinitionKeyIsPresent() {
-    // given
     DefaultScriptSecurityPolicy policy = new DefaultScriptSecurityPolicy(Set.of());
 
     ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
@@ -166,12 +138,153 @@ public class DefaultScriptSecurityPolicyTest {
         .processDefinitionKey("anyProcess")
         .build();
 
-    // when
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    // then
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
+  }
+
+  @Test
+  public void shouldAllowSpinFunctionCall() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("execution.setVariable('name', S('<test />').name());")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isAllowed()).isTrue();
+  }
+
+  @Test
+  public void shouldBlockGenericJavaTypeLookupForUserScript() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('org.eximeebpms.spin.Spin');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.USER)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
+  }
+
+  @Test
+  public void shouldBlockDangerousJavaTypeForUserScript() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('java.lang.System').getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.USER)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_LANG_SYSTEM");
+  }
+
+  @Test
+  public void shouldAllowPlatformEnvironmentScriptWithSpinJavaType() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('org.eximeebpms.spin.Spin');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.PLATFORM)
+        .provider("platform-environment")
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isAllowed()).isTrue();
+  }
+
+  @Test
+  public void shouldBlockPackagesHostClassLookupEvenForPlatformScript() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Packages.org.eximeebpms.spin.Spin;")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.PLATFORM)
+        .provider("platform-environment")
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
+  }
+
+  @Test
+  public void shouldBlockDangerousJavaTypeForPlatformScript() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('java.lang.System').getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.PLATFORM)
+        .provider("platform-environment")
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_LANG_SYSTEM");
+  }
+
+  @Test
+  public void shouldBlockUserPackagesHostClassLookup() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Packages.org.eximeebpms.spin.Spin;")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.USER)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
+  }
+
+  @Test
+  public void shouldBlockPackagesJavaNetAccess() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Packages.java.net.Socket;")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.USER)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getReason()).contains("Network access is forbidden");
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_NET");
+  }
+
+  @Test
+  public void shouldBlockJavaTypeLookupForProcessApplicationScript() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('org.eximeebpms.spin.Spin');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.PROCESS_APPLICATION)
+        .provider("process-application")
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
+  }
+
+  @Test
+  public void shouldBlockGenericJavaTypeLookupForPlatformScriptWhenClassIsNotAllowlisted() {
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('com.example.SomeClass');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.PLATFORM)
+        .provider("platform-environment")
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isDenied()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
   }
 
   protected ScriptSecurityContext context(String language, String source) {

@@ -683,7 +683,7 @@ public class ClientIT {
       clientRule.waitForFetchAndLockUntil(recordingExternalTaskHandler::isFailed);
 
       // then
-      assertThat(recordingExternalTaskHandler.getException().getType()).isEqualTo("ScriptEvaluationException");
+      assertThat(recordingExternalTaskHandler.getException().getType()).isIn("ScriptEvaluationException", "ScriptSecurityException");
     } finally {
       if (client != null) {
         client.stop();

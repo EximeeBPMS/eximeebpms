@@ -16,7 +16,7 @@
     Assembles the EximeeBPMS and makes it ready for qa.
     The assembly is installed to maven later in the reactor, if the integration tests pass successfully.
   </description>
-  
+
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
     Note: Every compile time dependency will end up in the license book. Please
@@ -36,7 +36,7 @@
       <groupId>org.eximeebpms.bpm.javaee</groupId>
       <artifactId>eximeebpms-ejb-client-jakarta</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine</artifactId>
@@ -51,12 +51,12 @@
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-cdi-jakarta</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-spring-6</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine-rest-jakarta</artifactId>

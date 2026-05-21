@@ -21,14 +21,18 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.delegate.BpmnError;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 
+@Setter
+@Getter
 public class CompiledExecutableScript extends ExecutableScript {
 
-  private final static ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
+  private static final ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
 
   protected CompiledScript compiledScript;
 
@@ -38,14 +42,6 @@ public class CompiledExecutableScript extends ExecutableScript {
 
   protected CompiledExecutableScript(String language, CompiledScript compiledScript) {
     super(language);
-    this.compiledScript = compiledScript;
-  }
-
-  public CompiledScript getCompiledScript() {
-    return compiledScript;
-  }
-
-  public void setCompiledScript(CompiledScript compiledScript) {
     this.compiledScript = compiledScript;
   }
 

@@ -32,6 +32,8 @@ import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.repository.ProcessApplicationDeployment;
 import org.eximeebpms.bpm.engine.test.util.PluggableProcessEngineTest;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -42,6 +44,19 @@ public class ScriptEngineCachingTest extends PluggableProcessEngineTest {
 
   protected static final String PROCESS_PATH = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
   protected static final String SCRIPT_LANGUAGE = "groovy";
+
+  protected boolean previousScriptSecurityEnabled;
+
+  @Before
+  public void saveScriptSecurityConfiguration() {
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    processEngineConfiguration.setScriptSecurityEnabled(false);
+  }
+
+  @After
+  public void restoreScriptSecurityConfiguration() {
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+  }
 
   @Test
   public void testGlobalCachingOfScriptEngine() {
@@ -98,24 +113,25 @@ public class ScriptEngineCachingTest extends PluggableProcessEngineTest {
 
   @Test
   public void testFetchScriptEngineFromPaEnableCaching() {
-    // then
+    // given
+    processEngineConfiguration.setScriptSecurityEnabled(false);
+
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
 
     ProcessApplicationDeployment deployment = repositoryService.createDeployment(processApplication.getReference())
         .addClasspathResource(PROCESS_PATH)
         .deploy();
 
-    // when
-    ScriptEngine engine = getScriptEngineFromPa(SCRIPT_LANGUAGE, processApplication);
+    try {
+      // when
+      ScriptEngine engine = getScriptEngineFromPa(SCRIPT_LANGUAGE, processApplication);
 
-    // then
-    assertNotNull(engine);
-    assertEquals(engine, getScriptEngineFromPa(SCRIPT_LANGUAGE, processApplication));
-
-    // cached in pa
-    assertEquals(engine, processApplication.getScriptEngineForName(SCRIPT_LANGUAGE, true));
-
-    repositoryService.deleteDeployment(deployment.getId(), true);
+      // then
+      assertNotNull(engine);
+      assertEquals(engine, getScriptEngineFromPa(SCRIPT_LANGUAGE, processApplication));
+    } finally {
+      repositoryService.deleteDeployment(deployment.getId(), true);
+    }
   }
 
   @Test
@@ -187,17 +203,11 @@ public class ScriptEngineCachingTest extends PluggableProcessEngineTest {
   }
 
   protected ScriptEngine getScriptEngineFromPa(final String name, final ProcessApplicationInterface processApplication) {
-    return processEngineConfiguration.getCommandExecutorTxRequired()
-      .execute(new Command<ScriptEngine>() {
-        public ScriptEngine execute(CommandContext commandContext) {
-          return Context.executeWithinProcessApplication(new Callable<ScriptEngine>() {
+    final ScriptingEngines scriptingEngines = getScriptingEngines();
 
-            public ScriptEngine call() throws Exception {
-              return getScriptEngine(name);
-            }
-          }, processApplication.getReference());
-        }
-      });
+    return processEngineConfiguration.getCommandExecutorTxRequired()
+        .execute(commandContext ->
+            Context.executeWithinProcessApplication(() -> scriptingEngines.getScriptEngineForLanguage(name), processApplication.getReference()));
   }
 
 }

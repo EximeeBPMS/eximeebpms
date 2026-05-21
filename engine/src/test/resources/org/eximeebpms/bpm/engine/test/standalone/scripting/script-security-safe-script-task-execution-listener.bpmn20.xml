@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" targetNamespace="Examples">
+  <process id="safeScriptTaskExecutionListenerSecurityProcess" isExecutable="true">
+    <startEvent id="start" />
+    <sequenceFlow id="flow1" sourceRef="start" targetRef="safeScriptTaskWithExecutionListener" />
+    <scriptTask id="safeScriptTaskWithExecutionListener" scriptFormat="javascript">
+      <extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="javascript">1 + 1;</camunda:script>
+        </camunda:executionListener>
+      </extensionElements>
+      <script>1 + 1;</script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="safeScriptTaskWithExecutionListener" targetRef="end" />
+    <endEvent id="end" />
+  </process>
+</definitions>

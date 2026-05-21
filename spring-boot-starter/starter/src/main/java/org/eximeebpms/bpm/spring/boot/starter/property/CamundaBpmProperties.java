@@ -159,6 +159,9 @@ public class CamundaBpmProperties {
   @NestedConfigurationProperty
   private FilterProperty filter = new FilterProperty();
 
+  @NestedConfigurationProperty
+  private ScriptSecurityProperty scriptSecurity = new ScriptSecurityProperty();
+
   public String getProcessEngineName() {
     return processEngineName;
   }
@@ -343,6 +346,14 @@ public class CamundaBpmProperties {
     this.generateUniqueProcessApplicationName = generateUniqueProcessApplicationName;
   }
 
+  public ScriptSecurityProperty getScriptSecurity() {
+    return scriptSecurity;
+  }
+
+  public void setScriptSecurity(ScriptSecurityProperty scriptSecurity) {
+    this.scriptSecurity = scriptSecurity;
+  }
+
   @Override
   public String toString() {
     return joinOn(this.getClass())
@@ -367,7 +378,8 @@ public class CamundaBpmProperties {
       .add("filter=" + filter)
       .add("idGenerator=" + idGenerator)
       .add("jobExecutorAcquireByPriority=" + jobExecutorAcquireByPriority)
-      .add("defaultNumberOfRetries" + defaultNumberOfRetries)
+      .add("defaultNumberOfRetries=" + defaultNumberOfRetries)
+      .add("scriptSecurity=" + scriptSecurity)
       .toString();
   }
 

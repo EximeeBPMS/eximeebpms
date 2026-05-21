@@ -347,6 +347,11 @@ import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAware;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityBpmnParseListener;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.SecureJuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.DatabaseImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.InternalsImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.JdkImpl;
@@ -599,6 +604,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<ScriptEnvResolver> scriptEnvResolvers;
   protected ScriptFactory scriptFactory;
   protected ScriptEngineResolver scriptEngineResolver;
+  protected boolean scriptSecurityEnabled = true;
+  protected ScriptSecurityPolicy scriptSecurityPolicy;
   protected String scriptEngineNameJavaScript;
   protected boolean autoStoreScriptVariables = false;
   protected boolean enableScriptCompilation = true;
@@ -1068,6 +1075,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
    */
   protected boolean legacyJobRetryBehaviorEnabled = false;
 
+  protected Set<String> scriptSecurityAllowlistedProcessDefinitionKeys = Set.of();
+
   /**
    * @return {@code true} if the exception code feature is disabled and vice-versa.
    */
@@ -1139,6 +1148,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initCmmnHistoryEventProducer();
     initDmnHistoryEventProducer();
     initHistoryEventHandler();
+    initScriptSecurityPolicy();
     initExpressionManager();
     initBeans();
     initArtifactFactory();
@@ -2201,6 +2211,11 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
+
+    if (isScriptSecurityEnabled()) {
+      defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
+    }
+
     if (!HistoryLevel.HISTORY_LEVEL_NONE.equals(historyLevel)) {
       defaultListeners.add(new HistoryParseListener(historyEventProducer));
     }
@@ -2603,6 +2618,18 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   }
 
+  protected void initScriptSecurityPolicy() {
+    if (!isScriptSecurityEnabled()) {
+      LOG.logScriptValidationDisabled();
+      scriptSecurityPolicy = null;
+      return;
+    }
+
+    if (scriptSecurityPolicy == null) {
+      scriptSecurityPolicy = new DefaultScriptSecurityPolicy(scriptSecurityAllowlistedProcessDefinitionKeys);
+    }
+  }
+
   protected void initScripting() {
     if (resolverFactories == null) {
       resolverFactories = new ArrayList<>();
@@ -2624,7 +2651,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       scriptEnvResolvers = new ArrayList<>();
     }
     if (scriptingEnvironment == null) {
-      scriptingEnvironment = new ScriptingEnvironment(scriptFactory, scriptEnvResolvers, scriptingEngines);
+      scriptingEnvironment = new ScriptingEnvironment(scriptFactory, scriptEnvResolvers, scriptingEngines, scriptSecurityPolicy);
+    } else {
+      scriptingEnvironment.setScriptSecurityPolicy(scriptSecurityPolicy);
     }
   }
 
@@ -2659,9 +2688,10 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected void initExpressionManager() {
     if (expressionManager == null) {
-      expressionManager = new JuelExpressionManager(beans);
+      expressionManager = createDefaultExpressionManager();
     }
 
+    configureExpressionManagerScriptSecurity(expressionManager);
 
     expressionManager.addFunction(CommandContextFunctions.CURRENT_USER,
         ReflectUtil.getMethod(CommandContextFunctions.class, CommandContextFunctions.CURRENT_USER));
@@ -2672,6 +2702,20 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.NOW));
     expressionManager.addFunction(DateTimeFunctions.DATE_TIME,
         ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.DATE_TIME));
+  }
+
+  protected ExpressionManager createDefaultExpressionManager() {
+    if (isScriptSecurityEnabled()) {
+      return new SecureJuelExpressionManager(beans, scriptSecurityPolicy);
+    }
+
+    return new JuelExpressionManager(beans);
+  }
+
+  protected void configureExpressionManagerScriptSecurity(ExpressionManager expressionManager) {
+    if (isScriptSecurityEnabled() && expressionManager instanceof ScriptSecurityAware scriptSecurityAware) {
+      scriptSecurityAware.setScriptSecurityPolicy(scriptSecurityPolicy);
+    }
   }
 
   protected void initBusinessCalendarManager() {
@@ -4274,6 +4318,45 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (scriptingEngines != null) {
       scriptingEngines.setScriptEngineResolver(scriptEngineResolver);
     }
+    return this;
+  }
+
+  public boolean isScriptSecurityEnabled() {
+    return scriptSecurityEnabled;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityEnabled(boolean scriptSecurityEnabled) {
+    this.scriptSecurityEnabled = scriptSecurityEnabled;
+    return this;
+  }
+
+  public ScriptSecurityPolicy getScriptSecurityPolicy() {
+    return scriptSecurityPolicy;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityPolicy(ScriptSecurityPolicy scriptSecurityPolicy) {
+    this.scriptSecurityPolicy = scriptSecurityPolicy;
+
+    if (scriptingEnvironment != null) {
+      scriptingEnvironment.setScriptSecurityPolicy(scriptSecurityPolicy);
+    }
+
+    configureExpressionManagerScriptSecurity(expressionManager);
+
+    return this;
+  }
+
+  public Set<String> getScriptSecurityAllowlistedProcessDefinitionKeys() {
+    return scriptSecurityAllowlistedProcessDefinitionKeys;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptSecurityAllowlistedProcessDefinitionKeys(
+      Set<String> scriptSecurityAllowlistedProcessDefinitionKeys) {
+    this.scriptSecurityAllowlistedProcessDefinitionKeys =
+        scriptSecurityAllowlistedProcessDefinitionKeys != null
+            ? Set.copyOf(scriptSecurityAllowlistedProcessDefinitionKeys)
+            : Set.of();
+
     return this;
   }
 

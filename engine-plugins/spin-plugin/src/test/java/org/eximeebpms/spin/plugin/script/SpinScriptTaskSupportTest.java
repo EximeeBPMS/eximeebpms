@@ -20,11 +20,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +43,12 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class SpinScriptTaskSupportTest {
+
+  private ProcessEngineConfigurationImpl processEngineConfiguration;
+  private boolean previousScriptSecurityEnabled;
+  private ScriptSecurityPolicy previousScriptSecurityPolicy;
+  private ScriptingEnvironment previousScriptingEnvironment;
+  private boolean previousConfigureScriptEngineHostAccess;
 
   @Rule
   public ProcessEngineRule engineRule = new ProcessEngineRule();
@@ -67,6 +77,23 @@ public class SpinScriptTaskSupportTest {
   public void setUp() {
     this.runtimeService = engineRule.getRuntimeService();
     this.repositoryService = engineRule.getRepositoryService();
+
+    this.processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+    this.previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    this.previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
+    this.previousScriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
+    this.previousConfigureScriptEngineHostAccess = processEngineConfiguration.isConfigureScriptEngineHostAccess();
+
+    processEngineConfiguration.setScriptSecurityEnabled(false);
+    processEngineConfiguration.setConfigureScriptEngineHostAccess(true);
+  }
+
+  @After
+  public void tearDown() {
+    processEngineConfiguration.setScriptingEnvironment(previousScriptingEnvironment);
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setConfigureScriptEngineHostAccess(previousConfigureScriptEngineHostAccess);
   }
 
   @Test

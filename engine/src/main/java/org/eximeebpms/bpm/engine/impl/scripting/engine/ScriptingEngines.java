@@ -23,6 +23,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
+import lombok.Getter;
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
@@ -55,13 +56,20 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
   public static final String GROOVY_SCRIPTING_LANGUAGE = "groovy";
   public static final String JAVASCRIPT_SCRIPTING_LANGUAGE = "javascript";
   public static final String ECMASCRIPT_SCRIPTING_LANGUAGE = "ecmascript";
+  public static final String NASHORN_SCRIPTING_LANGUAGE = "nashorn";
 
   public static final String GRAAL_JS_SCRIPT_ENGINE_NAME = "Graal.js";
   public static final String DEFAULT_JS_SCRIPTING_LANGUAGE = GRAAL_JS_SCRIPT_ENGINE_NAME;
 
+  private static final String GRAAL_JS_ALLOW_HOST_ACCESS = "polyglot.js.allowHostAccess";
+  private static final String GRAAL_JS_ALLOW_HOST_CLASS_LOOKUP = "polyglot.js.allowHostClassLookup";
+
   protected ScriptEngineResolver scriptEngineResolver;
+
+  @Getter
   protected ScriptBindingsFactory scriptBindingsFactory;
 
+  @Getter
   protected boolean enableScriptEngineCaching = true;
 
   public ScriptingEngines(ScriptBindingsFactory scriptBindingsFactory, ScriptEngineResolver scriptEngineResolver) {
@@ -71,10 +79,6 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
 
   public ScriptingEngines(ScriptEngineResolver scriptEngineResolver) {
     this.scriptEngineResolver = scriptEngineResolver;
-  }
-
-  public boolean isEnableScriptEngineCaching() {
-    return enableScriptEngineCaching;
   }
 
   public void setEnableScriptEngineCaching(boolean enableScriptEngineCaching) {
@@ -107,13 +111,13 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
     ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
 
     ScriptEngine engine = null;
-    if (config.isEnableFetchScriptEngineFromProcessApplication()) {
-      if(pa != null) {
+    if (config != null && config.isEnableFetchScriptEngineFromProcessApplication()) {
+      if (pa != null) {
         engine = getPaScriptEngine(language, pa);
       }
     }
 
-    if(engine == null) {
+    if (engine == null) {
       engine = getGlobalScriptEngine(language);
     }
 
@@ -146,14 +150,37 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
   }
 
   /** override to build a spring aware ScriptingEngines
-   * @param engineBindin
-   * @param scriptEngine */
+   * @param scriptEngine
+   * @param variableScope
+   * @return the Bindings to use for the given script engine and variable scope
+   **/
   public Bindings createBindings(ScriptEngine scriptEngine, VariableScope variableScope) {
-    return scriptBindingsFactory.createBindings(variableScope, scriptEngine.createBindings());
+    Bindings bindings = scriptBindingsFactory.createBindings(variableScope, scriptEngine.createBindings());
+    configureGraalJsHostAccess(scriptEngine, bindings);
+    return bindings;
   }
 
-  public ScriptBindingsFactory getScriptBindingsFactory() {
-    return scriptBindingsFactory;
+  protected void configureGraalJsHostAccess(ScriptEngine scriptEngine, Bindings bindings) {
+    ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
+
+    if (config == null || !config.isConfigureScriptEngineHostAccess()) {
+      return;
+    }
+
+    if (!isGraalJsScriptEngine(scriptEngine)) {
+      return;
+    }
+
+    bindings.put(GRAAL_JS_ALLOW_HOST_ACCESS, true);
+    bindings.put(GRAAL_JS_ALLOW_HOST_CLASS_LOOKUP, true);
+  }
+
+  protected boolean isGraalJsScriptEngine(ScriptEngine scriptEngine) {
+    if (scriptEngine == null || scriptEngine.getFactory() == null) {
+      return false;
+    }
+
+    return GRAAL_JS_SCRIPT_ENGINE_NAME.equals(scriptEngine.getFactory().getEngineName());
   }
 
   public void setScriptBindingsFactory(ScriptBindingsFactory scriptBindingsFactory) {

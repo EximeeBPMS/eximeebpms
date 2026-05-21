@@ -18,19 +18,22 @@ package org.eximeebpms.bpm.engine.test.bpmn.scripttask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-
 import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.junit.After;
 import org.junit.Before;
@@ -40,51 +43,10 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
-import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
-
 @RunWith(Parameterized.class)
 public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
 
   private static final String GRAALJS = "graal.js";
-
-  protected ScriptEngineResolver defaultScriptEngineResolver;
-  protected boolean spinEnabled = false;
-
-  @Before
-  public void setup() {
-    spinEnabled = processEngineConfiguration.getEnvScriptResolvers().stream()
-                    .anyMatch(resolver -> resolver.getClass().getSimpleName().equals("SpinScriptEnvResolver"));
-    defaultScriptEngineResolver = processEngineConfiguration.getScriptEngineResolver();
-    processEngineConfiguration.setConfigureScriptEngineHostAccess(configureHostAccess);
-    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(enableExternalResources);
-    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(enableNashornCompat);
-    // create custom script engine lookup to receive a fresh GraalVM JavaScript engine
-    processEngineConfiguration.setScriptEngineResolver(new TestScriptEngineResolver(
-        processEngineConfiguration.getScriptEngineResolver().getScriptEngineManager()));
-  }
-
-  @After
-  public void resetConfiguration() {
-    processEngineConfiguration.setConfigureScriptEngineHostAccess(true);
-    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(false);
-    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(false);
-    processEngineConfiguration.setScriptEngineResolver(defaultScriptEngineResolver);
-  }
-
-  @Parameters
-  public static Collection<Object[]> setups() {
-    return Arrays.asList(new Object[][] {
-      {false, false, false},
-      {true, false, false},
-      {false, true, false},
-      {false, false, true},
-      {true, true, false},
-      {true, false, true},
-      {false, true, true},
-      {true, true, true},
-    });
-  }
 
   @Parameter(0)
   public boolean configureHostAccess;
@@ -95,186 +57,276 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
   @Parameter(2)
   public boolean enableNashornCompat;
 
+  @Parameter(3)
+  public boolean scriptSecurityEnabled;
+
+  protected ScriptEngineResolver defaultScriptEngineResolver;
+  protected ScriptSecurityPolicy previousScriptSecurityPolicy;
+  protected boolean spinEnabled = false;
+  protected boolean previousEnableScriptEngineLoadExternalResources;
+  protected boolean previousConfigureScriptEngineHostAccess;
+  protected boolean previousEnableScriptEngineNashornCompatibility;
+  protected boolean previousScriptSecurityEnabled;
+
+  @Parameters(name = "{index}: host={0}, io={1}, nashorn={2}, security={3}")
+  public static Collection<Object[]> setups() {
+    return Arrays.asList(new Object[][]{
+        {false, false, false, true},
+        {true, false, false, true},
+        {false, true, false, true},
+        {false, false, true, true},
+        {true, true, false, true},
+        {true, false, true, true},
+        {false, true, true, true},
+        {true, true, true, true},
+
+        // backward compatibility: script security disabled
+        {false, false, false, false},
+        {true, false, false, false},
+        {false, true, false, false},
+        {false, false, true, false},
+        {true, true, false, false},
+        {true, false, true, false},
+        {false, true, true, false},
+        {true, true, true, false},
+    });
+  }
+
+  @Before
+  public void setup() {
+    processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+
+    previousEnableScriptEngineLoadExternalResources =
+        processEngineConfiguration.isEnableScriptEngineLoadExternalResources();
+    previousConfigureScriptEngineHostAccess =
+        processEngineConfiguration.isConfigureScriptEngineHostAccess();
+    previousEnableScriptEngineNashornCompatibility =
+        processEngineConfiguration.isEnableScriptEngineNashornCompatibility();
+    previousScriptSecurityEnabled =
+        processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityPolicy =
+        processEngineConfiguration.getScriptSecurityPolicy();
+
+    spinEnabled = processEngineConfiguration.getEnvScriptResolvers().stream()
+        .anyMatch(resolver -> resolver.getClass().getSimpleName().equals("SpinScriptEnvResolver"));
+
+    defaultScriptEngineResolver = processEngineConfiguration.getScriptEngineResolver();
+
+    processEngineConfiguration.setConfigureScriptEngineHostAccess(configureHostAccess);
+    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(enableExternalResources);
+    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(enableNashornCompat);
+    processEngineConfiguration.setScriptSecurityEnabled(scriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
+
+    processEngineConfiguration.setScriptEngineResolver(new TestScriptEngineResolver(
+        processEngineConfiguration.getScriptEngineResolver().getScriptEngineManager()));
+  }
+
+  @After
+  public void resetConfiguration() {
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
+    processEngineConfiguration.setEnableScriptEngineLoadExternalResources(previousEnableScriptEngineLoadExternalResources);
+    processEngineConfiguration.setConfigureScriptEngineHostAccess(previousConfigureScriptEngineHostAccess);
+    processEngineConfiguration.setEnableScriptEngineNashornCompatibility(previousEnableScriptEngineNashornCompatibility);
+    processEngineConfiguration.setScriptEngineResolver(defaultScriptEngineResolver);
+  }
+
   @Test
   public void testJavascriptProcessVarVisibility() {
-
     deployProcess(GRAALJS,
-
-        // GIVEN
-        // an execution variable 'foo'
         "execution.setVariable('foo', 'a');"
-
-        // THEN
-        // there should be a script variable defined
-      + "if (typeof foo !== 'undefined') { "
-      + "  throw 'Variable foo should be defined as script variable.';"
-      + "}"
-
-        // GIVEN
-        // a script variable with the same name
-      + "var foo = 'b';"
-
-        // THEN
-        // it should not change the value of the execution variable
-      + "if(execution.getVariable('foo') != 'a') {"
-      + "  throw 'Execution should contain variable foo';"
-      + "}"
-
-        // AND
-        // it should override the visibility of the execution variable
-      + "if(foo != 'b') {"
-      + "  throw 'Script variable must override the visibiltity of the execution variable.';"
-      + "}"
-
-    );
+            + "if (typeof foo !== 'undefined') { "
+            + "  throw 'Variable foo should be defined as script variable.';"
+            + "}"
+            + "var foo = 'b';"
+            + "if(execution.getVariable('foo') != 'a') {"
+            + "  throw 'Execution should contain variable foo';"
+            + "}"
+            + "if(foo != 'b') {"
+            + "  throw 'Script variable must override the visibiltity of the execution variable.';"
+            + "}");
 
     if (enableNashornCompat || configureHostAccess) {
-      // WHEN
-      // we start an instance of this process
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
 
-      // THEN
-      // the script task can be executed without exceptions
-      // the execution variable is stored and has the correct value
       Object variableValue = runtimeService.getVariable(pi.getId(), "foo");
       assertEquals("a", variableValue);
     } else {
-      // WHEN
-      // we start an instance of this process
       assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey("testProcess"))
-      // THEN
-      // this is not allowed in the JS ScriptEngine
-        .isInstanceOf(ScriptEvaluationException.class)
-        .hasMessageContaining(spinEnabled ? "ReferenceError" : "TypeError");
+          .isInstanceOf(ScriptEvaluationException.class)
+          .hasMessageContaining(spinEnabled ? "ReferenceError" : "TypeError");
     }
   }
 
   @Test
   public void testJavascriptFunctionInvocation() {
-
     deployProcess(GRAALJS,
-
-        // GIVEN
-        // a function named sum
         "function sum(a,b){"
-      + "  return a+b;"
-      + "};"
-
-        // THEN
-        // i can call the function
-      + "var result = sum(1,2);"
-
-      + "execution.setVariable('foo', result);"
-
-    );
+            + "  return a+b;"
+            + "};"
+            + "var result = sum(1,2);"
+            + "execution.setVariable('foo', result);");
 
     if (enableNashornCompat || configureHostAccess) {
-      // WHEN
-      // we start an instance of this process
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
 
-      // THEN
-      // the variable is defined
       Object variable = runtimeService.getVariable(pi.getId(), "foo");
       assertThat(variable).isIn(3, 3.0);
     } else {
-      // WHEN
-      // we start an instance of this process
       assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey("testProcess"))
-      // THEN
-      // this is not allowed in the JS ScriptEngine
-        .isInstanceOf(ScriptEvaluationException.class)
-        .hasMessageContaining(spinEnabled ? "ReferenceError" : "TypeError");
+          .isInstanceOf(ScriptEvaluationException.class)
+          .hasMessageContaining(spinEnabled ? "ReferenceError" : "TypeError");
     }
-
   }
 
   @Test
   public void testJsVariable() {
-
     String scriptText = "var foo = 1;";
 
     deployProcess(GRAALJS, scriptText);
 
     if (spinEnabled && !enableNashornCompat && !configureHostAccess) {
-      // WHEN
-      // we start an instance of this process
       assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey("testProcess"))
-      // THEN
-      // this Java access is not allowed for Spin Environment Script
-        .isInstanceOf(ScriptEvaluationException.class)
-        .hasMessageContaining("ReferenceError");
+          .isInstanceOf(ScriptEvaluationException.class)
+          .hasMessageContaining("ReferenceError");
     } else {
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
+
       Object variableValue = runtimeService.getVariable(pi.getId(), "foo");
       assertNull(variableValue);
     }
-
   }
 
   @Test
   public void testJavascriptVariableSerialization() {
-    deployProcess(GRAALJS,
-        // GIVEN
-        // setting Java classes as variables
+    String scriptSource =
         "execution.setVariable('date', new java.util.Date(0));"
-      + "execution.setVariable('myVar', new org.eximeebpms.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+            + "execution.setVariable('myVar', new org.eximeebpms.bpm.engine.test.bpmn.scripttask.MySerializable('test'));";
 
-    if (enableNashornCompat || configureHostAccess) {
-      // WHEN
-      ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
+    Throwable throwable = catchThrowable(() -> {
+      ProcessInstance pi = deployAndStartProcessReturningInstance(GRAALJS, scriptSource);
 
-      // THEN
-      Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
-      assertEquals(0, date.getTime());
-      MySerializable myVar = (MySerializable) runtimeService.getVariable(pi.getId(), "myVar");
-      assertEquals("test", myVar.getName());
-    } else {
-      // WHEN
-      // we start an instance of this process
-      assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey("testProcess"))
-      // THEN
-      // this is not allowed in the JS ScriptEngine
-        .isInstanceOf(ScriptEvaluationException.class)
-        .hasMessageContaining("ReferenceError");
+      if (shouldAllowJavaObjectCreation()) {
+        Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
+        assertEquals(0, date.getTime());
+
+        MySerializable myVar = (MySerializable) runtimeService.getVariable(pi.getId(), "myVar");
+        assertEquals("test", myVar.getName());
+      }
+    });
+
+    if (shouldAllowJavaObjectCreation()) {
+      assertThat(throwable).isNull();
+      return;
     }
+
+    assertThat(throwable).isNotNull();
+    assertThat(throwable.getMessage())
+        .containsAnyOf(
+            "Process deployment blocked by script security policy",
+            "Script execution blocked by script security policy",
+            "script security policy",
+            "Direct Java object creation is forbidden",
+            "SCRIPT_SECURITY_NEW_JAVA",
+            "ReferenceError",
+            "java\" is not defined",
+            "\"java\" is not defined",
+            "java is not defined",
+            "Operation is not allowed");
   }
 
   @Test
   public void shouldLoadExternalScript() {
-      // GIVEN
-      // an external JS file with a function
-      deployProcess(GRAALJS,
-          // WHEN
-          // we load a function from an external file
-          "load(\"" + getNormalizedResourcePath("/org/eximeebpms/bpm/engine/test/bpmn/scripttask/sum.js") + "\");"
-          // THEN
-          // we can use that function
-        + "execution.setVariable('foo', sum(3, 4));"
-      );
+    String scriptSource =
+        "load(\"" + getNormalizedResourcePath("/org/eximeebpms/bpm/engine/test/bpmn/scripttask/sum.js") + "\");"
+            + "execution.setVariable('foo', sum(3, 4));";
 
-      if (enableNashornCompat || (enableExternalResources && configureHostAccess)) {
-        // WHEN
-        // we start an instance of this process
-        ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess");
+    Throwable throwable = catchThrowable(() -> {
+      ProcessInstance pi = deployAndStartProcessReturningInstance(GRAALJS, scriptSource);
 
-        // THEN
-        // the script task can be executed without exceptions
-        // the execution variable is stored and has the correct value
+      if (shouldExecuteExternalScript()) {
         Object variableValue = runtimeService.getVariable(pi.getId(), "foo");
         assertEquals(7, variableValue);
-      } else {
-        // WHEN
-        // we start an instance of this process
-        assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey("testProcess"))
-        // THEN
-        // this is not allowed in the JS ScriptEngine
-          .isInstanceOf(ScriptEvaluationException.class)
-          .hasMessageContaining(
-              (spinEnabled && !configureHostAccess) ? "ReferenceError" :
-              (enableExternalResources && !configureHostAccess) ? "TypeError" :
-              "Operation is not allowed");
       }
+    });
+
+    if (shouldExecuteExternalScript()) {
+      assertThat(throwable).isNull();
+      return;
+    }
+
+    assertThat(throwable).isNotNull();
+    assertThat(throwable.getMessage())
+        .containsAnyOf(
+            "Process deployment blocked by script security policy",
+            "Script execution blocked by script security policy",
+            "script security policy",
+            "Loading external scripts is forbidden",
+            "SCRIPT_SECURITY_LOAD",
+            "Operation is not allowed",
+            "ReferenceError",
+            "TypeError",
+            "Script execution blocked");
+  }
+
+  @Test
+  public void shouldBlockDangerousJavaObjectCreationWhenScriptSecurityEnabled() {
+    String scriptSource =
+        "var proc = new java.lang.ProcessBuilder('sh', '-c', 'id').start();";
+
+    Throwable throwable = deployAndStartProcess(GRAALJS, scriptSource);
+
+    if (scriptSecurityEnabled) {
+      assertThat(throwable).isNotNull();
+      assertThat(throwable.getMessage())
+          .containsAnyOf(
+              "Process deployment blocked by script security policy",
+              "Script execution blocked by script security policy",
+              "script security policy",
+              "Process execution via ProcessBuilder is forbidden",
+              "SCRIPT_SECURITY_PROCESS_BUILDER",
+              "ReferenceError",
+              "java\" is not defined",
+              "\"java\" is not defined",
+              "java is not defined",
+              "Operation is not allowed");
+      return;
+    }
+
+    if (!shouldAllowJavaObjectCreation()) {
+      assertThat(throwable).isNotNull();
+      assertThat(throwable.getMessage())
+          .containsAnyOf(
+              "ReferenceError",
+              "java\" is not defined",
+              "\"java\" is not defined",
+              "java is not defined",
+              "Operation is not allowed");
+      return;
+    }
+
+    assertThat(throwable).isNull();
+  }
+
+  protected Throwable deployAndStartProcess(String language, String scriptSource) {
+    return catchThrowable(() -> {
+      deployProcess(language, scriptSource);
+      runtimeService.startProcessInstanceByKey("testProcess");
+    });
+  }
+
+  protected ProcessInstance deployAndStartProcessReturningInstance(String language, String scriptSource) {
+    deployProcess(language, scriptSource);
+    return runtimeService.startProcessInstanceByKey("testProcess");
+  }
+
+  private boolean shouldExecuteExternalScript() {
+    return !scriptSecurityEnabled && (enableNashornCompat || (enableExternalResources && configureHostAccess));
+  }
+
+  private boolean shouldAllowJavaObjectCreation() {
+    return !scriptSecurityEnabled && (configureHostAccess || enableNashornCompat);
   }
 
   protected static class TestScriptEngineResolver extends DefaultScriptEngineResolver {
@@ -293,5 +345,4 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
       return super.getScriptEngine(language);
     }
   }
-
 }

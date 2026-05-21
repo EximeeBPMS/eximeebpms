@@ -22,6 +22,7 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import lombok.Getter;
 import org.eximeebpms.bpm.engine.ScriptCompilationException;
 import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.delegate.BpmnError;
@@ -36,9 +37,10 @@ import org.eximeebpms.bpm.engine.impl.context.Context;
  * @author Daniel Meyer
  *
  */
+@Getter
 public class SourceExecutableScript extends CompiledExecutableScript {
 
-  private final static ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
+  private static final ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
 
   /** The source of the script. */
   protected String scriptSource;
@@ -125,10 +127,6 @@ public class SourceExecutableScript extends CompiledExecutableScript {
     return engine.eval(scriptSource, bindings);
   }
 
-  public String getScriptSource() {
-    return scriptSource;
-  }
-
   /**
    * Sets the script source code. And invalidates any cached compilation result.
    *
@@ -139,10 +137,6 @@ public class SourceExecutableScript extends CompiledExecutableScript {
     this.compiledScript = null;
     shouldBeCompiled = true;
     this.scriptSource = scriptSource;
-  }
-
-  public boolean isShouldBeCompiled() {
-    return shouldBeCompiled;
   }
 
 }

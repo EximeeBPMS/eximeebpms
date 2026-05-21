@@ -37,6 +37,8 @@ import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -49,11 +51,26 @@ import org.junit.Test;
  */
 public class ScriptTaskTest extends AbstractScriptTaskTest {
 
+  protected boolean previousScriptSecurityEnabled;
+
   private static final String JAVASCRIPT = "javascript";
   private static final String PYTHON = "python";
   private static final String RUBY = "ruby";
   private static final String GROOVY = "groovy";
   private static final String JUEL = "juel";
+
+  @Before
+  public void setUp() {
+    processEngineConfiguration = engineRule.getProcessEngineConfiguration();
+    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    processEngineConfiguration.setScriptSecurityEnabled(false);
+  }
+
+  @After
+  public void tearDown() {
+    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    super.tearDown();
+  }
 
   @Test
   public void testJavascriptProcessVarVisibility() {

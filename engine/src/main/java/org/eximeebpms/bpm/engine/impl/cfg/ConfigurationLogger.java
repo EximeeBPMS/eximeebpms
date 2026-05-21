@@ -153,4 +153,11 @@ public class ConfigurationLogger extends ProcessEngineLogger {
             + "Please keep in mind that levels different from 'READ_COMMITTED' are known to cause deadlocks and other unexpected behaviours.",
         transactionIsolationLevel);
   }
+
+  public void logScriptValidationDisabled() {
+    logWarn(
+        "021",
+        "Script security is disabled. Script deployment and runtime validation are turned off."
+    );
+  }
 }

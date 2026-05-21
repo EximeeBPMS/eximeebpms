@@ -19,6 +19,7 @@ package org.eximeebpms.bpm.engine.impl.scripting;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
+import lombok.Getter;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentEntity;
@@ -29,6 +30,7 @@ import org.eximeebpms.bpm.engine.impl.util.ResourceUtil;
  *
  * @author Sebastian Menski
  */
+@Getter
 public class ResourceExecutableScript extends SourceExecutableScript {
 
   protected String scriptResource;
@@ -54,4 +56,10 @@ public class ResourceExecutableScript extends SourceExecutableScript {
     }
   }
 
+  public String resolveScriptSource() {
+    if (scriptSource == null) {
+      loadScriptSource();
+    }
+    return getScriptSource();
+  }
 }

@@ -29,11 +29,14 @@ import org.junit.After;
 
 public abstract class AbstractScriptTaskTest extends PluggableProcessEngineTest {
 
-  private List<String> deploymentIds = new ArrayList<>();
+  protected final List<String> deploymentIds = new ArrayList<>();
 
   @After
-  public void tearDown() throws Exception {
-    deploymentIds.forEach(deploymentId -> repositoryService.deleteDeployment(deploymentId, true));
+  public void tearDown() {
+    for (String deploymentId : deploymentIds) {
+      repositoryService.deleteDeployment(deploymentId, true);
+    }
+    deploymentIds.clear();
   }
 
   protected void deployProcess(BpmnModelInstance process) {

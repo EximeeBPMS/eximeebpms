@@ -27,6 +27,7 @@ import java.sql.Connection;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAwareExpressionManager;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,5 +108,23 @@ public class ProcessEngineConfigurationTest {
         .createProcessEngineConfigurationFromResource("eximeebpms.cfg.skipIsolationLevelCheckEnabled.xml");
     // then
     assertTrue(engineConfiguration.skipIsolationLevelCheck);
+  }
+
+  @Test
+  public void shouldInjectScriptSecurityPolicyIntoAwareCustomExpressionManager() {
+    // given
+    ScriptSecurityAwareExpressionManager customExpressionManager = new ScriptSecurityAwareExpressionManager();
+
+    ProcessEngineConfigurationImpl configuration = new StandaloneInMemProcessEngineConfiguration();
+    configuration.setScriptSecurityEnabled(true);
+    configuration.setExpressionManager(customExpressionManager);
+
+    // when
+    configuration.initScriptSecurityPolicy();
+    configuration.initExpressionManager();
+
+    // then
+    assertThat(configuration.getExpressionManager()).isSameAs(customExpressionManager);
+    assertThat(customExpressionManager.getScriptSecurityPolicy()).isNotNull();
   }
 }

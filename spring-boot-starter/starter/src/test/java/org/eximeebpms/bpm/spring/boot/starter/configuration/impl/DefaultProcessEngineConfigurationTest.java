@@ -18,15 +18,18 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Set;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.Optional;
 
 public class DefaultProcessEngineConfigurationTest {
 
@@ -111,7 +114,47 @@ public class DefaultProcessEngineConfigurationTest {
     assertThat(configuration.getDefaultNumberOfRetries()).isEqualTo(1);
   }
 
+  @Test
+  public void setScriptSecurityEnabled_default_true() {
+    instance.preInit(configuration);
+    assertThat(configuration.isScriptSecurityEnabled()).isTrue();
+  }
+
+  @Test
+  public void setScriptSecurityEnabled_false() {
+    properties.getScriptSecurity().setEnabled(false);
+    instance.preInit(configuration);
+    assertThat(configuration.isScriptSecurityEnabled()).isFalse();
+  }
+
+  @Test
+  public void shouldConfigureScriptSecurityPolicyWithAllowlistedProcessDefinitionKeys() {
+    // given
+    ScriptSecurityProperty scriptSecurity = new ScriptSecurityProperty();
+    scriptSecurity.setEnabled(true);
+    scriptSecurity.setAllowlistedProcessDefinitionKeys(Set.of("legacyInvoiceProcess"));
+
+    properties.setScriptSecurity(scriptSecurity);
+
+    // when
+    instance.preInit(configuration);
+
+    // then
+    assertThat(configuration.isScriptSecurityEnabled()).isTrue();
+    assertThat(configuration.getScriptSecurityPolicy()).isInstanceOf(DefaultScriptSecurityPolicy.class);
+
+    ScriptSecurityContext allowlistedContext = ScriptSecurityContext.builder("javascript")
+        .source("System.getenv('HOME');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .processDefinitionKey("legacyInvoiceProcess")
+        .build();
+
+    assertThat(configuration.getScriptSecurityPolicy()
+        .evaluate(allowlistedContext)
+        .isAllowed()).isTrue();
+  }
+
   private void initIdGenerator(IdGenerator idGenerator) {
-    ReflectionTestUtils.setField(instance, "idGenerator", Optional.ofNullable(idGenerator));
+    ReflectionTestUtils.setField(instance, "idGenerator", idGenerator);
   }
 }

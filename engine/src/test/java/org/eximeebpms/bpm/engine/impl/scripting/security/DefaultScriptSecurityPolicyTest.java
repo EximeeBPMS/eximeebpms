@@ -214,8 +214,8 @@ public class DefaultScriptSecurityPolicyTest {
     ScriptSecurityDecision decision = policy.evaluate(context);
 
     assertThat(decision.isDenied()).isTrue();
-    assertThat(decision.getReason()).contains("NIO access is forbidden");
-    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_NIO");
+    assertThat(decision.getReason()).contains("NIO file system access is forbidden");
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_NIO_FILE");
   }
 
   @Test

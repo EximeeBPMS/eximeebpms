@@ -48,9 +48,18 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
       Rule.pattern("\\bjava\\.io\\.", "File system access is forbidden", "SCRIPT_SECURITY_JAVA_IO"),
       Rule.pattern("\\bjava\\.type\\s*\\(\\s*['\"]java\\.io\\.", "File system access is forbidden", "SCRIPT_SECURITY_JAVA_IO"),
 
-      Rule.pattern("\\bnew\\s+java\\.nio\\.", "NIO access is forbidden", "SCRIPT_SECURITY_JAVA_NIO"),
-      Rule.pattern("\\bjava\\.nio\\.", "NIO access is forbidden", "SCRIPT_SECURITY_JAVA_NIO"),
-      Rule.pattern("\\bjava\\.type\\s*\\(\\s*['\"]java\\.nio\\.", "NIO access is forbidden", "SCRIPT_SECURITY_JAVA_NIO"),
+      // NIO filesystem
+      Rule.pattern("\\bnew\\s+java\\.nio\\.file\\.", "NIO file system access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_FILE"),
+      Rule.pattern("\\bjava\\.nio\\.file\\.", "NIO file system access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_FILE"),
+      Rule.pattern("\\bjava\\.type\\s*\\(\\s*['\"]java\\.nio\\.file\\.", "NIO file system access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_FILE"),
+
+      // NIO file channels
+      Rule.pattern("\\bjava\\.nio\\.channels\\.(?:asynchronousfilechannel|filechannel)\\b", "NIO file channel access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_FILE_CHANNEL"),
+      Rule.pattern("\\bjava\\.type\\s*\\(\\s*['\"]java\\.nio\\.channels\\.(?:asynchronousfilechannel|filechannel)['\"]\\s*\\)", "NIO file channel access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_FILE_CHANNEL"),
+
+      // NIO network channels
+      Rule.pattern("\\bjava\\.nio\\.channels\\.(?:socketchannel|serversocketchannel|datagramchannel|asynchronoussocketchannel|asynchronousserversocketchannel)\\b", "NIO network channel access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_NETWORK_CHANNEL"),
+      Rule.pattern("\\bjava\\.type\\s*\\(\\s*['\"]java\\.nio\\.channels\\.(?:socketchannel|serversocketchannel|datagramchannel|asynchronoussocketchannel|asynchronousserversocketchannel)['\"]\\s*\\)", "NIO network channel access is forbidden", "SCRIPT_SECURITY_JAVA_NIO_NETWORK_CHANNEL"),
 
       // Network
       Rule.pattern("\\bnew\\s+java\\.net\\.", "Network access is forbidden", "SCRIPT_SECURITY_JAVA_NET"),

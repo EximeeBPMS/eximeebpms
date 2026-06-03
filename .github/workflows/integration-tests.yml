@@ -14,7 +14,7 @@ on:
         description: 'Java version to use'
         type: choice
         required: true
-        default: '["17"]'
+        default: '["21"]'
         options:
           - '["17"]'
           - '["21"]'
@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
+        java: ${{ fromJson(github.event.inputs.java_version || '["21"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}

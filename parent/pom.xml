@@ -58,6 +58,7 @@
     <version.mockito>5.23.0</version.mockito>
     <version.wiremock>2.27.2</version.wiremock>
     <version.testcontainers>1.16.0</version.testcontainers>
+    <version.archunit-junit5>1.4.2</version.archunit-junit5>
     <version.unirest-java>2.3.10</version.unirest-java>
     <version.jakarta-servlet-api>6.1.0</version.jakarta-servlet-api>
     <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
@@ -93,7 +94,7 @@
     <version.lombok>1.18.36</version.lombok>
     <version.commons-lang3>3.19.0</version.commons-lang3>
 
-    <version.eximeebpms-monitor>1.2.0</version.eximeebpms-monitor>
+    <version.eximeebpms-monitor>1.4.0</version.eximeebpms-monitor>
 
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />

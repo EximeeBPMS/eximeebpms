@@ -361,8 +361,8 @@
 
       <dependency>
         <groupId>org.python</groupId>
-        <artifactId>jython</artifactId>
-        <version>2.5.3</version>
+        <artifactId>jython-standalone</artifactId>
+        <version>${version.jython}</version>
       </dependency>
 
       <dependency>

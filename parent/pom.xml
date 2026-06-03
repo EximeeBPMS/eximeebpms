@@ -62,6 +62,8 @@
     <version.jakarta-servlet-api>6.1.0</version.jakarta-servlet-api>
     <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
 
+    <version.jython>2.7.4</version.jython>
+
     <version.commonj>1.1.0</version.commonj>
     <version.bouncycastle>1.70</version.bouncycastle>
 

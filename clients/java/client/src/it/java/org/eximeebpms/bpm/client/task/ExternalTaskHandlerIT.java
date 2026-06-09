@@ -621,6 +621,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -650,12 +651,14 @@ public class ExternalTaskHandlerIT {
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
       Map<String, Object> localVariables = new HashMap<>();
       localVariables.put(variableName, variableValue);
+      System.out.println("HANDLE!" + task);
       client.handleFailure(task.getId(), "my-message", "my-details", 0, 0, null, localVariables);
     });
 
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -697,6 +700,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -749,6 +753,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(processDefinition.getId())
             .open();
 
     // then

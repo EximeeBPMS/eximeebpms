@@ -86,6 +86,7 @@ jobs:
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }}-SNAPSHOT \
         env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
@@ -94,6 +95,7 @@ jobs:
           ./mvnw release:perform --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -Dgoals="" \
           -Darguments="-DskipTests -Dmaven.repo.local=${MAVEN_REPO_LOCAL}"
         env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 

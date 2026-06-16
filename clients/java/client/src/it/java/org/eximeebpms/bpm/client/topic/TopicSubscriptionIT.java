@@ -245,7 +245,7 @@ public class TopicSubscriptionIT {
   @Test
   public void shouldFilterByProcessDefinitionVersionTag() {
     // given
-    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).get(0);
+    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).getFirst();
     engineRule.startProcessInstance(processDefinitionWithVersionTag.getId());
     engineRule.startProcessInstance(processDefinition.getId());
 

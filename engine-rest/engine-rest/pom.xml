@@ -13,9 +13,7 @@
 
   <properties>
     <!-- pin tomcat version for engine-rest -->
-    <version.tomcat>7.0.50</version.tomcat>
     <rest.http.port>38080</rest.http.port>
-    <javax.activation.version>1.1.1</javax.activation.version>
   </properties>
 
   <dependencies>
@@ -103,7 +101,7 @@
     <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
-      <version>${javax.activation.version}</version>
+      <version>${version.javax.activation}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -177,7 +175,6 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
-      <version>${version.tomcat}</version>
       <scope>test</scope>
     </dependency>
 
@@ -224,8 +221,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
+      <groupId>org.apache.httpcomponents.core5</groupId>
+      <artifactId>httpcore5</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -289,13 +286,6 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>${version.tomcat}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
       <version>${version.tomcat}</version>
       <scope>test</scope>
     </dependency>

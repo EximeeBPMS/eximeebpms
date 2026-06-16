@@ -66,8 +66,8 @@ run_build () {
   fi
 
   echo "ℹ️ Building $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -DskipTests -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
-  ./mvnw -DskipTests -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
+  echo "./mvnw -DskipTests -Dcargo.maven.skip=true -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
+  ./mvnw -DskipTests -Dcargo.maven.skip=true -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null
@@ -103,18 +103,24 @@ run_tests () {
       ;;
   esac
 
+  DB_ARGS=()
   case "$DATABASE" in
     h2)
       PROFILES+=(h2)
       ;;
     postgresql)
       PROFILES+=(postgresql)
+      DB_ARGS=(
+        -Ddatabase.url="${DATABASE_URL:-jdbc:postgresql://localhost:5432/process-engine}"
+        -Ddatabase.username="${DATABASE_USERNAME:-eximeebpms}"
+        -Ddatabase.password="${DATABASE_PASSWORD:-eximeebpms}"
+      )
       ;;
   esac
 
   echo "ℹ️ Running $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR"
-  ./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR
+  echo "./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR ${DB_ARGS[*]}"
+  ./mvnw -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR "${DB_ARGS[@]}"
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null

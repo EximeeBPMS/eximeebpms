@@ -13,6 +13,7 @@
     <module name="java.sql" />
     <module name="jakarta.transaction.api"/>
     <module name="jakarta.enterprise.api" />
+    <module name="jakarta.el.api" />
     <module name="jakarta.inject.api" />
     <module name="jakarta.ejb.api" />
     <module name="jakarta.xml.bind.api" />
@@ -23,7 +24,7 @@
     <module name="org.mybatis.mybatis" />
     <module name="org.joda.time" slot="2.1" />
     <module name="org.apache.groovy.groovy-all" services="import"/>
-    <module name="org.python.jython" services="import"/>
+    <module name="org.python.jython-standalone" services="import"/>
     <module name="org.jruby.jruby-complete" services="import"/>
     <module name="org.graalvm.js.js-scriptengine" services="import"/>
 
@@ -39,6 +40,7 @@
     <module name="org.eximeebpms.commons.eximeebpms-commons-typed-values" export="true" />
     <module name="org.eximeebpms.template-engines.eximeebpms-template-engines-freemarker" services="import" />
     <module name="org.eximeebpms.spin.eximeebpms-spin-core" services="import" />
+    <module name="org.eximeebpms.commons.eximeebpms-commons-event-bus-api" services="import" />
 
     <module name="org.eximeebpms.bpm.dmn.eximeebpms-engine-dmn" />
     <module name="org.eximeebpms.bpm.juel.eximeebpms-juel" services="import"/>

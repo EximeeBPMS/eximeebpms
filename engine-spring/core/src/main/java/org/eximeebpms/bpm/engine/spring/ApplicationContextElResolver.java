@@ -16,8 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.spring;
 
-import java.beans.FeatureDescriptor;
-import java.util.Iterator;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import jakarta.el.ELContext;
 import jakarta.el.ELResolver;
@@ -69,11 +67,6 @@ public class ApplicationContextElResolver extends ELResolver {
   @Override
   public Class< ? > getCommonPropertyType(ELContext context, Object arg) {
     return Object.class;
-  }
-
-  @Override
-  public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object arg) {
-    return null;
   }
 
   @Override

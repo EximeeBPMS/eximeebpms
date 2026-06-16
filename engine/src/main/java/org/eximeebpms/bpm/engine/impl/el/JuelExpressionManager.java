@@ -61,9 +61,7 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
   }
 
   public JuelExpressionManager(Map<Object, Object> beans) {
-    // Use the ExpressionFactoryImpl built-in version of juel, with parametrised
-    // method expressions enabled
-    expressionFactory = new ExpressionFactoryImpl();
+    expressionFactory = ExpressionFactoryImpl.create();
     this.beans = beans;
   }
 

@@ -29,7 +29,6 @@ import org.eximeebpms.bpm.impl.juel.ExpressionFactoryImpl;
 public abstract class ExpressionFactoryResolver {
 
   public static ExpressionFactory resolveExpressionFactory() {
-    // Return instance of custom JUEL implementation
-    return new ExpressionFactoryImpl();
+    return ExpressionFactoryImpl.create();
   }
 }

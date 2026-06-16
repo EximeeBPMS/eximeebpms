@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.ws.rs.core.Application;
 
 import org.eximeebpms.bpm.engine.rest.CustomJacksonDateFormatTest;
+import org.eximeebpms.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.eximeebpms.bpm.engine.rest.ExceptionHandlerTest;
 import org.eximeebpms.bpm.engine.rest.application.TestCustomResourceApplication;
 import org.junit.rules.ExternalResource;
@@ -43,7 +44,7 @@ public class JerseySpecifics implements ContainerSpecifics {
 
   static {
     TEST_RULE_FACTORIES.put(ExceptionHandlerTest.class, new EmbeddedServerRuleFactory(new TestCustomResourceApplication()));
-    TEST_RULE_FACTORIES.put(CustomJacksonDateFormatTest.class, new ServletContainerRuleFactory("custom-date-format-web.xml"));
+    TEST_RULE_FACTORIES.put(CustomJacksonDateFormatTest.class, new CustomDateFormatServerRuleFactory());
   }
 
   public TestRule getTestRule(Class<?> testClass) {
@@ -82,6 +83,31 @@ public class JerseySpecifics implements ContainerSpecifics {
 
   public TestRule getTestRule(String webXmlResource) {
     throw new UnsupportedOperationException();
+  }
+
+  // Simulates what custom-date-format-web.xml + CustomJacksonDateFormatListener would do
+  // in the servlet container. Jersey 2.x is incompatible with Tomcat 10.x servlet API,
+  // so the custom format is applied programmatically before starting the Grizzly server.
+  public static class CustomDateFormatServerRuleFactory implements TestRuleFactory {
+
+    private static final String CUSTOM_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
+    public TestRule createTestRule() {
+      return new ExternalResource() {
+
+        JerseyServerBootstrap bootstrap = new JerseyServerBootstrap(new JaxrsApplication());
+
+        protected void before() throws Throwable {
+          JacksonConfigurator.setDateFormatString(CUSTOM_DATE_FORMAT);
+          bootstrap.start();
+        }
+
+        protected void after() {
+          bootstrap.stop();
+          JacksonConfigurator.setDateFormatString(JacksonConfigurator.DEFAULT_DATE_FORMAT);
+        }
+      };
+    }
   }
 
   public static class ServletContainerRuleFactory implements TestRuleFactory {

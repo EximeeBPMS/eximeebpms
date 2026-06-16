@@ -27,6 +27,8 @@
     <!-- use minimum version of resteasy and jersey -->
     <version.jaxrs.api>2.0.1.Final</version.jaxrs.api>
     <version.groovy>5.0.5</version.groovy>
+    <version.groovy-bom>3.0.25</version.groovy-bom>
+    <version.commons-codec>1.22.0</version.commons-codec>
     <version.graal.js>21.3.12</version.graal.js>
     <version.icu.icu4j>71.1</version.icu.icu4j>
     <!-- json-smart and accessors-smart are runtime dependencies of json-path -->
@@ -41,6 +43,7 @@
     <version.xml.bind-api>2.3.3</version.xml.bind-api>
     <version.xml.jaxb-impl>2.3.6</version.xml.jaxb-impl>
     <version.xml.jaxb-impl4>4.0.5</version.xml.jaxb-impl4>
+    <version.javax.activation>1.1.1</version.javax.activation>
     <version.jakarta.ws.rs-api>4.0.0</version.jakarta.ws.rs-api>
     <version.jakarta.xml.bind-api>4.0.2</version.jakarta.xml.bind-api>
     <version.jakarta-validation>3.1.1</version.jakarta-validation>

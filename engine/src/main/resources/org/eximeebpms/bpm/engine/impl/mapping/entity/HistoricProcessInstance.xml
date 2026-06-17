@@ -51,8 +51,6 @@
       END_ACT_ID_,
       SUPER_PROCESS_INSTANCE_ID_,
       ROOT_PROC_INST_ID_,
-      SUPER_CASE_INSTANCE_ID_,
-      CASE_INST_ID_,
       DELETE_REASON_,
       TENANT_ID_,
       STATE_,
@@ -72,8 +70,6 @@
       #{endActivityId, jdbcType=VARCHAR},
       #{superProcessInstanceId, jdbcType=VARCHAR},
       #{rootProcessInstanceId, jdbcType=VARCHAR},
-      #{superCaseInstanceId, jdbcType=VARCHAR},
-      #{caseInstanceId, jdbcType=VARCHAR},
       #{deleteReason, jdbcType=VARCHAR},
       #{tenantId, jdbcType=VARCHAR},
       #{state, jdbcType=VARCHAR},
@@ -310,8 +306,6 @@
     <result property="endActivityId" column="END_ACT_ID_" jdbcType="VARCHAR"/>
     <result property="superProcessInstanceId" column="SUPER_PROCESS_INSTANCE_ID_" jdbcType="VARCHAR"/>
     <result property="rootProcessInstanceId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR"/>
-    <result property="superCaseInstanceId" column="SUPER_CASE_INSTANCE_ID_" jdbcType="VARCHAR"/>
-    <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR"/>
     <result property="deleteReason" column="DELETE_REASON_" jdbcType="VARCHAR"/>
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR"/>
     <result property="state" column="STATE_" jdbcType="VARCHAR"/>
@@ -481,9 +475,6 @@
                 #{processInstanceId}
               </foreach>
             </if>
-            <if test="query.caseInstanceId != null">
-              ${queryType} SELF.CASE_INST_ID_ = #{query.caseInstanceId}
-            </if>
             <if test="query.processDefinitionId != null">
               ${queryType} SELF.PROC_DEF_ID_ = #{query.processDefinitionId}
             </if>
@@ -618,13 +609,6 @@
             <if test="query.subProcessInstanceId != null">
               ${queryType} SELF.PROC_INST_ID_ = (select SUPER_PROCESS_INSTANCE_ID_ from ${prefix}ACT_HI_PROCINST where
               PROC_INST_ID_ = #{query.subProcessInstanceId})
-            </if>
-            <if test="query.superCaseInstanceId != null">
-              ${queryType} SELF.SUPER_CASE_INSTANCE_ID_ = #{query.superCaseInstanceId}
-            </if>
-            <if test="query.subCaseInstanceId != null">
-              ${queryType} SELF.PROC_INST_ID_ = (select SUPER_PROCESS_INSTANCE_ID_ from ${prefix}ACT_HI_CASEINST where
-              CASE_INST_ID_ = #{query.subCaseInstanceId})
             </if>
             <foreach collection="query.queryVariableNameToValuesMap" item="queryVariableValues">
               <bind name="varPrefix" value="'VI' + variableConditionCounter + '.'"/>

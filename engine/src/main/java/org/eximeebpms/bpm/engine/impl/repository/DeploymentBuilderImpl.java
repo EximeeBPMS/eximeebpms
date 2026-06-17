@@ -40,7 +40,6 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.RepositoryServiceImpl;
 import org.eximeebpms.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.eximeebpms.bpm.engine.impl.cmd.CommandLogger;
-import org.eximeebpms.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
 import org.eximeebpms.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ResourceEntity;
@@ -53,8 +52,6 @@ import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.repository.DeploymentWithDefinitions;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
-import org.eximeebpms.bpm.model.cmmn.Cmmn;
-import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
 import org.eximeebpms.bpm.model.dmn.Dmn;
 import org.eximeebpms.bpm.model.dmn.DmnModelInstance;
 
@@ -104,17 +101,6 @@ public class DeploymentBuilderImpl implements DeploymentBuilder, Serializable {
       : text.getBytes();
 
     return addBytes(resourceName, bytes);
-  }
-
-  public DeploymentBuilder addModelInstance(String resourceName, CmmnModelInstance modelInstance) {
-    ensureNotNull("modelInstance", modelInstance);
-
-    validateResouceName(resourceName, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
-
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    Cmmn.writeModelToStream(outputStream, modelInstance);
-
-    return addBytes(resourceName, outputStream.toByteArray());
   }
 
   public DeploymentBuilder addModelInstance(String resourceName, BpmnModelInstance modelInstance) {

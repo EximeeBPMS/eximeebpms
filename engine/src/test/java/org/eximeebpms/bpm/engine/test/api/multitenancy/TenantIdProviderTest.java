@@ -27,20 +27,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.management.ActivityStatisticsQuery;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.Incident;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
@@ -70,7 +65,6 @@ public class TenantIdProviderTest {
 
   protected static final String PROCESS_DEFINITION_KEY = "testProcess";
   protected static final String DECISION_DEFINITION_KEY = "decision";
-  protected static final String CASE_DEFINITION_KEY = "caseTaskCase";
 
   protected static final BpmnModelInstance TASK_PROCESS = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done();
   protected static final BpmnModelInstance FAILING_PROCESS = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent()
@@ -80,11 +74,6 @@ public class TenantIdProviderTest {
       .done();
 
   protected static final String DMN_FILE = "org/eximeebpms/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
-
-  protected static final String CMMN_FILE = "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithCaseTask.cmmn";
-  protected static final String CMMN_FILE_WITH_MANUAL_ACTIVATION = "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithCaseTaskWithManualActivation.cmmn";
-  protected static final String CMMN_VARIABLE_FILE = "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithCaseTaskVariables.cmmn";
-  protected static final String CMMN_SUBPROCESS_FILE = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
 
   protected static final String TENANT_ID = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
@@ -449,105 +438,6 @@ public class TenantIdProviderTest {
     assertThat(processInstance.getTenantId()).isEqualTo(tenantId);
   }
 
-  // process task in case //////////////////////////////
-
-  @Test
-  public void providerCalledForProcessDefinitionWithoutTenantId_ProcessTask() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(
-        Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
-
-    // if the case is started
-    engineRule.getCaseService().createCaseInstanceByKey("testCase");
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult();
-
-
-    // then the tenant id provider is invoked once for the process instance
-    assertThat(tenantIdProvider.parameters.size()).isEqualTo(1);
-  }
-
-  @Test
-  public void providerNotCalledForProcessDefinitionWithTenantId_ProcessTask() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deployForTenant(TENANT_ID,
-        Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
-
-    // if the case is started
-    engineRule.getCaseService().createCaseInstanceByKey("testCase");
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult();
-
-    // then the tenant id provider is not invoked
-    assertThat(tenantIdProvider.parameters.size()).isEqualTo(0);
-  }
-
-  @Test
-  public void providerCalledWithVariables_ProcessTask() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(
-        Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
-
-    // if the case is started
-    engineRule.getCaseService().createCaseInstanceByKey("testCase", Variables.createVariables().putValue("varName", true));
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult();
-
-    // then the tenant id provider is passed in the variable
-    assertThat(tenantIdProvider.parameters.size()).isEqualTo(1);
-
-    VariableMap variables = tenantIdProvider.parameters.get(0).getVariables();
-    assertThat(variables.size()).isEqualTo(1);
-    assertThat((Boolean) variables.get("varName")).isTrue();
-  }
-
-  @Test
-  public void providerCalledWithProcessDefinition_ProcessTask() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(
-        Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
-
-    // if the case is started
-    engineRule.getCaseService().createCaseInstanceByKey("testCase");
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult();
-
-    // then the tenant id provider is passed in the process definition
-    assertThat(tenantIdProvider.parameters.size()).isEqualTo(1);
-    assertThat(tenantIdProvider.parameters.get(0).getProcessDefinition()).isNotNull();
-  }
-
-  @Test
-  public void providerCalledWithSuperCaseExecution() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(
-        Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/eximeebpms/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
-
-    // if the case is started
-    engineRule.getCaseService().createCaseInstanceByKey("testCase");
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult();
-
-    // then the tenant id provider is handed in the super case execution
-    assertThat(tenantIdProvider.parameters.size()).isEqualTo(1);
-    assertThat(tenantIdProvider.parameters.get(0).getSuperCaseExecution()).isNotNull();
-  }
-
   // historic decision instance //////////////////////////////////
 
   @Test
@@ -761,272 +651,6 @@ public class TenantIdProviderTest {
     return Variables.createVariables().putValue("status", "gold");
   }
 
-  // root case instance //////////////////////////////////
-
-  @Test
-  public void providerCalledForCaseDefinitionWithoutTenantId() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    // given a deployment without tenant id
-    testRule.deploy(CMMN_FILE_WITH_MANUAL_ACTIVATION);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is invoked
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(1);
-  }
-
-  @Test
-  public void providerNotCalledForCaseInstanceWithTenantId() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    // given a deployment with a tenant id
-    testRule.deployForTenant(TENANT_ID, CMMN_FILE_WITH_MANUAL_ACTIVATION);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is not invoked
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(0);
-  }
-
-  @Test
-  public void providerCalledForCaseInstanceWithVariables() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_FILE_WITH_MANUAL_ACTIVATION);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).setVariables(Variables.createVariables().putValue("varName", true)).create();
-
-    // then the tenant id provider is passed in the variable
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(1);
-    assertThat((Boolean) tenantIdProvider.caseParameters.get(0).getVariables().get("varName")).isTrue();
-  }
-
-  @Test
-  public void providerCalledWithCaseDefinition() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_FILE_WITH_MANUAL_ACTIVATION);
-    CaseDefinition deployedCaseDefinition = engineRule.getRepositoryService().createCaseDefinitionQuery().singleResult();
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is passed in the case definition
-    CaseDefinition passedCaseDefinition = tenantIdProvider.caseParameters.get(0).getCaseDefinition();
-    assertThat(passedCaseDefinition).isNotNull();
-    assertThat(passedCaseDefinition.getId()).isEqualTo(deployedCaseDefinition.getId());
-  }
-
-  @Test
-  public void setsTenantIdForCaseInstance() {
-
-    String tenantId = TENANT_ID;
-    StaticTenantIdTestProvider tenantIdProvider = new StaticTenantIdTestProvider(tenantId);
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_FILE_WITH_MANUAL_ACTIVATION);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider can set the tenant id to a value
-    CaseInstance caseInstance = engineRule.getCaseService().createCaseInstanceQuery().singleResult();
-    assertThat(caseInstance.getTenantId()).isEqualTo(tenantId);
-  }
-
-  @Test
-  public void setNullTenantIdForCaseInstance() {
-
-    String tenantId = null;
-    StaticTenantIdTestProvider tenantIdProvider = new StaticTenantIdTestProvider(tenantId);
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_FILE_WITH_MANUAL_ACTIVATION);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider can set the tenant id to null
-    CaseInstance caseInstance = engineRule.getCaseService().createCaseInstanceQuery().singleResult();
-    assertThat(caseInstance.getTenantId()).isNull();
-  }
-
-  // sub case instance //////////////////////////////////
-
-  @Test
-  public void providerCalledForCaseDefinitionWithoutTenantId_SubCaseInstance() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    // given a deployment without tenant id
-    testRule.deploy(CMMN_SUBPROCESS_FILE,CMMN_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is invoked twice
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(2);
-  }
-
-  @Test
-  public void providerNotCalledForCaseDefinitionWithTenantId_SubCaseInstance() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    // given a deployment with a tenant id
-    testRule.deployForTenant(TENANT_ID, CMMN_SUBPROCESS_FILE, CMMN_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is not invoked
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(0);
-  }
-
-  @Test
-  public void providerCalledWithVariables_SubCaseInstance() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_VARIABLE_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).setVariables(Variables.createVariables().putValue("varName", true)).create();
-
-    // then the tenant id provider is passed in the variable
-    assertThat(tenantIdProvider.caseParameters.get(1).getVariables().size()).isEqualTo(1);
-    assertThat((Boolean) tenantIdProvider.caseParameters.get(1).getVariables().get("varName")).isTrue();
-  }
-
-  @Test
-  public void providerCalledWithCaseDefinition_SubCaseInstance() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE);
-    CaseDefinition deployedCaseDefinition = engineRule.getRepositoryService().createCaseDefinitionQuery().caseDefinitionKey("oneTaskCase").singleResult();
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is passed in the case definition
-    CaseDefinition passedCaseDefinition = tenantIdProvider.caseParameters.get(1).getCaseDefinition();
-    assertThat(passedCaseDefinition).isNotNull();
-    assertThat(passedCaseDefinition.getId()).isEqualTo(deployedCaseDefinition.getId());
-  }
-
-  @Test
-  public void providerCalledWithSuperCaseInstance() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE_WITH_MANUAL_ACTIVATION);
-    CaseDefinition superCaseDefinition = engineRule.getRepositoryService().createCaseDefinitionQuery().caseDefinitionKey(CASE_DEFINITION_KEY).singleResult();
-
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-    startCaseTask();
-
-    // then the tenant id provider is passed in the case definition
-    DelegateCaseExecution superCaseExecution = tenantIdProvider.caseParameters.get(1).getSuperCaseExecution();
-    assertThat(superCaseExecution).isNotNull();
-    assertThat(superCaseExecution.getCaseDefinitionId()).isEqualTo(superCaseDefinition.getId());
-  }
-
-  @Test
-  public void setsTenantId_SubCaseInstance() {
-
-    String tenantId = TENANT_ID;
-    SetValueOnSubCaseInstanceTenantIdProvider tenantIdProvider = new SetValueOnSubCaseInstanceTenantIdProvider(tenantId);
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider can set the tenant id to a value
-    CaseInstance subCaseInstance = engineRule.getCaseService().createCaseInstanceQuery().caseDefinitionKey("oneTaskCase").singleResult();
-    assertThat(subCaseInstance.getTenantId()).isEqualTo(tenantId);
-
-    // and the super case instance is not assigned a tenant id
-    CaseInstance superCaseInstance = engineRule.getCaseService().createCaseInstanceQuery().caseDefinitionKey(CASE_DEFINITION_KEY).singleResult();
-    assertThat(superCaseInstance.getTenantId()).isNull();
-  }
-
-  @Test
-  public void setNullTenantId_SubCaseInstance() {
-
-    String tenantId = null;
-    SetValueOnSubCaseInstanceTenantIdProvider tenantIdProvider = new SetValueOnSubCaseInstanceTenantIdProvider(tenantId);
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider can set the tenant id to null
-    CaseInstance caseInstance = engineRule.getCaseService().createCaseInstanceQuery().caseDefinitionKey("oneTaskCase").singleResult();
-    assertThat(caseInstance.getTenantId()).isNull();
-  }
-
-  @Test
-  public void tenantIdInheritedFromSuperCaseInstance() {
-
-    String tenantId = TENANT_ID;
-    SetValueOnRootCaseInstanceTenantIdProvider tenantIdProvider = new SetValueOnRootCaseInstanceTenantIdProvider(tenantId);
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE);
-
-    // if a case instance is created
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id is inherited to the sub case instance even tough it is not set by the provider
-    CaseInstance caseInstance = engineRule.getCaseService().createCaseInstanceQuery().caseDefinitionKey("oneTaskCase").singleResult();
-    assertThat(caseInstance.getTenantId()).isEqualTo(tenantId);
-  }
-
-  @Test
-  public void providerCalledForCaseInstanceWithSuperCaseExecution() {
-
-    ContextLoggingTenantIdProvider tenantIdProvider = new ContextLoggingTenantIdProvider();
-    TestTenantIdProvider.delegate = tenantIdProvider;
-
-    testRule.deploy(CMMN_SUBPROCESS_FILE, CMMN_FILE);
-
-    // if the case is started
-    engineRule.getCaseService().withCaseDefinitionByKey(CASE_DEFINITION_KEY).create();
-
-    // then the tenant id provider is handed in the super case execution
-    assertThat(tenantIdProvider.caseParameters.size()).isEqualTo(2);
-    assertThat(tenantIdProvider.caseParameters.get(1).getSuperCaseExecution()).isNotNull();
-  }
-
-  protected void startCaseTask() {
-    CaseExecution caseExecution = engineRule.getCaseService().createCaseExecutionQuery().activityId("PI_CaseTask_1").singleResult();
-    engineRule.getCaseService().withCaseExecution(caseExecution.getId()).manualStart();
-  }
-
   @Test
   public void shouldHaveAccessToFormPropertiesFromTenantIdProvider() {
     // given
@@ -1226,21 +850,12 @@ public class TenantIdProviderTest {
         return null;
       }
     }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      if (delegate != null) {
-        return delegate.provideTenantIdForCaseInstance(ctx);
-      } else {
-        return null;
-      }
-    }
   }
 
   public static class ContextLoggingTenantIdProvider implements TenantIdProvider {
 
     protected List<TenantIdProviderProcessInstanceContext> parameters = new ArrayList<>();
     protected List<TenantIdProviderHistoricDecisionInstanceContext> dmnParameters = new ArrayList<>();
-    protected List<TenantIdProviderCaseInstanceContext> caseParameters = new ArrayList<>();
 
     public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
       parameters.add(ctx);
@@ -1249,11 +864,6 @@ public class TenantIdProviderTest {
 
     public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
       dmnParameters.add(ctx);
-      return null;
-    }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      caseParameters.add(ctx);
       return null;
     }
 
@@ -1276,10 +886,6 @@ public class TenantIdProviderTest {
       return null;
     }
 
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      return null;
-    }
-
   }
 
   // only sets tenant ids on root process instances
@@ -1296,10 +902,6 @@ public class TenantIdProviderTest {
     }
 
     public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
-      return null;
-    }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
       return null;
     }
   }
@@ -1320,54 +922,6 @@ public class TenantIdProviderTest {
     public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
       return ctx.getExecution() != null ? tenantIdToSet : null;
     }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      return null;
-    }
-  }
-
-  //only sets tenant ids on sub case instances
-  public static class SetValueOnSubCaseInstanceTenantIdProvider implements TenantIdProvider {
-
-    private final String tenantIdToSet;
-
-    public SetValueOnSubCaseInstanceTenantIdProvider(String tenantIdToSet) {
-      this.tenantIdToSet = tenantIdToSet;
-    }
-
-    public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
-      return null;
-    }
-
-    public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
-      return null;
-    }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      return ctx.getSuperCaseExecution() != null ? tenantIdToSet : null;
-    }
-  }
-
-  // only sets tenant ids on root case instances
-  public static class SetValueOnRootCaseInstanceTenantIdProvider implements TenantIdProvider {
-
-    private final String tenantIdToSet;
-
-    public SetValueOnRootCaseInstanceTenantIdProvider(String tenantIdToSet) {
-      this.tenantIdToSet = tenantIdToSet;
-    }
-
-    public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
-      return null;
-    }
-
-    public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
-      return null;
-    }
-
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      return ctx.getSuperCaseExecution() == null ? tenantIdToSet : null;
-    }
   }
 
   public static class AccessProcessInstanceVariableTenantIdProvider implements TenantIdProvider {
@@ -1385,11 +939,6 @@ public class TenantIdProviderTest {
     public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
       retreivedVariableValue = ctx.getVariables().get(variableToAccess);
       return tenantIdToSet;
-    }
-
-    @Override
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
-      return null;
     }
 
     @Override

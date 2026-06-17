@@ -178,42 +178,6 @@
     },
     {
       "id": {
-        "key": "caseDefinitionId",
-        "value": "PLUGIN_DECISION_DEFINITION_VALUE_CASE_DEFINITION_ID"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseDefinitionKey",
-        "value": "PLUGIN_DECISION_DEFINITION_VALUE_CASE_DEFINITION_KEY"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseInstanceId",
-        "value": "PLUGIN_DECISION_DEFINITION_VALUE_CASE_INSTANCE_ID"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
         "key": "activityIdIn",
         "value": "PLUGIN_DECISION_DEFINITION_VALUE_ACTIVITY_ID"
       },

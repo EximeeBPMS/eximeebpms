@@ -31,7 +31,6 @@ import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
-import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
 import org.eximeebpms.bpm.engine.impl.HistoryLevelSetupCommand;
 import org.eximeebpms.bpm.engine.impl.ManagementServiceImpl;
@@ -41,13 +40,10 @@ import org.eximeebpms.bpm.engine.impl.application.ProcessApplicationManager;
 import org.eximeebpms.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
 import org.eximeebpms.bpm.engine.impl.db.DbIdGenerator;
 import org.eximeebpms.bpm.engine.impl.db.PersistenceSession;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
-import org.eximeebpms.bpm.engine.impl.el.FixedValue;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.eximeebpms.bpm.engine.impl.management.DatabasePurgeReport;
@@ -82,7 +78,6 @@ public abstract class TestHelper {
 
   static {
     RESOURCE_SUFFIXES.addAll(Arrays.asList(BpmnDeployer.BPMN_RESOURCE_SUFFIXES));
-    RESOURCE_SUFFIXES.addAll(Arrays.asList(CmmnDeployer.CMMN_RESOURCE_SUFFIXES));
     RESOURCE_SUFFIXES.addAll(Arrays.asList(DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES));
   }
 
@@ -603,11 +598,5 @@ public abstract class TestHelper {
         }
         return null;
       });
-  }
-
-  public static Object defaultManualActivation() {
-    Expression expression = new FixedValue(true);
-    CaseControlRuleImpl caseControlRule = new CaseControlRuleImpl(expression);
-    return caseControlRule;
   }
 }

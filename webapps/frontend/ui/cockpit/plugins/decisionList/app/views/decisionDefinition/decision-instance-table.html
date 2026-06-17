@@ -38,18 +38,7 @@
           </a>
         </td>
         <td class="definition-key"
-            ng-if="decisionInstance.caseDefinitionKey"
-            cam-widget-clipboard="decisionInstance.caseDefinitionKey">
-          <a ng-if="hasCasePlugin"
-             ng-href="#/case-definition/{{ decisionInstance.caseDefinitionId }}?searchQuery={{ getActivitySearch(decisionInstance) }}">
-            {{ decisionInstance.caseDefinitionKey }}
-          </a>
-          <span ng-if="!hasCasePlugin">
-            {{ decisionInstance.caseDefinitionKey }}
-          </span>
-        </td>
-        <td class="definition-key"
-            ng-if="!decisionInstance.processDefinitionKey && !decisionInstance.caseDefinitionKey">
+            ng-if="!decisionInstance.processDefinitionKey">
         </td>
 
         <td class="instance-id"
@@ -60,18 +49,7 @@
           </a>
         </td>
         <td class="instance-id"
-            ng-if="decisionInstance.caseInstanceId"
-            cam-widget-clipboard="decisionInstance.caseInstanceId">
-          <a ng-if="hasCasePlugin"
-             ng-href="#/case-instance/{{ decisionInstance.caseInstanceId }}?searchQuery={{ getActivitySearch(decisionInstance) }}">
-            {{ decisionInstance.caseInstanceId }}
-          </a>
-          <span ng-if="!hasCasePlugin">
-            {{ decisionInstance.caseInstanceId }}
-          </span>
-        </td>
-        <td class="instance-id"
-            ng-if="!decisionInstance.processInstanceId && !decisionInstance.caseInstanceId">
+            ng-if="!decisionInstance.processInstanceId">
         </td>
 
         <td class="activity-id"

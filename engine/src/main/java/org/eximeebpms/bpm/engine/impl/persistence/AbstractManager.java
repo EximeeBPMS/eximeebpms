@@ -22,8 +22,6 @@ import org.eximeebpms.bpm.engine.authorization.Permission;
 import org.eximeebpms.bpm.engine.authorization.Resource;
 import org.eximeebpms.bpm.engine.impl.AbstractQuery;
 import org.eximeebpms.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionManager;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
@@ -46,8 +44,6 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.EventSubscriptionManage
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricActivityInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricBatchManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricDetailManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricExternalTaskLogManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricIdentityLinkLogManager;
@@ -112,10 +108,6 @@ public abstract class AbstractManager implements Session {
     return getSession(ProcessDefinitionManager.class);
   }
 
-  protected CaseDefinitionManager getCaseDefinitionManager() {
-    return getSession(CaseDefinitionManager.class);
-  }
-
   protected DecisionDefinitionManager getDecisionDefinitionManager() {
     return getSession(DecisionDefinitionManager.class);
   }
@@ -130,14 +122,6 @@ public abstract class AbstractManager implements Session {
 
   protected HistoricDecisionInstanceManager getHistoricDecisionInstanceManager() {
     return getSession(HistoricDecisionInstanceManager.class);
-  }
-
-  protected CaseExecutionManager getCaseInstanceManager() {
-    return getSession(CaseExecutionManager.class);
-  }
-
-  protected CaseExecutionManager getCaseExecutionManager() {
-    return getSession(CaseExecutionManager.class);
   }
 
   protected ExecutionManager getProcessInstanceManager() {
@@ -168,10 +152,6 @@ public abstract class AbstractManager implements Session {
     return getSession(BusinessEventManager.class);
   }
 
-  protected HistoricCaseInstanceManager getHistoricCaseInstanceManager() {
-    return getSession(HistoricCaseInstanceManager.class);
-  }
-
   protected HistoricDetailManager getHistoricDetailManager() {
     return getSession(HistoricDetailManager.class);
   }
@@ -182,10 +162,6 @@ public abstract class AbstractManager implements Session {
 
   protected HistoricActivityInstanceManager getHistoricActivityInstanceManager() {
     return getSession(HistoricActivityInstanceManager.class);
-  }
-
-  protected HistoricCaseActivityInstanceManager getHistoricCaseActivityInstanceManager() {
-    return getSession(HistoricCaseActivityInstanceManager.class);
   }
 
   protected HistoricTaskInstanceManager getHistoricTaskInstanceManager() {

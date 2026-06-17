@@ -113,11 +113,6 @@
       </dependency>
       <dependency>
         <groupId>org.eximeebpms.bpm.model</groupId>
-        <artifactId>eximeebpms-cmmn-model</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eximeebpms.bpm.model</groupId>
         <artifactId>eximeebpms-dmn-model</artifactId>
         <version>${project.version}</version>
       </dependency>

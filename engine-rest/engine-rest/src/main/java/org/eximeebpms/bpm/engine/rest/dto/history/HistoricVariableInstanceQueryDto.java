@@ -53,7 +53,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
   protected String processInstanceId;
   protected String processDefinitionId;
   protected String processDefinitionKey;
-  protected String caseInstanceId;
   protected String variableName;
   protected String variableNameLike;
   protected Object variableValue;
@@ -63,8 +62,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
   protected String[] executionIdIn;
   protected String[] taskIdIn;
   protected String[] activityInstanceIdIn;
-  protected String[] caseExecutionIdIn;
-  protected String[] caseActivityIdIn;
   protected String[] processInstanceIdIn;
   protected List<String> tenantIds;
   protected Boolean withoutTenantId;
@@ -91,11 +88,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
   @EximeeBPMSQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
   }
 
   @EximeeBPMSQueryParam("variableName")
@@ -148,16 +140,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="caseExecutionIdIn", converter = StringArrayConverter.class)
-  public void setCaseExecutionIdIn(String[] caseExecutionIdIn) {
-    this.caseExecutionIdIn = caseExecutionIdIn;
-  }
-
-  @EximeeBPMSQueryParam(value="caseActivityIdIn", converter = StringArrayConverter.class)
-  public void setCaseActivityIdIn(String[] caseActivityIdIn) {
-    this.caseActivityIdIn = caseActivityIdIn;
-  }
-
   @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
@@ -203,9 +185,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
     if (processDefinitionKey != null) {
       query.processDefinitionKey(processDefinitionKey);
     }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
     if (variableName != null) {
       query.variableName(variableName);
     }
@@ -240,12 +219,6 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
     }
     if (activityInstanceIdIn != null && activityInstanceIdIn.length > 0) {
       query.activityInstanceIdIn(activityInstanceIdIn);
-    }
-    if (caseExecutionIdIn != null && caseExecutionIdIn.length > 0) {
-      query.caseExecutionIdIn(caseExecutionIdIn);
-    }
-    if (caseActivityIdIn != null && caseActivityIdIn.length > 0) {
-      query.caseActivityIdIn(caseActivityIdIn);
     }
     if (tenantIds != null && !tenantIds.isEmpty()) {
       query.tenantIdIn(tenantIds.toArray(new String[tenantIds.size()]));

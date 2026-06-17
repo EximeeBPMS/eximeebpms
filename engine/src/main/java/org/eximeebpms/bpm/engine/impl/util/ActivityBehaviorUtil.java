@@ -18,9 +18,6 @@ package org.eximeebpms.bpm.engine.impl.util;
 
 import static org.eximeebpms.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnActivity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmActivity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmException;
 import org.eximeebpms.bpm.engine.impl.pvm.delegate.ActivityBehavior;
@@ -31,18 +28,6 @@ import org.eximeebpms.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  *
  */
 public class ActivityBehaviorUtil {
-
-  public static CmmnActivityBehavior getActivityBehavior(CmmnExecution execution) {
-    String id = execution.getId();
-
-    CmmnActivity activity = execution.getActivity();
-    ensureNotNull(PvmException.class, "Case execution '"+id+"' has no current activity.", "activity", activity);
-
-    CmmnActivityBehavior behavior = activity.getActivityBehavior();
-    ensureNotNull(PvmException.class, "There is no behavior specified in "+activity+" for case execution '"+id+"'.", "behavior", behavior);
-
-    return behavior;
-  }
 
   public static ActivityBehavior getActivityBehavior(PvmExecutionImpl execution) {
     String id = execution.getId();

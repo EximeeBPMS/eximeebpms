@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.BusinessEventService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -71,7 +70,6 @@ public class ProcessEngineImpl implements ProcessEngine {
   protected FormService formService;
   protected ManagementService managementService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
   protected FilterService filterService;
   protected ExternalTaskService externalTaskService;
   protected DecisionService decisionService;
@@ -102,7 +100,6 @@ public class ProcessEngineImpl implements ProcessEngine {
     this.formService = processEngineConfiguration.getFormService();
     this.managementService = processEngineConfiguration.getManagementService();
     this.authorizationService = processEngineConfiguration.getAuthorizationService();
-    this.caseService = processEngineConfiguration.getCaseService();
     this.filterService = processEngineConfiguration.getFilterService();
     this.externalTaskService = processEngineConfiguration.getExternalTaskService();
     this.decisionService = processEngineConfiguration.getDecisionService();
@@ -248,11 +245,6 @@ public class ProcessEngineImpl implements ProcessEngine {
   @Override
   public AuthorizationService getAuthorizationService() {
     return authorizationService;
-  }
-
-  @Override
-  public CaseService getCaseService() {
-    return caseService;
   }
 
   @Override

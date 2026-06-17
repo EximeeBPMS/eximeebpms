@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
@@ -58,7 +57,6 @@ public class HistoricTaskInstanceQueryOrTest {
   protected HistoryService historyService;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected RepositoryService repositoryService;
   protected FilterService filterService;
 
@@ -67,7 +65,6 @@ public class HistoricTaskInstanceQueryOrTest {
     historyService = processEngineRule.getHistoryService();
     runtimeService = processEngineRule.getRuntimeService();
     taskService = processEngineRule.getTaskService();
-    caseService = processEngineRule.getCaseService();
     repositoryService = processEngineRule.getRepositoryService();
     filterService = processEngineRule.getFilterService();
   }
@@ -351,42 +348,6 @@ public class HistoricTaskInstanceQueryOrTest {
       .endOr())
       .isInstanceOf(ProcessEngineException.class)
       .hasMessageContaining("Invalid query usage: cannot set orderByTaskPriority() within 'or' query");
-  }
-
-  @Test
-  public void shouldThrowExceptionOnOrderByCaseDefinitionId() {
-
-    // when/then
-    assertThatThrownBy(() -> historyService.createHistoricTaskInstanceQuery()
-      .or()
-        .orderByCaseDefinitionId()
-      .endOr())
-      .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("Invalid query usage: cannot set orderByCaseDefinitionId() within 'or' query");
-  }
-
-  @Test
-  public void shouldThrowExceptionOnOrderByCaseInstanceId() {
-
-    // when/then
-    assertThatThrownBy(() -> historyService.createHistoricTaskInstanceQuery()
-      .or()
-        .orderByCaseInstanceId()
-      .endOr())
-      .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("Invalid query usage: cannot set orderByCaseInstanceId() within 'or' query");
-  }
-
-  @Test
-  public void shouldThrowExceptionOnOrderByCaseExecutionId() {
-
-    // when/then
-    assertThatThrownBy(() -> historyService.createHistoricTaskInstanceQuery()
-      .or()
-        .orderByCaseExecutionId()
-      .endOr())
-      .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("Invalid query usage: cannot set orderByCaseExecutionId() within 'or' query");
   }
 
   @Test
@@ -837,27 +798,6 @@ public class HistoricTaskInstanceQueryOrTest {
         .or()
           .taskId(taskOne.getId())
           .processInstanceBusinessKey("aBusinessKey")
-        .endOr()
-        .list();
-
-    // then
-    assertThat(tasks.size()).isEqualTo(2);
-  }
-
-  @Test
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  public void shouldQueryStandaloneOrEmbeddedTaskByCaseDefinitionId() {
-    // given
-    Task taskOne = taskService.newTask();
-    taskService.saveTask(taskOne);
-
-    caseService.createCaseInstanceByKey("oneTaskCase");
-
-    // when
-    List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery()
-        .or()
-          .taskId(taskOne.getId())
-          .caseDefinitionKey("oneTaskCase")
         .endOr()
         .list();
 

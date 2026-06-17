@@ -21,13 +21,11 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.eximeebpms.bpm.engine.rest.CaseDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.GroupRestService;
 import org.eximeebpms.bpm.engine.rest.IdentityRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.UserRestService;
 import org.eximeebpms.bpm.engine.rest.cache.Cache;
-import org.eximeebpms.bpm.engine.rest.hal.caseDefinition.HalCaseDefinitionResolver;
 import org.eximeebpms.bpm.engine.rest.hal.group.HalGroupResolver;
 import org.eximeebpms.bpm.engine.rest.hal.identitylink.HalIdentityLinkResolver;
 import org.eximeebpms.bpm.engine.rest.hal.processDefinition.HalProcessDefinitionResolver;
@@ -52,7 +50,6 @@ public class Hal {
     halLinkResolvers.put(UserRestService.class, new HalUserResolver());
     halLinkResolvers.put(GroupRestService.class, new HalGroupResolver());
     halLinkResolvers.put(ProcessDefinitionRestService.class, new HalProcessDefinitionResolver());
-    halLinkResolvers.put(CaseDefinitionRestService.class, new HalCaseDefinitionResolver());
     halLinkResolvers.put(IdentityRestService.class, new HalIdentityLinkResolver());
   }
 

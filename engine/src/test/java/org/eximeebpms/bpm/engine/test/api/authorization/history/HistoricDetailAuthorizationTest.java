@@ -48,7 +48,6 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
 
   protected static final String PROCESS_KEY = "oneTaskProcess";
   protected static final String MESSAGE_START_PROCESS_KEY = "messageStartProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   protected String deploymentId;
 
@@ -57,8 +56,7 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
         "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn")
+        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml")
             .getId();
     super.setUp();
   }
@@ -223,20 +221,6 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
     verifyQueryResults(query, 7);
   }
 
-  // historic variable update query (case variables) /////////////////////////////////////////////
-
-  @Test
-  public void testQueryAfterCaseVariables() {
-    // given
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
-    // when
-    HistoricDetailQuery query = historyService.createHistoricDetailQuery().variableUpdates();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
   // historic variable update query (mixed) ////////////////////////////////////
 
   @Test
@@ -265,14 +249,11 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
     taskService.setVariables("five", getVariables());
     enableAuthorization();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
     // when
     HistoricDetailQuery query = historyService.createHistoricDetailQuery().variableUpdates();
 
     // then
-    verifyQueryResults(query, 7);
+    verifyQueryResults(query, 5);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -307,16 +288,13 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
     taskService.setVariables("five", getVariables());
     enableAuthorization();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, READ_HISTORY);
 
     // when
     HistoricDetailQuery query = historyService.createHistoricDetailQuery().variableUpdates();
 
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -351,16 +329,13 @@ public class HistoricDetailAuthorizationTest extends AuthorizationTest {
     taskService.setVariables("five", getVariables());
     enableAuthorization();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
     createGrantAuthorization(PROCESS_DEFINITION, ANY, userId, READ_HISTORY);
 
     // when
     HistoricDetailQuery query = historyService.createHistoricDetailQuery().variableUpdates();
 
     // then
-    verifyQueryResults(query, 14);
+    verifyQueryResults(query, 12);
 
     deleteTask("one", true);
     deleteTask("two", true);

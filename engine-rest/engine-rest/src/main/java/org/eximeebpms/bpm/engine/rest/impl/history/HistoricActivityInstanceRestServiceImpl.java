@@ -42,7 +42,7 @@ public class HistoricActivityInstanceRestServiceImpl implements HistoricActivity
   }
 
   @Override
-  public HistoricActivityInstanceResource getHistoricCaseInstance(String activityInstanceId) {
+  public HistoricActivityInstanceResource getHistoricActivityInstance(String activityInstanceId) {
     return new HistoricActivityInstanceResourceImpl(processEngine, activityInstanceId);
   }
 

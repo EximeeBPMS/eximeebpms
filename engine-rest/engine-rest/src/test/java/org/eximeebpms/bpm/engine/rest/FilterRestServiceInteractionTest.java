@@ -26,10 +26,6 @@ import static org.eximeebpms.bpm.engine.authorization.Resources.FILTER;
 import static org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto.SORT_ORDER_ASC_VALUE;
 import static org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto.SORT_ORDER_DESC_VALUE;
 import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_ASSIGNEE_VALUE;
-import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_CASE_EXECUTION_ID_VALUE;
-import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_CASE_EXECUTION_VARIABLE;
-import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_CASE_INSTANCE_ID_VALUE;
-import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_CASE_INSTANCE_VARIABLE;
 import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_CREATE_TIME_VALUE;
 import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_DESCRIPTION_VALUE;
 import static org.eximeebpms.bpm.engine.rest.dto.task.TaskQueryDto.SORT_BY_DUE_DATE_VALUE;
@@ -136,10 +132,8 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
   public static final String invalidExtendingQuery = "abc";
 
   public static final String PROCESS_INSTANCE_A_ID = "processInstanceA";
-  public static final String CASE_INSTANCE_A_ID = "caseInstanceA";
   public static final String EXECUTION_A_ID = "executionA";
   public static final String EXECUTION_B_ID = "executionB";
-  public static final String CASE_EXECUTION_A_ID = "caseExecutionA";
   public static final String TASK_A_ID = "taskA";
   public static final String TASK_B_ID = "taskB";
   public static final String TASK_C_ID = "taskC";
@@ -259,14 +253,6 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     TaskQueryImpl query = mock(TaskQueryImpl.class);
     when(query.getAssignee()).thenReturn(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME);
     when(query.getAssigneeLike()).thenReturn(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME);
-    when(query.getCaseDefinitionId()).thenReturn(MockProvider.EXAMPLE_CASE_DEFINITION_ID);
-    when(query.getCaseDefinitionKey()).thenReturn(MockProvider.EXAMPLE_CASE_DEFINITION_KEY);
-    when(query.getCaseDefinitionName()).thenReturn(MockProvider.EXAMPLE_CASE_DEFINITION_NAME);
-    when(query.getCaseDefinitionNameLike()).thenReturn(MockProvider.EXAMPLE_CASE_DEFINITION_NAME_LIKE);
-    when(query.getCaseExecutionId()).thenReturn(MockProvider.EXAMPLE_CASE_EXECUTION_ID);
-    when(query.getCaseInstanceBusinessKey()).thenReturn(MockProvider.EXAMPLE_CASE_INSTANCE_BUSINESS_KEY);
-    when(query.getCaseInstanceBusinessKeyLike()).thenReturn(MockProvider.EXAMPLE_CASE_INSTANCE_BUSINESS_KEY_LIKE);
-    when(query.getCaseInstanceId()).thenReturn(MockProvider.EXAMPLE_CASE_INSTANCE_ID);
     when(query.getCandidateUser()).thenReturn(MockProvider.EXAMPLE_USER_ID);
     when(query.getCandidateGroup()).thenReturn(MockProvider.EXAMPLE_GROUP_ID);
     when(query.getProcessInstanceBusinessKey()).thenReturn(MockProvider.EXAMPLE_PROCESS_INSTANCE_BUSINESS_KEY);
@@ -306,14 +292,6 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
       .statusCode(Status.OK.getStatusCode())
       .body("query.assignee", equalTo(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME))
       .body("query.assigneeLike", equalTo(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME))
-      .body("query.caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
-      .body("query.caseDefinitionKey", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_KEY))
-      .body("query.caseDefinitionName", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_NAME))
-      .body("query.caseDefinitionNameLike", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_NAME_LIKE))
-      .body("query.caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-      .body("query.caseInstanceBusinessKey", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_BUSINESS_KEY))
-      .body("query.caseInstanceBusinessKeyLike", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_BUSINESS_KEY_LIKE))
-      .body("query.caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
       .body("query.candidateUser", equalTo(MockProvider.EXAMPLE_USER_ID))
       .body("query.candidateGroup", equalTo(MockProvider.EXAMPLE_GROUP_ID))
       .body("query.processInstanceBusinessKey", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_BUSINESS_KEY))
@@ -476,7 +454,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
   public void testGetFilterWithMultipleSorting() {
     TaskQuery query = new TaskQueryImpl()
       .orderByDueDate().asc()
-      .orderByCaseExecutionId().desc();
+      .orderByExecutionId().desc();
 
     Filter filter = new FilterEntity("Task").setName("test").setQuery(query);
     when(filterServiceMock.getFilter(EXAMPLE_FILTER_ID)).thenReturn(filter);
@@ -493,18 +471,16 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     List<Map<String, Object>> sortings = from(content).getJsonObject("query.sorting");
     assertThat(sortings).hasSize(2);
     assertSorting(sortings.get(0), SORT_BY_DUE_DATE_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(1), SORT_BY_CASE_EXECUTION_ID_VALUE, SORT_ORDER_DESC_VALUE);
+    assertSorting(sortings.get(1), SORT_BY_EXECUTION_ID_VALUE, SORT_ORDER_DESC_VALUE);
   }
 
   @Test
   public void testGetFilterWithAllPropertiesSorting() {
     TaskQuery query = new TaskQueryImpl()
       .orderByProcessInstanceId().asc()
-      .orderByCaseInstanceId().asc()
       .orderByDueDate().asc()
       .orderByFollowUpDate().asc()
       .orderByExecutionId().asc()
-      .orderByCaseExecutionId().asc()
       .orderByTaskAssignee().asc()
       .orderByTaskCreateTime().asc()
       .orderByTaskDescription().asc()
@@ -527,21 +503,19 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     // validate sorting content
     String content = response.asString();
     List<Map<String, Object>> sortings = from(content).getJsonObject("query.sorting");
-    assertThat(sortings).hasSize(14);
+    assertThat(sortings).hasSize(12);
     assertSorting(sortings.get(0), SORT_BY_PROCESS_INSTANCE_ID_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(1), SORT_BY_CASE_INSTANCE_ID_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(2), SORT_BY_DUE_DATE_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(3), SORT_BY_FOLLOW_UP_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(4), SORT_BY_EXECUTION_ID_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(5), SORT_BY_CASE_EXECUTION_ID_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(6), SORT_BY_ASSIGNEE_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(7), SORT_BY_CREATE_TIME_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(8), SORT_BY_DESCRIPTION_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(9), SORT_BY_ID_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(10), SORT_BY_NAME_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(11), SORT_BY_NAME_CASE_INSENSITIVE_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(12), SORT_BY_PRIORITY_VALUE, SORT_ORDER_ASC_VALUE);
-    assertSorting(sortings.get(13), SORT_BY_TENANT_ID_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(1), SORT_BY_DUE_DATE_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(2), SORT_BY_FOLLOW_UP_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(3), SORT_BY_EXECUTION_ID_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(4), SORT_BY_ASSIGNEE_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(5), SORT_BY_CREATE_TIME_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(6), SORT_BY_DESCRIPTION_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(7), SORT_BY_ID_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(8), SORT_BY_NAME_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(9), SORT_BY_NAME_CASE_INSENSITIVE_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(10), SORT_BY_PRIORITY_VALUE, SORT_ORDER_ASC_VALUE);
+    assertSorting(sortings.get(11), SORT_BY_TENANT_ID_VALUE, SORT_ORDER_ASC_VALUE);
   }
 
   @Test
@@ -549,9 +523,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     TaskQuery query = new TaskQueryImpl()
       .orderByExecutionVariable("foo", ValueType.STRING).asc()
       .orderByProcessVariable("foo", ValueType.STRING).asc()
-      .orderByTaskVariable("foo", ValueType.STRING).asc()
-      .orderByCaseExecutionVariable("foo", ValueType.STRING).asc()
-      .orderByCaseInstanceVariable("foo", ValueType.STRING).asc();
+      .orderByTaskVariable("foo", ValueType.STRING).asc();
 
     Filter filter = new FilterEntity("Task").setName("test").setQuery(query);
     when(filterServiceMock.getFilter(EXAMPLE_FILTER_ID)).thenReturn(filter);
@@ -566,12 +538,10 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     // validate sorting content
     String content = response.asString();
     List<Map<String, Object>> sortings = from(content).getJsonObject("query.sorting");
-    assertThat(sortings).hasSize(5);
+    assertThat(sortings).hasSize(3);
     assertSorting(sortings.get(0), SORT_BY_EXECUTION_VARIABLE, SORT_ORDER_ASC_VALUE, "foo", ValueType.STRING);
     assertSorting(sortings.get(1), SORT_BY_PROCESS_VARIABLE, SORT_ORDER_ASC_VALUE, "foo", ValueType.STRING);
     assertSorting(sortings.get(2), SORT_BY_TASK_VARIABLE, SORT_ORDER_ASC_VALUE, "foo", ValueType.STRING);
-    assertSorting(sortings.get(3), SORT_BY_CASE_EXECUTION_VARIABLE, SORT_ORDER_ASC_VALUE, "foo", ValueType.STRING);
-    assertSorting(sortings.get(4), SORT_BY_CASE_INSTANCE_VARIABLE, SORT_ORDER_ASC_VALUE, "foo", ValueType.STRING);
   }
 
   @Test
@@ -1580,7 +1550,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     mockFilterWithVariableNames();
 
     // mock resulting task
-    Task task = createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID, null, null);
+    Task task = createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID);
     when(filterServiceMock.singleResult(eq(EXAMPLE_FILTER_ID), any())).thenReturn(task);
 
     // mock variable instances
@@ -1616,7 +1586,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     mockFilterWithVariableNames();
 
     // mock resulting task
-    Task task = createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID, CASE_INSTANCE_A_ID, CASE_EXECUTION_A_ID);
+    Task task = createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID);
     when(filterServiceMock.singleResult(eq(EXAMPLE_FILTER_ID), any())).thenReturn(task);
 
     // mock variable instances
@@ -1626,11 +1596,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
       createExecutionVariableInstanceMock("foo", stringValue("execution"), EXECUTION_A_ID),
       createExecutionVariableInstanceMock("execution", stringValue("bar"), EXECUTION_A_ID),
       createTaskVariableInstanceMock("foo", stringValue("task"), TASK_A_ID),
-      createTaskVariableInstanceMock("task", stringValue("bar"), TASK_A_ID),
-      createCaseInstanceVariableInstanceMock("foo", stringValue("caseInstance"), CASE_INSTANCE_A_ID),
-      createCaseInstanceVariableInstanceMock("caseInstance", stringValue("bar"), CASE_INSTANCE_A_ID),
-      createCaseExecutionVariableInstanceMock("foo", stringValue("caseExecution"), CASE_EXECUTION_A_ID),
-      createCaseExecutionVariableInstanceMock("caseExecution", stringValue("bar"), CASE_EXECUTION_A_ID)
+      createTaskVariableInstanceMock("task", stringValue("bar"), TASK_A_ID)
     );
     when(variableInstanceQueryMock.unlimitedList()).thenReturn(variableInstances);
 
@@ -1640,13 +1606,13 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     .expect()
       .statusCode(Status.OK.getStatusCode())
       .body("_embedded.containsKey('variable')", is(true))
-      .body("_embedded.variable.size()", equalTo(6))
+      .body("_embedded.variable.size()", equalTo(4))
     .when()
       .get(EXECUTE_SINGLE_RESULT_FILTER_URL);
 
     verify(filterServiceMock, times(1)).getFilter(eq(EXAMPLE_FILTER_ID));
     verify(variableInstanceQueryMock, times(1)).variableScopeIdIn(any(String[].class));
-    verify(variableInstanceQueryMock).variableScopeIdIn(TASK_A_ID, EXECUTION_A_ID, PROCESS_INSTANCE_A_ID, CASE_EXECUTION_A_ID, CASE_INSTANCE_A_ID);
+    verify(variableInstanceQueryMock).variableScopeIdIn(TASK_A_ID, EXECUTION_A_ID, PROCESS_INSTANCE_A_ID);
     verify(variableInstanceQueryMock, times(1)).variableNameIn(any(String[].class));
     verify(variableInstanceQueryMock).variableNameIn("foo", "bar");
     verify(variableInstanceQueryMock, times(1)).unlimitedList();
@@ -1664,10 +1630,6 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     verifyExecutionVariableValue(variables.get(2), "execution", "bar", EXECUTION_A_ID);
     // process instance variable 'processInstance'
     verifyProcessInstanceVariableValue(variables.get(3), "processInstance", "bar", PROCESS_INSTANCE_A_ID);
-    // caseExecution variable 'caseExecution'
-    verifyCaseExecutionVariableValue(variables.get(4), "caseExecution", "bar", CASE_EXECUTION_A_ID);
-    // case instance variable 'caseInstance'
-    verifyCaseInstanceVariableValue(variables.get(5), "caseInstance", "bar", CASE_INSTANCE_A_ID);
   }
 
   @Test
@@ -1677,9 +1639,9 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
 
     // mock resulting task
     List<Task> tasks = Arrays.asList(
-      createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID, null, null),
-      createTaskMock(TASK_B_ID, PROCESS_INSTANCE_A_ID, EXECUTION_B_ID, null, null),
-      createTaskMock(TASK_C_ID, null, null, CASE_INSTANCE_A_ID, CASE_EXECUTION_A_ID)
+      createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID),
+      createTaskMock(TASK_B_ID, PROCESS_INSTANCE_A_ID, EXECUTION_B_ID),
+      createTaskMock(TASK_C_ID, null, null)
     );
     when(filterServiceMock.list(eq(EXAMPLE_FILTER_ID), Mockito.<Query<?, Task>>any())).thenReturn(tasks);
 
@@ -1696,11 +1658,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
       createTaskVariableInstanceMock("foo", stringValue(TASK_B_ID), TASK_B_ID),
       createTaskVariableInstanceMock(TASK_B_ID, stringValue("bar"), TASK_B_ID),
       createTaskVariableInstanceMock("foo", stringValue(TASK_C_ID), TASK_C_ID),
-      createTaskVariableInstanceMock(TASK_C_ID, stringValue("bar"), TASK_C_ID),
-      createCaseInstanceVariableInstanceMock("foo", stringValue(CASE_INSTANCE_A_ID), CASE_INSTANCE_A_ID),
-      createCaseInstanceVariableInstanceMock(CASE_INSTANCE_A_ID, stringValue("bar"), CASE_INSTANCE_A_ID),
-      createCaseExecutionVariableInstanceMock("foo", stringValue(CASE_EXECUTION_A_ID), CASE_EXECUTION_A_ID),
-      createCaseExecutionVariableInstanceMock(CASE_EXECUTION_A_ID, stringValue("bar"), CASE_EXECUTION_A_ID)
+      createTaskVariableInstanceMock(TASK_C_ID, stringValue("bar"), TASK_C_ID)
     );
     when(variableInstanceQueryMock.unlimitedList()).thenReturn(variableInstances);
 
@@ -1716,7 +1674,7 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
 
     verify(filterServiceMock, times(1)).getFilter(eq(EXAMPLE_FILTER_ID));
     verify(variableInstanceQueryMock, times(1)).variableScopeIdIn(any(String[].class));
-    verify(variableInstanceQueryMock).variableScopeIdIn(TASK_A_ID, EXECUTION_A_ID, PROCESS_INSTANCE_A_ID, TASK_B_ID, EXECUTION_B_ID, TASK_C_ID, CASE_EXECUTION_A_ID, CASE_INSTANCE_A_ID);
+    verify(variableInstanceQueryMock).variableScopeIdIn(TASK_A_ID, EXECUTION_A_ID, PROCESS_INSTANCE_A_ID, TASK_B_ID, EXECUTION_B_ID, TASK_C_ID);
     verify(variableInstanceQueryMock, times(1)).variableNameIn(any(String[].class));
     verify(variableInstanceQueryMock).variableNameIn("foo", "bar");
     verify(variableInstanceQueryMock, times(1)).unlimitedList();
@@ -1752,26 +1710,21 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
 
     // task C
     variables = getEmbeddedTaskVariables(taskList.get(2));
-    assertThat(variables).hasSize(4);
+    assertThat(variables).hasSize(2);
 
     // task variable 'foo'
     verifyTaskVariableValue(variables.get(0), "foo", TASK_C_ID, TASK_C_ID);
     // task variable 'taskC'
     verifyTaskVariableValue(variables.get(1), TASK_C_ID, "bar", TASK_C_ID);
-    // case execution variable 'caseExecutionA'
-    verifyCaseExecutionVariableValue(variables.get(2), CASE_EXECUTION_A_ID, "bar", CASE_EXECUTION_A_ID);
-    // case instance variable 'caseInstanceA'
-    verifyCaseInstanceVariableValue(variables.get(3), CASE_INSTANCE_A_ID, "bar", CASE_INSTANCE_A_ID);
-
   }
 
   @Test
   public void testHalTaskListCount() {
     // mock resulting task
     List<Task> tasks = Arrays.asList(
-      createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID, null, null),
-      createTaskMock(TASK_B_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID, null, null),
-      createTaskMock(TASK_C_ID, PROCESS_INSTANCE_A_ID, EXECUTION_B_ID, null, null)
+      createTaskMock(TASK_A_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID),
+      createTaskMock(TASK_B_ID, PROCESS_INSTANCE_A_ID, EXECUTION_A_ID),
+      createTaskMock(TASK_C_ID, PROCESS_INSTANCE_A_ID, EXECUTION_B_ID)
     );
     when(filterServiceMock.list(eq(EXAMPLE_FILTER_ID), Mockito.<Query<?, Task>>any())).thenReturn(tasks);
     when(filterServiceMock.listPage(eq(EXAMPLE_FILTER_ID), Mockito.<Query<?, Task>>any(), eq(0), eq(2))).thenReturn(tasks.subList(0, 2));
@@ -1838,39 +1791,29 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     return filter;
   }
 
-  protected Task createTaskMock(String taskId, String processInstanceId, String executionId, String caseInstanceId, String caseExecutionId) {
+  protected Task createTaskMock(String taskId, String processInstanceId, String executionId) {
     return new MockTaskBuilder()
       .id(taskId)
       .processInstanceId(processInstanceId)
       .executionId(executionId)
-      .caseInstanceId(caseInstanceId)
-      .caseExecutionId(caseExecutionId)
       .build();
   }
 
   protected VariableInstance createTaskVariableInstanceMock(String name, TypedValue value, String taskId) {
-    return createVariableInstanceMock(name, value, taskId, null, null, null, null);
+    return createVariableInstanceMock(name, value, taskId, null, null);
   }
 
   protected VariableInstance createExecutionVariableInstanceMock(String name, TypedValue value, String executionId) {
-    return createVariableInstanceMock(name, value, null, executionId, null, null, null);
+    return createVariableInstanceMock(name, value, null, executionId, null);
   }
 
   protected VariableInstance createProcessInstanceVariableInstanceMock(String name, TypedValue value, String processInstanceId) {
-    return createVariableInstanceMock(name, value, null, processInstanceId, processInstanceId, null, null);
+    return createVariableInstanceMock(name, value, null, processInstanceId, processInstanceId);
   }
 
-  protected VariableInstance createCaseExecutionVariableInstanceMock(String name, TypedValue value, String caseExecutionId) {
-    return createVariableInstanceMock(name, value, null, null, null, caseExecutionId, null);
-  }
-
-  protected VariableInstance createCaseInstanceVariableInstanceMock(String name, TypedValue value, String caseInstanceId) {
-    return createVariableInstanceMock(name, value, null, null, null, caseInstanceId, caseInstanceId);
-  }
-
-  protected VariableInstance createVariableInstanceMock(String name, TypedValue value, String taskId, String executionId, String processInstanceId, String caseExecutionId, String caseInstanceId) {
+  protected VariableInstance createVariableInstanceMock(String name, TypedValue value, String taskId, String executionId, String processInstanceId) {
     return mockVariableInstance().name(name).typedValue(value).taskId(taskId)
-      .executionId(executionId).processInstanceId(processInstanceId).caseExecutionId(caseExecutionId).caseInstanceId(caseInstanceId)
+      .executionId(executionId).processInstanceId(processInstanceId)
       .buildEntity();
   }
 
@@ -1882,16 +1825,8 @@ public class FilterRestServiceInteractionTest extends AbstractRestServiceTest {
     verifyVariableValue(variable, name, value, ExecutionRestService.PATH, executionId, "localVariables");
   }
 
-  protected void verifyCaseExecutionVariableValue(Map<String, Object> variable, String name, String value, String caseExecutionId) {
-    verifyVariableValue(variable, name, value, CaseExecutionRestService.PATH, caseExecutionId, "localVariables");
-  }
-
   protected void verifyProcessInstanceVariableValue(Map<String, Object> variable, String name, String value, String processInstanceId) {
     verifyVariableValue(variable, name, value, ProcessInstanceRestService.PATH, processInstanceId, "variables");
-  }
-
-  protected void verifyCaseInstanceVariableValue(Map<String, Object> variable, String name, String value, String caseInstanceId) {
-    verifyVariableValue(variable, name, value, CaseInstanceRestService.PATH, caseInstanceId, "variables");
   }
 
   @SuppressWarnings("unchecked")

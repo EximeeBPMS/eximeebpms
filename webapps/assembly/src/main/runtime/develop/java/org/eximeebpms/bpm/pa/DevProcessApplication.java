@@ -34,7 +34,6 @@ import org.eximeebpms.bpm.admin.impl.web.SetupResource;
 import org.eximeebpms.bpm.application.PostDeploy;
 import org.eximeebpms.bpm.application.ProcessApplication;
 import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.externaltask.LockedExternalTask;
@@ -234,15 +233,6 @@ public class DevProcessApplication extends ServletProcessApplication {
     Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).singleResult();
     taskService.setVariableLocal(task.getId(), "localTaskVariable", "foo");
 
-    CaseService caseService = engine.getCaseService();
-    caseService
-      .withCaseDefinitionByKey("loanApplicationCase")
-      .setVariable("aVariable", "abc")
-      .setVariable("anotherVariable", "xyz")
-      .create();
-
-    caseService.createCaseInstanceByKey("CallingCase");
-
     Task standaloneTask = taskService.newTask();
     standaloneTask.setName("A Standalone Task");
     standaloneTask.setAssignee("jonny1");
@@ -370,7 +360,6 @@ public class DevProcessApplication extends ServletProcessApplication {
     engine.getRuntimeService().startProcessInstanceByKey("process-with-invalid-form");
     engine.getRuntimeService().startProcessInstanceByKey("process-with-http-form");
 
-    engine.getCaseService().createCaseInstanceByKey("case-with-deployment-form");
   }
 
   private Date createArtificalDate(int offset) {

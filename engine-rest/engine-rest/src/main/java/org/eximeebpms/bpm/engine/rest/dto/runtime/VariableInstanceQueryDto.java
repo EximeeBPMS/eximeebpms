@@ -62,8 +62,6 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
   protected Boolean variableValuesIgnoreCase;
   protected String[] executionIdIn;
   protected String[] processInstanceIdIn;
-  protected String[] caseExecutionIdIn;
-  protected String[] caseInstanceIdIn;
   protected String[] taskIdIn;
   protected String[] batchIdIn;
   protected String[] variableScopeIdIn;
@@ -109,16 +107,6 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
   @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
-  }
-
-  @EximeeBPMSQueryParam(value="caseExecutionIdIn", converter = StringArrayConverter.class)
-  public void setCaseExecutionIdIn(String[] caseExecutionIdIn) {
-    this.caseExecutionIdIn = caseExecutionIdIn;
-  }
-
-  @EximeeBPMSQueryParam(value="caseInstanceIdIn", converter = StringArrayConverter.class)
-  public void setCaseInstanceIdIn(String[] caseInstanceIdIn) {
-    this.caseInstanceIdIn = caseInstanceIdIn;
   }
 
   @EximeeBPMSQueryParam(value="taskIdIn", converter = StringArrayConverter.class)
@@ -206,14 +194,6 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
 
     if (processInstanceIdIn != null && processInstanceIdIn.length > 0) {
       query.processInstanceIdIn(processInstanceIdIn);
-    }
-
-    if (caseExecutionIdIn != null && caseExecutionIdIn.length > 0) {
-      query.caseExecutionIdIn(caseExecutionIdIn);
-    }
-
-    if (caseInstanceIdIn != null && caseInstanceIdIn.length > 0) {
-      query.caseInstanceIdIn(caseInstanceIdIn);
     }
 
     if (taskIdIn != null && taskIdIn.length > 0) {

@@ -17,7 +17,6 @@
 package org.eximeebpms.bpm.engine.impl.cfg.multitenancy;
 
 import org.eximeebpms.bpm.engine.authorization.Permission;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
@@ -40,10 +39,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TenantManager;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
 
 /**
  * {@link CommandChecker} to ensure that commands are only executed for
@@ -71,13 +68,6 @@ public class TenantCommandChecker implements CommandChecker {
   public void checkReadProcessDefinition(ProcessDefinition processDefinition) {
     if (!getTenantManager().isAuthenticatedTenant(processDefinition.getTenantId())) {
       throw LOG.exceptionCommandWithUnauthorizedTenant("get the process definition '"+ processDefinition.getId() + "'");
-    }
-  }
-
-  @Override
-  public void checkCreateCaseInstance(CaseDefinition caseDefinition) {
-    if (!getTenantManager().isAuthenticatedTenant(caseDefinition.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("create an instance of the case definition '"+ caseDefinition.getId() + "'");
     }
   }
 
@@ -394,20 +384,6 @@ public class TenantCommandChecker implements CommandChecker {
   }
 
   @Override
-  public void checkReadCaseDefinition(CaseDefinition caseDefinition) {
-    if (caseDefinition != null && !getTenantManager().isAuthenticatedTenant(caseDefinition.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("get the case definition '"+ caseDefinition.getId() + "'");
-    }
-  }
-
-  @Override
-  public void checkUpdateCaseDefinition(CaseDefinition caseDefinition) {
-    if (caseDefinition != null && !getTenantManager().isAuthenticatedTenant(caseDefinition.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("update the case definition '" + caseDefinition.getId() + "'");
-    }
-  }
-
-  @Override
   public void checkDeleteHistoricTaskInstance(HistoricTaskInstanceEntity task) {
     if (task != null && !getTenantManager().isAuthenticatedTenant(task.getTenantId())) {
       throw LOG.exceptionCommandWithUnauthorizedTenant("delete the historic task instance '"+ task.getId() + "'");
@@ -418,13 +394,6 @@ public class TenantCommandChecker implements CommandChecker {
   public void checkDeleteHistoricProcessInstance(HistoricProcessInstance instance) {
     if (instance != null && !getTenantManager().isAuthenticatedTenant(instance.getTenantId())) {
       throw LOG.exceptionCommandWithUnauthorizedTenant("delete the historic process instance '"+ instance.getId() + "'");
-    }
-  }
-
-  @Override
-  public void checkDeleteHistoricCaseInstance(HistoricCaseInstance instance) {
-    if (instance != null && !getTenantManager().isAuthenticatedTenant(instance.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("delete the historic case instance '"+ instance.getId() + "'");
     }
   }
 
@@ -483,20 +452,6 @@ public class TenantCommandChecker implements CommandChecker {
     // Report.selectHistoricProcessInstanceDurationReport
     // It is necessary to make the check there because the query may be return only the
     // historic process instances which belong to the authenticated tenant.
-  }
-
-  @Override
-  public void checkUpdateCaseInstance(CaseExecution caseExecution) {
-    if (caseExecution != null && !getTenantManager().isAuthenticatedTenant(caseExecution.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("update the case execution '" + caseExecution.getId() + "'");
-    }
-  }
-
-  @Override
-  public void checkReadCaseInstance(CaseExecution caseExecution) {
-    if (caseExecution != null && !getTenantManager().isAuthenticatedTenant(caseExecution.getTenantId())) {
-      throw LOG.exceptionCommandWithUnauthorizedTenant("get the case execution '" + caseExecution.getId() + "'");
-    }
   }
 
   @Override

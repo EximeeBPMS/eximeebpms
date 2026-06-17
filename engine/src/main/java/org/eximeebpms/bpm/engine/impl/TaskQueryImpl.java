@@ -162,15 +162,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   protected boolean isWithoutDueDate = false;
 
   protected String[] tenantIds;
-  // case management /////////////////////////////
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseDefinitionName;
-  protected String caseDefinitionNameLike;
-  protected String caseInstanceId;
-  protected String caseInstanceBusinessKey;
-  protected String caseInstanceBusinessKeyLike;
-  protected String caseExecutionId;
 
   protected List<String> cachedCandidateGroups;
   protected Map<String, List<String>> cachedUserGroups;
@@ -670,7 +661,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     this.taskDefinitionKeys = taskDefinitionKeys;
   	return this;
   }
-  
+
   @Override
   public TaskQuery taskDefinitionKeyNotIn(String... taskDefinitionKeyNotIn) {
     this.taskDefinitionKeyNotIn = taskDefinitionKeyNotIn;
@@ -680,62 +671,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public TaskQuery taskParentTaskId(String taskParentTaskId) {
     this.parentTaskId = taskParentTaskId;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceId(String caseInstanceId) {
-    ensureNotNull("caseInstanceId", caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceBusinessKey(String caseInstanceBusinessKey) {
-    ensureNotNull("caseInstanceBusinessKey", caseInstanceBusinessKey);
-    this.caseInstanceBusinessKey = caseInstanceBusinessKey;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceBusinessKeyLike(String caseInstanceBusinessKeyLike) {
-    ensureNotNull("caseInstanceBusinessKeyLike", caseInstanceBusinessKeyLike);
-    this.caseInstanceBusinessKeyLike = caseInstanceBusinessKeyLike;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseExecutionId(String caseExecutionId) {
-    ensureNotNull("caseExecutionId", caseExecutionId);
-    this.caseExecutionId = caseExecutionId;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseDefinitionId(String caseDefinitionId) {
-    ensureNotNull("caseDefinitionId", caseDefinitionId);
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseDefinitionKey(String caseDefinitionKey) {
-    ensureNotNull("caseDefinitionKey", caseDefinitionKey);
-    this.caseDefinitionKey = caseDefinitionKey;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseDefinitionName(String caseDefinitionName) {
-    ensureNotNull("caseDefinitionName", caseDefinitionName);
-    this.caseDefinitionName = caseDefinitionName;
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseDefinitionNameLike(String caseDefinitionNameLike) {
-    ensureNotNull("caseDefinitionNameLike", caseDefinitionNameLike);
-    this.caseDefinitionNameLike = caseDefinitionNameLike;
     return this;
   }
 
@@ -827,54 +762,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery processVariableValueLessThanOrEquals(String variableName, Object variableValue) {
     addVariable(variableName, variableValue, QueryOperator.LESS_THAN_OR_EQUAL, false, true);
   	return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueEquals(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.EQUALS, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueNotEquals(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.NOT_EQUALS, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueLike(String variableName, String variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.LIKE, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueNotLike(String variableName, String variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.NOT_LIKE, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueGreaterThan(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.GREATER_THAN, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueGreaterThanOrEquals(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.GREATER_THAN_OR_EQUAL, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueLessThan(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.LESS_THAN, false, false);
-    return this;
-  }
-
-  @Override
-  public TaskQuery caseInstanceVariableValueLessThanOrEquals(String variableName, Object variableValue) {
-    addVariable(variableName, variableValue, QueryOperator.LESS_THAN_OR_EQUAL, false, false);
-    return this;
   }
 
   @Override
@@ -1340,12 +1227,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   }
 
   @Override
-  public TaskQuery orderByCaseInstanceId() {
-    ensureNotInOrQuery("orderByCaseInstanceId()");
-    return orderBy(TaskQueryProperty.CASE_INSTANCE_ID);
-  }
-
-  @Override
   public TaskQuery orderByExecutionId() {
     ensureNotInOrQuery("orderByExecutionId()");
     return orderBy(TaskQueryProperty.EXECUTION_ID);
@@ -1355,12 +1236,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public TaskQuery orderByTenantId() {
     ensureNotInOrQuery("orderByTenantId()");
     return orderBy(TaskQueryProperty.TENANT_ID);
-  }
-
-  @Override
-  public TaskQuery orderByCaseExecutionId() {
-    ensureNotInOrQuery("orderByCaseExecutionId()");
-    return orderBy(TaskQueryProperty.CASE_EXECUTION_ID);
   }
 
   @Override
@@ -1423,26 +1298,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     return this;
   }
 
-  @Override
-  public TaskQuery orderByCaseExecutionVariable(String variableName, ValueType valueType) {
-    ensureNotInOrQuery("orderByCaseExecutionVariable()");
-    ensureNotNull("variableName", variableName);
-    ensureNotNull("valueType", valueType);
-
-    orderBy(VariableOrderProperty.forCaseExecutionVariable(variableName, valueType));
-    return this;
-  }
-
-  @Override
-  public TaskQuery orderByCaseInstanceVariable(String variableName, ValueType valueType) {
-    ensureNotInOrQuery("orderByCaseInstanceVariable()");
-    ensureNotNull("variableName", variableName);
-    ensureNotNull("valueType", valueType);
-
-    orderBy(VariableOrderProperty.forCaseInstanceVariable(variableName, valueType));
-    return this;
-  }
-
   //results ////////////////////////////////////////////////////////////////
 
   @Override
@@ -1457,8 +1312,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     if (getCandidateGroup() != null && getCandidateGroupsInternal() != null && getCandidateGroups().isEmpty()) {
       return Collections.emptyList();
     }
-
-    decideAuthorizationJoinType(commandContext);
 
     List<Task> taskList = commandContext
       .getTaskManager()
@@ -1494,16 +1347,9 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
       return 0;
     }
 
-    decideAuthorizationJoinType(commandContext);
-
     return commandContext
       .getTaskManager()
       .findTaskCountByQueryCriteria(this);
-  }
-
-  protected void decideAuthorizationJoinType(CommandContext commandContext) {
-    boolean cmmnEnabled = commandContext.getProcessEngineConfiguration().isCmmnEnabled();
-    authCheck.setUseLeftJoin(cmmnEnabled);
   }
 
   protected void resetCachedCandidateGroups() {
@@ -1683,7 +1529,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public String[] getKeys() {
     return taskDefinitionKeys;
   }
-  
+
   public String[] getKeyNotIn() {
     return taskDefinitionKeyNotIn;
   }
@@ -1762,38 +1608,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
 
   public SuspensionState getSuspensionState() {
     return suspensionState;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseInstanceBusinessKey() {
-    return caseInstanceBusinessKey;
-  }
-
-  public String getCaseInstanceBusinessKeyLike() {
-    return caseInstanceBusinessKeyLike;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionName() {
-    return caseDefinitionName;
-  }
-
-  public String getCaseDefinitionNameLike() {
-    return caseDefinitionNameLike;
   }
 
   public boolean isInitializeFormKeys() {
@@ -2116,7 +1930,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     else if (this.getKeys() != null) {
       extendedQuery.taskDefinitionKeyIn(this.getKeys());
     }
-    
+
     if (extendingQuery.getKeyNotIn() != null) {
       extendedQuery.taskDefinitionKeyNotIn(extendingQuery.getKeyNotIn());
     }
@@ -2251,62 +2065,6 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
       }
     }
 
-    if (extendingQuery.getCaseInstanceId() != null) {
-      extendedQuery.caseInstanceId(extendingQuery.getCaseInstanceId());
-    }
-    else if (this.getCaseInstanceId() != null) {
-      extendedQuery.caseInstanceId(this.getCaseInstanceId());
-    }
-
-    if (extendingQuery.getCaseInstanceBusinessKey() != null) {
-      extendedQuery.caseInstanceBusinessKey(extendingQuery.getCaseInstanceBusinessKey());
-    }
-    else if (this.getCaseInstanceBusinessKey() != null) {
-      extendedQuery.caseInstanceBusinessKey(this.getCaseInstanceBusinessKey());
-    }
-
-    if (extendingQuery.getCaseInstanceBusinessKeyLike() != null) {
-      extendedQuery.caseInstanceBusinessKeyLike(extendingQuery.getCaseInstanceBusinessKeyLike());
-    }
-    else if (this.getCaseInstanceBusinessKeyLike() != null) {
-      extendedQuery.caseInstanceBusinessKeyLike(this.getCaseInstanceBusinessKeyLike());
-    }
-
-    if (extendingQuery.getCaseExecutionId() != null) {
-      extendedQuery.caseExecutionId(extendingQuery.getCaseExecutionId());
-    }
-    else if (this.getCaseExecutionId() != null) {
-      extendedQuery.caseExecutionId(this.getCaseExecutionId());
-    }
-
-    if (extendingQuery.getCaseDefinitionId() != null) {
-      extendedQuery.caseDefinitionId(extendingQuery.getCaseDefinitionId());
-    }
-    else if (this.getCaseDefinitionId() != null) {
-      extendedQuery.caseDefinitionId(this.getCaseDefinitionId());
-    }
-
-    if (extendingQuery.getCaseDefinitionKey() != null) {
-      extendedQuery.caseDefinitionKey(extendingQuery.getCaseDefinitionKey());
-    }
-    else if (this.getCaseDefinitionKey() != null) {
-      extendedQuery.caseDefinitionKey(this.getCaseDefinitionKey());
-    }
-
-    if (extendingQuery.getCaseDefinitionName() != null) {
-      extendedQuery.caseDefinitionName(extendingQuery.getCaseDefinitionName());
-    }
-    else if (this.getCaseDefinitionName() != null) {
-      extendedQuery.caseDefinitionName(this.getCaseDefinitionName());
-    }
-
-    if (extendingQuery.getCaseDefinitionNameLike() != null) {
-      extendedQuery.caseDefinitionNameLike(extendingQuery.getCaseDefinitionNameLike());
-    }
-    else if (this.getCaseDefinitionNameLike() != null) {
-      extendedQuery.caseDefinitionNameLike(this.getCaseDefinitionNameLike());
-    }
-
     if (extendingQuery.isInitializeFormKeys() || this.isInitializeFormKeys()) {
       extendedQuery.initializeFormKeys();
     }
@@ -2356,7 +2114,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
 
   /**
    * Simple implementation of variable merging. Variables are only overridden if they have the same name and are
-   * in the same scope (ie are process instance, task or case execution variables).
+   * in the same scope (ie are process instance or task execution variables).
    */
   protected void mergeVariables(TaskQueryImpl extendedQuery, TaskQueryImpl extendingQuery) {
     List<TaskQueryVariableValue> extendingVariables = extendingQuery.getVariables();
@@ -2434,7 +2192,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   public boolean isQueryForProcessTasksOnly() {
     ProcessEngineConfigurationImpl engineConfiguration = Context.getProcessEngineConfiguration();
 
-    return !engineConfiguration.isCmmnEnabled() && !engineConfiguration.isStandaloneTasksEnabled();
+    return !engineConfiguration.isStandaloneTasksEnabled();
   }
 
   @Override

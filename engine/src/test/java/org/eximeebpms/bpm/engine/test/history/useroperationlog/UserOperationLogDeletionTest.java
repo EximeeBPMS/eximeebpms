@@ -129,36 +129,6 @@ public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
     assertEquals(5, query.count());
   }
 
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testDeleteCaseTaskKeepUserOperationLog() {
-    // given
-    caseService
-      .withCaseDefinitionByKey("oneTaskCase")
-      .create();
-
-    caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-    taskService.setAssignee(taskId, "demo");
-    taskService.complete(taskId);
-
-    UserOperationLogQuery query = historyService
-        .createUserOperationLogQuery()
-        .taskId(taskId);
-    assertEquals(2, query.count());
-
-    // when
-    historyService.deleteHistoricTaskInstance(taskId);
-
-    // then
-    assertEquals(4, query.count());
-  }
-
   @Deployment(resources = PROCESS_PATH)
   @Test
   public void testDeleteProcessInstanceKeepUserOperationLog() {
@@ -186,46 +156,6 @@ public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
       .operationType(OPERATION_TYPE_DELETE_HISTORY)
       .property("nrOfInstances")
       .singleResult();
-
-    assertNotNull(entry);
-    assertEquals(CATEGORY_OPERATOR, entry.getCategory());
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testDeleteCaseInstanceKeepUserOperationLog() {
-    // given
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey("oneTaskCase")
-        .create()
-        .getId();
-
-    caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-    taskService.complete(taskId);
-
-    caseService.closeCaseInstance(caseInstanceId);
-
-    UserOperationLogQuery query = historyService
-        .createUserOperationLogQuery()
-        .caseInstanceId(caseInstanceId)
-        .entityType(EntityTypes.TASK);
-    assertEquals(1, query.count());
-
-    // when
-    historyService.deleteHistoricCaseInstance(caseInstanceId);
-
-    // then
-    assertEquals(1, query.count());
-    
-    UserOperationLogEntry entry = historyService.createUserOperationLogQuery()
-        .operationType(OPERATION_TYPE_DELETE_HISTORY)
-        .singleResult();
 
     assertNotNull(entry);
     assertEquals(CATEGORY_OPERATOR, entry.getCategory());
@@ -429,13 +359,11 @@ public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
       assertTrue(Boolean.parseBoolean(userOperationLogEntry.getNewValue()));
 
       assertEquals(USER_ID, userOperationLogEntry.getUserId());
-      
+
       assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, userOperationLogEntry.getCategory());
-      
+
       assertNull(userOperationLogEntry.getJobDefinitionId());
       assertNull(userOperationLogEntry.getProcessInstanceId());
-      assertNull(userOperationLogEntry.getCaseInstanceId());
-      assertNull(userOperationLogEntry.getCaseDefinitionId());
     }
 
     assertEquals(6, historyService.createUserOperationLogQuery().count());

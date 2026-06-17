@@ -164,14 +164,6 @@ public class TaskFilterTest {
     assertEquals(testString, query.getExpressions().get("followUpAfter"));
     assertTrue(query.isExcludeSubtasks());
     assertEquals(SuspensionState.SUSPENDED, query.getSuspensionState());
-    assertEquals(testString, query.getCaseDefinitionKey());
-    assertEquals(testString, query.getCaseDefinitionId());
-    assertEquals(testString, query.getCaseDefinitionName());
-    assertEquals(testString, query.getCaseDefinitionNameLike());
-    assertEquals(testString, query.getCaseInstanceId());
-    assertEquals(testString, query.getCaseInstanceBusinessKey());
-    assertEquals(testString, query.getCaseInstanceBusinessKeyLike());
-    assertEquals(testString, query.getCaseExecutionId());
 
     // ordering
     verifyOrderingProperties(expectedOrderingProperties, query.getOrderingProperties());

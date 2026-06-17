@@ -54,8 +54,7 @@ public class StartProcessInstanceCmd implements Command<ProcessInstanceWithVaria
     }
 
     // Start the process instance
-    ExecutionEntity processInstance = processDefinition.createProcessInstance(instantiationBuilder.getBusinessKey(),
-        instantiationBuilder.getCaseInstanceId());
+    ExecutionEntity processInstance = processDefinition.createProcessInstance(instantiationBuilder.getBusinessKey());
 
     if (instantiationBuilder.getTenantId() != null) {
       processInstance.setTenantId(instantiationBuilder.getTenantId());

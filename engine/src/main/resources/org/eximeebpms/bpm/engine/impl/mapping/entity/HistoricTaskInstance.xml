@@ -31,10 +31,6 @@
         ROOT_PROC_INST_ID_,
         PROC_INST_ID_,
         EXECUTION_ID_,
-        CASE_DEF_KEY_,
-        CASE_DEF_ID_,
-        CASE_INST_ID_,
-        CASE_EXECUTION_ID_,
         ACT_INST_ID_,
         NAME_,
         PARENT_TASK_ID_,
@@ -59,10 +55,6 @@
         #{rootProcessInstanceId, jdbcType=VARCHAR},
         #{processInstanceId, jdbcType=VARCHAR},
         #{executionId, jdbcType=VARCHAR},
-        #{caseDefinitionKey, jdbcType=VARCHAR},
-        #{caseDefinitionId, jdbcType=VARCHAR},
-        #{caseInstanceId, jdbcType=VARCHAR},
-        #{caseExecutionId, jdbcType=VARCHAR},
         #{activityInstanceId, jdbcType=VARCHAR},
         #{name ,jdbcType=VARCHAR},
         #{parentTaskId ,jdbcType=VARCHAR},
@@ -100,8 +92,6 @@
       PRIORITY_ = #{priority, jdbcType=INTEGER},
       DUE_DATE_ = #{dueDate, jdbcType=TIMESTAMP},
       FOLLOW_UP_DATE_ = #{followUpDate, jdbcType=TIMESTAMP},
-      CASE_INST_ID_ = #{caseInstanceId, jdbcType=VARCHAR},
-      CASE_DEF_ID_ = #{caseDefinitionId, jdbcType=VARCHAR},
       TASK_STATE_ = #{taskState, jdbcType=VARCHAR}
       <if test="endTime!=null">
         , END_TIME_ = #{endTime, jdbcType=TIMESTAMP}
@@ -264,15 +254,6 @@
       <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
-  <delete id="deleteHistoricTaskInstanceByCaseInstanceIds">
-    delete
-    from ${prefix}ACT_HI_TASKINST
-    where
-      <bind name="listOfIds" value="list"/>
-      <bind name="fieldName" value="'CASE_INST_ID_'"/>
-      <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-  </delete>
-
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
       AND ${datepart1}<include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
@@ -328,10 +309,6 @@
     <result property="rootProcessInstanceId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR" />
     <result property="processInstanceId" column="PROC_INST_ID_" jdbcType="VARCHAR" />
     <result property="executionId" column="EXECUTION_ID_" jdbcType="VARCHAR" />
-    <result property="caseDefinitionKey" column="CASE_DEF_KEY_" jdbcType="VARCHAR" />
-    <result property="caseDefinitionId" column="CASE_DEF_ID_" jdbcType="VARCHAR" />
-    <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
-    <result property="caseExecutionId" column="CASE_EXECUTION_ID_" jdbcType="VARCHAR" />
     <result property="activityInstanceId" column="ACT_INST_ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
     <result property="parentTaskId" column="PARENT_TASK_ID_" jdbcType="VARCHAR" />
@@ -405,9 +382,6 @@
       <if test="query != null &amp;&amp; (query.processDefinitionKey != null || query.processDefinitionName != null)">
         <bind name="D_JOIN" value="true" />
       </if>
-      <if test="query != null &amp;&amp; (query.caseDefinitionKey != null || query.caseDefinitionName != null)">
-        <bind name="CD_JOIN" value="true" />
-      </if>
     </foreach>
 
     <if test="HPI_JOIN">
@@ -415,9 +389,6 @@
     </if>
     <if test="D_JOIN">
       ${JOIN_TYPE} ${prefix}ACT_RE_PROCDEF D on RES.PROC_DEF_ID_ = D.ID_
-    </if>
-    <if test="CD_JOIN">
-      ${JOIN_TYPE} ${prefix}ACT_RE_CASE_DEF CD on RES.CASE_DEF_ID_ = CD.ID_
     </if>
     <where>
       <foreach collection="queries" item="query" index="i">
@@ -514,21 +485,6 @@
                        open="(" separator="," close=")">
                 #{item}
               </foreach>
-            </if>
-            <if test="query.caseDefinitionId != null">
-              ${queryType} RES.CASE_DEF_ID_ = #{query.caseDefinitionId}
-            </if>
-            <if test="query.caseDefinitionKey != null">
-              ${queryType} CD.KEY_ = #{query.caseDefinitionKey}
-            </if>
-            <if test="query.caseDefinitionName != null">
-              ${queryType} CD.NAME_ = #{query.caseDefinitionName}
-            </if>
-            <if test="query.caseInstanceId != null">
-              ${queryType} RES.CASE_INST_ID_ = #{query.caseInstanceId}
-            </if>
-            <if test="query.caseExecutionId != null">
-              ${queryType} RES.CASE_EXECUTION_ID_ = #{query.caseExecutionId}
             </if>
             <if test="query.taskName != null">
               <!-- CAM-12186 case insensitive task name and description queries -->

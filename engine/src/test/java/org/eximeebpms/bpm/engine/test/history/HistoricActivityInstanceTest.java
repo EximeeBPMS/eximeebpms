@@ -1011,45 +1011,6 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("errorStartEvent", historicActivity.getActivityType());
   }
 
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/history/HistoricActivityInstanceTest.testCaseCallActivity.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
-  })
-  @Test
-  public void testCaseCallActivity() {
-    runtimeService.startProcessInstanceByKey("process");
-
-    String subCaseInstanceId = caseService
-        .createCaseInstanceQuery()
-        .singleResult()
-        .getId();
-
-
-    HistoricActivityInstance historicCallActivity = historyService
-        .createHistoricActivityInstanceQuery()
-        .activityId("callActivity")
-        .singleResult();
-
-    assertEquals(subCaseInstanceId, historicCallActivity.getCalledCaseInstanceId());
-    assertNull(historicCallActivity.getEndTime());
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    caseService.completeCaseExecution(humanTaskId);
-
-    historicCallActivity = historyService
-        .createHistoricActivityInstanceQuery()
-        .activityId("callActivity")
-        .singleResult();
-
-    assertEquals(subCaseInstanceId, historicCallActivity.getCalledCaseInstanceId());
-    assertNotNull(historicCallActivity.getEndTime());
-  }
-
   @Deployment(resources = {"org/eximeebpms/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionKeyProperty() {

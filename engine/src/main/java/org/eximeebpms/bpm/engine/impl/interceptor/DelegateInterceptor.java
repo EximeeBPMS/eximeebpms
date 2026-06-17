@@ -25,7 +25,6 @@ import org.eximeebpms.bpm.engine.impl.delegate.DelegateInvocation;
  * activity. The following is a list of classes that represent user code:
  * <ul>
  * <li>{@link org.eximeebpms.bpm.engine.delegate.JavaDelegate}</li>
- * <li>{@link org.eximeebpms.bpm.engine.delegate.CaseExecutionListener}</li>
  * <li>{@link org.eximeebpms.bpm.engine.delegate.ExecutionListener}</li>
  * <li>{@link org.eximeebpms.bpm.engine.delegate.Expression}</li>
  * <li>{@link org.eximeebpms.bpm.engine.delegate.TaskListener}</li>

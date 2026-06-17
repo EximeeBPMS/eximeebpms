@@ -26,7 +26,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import org.eximeebpms.bpm.BpmPlatform;
 import org.eximeebpms.bpm.container.RuntimeContainerDelegate;
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -41,19 +40,16 @@ import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.cdi.BusinessProcess;
 import org.eximeebpms.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.eximeebpms.bpm.engine.impl.ProcessEngineImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.eximeebpms.bpm.engine.impl.util.LogUtil;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
 
 /**
  * @author Daniel Meyer
@@ -94,7 +90,6 @@ public abstract class CdiProcessEngineTestCase {
   protected AuthorizationService authorizationService;
   protected FilterService filterService;
   protected ExternalTaskService externalTaskService;
-  protected CaseService caseService;
   protected DecisionService decisionService;
 
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
@@ -119,7 +114,6 @@ public abstract class CdiProcessEngineTestCase {
     authorizationService = processEngine.getAuthorizationService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
-    caseService = processEngine.getCaseService();
     decisionService = processEngine.getDecisionService();
   }
 
@@ -139,7 +133,6 @@ public abstract class CdiProcessEngineTestCase {
     authorizationService = null;
     filterService = null;
     externalTaskService = null;
-    caseService = null;
     decisionService = null;
     processEngineRule = null;
   }

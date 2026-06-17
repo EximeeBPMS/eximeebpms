@@ -42,7 +42,6 @@ import org.junit.Test;
 public class VariableInstanceAuthorizationTest extends AuthorizationTest {
 
   protected static final String PROCESS_KEY = "oneTaskProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   protected String deploymentId;
   protected boolean ensureSpecificVariablePermission;
@@ -51,8 +50,7 @@ public class VariableInstanceAuthorizationTest extends AuthorizationTest {
   @Before
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
-        "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
+        "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml").getId();
     ensureSpecificVariablePermission = processEngineConfiguration.isEnforceSpecificVariablePermission();
     super.setUp();
   }
@@ -78,18 +76,6 @@ public class VariableInstanceAuthorizationTest extends AuthorizationTest {
   }
 
   @Test
-  public void testCaseVariableQueryWithoutAuthorization () {
-    // given
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
-    // when
-    VariableInstanceQuery query = runtimeService.createVariableInstanceQuery();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
-  @Test
   public void testProcessLocalTaskVariableQueryWithoutAuthorization () {
     // given
     startProcessInstanceByKey(PROCESS_KEY);
@@ -101,20 +87,6 @@ public class VariableInstanceAuthorizationTest extends AuthorizationTest {
 
     // then
     verifyQueryResults(query, 0);
-  }
-
-  @Test
-  public void testCaseLocalTaskVariableQueryWithoutAuthorization () {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setTaskVariableLocal(taskId, VARIABLE_NAME, VARIABLE_VALUE);
-
-    // when
-    VariableInstanceQuery query = runtimeService.createVariableInstanceQuery();
-
-    // then
-    verifyQueryResults(query, 1);
   }
 
   @Test
@@ -414,25 +386,23 @@ public class VariableInstanceAuthorizationTest extends AuthorizationTest {
 
     String processInstanceId = startProcessInstanceByKey(PROCESS_KEY, getVariables()).getProcessInstanceId();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
     // when (1)
     VariableInstanceQuery query = runtimeService.createVariableInstanceQuery();
 
     // then (1)
-    verifyQueryResults(query, 1);
+    verifyQueryResults(query, 0);
 
     // when (2)
     createGrantAuthorization(TASK, taskId, userId, READ);
 
     // then (2)
-    verifyQueryResults(query, 2);
+    verifyQueryResults(query, 1);
 
     // when (3)
     createGrantAuthorization(PROCESS_INSTANCE, processInstanceId, userId, READ);
 
     // then (3)
-    verifyQueryResults(query, 3);
+    verifyQueryResults(query, 2);
 
     deleteTask(taskId, true);
   }
@@ -447,25 +417,23 @@ public class VariableInstanceAuthorizationTest extends AuthorizationTest {
 
     startProcessInstanceByKey(PROCESS_KEY, getVariables()).getProcessInstanceId();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
     // when (1)
     VariableInstanceQuery query = runtimeService.createVariableInstanceQuery();
 
     // then (1)
-    verifyQueryResults(query, 1);
+    verifyQueryResults(query, 0);
 
     // when (2)
     createGrantAuthorization(TASK, taskId, userId, READ_VARIABLE);
 
     // then (2)
-    verifyQueryResults(query, 2);
+    verifyQueryResults(query, 1);
 
     // when (3)
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, READ_INSTANCE_VARIABLE);
 
     // then (3)
-    verifyQueryResults(query, 3);
+    verifyQueryResults(query, 2);
 
     deleteTask(taskId, true);
   }

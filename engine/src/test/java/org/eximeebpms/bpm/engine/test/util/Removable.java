@@ -26,7 +26,6 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricIncident;
 import org.eximeebpms.bpm.engine.history.HistoricJobLog;
@@ -74,7 +73,6 @@ public final class Removable {
 
     mappings.put(HistoricProcessInstance.class, this::removeAllHistoricProcessInstances);
     mappings.put(HistoricDecisionInstance.class, this::removeAllHistoricDecisionInstances);
-    mappings.put(HistoricCaseInstance.class, this::removeAllHistoricCaseInstances);
 
     mappings.put(HistoryCleanupJobDeclaration.class, this::removeHistoryCleanupJobRelatedEntries);
 
@@ -200,14 +198,6 @@ public final class Removable {
         .list();
     for (HistoricDecisionInstance historicDecisionInstance : historicDecisionInstances) {
       historyService.deleteHistoricDecisionInstanceByInstanceId(historicDecisionInstance.getId());
-    }
-  }
-
-  private void removeAllHistoricCaseInstances() {
-    HistoryService historyService = engine.getHistoryService();
-    List<HistoricCaseInstance> historicCaseInstances = historyService.createHistoricCaseInstanceQuery().list();
-    for (HistoricCaseInstance historicCaseInstance : historicCaseInstances) {
-      historyService.deleteHistoricCaseInstance(historicCaseInstance.getId());
     }
   }
 

@@ -131,8 +131,7 @@ module.exports = [
 
     tasklistData.provide('searchQuery', {
       processVariables: [],
-      taskVariables: [],
-      caseInstanceVariables: []
+      taskVariables: []
     });
 
     tasklistData.provide('taskListQuery', [

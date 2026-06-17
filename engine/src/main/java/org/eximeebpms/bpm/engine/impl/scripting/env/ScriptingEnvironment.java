@@ -28,7 +28,6 @@ import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.ProcessApplicationUnavailableException;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
@@ -239,15 +238,6 @@ public class ScriptingEnvironment {
         builder.activityId(task.getExecution().getActivityId());
       }
 
-      if (task.getCaseExecution() != null) {
-        builder
-            .activityId(task.getCaseExecution().getActivityId())
-            .caseDefinitionId(task.getCaseDefinitionId());
-      }
-    } else if (scope instanceof DelegateCaseExecution caseExecution) {
-      builder
-          .activityId(caseExecution.getActivityId())
-          .caseDefinitionId(caseExecution.getCaseDefinitionId());
     }
 
     return builder.build();
@@ -321,13 +311,6 @@ public class ScriptingEnvironment {
         activityId = task.getExecution().getActivityId();
         definitionIdMessage = " in the process definition with id '" + task.getProcessDefinitionId() + "'";
       }
-      if (task.getCaseExecution() != null) {
-        activityId = task.getCaseExecution().getActivityId();
-        definitionIdMessage = " in the case definition with id '" + task.getCaseDefinitionId() + "'";
-      }
-    } else if (variableScope instanceof DelegateCaseExecution caseExecution) {
-      activityId = caseExecution.getActivityId();
-      definitionIdMessage = " in the case definition with id '" + caseExecution.getCaseDefinitionId() + "'";
     }
 
     if (activityId == null) {

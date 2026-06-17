@@ -33,7 +33,6 @@ var angular = require('eximeebpms-bpm-sdk-js/vendor/angular'),
   camRenderVarTemplate = require('./variables-table/cam-render-var-template'),
   search = require('./search/cam-widget-search'),
   bpmnViewer = require('./bpmn-viewer/cam-widget-bpmn-viewer'),
-  cmmnViewer = require('./cmmn-viewer/cam-widget-cmmn-viewer'),
   dmnViewer = require('./dmn-viewer/cam-widget-dmn-viewer'),
   filtersModule = require('../filter/date/index'),
   directivesModule = require('../directives/index'),
@@ -67,7 +66,6 @@ widgetModule.directive('camWidgetVariablesTable', variablesTable);
 widgetModule.directive('camRenderVarTemplate', camRenderVarTemplate);
 widgetModule.directive('camWidgetSearch', search);
 widgetModule.directive('camWidgetBpmnViewer', bpmnViewer);
-widgetModule.directive('camWidgetCmmnViewer', cmmnViewer);
 widgetModule.directive('camWidgetDmnViewer', dmnViewer);
 widgetModule.directive('camShareLink', camShareLink);
 widgetModule.directive('camWidgetPassword', password);

@@ -18,9 +18,6 @@ package org.eximeebpms.bpm.engine.impl.pvm.runtime.operation;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.TransferVariablesActivityBehavior;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnActivity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmActivity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmLogger;
 import org.eximeebpms.bpm.engine.impl.pvm.delegate.SubProcessActivityBehavior;
@@ -48,10 +45,8 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
     execution.leaveActivityInstance();
 
     PvmExecutionImpl superExecution = execution.getSuperExecution();
-    CmmnActivityExecution superCaseExecution = execution.getSuperCaseExecution();
 
     SubProcessActivityBehavior subProcessActivityBehavior = null;
-    TransferVariablesActivityBehavior transferVariablesBehavior = null;
 
     // copy variables before destroying the ended sub process instance
     if (superExecution != null) {
@@ -59,18 +54,6 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
       subProcessActivityBehavior = (SubProcessActivityBehavior) activity.getActivityBehavior();
       try {
         subProcessActivityBehavior.passOutputVariables(superExecution, execution);
-      } catch (RuntimeException e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw e;
-      } catch (Exception e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
-      }
-    } else if (superCaseExecution != null) {
-      CmmnActivity activity = superCaseExecution.getActivity();
-      transferVariablesBehavior = (TransferVariablesActivityBehavior) activity.getActivityBehavior();
-      try {
-        transferVariablesBehavior.transferVariables(execution, superCaseExecution);
       } catch (RuntimeException e) {
         LOG.exceptionWhileCompletingSupProcess(execution, e);
         throw e;
@@ -95,8 +78,6 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
         LOG.exceptionWhileCompletingSupProcess(execution, e);
         throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
       }
-    } else if (superCaseExecution != null) {
-      superCaseExecution.complete();
     }
   }
 

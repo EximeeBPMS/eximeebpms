@@ -30,10 +30,6 @@ public class HistoricVariableInstanceDto extends VariableValueDto {
   private String processInstanceId;
   private String executionId;
   private String activityInstanceId;
-  private String caseDefinitionKey;
-  private String caseDefinitionId;
-  private String caseInstanceId;
-  private String caseExecutionId;
   private String taskId;
   private String errorMessage;
   private String tenantId;
@@ -68,22 +64,6 @@ public class HistoricVariableInstanceDto extends VariableValueDto {
 
   public String getActivityInstanceId() {
     return activityInstanceId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
   }
 
   public String getTaskId() {
@@ -125,10 +105,6 @@ public class HistoricVariableInstanceDto extends VariableValueDto {
     dto.processInstanceId = historicVariableInstance.getProcessInstanceId();
     dto.executionId = historicVariableInstance.getExecutionId();
     dto.activityInstanceId = historicVariableInstance.getActivityInstanceId();
-    dto.caseDefinitionKey = historicVariableInstance.getCaseDefinitionKey();
-    dto.caseDefinitionId = historicVariableInstance.getCaseDefinitionId();
-    dto.caseInstanceId = historicVariableInstance.getCaseInstanceId();
-    dto.caseExecutionId = historicVariableInstance.getCaseExecutionId();
     dto.taskId = historicVariableInstance.getTaskId();
     dto.tenantId = historicVariableInstance.getTenantId();
     dto.state = historicVariableInstance.getState();

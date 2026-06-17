@@ -423,7 +423,6 @@ var ProcessDefinition = AbstractClientResource.extend(
      * @param {String} [params.tenantId]				The id of the tenant the process definition belongs to. Must be omitted if id is provided.
      * @param {String} [params.variables]       A JSON object containing the variables the process is to be initialized with. Each key corresponds to a variable name and each value to a variable value.
      * @param {String} [params.businessKey]     The business key the process instance is to be initialized with. The business key uniquely identifies the process instance in the context of the given process definition.
-     * @param {String} [params.caseInstanceId]  The case instance id the process instance is to be initialized with.
      */
     start: function(params, done) {
       var url = this.path + '/';

@@ -20,8 +20,6 @@
     "BOOLEAN": "Boolean",
     "CAM_WIDGET_BPMN_VIEWER_ERROR": "Could not render diagram:",
     "CAM_WIDGET_BPMN_VIEWER_LOADING": "Loading diagram",
-    "CAM_WIDGET_CMMN_VIEWER_ERROR": "Could not render diagram:",
-    "CAM_WIDGET_CMMN_VIEWER_LOADING": "Loading diagram",
     "CAM_WIDGET_COPY": "Click to copy '{{value}}'",
     "CAM_WIDGET_COPY_LINK": "copy link to current location",
     "CAM_WIDGET_DMN_VIEWER_ERROR": "Could not render table:",

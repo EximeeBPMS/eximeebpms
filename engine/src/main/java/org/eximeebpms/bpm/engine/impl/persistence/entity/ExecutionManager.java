@@ -100,10 +100,6 @@ public class ExecutionManager extends AbstractManager {
     return (ExecutionEntity) getDbEntityManager().selectOne("selectSubProcessInstanceBySuperExecutionId", superExecutionId);
   }
 
-  public ExecutionEntity findSubProcessInstanceBySuperCaseExecutionId(String superCaseExecutionId) {
-    return (ExecutionEntity) getDbEntityManager().selectOne("selectSubProcessInstanceBySuperCaseExecutionId", superCaseExecutionId);
-  }
-
   @SuppressWarnings("unchecked")
   public List<ExecutionEntity> findChildExecutionsByParentExecutionId(String parentExecutionId) {
     return getDbEntityManager().selectList("selectExecutionsByParentExecutionId", parentExecutionId);

@@ -66,11 +66,6 @@ public class ProcessApplicationDeploymentImpl implements ProcessApplicationDeplo
   }
 
   @Override
-  public List<CaseDefinition> getDeployedCaseDefinitions() {
-    return deployment.getDeployedCaseDefinitions();
-  }
-
-  @Override
   public List<DecisionDefinition> getDeployedDecisionDefinitions() {
     return deployment.getDeployedDecisionDefinitions();
   }

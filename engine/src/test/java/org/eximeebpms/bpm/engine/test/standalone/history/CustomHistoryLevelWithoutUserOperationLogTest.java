@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.EntityTypes;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.IdentityService;
@@ -46,7 +45,6 @@ import org.eximeebpms.bpm.engine.impl.RuntimeServiceImpl;
 import org.eximeebpms.bpm.engine.impl.TaskServiceImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
@@ -66,7 +64,6 @@ public class CustomHistoryLevelWithoutUserOperationLogTest {
 
   public static final String USER_ID = "demo";
   private static final String ONE_TASK_PROCESS = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
-  protected static final String ONE_TASK_CASE = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
 
   static HistoryLevel customHistoryLevelFullWUOL = new CustomHistoryLevelFullWithoutUserOperationLog();
 
@@ -91,7 +88,6 @@ public class CustomHistoryLevelWithoutUserOperationLogTest {
   protected IdentityService identityService;
   protected RepositoryService repositoryService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
 
   protected ProcessInstance process;
@@ -106,7 +102,6 @@ public class CustomHistoryLevelWithoutUserOperationLogTest {
     identityService = engineRule.getIdentityService();
     repositoryService = engineRule.getRepositoryService();
     taskService = engineRule.getTaskService();
-    caseService = engineRule.getCaseService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
     identityService.setAuthenticatedUserId(USER_ID);
   }
@@ -324,23 +319,6 @@ public class CustomHistoryLevelWithoutUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  public void testQueryDeleteVariableHistoryOperationOnCase() {
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-    caseService.setVariable(caseInstance.getId(), "myVariable", 1);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 2);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 3);
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
-
-    // then
-    verifyVariableOperationAsserts(UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
-  }
-
-  @Test
   public void testQueryDeleteVariableHistoryOperationOnStandaloneTask() {
     // given
     Task task = taskService.newTask();
@@ -431,41 +409,6 @@ public class CustomHistoryLevelWithoutUserOperationLogTest {
 
     // then
     verifyVariableOperationAsserts(UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
-  }
-
-  // --------------- CMMN --------------------
-
-  @Test
-  @Deployment(resources={ONE_TASK_CASE})
-  public void testQueryByCaseDefinitionId() {
-    // given:
-    // a deployed case definition
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create();
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    assertNotNull(task);
-
-    // when
-    taskService.setAssignee(task.getId(), "demo");
-
-    // then
-
-    UserOperationLogQuery query = historyService
-      .createUserOperationLogQuery()
-      .caseDefinitionId(caseDefinitionId);
-
-    assertEquals(0, query.count());
-
-    taskService.setAssignee(task.getId(), null);
   }
 
   @Test

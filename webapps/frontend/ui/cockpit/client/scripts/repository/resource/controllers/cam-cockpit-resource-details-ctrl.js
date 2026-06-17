@@ -44,7 +44,6 @@ module.exports = [
     var control = ($scope.control = {});
 
     var BPMN_PATTERN = /\.(bpmn\d*.xml|bpmn)$/;
-    var CMMN_PATTERN = /\.(cmmn\d*.xml|cmmn)$/;
     var DMN_PATTERN = /\.(dmn\d*.xml|dmn)$/;
     var IMAGE_PATTERN = /\.(gif|jpg|jpeg|jpe|png|svg|tif|tiff)$/;
     var HTML_PATTERN = /\.html$/;
@@ -66,13 +65,6 @@ module.exports = [
     ) {
       var resourceName = getResourceName(resource);
       return checkResource(resourceName, BPMN_PATTERN);
-    });
-
-    var isCmmnResource = (control.isCmmnResource = $scope.isCmmnResource = function(
-      resource
-    ) {
-      var resourceName = getResourceName(resource);
-      return checkResource(resourceName, CMMN_PATTERN);
     });
 
     var isDmnResource = (control.isDmnResource = $scope.isDmnResource = function(
@@ -106,7 +98,6 @@ module.exports = [
     control.isUnkownResource = $scope.isUnkownResource = function(resource) {
       return (
         !isBpmnResource(resource) &&
-        !isCmmnResource(resource) &&
         !isDmnResource(resource) &&
         !isImageResource(resource) &&
         !isHtmlResource(resource) &&
@@ -115,7 +106,6 @@ module.exports = [
     };
 
     var ProcessDefinition = camAPI.resource('process-definition');
-    var CaseDefinition = camAPI.resource('case-definition');
     var DecisionDefinition = camAPI.resource('decision-definition');
 
     // download link ////////////////////////////////////////////////
@@ -198,8 +188,6 @@ module.exports = [
           if (isBpmnResource(resource)) {
             bpmnResource = true;
             Service = ProcessDefinition;
-          } else if (isCmmnResource(resource)) {
-            Service = CaseDefinition;
           } else if (isDmnResource(resource)) {
             Service = DecisionDefinition;
           }

@@ -75,9 +75,6 @@ module.exports = [
             if (task.processInstanceId) {
               resource = 'process-instance';
               resourceId = task.processInstanceId;
-            } else if (task.caseInstanceId) {
-              resource = 'case-instance';
-              resourceId = task.caseInstanceId;
             } else {
               // standalone task
               $scope.instanceLink = undefined;
@@ -254,16 +251,6 @@ module.exports = [
                 return null;
               }
               return task._embedded.processDefinition[0];
-            }
-          ]);
-
-          taskData.provide('caseDefinition', [
-            'task',
-            function(task) {
-              if (!task || !task._embedded || !task._embedded.caseDefinition) {
-                return null;
-              }
-              return task._embedded.caseDefinition[0];
             }
           ]);
 

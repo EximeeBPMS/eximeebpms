@@ -34,7 +34,7 @@ public interface HistoricActivityInstanceRestService {
   public static final String PATH = "/activity-instance";
 
   @Path("/{id}")
-  HistoricActivityInstanceResource getHistoricCaseInstance(@PathParam("id") String activityInstanceId);
+  HistoricActivityInstanceResource getHistoricActivityInstance(@PathParam("id") String activityInstanceId);
 
   /**
    * Exposes the {@link HistoricActivityInstanceQuery} interface as a REST

@@ -16,8 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.impl.persistence.entity;
 
-import static org.eximeebpms.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,58 +55,14 @@ public class HistoricVariableInstanceManager extends AbstractHistoricManager {
     deleteHistoricVariableInstances(parameters);
   }
 
-  public void deleteHistoricVariableInstanceByCaseInstanceId(String historicCaseInstanceId) {
-    deleteHistoricVariableInstancesByProcessCaseInstanceId(null, historicCaseInstanceId);
-  }
-
-  public void deleteHistoricVariableInstancesByCaseInstanceIds(List<String> historicCaseInstanceIds) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("caseInstanceIds", historicCaseInstanceIds);
-    deleteHistoricVariableInstances(parameters);
-  }
-
   protected void deleteHistoricVariableInstances(Map<String, Object> parameters) {
     getDbEntityManager().deletePreserveOrder(ByteArrayEntity.class, "deleteHistoricVariableInstanceByteArraysByIds", parameters);
     getDbEntityManager().deletePreserveOrder(HistoricVariableInstanceEntity.class, "deleteHistoricVariableInstanceByIds", parameters);
   }
 
-  protected void deleteHistoricVariableInstancesByProcessCaseInstanceId(String historicProcessInstanceId, String historicCaseInstanceId) {
-    ensureOnlyOneNotNull("Only the process instance or case instance id should be set", historicProcessInstanceId, historicCaseInstanceId);
-    if (isHistoryEnabled()) {
-
-      // delete entries in DB
-      List<HistoricVariableInstance> historicVariableInstances;
-      if (historicProcessInstanceId != null) {
-        historicVariableInstances = findHistoricVariableInstancesByProcessInstanceId(historicProcessInstanceId);
-      }
-      else {
-        historicVariableInstances = findHistoricVariableInstancesByCaseInstanceId(historicCaseInstanceId);
-      }
-
-      for (HistoricVariableInstance historicVariableInstance : historicVariableInstances) {
-        ((HistoricVariableInstanceEntity) historicVariableInstance).delete();
-      }
-
-      // delete entries in Cache
-      List <HistoricVariableInstanceEntity> cachedHistoricVariableInstances = getDbEntityManager().getCachedEntitiesByType(HistoricVariableInstanceEntity.class);
-      for (HistoricVariableInstanceEntity historicVariableInstance : cachedHistoricVariableInstances) {
-        // make sure we only delete the right ones (as we cannot make a proper query in the cache)
-        if ((historicProcessInstanceId != null && historicProcessInstanceId.equals(historicVariableInstance.getProcessInstanceId()))
-            || (historicCaseInstanceId != null && historicCaseInstanceId.equals(historicVariableInstance.getCaseInstanceId()))) {
-          historicVariableInstance.delete();
-        }
-      }
-    }
-  }
-
   @SuppressWarnings("unchecked")
   public List<HistoricVariableInstance> findHistoricVariableInstancesByProcessInstanceId(String processInstanceId) {
     return getDbEntityManager().selectList("selectHistoricVariablesByProcessInstanceId", processInstanceId);
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<HistoricVariableInstance> findHistoricVariableInstancesByCaseInstanceId(String caseInstanceId) {
-    return getDbEntityManager().selectList("selectHistoricVariablesByCaseInstanceId", caseInstanceId);
   }
 
   public long findHistoricVariableInstanceCountByQueryCriteria(HistoricVariableInstanceQueryImpl historicProcessVariableQuery) {

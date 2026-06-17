@@ -31,7 +31,6 @@
     <module>xml-model</module>
     <module>bpmn-model</module>
     <module>dmn-model</module>
-    <module>cmmn-model</module>
   </modules>
 
 </project>

@@ -30,7 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.eximeebpms.bpm.engine.CaseService;
+
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.ManagementService;
@@ -52,7 +52,7 @@ import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
 import org.eximeebpms.bpm.engine.test.api.runtime.migration.models.AsyncProcessModels;
 import org.eximeebpms.bpm.engine.test.api.runtime.migration.models.ProcessModels;
 import org.eximeebpms.bpm.engine.test.bpmn.async.AsyncListener;
-import org.eximeebpms.bpm.engine.test.cmmn.decisiontask.TestPojo;
+import org.eximeebpms.bpm.engine.test.dmn.businessruletask.TestPojo;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineTestRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.eximeebpms.bpm.engine.variable.VariableMap;
@@ -86,7 +86,6 @@ public class HistoricDetailQueryTest {
   protected HistoryService historyService;
   protected TaskService taskService;
   protected IdentityService identityService;
-  protected CaseService caseService;
 
   @Before
   public void initServices() {
@@ -95,7 +94,6 @@ public class HistoricDetailQueryTest {
     historyService = engineRule.getHistoryService();
     taskService = engineRule.getTaskService();
     identityService = engineRule.getIdentityService();
-    caseService = engineRule.getCaseService();
   }
 
   @Test
@@ -757,23 +755,6 @@ public class HistoricDetailQueryTest {
     } catch (ProcessEngineException e) {
       // then fails
     }
-  }
-
-  @Test
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  public void testQueryByCaseInstanceIdAndCaseExecutionId() {
-    // given
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    caseService.setVariable(caseInstanceId, "myVariable", 1);
-
-    // when
-    HistoricDetail detail = historyService.createHistoricDetailQuery()
-        .caseInstanceId(caseInstanceId)
-        .caseExecutionId(caseInstanceId).singleResult();
-
-    // then
-    assertThat(detail.getCaseInstanceId()).isEqualTo(caseInstanceId);
-    assertThat(detail.getCaseExecutionId()).isEqualTo(caseInstanceId);
   }
 
   @Test

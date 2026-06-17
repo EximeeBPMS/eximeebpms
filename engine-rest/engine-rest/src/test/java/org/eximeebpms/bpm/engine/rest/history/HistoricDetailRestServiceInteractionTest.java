@@ -106,10 +106,6 @@ public class HistoricDetailRestServiceInteractionTest extends AbstractRestServic
       .body("time", equalTo(builder.getTime()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("executionId", equalTo(builder.getExecutionId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("tenantId", equalTo(builder.getTenantId()))
     .when().get(HISTORIC_DETAIL_URL);
 
@@ -150,10 +146,6 @@ public class HistoricDetailRestServiceInteractionTest extends AbstractRestServic
       .body("time", equalTo(builder.getTime()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("executionId", equalTo(builder.getExecutionId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("tenantId", equalTo(builder.getTenantId()))
     .when().get(HISTORIC_DETAIL_URL);
 
@@ -196,10 +188,6 @@ public class HistoricDetailRestServiceInteractionTest extends AbstractRestServic
       .body("time", equalTo(builder.getTime()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("executionId", equalTo(builder.getExecutionId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("tenantId", equalTo(builder.getTenantId()))
     .when().get(HISTORIC_DETAIL_URL);
 
@@ -237,10 +225,6 @@ public class HistoricDetailRestServiceInteractionTest extends AbstractRestServic
       .body("time", equalTo(builder.getTime()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("executionId", equalTo(builder.getExecutionId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("tenantId", equalTo(builder.getTenantId()))
     .when().get(HISTORIC_DETAIL_URL);
 

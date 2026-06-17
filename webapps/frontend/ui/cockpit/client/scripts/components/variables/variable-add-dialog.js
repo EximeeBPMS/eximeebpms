@@ -43,7 +43,6 @@ var Controller = [
     $scope.isProcessInstance = resolved.type === 'PROCESS_INSTANCE';
     $scope.isBatchOperation = resolved.type === 'BATCH_OPERATION';
     $scope.isMigration = resolved.type === 'MIGRATION';
-    $scope.isCaseInstance = resolved.type === 'CASE_INSTANCE';
 
     $scope.variableTypes = [
       'String',
@@ -70,7 +69,6 @@ var Controller = [
       FAIL = 'FAIL';
 
     var processInstance = camAPI.resource('process-instance');
-    var caseInstance = camAPI.resource('case-instance');
 
     $scope.$on('$routeChangeStart', function() {
       $modalInstance.close($scope.status);
@@ -123,9 +121,7 @@ var Controller = [
           data.value = fixDate(data.value);
         }
 
-        var instanceAPI = $scope.isProcessInstance
-          ? processInstance
-          : caseInstance;
+        var instanceAPI = processInstance;
         instanceAPI
           .setVariable(resolved.instanceId, data)
           .then(function() {

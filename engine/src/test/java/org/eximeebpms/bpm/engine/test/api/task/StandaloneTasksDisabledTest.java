@@ -19,7 +19,6 @@ package org.eximeebpms.bpm.engine.test.api.task;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
@@ -51,7 +50,6 @@ public class StandaloneTasksDisabledTest {
   private RuntimeService runtimeService;
   private TaskService taskService;
   private IdentityService identityService;
-  private CaseService caseService;
 
 
   @Before
@@ -59,7 +57,6 @@ public class StandaloneTasksDisabledTest {
     runtimeService = engineRule.getRuntimeService();
     taskService = engineRule.getTaskService();
     identityService = engineRule.getIdentityService();
-    caseService = engineRule.getCaseService();
   }
 
   @After
@@ -99,21 +96,4 @@ public class StandaloneTasksDisabledTest {
     assertThat(updatedTask.getAssignee()).isEqualTo("newAssignee");
   }
 
-  @Test
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  public void shouldAllowToUpdateCaseInstanceTask() {
-
-    // given
-    caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    Task task = taskService.createTaskQuery().singleResult();
-
-    task.setAssignee("newAssignee");
-
-    // when
-    taskService.saveTask(task);
-
-    // then
-    Task updatedTask = taskService.createTaskQuery().singleResult();
-    assertThat(updatedTask.getAssignee()).isEqualTo("newAssignee");
-  }
 }

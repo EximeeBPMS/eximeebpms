@@ -30,7 +30,6 @@ import java.util.concurrent.Callable;
 import org.eximeebpms.bpm.application.ProcessApplicationExecutionException;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.impl.EmbeddedProcessApplication;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
@@ -75,7 +74,6 @@ public class RedeploymentProcessApplicationTest {
 
   protected static RepositoryService repositoryService;
   protected static RuntimeService runtimeService;
-  protected static CaseService caseService;
   protected static DecisionService decisionService;
   protected static ManagementService managementService;
 
@@ -102,7 +100,6 @@ public class RedeploymentProcessApplicationTest {
   public static Collection<Object[]> scenarios() {
     return Arrays.asList(new Object[][] {
       { BPMN_RESOURCE_1, BPMN_RESOURCE_2, "processOne", "processTwo", processDefinitionTestProvider() },
-      { CMMN_RESOURCE_1, CMMN_RESOURCE_2, "oneTaskCase", "twoTaskCase", caseDefinitionTestProvider() },
       { DMN_RESOURCE_1, DMN_RESOURCE_2, "decision", "score-decision", decisionDefinitionTestProvider() },
       { DRD_RESOURCE_1, DRD_RESOURCE_2, "score", "dish", decisionRequirementsDefinitionTestProvider() }
     });
@@ -112,7 +109,6 @@ public class RedeploymentProcessApplicationTest {
   public void init() throws Exception {
     repositoryService = engineRule.getRepositoryService();
     runtimeService = engineRule.getRuntimeService();
-    caseService = engineRule.getCaseService();
     decisionService = engineRule.getDecisionService();
     managementService = engineRule.getManagementService();
 
@@ -492,20 +488,6 @@ public class RedeploymentProcessApplicationTest {
       public void createInstanceByDefinitionKey(String definitionKey) {
         runtimeService.startProcessInstanceByKey(definitionKey, Variables.createVariables()
             .putValue("a", 1).putValue("b", 1));
-      }
-
-    };
-  }
-
-  protected static TestProvider caseDefinitionTestProvider() {
-    return new TestProvider() {
-
-      public long countDefinitionsByKey(String definitionKey) {
-        return repositoryService.createCaseDefinitionQuery().caseDefinitionKey(definitionKey).count();
-      }
-
-      public void createInstanceByDefinitionKey(String definitionKey) {
-        caseService.createCaseInstanceByKey(definitionKey);
       }
 
     };

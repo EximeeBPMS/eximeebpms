@@ -67,11 +67,9 @@ import org.eximeebpms.bpm.engine.variable.type.ValueTypeResolver;
 public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
   public static final String SORT_BY_PROCESS_INSTANCE_ID_VALUE = "instanceId";
-  public static final String SORT_BY_CASE_INSTANCE_ID_VALUE = "caseInstanceId";
   public static final String SORT_BY_DUE_DATE_VALUE = "dueDate";
   public static final String SORT_BY_FOLLOW_UP_VALUE = "followUpDate";
   public static final String SORT_BY_EXECUTION_ID_VALUE = "executionId";
-  public static final String SORT_BY_CASE_EXECUTION_ID_VALUE = "caseExecutionId";
   public static final String SORT_BY_ASSIGNEE_VALUE = "assignee";
   public static final String SORT_BY_CREATE_TIME_VALUE = "created";
   public static final String SORT_BY_LAST_UPDATED_VALUE = "lastUpdated";
@@ -85,19 +83,15 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   public static final String SORT_BY_PROCESS_VARIABLE = "processVariable";
   public static final String SORT_BY_EXECUTION_VARIABLE = "executionVariable";
   public static final String SORT_BY_TASK_VARIABLE = "taskVariable";
-  public static final String SORT_BY_CASE_INSTANCE_VARIABLE = "caseInstanceVariable";
-  public static final String SORT_BY_CASE_EXECUTION_VARIABLE = "caseExecutionVariable";
 
   public static final List<String> VALID_SORT_BY_VALUES;
 
   static {
     VALID_SORT_BY_VALUES = new ArrayList<>();
     VALID_SORT_BY_VALUES.add(SORT_BY_PROCESS_INSTANCE_ID_VALUE);
-    VALID_SORT_BY_VALUES.add(SORT_BY_CASE_INSTANCE_ID_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_DUE_DATE_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_FOLLOW_UP_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_EXECUTION_ID_VALUE);
-    VALID_SORT_BY_VALUES.add(SORT_BY_CASE_EXECUTION_ID_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_ASSIGNEE_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_CREATE_TIME_VALUE);
     VALID_SORT_BY_VALUES.add(SORT_BY_LAST_UPDATED_VALUE);
@@ -163,15 +157,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   private Boolean active;
   private Boolean suspended;
 
-  private String caseDefinitionKey;
-  private String caseDefinitionId;
-  private String caseDefinitionName;
-  private String caseDefinitionNameLike;
-  private String caseInstanceId;
-  private String caseInstanceBusinessKey;
-  private String caseInstanceBusinessKeyLike;
-  private String caseExecutionId;
-
   private Date dueAfter;
   private String dueAfterExpression;
   private Date dueBefore;
@@ -213,7 +198,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
   private List<VariableQueryParameterDto> taskVariables;
   private List<VariableQueryParameterDto> processVariables;
-  private List<VariableQueryParameterDto> caseInstanceVariables;
 
   private List<TaskQueryDto> orQueries;
 
@@ -670,51 +654,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.processVariables = processVariables;
   }
 
-  @EximeeBPMSQueryParam("caseDefinitionId")
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionKey")
-  public void setCaseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionName")
-  public void setCaseDefinitionName(String caseDefinitionName) {
-    this.caseDefinitionName = caseDefinitionName;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionNameLike")
-  public void setCaseDefinitionNameLike(String caseDefinitionNameLike) {
-    this.caseDefinitionNameLike = caseDefinitionNameLike;
-  }
-
-  @EximeeBPMSQueryParam("caseExecutionId")
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceBusinessKey")
-  public void setCaseInstanceBusinessKey(String caseInstanceBusinessKey) {
-    this.caseInstanceBusinessKey = caseInstanceBusinessKey;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceBusinessKeyLike")
-  public void setCaseInstanceBusinessKeyLike(String caseInstanceBusinessKeyLike) {
-    this.caseInstanceBusinessKeyLike = caseInstanceBusinessKeyLike;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam(value = "caseInstanceVariables", converter = VariableListConverter.class)
-  public void setCaseInstanceVariables(List<VariableQueryParameterDto> caseInstanceVariables) {
-    this.caseInstanceVariables = caseInstanceVariables;
-  }
-
   @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesCaseInsensitive) {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
@@ -1019,30 +958,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     if (suspended != null && suspended) {
       query.suspended();
     }
-    if (caseDefinitionId != null) {
-      query.caseDefinitionId(caseDefinitionId);
-    }
-    if (caseDefinitionKey != null) {
-      query.caseDefinitionKey(caseDefinitionKey);
-    }
-    if (caseDefinitionName != null) {
-      query.caseDefinitionName(caseDefinitionName);
-    }
-    if (caseDefinitionNameLike != null) {
-      query.caseDefinitionNameLike(caseDefinitionNameLike);
-    }
-    if (caseExecutionId != null) {
-      query.caseExecutionId(caseExecutionId);
-    }
-    if (caseInstanceBusinessKey != null) {
-      query.caseInstanceBusinessKey(caseInstanceBusinessKey);
-    }
-    if (caseInstanceBusinessKeyLike != null) {
-      query.caseInstanceBusinessKeyLike(caseInstanceBusinessKeyLike);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
     if (variableValuesIgnoreCase != null && variableValuesIgnoreCase) {
       query.matchVariableValuesIgnoreCase();
     }
@@ -1106,31 +1021,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       }
     }
 
-    if (caseInstanceVariables != null) {
-      for (VariableQueryParameterDto variableQueryParam : caseInstanceVariables) {
-        String variableName = variableQueryParam.getName();
-        String op = variableQueryParam.getOperator();
-        Object variableValue = variableQueryParam.resolveValue(objectMapper);
-
-        if (op.equals(VariableQueryParameterDto.EQUALS_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueNotEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueGreaterThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueGreaterThanOrEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueLessThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueLessThanOrEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LIKE_OPERATOR_NAME)) {
-          query.caseInstanceVariableValueLike(variableName, String.valueOf(variableValue));
-        } else {
-          throw new InvalidRequestException(Status.BAD_REQUEST, "Invalid case variable comparator specified: " + op);
-        }
-      }
-    }
     if (withCommentAttachmentInfo != null && withCommentAttachmentInfo) {
       query.withCommentAttachmentInfo();
     }
@@ -1140,16 +1030,12 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   protected void applySortBy(TaskQuery query, String sortBy, Map<String, Object> parameters, ProcessEngine engine) {
     if (sortBy.equals(SORT_BY_PROCESS_INSTANCE_ID_VALUE)) {
       query.orderByProcessInstanceId();
-    } else if (sortBy.equals(SORT_BY_CASE_INSTANCE_ID_VALUE)) {
-      query.orderByCaseInstanceId();
     } else if (sortBy.equals(SORT_BY_DUE_DATE_VALUE)) {
       query.orderByDueDate();
     } else if (sortBy.equals(SORT_BY_FOLLOW_UP_VALUE)) {
       query.orderByFollowUpDate();
     } else if (sortBy.equals(SORT_BY_EXECUTION_ID_VALUE)) {
       query.orderByExecutionId();
-    } else if (sortBy.equals(SORT_BY_CASE_EXECUTION_ID_VALUE)) {
-      query.orderByCaseExecutionId();
     } else if (sortBy.equals(SORT_BY_ASSIGNEE_VALUE)) {
       query.orderByTaskAssignee();
     } else if (sortBy.equals(SORT_BY_CREATE_TIME_VALUE)) {
@@ -1184,15 +1070,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       String valueTypeName = getValueTypeName(parameters);
       query.orderByTaskVariable(variableName, getValueTypeByName(valueTypeName, engine));
 
-    } else if (sortBy.equals(SORT_BY_CASE_INSTANCE_VARIABLE)) {
-      String variableName = getVariableName(parameters);
-      String valueTypeName = getValueTypeName(parameters);
-      query.orderByCaseInstanceVariable(variableName, getValueTypeByName(valueTypeName, engine));
-
-    } else if (sortBy.equals(SORT_BY_CASE_EXECUTION_VARIABLE)) {
-      String variableName = getVariableName(parameters);
-      String valueTypeName = getValueTypeName(parameters);
-      query.orderByCaseExecutionVariable(variableName, getValueTypeByName(valueTypeName, engine));
     }
   }
 
@@ -1239,14 +1116,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     }
 
     dto.activityInstanceIdIn = taskQuery.getActivityInstanceIdIn();
-    dto.caseDefinitionId = taskQuery.getCaseDefinitionId();
-    dto.caseDefinitionKey = taskQuery.getCaseDefinitionKey();
-    dto.caseDefinitionName = taskQuery.getCaseDefinitionName();
-    dto.caseDefinitionNameLike = taskQuery.getCaseDefinitionNameLike();
-    dto.caseExecutionId = taskQuery.getCaseExecutionId();
-    dto.caseInstanceBusinessKey = taskQuery.getCaseInstanceBusinessKey();
-    dto.caseInstanceBusinessKeyLike = taskQuery.getCaseInstanceBusinessKeyLike();
-    dto.caseInstanceId = taskQuery.getCaseInstanceId();
 
     dto.candidateUser = taskQuery.getCandidateUser();
     dto.candidateGroup = taskQuery.getCandidateGroup();
@@ -1337,7 +1206,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 
     dto.processVariables = new ArrayList<>();
     dto.taskVariables = new ArrayList<>();
-    dto.caseInstanceVariables = new ArrayList<>();
     for (TaskQueryVariableValue variableValue : taskQuery.getVariables()) {
       VariableQueryParameterDto variableValueDto = new VariableQueryParameterDto(variableValue);
 
@@ -1345,8 +1213,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
         dto.processVariables.add(variableValueDto);
       } else if (variableValue.isLocal()) {
         dto.taskVariables.add(variableValueDto);
-      } else {
-        dto.caseInstanceVariables.add(variableValueDto);
       }
     }
 
@@ -1461,10 +1327,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   public static String sortByValueForQueryProperty(QueryProperty queryProperty) {
     if (TaskQueryProperty.ASSIGNEE.equals(queryProperty)) {
       return SORT_BY_ASSIGNEE_VALUE;
-    } else if (TaskQueryProperty.CASE_EXECUTION_ID.equals(queryProperty)) {
-      return SORT_BY_CASE_EXECUTION_ID_VALUE;
-    } else if (TaskQueryProperty.CASE_INSTANCE_ID.equals(queryProperty)) {
-      return SORT_BY_CASE_INSTANCE_ID_VALUE;
     } else if (TaskQueryProperty.CREATE_TIME.equals(queryProperty)) {
       return SORT_BY_CREATE_TIME_VALUE;
     } else if (TaskQueryProperty.LAST_UPDATED.equals(queryProperty)) {
@@ -1514,10 +1376,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
       return SORT_BY_EXECUTION_VARIABLE;
     } else if (VariableInstanceQueryProperty.TASK_ID.equals(property) && TaskQueryProperty.TASK_ID.equals(comparisonProperty)) {
       return SORT_BY_TASK_VARIABLE;
-    } else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_INSTANCE_ID.equals(comparisonProperty)) {
-      return SORT_BY_CASE_INSTANCE_VARIABLE;
-    } else if (VariableInstanceQueryProperty.CASE_EXECUTION_ID.equals(property) && TaskQueryProperty.CASE_EXECUTION_ID.equals(comparisonProperty)) {
-      return SORT_BY_CASE_EXECUTION_VARIABLE;
     } else {
       throw new RestException("Unknown relation condition for task query  with query property " + property + " and comparison property " + comparisonProperty);
     }
@@ -1589,14 +1447,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
         dto.getUnassigned() == null,
         dto.getActive() == null,
         dto.getSuspended() == null,
-        dto.getCaseDefinitionKey() == null,
-        dto.getCaseDefinitionId() == null,
-        dto.getCaseDefinitionName() == null,
-        dto.getCaseDefinitionNameLike() == null,
-        dto.getCaseInstanceId() == null,
-        dto.getCaseInstanceBusinessKey() == null,
-        dto.getCaseInstanceBusinessKeyLike() == null,
-        dto.getCaseExecutionId() == null,
         dto.getDueAfter() == null,
         dto.getDueAfterExpression() == null,
         dto.getDueBefore() == null,
@@ -1631,7 +1481,6 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
         dto.getWithoutCandidateUsers() == null,
         isEmpty(dto.getTaskVariables()),
         isEmpty(dto.getProcessVariables()),
-        isEmpty(dto.getCaseInstanceVariables()),
         dto.getVariableNamesIgnoreCase() == null,
         dto.getVariableValuesIgnoreCase() == null,
         dto.getWithCommentAttachmentInfo() == null

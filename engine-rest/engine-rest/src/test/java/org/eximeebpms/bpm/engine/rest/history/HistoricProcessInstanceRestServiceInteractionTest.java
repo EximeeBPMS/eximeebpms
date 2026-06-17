@@ -121,8 +121,6 @@ public class HistoricProcessInstanceRestServiceInteractionTest extends AbstractR
     String returnedStartActivityId = from(content).getString("startActivityId");
     String returnedDeleteReason = from(content).getString(DELETE_REASON);
     String returnedSuperProcessInstanceId = from(content).getString("superProcessInstanceId");
-    String returnedSuperCaseInstanceId = from(content).getString("superCaseInstanceId");
-    String returnedCaseInstanceId = from(content).getString("caseInstanceId");
     String returnedTenantId = from(content).getString("tenantId");
     String returnedState = from(content).getString("state");
     String restartedProcessInstanceId = from(content).getString("restartedProcessInstanceId");
@@ -138,8 +136,6 @@ public class HistoricProcessInstanceRestServiceInteractionTest extends AbstractR
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_START_ACTIVITY_ID, returnedStartActivityId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_DELETE_REASON, returnedDeleteReason);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_PROCESS_INSTANCE_ID, returnedSuperProcessInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_CASE_INSTANCE_ID, returnedSuperCaseInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_CASE_INSTANCE_ID, returnedCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STATE, returnedState);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, restartedProcessInstanceId);

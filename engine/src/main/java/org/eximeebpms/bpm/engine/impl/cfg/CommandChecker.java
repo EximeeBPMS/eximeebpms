@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.impl.cfg;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.authorization.Permission;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
@@ -34,10 +33,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricTaskInstanceEnt
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
 
 /**
  * Is invoked while executing a command to check if the current operation is
@@ -60,11 +57,6 @@ public interface CommandChecker {
    * Checks if it is allowed to read the given process definition.
    */
   void checkReadProcessDefinition(ProcessDefinition processDefinition);
-
-  /**
-   * Checks if it is allowed to create an instance of the given case definition.
-   */
-  void checkCreateCaseInstance(CaseDefinition caseDefinition);
 
   /**
    * Checks if it is allowed to update a process definition of the given process definition id.
@@ -282,16 +274,6 @@ public interface CommandChecker {
   void checkReadDecisionRequirementsDefinition(DecisionRequirementsDefinitionEntity decisionRequirementsDefinition);
 
   /**
-   * Checks if it is allowed to read the given case definition.
-   */
-  void checkReadCaseDefinition(CaseDefinition caseDefinition);
-
-  /**
-   * Checks if it is allowed to update the given case definition.
-   */
-  void checkUpdateCaseDefinition(CaseDefinition caseDefinition);
-
-  /**
    * Checks if it is allowed to delete the given historic task instance.
    */
   void checkDeleteHistoricTaskInstance(HistoricTaskInstanceEntity task);
@@ -300,11 +282,6 @@ public interface CommandChecker {
    * Checks if it is allowed to delete the given historic process instance.
    */
   void checkDeleteHistoricProcessInstance(HistoricProcessInstance instance);
-
-  /**
-   * Checks if it is allowed to delete the given historic case instance.
-   */
-  void checkDeleteHistoricCaseInstance(HistoricCaseInstance instance);
 
   /**
    * Checks if it is allowed to delete the historic decision instance of the given
@@ -333,11 +310,6 @@ public interface CommandChecker {
   void checkReadHistoryProcessDefinition(String processDefinitionId);
 
   /**
-   * Check if it is allowed to update a case instance of the given case execution.
-   */
-  void checkUpdateCaseInstance(CaseExecution caseExecution);
-
-  /**
    * Check if it is allowed to delete the user operation log of the given user operation log entry.
    */
   void checkDeleteUserOperationLog(UserOperationLogEntry entry);
@@ -346,11 +318,6 @@ public interface CommandChecker {
    * Check if it is allowed to update the user operation log of the given user operation log entry.
    */
   void checkUpdateUserOperationLog(UserOperationLogEntry entry);
-
-  /**
-   * Check if it is allowed to read a case instance of the given case execution.
-   */
-  void checkReadCaseInstance(CaseExecution caseExecution);
 
   /**
    * Checks if it is allowed to read the given historic external task log.

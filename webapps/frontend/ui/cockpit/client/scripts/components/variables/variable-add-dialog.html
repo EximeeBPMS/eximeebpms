@@ -4,7 +4,6 @@
     {{ isProcessInstance ? 'VARIABLE_ADD_MODAL_TITLE_PROCESS' : '' | translate }}
     {{ isBatchOperation ? 'VARIABLE_ADD_MODAL_TITLE_BATCH' : '' | translate }}
     {{ isMigration ? 'VARIABLE_ADD_MODAL_TITLE_MIGRATION' : '' | translate }}
-    {{ isCaseInstance ? 'VARIABLE_ADD_MODAL_TITLE_CASE' : '' | translate }}
   </h3>
 </div>
 
@@ -80,11 +79,6 @@
 
   <div ng-if="status === 'SUCCESS' && isProcessInstance"
        translate="VARIABLE_ADD_STATUS_SUCCESS_PROCESS"
-       translate-values="{ name: newVariable.name }">
-  </div>
-
-  <div ng-if="status === 'SUCCESS' && isCaseInstance"
-       translate="VARIABLE_ADD_STATUS_SUCCESS_CASE"
        translate-values="{ name: newVariable.name }">
   </div>
 

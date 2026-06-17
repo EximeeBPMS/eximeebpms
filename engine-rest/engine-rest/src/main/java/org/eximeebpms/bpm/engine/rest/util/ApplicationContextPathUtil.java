@@ -22,7 +22,6 @@ import org.eximeebpms.bpm.application.ProcessApplicationInfo;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.identity.Authentication;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 
 public class ApplicationContextPathUtil {
@@ -35,16 +34,6 @@ public class ApplicationContextPathUtil {
     }
 
     return getApplicationPathForDeployment(engine, processDefinition.getDeploymentId());
-  }
-
-  public static String getApplicationPathByCaseDefinitionId(ProcessEngine engine, String caseDefinitionId) {
-    CaseDefinition caseDefinition = engine.getRepositoryService().getCaseDefinition(caseDefinitionId);
-
-    if (caseDefinition == null) {
-      return null;
-    }
-
-    return getApplicationPathForDeployment(engine, caseDefinition.getDeploymentId());
   }
 
   public static String getApplicationPathForDeployment(ProcessEngine engine, String deploymentId) {

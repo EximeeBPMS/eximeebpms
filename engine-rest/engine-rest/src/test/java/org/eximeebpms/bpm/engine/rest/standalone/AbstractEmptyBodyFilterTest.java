@@ -80,7 +80,6 @@ public abstract class AbstractEmptyBodyFilterTest extends AbstractRestServiceTes
     mockInstantiationBuilder = mock(ProcessInstantiationBuilder.class);
     when(mockInstantiationBuilder.setVariables(any())).thenReturn(mockInstantiationBuilder);
     when(mockInstantiationBuilder.businessKey(any())).thenReturn(mockInstantiationBuilder);
-    when(mockInstantiationBuilder.caseInstanceId(any())).thenReturn(mockInstantiationBuilder);
     when(runtimeServiceMock.createProcessInstanceById(any())).thenReturn(mockInstantiationBuilder);
 
     ProcessInstanceWithVariables resultInstanceWithVariables = MockProvider.createMockInstanceWithVariables();

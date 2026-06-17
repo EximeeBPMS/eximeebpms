@@ -94,12 +94,6 @@ public class HistoricTaskInstanceQueryImpl extends AbstractQuery<HistoricTaskIns
   protected String[] tenantIds;
   protected boolean isTenantIdSet;
 
-  protected String caseDefinitionId;
-  protected String caseDefinitionKey;
-  protected String caseDefinitionName;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
-
   protected Date finishedAfter;
   protected Date finishedBefore;
   protected Date startedAfter;
@@ -255,31 +249,6 @@ public class HistoricTaskInstanceQueryImpl extends AbstractQuery<HistoricTaskIns
 
   public HistoricTaskInstanceQueryImpl taskOwnerLike(String taskOwnerLike) {
     this.taskOwnerLike = taskOwnerLike;
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery caseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery caseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery caseDefinitionName(String caseDefinitionName) {
-    this.caseDefinitionName = caseDefinitionName;
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery caseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
     return this;
   }
 
@@ -751,33 +720,6 @@ public class HistoricTaskInstanceQueryImpl extends AbstractQuery<HistoricTaskIns
     return this;
   }
 
-  public HistoricTaskInstanceQuery orderByCaseDefinitionId() {
-    if (isOrQueryActive) {
-      throw new ProcessEngineException("Invalid query usage: cannot set orderByCaseDefinitionId() within 'or' query");
-    }
-
-    orderBy(HistoricTaskInstanceQueryProperty.CASE_DEFINITION_ID);
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery orderByCaseInstanceId() {
-    if (isOrQueryActive) {
-      throw new ProcessEngineException("Invalid query usage: cannot set orderByCaseInstanceId() within 'or' query");
-    }
-
-    orderBy(HistoricTaskInstanceQueryProperty.CASE_INSTANCE_ID);
-    return this;
-  }
-
-  public HistoricTaskInstanceQuery orderByCaseExecutionId() {
-    if (isOrQueryActive) {
-      throw new ProcessEngineException("Invalid query usage: cannot set orderByCaseExecutionId() within 'or' query");
-    }
-
-    orderBy(HistoricTaskInstanceQueryProperty.CASE_EXECUTION_ID);
-    return this;
-  }
-
   public HistoricTaskInstanceQuery orderByTenantId() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByTenantId() within 'or' query");
@@ -974,26 +916,6 @@ public class HistoricTaskInstanceQueryImpl extends AbstractQuery<HistoricTaskIns
 
   public String[] getTenantIds() {
     return tenantIds;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionName() {
-    return caseDefinitionName;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
   }
 
   public Date getFinishedAfter() {

@@ -62,7 +62,6 @@ public class CamundaEngineConfigurationConfigTest {
         = (QuarkusProcessEngineConfiguration) processEngine.getProcessEngineConfiguration();
 
     // then
-    assertThat(configuration.isCmmnEnabled()).isEqualTo(false);
     assertThat(configuration.isDmnEnabled()).isEqualTo(false);
     assertThat(configuration.getHistory()).isEqualTo("none");
   }

@@ -26,9 +26,6 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.ProcessEngineServices;
 import org.eximeebpms.bpm.engine.delegate.BpmnModelExecutionContext;
 import org.eximeebpms.bpm.engine.delegate.ProcessEngineServicesAware;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
 import org.eximeebpms.bpm.engine.impl.core.variable.CoreVariableInstance;
 import org.eximeebpms.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
 import org.eximeebpms.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
@@ -72,12 +69,6 @@ public class ExecutionImpl extends PvmExecutionImpl implements
 
   /** reference to a subprocessinstance, not-null if currently subprocess is started from this execution */
   protected ExecutionImpl subProcessInstance;
-
-  /** super case execution, not-null if this execution is part of a case execution */
-  protected CaseExecutionImpl superCaseExecution;
-
-  /** reference to a subcaseinstance, not-null if currently subcase is started from this execution */
-  protected CaseExecutionImpl subCaseInstance;
 
   // variables/////////////////////////////////////////////////////////////////
 
@@ -171,40 +162,6 @@ public class ExecutionImpl extends PvmExecutionImpl implements
 
   public void setSubProcessInstance(PvmExecutionImpl subProcessInstance) {
     this.subProcessInstance = (ExecutionImpl) subProcessInstance;
-  }
-
-  // super case execution /////////////////////////////////////////////////////
-
-  public CaseExecutionImpl getSuperCaseExecution() {
-    return superCaseExecution;
-  }
-
-  public void setSuperCaseExecution(CmmnExecution superCaseExecution) {
-    this.superCaseExecution = (CaseExecutionImpl) superCaseExecution;
-  }
-
-  // sub case execution ////////////////////////////////////////////////////////
-
-  public CaseExecutionImpl getSubCaseInstance() {
-    return subCaseInstance;
-  }
-
-  public void setSubCaseInstance(CmmnExecution subCaseInstance) {
-    this.subCaseInstance = (CaseExecutionImpl) subCaseInstance;
-  }
-
-  public CaseExecutionImpl createSubCaseInstance(CmmnCaseDefinition caseDefinition) {
-    return createSubCaseInstance(caseDefinition, null);
-  }
-
-  public CaseExecutionImpl createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey) {
-    CaseExecutionImpl caseInstance = (CaseExecutionImpl) caseDefinition.createCaseInstance(businessKey);
-
-    // manage bidirectional super-process-sub-case-instances relation
-    subCaseInstance.setSuperExecution(this);
-    setSubCaseInstance(subCaseInstance);
-
-    return caseInstance;
   }
 
   // process definition ///////////////////////////////////////////////////////

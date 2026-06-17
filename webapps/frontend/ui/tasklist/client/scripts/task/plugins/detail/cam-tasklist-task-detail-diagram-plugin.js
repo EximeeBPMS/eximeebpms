@@ -27,16 +27,14 @@ var Controller = [
     // setup ///////////////////////////////////////////////////////////
 
     var ProcessDefinition = camAPI.resource('process-definition');
-    var CaseDefinition = camAPI.resource('case-definition');
     var diagramData = $scope.taskData.newChild($scope);
 
     // provider ////////////////////////////////////////////////////////
 
     diagramData.provide('xml', [
       'processDefinition',
-      'caseDefinition',
-      function(processDefinition, caseDefinition) {
-        if (!processDefinition && !caseDefinition) {
+      function(processDefinition) {
+        if (!processDefinition) {
           return $q.when(null);
         }
 
@@ -47,25 +45,18 @@ var Controller = [
             })
             .catch(function() {});
         }
-
-        return getDefinition($q, CaseDefinition, caseDefinition)
-          .then(function(xml) {
-            return xml.cmmnXml;
-          })
-          .catch(function() {});
       }
     ]);
 
     diagramData.provide('diagram', [
       'xml',
       'task',
-      'caseDefinition',
       'processDefinition',
-      function(xml, task, caseDefinition, processDefinition) {
+      function(xml, task, processDefinition) {
         return {
           xml: xml,
           task: task,
-          definition: processDefinition || caseDefinition
+          definition: processDefinition
         };
       }
     ]);
@@ -74,10 +65,6 @@ var Controller = [
 
     diagramData.observe('processDefinition', function(processDefinition) {
       $scope.processDefinition = processDefinition;
-    });
-
-    diagramData.observe('caseDefinition', function(caseDefinition) {
-      $scope.caseDefinition = caseDefinition;
     });
 
     $scope.diagramState = diagramData.observe('diagram', function(diagram) {

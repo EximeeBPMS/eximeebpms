@@ -35,7 +35,6 @@
         ACT_ID_,
         TASK_ID_,
         CALL_PROC_INST_ID_,
-        CALL_CASE_INST_ID_,
         ACT_NAME_,
         ACT_TYPE_,
         ASSIGNEE_,
@@ -57,7 +56,6 @@
         #{activityId ,jdbcType=VARCHAR},
         #{taskId ,jdbcType=VARCHAR},
         #{calledProcessInstanceId ,jdbcType=VARCHAR},
-        #{calledCaseInstanceId ,jdbcType=VARCHAR},
         #{activityName ,jdbcType=VARCHAR},
         #{activityType ,jdbcType=VARCHAR},
         #{taskAssignee ,jdbcType=VARCHAR},
@@ -115,7 +113,7 @@
       ${limitAfterWithoutOffset}
     </if>
   </update>
-  
+
   <update id="updateHistoricActivityInstancesByRootProcessInstanceId_postgres"
           parameterType="java.util.Map">
     update ${prefix}ACT_HI_ACTINST set
@@ -129,7 +127,7 @@
       ${limitAfterInUpdate}
     </if>
   </update>
-  
+
   <update id="updateHistoricActivityInstancesByRootProcessInstanceId_mysql"
           parameterType="java.util.Map">
     update ${prefix}ACT_HI_ACTINST
@@ -147,7 +145,7 @@
       ${limitAfterInUpdate}
       set REMOVAL_TIME_ = #{removalTime, jdbcType=TIMESTAMP}
     </if>
-    
+
   </update>
 
   <update id="updateHistoricActivityInstancesByRootProcessInstanceId_mssql"
@@ -168,7 +166,7 @@
 
   <update id="updateHistoricActivityInstancesByProcessInstanceId"
           parameterType="java.util.Map">
-    update 
+    update
     <if test="maxResults != null">
       ${limitBeforeWithoutOffset}
     </if>
@@ -180,10 +178,10 @@
         ${limitAfterWithoutOffset}
       </if>
   </update>
-  
+
   <update id="updateHistoricActivityInstancesByProcessInstanceId_postgres"
           parameterType="java.util.Map">
-    update ${prefix}ACT_HI_ACTINST 
+    update ${prefix}ACT_HI_ACTINST
     set REMOVAL_TIME_ = #{removalTime, jdbcType=TIMESTAMP}
     <if test="maxResults != null">
       ${limitBeforeInUpdate} ${prefix}ACT_HI_ACTINST
@@ -194,10 +192,10 @@
       ${limitAfterInUpdate}
     </if>
   </update>
-  
+
   <update id="updateHistoricActivityInstancesByProcessInstanceId_mysql"
           parameterType="java.util.Map">
-    update ${prefix}ACT_HI_ACTINST 
+    update ${prefix}ACT_HI_ACTINST
     <choose>
       <when test="maxResults != null">
         ${limitBeforeInUpdate} ${prefix}ACT_HI_ACTINST
@@ -216,7 +214,7 @@
 
   <update id="updateHistoricActivityInstancesByProcessInstanceId_mssql"
           parameterType="java.util.Map">
-    update 
+    update
     <if test="maxResults != null">
       ${limitBeforeWithoutOffset}
     </if>
@@ -306,7 +304,6 @@
     <result property="activityId" column="ACT_ID_" jdbcType="VARCHAR" />
     <result property="taskId" column="TASK_ID_" jdbcType="VARCHAR" />
     <result property="calledProcessInstanceId" column="CALL_PROC_INST_ID_" jdbcType="VARCHAR" />
-    <result property="calledCaseInstanceId" column="CALL_CASE_INST_ID_" jdbcType="VARCHAR" />
     <result property="activityName" column="ACT_NAME_" jdbcType="VARCHAR" />
     <result property="activityType" column="ACT_TYPE_" jdbcType="VARCHAR" />
     <result property="taskAssignee" column="ASSIGNEE_" jdbcType="VARCHAR" />

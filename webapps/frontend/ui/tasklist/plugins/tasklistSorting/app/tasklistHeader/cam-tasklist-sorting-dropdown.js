@@ -78,9 +78,7 @@ module.exports = [
         $scope.sortableVariables = {
           processVariable: $translate.instant('PROCESS_VARIABLE'),
           executionVariable: $translate.instant('EXECUTION_VARIABLE'),
-          taskVariable: $translate.instant('TASK_VARIABLE'),
-          caseExecutionVariable: $translate.instant('CASE_EXECUTION_VARIABLE'),
-          caseInstanceVariable: $translate.instant('CASE_INSTANCE_VARIABLE')
+          taskVariable: $translate.instant('TASK_VARIABLE')
         };
 
         $scope.showInputs = function($event, name) {

@@ -29,7 +29,6 @@ import org.eximeebpms.bpm.engine.batch.BatchStatistics;
 import org.eximeebpms.bpm.engine.batch.history.HistoricBatch;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDetail;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLog;
@@ -42,11 +41,9 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricJobLogEventEntity;
 import org.eximeebpms.bpm.engine.management.SchemaLogEntry;
 import org.eximeebpms.bpm.engine.query.Query;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
@@ -193,37 +190,6 @@ public class TestOrderingUtil {
     });
   }
 
-  // CASE EXECUTION
-
-  public static NullTolerantComparator<CaseExecution> caseExecutionByDefinitionId() {
-    return propertyComparator(new PropertyAccessor<CaseExecution, String>() {
-      @Override
-      public String getProperty(CaseExecution obj) {
-        return obj.getCaseDefinitionId();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<CaseExecution> caseExecutionByDefinitionKey(ProcessEngine processEngine) {
-    final RepositoryService repositoryService = processEngine.getRepositoryService();
-    return propertyComparator(new PropertyAccessor<CaseExecution, String>() {
-      @Override
-      public String getProperty(CaseExecution obj) {
-        CaseDefinition caseDefinition = repositoryService.getCaseDefinition(obj.getCaseDefinitionId());
-        return caseDefinition.getKey();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<CaseExecution> caseExecutionById() {
-    return propertyComparator(new PropertyAccessor<CaseExecution, String>() {
-      @Override
-      public String getProperty(CaseExecution obj) {
-        return obj.getId();
-      }
-    });
-  }
-
   // TASK
 
   public static NullTolerantComparator<Task> taskById() {
@@ -312,24 +278,6 @@ public class TestOrderingUtil {
       @Override
       public Date getProperty(Task obj) {
         return obj.getFollowUpDate();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<Task> taskByCaseInstanceId() {
-    return propertyComparator(new PropertyAccessor<Task, String>() {
-      @Override
-      public String getProperty(Task obj) {
-        return obj.getCaseInstanceId();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<Task> taskByCaseExecutionId() {
-    return propertyComparator(new PropertyAccessor<Task, String>() {
-      @Override
-      public String getProperty(Task obj) {
-        return obj.getCaseExecutionId();
       }
     });
   }
@@ -774,24 +722,6 @@ public class TestOrderingUtil {
     return propertyComparator(new PropertyAccessor<HistoricVariableInstance, String>() {
       @Override
       public String getProperty(HistoricVariableInstance obj) {
-        return obj.getTenantId();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<HistoricCaseActivityInstance> historicCaseActivityInstanceByTenantId() {
-    return propertyComparator(new PropertyAccessor<HistoricCaseActivityInstance, String>() {
-      @Override
-      public String getProperty(HistoricCaseActivityInstance obj) {
-        return obj.getTenantId();
-      }
-    });
-  }
-
-  public static NullTolerantComparator<HistoricExternalTaskLog> historicExternalTaskLogByTenantId() {
-    return propertyComparator(new PropertyAccessor<HistoricExternalTaskLog, String>() {
-      @Override
-      public String getProperty(HistoricExternalTaskLog obj) {
         return obj.getTenantId();
       }
     });

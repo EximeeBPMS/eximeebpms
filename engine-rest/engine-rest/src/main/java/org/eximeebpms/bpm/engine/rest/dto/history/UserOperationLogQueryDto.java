@@ -42,9 +42,6 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
   protected String processDefinitionKey;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String jobId;
   protected String jobDefinitionId;
@@ -92,15 +89,6 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
     }
     if (executionId != null) {
       query.executionId(executionId);
-    }
-    if (caseDefinitionId != null) {
-      query.caseDefinitionId(caseDefinitionId);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
-    if (caseExecutionId != null) {
-      query.caseExecutionId(caseExecutionId);
     }
     if (taskId != null) {
       query.taskId(taskId);
@@ -181,21 +169,6 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam("caseDefinitionId")
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("caseExecutionId")
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
   @EximeeBPMSQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
@@ -225,7 +198,7 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
   public void setOperationId(String operationId) {
     this.operationId = operationId;
   }
-  
+
   @EximeeBPMSQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
@@ -245,7 +218,7 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
   public void setEntityTypeIn(String[] entityTypes) {
     this.entityTypes = entityTypes;
   }
-  
+
   @EximeeBPMSQueryParam("category")
   public void setcategory(String category) {
     this.category = category;
@@ -255,7 +228,7 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
   public void setCategoryIn(String[] categories) {
     this.categories = categories;
   }
-  
+
   @EximeeBPMSQueryParam("property")
   public void setProperty(String property) {
     this.property = property;

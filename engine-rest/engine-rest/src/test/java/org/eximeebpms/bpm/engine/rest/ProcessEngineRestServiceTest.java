@@ -43,7 +43,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import io.restassured.response.Response;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.HistoryService;
@@ -83,18 +82,12 @@ import org.eximeebpms.bpm.engine.identity.UserQuery;
 import org.eximeebpms.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
 import org.eximeebpms.bpm.engine.management.JobDefinition;
 import org.eximeebpms.bpm.engine.management.JobDefinitionQuery;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentQuery;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 import org.eximeebpms.bpm.engine.rest.helper.MockProvider;
 import org.eximeebpms.bpm.engine.rest.util.container.TestContainerRule;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseExecutionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
-import org.eximeebpms.bpm.engine.runtime.CaseInstanceQuery;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.ExecutionQuery;
 import org.eximeebpms.bpm.engine.runtime.Incident;
@@ -145,10 +138,6 @@ public class ProcessEngineRestServiceTest extends
 
   protected static final String JOB_DEFINITION_URL = SINGLE_ENGINE_URL + "/job-definition";
 
-  protected static final String CASE_DEFINITION_URL = SINGLE_ENGINE_URL + "/case-definition";
-  protected static final String CASE_INSTANCE_URL = SINGLE_ENGINE_URL + "/case-instance";
-  protected static final String CASE_EXECUTION_URL = SINGLE_ENGINE_URL + "/case-execution";
-
   protected static final String FILTER_URL = SINGLE_ENGINE_URL + "/filter";
 
   protected static final String HISTORY_URL = SINGLE_ENGINE_URL + "/history";
@@ -174,7 +163,6 @@ public class ProcessEngineRestServiceTest extends
   private ManagementService mockManagementService;
   private HistoryService mockHistoryService;
   private ExternalTaskService mockExternalTaskService;
-  private CaseService mockCaseService;
   private FilterService mockFilterService;
   private MessageCorrelationBuilder mockMessageCorrelationBuilder;
   private MessageCorrelationResult mockMessageCorrelationResult;
@@ -188,7 +176,6 @@ public class ProcessEngineRestServiceTest extends
     mockIdentityService = mock(IdentityService.class);
     mockManagementService = mock(ManagementService.class);
     mockHistoryService = mock(HistoryService.class);
-    mockCaseService = mock(CaseService.class);
     mockFilterService = mock(FilterService.class);
     mockExternalTaskService = mock(ExternalTaskService.class);
 
@@ -198,7 +185,6 @@ public class ProcessEngineRestServiceTest extends
     when(namedProcessEngine.getIdentityService()).thenReturn(mockIdentityService);
     when(namedProcessEngine.getManagementService()).thenReturn(mockManagementService);
     when(namedProcessEngine.getHistoryService()).thenReturn(mockHistoryService);
-    when(namedProcessEngine.getCaseService()).thenReturn(mockCaseService);
     when(namedProcessEngine.getFilterService()).thenReturn(mockFilterService);
     when(namedProcessEngine.getExternalTaskService()).thenReturn(mockExternalTaskService);
 
@@ -212,9 +198,6 @@ public class ProcessEngineRestServiceTest extends
     createIncidentMock();
     createDeploymentMock();
     createMessageCorrelationBuilderMock();
-    createCaseDefinitionMock();
-    createCaseInstanceMock();
-    createCaseExecutionMock();
     createFilterMock();
     createExternalTaskMock();
 
@@ -233,37 +216,6 @@ public class ProcessEngineRestServiceTest extends
     ProcessDefinition mockDefinition = MockProvider.createMockDefinition();
 
     when(mockRepoService.getProcessDefinition(eq(MockProvider.EXAMPLE_PROCESS_DEFINITION_ID))).thenReturn(mockDefinition);
-  }
-
-
-  private void createCaseDefinitionMock() {
-    List<CaseDefinition> caseDefinitions = new ArrayList<CaseDefinition>();
-    CaseDefinition mockCaseDefinition = MockProvider.createMockCaseDefinition();
-    caseDefinitions.add(mockCaseDefinition);
-
-    CaseDefinitionQuery mockCaseDefinitionQuery = mock(CaseDefinitionQuery.class);
-    when(mockCaseDefinitionQuery.list()).thenReturn(caseDefinitions);
-    when(mockRepoService.createCaseDefinitionQuery()).thenReturn(mockCaseDefinitionQuery);
-  }
-
-  private void createCaseInstanceMock() {
-    List<CaseInstance> caseInstances = new ArrayList<CaseInstance>();
-    CaseInstance mockCaseInstance = MockProvider.createMockCaseInstance();
-    caseInstances.add(mockCaseInstance);
-
-    CaseInstanceQuery mockCaseInstanceQuery = mock(CaseInstanceQuery.class);
-    when(mockCaseInstanceQuery.list()).thenReturn(caseInstances);
-    when(mockCaseService.createCaseInstanceQuery()).thenReturn(mockCaseInstanceQuery);
-  }
-
-  private void createCaseExecutionMock() {
-    List<CaseExecution> caseExecutions = new ArrayList<CaseExecution>();
-    CaseExecution mockCaseExecution = MockProvider.createMockCaseExecution();
-    caseExecutions.add(mockCaseExecution);
-
-    CaseExecutionQuery mockCaseExecutionQuery = mock(CaseExecutionQuery.class);
-    when(mockCaseExecutionQuery.list()).thenReturn(caseExecutions);
-    when(mockCaseService.createCaseExecutionQuery()).thenReturn(mockCaseExecutionQuery);
   }
 
   private void createProcessInstanceMock() {
@@ -831,48 +783,6 @@ public class ProcessEngineRestServiceTest extends
     verifyNoInteractions(processEngine);
 
     assertThat(response.getBody().as(Set.class)).isEqualTo(registeredDeployments);
-  }
-
-  @Test
-  public void testCaseDefinitionAccess() {
-    given()
-      .pathParam("name", EXAMPLE_ENGINE_NAME)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-      .when()
-        .get(CASE_DEFINITION_URL);
-
-    verify(mockRepoService).createCaseDefinitionQuery();
-    verifyNoInteractions(processEngine);
-  }
-
-  @Test
-  public void testCaseInstanceAccess() {
-    given()
-      .pathParam("name", EXAMPLE_ENGINE_NAME)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-      .when()
-        .get(CASE_INSTANCE_URL);
-
-    verify(mockCaseService).createCaseInstanceQuery();
-    verifyNoInteractions(processEngine);
-  }
-
-  @Test
-  public void testCaseExecutionAccess() {
-    given()
-      .pathParam("name", EXAMPLE_ENGINE_NAME)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-      .when()
-        .get(CASE_EXECUTION_URL);
-
-    verify(mockCaseService).createCaseExecutionQuery();
-    verifyNoInteractions(processEngine);
   }
 
   @Test

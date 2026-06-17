@@ -19,7 +19,6 @@ package org.eximeebpms.bpm.engine.impl.history.parser;
 import org.eximeebpms.bpm.dmn.engine.DmnDecision;
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.context.CoreExecutionContext;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
@@ -63,10 +62,6 @@ public class HistoryDecisionEvaluationListener implements DmnDecisionEvaluationL
         if (coreExecution instanceof ExecutionEntity) {
           ExecutionEntity execution = (ExecutionEntity) coreExecution;
           return eventProducer.createDecisionEvaluatedEvt(execution, evaluationEvent);
-        }
-        else if (coreExecution instanceof CaseExecutionEntity) {
-          CaseExecutionEntity caseExecution = (CaseExecutionEntity) coreExecution;
-          return eventProducer.createDecisionEvaluatedEvt(caseExecution, evaluationEvent);
         }
 
       }

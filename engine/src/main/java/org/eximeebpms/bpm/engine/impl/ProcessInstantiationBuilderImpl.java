@@ -44,7 +44,6 @@ public class ProcessInstantiationBuilderImpl implements ProcessInstantiationBuil
   protected String processDefinitionKey;
 
   protected String businessKey;
-  protected String caseInstanceId;
   protected String tenantId;
 
   protected String processDefinitionTenantId;
@@ -104,11 +103,6 @@ public class ProcessInstantiationBuilderImpl implements ProcessInstantiationBuil
     return this;
   }
 
-  public ProcessInstantiationBuilder caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
   public ProcessInstantiationBuilder tenantId(String tenantId) {
     this.tenantId = tenantId;
     return this;
@@ -138,7 +132,7 @@ public class ProcessInstantiationBuilderImpl implements ProcessInstantiationBuil
   public ProcessInstanceWithVariables executeWithVariablesInReturn() {
     return executeWithVariablesInReturn(false, false);
   }
-  
+
   @Override
   public ProcessInstanceWithVariables executeWithVariablesInReturn(boolean skipCustomListeners, boolean skipIoMappings) {
     ensureOnlyOneNotNull("either process definition id or key must be set", processDefinitionId, processDefinitionKey);
@@ -182,10 +176,6 @@ public class ProcessInstantiationBuilderImpl implements ProcessInstantiationBuil
 
   public String getBusinessKey() {
     return businessKey;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   public Map<String, Object> getVariables() {

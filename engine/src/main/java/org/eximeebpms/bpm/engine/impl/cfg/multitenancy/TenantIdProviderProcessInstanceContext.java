@@ -16,7 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.impl.cfg.multitenancy;
 
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.variable.VariableMap;
@@ -35,8 +34,6 @@ public class TenantIdProviderProcessInstanceContext {
 
   protected DelegateExecution superExecution;
 
-  protected DelegateCaseExecution superCaseExecution;
-
   public TenantIdProviderProcessInstanceContext(ProcessDefinition processDefinition, VariableMap variables) {
     this.processDefinition = processDefinition;
     this.variables = variables;
@@ -45,11 +42,6 @@ public class TenantIdProviderProcessInstanceContext {
   public TenantIdProviderProcessInstanceContext(ProcessDefinition processDefinition, VariableMap variables, DelegateExecution superExecution) {
     this(processDefinition, variables);
     this.superExecution = superExecution;
-  }
-
-  public TenantIdProviderProcessInstanceContext(ProcessDefinition processDefinition, VariableMap variables, DelegateCaseExecution superCaseExecution) {
-    this(processDefinition, variables);
-    this.superCaseExecution = superCaseExecution;
   }
 
   /**
@@ -73,13 +65,6 @@ public class TenantIdProviderProcessInstanceContext {
    */
   public DelegateExecution getSuperExecution() {
     return superExecution;
-  }
-
-  /**
-   * @return the super case execution. Null if the starting process instance is not a sub process instance started using a CMMN case task.
-   */
-  public DelegateCaseExecution getSuperCaseExecution() {
-    return superCaseExecution;
   }
 
 }

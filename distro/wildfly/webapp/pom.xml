@@ -40,7 +40,7 @@
           <archive>
             <manifestEntries>
               <!-- module dependencies for deployment on JBoss/WildFly -->
-              <Dependencies>org.eximeebpms.bpm.eximeebpms-engine,org.eximeebpms.bpm.dmn.eximeebpms-engine-dmn,org.eximeebpms.bpm.model.eximeebpms-bpmn-model,org.eximeebpms.bpm.model.eximeebpms-cmmn-model,org.eximeebpms.bpm.model.eximeebpms-dmn-model,org.eximeebpms.bpm.model.eximeebpms-xml-model,org.eximeebpms.commons.eximeebpms-commons-logging,org.eximeebpms.spin.eximeebpms-spin-core,org.eximeebpms.bpm.juel.eximeebpms-juel services,org.graalvm.js.js-scriptengine services</Dependencies>
+              <Dependencies>org.eximeebpms.bpm.eximeebpms-engine,org.eximeebpms.bpm.dmn.eximeebpms-engine-dmn,org.eximeebpms.bpm.model.eximeebpms-bpmn-model,org.eximeebpms.bpm.model.eximeebpms-dmn-model,org.eximeebpms.bpm.model.eximeebpms-xml-model,org.eximeebpms.commons.eximeebpms-commons-logging,org.eximeebpms.spin.eximeebpms-spin-core,org.eximeebpms.bpm.juel.eximeebpms-juel services,org.graalvm.js.js-scriptengine services</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>

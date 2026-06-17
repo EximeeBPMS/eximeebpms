@@ -21,7 +21,6 @@ import io.quarkus.arc.InjectableInstance;
 import io.quarkus.arc.InstanceHandle;
 import org.eximeebpms.bpm.BpmPlatform;
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -62,7 +61,6 @@ public class CdiProcessEngineTestCase {
   protected AuthorizationService authorizationService;
   protected FilterService filterService;
   protected ExternalTaskService externalTaskService;
-  protected CaseService caseService;
   protected DecisionService decisionService;
 
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
@@ -91,7 +89,6 @@ public class CdiProcessEngineTestCase {
     authorizationService = processEngine.getAuthorizationService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
-    caseService = processEngine.getCaseService();
     decisionService = processEngine.getDecisionService();
   }
 
@@ -127,7 +124,6 @@ public class CdiProcessEngineTestCase {
     authorizationService = null;
     filterService = null;
     externalTaskService = null;
-    caseService = null;
     decisionService = null;
   }
 

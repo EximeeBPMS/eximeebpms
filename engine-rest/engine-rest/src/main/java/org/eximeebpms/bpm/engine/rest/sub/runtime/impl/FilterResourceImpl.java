@@ -508,8 +508,6 @@ public class FilterResourceImpl extends AbstractAuthorizedRestResource implement
         variableScopeIds.add(halTask.getId());
         variableScopeIds.add(halTask.getExecutionId());
         variableScopeIds.add(halTask.getProcessInstanceId());
-        variableScopeIds.add(halTask.getCaseExecutionId());
-        variableScopeIds.add(halTask.getCaseInstanceId());
       }
     }
 

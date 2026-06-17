@@ -82,12 +82,6 @@ public class CommentManager extends AbstractHistoricManager {
     deleteComments(parameters);
   }
 
-  public void deleteCommentsByTaskCaseInstanceIds(List<String> caseInstanceIds) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("taskCaseInstanceIds", caseInstanceIds);
-    deleteComments(parameters);
-  }
-
   protected void deleteComments(Map<String, Object> parameters) {
     getDbEntityManager().deletePreserveOrder(CommentEntity.class, "deleteCommentsByIds", parameters);
   }

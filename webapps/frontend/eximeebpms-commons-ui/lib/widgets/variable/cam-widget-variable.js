@@ -47,8 +47,6 @@ module.exports = [
         //   },
         //
         //   activitiyInstanceId: <UUID>,
-        //   caseExecutionId: <UUID>,
-        //   caseInstanceId: <UUID>,
         //   executionId: <UUID>,
         //   processInstanceId: <UUID>,
         //   taskId: <UUID>

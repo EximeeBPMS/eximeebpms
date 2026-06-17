@@ -17,7 +17,6 @@
 package org.eximeebpms.bpm.engine.test.api.multitenancy;
 
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 
@@ -43,11 +42,6 @@ public class StaticTenantIdTestProvider implements TenantIdProvider {
 
   @Override
   public String provideTenantIdForHistoricDecisionInstance(TenantIdProviderHistoricDecisionInstanceContext ctx) {
-    return tenantId;
-  }
-
-  @Override
-  public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
     return tenantId;
   }
 }

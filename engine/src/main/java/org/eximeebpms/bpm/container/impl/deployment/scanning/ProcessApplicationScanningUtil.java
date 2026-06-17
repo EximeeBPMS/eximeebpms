@@ -22,7 +22,6 @@ import java.util.Map;
 import org.eximeebpms.bpm.application.impl.metadata.spi.ProcessArchiveXml;
 import org.eximeebpms.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
 import org.eximeebpms.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
-import org.eximeebpms.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
 import org.eximeebpms.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
 
 public class ProcessApplicationScanningUtil {
@@ -71,7 +70,6 @@ public class ProcessApplicationScanningUtil {
 
   public static boolean isDeployable(String filename) {
     return hasSuffix(filename, BpmnDeployer.BPMN_RESOURCE_SUFFIXES)
-      || hasSuffix(filename, CmmnDeployer.CMMN_RESOURCE_SUFFIXES)
       || hasSuffix(filename, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
   }
 
@@ -95,12 +93,10 @@ public class ProcessApplicationScanningUtil {
   public static boolean isDiagram(String fileName, String modelFileName) {
     // process resources
     boolean isBpmnDiagram = checkDiagram(fileName, modelFileName, BpmnDeployer.DIAGRAM_SUFFIXES, BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
-    // case resources
-    boolean isCmmnDiagram = checkDiagram(fileName, modelFileName, CmmnDeployer.DIAGRAM_SUFFIXES, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
     // decision resources
     boolean isDmnDiagram = checkDiagram(fileName, modelFileName, DecisionDefinitionDeployer.DIAGRAM_SUFFIXES, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
 
-    return isBpmnDiagram || isCmmnDiagram || isDmnDiagram;
+    return isBpmnDiagram || isDmnDiagram;
   }
 
   /**

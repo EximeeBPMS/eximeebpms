@@ -75,26 +75,6 @@ public class HistoricTaskInstanceManager extends AbstractHistoricManager {
     getDbEntityManager().deletePreserveOrder(HistoricTaskInstanceEntity.class, "deleteHistoricTaskInstanceByProcessInstanceIds", processInstanceIds);
   }
 
-  public void deleteHistoricTaskInstancesByCaseInstanceIds(List<String> caseInstanceIds) {
-
-    CommandContext commandContext = Context.getCommandContext();
-
-    getHistoricDetailManager()
-        .deleteHistoricDetailsByTaskCaseInstanceIds(caseInstanceIds);
-
-    commandContext
-        .getCommentManager()
-        .deleteCommentsByTaskCaseInstanceIds(caseInstanceIds);
-
-    getAttachmentManager()
-        .deleteAttachmentsByTaskCaseInstanceIds(caseInstanceIds);
-
-    getHistoricIdentityLinkManager()
-        .deleteHistoricIdentityLinksLogByTaskCaseInstanceIds(caseInstanceIds);
-
-    getDbEntityManager().deletePreserveOrder(HistoricTaskInstanceEntity.class, "deleteHistoricTaskInstanceByCaseInstanceIds", caseInstanceIds);
-  }
-
   public long findHistoricTaskInstanceCountByQueryCriteria(final HistoricTaskInstanceQueryImpl historicTaskInstanceQuery) {
     if (isHistoryEnabled()) {
       configureQuery(historicTaskInstanceQuery);

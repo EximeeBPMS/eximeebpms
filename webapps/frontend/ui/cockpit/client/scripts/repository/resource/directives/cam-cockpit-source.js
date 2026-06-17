@@ -45,7 +45,6 @@ module.exports = [
           py: 'python',
           rb: 'ruby',
           bpmn: 'markup',
-          cmmn: 'markup',
           dmn: 'markup'
         };
 

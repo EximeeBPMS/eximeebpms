@@ -68,8 +68,6 @@ public class HistoricDetailQueryDto extends AbstractQueryDto<HistoricDetailQuery
   protected String processInstanceId;
   protected String executionId;
   protected String activityInstanceId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String variableInstanceId;
   protected String[] variableTypeIn;
   protected String variableNameLike;
@@ -105,16 +103,6 @@ public class HistoricDetailQueryDto extends AbstractQueryDto<HistoricDetailQuery
   @EximeeBPMSQueryParam(value = "activityInstanceId")
   public void setActivityInstanceId(String activityInstanceId) {
     this.activityInstanceId = activityInstanceId;
-  }
-
-  @EximeeBPMSQueryParam(value = "caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam(value = "caseExecutionId")
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
   }
 
   @EximeeBPMSQueryParam(value = "variableInstanceId")
@@ -227,12 +215,6 @@ public class HistoricDetailQueryDto extends AbstractQueryDto<HistoricDetailQuery
     }
     if (activityInstanceId != null) {
       query.activityInstanceId(activityInstanceId);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
-    if (caseExecutionId != null) {
-      query.caseExecutionId(caseExecutionId);
     }
     if (variableInstanceId != null) {
       query.variableInstanceId(variableInstanceId);

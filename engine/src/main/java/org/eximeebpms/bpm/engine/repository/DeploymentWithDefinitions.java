@@ -33,13 +33,6 @@ public interface DeploymentWithDefinitions extends Deployment {
   List<ProcessDefinition> getDeployedProcessDefinitions();
 
   /**
-   * Returns the case definitions, which are deployed with that deployment.
-   *
-   * @return the case definitions, which are deployed
-   */
-  List<CaseDefinition> getDeployedCaseDefinitions();
-
-  /**
    * Returns the decision definitions, which are deployed with that deployment
    *
    * @return the decision definitions, which are deployed

@@ -27,6 +27,4 @@ public interface PvmProcessDefinition extends ReadOnlyProcessDefinition {
 
   PvmProcessInstance createProcessInstance(String businessKey);
 
-  PvmProcessInstance createProcessInstance(String businessKey, String caseInstanceId);
-
 }

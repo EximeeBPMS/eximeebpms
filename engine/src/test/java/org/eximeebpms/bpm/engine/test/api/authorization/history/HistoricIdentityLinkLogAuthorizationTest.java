@@ -42,13 +42,11 @@ import org.junit.Test;
 public class HistoricIdentityLinkLogAuthorizationTest extends AuthorizationTest {
 
   protected static final String ONE_PROCESS_KEY = "demoAssigneeProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   @Override
   @Before
   public void setUp() throws Exception {
-    testRule.deploy( "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskProcess.bpmn20.xml",
-    "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn");
+    testRule.deploy( "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskProcess.bpmn20.xml");
     super.setUp();
   }
 
@@ -157,24 +155,6 @@ public class HistoricIdentityLinkLogAuthorizationTest extends AuthorizationTest 
   }
 
   @Test
-  public void testQueryCaseTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    // if
-    identityService.setAuthenticatedUserId("aAssignerId");
-    taskService.addCandidateUser(taskId, "aUserId");
-    enableAuthorization();
-
-    // when
-    HistoricIdentityLinkLogQuery query = historyService.createHistoricIdentityLinkLogQuery();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
-  @Test
   public void testMixedQuery() {
 
     disableAuthorization();
@@ -182,11 +162,6 @@ public class HistoricIdentityLinkLogAuthorizationTest extends AuthorizationTest 
     startProcessInstanceByKey(ONE_PROCESS_KEY);
     startProcessInstanceByKey(ONE_PROCESS_KEY);
     startProcessInstanceByKey(ONE_PROCESS_KEY);
-
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    taskService.addCandidateUser(taskService.createTaskQuery().list().get(3).getId(), "dUserId");
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    taskService.addCandidateUser(taskService.createTaskQuery().list().get(4).getId(), "eUserId");
 
     createTaskAndAssignUser("one");
     createTaskAndAssignUser("two");
@@ -200,13 +175,13 @@ public class HistoricIdentityLinkLogAuthorizationTest extends AuthorizationTest 
     HistoricIdentityLinkLogQuery query = historyService.createHistoricIdentityLinkLogQuery();
 
     // then
-    verifyQueryResults(query, 7);
+    verifyQueryResults(query, 5);
 
     disableAuthorization();
 
     query = historyService.createHistoricIdentityLinkLogQuery();
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     // if
     createGrantAuthorization(PROCESS_DEFINITION, ONE_PROCESS_KEY, userId, READ_HISTORY);
@@ -214,7 +189,7 @@ public class HistoricIdentityLinkLogAuthorizationTest extends AuthorizationTest 
     query = historyService.createHistoricIdentityLinkLogQuery();
 
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     deleteTask("one", true);
     deleteTask("two", true);

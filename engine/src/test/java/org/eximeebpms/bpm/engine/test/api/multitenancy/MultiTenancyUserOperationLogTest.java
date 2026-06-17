@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.EntityTypes;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -48,7 +47,6 @@ import org.eximeebpms.bpm.engine.identity.Tenant;
 import org.eximeebpms.bpm.engine.identity.User;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.management.JobDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.runtime.Incident;
@@ -539,61 +537,6 @@ public class MultiTenancyUserOperationLogTest {
       assertThat(userOperationLogEntry.getTenantId()).isEqualTo(null);
     }
   }
-
-  @Test
-  public void shouldLogCaseDefinitionOperationWithTenant() {
-    // given
-    testRule.deployForTenant(TENANT_ONE, "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
-    identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
-    CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
-
-    // when
-    repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), 6);
-    List<UserOperationLogEntry> list = historyService.createUserOperationLogQuery()
-        .operationType(UserOperationLogEntry.OPERATION_TYPE_UPDATE_HISTORY_TIME_TO_LIVE)
-        .entityType(EntityTypes.CASE_DEFINITION)
-        .list();
-
-    // then
-    assertThat(list.size()).isEqualTo(2); // 2 properties
-    for (UserOperationLogEntry userOperationLogEntry : list) {
-      assertThat(userOperationLogEntry.getTenantId()).isEqualTo(TENANT_ONE);
-    }
-  }
-
-  @Test
-  public void shouldLogCaseInstanceOperationWithTenant() {
-    // given
-    testRule.deployForTenant(TENANT_ONE, "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
-    identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
-    CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
-    CaseService caseService = engineRule.getCaseService();
-    String caseInstanceId = caseService.withCaseDefinition(caseDefinition.getId()).create().getId();
-
-    String caseExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    caseService
-      .withCaseExecution(caseExecutionId).complete();
-
-    caseService
-      .withCaseExecution(caseInstanceId)
-      .close();
-
-    // when
-    historyService.deleteHistoricCaseInstance(caseInstanceId);
-    UserOperationLogEntry singleResult = historyService.createUserOperationLogQuery()
-        .operationType(UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY)
-        .entityType(EntityTypes.CASE_INSTANCE)
-        .singleResult();
-
-    // then
-    assertThat(singleResult.getTenantId()).isEqualTo(TENANT_ONE);
-  }
-
 
   @Test
   public void shouldLogMetricsOperationWithoutTenant() {

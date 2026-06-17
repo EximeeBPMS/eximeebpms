@@ -45,10 +45,6 @@ public abstract class HistoricDetailDto {
   protected String processInstanceId;
   protected String activityInstanceId;
   protected String executionId;
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String tenantId;
   protected String userOperationId;
@@ -78,22 +74,6 @@ public abstract class HistoricDetailDto {
 
   public String getExecutionId() {
     return executionId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
   }
 
   public String getTaskId() {
@@ -145,10 +125,6 @@ public abstract class HistoricDetailDto {
     dto.activityInstanceId = historicDetail.getActivityInstanceId();
     dto.executionId = historicDetail.getExecutionId();
     dto.taskId = historicDetail.getTaskId();
-    dto.caseDefinitionKey = historicDetail.getCaseDefinitionKey();
-    dto.caseDefinitionId = historicDetail.getCaseDefinitionId();
-    dto.caseInstanceId = historicDetail.getCaseInstanceId();
-    dto.caseExecutionId = historicDetail.getCaseExecutionId();
     dto.tenantId = historicDetail.getTenantId();
     dto.userOperationId = historicDetail.getUserOperationId();
     dto.time = historicDetail.getTime();

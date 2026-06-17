@@ -83,36 +83,6 @@ var fragment4 = combine(
   ])
 );
 
-var fragment5 = combine(
-  operation('deployment', 'create', [
-    {
-      deploymentName: 'user-tasks',
-      files: [
-        {
-          name: 'case-task.cmmn',
-          content: readResource('case-task.cmmn')
-        },
-        {
-          name: 'case-task2.cmmn',
-          content: readResource('case-task2.cmmn')
-        }
-      ]
-    }
-  ]),
-  operation('case-definition', 'create', [
-    {
-      key: 'Case_1',
-      businessKey: 'Instance1'
-    }
-  ]),
-  operation('case-definition', 'create', [
-    {
-      key: 'Case_2',
-      businessKey: 'Instance1'
-    }
-  ])
-);
-
 var fragment6 = combine(
   operation('deployment', 'create', [
     {
@@ -155,7 +125,7 @@ module.exports = {
   setup1: combine(fragment1, fragment2),
   setup2: combine(fragment3),
   setup3: combine(fragment1, fragment4),
-  setup4: combine(fragment1, fragment5),
+  setup4: combine(fragment1),
   setup5: combine(fragment1, fragment6),
   multiTenancySetup: combine(fragment1, multiTenancyFragment)
 };

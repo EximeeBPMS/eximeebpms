@@ -28,15 +28,12 @@ import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnEvaluatedInput;
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInputInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionOutputInstance;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricDecisionEvaluationEvent;
@@ -71,15 +68,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
 
       public HistoricDecisionInstanceEntity createHistoricDecisionInstance(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
         return createDecisionEvaluatedEvt(evaluationEvent, (ExecutionEntity) execution);
-      }
-    });
-  }
-
-  public HistoryEvent createDecisionEvaluatedEvt(final DelegateCaseExecution execution, final DmnDecisionEvaluationEvent evaluationEvent) {
-    return createHistoryEvent(evaluationEvent, new HistoricDecisionInstanceSupplier() {
-
-      public HistoricDecisionInstanceEntity createHistoricDecisionInstance(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
-        return createDecisionEvaluatedEvt(evaluationEvent, (CaseExecutionEntity) execution);
       }
     });
   }
@@ -134,22 +122,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
     return event;
   }
 
-  protected HistoricDecisionInstanceEntity createDecisionEvaluatedEvt(DmnDecisionLogicEvaluationEvent evaluationEvent, CaseExecutionEntity execution) {
-    // create event instance
-    HistoricDecisionInstanceEntity event = newDecisionInstanceEventEntity(execution, evaluationEvent);
-    // initialize event
-    initDecisionInstanceEvent(event, evaluationEvent, HistoryEventTypes.DMN_DECISION_EVALUATE);
-    setReferenceToCaseInstance(event, execution);
-
-    DecisionDefinition decisionDefinition = (DecisionDefinition) evaluationEvent.getDecision();
-    String tenantId = execution.getTenantId();
-    if (tenantId == null) {
-      tenantId = provideTenantId(decisionDefinition, event);
-    }
-    event.setTenantId(tenantId);
-    return event;
-  }
-
   protected HistoricDecisionInstanceEntity createDecisionEvaluatedEvt(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
     // create event instance
     HistoricDecisionInstanceEntity event = newDecisionInstanceEventEntity(evaluationEvent);
@@ -173,10 +145,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
   }
 
   protected HistoricDecisionInstanceEntity newDecisionInstanceEventEntity(ExecutionEntity executionEntity, DmnDecisionLogicEvaluationEvent evaluationEvent) {
-    return new HistoricDecisionInstanceEntity();
-  }
-
-  protected HistoricDecisionInstanceEntity newDecisionInstanceEventEntity(CaseExecutionEntity executionEntity, DmnDecisionLogicEvaluationEvent evaluationEvent) {
     return new HistoricDecisionInstanceEntity();
   }
 
@@ -204,7 +172,7 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
     // set current time as evaluation time
     event.setEvaluationTime(ClockUtil.getCurrentTime());
 
-    if (event.getRootProcessInstanceId() == null && event.getCaseInstanceId() == null) {
+    if (event.getRootProcessInstanceId() == null) {
 
       if (rootDecisionInstance != null) {
         event.setRemovalTime(rootDecisionInstance.getRemovalTime());
@@ -336,26 +304,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
     }
   }
 
-  protected void setReferenceToCaseInstance(HistoricDecisionInstanceEntity event, CaseExecutionEntity execution) {
-    event.setCaseDefinitionKey(getCaseDefinitionKey(execution));
-    event.setCaseDefinitionId(execution.getCaseDefinitionId());
-
-    event.setCaseInstanceId(execution.getCaseInstanceId());
-    event.setExecutionId(execution.getId());
-
-    event.setActivityId(execution.getActivityId());
-    event.setActivityInstanceId(execution.getId());
-  }
-
-  protected String getCaseDefinitionKey(CaseExecutionEntity execution) {
-    CaseDefinitionEntity definition = (CaseDefinitionEntity) execution.getCaseDefinition();
-    if (definition != null) {
-      return definition.getKey();
-    } else {
-      return null;
-    }
-  }
-
   protected void setUserId(HistoricDecisionInstanceEntity event) {
     event.setUserId(Context.getCommandContext().getAuthenticatedUserId());
   }
@@ -370,9 +318,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
       if(event.getExecutionId() != null) {
         ctx = new TenantIdProviderHistoricDecisionInstanceContext(decisionDefinition, getExecution(event));
       }
-      else if(event.getCaseExecutionId() != null) {
-        ctx = new TenantIdProviderHistoricDecisionInstanceContext(decisionDefinition, getCaseExecution(event));
-      }
       else {
         ctx = new TenantIdProviderHistoricDecisionInstanceContext(decisionDefinition);
       }
@@ -385,10 +330,6 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
 
   protected DelegateExecution getExecution(HistoricDecisionInstanceEntity event) {
     return Context.getCommandContext().getExecutionManager().findExecutionById(event.getExecutionId());
-  }
-
-  protected DelegateCaseExecution getCaseExecution(HistoricDecisionInstanceEntity event) {
-      return Context.getCommandContext().getCaseExecutionManager().findCaseExecutionById(event.getCaseExecutionId());
   }
 
   protected Date calculateRemovalTime(HistoricDecisionInstanceEntity historicDecisionInstance, DecisionDefinition decisionDefinition) {

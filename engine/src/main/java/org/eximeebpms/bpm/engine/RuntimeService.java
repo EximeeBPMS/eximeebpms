@@ -114,39 +114,6 @@ public interface RuntimeService {
    */
   ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey);
 
-  /**
-   * Starts a new process instance in the latest version of the process
-   * definition with the given key.
-   *
-   * A business key can be provided to associate the process instance with a
-   * certain identifier that has a clear business meaning. For example in an
-   * order process, the business key could be an order id. This business key can
-   * then be used to easily look up that process instance , see
-   * {@link ProcessInstanceQuery#processInstanceBusinessKey(String)}. Providing such a business
-   * key is definitely a best practice.
-   *
-   * Note that a business key MUST be unique for the given process definition WHEN you have added
-   * a database constraint for it.
-   * In this case, only Process instance from different process definition are allowed to have the
-   * same business key and the combination of processdefinitionKey-businessKey must be unique.
-   *
-   * @param processDefinitionKey
-   *          key of process definition, cannot be null.
-   * @param businessKey
-   *          a key that uniquely identifies the process instance in the context
-   *          of the given process definition.
-   * @param caseInstanceId
-   *          an id of a case instance to associate the process instance with
-   *          a case instance.
-   *
-   * @throws ProcessEngineException
-   *          when no process definition is deployed with the given key.
-   * @throws AuthorizationException
-   *          if the user has no {@link Permissions#CREATE} permission on {@link Resources#PROCESS_INSTANCE}
-   *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
-   */
-  ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, String caseInstanceId);
-
   /** Starts a new process instance in the latest version of the process definition with the given key
    *
    * @param processDefinitionKey key of process definition, cannot be null.
@@ -190,38 +157,6 @@ public interface RuntimeService {
    */
   ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables);
 
-  /**
-   * Starts a new process instance in the latest version of the process definition with the given key.
-   *
-   * A business key can be provided to associate the process instance with a
-   * certain identifier that has a clear business meaning. For example in an
-   * order process, the business key could be an order id. This business key can
-   * then be used to easily look up that process instance , see
-   * {@link ProcessInstanceQuery#processInstanceBusinessKey(String)}. Providing such a business
-   * key is definitely a best practice.
-   *
-   * Note that a business key MUST be unique for the given process definition WHEN you have added a
-   * database constraint for it.
-   * In this case, only Process instance from different process definition are allowed to have the
-   * same business key and the combination of processdefinitionKey-businessKey must be unique.
-   *
-   * The combination of processdefinitionKey-businessKey must be unique.
-   * @param processDefinitionKey key of process definition, cannot be null.
-   * @param variables the variables to pass, can be null.
-   * @param businessKey a key that uniquely identifies the process instance in the context of the
-   *                    given process definition.
-   * @param caseInstanceId
-   *          an id of a case instance to associate the process instance with
-   *          a case instance.
-   *
-   * @throws ProcessEngineException
-   *          when no process definition is deployed with the given key.
-   * @throws AuthorizationException
-   *          if the user has no {@link Permissions#CREATE} permission on {@link Resources#PROCESS_INSTANCE}
-   *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
-   */
-  ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, String caseInstanceId, Map<String, Object> variables);
-
   /** Starts a new process instance in the exactly specified version of the process definition with the given id.
    *
    * @param processDefinitionId the id of the process definition, cannot be null.
@@ -260,36 +195,6 @@ public interface RuntimeService {
    *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
    */
   ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey);
-
-  /**
-   * Starts a new process instance in the exactly specified version of the process definition with the given id.
-   *
-   * A business key can be provided to associate the process instance with a
-   * certain identifier that has a clear business meaning. For example in an
-   * order process, the business key could be an order id. This business key can
-   * then be used to easily look up that process instance , see
-   * {@link ProcessInstanceQuery#processInstanceBusinessKey(String)}. Providing such a business
-   * key is definitely a best practice.
-   *
-   * Note that a business key MUST be unique for the given process definition WHEN you have added
-   * a database constraint for it.
-   * In this case, only Process instance from different process definition are allowed to have the
-   * same business key and the combination of processdefinitionKey-businessKey must be unique.
-   *
-   * @param processDefinitionId the id of the process definition, cannot be null.
-   * @param businessKey a key that uniquely identifies the process instance in the context of the
-   *                    given process definition.
-   * @param caseInstanceId
-   *          an id of a case instance to associate the process instance with
-   *          a case instance.
-   *
-   * @throws ProcessEngineException
-   *          when no process definition is deployed with the given key.
-   * @throws AuthorizationException
-   *          if the user has no {@link Permissions#CREATE} permission on {@link Resources#PROCESS_INSTANCE}
-   *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
-   */
-  ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, String caseInstanceId);
 
   /** Starts a new process instance in the exactly specified version of the process definition with the given id.
    *
@@ -331,37 +236,6 @@ public interface RuntimeService {
    *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
    */
   ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, Map<String, Object> variables);
-
-  /**
-   * Starts a new process instance in the exactly specified version of the process definition with the given id.
-   *
-   * A business key can be provided to associate the process instance with a
-   * certain identifier that has a clear business meaning. For example in an
-   * order process, the business key could be an order id. This business key can
-   * then be used to easily look up that process instance , see
-   * {@link ProcessInstanceQuery#processInstanceBusinessKey(String)}. Providing such a business
-   * key is definitely a best practice.
-   *
-   * Note that a business key MUST be unique for the given process definition WHEN you have added
-   * a database constraint for it.
-   * In this case, only Process instance from different process definition are allowed to have the
-   * same business key and the combination of processdefinitionKey-businessKey must be unique.
-   *
-   * @param processDefinitionId the id of the process definition, cannot be null.
-   * @param businessKey a key that uniquely identifies the process instance in the context of the
-   *                    given process definition.
-   * @param caseInstanceId
-   *          an id of a case instance to associate the process instance with
-   *          a case instance.
-   * @param variables variables to be passed, can be null
-   *
-   * @throws ProcessEngineException
-   *          when no process definition is deployed with the given key.
-   * @throws AuthorizationException
-   *          if the user has no {@link Permissions#CREATE} permission on {@link Resources#PROCESS_INSTANCE}
-   *          and no {@link Permissions#CREATE_INSTANCE} permission on {@link Resources#PROCESS_DEFINITION}.
-   */
-  ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, String caseInstanceId, Map<String, Object> variables);
 
   /**
    * <p>Signals the process engine that a message is received and starts a new

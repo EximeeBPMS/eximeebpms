@@ -32,9 +32,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.eximeebpms.bpm.engine.rest.AuthorizationRestService;
 import org.eximeebpms.bpm.engine.rest.BatchRestService;
-import org.eximeebpms.bpm.engine.rest.CaseDefinitionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseExecutionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.ConditionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
@@ -161,24 +158,6 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
   @Path("/{name}" + DeploymentRestService.PATH)
   public DeploymentRestService getDeploymentRestService(@PathParam("name") String engineName) {
     return super.getDeploymentRestService(engineName);
-  }
-
-  @Override
-  @Path("/{name}" + CaseDefinitionRestService.PATH)
-  public CaseDefinitionRestService getCaseDefinitionRestService(@PathParam("name") String engineName) {
-    return super.getCaseDefinitionRestService(engineName);
-  }
-
-  @Override
-  @Path("/{name}" + CaseInstanceRestService.PATH)
-  public CaseInstanceRestService getCaseInstanceRestService(@PathParam("name") String engineName) {
-    return super.getCaseInstanceRestService(engineName);
-  }
-
-  @Override
-  @Path("/{name}" + CaseExecutionRestService.PATH)
-  public CaseExecutionRestService getCaseExecutionRestService(@PathParam("name") String engineName) {
-    return super.getCaseExecutionRestService(engineName);
   }
 
   @Override

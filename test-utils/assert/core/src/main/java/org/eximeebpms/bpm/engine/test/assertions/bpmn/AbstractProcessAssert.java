@@ -16,12 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.test.assertions.bpmn;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
@@ -32,17 +28,16 @@ import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTaskQuery;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinitionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseExecutionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseInstanceQuery;
 import org.eximeebpms.bpm.engine.runtime.ExecutionQuery;
 import org.eximeebpms.bpm.engine.runtime.JobQuery;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.task.TaskQuery;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A>, A> extends AbstractAssert<S, A> {
 
@@ -141,10 +136,6 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
     return engine.getExternalTaskService();
   }
 
-  protected CaseService caseService() {
-    return engine.getCaseService();
-  }
-
   /*
    * TaskQuery, unnarrowed. Narrow this to {@link ProcessInstance} (or {@link ProcessDefinition})
    * by overriding this method in sub classes specialised to verify a specific
@@ -224,42 +215,6 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
    */
   protected ExternalTaskQuery externalTaskQuery() {
     return externalTaskService().createExternalTaskQuery();
-  }
-
-  /*
-   * CaseExecutionQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
-   * {@link CaseDefinition}) by overriding this method in sub classes specialized to
-   * verify a specific process engine domain class.
-   */
-  protected CaseExecutionQuery caseExecutionQuery() {
-    return caseService().createCaseExecutionQuery();
-  }
-
-  /*
-   * CaseDefinitionQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
-   * {@link CaseDefinition}) by overriding this method in sub classes specialized to
-   * verify a specific process engine domain class.
-   */
-  protected CaseDefinitionQuery caseDefinitionQuery() {
-    return repositoryService().createCaseDefinitionQuery();
-  }
-
-  /*
-   * CaseInstanceQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
-   * {@link CaseDefinition}) by overriding this method in sub classes specialized to
-   * verify a specific process engine domain class.
-   */
-  protected CaseInstanceQuery caseInstanceQuery() {
-    return caseService().createCaseInstanceQuery();
-  }
-
-  /*
-   * HistoricCaseActivityInstanceQuery, unnarrowed. Narrow this to {@link CaseInstance} (or
-   * {@link CaseDefinition}) by overriding this method in sub classes specialised to
-   * verify a specific process engine domain class.
-   */
-  protected HistoricCaseActivityInstanceQuery historicCaseActivityInstanceQuery() {
-    return historyService().createHistoricCaseActivityInstanceQuery();
   }
 
 }

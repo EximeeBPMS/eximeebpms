@@ -33,7 +33,6 @@ public class HistoricActivityInstanceDto {
   private String executionId;
   private String taskId;
   private String calledProcessInstanceId;
-  private String calledCaseInstanceId;
   private String assignee;
   private Date startTime;
   private Date endTime;
@@ -88,10 +87,6 @@ public class HistoricActivityInstanceDto {
     return calledProcessInstanceId;
   }
 
-  public String getCalledCaseInstanceId() {
-    return calledCaseInstanceId;
-  }
-
   public String getAssignee() {
     return assignee;
   }
@@ -142,7 +137,6 @@ public class HistoricActivityInstanceDto {
     dto.executionId = historicActivityInstance.getExecutionId();
     dto.taskId = historicActivityInstance.getTaskId();
     dto.calledProcessInstanceId = historicActivityInstance.getCalledProcessInstanceId();
-    dto.calledCaseInstanceId = historicActivityInstance.getCalledCaseInstanceId();
     dto.assignee = historicActivityInstance.getAssignee();
     dto.startTime = historicActivityInstance.getStartTime();
     dto.endTime = historicActivityInstance.getEndTime();

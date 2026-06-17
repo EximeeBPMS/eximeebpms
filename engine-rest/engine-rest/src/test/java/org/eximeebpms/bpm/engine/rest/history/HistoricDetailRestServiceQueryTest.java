@@ -501,10 +501,6 @@ public class HistoricDetailRestServiceQueryTest extends AbstractRestServiceTest 
           .body("[0].taskId", equalTo(historicUpdateBuilder.getTaskId()))
           .body("[0].executionId", equalTo(historicUpdateBuilder.getExecutionId()))
           .body("[0].type", equalTo("variableUpdate"))
-          .body("[0].caseDefinitionKey", equalTo(historicUpdateBuilder.getCaseDefinitionKey()))
-          .body("[0].caseDefinitionId", equalTo(historicUpdateBuilder.getCaseDefinitionId()))
-          .body("[0].caseInstanceId", equalTo(historicUpdateBuilder.getCaseInstanceId()))
-          .body("[0].caseExecutionId", equalTo(historicUpdateBuilder.getCaseExecutionId()))
           .body("[0].tenantId", equalTo(historicUpdateBuilder.getTenantId()))
           .body("[0].userOperationId", equalTo(historicUpdateBuilder.getUserOperationId()))
       .when()
@@ -543,10 +539,6 @@ public class HistoricDetailRestServiceQueryTest extends AbstractRestServiceTest 
           .body("[0].taskId", equalTo(historicUpdateBuilder.getTaskId()))
           .body("[0].executionId", equalTo(historicUpdateBuilder.getExecutionId()))
           .body("[0].type", equalTo("variableUpdate"))
-          .body("[0].caseDefinitionKey", equalTo(historicUpdateBuilder.getCaseDefinitionKey()))
-          .body("[0].caseDefinitionId", equalTo(historicUpdateBuilder.getCaseDefinitionId()))
-          .body("[0].caseInstanceId", equalTo(historicUpdateBuilder.getCaseInstanceId()))
-          .body("[0].caseExecutionId", equalTo(historicUpdateBuilder.getCaseExecutionId()))
           .body("[0].tenantId", equalTo(historicUpdateBuilder.getTenantId()))
           .body("[0].userOperationId", equalTo(historicUpdateBuilder.getUserOperationId()))
       .when()
@@ -579,10 +571,6 @@ public class HistoricDetailRestServiceQueryTest extends AbstractRestServiceTest 
     String returnedFieldId = from(content).getString("[1].fieldId");
     String returnedFieldValue = from(content).getString("[1].fieldValue");
     String returnedType = from(content).getString("[1].type");
-    String returnedCaseDefinitionKey2 = from(content).getString("[1].caseDefinitionKey");
-    String returnedCaseDefinitionId2 = from(content).getString("[1].caseDefinitionId");
-    String returnedCaseInstanceId2 = from(content).getString("[1].caseInstanceId");
-    String returnedCaseExecutionId2 = from(content).getString("[1].caseExecutionId");
     String returnedTenantId2 = from(content).getString("[1].tenantId");
     String returnedOperationId2 = from(content).getString("[1].userOperationId");
     String returnedRootProcessInstanceId = from(content).getString("[1].rootProcessInstanceId");
@@ -599,10 +587,6 @@ public class HistoricDetailRestServiceQueryTest extends AbstractRestServiceTest 
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_FIELD_ID, returnedFieldId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_VALUE, returnedFieldValue);
     Assert.assertEquals("formField", returnedType);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_CASE_DEF_ID, returnedCaseDefinitionId2);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_CASE_DEF_KEY, returnedCaseDefinitionKey2);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_CASE_INST_ID, returnedCaseInstanceId2);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_CASE_EXEC_ID, returnedCaseExecutionId2);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId2);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_EXEC_ID, returnedExecutionId2);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_FORM_FIELD_OPERATION_ID, returnedOperationId2);
@@ -1078,69 +1062,6 @@ public class HistoricDetailRestServiceQueryTest extends AbstractRestServiceTest 
       .post(HISTORIC_DETAIL_RESOURCE_URL);
 
     verify(mockedQuery).excludeTaskDetails();
-  }
-
-  @Test
-  public void testQueryByCaseInstanceId() {
-    // GET
-    given()
-      .queryParam("caseInstanceId", MockProvider.EXAMPLE_CASE_INSTANCE_ID)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .get(HISTORIC_DETAIL_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-
-    reset(mockedQuery);
-
-    // POST
-    Map<String, Object> jsonBody = new HashMap<>();
-    jsonBody.put("caseInstanceId", MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .header("accept", MediaType.APPLICATION_JSON)
-      .body(jsonBody)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-    .when()
-      .post(HISTORIC_DETAIL_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-  }
-
-  @Test
-  public void testQueryByCaseExecutionId() {
-    // GET
-    given()
-      .queryParam("caseExecutionId", MockProvider.EXAMPLE_CASE_EXECUTION_ID)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-    .when()
-      .get(HISTORIC_DETAIL_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionId(MockProvider.EXAMPLE_CASE_EXECUTION_ID);
-
-    reset(mockedQuery);
-
-    // POST
-    Map<String, Object> jsonBody = new HashMap<>();
-    jsonBody.put("caseExecutionId", MockProvider.EXAMPLE_CASE_EXECUTION_ID);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .header("accept", MediaType.APPLICATION_JSON)
-      .body(jsonBody)
-    .then()
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-    .when()
-      .post(HISTORIC_DETAIL_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionId(MockProvider.EXAMPLE_CASE_EXECUTION_ID);
   }
 
   @Test

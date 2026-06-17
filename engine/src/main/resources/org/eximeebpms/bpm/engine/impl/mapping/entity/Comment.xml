@@ -250,16 +250,6 @@
           <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       )
     </if>
-    <if test="taskCaseInstanceIds != null &amp;&amp; taskCaseInstanceIds.size > 0">
-      TASK_ID_ in (
-        select ID_
-        from ${prefix}ACT_HI_TASKINST
-        where
-          <bind name="listOfIds" value="taskCaseInstanceIds"/>
-          <bind name="fieldName" value="'CASE_INST_ID_'"/>
-          <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-        )
-    </if>
     <if test="processInstanceIds != null &amp;&amp; processInstanceIds.size > 0">
       <bind name="listOfIds" value="processInstanceIds"/>
       <bind name="fieldName" value="'PROC_INST_ID_'"/>
@@ -275,12 +265,6 @@
         where
           <bind name="listOfIds" value="taskProcessInstanceIds"/>
           <bind name="fieldName" value="'T.PROC_INST_ID_'"/>
-          <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-      </if>
-      <if test="taskCaseInstanceIds != null &amp;&amp; taskCaseInstanceIds.size > 0">
-        where
-          <bind name="listOfIds" value="taskCaseInstanceIds"/>
-          <bind name="fieldName" value="'T.CASE_INST_ID_'"/>
           <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
       <if test="processInstanceIds != null &amp;&amp; processInstanceIds.size > 0">

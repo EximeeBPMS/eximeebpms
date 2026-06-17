@@ -112,21 +112,6 @@ public class HistoryEvent implements Serializable, DbEntity, HistoricEntity {
   /** the version of the process definition */
   protected Integer processDefinitionVersion;
 
-  /** the case instance in which the event has happened */
-  protected String caseInstanceId;
-
-  /** the id of the case execution in which the event has happened */
-  protected String caseExecutionId;
-
-  /** the id of the case definition */
-  protected String caseDefinitionId;
-
-  /** the key of the case definition */
-  protected String caseDefinitionKey;
-
-  /** the name of the case definition */
-  protected String caseDefinitionName;
-
   /**
    * The type of the activity audit event.
    * @see HistoryEventType#getEventName()
@@ -194,46 +179,6 @@ public class HistoryEvent implements Serializable, DbEntity, HistoricEntity {
 
   public void setProcessDefinitionVersion(Integer processDefinitionVersion) {
     this.processDefinitionVersion = processDefinitionVersion;
-  }
-
-  public String getCaseDefinitionName() {
-    return caseDefinitionName;
-  }
-
-  public void setCaseDefinitionName(String caseDefinitionName) {
-    this.caseDefinitionName = caseDefinitionName;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public void setCaseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
   }
 
   public void setId(String id) {

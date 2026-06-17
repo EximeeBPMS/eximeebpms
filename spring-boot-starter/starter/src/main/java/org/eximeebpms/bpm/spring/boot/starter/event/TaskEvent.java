@@ -23,9 +23,6 @@ import org.eximeebpms.bpm.engine.delegate.TaskListener;
 public class TaskEvent {
 
   protected String assignee;
-  protected String caseDefinitionId;
-  protected String caseExecutionId;
-  protected String caseInstanceId;
   protected Date createTime; // The time when the task has been created
   protected String deleteReason;
   protected String description;
@@ -45,9 +42,6 @@ public class TaskEvent {
 
   public TaskEvent(DelegateTask delegateTask) {
     this.assignee = delegateTask.getAssignee();
-    this.caseDefinitionId = delegateTask.getCaseDefinitionId();
-    this.caseExecutionId = delegateTask.getCaseExecutionId();
-    this.caseInstanceId = delegateTask.getCaseInstanceId();
     this.createTime = delegateTask.getCreateTime();
     this.deleteReason = delegateTask.getDeleteReason();
     this.description = delegateTask.getDescription();
@@ -72,29 +66,6 @@ public class TaskEvent {
    */
   public String getAssignee() {
     return assignee;
-  }
-
-  /**
-   * Reference to the case definition or null if it is not related to a case.
-   */
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  /**
-   * Reference to the case execution or null if it is not related to a case
-   * instance.
-   */
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  /**
-   * Reference to the case instance or null if it is not related to a case
-   * instance.
-   */
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   /** The date/time when this task was created */
@@ -225,9 +196,6 @@ public class TaskEvent {
         + ", followUpDate=" + followUpDate
         + ", priority=" + priority
         + ", deleteReason=" + deleteReason
-        + ", caseDefinitionId=" + caseDefinitionId
-        + ", caseExecutionId=" + caseExecutionId
-        + ", caseInstanceId=" + caseInstanceId
         + ", tenantId=" + tenantId
         + "]";
   }

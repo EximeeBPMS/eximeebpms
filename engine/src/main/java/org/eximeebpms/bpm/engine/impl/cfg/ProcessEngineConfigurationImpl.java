@@ -62,7 +62,6 @@ import org.eximeebpms.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvide
 import org.eximeebpms.bpm.engine.ArtifactFactory;
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.BusinessEventService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -137,16 +136,6 @@ import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantCommandChecker;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
 import org.eximeebpms.bpm.engine.impl.cfg.standalone.StandaloneTransactionContextFactory;
 import org.eximeebpms.bpm.engine.impl.cmd.HistoryCleanupCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.CaseServiceImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.handler.DefaultCmmnElementHandlerRegistry;
-import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformFactory;
-import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformListener;
-import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
-import org.eximeebpms.bpm.engine.impl.cmmn.transformer.DefaultCmmnTransformFactory;
 import org.eximeebpms.bpm.engine.impl.db.DbIdGenerator;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManagerFactory;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.cache.DbEntityCacheKeyMapping;
@@ -209,13 +198,10 @@ import org.eximeebpms.bpm.engine.impl.history.handler.CompositeHistoryEventHandl
 import org.eximeebpms.bpm.engine.impl.history.handler.DbHistoryEventHandler;
 import org.eximeebpms.bpm.engine.impl.history.handler.HistoryEventHandler;
 import org.eximeebpms.bpm.engine.impl.history.parser.HistoryParseListener;
-import org.eximeebpms.bpm.engine.impl.history.producer.CacheAwareCmmnHistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.history.producer.CacheAwareHistoryEventProducer;
-import org.eximeebpms.bpm.engine.impl.history.producer.CmmnHistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.history.producer.DefaultDmnHistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.history.producer.DmnHistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.history.producer.HistoryEventProducer;
-import org.eximeebpms.bpm.engine.impl.history.transformer.CmmnHistoryTransformListener;
 import org.eximeebpms.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
 import org.eximeebpms.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
 import org.eximeebpms.bpm.engine.impl.identity.WritableIdentityProvider;
@@ -260,7 +246,6 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.Bus
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsRegistry;
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsReporterIdProvider;
 import org.eximeebpms.bpm.engine.impl.metrics.parser.MetricsBpmnParseListener;
-import org.eximeebpms.bpm.engine.impl.metrics.parser.MetricsCmmnTransformListener;
 import org.eximeebpms.bpm.engine.impl.metrics.reporter.DbMetricsReporter;
 import org.eximeebpms.bpm.engine.impl.migration.DefaultMigrationActivityMatcher;
 import org.eximeebpms.bpm.engine.impl.migration.DefaultMigrationInstructionGenerator;
@@ -312,8 +297,6 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.FilterManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricActivityInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricBatchManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricDetailManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricExternalTaskLogManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricIdentityLinkLogManager;
@@ -393,7 +376,6 @@ import org.eximeebpms.bpm.engine.impl.variable.serializer.TypedValueSerializer;
 import org.eximeebpms.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
 import org.eximeebpms.bpm.engine.impl.variable.serializer.VariableSerializers;
 import org.eximeebpms.bpm.engine.management.Metrics;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionRequirementsDefinition;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
@@ -452,7 +434,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected FormService formService = new FormServiceImpl();
   protected ManagementService managementService = new ManagementServiceImpl(this);
   protected AuthorizationService authorizationService = new AuthorizationServiceImpl();
-  protected CaseService caseService = new CaseServiceImpl();
   protected FilterService filterService = new FilterServiceImpl();
   protected ExternalTaskService externalTaskService = new ExternalTaskServiceImpl();
   protected DecisionService decisionService = new DecisionServiceImpl();
@@ -634,17 +615,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected boolean configureScriptEngineHostAccess = true;
   protected boolean skipIsolationLevelCheck = false;
 
-  /**
-   * When set to false, the following behavior changes:
-   * <ul>
-   * <li>The automated schema maintenance (creating and dropping tables, see property <code>databaseSchemaUpdate</code>)
-   *   does not cover the tables required for CMMN execution.</li>
-   * <li>CMMN resources are not deployed as {@link CaseDefinition} to the engine.</li>
-   * <li>Tasks from CMMN cases are not returned by the {@link TaskQuery}.</li>
-   * </ul>
-   */
-  protected boolean cmmnEnabled = true;
-
     /**
    * When set to false, the following behavior changes:
    * <ul>
@@ -673,10 +643,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected CommandContextFactory commandContextFactory;
   protected TransactionContextFactory transactionContextFactory;
   protected BpmnParseFactory bpmnParseFactory;
-
-  // cmmn
-  protected CmmnTransformFactory cmmnTransformFactory;
-  protected DefaultCmmnElementHandlerRegistry cmmnElementHandlerRegistry;
 
   // dmn
   protected DefaultDmnEngineConfiguration dmnEngineConfiguration;
@@ -711,9 +677,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected List<BpmnParseListener> preParseListeners;
   protected List<BpmnParseListener> postParseListeners;
-
-  protected List<CmmnTransformListener> customPreCmmnTransformListeners;
-  protected List<CmmnTransformListener> customPostCmmnTransformListeners;
 
   protected Map<Object, Object> beans;
 
@@ -772,8 +735,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<ProcessEnginePlugin> processEnginePlugins = new ArrayList<>();
 
   protected HistoryEventProducer historyEventProducer;
-
-  protected CmmnHistoryEventProducer cmmnHistoryEventProducer;
 
   protected DmnHistoryEventProducer dmnHistoryEventProducer;
 
@@ -1165,7 +1126,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initDefaultCharset();
     initHistoryLevel();
     initHistoryEventProducer();
-    initCmmnHistoryEventProducer();
     initDmnHistoryEventProducer();
     initHistoryEventHandler();
     initScriptSecurityPolicy();
@@ -1694,7 +1654,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initService(formService);
     initService(managementService);
     initService(authorizationService);
-    initService(caseService);
     initService(filterService);
     initService(externalTaskService);
     initService(decisionService);
@@ -2007,11 +1966,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       addSessionFactory(new GenericManagerFactory(DeploymentManager.class));
       addSessionFactory(new GenericManagerFactory(ExecutionManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricActivityInstanceManager.class));
-      addSessionFactory(new GenericManagerFactory(HistoricCaseActivityInstanceManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricStatisticsManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricDetailManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricProcessInstanceManager.class));
-      addSessionFactory(new GenericManagerFactory(HistoricCaseInstanceManager.class));
       addSessionFactory(new GenericManagerFactory(UserOperationLogManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricTaskInstanceManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricVariableInstanceManager.class));
@@ -2043,10 +2000,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       addSessionFactory(new GenericManagerFactory(HistoricBatchManager.class));
       addSessionFactory(new GenericManagerFactory(TenantManager.class));
       addSessionFactory(new GenericManagerFactory(SchemaLogManager.class));
-
-      addSessionFactory(new GenericManagerFactory(CaseDefinitionManager.class));
-      addSessionFactory(new GenericManagerFactory(CaseExecutionManager.class));
-      addSessionFactory(new GenericManagerFactory(CaseSentryPartManager.class));
 
       addSessionFactory(new GenericManagerFactory(DecisionDefinitionManager.class));
       addSessionFactory(new GenericManagerFactory(DecisionRequirementsDefinitionManager.class));
@@ -2085,7 +2038,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     dbSqlSessionFactory.setDbIdentityUsed(isDbIdentityUsed);
     dbSqlSessionFactory.setDbHistoryUsed(isDbHistoryUsed);
     dbSqlSessionFactory.setBusinessEventUsed(isBusinessEventsEnabled());
-    dbSqlSessionFactory.setCmmnEnabled(cmmnEnabled);
     dbSqlSessionFactory.setDmnEnabled(dmnEnabled);
     dbSqlSessionFactory.setDatabaseTablePrefix(databaseTablePrefix);
 
@@ -2227,11 +2179,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
     defaultDeployers.add(getCamundaFormDeployer());
 
-    if (isCmmnEnabled()) {
-      CmmnDeployer cmmnDeployer = getCmmnDeployer();
-      defaultDeployers.add(cmmnDeployer);
-    }
-
     if (isDmnEnabled()) {
       DecisionRequirementsDefinitionDeployer decisionRequirementsDefinitionDeployer = getDecisionRequirementsDefinitionDeployer();
       DecisionDefinitionDeployer decisionDefinitionDeployer = getDecisionDefinitionDeployer();
@@ -2290,45 +2237,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     CamundaFormDefinitionDeployer deployer = new CamundaFormDefinitionDeployer();
     deployer.setIdGenerator(idGenerator);
     return deployer;
-  }
-
-  protected CmmnDeployer getCmmnDeployer() {
-    CmmnDeployer cmmnDeployer = new CmmnDeployer();
-
-    cmmnDeployer.setIdGenerator(idGenerator);
-
-    if (cmmnTransformFactory == null) {
-      cmmnTransformFactory = new DefaultCmmnTransformFactory();
-    }
-
-    if (cmmnElementHandlerRegistry == null) {
-      cmmnElementHandlerRegistry = new DefaultCmmnElementHandlerRegistry();
-    }
-
-    CmmnTransformer cmmnTransformer = new CmmnTransformer(expressionManager, cmmnElementHandlerRegistry, cmmnTransformFactory);
-
-    if (customPreCmmnTransformListeners != null) {
-      cmmnTransformer.getTransformListeners().addAll(customPreCmmnTransformListeners);
-    }
-    cmmnTransformer.getTransformListeners().addAll(getDefaultCmmnTransformListeners());
-    if (customPostCmmnTransformListeners != null) {
-      cmmnTransformer.getTransformListeners().addAll(customPostCmmnTransformListeners);
-    }
-
-    cmmnDeployer.setTransformer(cmmnTransformer);
-
-    return cmmnDeployer;
-  }
-
-  protected List<CmmnTransformListener> getDefaultCmmnTransformListeners() {
-    List<CmmnTransformListener> defaultListener = new ArrayList<>();
-    if (!HistoryLevel.HISTORY_LEVEL_NONE.equals(historyLevel)) {
-      defaultListener.add(new CmmnHistoryTransformListener(cmmnHistoryEventProducer));
-    }
-    if (isMetricsEnabled) {
-      defaultListener.add(new MetricsCmmnTransformListener());
-    }
-    return defaultListener;
   }
 
   protected DecisionDefinitionDeployer getDecisionDefinitionDeployer() {
@@ -2891,12 +2799,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
   }
 
-  protected void initCmmnHistoryEventProducer() {
-    if (cmmnHistoryEventProducer == null) {
-      cmmnHistoryEventProducer = new CacheAwareCmmnHistoryEventProducer();
-    }
-  }
-
   protected void initDmnHistoryEventProducer() {
     if (dmnHistoryEventProducer == null) {
       dmnHistoryEventProducer = new DefaultDmnHistoryEventProducer();
@@ -3211,14 +3113,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   public ProcessEngineConfigurationImpl setManagementService(ManagementService managementService) {
     this.managementService = managementService;
     return this;
-  }
-
-  public CaseService getCaseService() {
-    return caseService;
-  }
-
-  public void setCaseService(CaseService caseService) {
-    this.caseService = caseService;
   }
 
   public FilterService getFilterService() {
@@ -3647,22 +3541,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   @Deprecated
   public void setPostParseListeners(List<BpmnParseListener> postParseListeners) {
     this.postParseListeners = postParseListeners;
-  }
-
-  public List<CmmnTransformListener> getCustomPreCmmnTransformListeners() {
-    return customPreCmmnTransformListeners;
-  }
-
-  public void setCustomPreCmmnTransformListeners(List<CmmnTransformListener> customPreCmmnTransformListeners) {
-    this.customPreCmmnTransformListeners = customPreCmmnTransformListeners;
-  }
-
-  public List<CmmnTransformListener> getCustomPostCmmnTransformListeners() {
-    return customPostCmmnTransformListeners;
-  }
-
-  public void setCustomPostCmmnTransformListeners(List<CmmnTransformListener> customPostCmmnTransformListeners) {
-    this.customPostCmmnTransformListeners = customPostCmmnTransformListeners;
   }
 
   public Map<Object, Object> getBeans() {
@@ -4225,15 +4103,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return historyEventProducer;
   }
 
-  public ProcessEngineConfigurationImpl setCmmnHistoryEventProducer(CmmnHistoryEventProducer cmmnHistoryEventProducer) {
-    this.cmmnHistoryEventProducer = cmmnHistoryEventProducer;
-    return this;
-  }
-
-  public CmmnHistoryEventProducer getCmmnHistoryEventProducer() {
-    return cmmnHistoryEventProducer;
-  }
-
   public ProcessEngineConfigurationImpl setDmnHistoryEventProducer(DmnHistoryEventProducer dmnHistoryEventProducer) {
     this.dmnHistoryEventProducer = dmnHistoryEventProducer;
     return this;
@@ -4358,14 +4227,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
    */
   public void setDeploymentSynchronized(boolean deploymentSynchronized) {
     isDeploymentSynchronized = deploymentSynchronized;
-  }
-
-  public boolean isCmmnEnabled() {
-    return cmmnEnabled;
-  }
-
-  public void setCmmnEnabled(boolean cmmnEnabled) {
-    this.cmmnEnabled = cmmnEnabled;
   }
 
   public boolean isDmnEnabled() {

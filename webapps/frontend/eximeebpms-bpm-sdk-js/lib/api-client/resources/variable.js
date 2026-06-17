@@ -55,14 +55,6 @@ Variable.path = 'variable-instance';
  *                                                          belong to one of the passed and
  *                                                          comma-separated execution ids.
  *
- * @param  {String[]}         [params.caseInstanceIdIn]     Only include variable instances which
- *                                                          belong to one of the passed
- *                                                          case instance ids.
- *
- * @param  {String[]}         [params.caseExecutionIdIn]    Only include variable instances which
- *                                                          belong to one of the passed
- *                                                          case execution ids.
- *
  * @param  {String[]}         [params.taskIdIn]             Only include variable instances which
  *                                                          belong to one of the passed and
  *                                                          comma-separated task ids.

@@ -18,13 +18,9 @@ package org.eximeebpms.bpm.engine.test.api.mgmt.metrics;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstance;
 import org.eximeebpms.bpm.engine.management.Metrics;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
 import org.eximeebpms.bpm.engine.task.Task;
-import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.junit.Test;
 
@@ -108,51 +104,6 @@ public class ActivityInstanceCountMetricsTest extends AbstractMetricsTest {
     if(hti!=null) {
       historyService.deleteHistoricTaskInstance(hti.getId());
     }
-  }
-
-  @Deployment
-  @Test
-  public void testCmmnActivitiyInstances() {
-    // given
-    // that no activity instances have been executed
-    assertEquals(0l, managementService.createMetricsQuery()
-      .name(Metrics.ACTIVTY_INSTANCE_START)
-      .sum());
-
-    caseService.createCaseInstanceByKey("case");
-
-    assertEquals(1l, managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum());
-
-    // start PI_HumanTask_1 and PI_Milestone_1
-    List<CaseExecution> list = caseService.createCaseExecutionQuery().enabled().list();
-    for (CaseExecution caseExecution : list) {
-      caseService.withCaseExecution(caseExecution.getId())
-        .manualStart();
-    }
-
-    assertEquals(2l, managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum());
-
-    // and force the db metrics reporter to report
-    processEngineConfiguration.getDbMetricsReporter().reportNow();
-
-    // still 2
-    assertEquals(2l, managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum());
-
-    // trigger the milestone
-    CaseExecution taskExecution = caseService.createCaseExecutionQuery().activityId("PI_HumanTask_1").singleResult();
-    caseService.completeCaseExecution(taskExecution.getId());
-
-    // milestone is counted
-    assertEquals(3l, managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum());
-
   }
 
 }

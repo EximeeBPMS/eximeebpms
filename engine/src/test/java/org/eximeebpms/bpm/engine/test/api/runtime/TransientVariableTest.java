@@ -297,20 +297,6 @@ public class TransientVariableTest {
   }
 
   @Test
-  public void setVariableTransientForCase() {
-    // given
-    testRule.deploy("org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
-
-    // when
-    engineRule.getCaseService().withCaseDefinitionByKey("oneTaskCase")
-        .setVariable("foo", Variables.stringValue("bar", true)).create();
-
-    // then
-    List<HistoricVariableInstance> variables = historyService.createHistoricVariableInstanceQuery().list();
-    assertEquals(0, variables.size());
-  }
-
-  @Test
   public void testTransientVariableOvewritesPersistedVariableInSameScope() {
     testRule.deploy(ProcessModels.ONE_TASK_PROCESS);
     runtimeService.startProcessInstanceByKey("Process", Variables.createVariables().putValue("foo", "bar"));

@@ -29,18 +29,12 @@ import org.eximeebpms.bpm.engine.exception.NotValidException;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstance;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatisticsQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDetail;
 import org.eximeebpms.bpm.engine.history.HistoricDetailQuery;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLogQuery;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricBatchReport;
-import org.eximeebpms.bpm.engine.history.CleanableHistoricCaseInstanceReport;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricDecisionInstanceReport;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricProcessInstanceReport;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLog;
@@ -59,8 +53,6 @@ import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceReport;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstance;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.NativeHistoricCaseActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.NativeHistoricCaseInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricTaskInstanceQuery;
@@ -129,11 +121,6 @@ public interface HistoryService {
    * permission on {@link Resources#PROCESS_DEFINITION}
    */
   HistoricActivityStatisticsQuery createHistoricActivityStatisticsQuery(String processDefinitionId);
-
-  /**
-   * Query for the number of historic case activity instances aggregated by case activities of a single case definition.
-   */
-  HistoricCaseActivityStatisticsQuery createHistoricCaseActivityStatisticsQuery(String caseDefinitionId);
 
   /**
    * <p>Creates a new programmatic query to search for {@link HistoricTaskInstance}s.
@@ -242,12 +229,6 @@ public interface HistoryService {
    * */
   HistoricIdentityLinkLogQuery createHistoricIdentityLinkLogQuery();
 
-  /** Creates a new programmatic query to search for {@link HistoricCaseInstance}s. */
-  HistoricCaseInstanceQuery createHistoricCaseInstanceQuery();
-
-  /** Creates a new programmatic query to search for {@link HistoricCaseActivityInstance}s. */
-  HistoricCaseActivityInstanceQuery createHistoricCaseActivityInstanceQuery();
-
   /**
    * Creates a new programmatic query to search for {@link HistoricDecisionInstance}s.
    *
@@ -322,8 +303,8 @@ public interface HistoryService {
 
   /**
    * Schedules history cleanup job at batch window start time. The job will delete historic data for
-   * finished process, decision and case instances, and batch operations taking into account {@link ProcessDefinition#getHistoryTimeToLive()},
-   * {@link DecisionDefinition#getHistoryTimeToLive()}, {@link CaseDefinition#getHistoryTimeToLive()}, {@link ProcessEngineConfigurationImpl#getBatchOperationHistoryTimeToLive()}
+   * finished process and decision instances, and batch operations taking into account {@link ProcessDefinition#getHistoryTimeToLive()},
+   * {@link DecisionDefinition#getHistoryTimeToLive()}, {@link ProcessEngineConfigurationImpl#getBatchOperationHistoryTimeToLive()}
    * and {@link ProcessEngineConfigurationImpl#getBatchOperationsForHistoryCleanup()} values.
    *
    * @throws AuthorizationException
@@ -334,8 +315,8 @@ public interface HistoryService {
 
   /**
    * Schedules history cleanup job at batch window start time. The job will delete historic data for
-   * finished process, decision and case instances, and batch operations taking into account {@link ProcessDefinition#getHistoryTimeToLive()},
-   * {@link DecisionDefinition#getHistoryTimeToLive()}, {@link CaseDefinition#getHistoryTimeToLive()}, {@link ProcessEngineConfigurationImpl#getBatchOperationHistoryTimeToLive()}
+   * finished process and decision instances, and batch operations taking into account {@link ProcessDefinition#getHistoryTimeToLive()},
+   * {@link DecisionDefinition#getHistoryTimeToLive()}, {@link ProcessEngineConfigurationImpl#getBatchOperationHistoryTimeToLive()}
    * and {@link ProcessEngineConfigurationImpl#getBatchOperationsForHistoryCleanup()} values.
    *
    * @param immediatelyDue must be true if cleanup must be scheduled at once, otherwise is will be scheduled according to configured batch window
@@ -411,20 +392,6 @@ public interface HistoryService {
    *           {@link Resources#OPERATION_LOG_CATEGORY}.
    */
   void deleteUserOperationLogEntry(String entryId);
-
-  /**
-   * Deletes historic case instance. All historic case activities, historic task and
-   * historic details are deleted as well.
-   */
-  void deleteHistoricCaseInstance(String caseInstanceId);
-
-  /**
-   * Deletes historic case instances and all related historic data in bulk manner. DELETE SQL statement will be created for each entity type. They will have list
-   * of given case instance ids in IN clause. Therefore, DB limitation for number of values in IN clause must be taken into account.
-   *
-   * @param caseInstanceIds list of case instance ids for removal
-   */
-  void deleteHistoricCaseInstancesBulk(List<String> caseInstanceIds);
 
   /**
    * Deletes historic decision instances of a decision definition. All historic
@@ -554,16 +521,6 @@ public interface HistoryService {
   NativeHistoricActivityInstanceQuery createNativeHistoricActivityInstanceQuery();
 
   /**
-   * creates a native query to search for {@link HistoricCaseInstance}s via SQL
-   */
-  NativeHistoricCaseInstanceQuery createNativeHistoricCaseInstanceQuery();
-
-  /**
-   * creates a native query to search for {@link HistoricCaseActivityInstance}s via SQL
-   */
-  NativeHistoricCaseActivityInstanceQuery createNativeHistoricCaseActivityInstanceQuery();
-
-  /**
    * creates a native query to search for {@link HistoricDecisionInstance}s via SQL
    */
   NativeHistoricDecisionInstanceQuery createNativeHistoricDecisionInstanceQuery();
@@ -633,13 +590,6 @@ public interface HistoryService {
    * @since 7.8
    */
   CleanableHistoricDecisionInstanceReport createCleanableHistoricDecisionInstanceReport();
-
-  /**
-   * Creates a new programmatic query to create a cleanable historic case instance report.
-   *
-   * @since 7.8
-   */
-  CleanableHistoricCaseInstanceReport createCleanableHistoricCaseInstanceReport();
 
   /**
    * Creates a new programmatic query to create a cleanable historic batch report.

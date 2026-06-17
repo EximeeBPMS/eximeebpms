@@ -21,7 +21,6 @@ public class ProcessInstanceDto {
   protected String id;
   private String definitionId;
   private String businessKey;
-  private String caseInstanceId;
   private boolean ended;
   private boolean suspended;
   private String tenantId;
@@ -66,14 +65,6 @@ public class ProcessInstanceDto {
 
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
   }
 
   public boolean isEnded() {

@@ -32,8 +32,6 @@
       PROC_DEF_ID_,
       PROC_INST_ID_,
       EXECUTION_ID_,
-      CASE_INST_ID_,
-      CASE_EXECUTION_ID_,
       TASK_ID_,
       BATCH_ID_,
       BYTEARRAY_ID_,
@@ -54,8 +52,6 @@
       #{processDefinitionId, jdbcType=VARCHAR},
       #{processInstanceId, jdbcType=VARCHAR},
       #{executionId, jdbcType=VARCHAR},
-      #{caseInstanceId, jdbcType=VARCHAR},
-      #{caseExecutionId, jdbcType=VARCHAR},
       #{taskId, jdbcType=VARCHAR},
       #{batchId, jdbcType=VARCHAR},
       #{byteArrayValueId, jdbcType=VARCHAR},
@@ -106,8 +102,6 @@
       <result property="processDefinitionId" column="PROC_DEF_ID_" jdbcType="VARCHAR" />
       <result property="processInstanceId" column="PROC_INST_ID_" jdbcType="VARCHAR" />
       <result property="executionId" column="EXECUTION_ID_" jdbcType="VARCHAR" />
-      <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
-      <result property="caseExecutionId" column="CASE_EXECUTION_ID_" jdbcType="VARCHAR" />
       <result property="taskId" column="TASK_ID_" jdbcType="VARCHAR" />
       <result property="batchId" column="BATCH_ID_" jdbcType="VARCHAR" />
       <result property="activityInstanceId" column="ACT_INST_ID_" jdbcType="VARCHAR" />
@@ -202,36 +196,6 @@
         RES.PROC_INST_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectVariablesByCaseExecutionId" parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
-    SELECT
-        RES.*,
-        (<include refid="actInstIdColumn"/>) ACT_INST_ID_
-    FROM
-        ${prefix}ACT_RU_VARIABLE RES
-
-    LEFT JOIN
-        ${prefix}ACT_RU_EXECUTION EXECUTION
-    ON
-        RES.EXECUTION_ID_ = EXECUTION.ID_
-
-    LEFT JOIN
-        ${prefix}ACT_RU_EXECUTION PARENT_EXECUTION
-    ON
-        EXECUTION.PARENT_ID_ = PARENT_EXECUTION.ID_
-
-    WHERE
-        CASE_EXECUTION_ID_ = #{parameter.caseExecutionId, jdbcType=VARCHAR}
-    AND
-        TASK_ID_ is null
-    <if test="parameter.variableNames != null &amp;&amp; parameter.variableNames.size > 0">
-    AND
-        NAME_ IN
-        <foreach item="item" index="index" collection="parameter.variableNames" open="(" separator="," close=")">
-          #{item, jdbcType=VARCHAR}
-        </foreach>
-    </if>
-  </select>
-
   <select id="selectVariablesByTaskId" parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
     SELECT
         RES.*,
@@ -283,10 +247,6 @@
       and RES.EXECUTION_ID_ is not null
 	  then EXECUTION.ACT_INST_ID_
 
-    when
-      RES.CASE_EXECUTION_ID_ is not null
-    then RES.CASE_EXECUTION_ID_
-
     <!-- if execution is process instance -->
 	  when
 	    EXECUTION.PARENT_ID_ is null
@@ -324,11 +284,11 @@
             on PROC_EXECUTION.ID_ = RES.PROC_INST_ID_
 
             left join ${prefix}ACT_RE_PROCDEF PROCDEF
-            on PROCDEF.ID_ = PROC_EXECUTION.PROC_DEF_ID_   
-            <if test="!authCheck.revokeAuthorizationCheckEnabled">      
+            on PROCDEF.ID_ = PROC_EXECUTION.PROC_DEF_ID_
+            <if test="!authCheck.revokeAuthorizationCheckEnabled">
               <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
               AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart}
-                RES.PROC_INST_ID_ 
+                RES.PROC_INST_ID_
                 ${authJoinSeparator} PROC_EXECUTION.ID_
                 ${authJoinSeparator} PROCDEF.KEY_
                 ${authJoinSeparator} RES.TASK_ID_
@@ -375,24 +335,6 @@
             <if test="processInstanceIds != null &amp;&amp; processInstanceIds.length > 0">
               and RES.PROC_INST_ID_ in
               <foreach item="item" index="index" collection="processInstanceIds"
-                       open="(" separator="," close=")">
-                #{item}
-              </foreach>
-            </if>
-
-            <!-- caseExecutionIds -->
-            <if test="caseExecutionIds != null &amp;&amp; caseExecutionIds.length > 0">
-              and RES.CASE_EXECUTION_ID_ in
-              <foreach item="item" index="index" collection="caseExecutionIds"
-                       open="(" separator="," close=")">
-                #{item}
-              </foreach>
-            </if>
-
-            <!-- caseInstanceIds -->
-            <if test="caseInstanceIds != null &amp;&amp; caseInstanceIds.length > 0">
-              and RES.CASE_INST_ID_ in
-              <foreach item="item" index="index" collection="caseInstanceIds"
                        open="(" separator="," close=")">
                 #{item}
               </foreach>
@@ -462,7 +404,6 @@
               </if>
             </foreach>
 
-            <bind name="applyAuthorizationCheckForCaseInstances" value="true" />
             <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" />
             <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
@@ -476,22 +417,22 @@
     insert into ${prefix}ACT_GE_BYTEARRAY(ID_, NAME_, BYTES_, DEPLOYMENT_ID_, TENANT_ID_, TYPE_, CREATE_TIME_, ROOT_PROC_INST_ID_, REMOVAL_TIME_, REV_)
     values (
       #{id, jdbcType=VARCHAR},
-      #{name, jdbcType=VARCHAR}, 
-      #{bytes, jdbcType=BLOB}, 
+      #{name, jdbcType=VARCHAR},
+      #{bytes, jdbcType=BLOB},
       #{deploymentId, jdbcType=VARCHAR},
       #{tenantId, jdbcType=VARCHAR},
       #{type, jdbcType=INTEGER},
       #{createTime, jdbcType=TIMESTAMP},
       #{rootProcessInstanceId, jdbcType=VARCHAR},
       #{removalTime, jdbcType=TIMESTAMP},
-      1 
-    )  
+      1
+    )
   </insert>
 
   <!-- BYTE ARRAY UPDATE -->
 
   <update id="updateByteArray" parameterType="org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity">
-    update ${prefix}ACT_GE_BYTEARRAY 
+    update ${prefix}ACT_GE_BYTEARRAY
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       BYTES_ = #{bytes, jdbcType=BLOB}
@@ -532,7 +473,7 @@
 
   <update id="updateByteArraysByRootProcessInstanceId_mysql"
           parameterType="java.util.Map">
-      update ${prefix}ACT_GE_BYTEARRAY 
+      update ${prefix}ACT_GE_BYTEARRAY
       <choose>
         <when test="maxResults != null">
           ${limitBeforeInUpdate} ${prefix}ACT_GE_BYTEARRAY

@@ -60,8 +60,6 @@ import org.eximeebpms.bpm.engine.task.IdentityLinkType;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.task.TaskQuery;
 import org.eximeebpms.bpm.engine.test.Deployment;
-import org.eximeebpms.bpm.engine.variable.VariableMap;
-import org.eximeebpms.bpm.engine.variable.value.TypedValue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,18 +71,15 @@ import org.junit.Test;
 public class TaskAuthorizationTest extends AuthorizationTest {
 
   protected static final String PROCESS_KEY = "oneTaskProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
   protected static final String DEMO_ASSIGNEE_PROCESS_KEY = "demoAssigneeProcess";
   protected static final String CANDIDATE_USERS_PROCESS_KEY = "candidateUsersProcess";
   protected static final String CANDIDATE_GROUPS_PROCESS_KEY = "candidateGroupsProcess";
-  protected static final String INVALID_PERMISSION = "invalidPermission";
 
   @Override
   @Before
   public void setUp() throws Exception {
     testRule.deploy(
         "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn",
         "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskProcess.bpmn20.xml",
         "org/eximeebpms/bpm/engine/test/api/authorization/candidateUsersProcess.bpmn20.xml",
         "org/eximeebpms/bpm/engine/test/api/authorization/candidateGroupsProcess.bpmn20.xml");
@@ -329,18 +324,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     // then
     verifyQueryResults(query, 7);
-  }
-
-  @Test
-  public void testQueryWithTaskInsideCaseWithoutAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-
-    // when
-    TaskQuery query = taskService.createTaskQuery();
-
-    // then
-    verifyQueryResults(query, 1);
   }
 
   @Test
@@ -664,24 +647,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals("demo", task.getAssignee());
   }
 
-  // save (case) task (update) //////////////////////////////////////////////////////////
-
-  @Test
-  public void testSaveCaseTaskUpdate() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    Task task = selectSingleTask();
-    task.setAssignee("demo");
-
-    // when
-    taskService.saveTask(task);
-
-    // then
-    task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals("demo", task.getAssignee());
-  }
-
   // delete task ///////////////////////////////////////////////////////////////////////
 
   @Test
@@ -991,23 +956,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals("demo", task.getAssignee());
   }
 
-  // set assignee on case task /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetAssignee() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.setAssignee(taskId, "demo");
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals("demo", task.getAssignee());
-  }
-
   // set owner on standalone task /////////////////////////////////////////////
 
   @Test
@@ -1218,23 +1166,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, TASK_ASSIGN);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, TASK_ASSIGN);
-
-    // when
-    taskService.setOwner(taskId, "demo");
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals("demo", task.getOwner());
-  }
-
-  // set owner on case task /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetOwner() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
 
     // when
     taskService.setOwner(taskId, "demo");
@@ -1527,32 +1458,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, UPDATE);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, UPDATE_TASK);
-
-    // when
-    taskService.addCandidateUser(taskId, "demo");
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertEquals(1, linksForTask.size());
-
-    IdentityLink identityLink = linksForTask.get(0);
-    assertNotNull(identityLink);
-
-    assertEquals("demo", identityLink.getUserId());
-    assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
-  }
-
-  // add candidate user ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddCandidateUser() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
 
     // when
     taskService.addCandidateUser(taskId, "demo");
@@ -1909,32 +1814,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
   }
 
-  // add candidate group ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddCandidateGroup() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.addCandidateGroup(taskId, "accounting");
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertEquals(1, linksForTask.size());
-
-    IdentityLink identityLink = linksForTask.get(0);
-    assertNotNull(identityLink);
-
-    assertEquals("accounting", identityLink.getGroupId());
-    assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
-  }
-
   // add user identity link ((standalone) task) /////////////////////////////////////////////
 
   @Test
@@ -2217,32 +2096,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
   }
 
-  // add user identity link ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddUserIdentityLink() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.addUserIdentityLink(taskId, "demo", IdentityLinkType.CANDIDATE);
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertEquals(1, linksForTask.size());
-
-    IdentityLink identityLink = linksForTask.get(0);
-    assertNotNull(identityLink);
-
-    assertEquals("demo", identityLink.getUserId());
-    assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
-  }
-
   // add group identity link ((standalone) task) /////////////////////////////////////////////
 
   @Test
@@ -2401,32 +2254,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, UPDATE);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, UPDATE_TASK);
-
-    // when
-    taskService.addGroupIdentityLink(taskId, "accounting", IdentityLinkType.CANDIDATE);
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertEquals(1, linksForTask.size());
-
-    IdentityLink identityLink = linksForTask.get(0);
-    assertNotNull(identityLink);
-
-    assertEquals("accounting", identityLink.getGroupId());
-    assertEquals(IdentityLinkType.CANDIDATE, identityLink.getType());
-  }
-
-  // add group identity link ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddGroupIdentityLink() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
 
     // when
     taskService.addGroupIdentityLink(taskId, "accounting", IdentityLinkType.CANDIDATE);
@@ -2686,27 +2513,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertTrue(linksForTask.isEmpty());
   }
 
-  // delete candidate user ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskDeleteCandidateUser() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    addCandidateUser(taskId, "demo");
-
-    // when
-    taskService.deleteCandidateUser(taskId, "demo");
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertTrue(linksForTask.isEmpty());
-  }
-
   // delete candidate group ((standalone) task) /////////////////////////////////////////////
 
   @Test
@@ -2934,27 +2740,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, UPDATE);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, UPDATE_TASK);
-
-    // when
-    taskService.deleteCandidateGroup(taskId, "accounting");
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertTrue(linksForTask.isEmpty());
-  }
-
-  // delete candidate group ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskDeleteCandidateGroup() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    addCandidateGroup(taskId, "accounting");
 
     // when
     taskService.deleteCandidateGroup(taskId, "accounting");
@@ -3230,27 +3015,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertTrue(linksForTask.isEmpty());
   }
 
-  // delete user identity link ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskDeleteUserIdentityLink() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    addCandidateUser(taskId, "demo");
-
-    // when
-    taskService.deleteUserIdentityLink(taskId, "demo", IdentityLinkType.CANDIDATE);
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertTrue(linksForTask.isEmpty());
-  }
-
   // delete group identity link ((standalone) task) /////////////////////////////////////////////
 
   @Test
@@ -3405,27 +3169,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertTrue(linksForTask.isEmpty());
   }
 
-  // delete group identity link ((case) task) /////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskDeleteGroupIdentityLink() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    addCandidateGroup(taskId, "accounting");
-
-    // when
-    taskService.deleteGroupIdentityLink(taskId, "accounting", IdentityLinkType.CANDIDATE);
-
-    // then
-    disableAuthorization();
-    List<IdentityLink> linksForTask = taskService.getIdentityLinksForTask(taskId);
-    enableAuthorization();
-
-    assertNotNull(linksForTask);
-    assertTrue(linksForTask.isEmpty());
-  }
-
   // get identity links ((standalone) task) ////////////////////////////////////////////////
 
   @Test
@@ -3551,23 +3294,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, READ);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, READ_TASK);
-
-    // when
-    List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
-
-    // then
-    assertNotNull(identityLinksForTask);
-    assertFalse(identityLinksForTask.isEmpty());
-  }
-
-  // get identity links ((case) task) ////////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetIdentityLinks() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    addCandidateUser(taskId, "demo");
 
     // when
     List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
@@ -3858,23 +3584,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals("demo", task.getAssignee());
   }
 
-  // claim (case) task ////////////////////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskClaimTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.claim(taskId, "demo");
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals("demo", task.getAssignee());
-  }
-
   // complete (standalone) task ////////////////////////////////////////////////////////////
 
   @Test
@@ -4047,22 +3756,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     createGrantAuthorization(TASK, taskId, userId, UPDATE);
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, UPDATE_TASK);
-
-    // when
-    taskService.complete(taskId);
-
-    // then
-    Task task = selectSingleTask();
-    assertNull(task);
-  }
-
-  // complete (case) task ////////////////////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskCompleteTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
 
     // when
     taskService.complete(taskId);
@@ -4292,23 +3985,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals("demo", task.getAssignee());
   }
 
-  // delegate (case) task /////////////////////////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskDelegateTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.delegateTask(taskId, "demo");
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals("demo", task.getAssignee());
-  }
-
   // resolve (standalone) task ///////////////////////////////////////////////////////
 
   @Test
@@ -4449,40 +4125,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     Task task = selectSingleTask();
     assertNotNull(task);
     assertEquals(userId, task.getAssignee());
-  }
-
-  // delegate (case) task /////////////////////////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskResolveTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, userId);
-    delegateTask(taskId, "demo");
-
-    // when
-    taskService.resolveTask(taskId);
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals(userId, task.getAssignee());
-  }
-
-  @Test
-  public void testCaseTaskSetPriority() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    taskService.setPriority(taskId, 80);
-
-    // then
-    Task task = selectSingleTask();
-    assertNotNull(task);
-    assertEquals(80, task.getPriority());
   }
 
   // get sub tasks ((standalone) task) ////////////////////////////////////
@@ -4627,85 +4269,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
   public void testProcessTaskGetSubTasks() {
     // given
     startProcessInstanceByKey(PROCESS_KEY);
-    String parentTaskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    Task sub1 = taskService.newTask("sub1");
-    sub1.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub1);
-
-    Task sub2 = taskService.newTask("sub2");
-    sub2.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub2);
-    enableAuthorization();
-
-    createGrantAuthorization(TASK, ANY, userId, READ);
-
-    // when
-    List<Task> subTasks = taskService.getSubTasks(parentTaskId);
-
-    // then
-    assertFalse(subTasks.isEmpty());
-    assertEquals(2, subTasks.size());
-  }
-
-  // get sub tasks ((case) task) ////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetSubTasksWithoutAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String parentTaskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    Task sub1 = taskService.newTask("sub1");
-    sub1.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub1);
-
-    Task sub2 = taskService.newTask("sub2");
-    sub2.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub2);
-    enableAuthorization();
-
-    // when
-    List<Task> subTasks = taskService.getSubTasks(parentTaskId);
-
-    // then
-    assertTrue(subTasks.isEmpty());
-  }
-
-  @Test
-  public void testCaseTaskGetSubTasksWithReadPermissionOnSub1() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String parentTaskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    Task sub1 = taskService.newTask("sub1");
-    sub1.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub1);
-
-    Task sub2 = taskService.newTask("sub2");
-    sub2.setParentTaskId(parentTaskId);
-    taskService.saveTask(sub2);
-    enableAuthorization();
-
-    createGrantAuthorization(TASK, "sub1", userId, READ);
-
-    // when
-    List<Task> subTasks = taskService.getSubTasks(parentTaskId);
-
-    // then
-    assertFalse(subTasks.isEmpty());
-    assertEquals(1, subTasks.size());
-
-    assertEquals("sub1", subTasks.get(0).getId());
-  }
-
-  @Test
-  public void testCaseTaskGetSubTasks() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
     String parentTaskId = selectSingleTask().getId();
 
     disableAuthorization();
@@ -5113,29 +4676,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     identityService.setAuthentication(userId, Arrays.asList(groupId));
   }
 
-  // set assignee -> should not create an authorization (case task) /////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetAssigneeNoAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    createGrantAuthorization(TASK, taskId, userId, UPDATE);
-
-    // when
-    taskService.setAssignee(taskId, "demo");
-
-    // then
-    disableAuthorization();
-    Authorization authorization = authorizationService
-        .createAuthorizationQuery()
-        .userIdIn("demo")
-        .singleResult();
-    enableAuthorization();
-
-    assertNull(authorization);
-  }
-
   // set owner -> an authorization is available (standalone task) /////////////////////////////////////////
 
   @Test
@@ -5357,29 +4897,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     identityService.clearAuthentication();
     identityService.setAuthentication(userId, Arrays.asList(groupId));
-  }
-
-  // set owner -> should not create an authorization  (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetOwnerNoAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    createGrantAuthorization(TASK, taskId, userId, UPDATE);
-
-    // when
-    taskService.setOwner(taskId, "demo");
-
-    // then
-    disableAuthorization();
-    Authorization authorization = authorizationService
-        .createAuthorizationQuery()
-        .userIdIn("demo")
-        .singleResult();
-    enableAuthorization();
-
-    assertNull(authorization);
   }
 
   // add candidate user -> an authorization is available (standalone task) /////////////////
@@ -5629,29 +5146,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
     assertEquals(taskId, task.getId());
   }
 
-  // add candidate user -> should not create an authorization  (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddCandidateUserNoAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    createGrantAuthorization(TASK, taskId, userId, UPDATE);
-
-    // when
-    taskService.addCandidateUser(taskId, "demo");
-
-    // then
-    disableAuthorization();
-    Authorization authorization = authorizationService
-        .createAuthorizationQuery()
-        .userIdIn("demo")
-        .singleResult();
-    enableAuthorization();
-
-    assertNull(authorization);
-  }
-
   // add candidate group -> an authorization is available (standalone task) /////////////////
 
   @Test
@@ -5870,385 +5364,6 @@ public class TaskAuthorizationTest extends AuthorizationTest {
 
     assertNotNull(task);
     assertEquals(taskId, task.getId());
-  }
-
-  // add candidate group -> should not create an authorization (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskAddCandidateGroupNoAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    createGrantAuthorization(TASK, taskId, userId, UPDATE);
-
-    // when
-    taskService.addCandidateGroup(taskId, "management");
-
-    // then
-    disableAuthorization();
-    Authorization authorization = authorizationService
-        .createAuthorizationQuery()
-        .groupIdIn("management")
-        .singleResult();
-    enableAuthorization();
-
-    assertNull(authorization);
-  }
-
-  // TaskService#getVariable() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariable() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    Object variable = taskService.getVariable(taskId, VARIABLE_NAME);
-
-    // then
-    assertEquals(VARIABLE_VALUE, variable);
-  }
-
-  // TaskService#getVariableLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariableLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    Object variable = taskService.getVariableLocal(taskId, VARIABLE_NAME);
-
-    // then
-    assertEquals(VARIABLE_VALUE, variable);
-  }
-
-  // TaskService#getVariableTyped() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariableTyped() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    TypedValue typedValue = taskService.getVariableTyped(taskId, VARIABLE_NAME);
-
-    // then
-    assertNotNull(typedValue);
-    assertEquals(VARIABLE_VALUE, typedValue.getValue());
-  }
-
-  // TaskService#getVariableLocalTyped() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariableLocalTyped() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    TypedValue typedValue = taskService.getVariableLocalTyped(taskId, VARIABLE_NAME);
-
-    // then
-    assertNotNull(typedValue);
-    assertEquals(VARIABLE_VALUE, typedValue.getValue());
-  }
-
-  // TaskService#getVariables() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariables() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    Map<String, Object> variables = taskService.getVariables(taskId);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    Map<String, Object> variables = taskService.getVariablesLocal(taskId);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariablesTyped() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesTyped() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    VariableMap variables = taskService.getVariablesTyped(taskId);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariablesLocalTyped() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesLocalTyped() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    Map<String, Object> variables = taskService.getVariablesLocalTyped(taskId);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariables() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesByName() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    Map<String, Object> variables = taskService.getVariables(taskId, Arrays.asList(VARIABLE_NAME));
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesLocalByName() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    Map<String, Object> variables = taskService.getVariablesLocal(taskId, Arrays.asList(VARIABLE_NAME));
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariables() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesTypedByName() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    // when
-    VariableMap variables = taskService.getVariablesTyped(taskId, Arrays.asList(VARIABLE_NAME), false);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#getVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetVariablesLocalTypedByName() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariablesLocal(taskId, getVariables());
-    enableAuthorization();
-
-    // when
-    Map<String, Object> variables = taskService.getVariablesLocalTyped(taskId, Arrays.asList(VARIABLE_NAME), false);
-
-    // then
-    assertNotNull(variables);
-    assertFalse(variables.isEmpty());
-    assertEquals(1, variables.size());
-
-    assertEquals(VARIABLE_VALUE, variables.get(VARIABLE_NAME));
-  }
-
-  // TaskService#setVariable() (case task) /////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetVariable() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifySetVariable(taskId);
-  }
-
-  // TaskService#setVariableLocal() (case task) /////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetVariableLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifySetVariableLocal(taskId);
-  }
-
-  // TaskService#setVariables() (case task) /////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetVariables() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifySetVariables(taskId);
-  }
-
-  // TaskService#setVariablesLocal() (case task) /////////////////////////////////////
-
-  @Test
-  public void testCaseTaskSetVariablesLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifySetVariablesLocal(taskId);
-  }
-
-  // TaskService#removeVariable() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskRemoveVariable() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    verifyRemoveVariable(taskId);
-  }
-
-  // TaskService#removeVariableLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskRemoveVariableLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariableLocal(taskId, VARIABLE_NAME, VARIABLE_VALUE);
-    enableAuthorization();
-
-    verifyRemoveVariableLocal(taskId);
-  }
-
-  // TaskService#removeVariables() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskRemoveVariables() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY, getVariables());
-    String taskId = selectSingleTask().getId();
-
-    verifyRemoveVariables(taskId);
-  }
-
-  // TaskService#removeVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskRemoveVariablesLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    disableAuthorization();
-    taskService.setVariableLocal(taskId, VARIABLE_NAME, VARIABLE_VALUE);
-    enableAuthorization();
-
-    verifyRemoveVariablesLocal(taskId);
-  }
-
-  // TaskServiceImpl#updateVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskUpdateVariablesLocal() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifyUpdateVariablesLocal(taskId);
-  }
-
-  // TaskServiceImpl#updateVariablesLocal() (case task) ////////////////////////////////////////////
-
-  @Test
-  public void testCaseTaskUpdateVariables() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    verifyUpdateVariables(taskId);
   }
 
   @Test

@@ -22,7 +22,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import org.eximeebpms.bpm.BpmPlatform;
 import org.eximeebpms.bpm.ProcessEngineService;
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -87,8 +86,6 @@ public class NamedProcessEngineServicesProducer {
   @Produces @ProcessEngineName("") public FilterService filterService(InjectionPoint ip) { return processEngine(ip).getFilterService(); }
 
   @Produces @ProcessEngineName("") public ExternalTaskService externalTaskService(InjectionPoint ip) { return processEngine(ip).getExternalTaskService(); }
-
-  @Produces @ProcessEngineName("") public CaseService caseService(InjectionPoint ip) { return processEngine(ip).getCaseService(); }
 
   @Produces @ProcessEngineName("") public DecisionService decisionService(InjectionPoint ip) { return processEngine(ip).getDecisionService(); }
 

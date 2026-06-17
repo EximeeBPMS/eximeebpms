@@ -22,7 +22,6 @@ import javax.inject.Named;
 
 import org.eximeebpms.bpm.BpmPlatform;
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -84,8 +83,6 @@ public class ProcessEngineServicesProducer {
   @Produces @Named @ApplicationScoped public FilterService filterService() { return processEngine().getFilterService(); }
 
   @Produces @Named @ApplicationScoped public ExternalTaskService externalTaskService() { return processEngine().getExternalTaskService(); }
-
-  @Produces @Named @ApplicationScoped public CaseService caseService() { return processEngine().getCaseService(); }
 
   @Produces @Named @ApplicationScoped public DecisionService decisionService() { return processEngine().getDecisionService(); }
 

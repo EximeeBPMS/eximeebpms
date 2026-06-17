@@ -19,9 +19,6 @@ package org.eximeebpms.bpm.engine.rest.impl.history;
 import org.eximeebpms.bpm.engine.rest.history.HistoricActivityInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.history.HistoricProcessDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.history.HistoricBatchRestService;
-import org.eximeebpms.bpm.engine.rest.history.HistoricCaseActivityInstanceRestService;
-import org.eximeebpms.bpm.engine.rest.history.HistoricCaseDefinitionRestService;
-import org.eximeebpms.bpm.engine.rest.history.HistoricCaseInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.history.HistoricDecisionDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.history.HistoricDecisionInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.history.HistoricDecisionStatisticsRestService;
@@ -51,16 +48,8 @@ public class HistoryRestServiceImpl extends AbstractRestProcessEngineAware imple
     return new HistoricProcessInstanceRestServiceImpl(getObjectMapper(), getProcessEngine());
   }
 
-  public HistoricCaseInstanceRestService getCaseInstanceService() {
-    return new HistoricCaseInstanceRestServiceImpl(getObjectMapper(), getProcessEngine());
-  }
-
   public HistoricActivityInstanceRestService getActivityInstanceService() {
     return new HistoricActivityInstanceRestServiceImpl(getObjectMapper(), getProcessEngine());
-  }
-
-  public HistoricCaseActivityInstanceRestService getCaseActivityInstanceService() {
-    return new HistoricCaseActivityInstanceRestServiceImpl(getObjectMapper(), getProcessEngine());
   }
 
   public HistoricVariableInstanceRestService getVariableInstanceService() {
@@ -77,10 +66,6 @@ public class HistoryRestServiceImpl extends AbstractRestProcessEngineAware imple
 
   public HistoricDecisionStatisticsRestService getDecisionStatisticsService() {
     return new HistoricDecisionStatisticsRestServiceImpl(getProcessEngine());
-  }
-
-  public HistoricCaseDefinitionRestService getCaseDefinitionService() {
-    return new HistoricCaseDefinitionRestServiceImpl(getObjectMapper(), getProcessEngine());
   }
 
   public UserOperationLogRestService getUserOperationLogRestService() {

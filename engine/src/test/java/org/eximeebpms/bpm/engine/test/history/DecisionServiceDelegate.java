@@ -18,16 +18,13 @@ package org.eximeebpms.bpm.engine.test.history;
 
 import java.io.Serializable;
 
-import org.eximeebpms.bpm.dmn.engine.DmnDecisionRuleResult;
 import org.eximeebpms.bpm.dmn.engine.DmnDecisionTableResult;
 import org.eximeebpms.bpm.engine.DecisionService;
-import org.eximeebpms.bpm.engine.delegate.CaseExecutionListener;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.JavaDelegate;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 
-public class DecisionServiceDelegate implements JavaDelegate, CaseExecutionListener, Serializable {
+public class DecisionServiceDelegate implements JavaDelegate, Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -35,18 +32,6 @@ public class DecisionServiceDelegate implements JavaDelegate, CaseExecutionListe
   public void execute(DelegateExecution execution) throws Exception {
     DecisionService decisionService = execution.getProcessEngineServices().getDecisionService();
     evaluateDecision(decisionService, execution);
-  }
-
-  public void notify(DelegateCaseExecution caseExecution) throws Exception {
-    DecisionService decisionService = caseExecution.getProcessEngineServices().getDecisionService();
-    evaluateDecision(decisionService, caseExecution);
-  }
-
-  public boolean evaluate(DelegateCaseExecution caseExecution) {
-    DecisionService decisionService = caseExecution.getProcessEngineServices().getDecisionService();
-    DmnDecisionTableResult result = evaluateDecision(decisionService, caseExecution);
-    DmnDecisionRuleResult singleResult = result.getSingleResult();
-    return (Boolean) singleResult.getSingleEntry();
   }
 
   protected DmnDecisionTableResult evaluateDecision(DecisionService decisionService, VariableScope variableScope) {

@@ -127,21 +127,6 @@ public class ProcessInstantiationAtActivitiesTest extends PluggableProcessEngine
 
   @Deployment(resources = EXCLUSIVE_GATEWAY_PROCESS)
   @Test
-  public void testSingleActivityInstantiationSetCaseInstanceId() {
-    // when
-    ProcessInstance instance = runtimeService
-      .createProcessInstanceByKey("exclusiveGateway")
-      .caseInstanceId("caseInstanceId")
-      .startBeforeActivity("task1")
-      .execute();
-
-    // then
-    assertNotNull(instance);
-    assertEquals("caseInstanceId", instance.getCaseInstanceId());
-  }
-
-  @Deployment(resources = EXCLUSIVE_GATEWAY_PROCESS)
-  @Test
   public void testStartEventInstantiation() {
     // when
     ProcessInstance instance = runtimeService

@@ -162,12 +162,10 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
   protected ProcessInstanceWithVariables startProcessInstanceAtActivities(StartProcessInstanceDto dto) {
     Map<String, Object> processInstanceVariables = VariableValueDto.toMap(dto.getVariables(), engine, objectMapper);
     String businessKey = dto.getBusinessKey();
-    String caseInstanceId = dto.getCaseInstanceId();
 
     ProcessInstantiationBuilder instantiationBuilder = engine.getRuntimeService()
         .createProcessInstanceById(processDefinitionId)
         .businessKey(businessKey)
-        .caseInstanceId(caseInstanceId)
         .setVariables(processInstanceVariables);
 
     if (dto.getStartInstructions() != null && !dto.getStartInstructions().isEmpty()) {

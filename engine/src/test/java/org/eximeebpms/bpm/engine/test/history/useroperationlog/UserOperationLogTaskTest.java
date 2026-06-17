@@ -45,7 +45,6 @@ import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
 import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.DelegationState;
@@ -418,50 +417,6 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
     assertThat(log.getOrgValue()).isEqualTo("false");
     assertThat(log.getNewValue()).isEqualTo("true");
     assertThat(log.getCategory()).isEqualTo(UserOperationLogEntry.CATEGORY_TASK_WORKER);
-  }
-
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCompleteCaseExecution() {
-    // given
-    CaseDefinition caseDefinition = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult();
-
-    String caseInstanceId = caseService
-        .withCaseDefinition(caseDefinition.getId())
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // when
-    caseService
-      .withCaseExecution(humanTaskId)
-      .complete();
-
-    // then
-    UserOperationLogQuery query = queryOperationDetails(OPERATION_TYPE_COMPLETE);
-
-    assertEquals(1, query.count());
-
-    UserOperationLogEntry entry = query.singleResult();
-    assertNotNull(entry);
-
-    assertEquals(caseDefinition.getId(), entry.getCaseDefinitionId());
-    assertEquals(caseInstanceId, entry.getCaseInstanceId());
-    assertEquals(humanTaskId, entry.getCaseExecutionId());
-    assertEquals(caseDefinition.getDeploymentId(), entry.getDeploymentId());
-
-    assertFalse(Boolean.parseBoolean(entry.getOrgValue()));
-    assertTrue(Boolean.parseBoolean(entry.getNewValue()));
-    assertEquals(DELETE, entry.getProperty());
-    assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, entry.getCategory());
-
   }
 
   @Deployment(resources = {"org/eximeebpms/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})

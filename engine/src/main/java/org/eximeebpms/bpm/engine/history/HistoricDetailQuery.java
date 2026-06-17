@@ -18,8 +18,6 @@ package org.eximeebpms.bpm.engine.history;
 
 import java.util.Date;
 import org.eximeebpms.bpm.engine.query.Query;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.VariableInstance;
@@ -43,19 +41,10 @@ public interface HistoricDetailQuery extends Query<HistoricDetailQuery, Historic
    * {@link ProcessInstance} ids and {@link HistoricProcessInstance} ids match. */
   HistoricDetailQuery processInstanceId(String processInstanceId);
 
-  /** Only select historic variable updates with the given case instance.
-   * {@link CaseInstance} ids and {@link HistoricCaseInstance} ids match. */
-  HistoricDetailQuery caseInstanceId(String caseInstanceId);
-
   /** Only select historic variable updates with the given execution.
    * Note that {@link Execution} ids are not stored in the history as first class citizen,
    * only process instances are.*/
   HistoricDetailQuery executionId(String executionId);
-
-  /** Only select historic variable updates with the given case execution.
-   * Note that {@link CaseExecution} ids are not stored in the history as first class citizen,
-   * only case instances are.*/
-  HistoricDetailQuery caseExecutionId(String caseExecutionId);
 
   /** Only select historic variable updates associated to the given {@link HistoricActivityInstance activity instance}.
    * @deprecated since 5.2, use {@link #activityInstanceId(String)} instead */

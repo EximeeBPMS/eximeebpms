@@ -35,7 +35,6 @@ import org.eximeebpms.bpm.engine.authorization.Permission;
 import org.eximeebpms.bpm.engine.authorization.Resource;
 import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
 import org.eximeebpms.bpm.engine.impl.el.FixedValue;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
@@ -47,12 +46,10 @@ import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.repository.DeploymentWithDefinitions;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
-import org.eximeebpms.bpm.engine.variable.VariableMap;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -100,17 +97,6 @@ public class ProcessEngineTestRule extends TestWatcher {
     if (processInstance==null) {
       throw new AssertionFailedError("Expected process instance '"+processInstanceId+"' to be still active but it was not in the db");
     }
-  }
-
-
-  public void assertCaseEnded(String caseInstanceId) {
-    CaseInstance caseInstance = processEngine
-      .getCaseService()
-      .createCaseInstanceQuery()
-      .caseInstanceId(caseInstanceId)
-      .singleResult();
-
-    assertThat(caseInstance).describedAs("Case instance with id " + caseInstanceId + " is not finished").isNull();
   }
 
   public DeploymentWithDefinitions deploy(BpmnModelInstance... bpmnModelInstances) {
@@ -362,13 +348,6 @@ public class ProcessEngineTestRule extends TestWatcher {
     assertTextPresent(expected.toLowerCase(), actual.toLowerCase());
   }
 
-  public Object defaultManualActivation() {
-    Expression expression = new FixedValue(true);
-    CaseControlRuleImpl caseControlRule = new CaseControlRuleImpl(expression);
-    return caseControlRule;
-  }
-
-
   public void deleteHistoryCleanupJobs() {
     HistoryService historyService = processEngine.getHistoryService();
     final List<Job> jobs = historyService.findHistoryCleanupJobs();
@@ -388,26 +367,6 @@ public class ProcessEngineTestRule extends TestWatcher {
           return null;
         });
     }
-  }
-
-  public CaseInstance createCaseInstanceByKey(String caseDefinitionKey) {
-    return createCaseInstanceByKey(caseDefinitionKey, null, null);
-  }
-
-  public CaseInstance createCaseInstanceByKey(String caseDefinitionKey, String businessKey) {
-    return createCaseInstanceByKey(caseDefinitionKey, businessKey, null);
-  }
-
-  public CaseInstance createCaseInstanceByKey(String caseDefinitionKey, VariableMap variables) {
-    return createCaseInstanceByKey(caseDefinitionKey, null, variables);
-  }
-
-  public CaseInstance createCaseInstanceByKey(String caseDefinitionKey, String businessKey, VariableMap variables) {
-    return processEngine.getCaseService()
-        .withCaseDefinitionByKey(caseDefinitionKey)
-        .businessKey(businessKey)
-        .setVariables(variables)
-        .create();
   }
 
   public String getDatabaseType() {
@@ -433,7 +392,7 @@ public class ProcessEngineTestRule extends TestWatcher {
     taskService.createTaskQuery()
       .list()
       .stream()
-      .filter(t -> t.getProcessInstanceId() == null && t.getCaseInstanceId() == null)
+      .filter(t -> t.getProcessInstanceId() == null)
       .forEach(t -> taskService.deleteTask(t.getId(), true));
   }
 

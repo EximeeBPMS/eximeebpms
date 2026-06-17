@@ -28,8 +28,6 @@ import org.eximeebpms.bpm.engine.exception.DeploymentResourceNotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
 import org.eximeebpms.bpm.engine.exception.NullValueException;
-import org.eximeebpms.bpm.engine.exception.cmmn.CaseDefinitionNotFoundException;
-import org.eximeebpms.bpm.engine.exception.cmmn.CmmnModelInstanceNotFoundException;
 import org.eximeebpms.bpm.engine.exception.dmn.DecisionDefinitionNotFoundException;
 import org.eximeebpms.bpm.engine.exception.dmn.DmnModelInstanceNotFoundException;
 import org.eximeebpms.bpm.engine.impl.cmd.AddIdentityLinkForProcessDefinitionCmd;
@@ -49,12 +47,6 @@ import org.eximeebpms.bpm.engine.impl.cmd.GetIdentityLinksForProcessDefinitionCm
 import org.eximeebpms.bpm.engine.impl.cmd.GetStaticCalledProcessDefinitionCmd;
 import org.eximeebpms.bpm.engine.impl.cmd.UpdateDecisionDefinitionHistoryTimeToLiveCmd;
 import org.eximeebpms.bpm.engine.impl.cmd.UpdateProcessDefinitionHistoryTimeToLiveCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.GetDeploymentCaseDefinitionCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.GetDeploymentCaseDiagramCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.GetDeploymentCaseModelCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.GetDeploymentCmmnModelInstanceCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.UpdateCaseDefinitionHistoryTimeToLiveCmd;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl;
 import org.eximeebpms.bpm.engine.impl.dmn.cmd.GetDeploymentDecisionDefinitionCmd;
 import org.eximeebpms.bpm.engine.impl.dmn.cmd.GetDeploymentDecisionDiagramCmd;
 import org.eximeebpms.bpm.engine.impl.dmn.cmd.GetDeploymentDecisionModelCmd;
@@ -72,7 +64,6 @@ import org.eximeebpms.bpm.engine.impl.repository.UpdateProcessDefinitionSuspensi
 import org.eximeebpms.bpm.engine.repository.*;
 import org.eximeebpms.bpm.engine.task.IdentityLink;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
-import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
 import org.eximeebpms.bpm.model.dmn.DmnModelInstance;
 
 /**
@@ -166,10 +157,6 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
 
   public ProcessDefinitionQuery createProcessDefinitionQuery() {
     return new ProcessDefinitionQueryImpl(commandExecutor);
-  }
-
-  public CaseDefinitionQuery createCaseDefinitionQuery() {
-    return new CaseDefinitionQueryImpl(commandExecutor);
   }
 
   public DecisionDefinitionQuery createDecisionDefinitionQuery() {
@@ -278,10 +265,6 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
     commandExecutor.execute(new UpdateDecisionDefinitionHistoryTimeToLiveCmd(decisionDefinitionId, historyTimeToLive));
   }
 
-  public void updateCaseDefinitionHistoryTimeToLive(String caseDefinitionId, Integer historyTimeToLive){
-    commandExecutor.execute(new UpdateCaseDefinitionHistoryTimeToLiveCmd(caseDefinitionId, historyTimeToLive));
-  }
-
   public InputStream getProcessModel(String processDefinitionId) {
     return commandExecutor.execute(new GetDeploymentProcessModelCmd(processDefinitionId));
   }
@@ -290,32 +273,12 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
     return commandExecutor.execute(new GetDeploymentProcessDiagramCmd(processDefinitionId));
   }
 
-  public InputStream getCaseDiagram(String caseDefinitionId) {
-    return commandExecutor.execute(new GetDeploymentCaseDiagramCmd(caseDefinitionId));
-  }
-
   public DiagramLayout getProcessDiagramLayout(String processDefinitionId) {
     return commandExecutor.execute(new GetDeploymentProcessDiagramLayoutCmd(processDefinitionId));
   }
 
   public BpmnModelInstance getBpmnModelInstance(String processDefinitionId) {
     return commandExecutor.execute(new GetDeploymentBpmnModelInstanceCmd(processDefinitionId));
-  }
-
-  public CmmnModelInstance getCmmnModelInstance(String caseDefinitionId) {
-    try {
-      return commandExecutor.execute(new GetDeploymentCmmnModelInstanceCmd(caseDefinitionId));
-
-    } catch (NullValueException e) {
-      throw new NotValidException(e.getMessage(), e);
-
-    } catch (CmmnModelInstanceNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    } catch (DeploymentResourceNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    }
   }
 
   public DmnModelInstance getDmnModelInstance(String decisionDefinitionId) {
@@ -352,36 +315,6 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
 
   public List<IdentityLink> getIdentityLinksForProcessDefinition(String processDefinitionId) {
     return commandExecutor.execute(new GetIdentityLinksForProcessDefinitionCmd(processDefinitionId));
-  }
-
-  public CaseDefinition getCaseDefinition(String caseDefinitionId) {
-    try {
-      return commandExecutor.execute(new GetDeploymentCaseDefinitionCmd(caseDefinitionId));
-
-    } catch (NullValueException e) {
-      throw new NotValidException(e.getMessage(), e);
-
-    } catch (CaseDefinitionNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    }
-  }
-
-  public InputStream getCaseModel(String caseDefinitionId) {
-    try {
-      return commandExecutor.execute(new GetDeploymentCaseModelCmd(caseDefinitionId));
-
-    } catch (NullValueException e) {
-      throw new NotValidException(e.getMessage(), e);
-
-    } catch (CaseDefinitionNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    } catch (DeploymentResourceNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    }
-
   }
 
   public DecisionDefinition getDecisionDefinition(String decisionDefinitionId) {

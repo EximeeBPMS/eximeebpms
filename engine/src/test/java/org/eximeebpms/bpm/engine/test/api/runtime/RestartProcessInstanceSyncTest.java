@@ -40,7 +40,6 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
@@ -655,7 +654,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldRestartProcessInstanceWithoutBusinessKey() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process", "businessKey", (String) null);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process", "businessKey");
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");
 
     // when
@@ -674,7 +673,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldRestartProcessInstanceWithBusinessKey() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process", "businessKey", (String) null);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process", "businessKey");
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");
 
     // when
@@ -687,24 +686,6 @@ public class RestartProcessInstanceSyncTest {
     ProcessInstance restartedProcessInstance = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).active().singleResult();
     assertNotNull(restartedProcessInstance.getBusinessKey());
     assertEquals("businessKey", restartedProcessInstance.getBusinessKey());
-  }
-
-  @Test
-  public void shouldRestartProcessInstanceWithoutCaseInstanceId() {
-    // given
-    ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process", null, "caseInstanceId");
-    runtimeService.deleteProcessInstance(processInstance.getId(), "test");
-
-    // when
-    runtimeService.restartProcessInstances(processDefinition.getId())
-    .startBeforeActivity("userTask1")
-    .processInstanceIds(processInstance.getId())
-    .execute();
-
-    // then
-    ProcessInstance restartedProcessInstance = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).active().singleResult();
-    assertNull(restartedProcessInstance.getCaseInstanceId());
   }
 
   @Test
@@ -887,11 +868,6 @@ public class RestartProcessInstanceSyncTest {
 
     @Override
     public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
       throw new UnsupportedOperationException();
     }
 

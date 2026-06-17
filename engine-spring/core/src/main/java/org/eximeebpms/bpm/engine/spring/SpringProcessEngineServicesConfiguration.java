@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.spring;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.BusinessEventService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -98,12 +97,6 @@ public class SpringProcessEngineServicesConfiguration implements ProcessEngineSe
   @Override
   public AuthorizationService getAuthorizationService() {
     return processEngine.getAuthorizationService();
-  }
-
-  @Bean(name = "caseService")
-  @Override
-  public CaseService getCaseService() {
-    return processEngine.getCaseService();
   }
 
   @Bean(name = "filterService")

@@ -182,11 +182,6 @@ public interface HistoricProcessInstanceQuery extends Query<HistoricProcessInsta
   HistoricProcessInstanceQuery withJobsRetrying();
 
   /**
-   * Only select historic process instances which are associated with the given case instance id.
-   */
-  HistoricProcessInstanceQuery caseInstanceId(String caseInstanceId);
-
-  /**
    * The query will match the names of variables in a case-insensitive way.
    */
   HistoricProcessInstanceQuery matchVariableNamesIgnoreCase();
@@ -372,21 +367,6 @@ public interface HistoricProcessInstanceQuery extends Query<HistoricProcessInsta
    * such process instance that can be the result of this query.
    */
   HistoricProcessInstanceQuery subProcessInstanceId(String subProcessInstanceId);
-
-  /**
-   * Only select historic process instances started by the given case
-   * instance.
-   */
-  HistoricProcessInstanceQuery superCaseInstanceId(String superCaseInstanceId);
-
-  /**
-   * Only select historic process instances having a sub case instance
-   * with the given case instance id.
-   * <p>
-   * Note that there will always be maximum only <b>one</b>
-   * such process instance that can be the result of this query.
-   */
-  HistoricProcessInstanceQuery subCaseInstanceId(String subCaseInstanceId);
 
   /**
    * Only select historic process instances with one of the given tenant ids.

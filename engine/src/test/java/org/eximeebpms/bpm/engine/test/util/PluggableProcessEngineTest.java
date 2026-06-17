@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -64,7 +63,6 @@ public class PluggableProcessEngineTest {
   protected IdentityService identityService;
   protected ManagementService managementService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
   protected FilterService filterService;
   protected ExternalTaskService externalTaskService;
   protected DecisionService decisionService;
@@ -84,7 +82,6 @@ public class PluggableProcessEngineTest {
     identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     authorizationService = processEngine.getAuthorizationService();
-    caseService = processEngine.getCaseService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
     decisionService = processEngine.getDecisionService();

@@ -177,7 +177,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     String returnedDefinitionId = from(content).getString("[0].definitionId");
     String returnedBusinessKey = from(content).getString("[0].businessKey");
     Boolean returnedIsSuspended = from(content).getBoolean("[0].suspended");
-    String returnedCaseInstanceId = from(content).getString("[0].caseInstanceId");
     String returnedTenantId = from(content).getString("[0].tenantId");
 
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, returnedInstanceId);
@@ -185,7 +184,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_DEFINITION_ID, returnedDefinitionId);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_BUSINESS_KEY, returnedBusinessKey);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_IS_SUSPENDED, returnedIsSuspended);
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_INSTANCE_ID, returnedCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
   }
 
@@ -226,7 +224,6 @@ public class ProcessInstanceRestServiceQueryTest extends
       .expect().statusCode(Status.OK.getStatusCode())
       .when().get(PROCESS_INSTANCE_QUERY_URL);
 
-    verify(mockedQuery).caseInstanceId(queryParameters.get("caseInstanceId"));
     verify(mockedQuery).processInstanceBusinessKey(queryParameters.get("businessKey"));
     verify(mockedQuery).processInstanceBusinessKeyLike(queryParameters.get("businessKeyLike"));
     verify(mockedQuery).processDefinitionKey(queryParameters.get("processDefinitionKey"));
@@ -234,8 +231,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     verify(mockedQuery).deploymentId(queryParameters.get("deploymentId"));
     verify(mockedQuery).superProcessInstanceId(queryParameters.get("superProcessInstance"));
     verify(mockedQuery).subProcessInstanceId(queryParameters.get("subProcessInstance"));
-    verify(mockedQuery).superCaseInstanceId(queryParameters.get("superCaseInstance"));
-    verify(mockedQuery).subCaseInstanceId(queryParameters.get("subCaseInstance"));
     verify(mockedQuery).suspended();
     verify(mockedQuery).active();
     verify(mockedQuery).incidentId(queryParameters.get("incidentId"));
@@ -256,15 +251,12 @@ public class ProcessInstanceRestServiceQueryTest extends
     parameters.put("deploymentId", "deploymentId");
     parameters.put("superProcessInstance", "aSuperProcInstId");
     parameters.put("subProcessInstance", "aSubProcInstId");
-    parameters.put("superCaseInstance", "aSuperCaseInstId");
-    parameters.put("subCaseInstance", "aSubCaseInstId");
     parameters.put("suspended", "true");
     parameters.put("active", "true");
     parameters.put("incidentId", "incId");
     parameters.put("incidentMessage", "incMessage");
     parameters.put("incidentMessageLike", "incMessageLike");
     parameters.put("incidentType", "incType");
-    parameters.put("caseInstanceId", "aCaseInstanceId");
     parameters.put("rootProcessInstanceId", "aRootProcessInstanceId");
 
     return parameters;
@@ -903,7 +895,6 @@ public class ProcessInstanceRestServiceQueryTest extends
       .expect().statusCode(Status.OK.getStatusCode())
       .when().post(PROCESS_INSTANCE_QUERY_URL);
 
-    verify(mockedQuery).caseInstanceId(queryParameters.get("caseInstanceId"));
     verify(mockedQuery).processInstanceBusinessKey(queryParameters.get("businessKey"));
     verify(mockedQuery).processInstanceBusinessKeyLike(queryParameters.get("businessKeyLike"));
     verify(mockedQuery).processDefinitionKey(queryParameters.get("processDefinitionKey"));
@@ -911,8 +902,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     verify(mockedQuery).deploymentId(queryParameters.get("deploymentId"));
     verify(mockedQuery).superProcessInstanceId(queryParameters.get("superProcessInstance"));
     verify(mockedQuery).subProcessInstanceId(queryParameters.get("subProcessInstance"));
-    verify(mockedQuery).superCaseInstanceId(queryParameters.get("superCaseInstance"));
-    verify(mockedQuery).subCaseInstanceId(queryParameters.get("subCaseInstance"));
     verify(mockedQuery).suspended();
     verify(mockedQuery).active();
     verify(mockedQuery).incidentId(queryParameters.get("incidentId"));
@@ -943,7 +932,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     String returnedProcessInstanceId = from(content).getString("[0].id");
     String returnedProcessDefinitionId = from(content).getString("[0].definitionId");
     String returnedProcessInstanceBusinessKey = from(content).getString("[0].businessKey");
-    String returnedCaseInstanceId = from(content).getString("[0].caseInstanceId");
     Boolean returnedIsEnded = from(content).getBoolean("[0].ended");
     Boolean returnedIsSuspended = from(content).getBoolean("[0].suspended");
     String returnedTenantId = from(content).getString("[0].tenantId");
@@ -951,7 +939,6 @@ public class ProcessInstanceRestServiceQueryTest extends
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, returnedProcessInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_DEFINITION_ID, returnedProcessDefinitionId);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_BUSINESS_KEY, returnedProcessInstanceBusinessKey);
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_INSTANCE_ID, returnedCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_IS_ENDED, returnedIsEnded);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_IS_SUSPENDED, returnedIsSuspended);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);

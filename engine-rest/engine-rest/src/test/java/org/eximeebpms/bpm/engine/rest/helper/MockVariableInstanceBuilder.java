@@ -40,8 +40,6 @@ public class MockVariableInstanceBuilder {
   protected String processDefinitionId;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String batchId;
   protected String activityInstanceId;
@@ -62,7 +60,7 @@ public class MockVariableInstanceBuilder {
     this.typedValue = value;
     return this;
   }
-  
+
   public MockVariableInstanceBuilder processDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
     return this;
@@ -75,16 +73,6 @@ public class MockVariableInstanceBuilder {
 
   public MockVariableInstanceBuilder executionId(String executionId) {
     this.executionId = executionId;
-    return this;
-  }
-
-  public MockVariableInstanceBuilder caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public MockVariableInstanceBuilder caseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
     return this;
   }
 
@@ -141,14 +129,6 @@ public class MockVariableInstanceBuilder {
     return executionId;
   }
 
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
   public String getTaskId() {
     return taskId;
   }
@@ -186,9 +166,6 @@ public class MockVariableInstanceBuilder {
     else if (executionId != null) {
       when(mockVariable.getVariableScopeId()).thenReturn(executionId);
     }
-    else {
-      when(mockVariable.getVariableScopeId()).thenReturn(caseExecutionId);
-    }
     return build(mockVariable);
   }
 
@@ -212,8 +189,6 @@ public class MockVariableInstanceBuilder {
     when(mockVariable.getProcessDefinitionId()).thenReturn(processDefinitionId);
     when(mockVariable.getProcessInstanceId()).thenReturn(processInstanceId);
     when(mockVariable.getExecutionId()).thenReturn(executionId);
-    when(mockVariable.getCaseInstanceId()).thenReturn(caseInstanceId);
-    when(mockVariable.getCaseExecutionId()).thenReturn(caseExecutionId);
     when(mockVariable.getTaskId()).thenReturn(taskId);
     when(mockVariable.getBatchId()).thenReturn(batchId);
     when(mockVariable.getActivityInstanceId()).thenReturn(activityInstanceId);

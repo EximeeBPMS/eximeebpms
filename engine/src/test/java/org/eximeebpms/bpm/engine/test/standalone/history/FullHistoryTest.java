@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
@@ -55,7 +54,6 @@ import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.VariableInstance;
@@ -99,7 +97,6 @@ public class FullHistoryTest {
   protected TaskService taskService;
   protected FormService formService;
   protected RepositoryService repositoryService;
-  protected CaseService caseService;
 
   @Before
   public void initServices() {
@@ -108,7 +105,6 @@ public class FullHistoryTest {
     taskService = engineRule.getTaskService();
     formService = engineRule.getFormService();
     repositoryService = engineRule.getRepositoryService();
-    caseService = engineRule.getCaseService();
   }
 
   @Test
@@ -1595,9 +1591,6 @@ public class FullHistoryTest {
     assertNotNull(instance.getProcessDefinitionId());
     assertEquals(processInstance.getProcessDefinitionId(), instance.getProcessDefinitionId());
 
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
-
     // when (2)
     instance = (HistoricVariableUpdate) historyService
         .createHistoricDetailQuery()
@@ -1612,75 +1605,6 @@ public class FullHistoryTest {
     assertNotNull(instance.getProcessDefinitionId());
     assertEquals(processInstance.getProcessDefinitionId(), instance.getProcessDefinitionId());
 
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
-  }
-
-  @Test
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  public void testHistoricVariableUpdateCaseDefinitionProperty() {
-    // given
-    String key = "oneTaskCase";
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey(key);
-
-    String caseInstanceId = caseInstance.getId();
-
-    String humanTask = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    caseService.setVariable(caseInstanceId, "aVariable", "aValue");
-    taskService.setVariableLocal(taskId, "aLocalVariable", "anotherValue");
-
-    String firstVariable = runtimeService
-        .createVariableInstanceQuery()
-        .variableName("aVariable")
-        .singleResult()
-        .getId();
-
-    String secondVariable = runtimeService
-        .createVariableInstanceQuery()
-        .variableName("aLocalVariable")
-        .singleResult()
-        .getId();
-
-
-    // when (1)
-    HistoricVariableUpdate instance = (HistoricVariableUpdate) historyService
-        .createHistoricDetailQuery()
-        .variableUpdates()
-        .variableInstanceId(firstVariable)
-        .singleResult();
-
-    // then (1)
-    assertNotNull(instance.getCaseDefinitionKey());
-    assertEquals(key, instance.getCaseDefinitionKey());
-
-    assertNotNull(instance.getCaseDefinitionId());
-    assertEquals(caseInstance.getCaseDefinitionId(), instance.getCaseDefinitionId());
-
-    assertNull(instance.getProcessDefinitionKey());
-    assertNull(instance.getProcessDefinitionId());
-
-    // when (2)
-    instance = (HistoricVariableUpdate) historyService
-        .createHistoricDetailQuery()
-        .variableUpdates()
-        .variableInstanceId(secondVariable)
-        .singleResult();
-
-    // then (2)
-    assertNotNull(instance.getCaseDefinitionKey());
-    assertEquals(key, instance.getCaseDefinitionKey());
-
-    assertNotNull(instance.getCaseDefinitionId());
-    assertEquals(caseInstance.getCaseDefinitionId(), instance.getCaseDefinitionId());
-
-    assertNull(instance.getProcessDefinitionKey());
-    assertNull(instance.getProcessDefinitionId());
   }
 
   @Test
@@ -1708,8 +1632,6 @@ public class FullHistoryTest {
     // then
     assertNull(instance.getProcessDefinitionKey());
     assertNull(instance.getProcessDefinitionId());
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
 
     taskService.deleteTask(taskId, true);
   }
@@ -1737,9 +1659,6 @@ public class FullHistoryTest {
 
     assertNotNull(instance.getProcessDefinitionId());
     assertEquals(processInstance.getProcessDefinitionId(), instance.getProcessDefinitionId());
-
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
   }
 
   @Test

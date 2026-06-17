@@ -30,8 +30,6 @@ import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
 import org.eximeebpms.bpm.engine.exception.NotAllowedException;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.DecisionRequirementsDefinition;
@@ -50,7 +48,6 @@ import org.eximeebpms.bpm.engine.repository.UpdateProcessDefinitionSuspensionSta
 import org.eximeebpms.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateSelectBuilder;
 import org.eximeebpms.bpm.engine.task.IdentityLink;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
-import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
 import org.eximeebpms.bpm.model.dmn.DmnModelInstance;
 
 
@@ -278,11 +275,6 @@ public interface RepositoryService {
    * Query process definitions.
    */
   ProcessDefinitionQuery createProcessDefinitionQuery();
-
-  /**
-   * Query case definitions.
-   */
-  CaseDefinitionQuery createCaseDefinitionQuery();
 
   /**
    * Query decision definitions.
@@ -513,15 +505,6 @@ public interface RepositoryService {
   void updateDecisionDefinitionHistoryTimeToLive(String decisionDefinitionId, Integer historyTimeToLive);
 
   /**
-   * Updates time to live of case definition. The field is used within history cleanup process.
-   *
-   * @param caseDefinitionId  The given case definition id to update
-   * @param historyTimeToLive the value of history time to live to update
-   * @throws NotAllowedException in case feature flag {@code enforceHistoryTimeToLive} is set to true and the given historyTimeToLive value is {@code null}.
-   */
-  void updateCaseDefinitionHistoryTimeToLive(String caseDefinitionId, Integer historyTimeToLive);
-
-  /**
    * Gives access to a deployed process model, e.g., a BPMN 2.0 XML file,
    * through a stream of bytes.
    *
@@ -589,22 +572,6 @@ public interface RepositoryService {
    *          If the user has no {@link Permissions#READ} permission on {@link Resources#PROCESS_DEFINITION}.
    */
   BpmnModelInstance getBpmnModelInstance(String processDefinitionId);
-
-  /**
-   * Returns the {@link CmmnModelInstance} for the given caseDefinitionId.
-   *
-   * @param caseDefinitionId the id of the Case Definition for which the {@link CmmnModelInstance}
-   *  should be retrieved.
-   *
-   * @return the {@link CmmnModelInstance}
-   *
-   * @throws NotValidException when the given case definition id or deployment id or resource name is null
-   * @throws NotFoundException when no CMMN model instance or deployment resource is found for the given
-   *     case definition id
-   * @throws ProcessEngineException when an internal exception happens during the execution
-   *     of the command.
-   */
-  CmmnModelInstance getCmmnModelInstance(String caseDefinitionId);
 
   /**
    * Returns the {@link DmnModelInstance} for the given decisionDefinitionId.
@@ -695,39 +662,6 @@ public interface RepositoryService {
   List<IdentityLink> getIdentityLinksForProcessDefinition(String processDefinitionId);
 
   /**
-   * Returns the {@link CaseDefinition}.
-   *
-   * @throws NotValidException when the given case definition id is null
-   * @throws NotFoundException when no case definition is found for the given case definition id
-   * @throws ProcessEngineException when an internal exception happens during the execution
-   *     of the command.
-   */
-  CaseDefinition getCaseDefinition(String caseDefinitionId);
-
-  /**
-   * Gives access to a deployed case model, e.g., a CMMN 1.0 XML file,
-   * through a stream of bytes.
-   *
-   * @param caseDefinitionId
-   *          id of a {@link CaseDefinition}, cannot be null.
-   *
-   * @throws NotValidException when the given case definition id or deployment id or resource name is null
-   * @throws NotFoundException when no case definition or deployment resource is found for the given case definition id
-   * @throws ProcessEngineException when an internal exception happens during the execution of the command
-   */
-  InputStream getCaseModel(String caseDefinitionId);
-
-  /**
-   * Gives access to a deployed case diagram, e.g., a PNG image, through a
-   * stream of bytes.
-   *
-   * @param caseDefinitionId id of a {@link CaseDefinition}, cannot be null.
-   * @return null when the diagram resource name of a {@link CaseDefinition} is null.
-   * @throws ProcessEngineException when the process diagram doesn't exist.
-   */
-  InputStream getCaseDiagram(String caseDefinitionId);
-
-  /**
    * Returns the {@link DecisionDefinition}.
    *
    * @throws NotValidException when the given decision definition id is null
@@ -809,7 +743,6 @@ public interface RepositoryService {
    * This method does not resolve process definitions that are referenced with expressions.
    * Each {@link CalledProcessDefinition} contains a list of call activity ids, which specifies the call activities
    * that are calling that process.
-   * This method does not resolve references to case definitions.
    *
    * @param processDefinitionId id of a {@link ProcessDefinition}
    * @return a list of {@link CalledProcessDefinition}.

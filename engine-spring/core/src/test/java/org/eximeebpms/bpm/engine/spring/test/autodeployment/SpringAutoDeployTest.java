@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.spring.test.autodeployment;
 
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.impl.test.PvmTestCase;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentQuery;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
@@ -44,12 +43,6 @@ public class SpringAutoDeployTest extends PvmTestCase {
     = "org/eximeebpms/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-create-drop-clean-db-context.xml";
   protected static final String CTX_DYNAMIC_DEPLOY_PATH
   = "org/eximeebpms/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-dynamic-deployment-context.xml";
-
-  protected static final String CTX_CMMN_PATH
-    = "org/eximeebpms/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnTest-context.xml";
-
-  protected static final String CTX_CMMN_BPMN_TOGETHER_PATH
-      = "org/eximeebpms/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnBpmnTest-context.xml";
 
   protected static final String CTX_DEPLOY_CHANGE_ONLY_PATH
       = "org/eximeebpms/bpm/engine/spring/test/autodeployment/SpringAutoDeployDeployChangeOnlyTest-context.xml";
@@ -109,24 +102,6 @@ public class SpringAutoDeployTest extends PvmTestCase {
     applicationContext = new ClassPathXmlApplicationContext(CTX_PATH);
     assertEquals(1, deploymentQuery.count());
     assertEquals(3, processDefinitionQuery.count());
-  }
-
-  public void testAutoDeployCmmn() {
-    createAppContext(CTX_CMMN_PATH);
-
-    List<CaseDefinition> definitions = repositoryService.createCaseDefinitionQuery().list();
-
-    assertEquals(1, definitions.size());
-  }
-
-  public void testAutoDeployCmmnAndBpmnTogether() {
-    createAppContext(CTX_CMMN_BPMN_TOGETHER_PATH);
-
-    long caseDefs = repositoryService.createCaseDefinitionQuery().count();
-    long procDefs = repositoryService.createProcessDefinitionQuery().count();
-
-    assertEquals(1, caseDefs);
-    assertEquals(3, procDefs);
   }
 
   // when deployChangeOnly=true, new deployment should be created only for the changed resources
@@ -199,14 +174,6 @@ public class SpringAutoDeployTest extends PvmTestCase {
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
 
     assertEquals(1, deploymentQuery.tenantIdIn("tenant1").count());
-  }
-
-  public void testAutoDeployWithoutTenantId() {
-    createAppContext(CTX_CMMN_BPMN_TOGETHER_PATH);
-
-    DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
-
-    assertEquals(1, deploymentQuery.withoutTenantId().count());
   }
 
   public void testAutoDeployCustomName() {

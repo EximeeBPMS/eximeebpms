@@ -20,7 +20,7 @@ package org.eximeebpms.bpm.engine.test.api.externaltask;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
-import org.eximeebpms.bpm.engine.CaseService;
+
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
@@ -58,7 +58,6 @@ public class ExternalTaskQueryByCreateTimeTest {
   protected ManagementService managementService;
   protected HistoryService historyService;
   protected TaskService taskService;
-  protected CaseService caseService;
 
   @Before
   public void setup() {
@@ -68,7 +67,6 @@ public class ExternalTaskQueryByCreateTimeTest {
     managementService = engineRule.getManagementService();
     historyService = engineRule.getHistoryService();
     taskService = engineRule.getTaskService();
-    caseService = engineRule.getCaseService();
 
     // given four process definitions with one external task each, external tasks have priorities 4, 3, 0, and 0
     deployProcessesWithExternalTasks();

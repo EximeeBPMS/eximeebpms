@@ -44,7 +44,7 @@ public class HistoricActivityInstanceRestServiceInteractionTest extends Abstract
 
   @ClassRule
   public static TestContainerRule rule = new TestContainerRule();
-  
+
   protected static final String HISTORIC_ACTIVITY_INSTANCE_URL = TEST_RESOURCE_ROOT_PATH + "/history/activity-instance";
   protected static final String HISTORIC_SINGLE_ACTIVITY_INSTANCE_URL = HISTORIC_ACTIVITY_INSTANCE_URL + "/{id}";
 
@@ -89,7 +89,6 @@ public class HistoricActivityInstanceRestServiceInteractionTest extends Abstract
     String returnedExecutionId = from(content).getString("executionId");
     String returnedTaskId = from(content).getString("taskId");
     String returnedCalledProcessInstanceId = from(content).getString("calledProcessInstanceId");
-    String returnedCalledCaseInstanceId = from(content).getString("calledCaseInstanceId");
     String returnedAssignee = from(content).getString("assignee");
     String returnedStartTime = from(content).getString("startTime");
     String returnedEndTime = from(content).getString("endTime");
@@ -111,7 +110,6 @@ public class HistoricActivityInstanceRestServiceInteractionTest extends Abstract
     Assert.assertEquals(MockProvider.EXAMPLE_EXECUTION_ID, returnedExecutionId);
     Assert.assertEquals(MockProvider.EXAMPLE_TASK_ID, returnedTaskId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_CALLED_PROCESS_INSTANCE_ID, returnedCalledProcessInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_CALLED_CASE_INSTANCE_ID, returnedCalledCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME, returnedAssignee);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_START_TIME, returnedStartTime);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_END_TIME, returnedEndTime);
@@ -121,21 +119,6 @@ public class HistoricActivityInstanceRestServiceInteractionTest extends Abstract
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_START_TIME, returnedRemovalTime);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_ROOT_PROCESS_INSTANCE_ID, returnedRootProcessInstanceId);
-  }
-
-  @Test
-  public void testGetNonExistingHistoricCaseInstance() {
-    when(historicQueryMock.singleResult()).thenReturn(null);
-
-    given()
-      .pathParam("id", MockProvider.NON_EXISTING_ID)
-    .then().expect()
-      .statusCode(Status.NOT_FOUND.getStatusCode())
-      .contentType(ContentType.JSON)
-      .body("type", equalTo(InvalidRequestException.class.getSimpleName()))
-      .body("message", equalTo("Historic activity instance with id '" + MockProvider.NON_EXISTING_ID + "' does not exist"))
-    .when()
-      .get(HISTORIC_SINGLE_ACTIVITY_INSTANCE_URL);
   }
 
 }

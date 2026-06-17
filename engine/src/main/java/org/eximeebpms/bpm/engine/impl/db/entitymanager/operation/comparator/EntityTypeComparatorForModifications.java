@@ -21,9 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eximeebpms.bpm.engine.batch.Batch;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.*;
@@ -57,8 +54,6 @@ public class EntityTypeComparatorForModifications implements Comparator<Class<?>
     TYPE_ORDER.put(MembershipEntity.class, 1);
     TYPE_ORDER.put(TenantMembershipEntity.class, 1);
 
-    TYPE_ORDER.put(CaseSentryPartEntity.class, 1);
-
     TYPE_ORDER.put(ExternalTaskEntity.class, 1);
     TYPE_ORDER.put(Batch.class, 1);
 
@@ -72,11 +67,9 @@ public class EntityTypeComparatorForModifications implements Comparator<Class<?>
 
     // 3
     TYPE_ORDER.put(ExecutionEntity.class, 3);
-    TYPE_ORDER.put(CaseExecutionEntity.class, 3);
 
     // 4
     TYPE_ORDER.put(ProcessDefinitionEntity.class, 4);
-    TYPE_ORDER.put(CaseDefinitionEntity.class, 4);
     TYPE_ORDER.put(DecisionDefinitionEntity.class, 4);
     TYPE_ORDER.put(DecisionRequirementsDefinitionEntity.class, 4);
     TYPE_ORDER.put(ResourceEntity.class, 4);

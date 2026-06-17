@@ -114,17 +114,11 @@ public class UserOperationLogContextEntryBuilder {
       entry.setProcessDefinitionKey(definition.getKey());
       entry.setDeploymentId(definition.getDeploymentId());
       entry.setTenantId(definition.getTenantId());
-    } else if (task.getCaseDefinitionId() != null) {
-      entry.setDeploymentId(task.getCaseDefinition().getDeploymentId());
-      entry.setTenantId(task.getCaseDefinition().getTenantId());
     }
 
     entry.setProcessDefinitionId(task.getProcessDefinitionId());
     entry.setProcessInstanceId(task.getProcessInstanceId());
     entry.setExecutionId(task.getExecutionId());
-    entry.setCaseDefinitionId(task.getCaseDefinitionId());
-    entry.setCaseInstanceId(task.getCaseInstanceId());
-    entry.setCaseExecutionId(task.getCaseExecutionId());
     entry.setTaskId(task.getId());
     if (entry.getTenantId() == null && task.getTenantId() != null) { // standalone task with tenant info
       entry.setTenantId(task.getTenantId());
@@ -151,9 +145,6 @@ public class UserOperationLogContextEntryBuilder {
     entry.setProcessDefinitionId(task.getProcessDefinitionId());
     entry.setProcessInstanceId(task.getProcessInstanceId());
     entry.setExecutionId(task.getExecutionId());
-    entry.setCaseDefinitionId(task.getCaseDefinitionId());
-    entry.setCaseInstanceId(task.getCaseInstanceId());
-    entry.setCaseExecutionId(task.getCaseExecutionId());
     entry.setTaskId(task.getId());
     entry.setRootProcessInstanceId(task.getRootProcessInstanceId());
     entry.setTenantId(task.getTenantId());
@@ -173,7 +164,6 @@ public class UserOperationLogContextEntryBuilder {
     entry.setProcessInstanceId(processInstance.getProcessInstanceId());
     entry.setProcessDefinitionId(processInstance.getProcessDefinitionId());
     entry.setExecutionId(processInstance.getId());
-    entry.setCaseInstanceId(processInstance.getCaseInstanceId());
     entry.setTenantId(processInstance.getTenantId());
 
     ProcessDefinitionEntity definition = processInstance.getProcessDefinition();
@@ -197,9 +187,6 @@ public class UserOperationLogContextEntryBuilder {
     entry.setProcessDefinitionId(historyEvent.getProcessDefinitionId());
     entry.setProcessInstanceId(historyEvent.getProcessInstanceId());
     entry.setExecutionId(historyEvent.getExecutionId());
-    entry.setCaseDefinitionId(historyEvent.getCaseDefinitionId());
-    entry.setCaseInstanceId(historyEvent.getCaseInstanceId());
-    entry.setCaseExecutionId(historyEvent.getCaseExecutionId());
 
     if (definition != null) {
       if (definition instanceof ProcessDefinitionEntity) {
@@ -224,9 +211,6 @@ public class UserOperationLogContextEntryBuilder {
     entry.setProcessDefinitionId(variable.getProcessDefinitionId());
     entry.setProcessInstanceId(variable.getProcessInstanceId());
     entry.setExecutionId(variable.getExecutionId());
-    entry.setCaseDefinitionId(variable.getCaseDefinitionId());
-    entry.setCaseInstanceId(variable.getCaseInstanceId());
-    entry.setCaseExecutionId(variable.getCaseExecutionId());
     entry.setTaskId(variable.getTaskId());
     entry.setTenantId(variable.getTenantId());
 
@@ -292,11 +276,6 @@ public class UserOperationLogContextEntryBuilder {
     return this;
   }
 
-  public UserOperationLogContextEntryBuilder caseDefinitionId(String caseDefinitionId) {
-    entry.setCaseDefinitionId(caseDefinitionId);
-    return this;
-  }
-
   public UserOperationLogContextEntryBuilder deploymentId(String deploymentId) {
     entry.setDeploymentId(deploymentId);
     return this;
@@ -309,11 +288,6 @@ public class UserOperationLogContextEntryBuilder {
 
   public UserOperationLogContextEntryBuilder taskId(String taskId) {
     entry.setTaskId(taskId);
-    return this;
-  }
-
-  public UserOperationLogContextEntryBuilder caseInstanceId(String caseInstanceId) {
-    entry.setCaseInstanceId(caseInstanceId);
     return this;
   }
 

@@ -11,10 +11,5 @@
         <property name="idGenerator">
             <bean class="org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator"/>
         </property>
-      <property name="customPostCmmnTransformListeners">
-        <list>
-          <bean class="org.eximeebpms.bpm.engine.test.assertions.helpers.LoggerCmmnTransformListener" />
-        </list>
-      </property>
     </bean>
 </beans>

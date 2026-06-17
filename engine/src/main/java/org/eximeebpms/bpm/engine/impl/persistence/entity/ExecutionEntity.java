@@ -36,10 +36,6 @@ import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBus
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.core.operation.CoreAtomicOperation;
@@ -110,7 +106,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   public static final int INCIDENT_STATE_BIT = 4;
   public static final int VARIABLES_STATE_BIT = 5;
   public static final int SUB_PROCESS_INSTANCE_STATE_BIT = 6;
-  public static final int SUB_CASE_INSTANCE_STATE_BIT = 7;
   public static final int EXTERNAL_TASKS_BIT = 8;
 
   // current position /////////////////////////////////////////////////////////
@@ -131,26 +126,12 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   protected transient ExecutionEntity superExecution;
 
   /**
-   * super case execution, not-null if this execution is part of a case
-   * execution
-   */
-  protected transient CaseExecutionEntity superCaseExecution;
-
-  /**
    * reference to a subprocessinstance, not-null if currently subprocess is
    * started from this execution
    */
   protected transient ExecutionEntity subProcessInstance;
 
-  /**
-   * reference to a subcaseinstance, not-null if currently subcase is started
-   * from this execution
-   */
-  protected transient CaseExecutionEntity subCaseInstance;
-
   protected boolean shouldQueryForSubprocessInstance = false;
-
-  protected boolean shouldQueryForSubCaseInstance = false;
 
   // associated entities /////////////////////////////////////////////////////
 
@@ -228,14 +209,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   protected String rootProcessInstanceId;
 
   /**
-   * persisted reference to the super case execution of this execution
-   *
-   * @See {@link #getSuperCaseExecution()}
-   * @see <code>setSuperCaseExecution(ExecutionEntity)</code>
-   */
-  protected String superCaseExecutionId;
-
-  /**
    * Completed HPI that is being restarted through this ExecutionEntity
    */
   protected String restartedProcessInstanceId;
@@ -302,10 +275,10 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   // /////////////////////////////////////////////////////////////
 
   @Override
-  public ExecutionEntity createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey, String caseInstanceId) {
+  public ExecutionEntity createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey) {
     shouldQueryForSubprocessInstance = true;
 
-    ExecutionEntity subProcessInstance = (ExecutionEntity) super.createSubProcessInstance(processDefinition, businessKey, caseInstanceId);
+    ExecutionEntity subProcessInstance = (ExecutionEntity) super.createSubProcessInstance(processDefinition, businessKey);
 
     // inherit the tenant-id from the process definition
     String tenantId = ((ProcessDefinitionEntity) processDefinition).getTenantId();
@@ -335,36 +308,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     return createNewExecution();
   }
 
-  // sub case instance ////////////////////////////////////////////////////////
-
-  @Override
-  public CaseExecutionEntity createSubCaseInstance(CmmnCaseDefinition caseDefinition) {
-    return createSubCaseInstance(caseDefinition, null);
-  }
-
-  @Override
-  public CaseExecutionEntity createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey) {
-    CaseExecutionEntity subCaseInstance = (CaseExecutionEntity) caseDefinition.createCaseInstance(businessKey);
-
-    // inherit the tenant-id from the case definition
-    String tenantId = ((CaseDefinitionEntity) caseDefinition).getTenantId();
-    if (tenantId != null) {
-      subCaseInstance.setTenantId(tenantId);
-    }
-    else {
-      // if case definition has no tenant id, inherit this process instance's tenant id
-      subCaseInstance.setTenantId(this.tenantId);
-    }
-
-    // manage bidirectional super-process-sub-case-instances relation
-    subCaseInstance.setSuperExecution(this);
-    setSubCaseInstance(subCaseInstance);
-
-    fireHistoricActivityInstanceUpdate();
-
-    return subCaseInstance;
-  }
-
   // helper ///////////////////////////////////////////////////////////////////
 
   public void fireHistoricActivityInstanceUpdate() {
@@ -372,7 +315,7 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     HistoryLevel historyLevel = configuration.getHistoryLevel();
     if (historyLevel.isHistoryEventProduced(HistoryEventTypes.ACTIVITY_INSTANCE_UPDATE, this)) {
       // publish update event for current activity instance (containing the id
-      // of the sub process/case)
+      // of the sub process)
       HistoryEventProcessor.processHistoryEvents(new HistoryEventProcessor.HistoryEventCreator() {
         @Override
         public HistoryEvent createHistoryEvent(HistoryEventProducer producer) {
@@ -483,8 +426,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
         TenantIdProviderProcessInstanceContext ctx;
         if (superExecutionId != null) {
           ctx = new TenantIdProviderProcessInstanceContext(processDefinition, variableMap, getSuperExecution());
-        } else if (superCaseExecutionId != null) {
-          ctx = new TenantIdProviderProcessInstanceContext(processDefinition, variableMap, getSuperCaseExecution());
         } else {
           ctx = new TenantIdProviderProcessInstanceContext(processDefinition, variableMap);
         }
@@ -980,68 +921,12 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     }
   }
 
-  // super case executions ///////////////////////////////////////////////////
-
-  public String getSuperCaseExecutionId() {
-    return superCaseExecutionId;
-  }
-
-  public void setSuperCaseExecutionId(String superCaseExecutionId) {
-    this.superCaseExecutionId = superCaseExecutionId;
-  }
-
   public String getRestartedProcessInstanceId(){
     return restartedProcessInstanceId;
   }
 
   public void setRestartedProcessInstanceId(String restartedProcessInstanceId){
     this.restartedProcessInstanceId = restartedProcessInstanceId;
-  }
-
-  @Override
-  public CaseExecutionEntity getSuperCaseExecution() {
-    ensureSuperCaseExecutionInitialized();
-    return superCaseExecution;
-  }
-
-  @Override
-  public void setSuperCaseExecution(CmmnExecution superCaseExecution) {
-    this.superCaseExecution = (CaseExecutionEntity) superCaseExecution;
-
-    if (superCaseExecution != null) {
-      this.superCaseExecutionId = superCaseExecution.getId();
-      this.caseInstanceId = superCaseExecution.getCaseInstanceId();
-    } else {
-      this.superCaseExecutionId = null;
-      this.caseInstanceId = null;
-    }
-  }
-
-  protected void ensureSuperCaseExecutionInitialized() {
-    if (superCaseExecution == null && superCaseExecutionId != null) {
-      superCaseExecution = Context.getCommandContext().getCaseExecutionManager().findCaseExecutionById(superCaseExecutionId);
-    }
-  }
-
-  // sub case execution //////////////////////////////////////////////////////
-
-  @Override
-  public CaseExecutionEntity getSubCaseInstance() {
-    ensureSubCaseInstanceInitialized();
-    return subCaseInstance;
-
-  }
-
-  @Override
-  public void setSubCaseInstance(CmmnExecution subCaseInstance) {
-    shouldQueryForSubCaseInstance = subCaseInstance != null;
-    this.subCaseInstance = (CaseExecutionEntity) subCaseInstance;
-  }
-
-  protected void ensureSubCaseInstanceInitialized() {
-    if (shouldQueryForSubCaseInstance && subCaseInstance == null) {
-      subCaseInstance = Context.getCommandContext().getCaseExecutionManager().findSubCaseInstanceBySuperExecutionId(id);
-    }
   }
 
   // customized persistence behavior /////////////////////////////////////////
@@ -1118,7 +1003,7 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
         if (task.getExecution() == null || task.getExecution() != replacedBy) {
           // All tasks should have been moved when "replacedBy" has been set.
           // Just in case tasks where added,
-          // wo do an additional check here and move it
+          // we do an additional check here and move it
           task.setExecution(replacedBy);
           this.getReplacedBy().addTask(task);
         }
@@ -1459,8 +1344,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     persistentState.put("isEventScope", this.isEventScope);
     persistentState.put("parentId", parentId);
     persistentState.put("superExecution", this.superExecutionId);
-    persistentState.put("superCaseExecutionId", this.superCaseExecutionId);
-    persistentState.put("caseInstanceId", this.caseInstanceId);
     persistentState.put("suspensionState", this.suspensionState);
     persistentState.put("cachedEntityState", getCachedEntityState());
     persistentState.put("sequenceCounter", getSequenceCounter());
@@ -1788,7 +1671,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
       externalTasks = new ArrayList<>();
     }
     shouldQueryForSubprocessInstance = BitMaskUtil.isBitOn(cachedEntityState, SUB_PROCESS_INSTANCE_STATE_BIT);
-    shouldQueryForSubCaseInstance = BitMaskUtil.isBitOn(cachedEntityState, SUB_CASE_INSTANCE_STATE_BIT);
   }
 
   public int getCachedEntityState() {
@@ -1803,7 +1685,6 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     cachedEntityState = BitMaskUtil.setBit(cachedEntityState, INCIDENT_STATE_BIT, (incidents == null || incidents.size() > 0));
     cachedEntityState = BitMaskUtil.setBit(cachedEntityState, VARIABLES_STATE_BIT, (!variableStore.isInitialized() || !variableStore.isEmpty()));
     cachedEntityState = BitMaskUtil.setBit(cachedEntityState, SUB_PROCESS_INSTANCE_STATE_BIT, shouldQueryForSubprocessInstance);
-    cachedEntityState = BitMaskUtil.setBit(cachedEntityState, SUB_CASE_INSTANCE_STATE_BIT, shouldQueryForSubCaseInstance);
     cachedEntityState = BitMaskUtil.setBit(cachedEntityState, EXTERNAL_TASKS_BIT, (externalTasks == null || externalTasks.size() > 0));
 
     return cachedEntityState;

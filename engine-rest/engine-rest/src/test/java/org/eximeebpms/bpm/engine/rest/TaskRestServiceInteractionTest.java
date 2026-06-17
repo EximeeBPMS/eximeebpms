@@ -19,9 +19,6 @@ package org.eximeebpms.bpm.engine.rest;
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_CASE_DEFINITION_ID;
-import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_CASE_EXECUTION_ID;
-import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_CASE_INSTANCE_ID;
 import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_GROUP_ID;
 import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_GROUP_ID2;
 import static org.eximeebpms.bpm.engine.rest.helper.MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME;
@@ -110,8 +107,6 @@ import org.eximeebpms.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
 import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.form.validator.FormFieldValidationException;
 import org.eximeebpms.bpm.engine.impl.util.IoUtil;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -328,9 +323,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("taskState", equalTo(MockProvider.EXAMPLE_HISTORIC_TASK_STATE))
@@ -360,9 +352,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("attachment", equalTo(MockProvider.EXAMPLE_TASK_ATTACHMENT_STATE))
@@ -392,9 +381,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("variables", notNullValue())
@@ -428,9 +414,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("variables", notNullValue())
@@ -469,9 +452,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("attachment", equalTo(MockProvider.EXAMPLE_TASK_ATTACHMENT_STATE))
@@ -506,9 +486,6 @@ public class TaskRestServiceInteractionTest extends
         .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
         .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
         .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-        .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-        .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-        .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
         .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
         .body("lastUpdated", equalTo(MockProvider.EXAMPLE_TASK_LAST_UPDATED))
         .body("attachment", equalTo(MockProvider.EXAMPLE_TASK_ATTACHMENT_STATE))
@@ -562,14 +539,6 @@ public class TaskRestServiceInteractionTest extends
     when(sampleProcessDefinitionQuery.count()).thenReturn(1l);
     when(processEngine.getRepositoryService().createProcessDefinitionQuery()).thenReturn(sampleProcessDefinitionQuery);
 
-    // setup case definition query mock
-    List<CaseDefinition> mockCaseDefinitions = MockProvider.createMockCaseDefinitions();
-    CaseDefinitionQuery sampleCaseDefinitionQuery = mock(CaseDefinitionQuery.class);
-    when(sampleCaseDefinitionQuery.listPage(0, 1)).thenReturn(mockCaseDefinitions);
-    when(sampleCaseDefinitionQuery.caseDefinitionIdIn(MockProvider.EXAMPLE_CASE_DEFINITION_ID)).thenReturn(sampleCaseDefinitionQuery);
-    when(sampleCaseDefinitionQuery.count()).thenReturn(1l);
-    when(processEngine.getRepositoryService().createCaseDefinitionQuery()).thenReturn(sampleCaseDefinitionQuery);
-
     Response response = given()
       .header("accept", Hal.APPLICATION_HAL_JSON)
       .pathParam("id", EXAMPLE_TASK_ID)
@@ -589,16 +558,10 @@ public class TaskRestServiceInteractionTest extends
       .body("processInstanceId", equalTo(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID))
       .body("taskDefinitionKey", equalTo(MockProvider.EXAMPLE_TASK_DEFINITION_KEY))
       .body("suspended", equalTo(MockProvider.EXAMPLE_TASK_SUSPENSION_STATE))
-      .body("caseExecutionId", equalTo(MockProvider.EXAMPLE_CASE_EXECUTION_ID))
-      .body("caseInstanceId", equalTo(MockProvider.EXAMPLE_CASE_INSTANCE_ID))
-      .body("caseDefinitionId", equalTo(MockProvider.EXAMPLE_CASE_DEFINITION_ID))
       .body("tenantId", equalTo(MockProvider.EXAMPLE_TENANT_ID))
 
       // links
       .body("_links.assignee.href", endsWith(EXAMPLE_TASK_ASSIGNEE_NAME))
-      .body("_links.caseDefinition.href", endsWith(EXAMPLE_CASE_DEFINITION_ID))
-      .body("_links.caseExecution.href", endsWith(EXAMPLE_CASE_EXECUTION_ID))
-      .body("_links.caseInstance.href", endsWith(EXAMPLE_CASE_INSTANCE_ID))
       .body("_links.execution.href", endsWith(EXAMPLE_TASK_EXECUTION_ID))
       .body("_links.owner.href", endsWith(EXAMPLE_TASK_OWNER))
       .body("_links.parentTask.href", endsWith(EXAMPLE_TASK_PARENT_TASK_ID))
@@ -685,28 +648,6 @@ public class TaskRestServiceInteractionTest extends
     assertHalLink(links, "deployment", "/deployment/" +  MockProvider.EXAMPLE_DEPLOYMENT_ID);
     assertHalLink(links, "resource", "/deployment/" +  MockProvider.EXAMPLE_DEPLOYMENT_ID + "/resources/"
         + MockProvider.EXAMPLE_PROCESS_DEFINITION_RESOURCE_NAME);
-
-
-    // validate embedded caseDefinitions:
-    List<Map<String,Object>> embeddedCaseDefinitions = from(content).getList("_embedded.caseDefinition");
-    Assert.assertEquals("There should be one caseDefinition returned.", 1, embeddedCaseDefinitions.size());
-    Map<String, Object> embeddedCaseDefinition = embeddedCaseDefinitions.get(0);
-    Assert.assertNotNull("The returned caseDefinition should not be null.", embeddedCaseDefinition);
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_ID, embeddedCaseDefinition.get("id"));
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_KEY, embeddedCaseDefinition.get("key"));
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_CATEGORY, embeddedCaseDefinition.get("category"));
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_NAME, embeddedCaseDefinition.get("name"));
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_VERSION, embeddedCaseDefinition.get("version"));
-    Assert.assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_RESOURCE_NAME, embeddedCaseDefinition.get("resource"));
-    Assert.assertEquals(MockProvider.EXAMPLE_DEPLOYMENT_ID, embeddedCaseDefinition.get("deploymentId"));
-    Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH, embeddedCaseDefinition.get("contextPath"));
-
-    links = (Map<String, Object>) embeddedCaseDefinition.get("_links");
-    Assert.assertEquals(3, links.size());
-    assertHalLink(links, "self", "/case-definition/" +  MockProvider.EXAMPLE_CASE_DEFINITION_ID);
-    assertHalLink(links, "deployment", "/deployment/" +  MockProvider.EXAMPLE_DEPLOYMENT_ID);
-    assertHalLink(links, "resource", "/deployment/" +  MockProvider.EXAMPLE_DEPLOYMENT_ID + "/resources/"
-        + MockProvider.EXAMPLE_CASE_DEFINITION_RESOURCE_NAME);
 
     // validate embedded identity links
     List<Map<String, Object>> embeddedIdentityLinks = from(content).getList("_embedded.identityLink");
@@ -3109,7 +3050,6 @@ public class TaskRestServiceInteractionTest extends
     json.put("due", withTimezone("2014-01-01T00:00:00"));
     json.put("followUp", withTimezone("2014-01-01T00:00:00"));
     json.put("parentTaskId", "aParentTaskId");
-    json.put("caseInstanceId", "aCaseInstanceId");
     json.put("tenantId", MockProvider.EXAMPLE_TENANT_ID);
 
     Task newTask = mock(Task.class);
@@ -3134,7 +3074,6 @@ public class TaskRestServiceInteractionTest extends
     verify(newTask).setDueDate(any(Date.class));
     verify(newTask).setFollowUpDate(any(Date.class));
     verify(newTask).setParentTaskId((String) json.get("parentTaskId"));
-    verify(newTask).setCaseInstanceId((String) json.get("caseInstanceId"));
     verify(newTask).setTenantId((String) json.get("tenantId"));
     verify(taskServiceMock).saveTask(newTask);
   }
@@ -3172,7 +3111,6 @@ public class TaskRestServiceInteractionTest extends
     verify(newTask).setDueDate(any(Date.class));
     verify(newTask).setFollowUpDate(null);
     verify(newTask).setParentTaskId((String) json.get("parentTaskId"));
-    verify(newTask).setCaseInstanceId(null);
     verify(newTask).setTenantId(null);
     verify(taskServiceMock).saveTask(newTask);
   }
@@ -3348,7 +3286,6 @@ public class TaskRestServiceInteractionTest extends
     json.put("due", withTimezone("2014-01-01T00:00:00"));
     json.put("followUp", withTimezone("2014-01-01T00:00:00"));
     json.put("parentTaskId", "aParentTaskId");
-    json.put("caseInstanceId", "aCaseInstanceId");
     json.put("tenantId", MockProvider.EXAMPLE_TENANT_ID);
 
     given()
@@ -3370,7 +3307,6 @@ public class TaskRestServiceInteractionTest extends
     verify(mockTask).setDueDate(any(Date.class));
     verify(mockTask).setFollowUpDate(any(Date.class));
     verify(mockTask).setParentTaskId((String) json.get("parentTaskId"));
-    verify(mockTask).setCaseInstanceId((String) json.get("caseInstanceId"));
     verify(mockTask).setTenantId((String) json.get("tenantId"));
     verify(taskServiceMock).saveTask(mockTask);
   }
@@ -3405,7 +3341,6 @@ public class TaskRestServiceInteractionTest extends
     verify(mockTask).setDueDate(any(Date.class));
     verify(mockTask).setFollowUpDate(null);
     verify(mockTask).setParentTaskId((String) json.get("parentTaskId"));
-    verify(mockTask).setCaseInstanceId(null);
     verify(mockTask).setTenantId(null);
     verify(taskServiceMock).saveTask(mockTask);
   }

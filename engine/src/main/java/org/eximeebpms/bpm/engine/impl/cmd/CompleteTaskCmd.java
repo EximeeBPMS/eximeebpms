@@ -85,7 +85,7 @@ public class CompleteTaskCmd implements Command<VariableMap>, Serializable {
       if (variablesListener != null) {
         return variablesListener.getVariables();
       } else {
-        return task.getCaseDefinitionId() != null ? null : task.getVariablesTyped(false);
+        return task.getVariablesTyped(false);
       }
     }
     else

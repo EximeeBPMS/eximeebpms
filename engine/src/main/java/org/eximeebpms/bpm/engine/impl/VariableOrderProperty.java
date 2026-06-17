@@ -66,22 +66,6 @@ public class VariableOrderProperty extends QueryOrderingProperty {
     return orderingProperty;
   }
 
-  public static VariableOrderProperty forCaseInstanceVariable(String variableName, ValueType valueType) {
-    VariableOrderProperty orderingProperty = new VariableOrderProperty(variableName, valueType);
-    orderingProperty.relationConditions.add(
-        new QueryEntityRelationCondition(VariableInstanceQueryProperty.CASE_EXECUTION_ID, TaskQueryProperty.CASE_INSTANCE_ID));
-
-    return orderingProperty;
-  }
-
-  public static VariableOrderProperty forCaseExecutionVariable(String variableName, ValueType valueType) {
-    VariableOrderProperty orderingProperty = new VariableOrderProperty(variableName, valueType);
-    orderingProperty.relationConditions.add(
-        new QueryEntityRelationCondition(VariableInstanceQueryProperty.CASE_EXECUTION_ID, TaskQueryProperty.CASE_EXECUTION_ID));
-
-    return orderingProperty;
-  }
-
   public static QueryProperty typeToQueryProperty(ValueType type) {
     if (ValueType.STRING.equals(type)) {
       return VariableInstanceQueryProperty.TEXT_AS_LOWER;

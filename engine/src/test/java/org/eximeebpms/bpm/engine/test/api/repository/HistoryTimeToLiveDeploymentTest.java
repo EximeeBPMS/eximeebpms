@@ -27,7 +27,6 @@ import org.eximeebpms.bpm.engine.ParseException;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.RepositoryService;
-import org.eximeebpms.bpm.engine.exception.NotValidException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.Deployment;
@@ -120,32 +119,6 @@ public class HistoryTimeToLiveDeploymentTest {
   }
 
   @Test
-  public void caseWithHTTLShouldSucceed() {
-    // when
-    testRule.deploy(repositoryService
-        .createDeployment()
-        .addClasspathResource("org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn"));
-
-    Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
-
-    // then
-    assertThat(deployment).isNotNull();
-  }
-
-  @Test
-  public void caseWithoutHTTLShouldFail() {
-    assertThatThrownBy(() -> {
-      // when
-      testRule.deploy(repositoryService.createDeployment()
-          .addClasspathResource("org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));})
-
-        // then
-        .isInstanceOf(ProcessEngineException.class)
-        .hasCauseInstanceOf(NotValidException.class)
-        .hasStackTraceContaining(EXPECTED_DEFAULT_CONFIG_MSG);
-  }
-
-  @Test
   public void decisionWithHTTLShouldSucceed() {
     // when
     testRule.deploy(repositoryService
@@ -231,21 +204,6 @@ public class HistoryTimeToLiveDeploymentTest {
   }
 
   @Test
-  public void shouldGetDeployedCase() {
-    // given
-    processEngineConfiguration.setEnforceHistoryTimeToLive(false);
-
-    // when
-    DeploymentWithDefinitions definitions = testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));
-
-    // then
-    processEngineConfiguration.setEnforceHistoryTimeToLive(true);
-    processEngineConfiguration.getDeploymentCache().purgeCache();
-    repositoryService.getCaseDefinition(definitions.getDeployedCaseDefinitions().get(0).getId());
-  }
-
-  @Test
   public void shouldLogMessageOnLongerTTLInProcessModel() {
     // given
     String nonDefaultValue = "179";
@@ -256,20 +214,6 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // then
     assertThat(loggingRule.getFilteredLog("definitionKey: process; " + EXPECTED_LONGER_TTL_MSG)).hasSize(1);
-  }
-
-  @Test
-  public void shouldLogMessageOnLongerTTLInfCaseModel() {
-    // given
-    String nonDefaultValue = "179";
-    processEngineConfiguration.setHistoryTimeToLive(nonDefaultValue);
-
-    // when
-    testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/eximeebpms/bpm/engine/test/api/repository/case_with_365_httl.cmmn"));
-
-    // then
-    assertThat(loggingRule.getFilteredLog("definitionKey: testCase; " + EXPECTED_LONGER_TTL_MSG)).hasSize(1);
   }
 
   @Test

@@ -29,14 +29,8 @@ public interface HistoryRestService {
   @Path(HistoricProcessInstanceRestService.PATH)
   HistoricProcessInstanceRestService getProcessInstanceService();
 
-  @Path(HistoricCaseInstanceRestService.PATH)
-  HistoricCaseInstanceRestService getCaseInstanceService();
-
   @Path(HistoricActivityInstanceRestService.PATH)
   HistoricActivityInstanceRestService getActivityInstanceService();
-
-  @Path(HistoricCaseActivityInstanceRestService.PATH)
-  HistoricCaseActivityInstanceRestService getCaseActivityInstanceService();
 
   @Path(HistoricVariableInstanceRestService.PATH)
   HistoricVariableInstanceRestService getVariableInstanceService();
@@ -46,9 +40,6 @@ public interface HistoryRestService {
 
   @Path(HistoricDecisionDefinitionRestService.PATH)
   HistoricDecisionDefinitionRestService getDecisionDefinitionService();
-
-  @Path(HistoricCaseDefinitionRestService.PATH)
-  HistoricCaseDefinitionRestService getCaseDefinitionService();
 
   @Path(HistoricDecisionStatisticsRestService.PATH)
   HistoricDecisionStatisticsRestService getDecisionStatisticsService();

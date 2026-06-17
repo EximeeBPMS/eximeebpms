@@ -5,8 +5,6 @@ import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventFactorySupport;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
@@ -55,8 +53,6 @@ public class VariableInstanceBusinessEventFactory extends BusinessEventFactorySu
     event.setVariableInstanceId(variableInstance.getId());
     event.setProcessInstanceId(variableInstance.getProcessInstanceId());
     event.setExecutionId(variableInstance.getExecutionId());
-    event.setCaseInstanceId(variableInstance.getCaseInstanceId());
-    event.setCaseExecutionId(variableInstance.getCaseExecutionId());
     event.setTaskId(variableInstance.getTaskId());
     event.setRevision(variableInstance.getRevision());
     event.setVariableName(variableInstance.getName());
@@ -64,7 +60,6 @@ public class VariableInstanceBusinessEventFactory extends BusinessEventFactorySu
     event.setTenantId(variableInstance.getTenantId());
 
     fillProcessInstanceData(event, variableInstance);
-    fillCaseDefinitionData(event, variableInstance);
     copyVariableValue(event, variableInstance);
     initSequenceCounter(variableInstance.getSequenceCounter(), event);
   }
@@ -92,10 +87,6 @@ public class VariableInstanceBusinessEventFactory extends BusinessEventFactorySu
       return scopeExecution.getActivityInstanceId();
     }
 
-    if (variableInstance.getCaseExecutionId() != null) {
-      return variableInstance.getCaseExecutionId();
-    }
-
     return null;
   }
 
@@ -112,16 +103,8 @@ public class VariableInstanceBusinessEventFactory extends BusinessEventFactorySu
 
       if (sourceExecution != null) {
         sourceActivityInstanceId = sourceExecution.getActivityInstanceId();
-      } else {
-        final CaseExecutionEntity sourceCaseExecution = taskEntity.getCaseExecution();
-
-        if (sourceCaseExecution != null) {
-          sourceActivityInstanceId = sourceCaseExecution.getId();
-        }
       }
 
-    } else if (sourceVariableScope instanceof CaseExecutionEntity caseExecutionEntity) {
-      sourceActivityInstanceId = caseExecutionEntity.getId();
     }
 
     return new VariableSourceContext(sourceExecution, sourceActivityInstanceId);
@@ -136,20 +119,6 @@ public class VariableInstanceBusinessEventFactory extends BusinessEventFactorySu
 
     fillProcessDefinitionData(event, execution);
     event.setRootProcessInstanceId(execution.getRootProcessInstanceId());
-  }
-
-  protected void fillCaseDefinitionData(final BusinessVariableUpdateEventEntity event, final VariableInstanceEntity variableInstance) {
-    final CaseExecutionEntity caseExecution = variableInstance.getCaseExecution();
-
-    if (caseExecution == null) {
-      return;
-    }
-
-    if (caseExecution.getCaseDefinition() instanceof CaseDefinitionEntity definition) {
-      event.setCaseDefinitionId(definition.getId());
-      event.setCaseDefinitionKey(definition.getKey());
-      event.setCaseDefinitionName(definition.getName());
-    }
   }
 
   protected void copyVariableValue(final BusinessVariableUpdateEventEntity event, final VariableInstanceEntity variableInstance) {

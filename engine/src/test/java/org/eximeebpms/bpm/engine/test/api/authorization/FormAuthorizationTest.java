@@ -54,7 +54,6 @@ public class FormAuthorizationTest extends AuthorizationTest {
 
   protected static final String FORM_PROCESS_KEY = "FormsProcess";
   protected static final String RENDERED_FORM_PROCESS_KEY = "renderedFormProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   protected String deploymentId;
   protected boolean ensureSpecificVariablePermission;
@@ -65,8 +64,7 @@ public class FormAuthorizationTest extends AuthorizationTest {
         "org/eximeebpms/bpm/engine/test/api/form/DeployedFormsProcess.bpmn20.xml",
         "org/eximeebpms/bpm/engine/test/api/form/start.html",
         "org/eximeebpms/bpm/engine/test/api/form/task.html",
-        "org/eximeebpms/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
+        "org/eximeebpms/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml").getId();
     ensureSpecificVariablePermission = processEngineConfiguration.isEnforceSpecificVariablePermission();
     super.setUp();
   }
@@ -446,21 +444,6 @@ public class FormAuthorizationTest extends AuthorizationTest {
     assertNotNull(taskFormData);
   }
 
-  // get task form data (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetTaskFormData() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    TaskFormData taskFormData = formService.getTaskFormData(taskId);
-
-    // then
-    assertNotNull(taskFormData);
-  }
-
   // get rendered task form (standalone task) //////////////////
 
   @Test
@@ -650,21 +633,6 @@ public class FormAuthorizationTest extends AuthorizationTest {
 
     // then
     assertNotNull(taskForm);
-  }
-
-  // get rendered task form (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetRenderedTaskForm() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    Object taskForm = formService.getRenderedTaskForm(taskId);
-
-    // then
-    assertNull(taskForm);
   }
 
   // get task form variables (standalone task) ////////////////////////
@@ -862,22 +830,6 @@ public class FormAuthorizationTest extends AuthorizationTest {
     assertEquals(1, variables.size());
   }
 
-  // get task form variables (case task) /////////////////////////////////
-
-  @Test
-  public void testCaseTaskGetTaskFormVariables() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
-
-    // when
-    VariableMap variables = formService.getTaskFormVariables(taskId);
-
-    // then
-    assertNotNull(variables);
-    assertEquals(0, variables.size());
-  }
-
   // submit task form (standalone task) ////////////////////////////////
 
   @Test
@@ -983,22 +935,6 @@ public class FormAuthorizationTest extends AuthorizationTest {
     String taskId = selectSingleTask().getId();
     createGrantAuthorization(TASK, taskId, userId, UPDATE);
     createGrantAuthorization(PROCESS_DEFINITION, FORM_PROCESS_KEY, userId, UPDATE_TASK);
-
-    // when
-    formService.submitTaskForm(taskId, null);
-
-    // then
-    Task task = selectSingleTask();
-    assertNull(task);
-  }
-
-  // submit task form (case task) ////////////////////////////////
-
-  @Test
-  public void testCaseTaskSubmitTaskForm() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    String taskId = selectSingleTask().getId();
 
     // when
     formService.submitTaskForm(taskId, null);

@@ -6,7 +6,6 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventFactorySupport;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricTaskInstanceEventEntity;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
@@ -89,9 +88,6 @@ public class TaskInstanceBusinessEventFactory extends BusinessEventFactorySuppor
     final String processInstanceId = taskEntity.getProcessInstanceId();
     final String executionId = taskEntity.getExecutionId();
 
-    final CaseDefinitionEntity caseDefinition = taskEntity.getCaseDefinition();
-    final String caseDefinitionKey = caseDefinition != null ? caseDefinition.getKey() : null;
-
     event.setId(taskEntity.getId());
     event.setEventType(eventType.getEventName());
     event.setBusinessEventType(eventType.getBusinessEventName());
@@ -104,11 +100,6 @@ public class TaskInstanceBusinessEventFactory extends BusinessEventFactorySuppor
 
     event.setProcessInstanceId(processInstanceId);
     event.setExecutionId(executionId);
-
-    event.setCaseDefinitionKey(caseDefinitionKey);
-    event.setCaseDefinitionId(taskEntity.getCaseDefinitionId());
-    event.setCaseExecutionId(taskEntity.getCaseExecutionId());
-    event.setCaseInstanceId(taskEntity.getCaseInstanceId());
 
     event.setAssignee(taskEntity.getAssignee());
     event.setDescription(taskEntity.getDescription());

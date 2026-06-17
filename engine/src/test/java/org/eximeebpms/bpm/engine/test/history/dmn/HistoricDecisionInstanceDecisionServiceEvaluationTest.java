@@ -142,9 +142,6 @@ public class HistoricDecisionInstanceDecisionServiceEvaluationTest {
     assertThat(historicDecisionInstance.getProcessDefinitionKey()).isEqualTo(processDefinition.getKey());
     assertThat(historicDecisionInstance.getProcessDefinitionId()).isEqualTo(processDefinition.getId());
     assertThat(historicDecisionInstance.getProcessInstanceId()).isEqualTo(processInstance.getId());
-    assertThat(historicDecisionInstance.getCaseDefinitionKey()).isNull();
-    assertThat(historicDecisionInstance.getCaseDefinitionId()).isNull();
-    assertThat(historicDecisionInstance.getCaseInstanceId()).isNull();
     assertThat(historicDecisionInstance.getActivityId()).isEqualTo(activityId);
     assertThat(historicDecisionInstance.getEvaluationTime()).isNotNull();
   }

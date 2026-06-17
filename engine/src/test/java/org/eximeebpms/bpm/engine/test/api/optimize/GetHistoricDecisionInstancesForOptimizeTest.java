@@ -347,11 +347,6 @@ public class GetHistoricDecisionInstancesForOptimizeTest {
     assertThat(decisionInstance.getProcessInstanceId(), is(notNullValue()));
     assertThat(decisionInstance.getRootProcessInstanceId(), is(notNullValue()));
 
-    assertThat(decisionInstance.getCaseDefinitionKey(), is(nullValue()));
-    assertThat(decisionInstance.getCaseDefinitionId(), is(nullValue()));
-
-    assertThat(decisionInstance.getCaseInstanceId(), is(nullValue()));
-
     assertThat(decisionInstance.getRootDecisionInstanceId(), is(nullValue()));
     assertThat(decisionInstance.getDecisionRequirementsDefinitionId(), is(nullValue()));
     assertThat(decisionInstance.getDecisionRequirementsDefinitionKey(), is(nullValue()));

@@ -29,8 +29,6 @@ public class VariableInstanceDto extends VariableValueDto {
   protected String processDefinitionId;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String batchId;
   protected String activityInstanceId;
@@ -111,14 +109,6 @@ public class VariableInstanceDto extends VariableValueDto {
     this.errorMessage = errorMessage;
   }
 
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
   public String getTenantId() {
     return tenantId;
   }
@@ -131,9 +121,6 @@ public class VariableInstanceDto extends VariableValueDto {
     dto.processDefinitionId = variableInstance.getProcessDefinitionId();
     dto.processInstanceId = variableInstance.getProcessInstanceId();
     dto.executionId = variableInstance.getExecutionId();
-
-    dto.caseExecutionId = variableInstance.getCaseExecutionId();
-    dto.caseInstanceId = variableInstance.getCaseInstanceId();
 
     dto.taskId = variableInstance.getTaskId();
     dto.batchId = variableInstance.getBatchId();

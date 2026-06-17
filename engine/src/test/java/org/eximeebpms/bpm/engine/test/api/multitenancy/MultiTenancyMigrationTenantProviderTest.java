@@ -22,7 +22,6 @@ import java.util.Arrays;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 import org.eximeebpms.bpm.engine.migration.MigrationPlan;
@@ -33,7 +32,6 @@ import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineTestRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.eximeebpms.bpm.engine.variable.Variables;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -184,11 +182,6 @@ public class MultiTenancyMigrationTenantProviderTest {
 
     @Override
     public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
-      return (String) ctx.getVariables().get(TENANT_VARIABLE);
-    }
-
-    @Override
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
       return (String) ctx.getVariables().get(TENANT_VARIABLE);
     }
 

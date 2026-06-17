@@ -330,38 +330,6 @@ public class UserOperationLogManager extends AbstractHistoricManager {
     }
   }
 
-  public void logCaseInstanceOperation(String operation, String caseInstanceId, String tenantId, List<PropertyChange> propertyChanges) {
-    if (isUserOperationLogEnabled()) {
-
-      UserOperationLogContext context = new UserOperationLogContext();
-      UserOperationLogContextEntryBuilder entryBuilder =
-        UserOperationLogContextEntryBuilder.entry(operation, EntityTypes.CASE_INSTANCE)
-          .caseInstanceId(caseInstanceId)
-          .propertyChanges(propertyChanges)
-          .tenantId(tenantId)
-          .category(UserOperationLogEntry.CATEGORY_OPERATOR);
-
-      context.addEntry(entryBuilder.create());
-      fireUserOperationLog(context);
-    }
-  }
-
-  public void logCaseDefinitionOperation(String operation, String caseDefinitionId, String tenantId, List<PropertyChange> propertyChanges) {
-    if (isUserOperationLogEnabled()) {
-
-      UserOperationLogContext context = new UserOperationLogContext();
-      UserOperationLogContextEntryBuilder entryBuilder =
-        UserOperationLogContextEntryBuilder.entry(operation, EntityTypes.CASE_DEFINITION)
-          .propertyChanges(propertyChanges)
-          .caseDefinitionId(caseDefinitionId)
-          .tenantId(tenantId)
-          .category(UserOperationLogEntry.CATEGORY_OPERATOR);
-
-      context.addEntry(entryBuilder.create());
-      fireUserOperationLog(context);
-    }
-  }
-
   public void logDecisionDefinitionOperation(String operation, String tenantId, List<PropertyChange> propertyChanges) {
     if (isUserOperationLogEnabled()) {
 

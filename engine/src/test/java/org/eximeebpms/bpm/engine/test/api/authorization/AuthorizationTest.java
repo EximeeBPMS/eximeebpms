@@ -47,7 +47,6 @@ import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Comment;
@@ -270,11 +269,6 @@ public abstract class AuthorizationTest extends PluggableProcessEngineTest {
     });
   }
 
-  protected CaseInstance createCaseInstanceByKey(final String key,
-                                                 final Map<String, Object> variables) {
-    return runWithoutAuthorization(() -> caseService.createCaseInstanceByKey(key, variables));
-  }
-
   protected void createTask(final String taskId) {
     runWithoutAuthorization((Callable<Void>) () -> {
       Task task = taskService.newTask(taskId);
@@ -368,22 +362,6 @@ public abstract class AuthorizationTest extends PluggableProcessEngineTest {
                                            final Object value) {
     runWithoutAuthorization((Callable<Void>) () -> {
       runtimeService.setVariableLocal(executionId, name, value);
-      return null;
-    });
-  }
-
-  protected void setCaseVariable(final String caseExecution, final String name,
-                                 final Object value) {
-    runWithoutAuthorization((Callable<Void>) () -> {
-      caseService.setVariable(caseExecution, name, value);
-      return null;
-    });
-  }
-
-  protected void setCaseVariableLocal(final String caseExecution, final String name,
-                                      final Object value) {
-    runWithoutAuthorization((Callable<Void>) () -> {
-      caseService.setVariableLocal(caseExecution, name, value);
       return null;
     });
   }

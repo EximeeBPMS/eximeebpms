@@ -89,8 +89,8 @@ public abstract class HistoryCleanupHelper {
 
   /**
    * Creates next batch object for history cleanup. First searches for historic process instances ready for cleanup. If there is still some place left in batch (configured batch
-   * size was not reached), searches for historic decision instances and also adds them to the batch. Then if there is still some place left in batch, searches for historic case
-   * instances and historic batches - and adds them to the batch.
+   * size was not reached), searches for historic decision instances and also adds them to the batch. Then if there is still some place left in batch, searches for historic
+   * batches - and adds them to the batch.
    *
    * @param commandContext
    * @return
@@ -113,15 +113,6 @@ public abstract class HistoryCleanupHelper {
           .findHistoricDecisionInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
       if (historicDecisionInstanceIds.size() > 0) {
         historyCleanupBatch.setHistoricDecisionInstanceIds(historicDecisionInstanceIds);
-      }
-    }
-
-    //if batch is not full, add case instance ids
-    if (historyCleanupBatch.size() < batchSize && processEngineConfiguration.isCmmnEnabled()) {
-      final List<String> historicCaseInstanceIds = commandContext.getHistoricCaseInstanceManager()
-          .findHistoricCaseInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicCaseInstanceIds.size() > 0) {
-        historyCleanupBatch.setHistoricCaseInstanceIds(historicCaseInstanceIds);
       }
     }
 

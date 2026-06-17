@@ -42,7 +42,6 @@ module.exports = [
 
         var Task = camAPI.resource('task');
         var ProcessInstance = camAPI.resource('process-instance');
-        var CaseInstance = camAPI.resource('case-instance');
 
         $scope.showBusinessKey = false;
 
@@ -67,15 +66,13 @@ module.exports = [
          */
 
         var params = formController.getParams();
-        var id = params.processInstanceId || params.caseInstanceId;
+        var id = params.processInstanceId;
 
-        if (!params.processDefinitionId && !params.caseDefinitionId) {
+        if (!params.processDefinitionId) {
           $scope.showBusinessKey = false;
         } else if (id) {
           $scope.readonly = true;
-          var resource = params.processInstanceId
-            ? ProcessInstance
-            : CaseInstance;
+          var resource = ProcessInstance;
           resource
             .get(id)
             .then(function(res) {

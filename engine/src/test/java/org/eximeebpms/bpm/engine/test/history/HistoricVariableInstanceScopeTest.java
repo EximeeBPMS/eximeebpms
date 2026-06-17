@@ -32,7 +32,6 @@ import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.Deployment;
@@ -268,40 +267,6 @@ public class HistoricVariableInstanceScopeTest extends PluggableProcessEngineTes
     testRule.assertProcessEnded(pi.getId());
   }
 
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testHistoricCaseVariableInstanceQuery() {
-    // start case instance with variables
-    Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("foo", "bar");
-    String caseInstanceId =  caseService.createCaseInstanceByKey("oneTaskCase", variables).getId();
-
-    String caseExecutionId = caseService.createCaseExecutionQuery().activityId("CasePlanModel_1").singleResult().getId();
-    String taskExecutionId = caseService.createCaseExecutionQuery().activityId("PI_HumanTask_1").singleResult().getId();
-
-    // set variable on both executions
-    caseService.setVariableLocal(caseExecutionId, "case", "execution");
-    caseService.setVariableLocal(taskExecutionId, "task", "execution");
-
-    // update variable on both executions
-    caseService.setVariableLocal(caseExecutionId, "case", "update");
-    caseService.setVariableLocal(taskExecutionId, "task", "update");
-
-    assertEquals(3, historyService.createHistoricVariableInstanceQuery().count());
-    assertEquals(3, historyService.createHistoricVariableInstanceQuery().caseInstanceId(caseInstanceId).count());
-    assertEquals(3, historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(caseExecutionId, taskExecutionId).count());
-    assertEquals(2, historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(caseExecutionId).count());
-    assertEquals(1, historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(taskExecutionId).count());
-
-    HistoryLevel historyLevel = processEngineConfiguration.getHistoryLevel();
-    if (historyLevel.equals(HistoryLevel.HISTORY_LEVEL_FULL)) {
-      assertEquals(5, historyService.createHistoricDetailQuery().count());
-      assertEquals(5, historyService.createHistoricDetailQuery().caseInstanceId(caseInstanceId).count());
-      assertEquals(3, historyService.createHistoricDetailQuery().caseExecutionId(caseExecutionId).count());
-      assertEquals(2, historyService.createHistoricDetailQuery().caseExecutionId(taskExecutionId).count());
-    }
-  }
-
   @Deployment
   @Test
   public void testInputMappings() {
@@ -370,123 +335,4 @@ public class HistoricVariableInstanceScopeTest extends PluggableProcessEngineTes
       assertEquals(theTaskId, thirdVariableDetail.getActivityInstanceId());
     }
   }
-
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCmmnActivityInstanceIdOnCaseInstance() {
-
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-
-    String taskExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // when
-    caseService
-      .withCaseExecution(taskExecutionId)
-      .setVariable("foo", "bar")
-      .execute();
-
-    // then
-    HistoricVariableInstance variable = historyService
-        .createHistoricVariableInstanceQuery()
-        .variableName("foo")
-        .singleResult();
-
-    assertNotNull(variable);
-    assertEquals(caseInstance.getId(), variable.getActivityInstanceId());
-
-    if(processEngineConfiguration.getHistoryLevel().getId() > ProcessEngineConfigurationImpl.HISTORYLEVEL_AUDIT) {
-      HistoricDetail variableDetail = historyService
-        .createHistoricDetailQuery()
-        .variableUpdates()
-        .variableInstanceId(variable.getId())
-        .singleResult();
-      assertEquals(taskExecutionId, variableDetail.getActivityInstanceId());
-    }
-
-  }
-
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCmmnActivityInstanceIdOnCaseExecution() {
-
-    // given
-    caseService.createCaseInstanceByKey("oneTaskCase");
-
-    String taskExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // when
-    caseService
-      .withCaseExecution(taskExecutionId)
-      .setVariableLocal("foo", "bar")
-      .execute();
-
-    // then
-    HistoricVariableInstance variable = historyService
-        .createHistoricVariableInstanceQuery()
-        .variableName("foo")
-        .singleResult();
-
-    assertNotNull(variable);
-    assertEquals(taskExecutionId, variable.getActivityInstanceId());
-
-    if(processEngineConfiguration.getHistoryLevel().getId() > ProcessEngineConfigurationImpl.HISTORYLEVEL_AUDIT) {
-      HistoricDetail variableDetail = historyService
-        .createHistoricDetailQuery()
-        .variableUpdates()
-        .variableInstanceId(variable.getId())
-        .singleResult();
-      assertEquals(taskExecutionId, variableDetail.getActivityInstanceId());
-    }
-
-  }
-
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCmmnActivityInstanceIdOnTask() {
-
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-
-    String taskExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    Task task = taskService
-        .createTaskQuery()
-        .singleResult();
-
-    // when
-    taskService.setVariable(task.getId(), "foo", "bar");
-
-    // then
-    HistoricVariableInstance variable = historyService
-        .createHistoricVariableInstanceQuery()
-        .variableName("foo")
-        .singleResult();
-
-    assertNotNull(variable);
-    assertEquals(caseInstance.getId(), variable.getActivityInstanceId());
-
-    if(processEngineConfiguration.getHistoryLevel().getId() > ProcessEngineConfigurationImpl.HISTORYLEVEL_AUDIT) {
-      HistoricDetail variableDetail = historyService
-        .createHistoricDetailQuery()
-        .variableUpdates()
-        .variableInstanceId(variable.getId())
-        .singleResult();
-      assertEquals(taskExecutionId, variableDetail.getActivityInstanceId());
-    }
-
-  }
-
 }

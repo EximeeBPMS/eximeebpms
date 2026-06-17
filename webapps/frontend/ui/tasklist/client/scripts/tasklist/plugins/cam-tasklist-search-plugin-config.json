@@ -181,15 +181,6 @@
     },
     {
       "id": {
-        "key": "caseInstanceVariables",
-        "value": "CASE_VARIABLE"
-      },
-      "extended": true,
-      "caseOptions": true,
-      "allowDates": true
-    },
-    {
-      "id": {
         "key": "processInstanceIdIn",
         "value": "PROCESS_INSTANCE_ID"
       },
@@ -261,86 +252,6 @@
       "id": {
         "key": "executionId",
         "value": "EXECUTION_ID"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseInstanceId",
-        "value": "CASE_INSTANCE_ID"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseInstanceBusinessKey",
-        "value": "CASE_INSTANCE_BUSINESS_KEY"
-      },
-      "operators": [
-        {
-          "key": "Like",
-          "value": "LIKE"
-        },
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseDefinitionId",
-        "value": "CASE_DEFINITION_ID"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseDefinitionKey",
-        "value": "CASE_DEFINITION_KEY"
-      },
-      "operators": [
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseDefinitionName",
-        "value": "CASE_DEFINITION_NAME"
-      },
-      "operators": [
-        {
-          "key": "Like",
-          "value": "LIKE"
-        },
-        {
-          "key": "eq",
-          "value": "="
-        }
-      ]
-    },
-    {
-      "id": {
-        "key": "caseExecutionId",
-        "value": "CASE_EXECUTION_ID"
       },
       "operators": [
         {

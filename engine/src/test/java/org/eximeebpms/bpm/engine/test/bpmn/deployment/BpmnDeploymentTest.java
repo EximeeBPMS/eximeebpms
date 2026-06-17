@@ -56,13 +56,13 @@ import org.junit.Test;
 public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
   protected static final String CMD_LOGGER = "org.eximeebpms.bpm.engine.cmd";
-  
+
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule();
 
   protected DeploymentHandlerFactory defaultDeploymentHandlerFactory;
   protected DeploymentHandlerFactory customDeploymentHandlerFactory;
-  
+
   @Before
   public void setUp() throws Exception {
     defaultDeploymentHandlerFactory = processEngineConfiguration.getDeploymentHandlerFactory();
@@ -170,11 +170,11 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
     // when
     testRule.deploy(deploymentBuilder);
-    
+
     // then
     assertThat(loggingRule.getFilteredLog(CMD_LOGGER, "Deployment name set to null. Filtering duplicates will not work properly.").size()).isEqualTo(1);
   }
-  
+
   @Test
   @WatchLogger(loggerNames = CMD_LOGGER, level = "WARN")
   public void shouldLogWarningForDuplicateFilteringWithoutPreviousDeploymentName() {
@@ -183,18 +183,18 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
     DeploymentWithDefinitions deployment = testRule.deploy(repositoryService.createDeployment()
       .addModelInstance("model.bpmn", model));
-    
+
     DeploymentBuilder deploymentBuilder = repositoryService.createDeployment()
         .enableDuplicateFiltering(true)
         .addDeploymentResources(deployment.getId());
 
     // when
     testRule.deploy(deploymentBuilder);
-    
+
     // then
     assertThat(loggingRule.getFilteredLog(CMD_LOGGER, "Deployment name set to null. Filtering duplicates will not work properly.").size()).isEqualTo(1);
   }
-  
+
   @Test
   public void testDuplicateFilteringDefaultBehavior() {
     // given
@@ -517,7 +517,6 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     // then deployment contains deployed process definitions
     List<ProcessDefinition> deployedProcessDefinitions = deployment.getDeployedProcessDefinitions();
     assertThat(deployedProcessDefinitions.size()).isEqualTo(1);
-    assertThat(deployment.getDeployedCaseDefinitions()).isNull();;
     assertThat(deployment.getDeployedDecisionDefinitions()).isNull();;
     assertThat(deployment.getDeployedDecisionRequirementsDefinitions()).isNull();;
 

@@ -38,9 +38,6 @@ public class UserOperationLogQueryImpl extends AbstractQuery<UserOperationLogQue
   protected String processDefinitionKey;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String jobId;
   protected String jobDefinitionId;
@@ -96,25 +93,6 @@ public class UserOperationLogQueryImpl extends AbstractQuery<UserOperationLogQue
     this.executionId = executionId;
     return this;
   }
-
-  public UserOperationLogQuery caseDefinitionId(String caseDefinitionId) {
-    ensureNotNull("caseDefinitionId", caseDefinitionId);
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  public UserOperationLogQuery caseInstanceId(String caseInstanceId) {
-    ensureNotNull("caseInstanceId", caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public UserOperationLogQuery caseExecutionId(String caseExecutionId) {
-    ensureNotNull("caseExecutionId", caseExecutionId);
-    this.caseExecutionId = caseExecutionId;
-    return this;
-  }
-
 
   public UserOperationLogQuery taskId(String taskId) {
     ensureNotNull("taskId", taskId);

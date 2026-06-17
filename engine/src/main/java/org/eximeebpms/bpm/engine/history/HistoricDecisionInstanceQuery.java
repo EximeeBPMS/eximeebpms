@@ -65,23 +65,11 @@ public interface HistoricDecisionInstanceQuery extends Query<HistoricDecisionIns
    * with the given process instance id. */
   HistoricDecisionInstanceQuery processInstanceId(String processInstanceId);
 
-  /** Only select historic decision instances that are evaluated inside a case
-   * with the given case definition key. */
-  HistoricDecisionInstanceQuery caseDefinitionKey(String caseDefinitionKey);
-
-  /** Only select historic decision instances that are evaluated inside a case
-   * with the given case definition id. */
-  HistoricDecisionInstanceQuery caseDefinitionId(String caseDefinitionId);
-
-  /** Only select historic decision instances that are evaluated inside a case
-   * with the given case instance id. */
-  HistoricDecisionInstanceQuery caseInstanceId(String caseInstanceId);
-
-  /** Only select historic decision instances that are evaluated inside a process or a case
+  /** Only select historic decision instances that are evaluated inside a process
    * which have one of the activity ids. */
   HistoricDecisionInstanceQuery activityIdIn(String... activityIds);
 
-  /** Only select historic decision instances that are evaluated inside a process or a case
+  /** Only select historic decision instances that are evaluated inside a process
    * which have one of the activity instance ids. */
   HistoricDecisionInstanceQuery activityInstanceIdIn(String... activityInstanceIds);
 
@@ -92,8 +80,7 @@ public interface HistoricDecisionInstanceQuery extends Query<HistoricDecisionIns
   HistoricDecisionInstanceQuery evaluatedAfter(Date date);
 
   /** Only select historic decision instances that were evaluated by the user with the given user ID.
-   * <p> The user ID is saved for decisions which are evaluated by a authenticated user without a process or
-   * case instance */
+   * <p> The user ID is saved for decisions which are evaluated by a authenticated user without a process */
   HistoricDecisionInstanceQuery userId(String userId);
 
   /** Enable fetching {@link HistoricDecisionInputInstance} of evaluated decision. */

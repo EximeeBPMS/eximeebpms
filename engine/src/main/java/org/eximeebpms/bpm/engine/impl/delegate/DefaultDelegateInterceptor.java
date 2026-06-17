@@ -22,7 +22,6 @@ import org.eximeebpms.bpm.application.InvocationContext;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.engine.delegate.BaseDelegateExecution;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.context.CoreExecutionContext;
 import org.eximeebpms.bpm.engine.impl.context.ProcessApplicationContextUtil;
@@ -117,10 +116,6 @@ public class DefaultDelegateInterceptor implements DelegateInterceptor {
   protected boolean setExecutionContext(BaseDelegateExecution execution) {
     if (execution instanceof ExecutionEntity) {
       Context.setExecutionContext((ExecutionEntity) execution);
-      return true;
-    }
-    else if (execution instanceof CaseExecutionEntity) {
-      Context.setExecutionContext((CaseExecutionEntity) execution);
       return true;
     }
     return false;

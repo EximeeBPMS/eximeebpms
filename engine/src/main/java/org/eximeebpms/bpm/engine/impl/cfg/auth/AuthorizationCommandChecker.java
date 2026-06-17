@@ -46,7 +46,6 @@ import org.eximeebpms.bpm.engine.authorization.Resources;
 import org.eximeebpms.bpm.engine.authorization.SystemPermissions;
 import org.eximeebpms.bpm.engine.authorization.TaskPermissions;
 import org.eximeebpms.bpm.engine.authorization.UserOperationLogCategoryPermissions;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
@@ -68,10 +67,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricVariableInstanc
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
 
 /**
  * {@link CommandChecker} that uses the {@link AuthorizationManager} to perform
@@ -97,11 +94,6 @@ public class AuthorizationCommandChecker implements CommandChecker {
   @Override
   public void checkReadProcessDefinition(ProcessDefinition processDefinition) {
     getAuthorizationManager().checkAuthorization(READ, PROCESS_DEFINITION, processDefinition.getKey());
-  }
-
-  @Override
-  public void checkCreateCaseInstance(CaseDefinition caseDefinition) {
-    // no authorization check for CMMN
   }
 
   @Override
@@ -452,19 +444,11 @@ public class AuthorizationCommandChecker implements CommandChecker {
     } else {
 
       // if task does not exist in context of process
-      // instance, then it is either a (a) standalone task
-      // or (b) it exists in context of a case instance.
+      // instance, then it is a standalone task
 
-      // (a) standalone task: check following permission
+      // standalone task: check following permission
       // - 'taskPermission' on TASK
-      // (b) task in context of a case instance, in this
-      // case it is not necessary to check any permission,
-      // because such tasks can always be read
-
-      String caseExecutionId = task.getCaseExecutionId();
-      if (caseExecutionId == null) {
-        getAuthorizationManager().checkAuthorization(taskPermission, TASK, taskId);
-      }
+      getAuthorizationManager().checkAuthorization(taskPermission, TASK, taskId);
 
     }
   }
@@ -499,26 +483,18 @@ public class AuthorizationCommandChecker implements CommandChecker {
     } else {
 
       // if task does not exist in context of process
-      // instance, then it is either a (a) standalone task
-      // or (b) it exists in context of a case instance.
+      // instance, then it is a standalone task
 
-      // (a) standalone task: check following permission
+      // standalone task: check following permission
       // - READ on TASK
-      // (b) task in context of a case instance, in this
-      // case it is not necessary to check any permission,
-      // because such tasks can always be updated
 
-      String caseExecutionId = task.getCaseExecutionId();
-      if (caseExecutionId == null) {
-        // standalone task
-        CompositePermissionCheck updateTaskPermissionCheck = new PermissionCheckBuilder()
-            .disjunctive()
-              .atomicCheckForResourceId(TASK, taskId, TaskPermissions.UPDATE_VARIABLE)
-              .atomicCheckForResourceId(TASK, taskId, UPDATE)
-            .build();
+      CompositePermissionCheck updateTaskPermissionCheck = new PermissionCheckBuilder()
+          .disjunctive()
+            .atomicCheckForResourceId(TASK, taskId, TaskPermissions.UPDATE_VARIABLE)
+            .atomicCheckForResourceId(TASK, taskId, UPDATE)
+          .build();
 
-        getAuthorizationManager().checkAuthorization(updateTaskPermissionCheck);
-      }
+      getAuthorizationManager().checkAuthorization(updateTaskPermissionCheck);
 
     }
   }
@@ -596,14 +572,6 @@ public class AuthorizationCommandChecker implements CommandChecker {
     getAuthorizationManager().checkAuthorization(READ, DECISION_REQUIREMENTS_DEFINITION, decisionRequirementsDefinition.getKey());
   }
 
-  @Override
-  public void checkReadCaseDefinition(CaseDefinition caseDefinition) {
-  }
-
-  @Override
-  public void checkUpdateCaseDefinition(CaseDefinition caseDefinition) {
-  }
-
   // delete permission ////////////////////////////////////////
 
   @Override
@@ -622,10 +590,6 @@ public class AuthorizationCommandChecker implements CommandChecker {
   @Override
   public void checkDeleteHistoricProcessInstance(HistoricProcessInstance instance) {
     getAuthorizationManager().checkAuthorization(DELETE_HISTORY, PROCESS_DEFINITION, instance.getProcessDefinitionKey());
-  }
-
-  @Override
-  public void checkDeleteHistoricCaseInstance(HistoricCaseInstance instance) {
   }
 
   @Override
@@ -658,14 +622,6 @@ public class AuthorizationCommandChecker implements CommandChecker {
   }
 
   @Override
-  public void checkUpdateCaseInstance(CaseExecution caseExecution) {
-  }
-
-  @Override
-  public void checkReadCaseInstance(CaseExecution caseExecution) {
-  }
-
-  @Override
   public void checkTaskAssign(TaskEntity task) {
 
     String taskId = task.getId();
@@ -688,26 +644,18 @@ public class AuthorizationCommandChecker implements CommandChecker {
     else {
 
       // if task does not exist in context of process
-      // instance, then it is either a (a) standalone task
-      // or (b) it exists in context of a case instance.
+      // instance, then it is a standalone task
 
-      // (a) standalone task: check following permission
+      // standalone task: check following permission
       // - TASK_ASSIGN or UPDATE
-      // (b) task in context of a case instance, in this
-      // case it is not necessary to check any permission,
-      // because such tasks can always be updated
 
-      String caseExecutionId = task.getCaseExecutionId();
-      if (caseExecutionId == null) {
-        // standalone task
-        CompositePermissionCheck taskWorkPermission = new PermissionCheckBuilder()
-            .disjunctive()
-            .atomicCheckForResourceId(TASK, taskId, TASK_ASSIGN)
-            .atomicCheckForResourceId(TASK, taskId, UPDATE)
-          .build();
+      CompositePermissionCheck taskWorkPermission = new PermissionCheckBuilder()
+          .disjunctive()
+          .atomicCheckForResourceId(TASK, taskId, TASK_ASSIGN)
+          .atomicCheckForResourceId(TASK, taskId, UPDATE)
+        .build();
 
-        getAuthorizationManager().checkAuthorization(taskWorkPermission);
-      }
+      getAuthorizationManager().checkAuthorization(taskWorkPermission);
     }
   }
 
@@ -746,26 +694,17 @@ public class AuthorizationCommandChecker implements CommandChecker {
     else {
 
       // if task does not exist in context of process
-      // instance, then it is either a (a) standalone task
-      // or (b) it exists in context of a case instance.
+      // instance, then it is a standalone task
 
-      // (a) standalone task: check following permission
+      // standalone task: check following permission
       // - TASK_WORK or UPDATE
-      // (b) task in context of a case instance, in this
-      // case it is not necessary to check any permission,
-      // because such tasks can always be updated
+      CompositePermissionCheck taskWorkPermission = new PermissionCheckBuilder()
+          .disjunctive()
+          .atomicCheckForResourceId(TASK, taskId, TASK_WORK)
+          .atomicCheckForResourceId(TASK, taskId, UPDATE)
+        .build();
 
-      String caseExecutionId = task.getCaseExecutionId();
-      if (caseExecutionId == null) {
-        // standalone task
-        CompositePermissionCheck taskWorkPermission = new PermissionCheckBuilder()
-            .disjunctive()
-            .atomicCheckForResourceId(TASK, taskId, TASK_WORK)
-            .atomicCheckForResourceId(TASK, taskId, UPDATE)
-          .build();
-
-          getAuthorizationManager().checkAuthorization(taskWorkPermission);
-      }
+        getAuthorizationManager().checkAuthorization(taskWorkPermission);
     }
   }
 
@@ -775,15 +714,14 @@ public class AuthorizationCommandChecker implements CommandChecker {
 
     // Note: Calling TaskService#deleteTask() to
     // delete a task which exists in context of
-    // a process instance or case instance cannot
+    // a process instance cannot
     // be deleted. In such a case TaskService#deleteTask()
     // throws an exception before invoking the
     // authorization check.
 
     String executionId = task.getExecutionId();
-    String caseExecutionId = task.getCaseExecutionId();
 
-    if (executionId == null && caseExecutionId == null) {
+    if (executionId == null) {
       getAuthorizationManager().checkAuthorization(DELETE, TASK, taskId);
     }
   }

@@ -28,8 +28,6 @@ import java.util.Set;
 
 import org.eximeebpms.bpm.engine.filter.Filter;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDetail;
 import org.eximeebpms.bpm.engine.history.HistoricFormProperty;
@@ -41,9 +39,6 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.TablePageQueryImpl;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.batch.history.HistoricBatchEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.eximeebpms.bpm.engine.impl.db.sql.DbSqlSessionFactory;
@@ -107,11 +102,6 @@ public class TableDataManager extends AbstractManager {
     persistentObjectToTableNameMap.put(DeploymentEntity.class, "ACT_RE_DEPLOYMENT");
     persistentObjectToTableNameMap.put(ProcessDefinitionEntity.class, "ACT_RE_PROCDEF");
 
-    // CMMN
-    persistentObjectToTableNameMap.put(CaseDefinitionEntity.class, "ACT_RE_CASE_DEF");
-    persistentObjectToTableNameMap.put(CaseExecutionEntity.class, "ACT_RU_CASE_EXECUTION");
-    persistentObjectToTableNameMap.put(CaseSentryPartEntity.class, "ACT_RU_CASE_SENTRY_PART");
-
     // DMN
     persistentObjectToTableNameMap.put(DecisionRequirementsDefinitionEntity.class, "ACT_RE_DECISION_REQ_DEF");
     persistentObjectToTableNameMap.put(DecisionDefinitionEntity.class, "ACT_RE_DECISION_DEF");
@@ -130,8 +120,6 @@ public class TableDataManager extends AbstractManager {
     persistentObjectToTableNameMap.put(HistoricBatchEntity.class, "ACT_HI_BATCH");
     persistentObjectToTableNameMap.put(HistoricExternalTaskLogEntity.class, "ACT_HI_EXT_TASK_LOG");
 
-    persistentObjectToTableNameMap.put(HistoricCaseInstanceEntity.class, "ACT_HI_CASEINST");
-    persistentObjectToTableNameMap.put(HistoricCaseActivityInstanceEntity.class, "ACT_HI_CASEACTINST");
     persistentObjectToTableNameMap.put(HistoricIdentityLinkLogEntity.class, "ACT_HI_IDENTITYLINK");
     // a couple of stuff goes to the same table
     persistentObjectToTableNameMap.put(HistoricFormPropertyEntity.class, "ACT_HI_DETAIL");
@@ -182,10 +170,6 @@ public class TableDataManager extends AbstractManager {
     apiTypeToTableNameMap.put(HistoricFormProperty.class, "ACT_HI_DETAIL");
     apiTypeToTableNameMap.put(HistoricTaskInstance.class, "ACT_HI_TASKINST");
     apiTypeToTableNameMap.put(HistoricVariableInstance.class, "ACT_HI_VARINST");
-
-
-    apiTypeToTableNameMap.put(HistoricCaseInstance.class, "ACT_HI_CASEINST");
-    apiTypeToTableNameMap.put(HistoricCaseActivityInstance.class, "ACT_HI_CASEACTINST");
 
     apiTypeToTableNameMap.put(HistoricDecisionInstance.class, "ACT_HI_DECINST");
 

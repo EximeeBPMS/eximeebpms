@@ -40,9 +40,6 @@ public class HistoricDecisionInstanceDto {
   protected String processDefinitionKey;
   protected String processInstanceId;
   protected String rootProcessInstanceId;
-  protected String caseDefinitionId;
-  protected String caseDefinitionKey;
-  protected String caseInstanceId;
   protected String activityId;
   protected String activityInstanceId;
   protected String userId;
@@ -84,18 +81,6 @@ public class HistoricDecisionInstanceDto {
 
   public String getProcessInstanceId() {
     return processInstanceId;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   public String getActivityId() {
@@ -168,9 +153,6 @@ public class HistoricDecisionInstanceDto {
     dto.processDefinitionId = historicDecisionInstance.getProcessDefinitionId();
     dto.processDefinitionKey = historicDecisionInstance.getProcessDefinitionKey();
     dto.processInstanceId = historicDecisionInstance.getProcessInstanceId();
-    dto.caseDefinitionId = historicDecisionInstance.getCaseDefinitionId();
-    dto.caseDefinitionKey = historicDecisionInstance.getCaseDefinitionKey();
-    dto.caseInstanceId = historicDecisionInstance.getCaseInstanceId();
     dto.activityId = historicDecisionInstance.getActivityId();
     dto.activityInstanceId = historicDecisionInstance.getActivityInstanceId();
     dto.userId = historicDecisionInstance.getUserId();

@@ -71,8 +71,6 @@ import org.eximeebpms.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.IoUtil;
 import org.eximeebpms.bpm.engine.repository.CalledProcessDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinitionQuery;
 import org.eximeebpms.bpm.engine.repository.DecisionRequirementsDefinition;
@@ -338,25 +336,19 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/repository/one.cmmn"})
+      "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteDeploymentClearsCache() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
 
     // fetch definition ids
     String processDefinitionId = repositoryService.createProcessDefinitionQuery().singleResult().getId();
-    String caseDefinitionId = repositoryService.createCaseDefinitionQuery().singleResult().getId();
-    // fetch CMMN model to be placed to in the cache
-    repositoryService.getCmmnModelInstance(caseDefinitionId);
 
     DeploymentCache deploymentCache = processEngineConfiguration.getDeploymentCache();
 
     // ensure definitions and models are part of the cache
     assertNotNull(deploymentCache.getProcessDefinitionCache().get(processDefinitionId));
     assertNotNull(deploymentCache.getBpmnModelInstanceCache().get(processDefinitionId));
-    assertNotNull(deploymentCache.getCaseDefinitionCache().get(caseDefinitionId));
-    assertNotNull(deploymentCache.getCmmnModelInstanceCache().get(caseDefinitionId));
 
     // when the deployment is deleted
     repositoryService.deleteDeployment(deploymentId, true);
@@ -364,8 +356,6 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     // then the definitions and models are removed from the cache
     assertNull(deploymentCache.getProcessDefinitionCache().get(processDefinitionId));
     assertNull(deploymentCache.getBpmnModelInstanceCache().get(processDefinitionId));
-    assertNull(deploymentCache.getCaseDefinitionCache().get(caseDefinitionId));
-    assertNull(deploymentCache.getCmmnModelInstanceCache().get(caseDefinitionId));
   }
 
   @Test
@@ -526,72 +516,6 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
       fail("ProcessEngineException expected");
     } catch (ProcessEngineException ae) {
       testRule.assertTextPresent("resourceName is null", ae.getMessage());
-    }
-  }
-
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/repository/one.cmmn" })
-  @Test
-  public void testGetCaseDefinition() {
-    CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
-
-    CaseDefinition caseDefinition = query.singleResult();
-    String caseDefinitionId = caseDefinition.getId();
-
-    CaseDefinition definition = repositoryService.getCaseDefinition(caseDefinitionId);
-
-    assertNotNull(definition);
-    assertEquals(caseDefinitionId, definition.getId());
-  }
-
-  @Test
-  public void testGetCaseDefinitionByInvalidId() {
-    try {
-      repositoryService.getCaseDefinition("invalid");
-    } catch (NotFoundException e) {
-      testRule.assertTextPresent("no deployed case definition found with id 'invalid'", e.getMessage());
-    }
-
-    try {
-      repositoryService.getCaseDefinition(null);
-      fail();
-    } catch (NotValidException e) {
-      testRule.assertTextPresent("caseDefinitionId is null", e.getMessage());
-    }
-  }
-
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/repository/one.cmmn" })
-  @Test
-  public void testGetCaseModel() throws Exception {
-    CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
-
-    CaseDefinition caseDefinition = query.singleResult();
-    String caseDefinitionId = caseDefinition.getId();
-
-    InputStream caseModel = repositoryService.getCaseModel(caseDefinitionId);
-
-    assertNotNull(caseModel);
-
-    byte[] readInputStream = IoUtil.readInputStream(caseModel, "caseModel");
-    String model = new String(readInputStream, "UTF-8");
-
-    assertTrue(model.contains("<case id=\"one\" name=\"One\">"));
-
-    IoUtil.closeSilently(caseModel);
-  }
-
-  @Test
-  public void testGetCaseModelByInvalidId() throws Exception {
-    try {
-      repositoryService.getCaseModel("invalid");
-    } catch (ProcessEngineException e) {
-      testRule.assertTextPresent("no deployed case definition found with id 'invalid'", e.getMessage());
-    }
-
-    try {
-      repositoryService.getCaseModel(null);
-      fail();
-    } catch (NotValidException e) {
-      testRule.assertTextPresent("caseDefinitionId is null", e.getMessage());
     }
   }
 
@@ -1035,77 +959,6 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCaseDefinitionUpdateHistoryTimeToLiveWithUserOperationLog() {
-    // given
-    identityService.setAuthenticatedUserId("userId");
-
-    // there exists a deployment containing a case definition with key "oneTaskCase"
-    CaseDefinition caseDefinition = findOnlyCaseDefinition();
-
-    // when
-    repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), 6);
-
-    // then
-    caseDefinition = findOnlyCaseDefinition();
-
-    assertEquals(6, caseDefinition.getHistoryTimeToLive().intValue());
-
-    UserOperationLogQuery operationLogQuery = historyService.createUserOperationLogQuery()
-      .operationType(UserOperationLogEntry.OPERATION_TYPE_UPDATE_HISTORY_TIME_TO_LIVE)
-      .entityType(EntityTypes.CASE_DEFINITION)
-      .caseDefinitionId(caseDefinition.getId());
-
-    UserOperationLogEntry ttlEntry = operationLogQuery.property("historyTimeToLive").singleResult();
-    UserOperationLogEntry definitionKeyEntry = operationLogQuery.property("caseDefinitionKey").singleResult();
-
-    assertNotNull(ttlEntry);
-    assertNotNull(definitionKeyEntry);
-
-    // original time-to-live value is null
-    assertNull(ttlEntry.getOrgValue());
-    assertEquals("6", ttlEntry.getNewValue());
-    assertEquals(caseDefinition.getKey(), definitionKeyEntry.getNewValue());
-
-    assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, ttlEntry.getCategory());
-    assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, definitionKeyEntry.getCategory());
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testUpdateHistoryTimeToLiveNull() {
-    // given
-    // there exists a deployment containing a case definition with key "oneTaskCase"
-
-    CaseDefinition caseDefinition = findOnlyCaseDefinition();
-
-    // when
-    repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), null);
-
-    // then
-    caseDefinition = findOnlyCaseDefinition();
-
-    assertEquals(null, caseDefinition.getHistoryTimeToLive());
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void shouldFailToUpdateHistoryTimeToLiveOnCaseDefinitionHTTLUpdate() {
-    assertThatThrownBy(() -> {
-      // given
-      CaseDefinition caseDefinition = findOnlyCaseDefinition();
-      processEngineConfiguration.setEnforceHistoryTimeToLive(true);
-
-      // when
-      repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), null);
-    })
-        // then
-        .isInstanceOf(NotAllowedException.class)
-        .hasMessage("Null historyTimeToLive values are not allowed");
-  }
-
   @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void shouldFailToUpdateHistoryTimeToLiveOnProcessDefinitionHTTLUpdate() {
@@ -1134,48 +987,6 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
         // then
         .isInstanceOf(NotAllowedException.class)
         .hasMessage("Null historyTimeToLive values are not allowed");
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testUpdateHistoryTimeToLiveNegative() {
-    // given
-    // there exists a deployment containing a case definition with key "oneTaskCase"
-
-    CaseDefinition caseDefinition = findOnlyCaseDefinition();
-
-    // when
-    try {
-      repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), -1);
-      fail("Exception is expected, that negative value is not allowed.");
-    } catch (BadUserRequestException ex) {
-      assertTrue(ex.getMessage().contains("greater than"));
-    }
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testUpdateHistoryTimeToLiveInCache() {
-    // given
-    // there exists a deployment containing a case definition with key "oneTaskCase"
-
-    CaseDefinition caseDefinition = findOnlyCaseDefinition();
-
-    // assume
-    assertNull(caseDefinition.getHistoryTimeToLive());
-
-    // when
-    repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinition.getId(), 10);
-
-    CaseDefinition definition = repositoryService.getCaseDefinition(caseDefinition.getId());
-    assertEquals(Integer.valueOf(10), definition.getHistoryTimeToLive());
-  }
-
-  private CaseDefinition findOnlyCaseDefinition() {
-    List<CaseDefinition> caseDefinitions = repositoryService.createCaseDefinitionQuery().list();
-    assertNotNull(caseDefinitions);
-    assertEquals(1, caseDefinitions.size());
-    return caseDefinitions.get(0);
   }
 
   private ProcessDefinition findOnlyProcessDefinition() {
@@ -1346,8 +1157,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   @Deployment(resources = {
     "org/eximeebpms/bpm/engine/test/api/repository/call-activities-with-references.bpmn",
     "org/eximeebpms/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml",
-    "org/eximeebpms/bpm/engine/test/api/repository/first-process.bpmn20.xml",
-    "org/eximeebpms/bpm/engine/test/api/repository/three_.cmmn"
+    "org/eximeebpms/bpm/engine/test/api/repository/first-process.bpmn20.xml"
   })
   public void shouldReturnStaticCalledProcessDefinitions() {
     //given

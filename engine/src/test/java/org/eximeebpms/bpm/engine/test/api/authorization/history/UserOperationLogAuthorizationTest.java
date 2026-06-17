@@ -69,7 +69,6 @@ import org.junit.Test;
 public class UserOperationLogAuthorizationTest extends AuthorizationTest {
 
   protected static final String ONE_TASK_PROCESS_KEY = "oneTaskProcess";
-  protected static final String ONE_TASK_CASE_KEY = "oneTaskCase";
   protected static final String TIMER_BOUNDARY_PROCESS_KEY = "timerBoundaryProcess";
 
   protected String deploymentId;
@@ -80,7 +79,6 @@ public class UserOperationLogAuthorizationTest extends AuthorizationTest {
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
         "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn",
         "org/eximeebpms/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml")
             .getId();
     super.setUp();
@@ -825,7 +823,6 @@ public class UserOperationLogAuthorizationTest extends AuthorizationTest {
     setAssignee(taskId, "demo");
 
     createGrantAuthorizationWithoutAuthentication(OPERATION_LOG_CATEGORY, ANY, userId, READ);
-    createRevokeAuthorizationWithoutAuthentication(PROCESS_DEFINITION, ONE_TASK_CASE_KEY, userId, READ_HISTORY);
 
     // when
     UserOperationLogQuery query = historyService.createUserOperationLogQuery();
@@ -849,86 +846,6 @@ public class UserOperationLogAuthorizationTest extends AuthorizationTest {
 
     // then
     verifyQueryResults(query, 0);// "revoke all process definitions" wins over "grant all categories"
-  }
-
-  // (case) human task /////////////////////////////
-
-  @Test
-  public void testQuerySetAssigneeHumanTaskUserOperationLogWithoutAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    // when
-    UserOperationLogQuery query = historyService.createUserOperationLogQuery();
-
-    // then
-    verifyQueryResults(query, 0);
-  }
-
-  @Test
-  public void testQuerySetAssigneeHumanTaskUserOperationLogWithReadHistoryPermissionOnProcessDefinition() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    createGrantAuthorizationWithoutAuthentication(PROCESS_DEFINITION, ONE_TASK_CASE_KEY, userId, READ_HISTORY);
-
-    // when
-    UserOperationLogQuery query = historyService.createUserOperationLogQuery();
-
-    // then
-    verifyQueryResults(query, 0);
-  }
-
-  // CAM-9888
-  public void failing_testQuerySetAssigneeHumanTaskUserOperationLogWithReadHistoryPermissionOnAnyProcessDefinition() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    createGrantAuthorizationWithoutAuthentication(PROCESS_DEFINITION, ANY, userId, READ_HISTORY);
-
-    // when
-    UserOperationLogQuery query = historyService.createUserOperationLogQuery();
-
-    // then
-    verifyQueryResults(query, 0);
-  }
-
-  @Test
-  public void testQuerySetAssigneeHumanTaskUserOperationLogWithReadPermissionOnCategory() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    createGrantAuthorizationWithoutAuthentication(OPERATION_LOG_CATEGORY, CATEGORY_TASK_WORKER, userId, READ);
-
-    // when
-    UserOperationLogQuery query = historyService.createUserOperationLogQuery();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
-  @Test
-  public void testQuerySetAssigneeHumanTaskUserOperationLogWithReadPermissionOnAnyCategory() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    createGrantAuthorizationWithoutAuthentication(OPERATION_LOG_CATEGORY, ANY, userId, READ);
-
-    // when
-    UserOperationLogQuery query = historyService.createUserOperationLogQuery();
-
-    // then
-    verifyQueryResults(query, 1);
   }
 
   // standalone job ///////////////////////////////
@@ -1768,127 +1685,6 @@ public class UserOperationLogAuthorizationTest extends AuthorizationTest {
     disableAuthorization();
     historyService.deleteHistoricProcessInstance(processInstanceId);
     enableAuthorization();
-  }
-
-  // delete user operation log (case) //////////////////////////////
-
-  @Test
-  public void testCaseDeleteEntryWithoutAuthorization() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    disableAuthorization();
-    String entryId = historyService.createUserOperationLogQuery().singleResult().getId();
-    enableAuthorization();
-
-    // when
-    try {
-      historyService.deleteUserOperationLogEntry(entryId);
-      fail("Exception expected: It should not be possible to delete the user operation log");
-    } catch (AuthorizationException e) {
-      // then
-      String message = e.getMessage();
-      testRule.assertTextPresent(userId, message);
-      testRule.assertTextPresent(DELETE.getName(), message);
-      testRule.assertTextPresent(OPERATION_LOG_CATEGORY.resourceName(), message);
-      testRule.assertTextPresent(CATEGORY_TASK_WORKER, message);
-    }
-  }
-
-  @Test
-  public void testCaseDeleteEntryWithDeleteHistoryPermissionOnProcessDefinition() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    disableAuthorization();
-    String entryId = historyService.createUserOperationLogQuery().singleResult().getId();
-    enableAuthorization();
-
-    createGrantAuthorizationWithoutAuthentication(PROCESS_DEFINITION, ONE_TASK_CASE_KEY, userId, DELETE_HISTORY);
-
-    // when
-    try {
-      historyService.deleteUserOperationLogEntry(entryId);
-      fail("Exception expected: It should not be possible to delete the user operation log");
-    } catch (AuthorizationException e) {
-      // then
-      String message = e.getMessage();
-      testRule.assertTextPresent(userId, message);
-      testRule.assertTextPresent(DELETE.getName(), message);
-      testRule.assertTextPresent(OPERATION_LOG_CATEGORY.resourceName(), message);
-      testRule.assertTextPresent(CATEGORY_TASK_WORKER, message);
-    }
-  }
-
-  @Test
-  public void testCaseDeleteEntryWithDeleteHistoryPermissionOnAnyProcessDefinition() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    disableAuthorization();
-    String entryId = historyService.createUserOperationLogQuery().singleResult().getId();
-    enableAuthorization();
-
-    createGrantAuthorizationWithoutAuthentication(PROCESS_DEFINITION, ANY, userId, DELETE_HISTORY);
-
-    // when
-    try {
-      historyService.deleteUserOperationLogEntry(entryId);
-      fail("Exception expected: It should not be possible to delete the user operation log");
-    } catch (AuthorizationException e) {
-      // then
-      String message = e.getMessage();
-      testRule.assertTextPresent(userId, message);
-      testRule.assertTextPresent(DELETE.getName(), message);
-      testRule.assertTextPresent(OPERATION_LOG_CATEGORY.resourceName(), message);
-      testRule.assertTextPresent(CATEGORY_TASK_WORKER, message);
-    }
-  }
-
-  @Test
-  public void testCaseDeleteEntryWithDeletePermissionOnCategory() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    disableAuthorization();
-    String entryId = historyService.createUserOperationLogQuery().singleResult().getId();
-    enableAuthorization();
-
-    createGrantAuthorizationWithoutAuthentication(OPERATION_LOG_CATEGORY, CATEGORY_TASK_WORKER, userId, DELETE);
-
-    // when
-    historyService.deleteUserOperationLogEntry(entryId);
-
-    // then
-    assertNull(historyService.createUserOperationLogQuery().singleResult());
-  }
-
-  @Test
-  public void testCaseDeleteEntryWithDeletePermissionOnAnyCategory() {
-    // given
-    testRule.createCaseInstanceByKey(ONE_TASK_CASE_KEY);
-    String taskId = selectSingleTask().getId();
-    setAssignee(taskId, "demo");
-
-    disableAuthorization();
-    String entryId = historyService.createUserOperationLogQuery().singleResult().getId();
-    enableAuthorization();
-
-    createGrantAuthorizationWithoutAuthentication(OPERATION_LOG_CATEGORY, ANY, userId, DELETE);
-
-    // when
-    historyService.deleteUserOperationLogEntry(entryId);
-
-    // then
-    assertNull(historyService.createUserOperationLogQuery().singleResult());
   }
 
   // update user operation log //////////////////////////////

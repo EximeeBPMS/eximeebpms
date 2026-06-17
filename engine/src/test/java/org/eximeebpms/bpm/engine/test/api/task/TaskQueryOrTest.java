@@ -29,14 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.impl.TaskQueryImpl;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.task.TaskQuery;
@@ -61,7 +59,6 @@ public class TaskQueryOrTest {
 
   protected RuntimeService runtimeService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected RepositoryService repositoryService;
   protected FilterService filterService;
 
@@ -69,7 +66,6 @@ public class TaskQueryOrTest {
   public void init() {
     runtimeService = processEngineRule.getRuntimeService();
     taskService = processEngineRule.getTaskService();
-    caseService = processEngineRule.getCaseService();
     repositoryService = processEngineRule.getRepositoryService();
     filterService = processEngineRule.getFilterService();
   }
@@ -161,10 +157,10 @@ public class TaskQueryOrTest {
     // when/then
     assertThatThrownBy(() -> taskService.createTaskQuery()
         .or()
-          .orderByCaseExecutionId()
+          .orderByExecutionId()
         .endOr())
       .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("Invalid query usage: cannot set orderByCaseExecutionId() within 'or' query");
+      .hasMessageContaining("Invalid query usage: cannot set orderByExecutionId() within 'or' query");
   }
 
   @Test
@@ -874,171 +870,6 @@ public class TaskQueryOrTest {
 
     // then
     assertEquals(3, tasks.size());
-  }
-
-  @Test
-  @Deployment(resources={
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
-  public void shouldReturnTasksWithCaseDefinitionKeyCaseDefinitionName() {
-    // given
-    String caseDefinitionId1 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase")
-      .singleResult()
-      .getId();
-
-    caseService
-      .withCaseDefinition(caseDefinitionId1)
-      .create();
-
-    String caseDefinitionId2 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase2")
-      .singleResult()
-      .getId();
-
-    caseService
-      .withCaseDefinition(caseDefinitionId2)
-      .create();
-
-    // when
-    List<Task> tasks = taskService.createTaskQuery()
-      .or()
-        .caseDefinitionKey("oneTaskCase")
-        .caseDefinitionName("One")
-      .endOr()
-      .list();
-
-    // then
-    assertEquals(2, tasks.size());
-  }
-
-  @Test
-  @Deployment(resources={
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
-  public void shouldReturnTasksWithCaseInstanceBusinessKeyOrCaseInstanceBusinessKeyLike() {
-    // given
-    String caseDefinitionId1 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase")
-      .singleResult()
-      .getId();
-
-    CaseInstance caseInstance1 = caseService
-      .withCaseDefinition(caseDefinitionId1)
-      .businessKey("aBusinessKey")
-      .create();
-
-    String caseDefinitionId2 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase2")
-      .singleResult()
-      .getId();
-
-    CaseInstance caseInstance2 = caseService
-      .withCaseDefinition(caseDefinitionId2)
-      .businessKey("anotherBusinessKey")
-      .create();
-
-    // when
-    List<Task> tasks = taskService.createTaskQuery()
-      .or()
-        .caseInstanceBusinessKey(caseInstance1.getBusinessKey())
-        .caseInstanceBusinessKeyLike(caseInstance2.getBusinessKey())
-      .endOr()
-      .list();
-
-    // then
-    assertEquals(2, tasks.size());
-  }
-
-  @Test
-  @Deployment(resources={
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
-  public void shouldReturnTasksWithCaseInstanceBusinessKeyOrCaseInstanceBusinessKeyLikeOrStandaloneAssignee() {
-    // given
-    String caseDefinitionId1 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase")
-      .singleResult()
-      .getId();
-
-    CaseInstance caseInstance1 = caseService
-      .withCaseDefinition(caseDefinitionId1)
-      .businessKey("aBusinessKey")
-      .create();
-
-    String caseDefinitionId2 = repositoryService
-      .createCaseDefinitionQuery()
-      .caseDefinitionKey("oneTaskCase2")
-      .singleResult()
-      .getId();
-
-    CaseInstance caseInstance2 = caseService
-      .withCaseDefinition(caseDefinitionId2)
-      .businessKey("anotherBusinessKey")
-      .create();
-
-    // create a standalone task with assignee
-    String assignee = "testUser4";
-    Task newTask = taskService.newTask();
-    newTask.setAssignee(assignee);
-    taskService.saveTask(newTask);
-
-    // when
-    List<Task> tasks = taskService.createTaskQuery()
-      .or()
-        .caseInstanceBusinessKey(caseInstance1.getBusinessKey())
-        .caseInstanceBusinessKeyLike(caseInstance2.getBusinessKey())
-        .taskAssignee(assignee)
-      .endOr()
-      .list();
-
-    // then
-    assertEquals(3, tasks.size());
-  }
-
-  @Test
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  public void shouldReturnTasksWithCaseInstanceBusinessKeyOrProcessInstanceBusinessKey() {
-    String businessKey = "aBusinessKey";
-
-    BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-      .startEvent()
-        .userTask()
-      .endEvent()
-      .done();
-
-    repositoryService
-      .createDeployment()
-      .addModelInstance("foo.bpmn", aProcessDefinition)
-      .deploy();
-
-    runtimeService.startProcessInstanceByKey("aProcessDefinition", businessKey);
-
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .caseDefinitionKey("oneTaskCase")
-        .singleResult()
-        .getId();
-
-    caseService
-      .withCaseDefinition(caseDefinitionId)
-      .businessKey(businessKey)
-      .create();
-
-    TaskQuery query = taskService.createTaskQuery();
-
-    query
-      .or()
-        .caseInstanceBusinessKey(businessKey)
-        .processInstanceBusinessKey(businessKey)
-      .endOr();
-
-    assertEquals(2, query.list().size());
   }
 
   @Test

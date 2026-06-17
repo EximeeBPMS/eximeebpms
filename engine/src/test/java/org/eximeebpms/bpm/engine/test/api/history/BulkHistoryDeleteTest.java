@@ -27,12 +27,9 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.eximeebpms.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
-import org.eximeebpms.bpm.engine.CaseService;
-import org.eximeebpms.bpm.engine.EntityTypes;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
@@ -41,17 +38,11 @@ import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.externaltask.LockedExternalTask;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstance;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInputInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionOutputInstance;
-import org.eximeebpms.bpm.engine.history.HistoricDetail;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLog;
-import org.eximeebpms.bpm.engine.history.HistoricIdentityLinkLog;
 import org.eximeebpms.bpm.engine.history.HistoricJobLog;
-import org.eximeebpms.bpm.engine.history.HistoricTaskInstance;
-import org.eximeebpms.bpm.engine.history.HistoricVariableInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricDecisionInputInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity;
@@ -61,10 +52,8 @@ import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricJobLogEventEntity;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Attachment;
-import org.eximeebpms.bpm.engine.task.Comment;
 import org.eximeebpms.bpm.engine.task.IdentityLinkType;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.Deployment;
@@ -100,7 +89,6 @@ public class BulkHistoryDeleteTest {
   private RuntimeService runtimeService;
   private FormService formService;
   private ExternalTaskService externalTaskService;
-  private CaseService caseService;
   private IdentityService identityService;
 
   public static final String USER_ID = "demo";
@@ -115,7 +103,6 @@ public class BulkHistoryDeleteTest {
     taskService = engineRule.getTaskService();
     formService = engineRule.getFormService();
     externalTaskService = engineRule.getExternalTaskService();
-    caseService = engineRule.getCaseService();
     identityService = engineRule.getIdentityService();
     identityService.setAuthenticatedUserId(USER_ID);
   }
@@ -643,313 +630,4 @@ public class BulkHistoryDeleteTest {
         .putValue("pojoVariableName", new TestPojo("someValue", 111.));
   }
 
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstance() {
-    // given
-    // create case instances
-    int instanceCount = 10;
-    List<String> caseInstanceIds = prepareHistoricCaseInstance(instanceCount);
-
-    // assume
-    List<HistoricCaseInstance> caseInstanceList = historyService.createHistoricCaseInstanceQuery().list();
-    assertEquals(instanceCount, caseInstanceList.size());
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(caseInstanceIds);
-
-    // then
-    assertEquals(0, historyService.createHistoricCaseInstanceQuery().count());
-    assertEquals(0, historyService.createHistoricTaskInstanceQuery().count());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseActivityInstance() {
-    // given
-    // create case instance
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    terminateAndCloseCaseInstance(caseInstanceId, null);
-
-    // assume
-    List<HistoricCaseActivityInstance> activityInstances = historyService.createHistoricCaseActivityInstanceQuery().list();
-    assertEquals(1, activityInstances.size());
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstanceId));
-
-    // then
-    activityInstances = historyService.createHistoricCaseActivityInstanceQuery().list();
-    assertEquals(0, activityInstances.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTask() {
-    // given
-    // create case instance
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    terminateAndCloseCaseInstance(caseInstanceId, null);
-
-    // assume
-    List<HistoricTaskInstance> taskInstances = historyService.createHistoricTaskInstanceQuery().list();
-    assertEquals(1, taskInstances.size());
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstanceId));
-
-    // then
-    taskInstances = historyService.createHistoricTaskInstanceQuery().list();
-    assertEquals(0, taskInstances.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTaskComment() {
-    // given
-    // create case instance
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-    taskService.createComment(task.getId(), null, "This is a comment...");
-
-    // assume
-    List<Comment> comments = taskService.getTaskComments(task.getId());
-    assertEquals(1, comments.size());
-    terminateAndCloseCaseInstance(caseInstanceId, null);
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstanceId));
-
-    // then
-    comments = taskService.getTaskComments(task.getId());
-    assertEquals(0, comments.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTaskDetails() {
-    // given
-    // create case instance
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    taskService.setVariable(task.getId(), "boo", new TestPojo("foo", 123.0));
-    taskService.setVariable(task.getId(), "goo", 9);
-    taskService.setVariable(task.getId(), "boo", new TestPojo("foo", 321.0));
-
-
-    // assume
-    List<HistoricDetail> detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(3, detailsList.size());
-    terminateAndCloseCaseInstance(caseInstance.getId(), taskService.getVariables(task.getId()));
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstance.getId()));
-
-    // then
-    detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(0, detailsList.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTaskIdentityLink() {
-    // given
-    // create case instance
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    // assume
-    taskService.addGroupIdentityLink(task.getId(), "accounting", IdentityLinkType.CANDIDATE);
-    int identityLinksForTask = taskService.getIdentityLinksForTask(task.getId()).size();
-    assertEquals(1, identityLinksForTask);
-    terminateAndCloseCaseInstance(caseInstanceId, null);
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstanceId));
-
-    // then
-    List<HistoricIdentityLinkLog> historicIdentityLinkLog = historyService.createHistoricIdentityLinkLogQuery().list();
-    assertEquals(0, historicIdentityLinkLog.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTaskAttachmentByteArray() {
-    // given
-    // create case instance
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-
-    Task task = taskService.createTaskQuery().singleResult();
-    String taskId = task.getId();
-    taskService.createAttachment("foo", taskId, null, "something", null, new ByteArrayInputStream("someContent".getBytes()));
-
-    // assume
-    List<Attachment> attachments = taskService.getTaskAttachments(taskId);
-    assertEquals(1, attachments.size());
-    String contentId = findAttachmentContentId(attachments);
-    terminateAndCloseCaseInstance(caseInstance.getId(), null);
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstance.getId()));
-
-    // then
-    attachments = taskService.getTaskAttachments(taskId);
-    assertEquals(0, attachments.size());
-    verifyByteArraysWereRemoved(contentId);
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceTaskAttachmentUrl() {
-    // given
-    // create case instance
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-    taskService.createAttachment("foo", task.getId(), null, "something", null, "http://camunda.org");
-
-    // assume
-    List<Attachment> attachments = taskService.getTaskAttachments(task.getId());
-    assertEquals(1, attachments.size());
-    terminateAndCloseCaseInstance(caseInstanceId, null);
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstanceId));
-
-    // then
-    attachments = taskService.getTaskAttachments(task.getId());
-    assertEquals(0, attachments.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceVariables() {
-    // given
-    // create case instances
-    List<String> caseInstanceIds = new ArrayList<String>();
-    int instanceCount = 10;
-    for (int i = 0; i < instanceCount; i++) {
-      VariableMap variables = Variables.createVariables();
-      CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase", variables.putValue("name" + i, "theValue"));
-      caseInstanceIds.add(caseInstance.getId());
-      terminateAndCloseCaseInstance(caseInstance.getId(), variables);
-    }
-    // assume
-    List<HistoricVariableInstance> variablesInstances = historyService.createHistoricVariableInstanceQuery().list();
-    assertEquals(instanceCount, variablesInstances.size());
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(caseInstanceIds);
-
-    // then
-    variablesInstances = historyService.createHistoricVariableInstanceQuery().list();
-    assertEquals(0, variablesInstances.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceComplexVariable() {
-    // given
-    // create case instances
-    VariableMap variables = Variables.createVariables();
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase", variables.putValue("pojo", new TestPojo("okay", 13.37)));
-
-    caseService.setVariable(caseInstance.getId(), "pojo", "theValue");
-
-    // assume
-    List<HistoricVariableInstance> variablesInstances = historyService.createHistoricVariableInstanceQuery().list();
-    assertEquals(1, variablesInstances.size());
-    List<HistoricDetail> detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(2, detailsList.size());
-    terminateAndCloseCaseInstance(caseInstance.getId(), variables);
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstance.getId()));
-
-    // then
-    variablesInstances = historyService.createHistoricVariableInstanceQuery().list();
-    assertEquals(0, variablesInstances.size());
-    detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(0, detailsList.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceDetails() {
-    // given
-    // create case instances
-    String variableNameCase1 = "varName1";
-    CaseInstance caseInstance1 = caseService.createCaseInstanceByKey("oneTaskCase", Variables.createVariables().putValue(variableNameCase1, "value1"));
-    CaseInstance caseInstance2 = caseService.createCaseInstanceByKey("oneTaskCase", Variables.createVariables().putValue("varName2", "value2"));
-
-    caseService.setVariable(caseInstance1.getId(), variableNameCase1, "theValue");
-
-    // assume
-    List<HistoricDetail> detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(3, detailsList.size());
-    caseService.terminateCaseExecution(caseInstance1.getId(), caseService.getVariables(caseInstance1.getId()));
-    caseService.terminateCaseExecution(caseInstance2.getId(), caseService.getVariables(caseInstance2.getId()));
-    caseService.closeCaseInstance(caseInstance1.getId());
-    caseService.closeCaseInstance(caseInstance2.getId());
-
-    // when
-    historyService.deleteHistoricCaseInstancesBulk(Arrays.asList(caseInstance1.getId(), caseInstance2.getId()));
-
-    // then
-    detailsList = historyService.createHistoricDetailQuery().list();
-    assertEquals(0, detailsList.size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testCleanupHistoryCaseInstanceOperationLog() {
-    // given
-    // create case instances
-    int instanceCount = 10;
-    List<String> caseInstanceIds = prepareHistoricCaseInstance(instanceCount);
-
-    // assume
-    List<HistoricCaseInstance> caseInstanceList = historyService.createHistoricCaseInstanceQuery().list();
-    assertEquals(instanceCount, caseInstanceList.size());
-
-    // when
-    identityService.setAuthenticatedUserId(USER_ID);
-    historyService.deleteHistoricCaseInstancesBulk(caseInstanceIds);
-    identityService.clearAuthentication();
-
-    // then
-    assertEquals(1, historyService.createUserOperationLogQuery().operationType(OPERATION_TYPE_DELETE_HISTORY).count());
-    UserOperationLogEntry entry = historyService.createUserOperationLogQuery().operationType(OPERATION_TYPE_DELETE_HISTORY).singleResult();
-    assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, entry.getCategory());
-    assertEquals(EntityTypes.CASE_INSTANCE, entry.getEntityType());
-    assertEquals(OPERATION_TYPE_DELETE_HISTORY, entry.getOperationType());
-    assertNull(entry.getCaseInstanceId());
-    assertEquals("nrOfInstances", entry.getProperty());
-    assertNull(entry.getOrgValue());
-    assertEquals(String.valueOf(instanceCount), entry.getNewValue());
-  }
-
-  private List<String> prepareHistoricCaseInstance(int instanceCount) {
-    List<String> caseInstanceIds = new ArrayList<String>();
-    for (int i = 0; i < instanceCount; i++) {
-      CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-      String caseInstanceId = caseInstance.getId();
-      caseInstanceIds.add(caseInstanceId);
-      terminateAndCloseCaseInstance(caseInstanceId, null);
-    }
-    return caseInstanceIds;
-  }
-
-  private void terminateAndCloseCaseInstance(String caseInstanceId, Map<String, Object> variables) {
-    if (variables==null) {
-      caseService.terminateCaseExecution(caseInstanceId, variables);
-    }else {
-      caseService.terminateCaseExecution(caseInstanceId);
-    }
-    caseService.closeCaseInstance(caseInstanceId);
-  }
 }

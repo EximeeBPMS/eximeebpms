@@ -27,8 +27,6 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.application.ProcessApplicationManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 
 /**
@@ -205,15 +203,6 @@ public class ProcessApplicationLogger extends ProcessEngineLogger {
             execution.getId(),
             execution.getProcessDefinitionId(),
             execution.getProcessDefinition().getDeploymentId(),
-            processApplicationManager.getRegistrationSummary());
-  }
-
-  public void debugNoTargetProcessApplicationFoundForCaseExecution(CaseExecutionEntity execution, ProcessApplicationManager processApplicationManager) {
-    logDebug("024",
-        "No target process application found for CaseExecution[{}], CaseDefinition[{}], Deployment[{}] Registrations[{}]",
-            execution.getId(),
-            execution.getCaseDefinitionId(),
-            ((CaseDefinitionEntity)execution.getCaseDefinition()).getDeploymentId(),
             processApplicationManager.getRegistrationSummary());
   }
 }

@@ -20,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.util.Date;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
@@ -83,7 +82,6 @@ public class ProcessEngineTestCase extends TestCase {
   protected FormService formService;
   protected FilterService filterService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
 
   protected boolean skipTest = false;
 
@@ -145,7 +143,6 @@ public class ProcessEngineTestCase extends TestCase {
     formService = processEngine.getFormService();
     filterService = processEngine.getFilterService();
     authorizationService = processEngine.getAuthorizationService();
-    caseService = processEngine.getCaseService();
   }
 
   @Override

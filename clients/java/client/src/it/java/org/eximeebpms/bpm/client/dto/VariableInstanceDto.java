@@ -27,8 +27,6 @@ public class VariableInstanceDto {
   protected String name;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String activityInstanceId;
   protected String errorMessage;
@@ -112,14 +110,6 @@ public class VariableInstanceDto {
 
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   public String getTenantId() {

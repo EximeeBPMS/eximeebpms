@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.BusinessEventService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -124,7 +123,6 @@ public class ProcessEngineExtension implements TestWatcher,
   protected FormService formService;
   protected FilterService filterService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
   protected ExternalTaskService externalTaskService;
   protected DecisionService decisionService;
 
@@ -151,7 +149,6 @@ public class ProcessEngineExtension implements TestWatcher,
     managementService = processEngine.getManagementService();
     formService = processEngine.getFormService();
     authorizationService = processEngine.getAuthorizationService();
-    caseService = processEngine.getCaseService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
     decisionService = processEngine.getDecisionService();
@@ -168,7 +165,6 @@ public class ProcessEngineExtension implements TestWatcher,
     identityService = null;
     managementService = null;
     authorizationService = null;
-    caseService = null;
     filterService = null;
     externalTaskService = null;
     decisionService = null;
@@ -401,15 +397,6 @@ public class ProcessEngineExtension implements TestWatcher,
 
   public void setAuthorizationService(AuthorizationService authorizationService) {
     this.authorizationService = authorizationService;
-  }
-
-  @Override
-  public CaseService getCaseService() {
-    return caseService;
-  }
-
-  public void setCaseService(CaseService caseService) {
-    this.caseService = caseService;
   }
 
   @Override

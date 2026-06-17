@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.eximeebpms.bpm.application.InvocationContext;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.engine.AuthorizationException;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
@@ -37,11 +36,6 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionContext;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionContextFactory;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartManager;
-import org.eximeebpms.bpm.engine.impl.cmmn.operation.CmmnAtomicOperation;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.context.ProcessApplicationContextUtil;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
@@ -68,8 +62,6 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.FilterManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricActivityInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricBatchManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceManager;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseInstanceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricDetailManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricExternalTaskLogManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricIdentityLinkLogManager;
@@ -138,36 +130,8 @@ public class CommandContext {
     this.restrictUserOperationLogToAuthenticatedUsers = processEngineConfiguration.isRestrictUserOperationLogToAuthenticatedUsers();
   }
 
-  public void performOperation(final CmmnAtomicOperation executionOperation, final CaseExecutionEntity execution) {
-    ProcessApplicationReference targetProcessApplication = getTargetProcessApplication(execution);
-
-    if(requiresContextSwitch(targetProcessApplication)) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-        public Void call() throws Exception {
-          performOperation(executionOperation, execution);
-          return null;
-        }
-
-      }, targetProcessApplication, new InvocationContext(execution));
-
-    } else {
-      try {
-        Context.setExecutionContext(execution);
-        LOG.debugExecutingAtomicOperation(executionOperation, execution);
-
-        executionOperation.execute(execution);
-      } finally {
-        Context.removeExecutionContext();
-      }
-    }
-  }
-
   public ProcessEngineConfigurationImpl getProcessEngineConfiguration() {
     return processEngineConfiguration;
-  }
-
-  protected ProcessApplicationReference getTargetProcessApplication(CaseExecutionEntity execution) {
-    return ProcessApplicationContextUtil.getTargetProcessApplication(execution);
   }
 
   protected boolean requiresContextSwitch(ProcessApplicationReference processApplicationReference) {
@@ -345,10 +309,6 @@ public class CommandContext {
     return getSession(HistoricProcessInstanceManager.class);
   }
 
-  public HistoricCaseInstanceManager getHistoricCaseInstanceManager() {
-    return getSession(HistoricCaseInstanceManager.class);
-  }
-
   public HistoricDetailManager getHistoricDetailManager() {
     return getSession(HistoricDetailManager.class);
   }
@@ -363,10 +323,6 @@ public class CommandContext {
 
   public HistoricActivityInstanceManager getHistoricActivityInstanceManager() {
     return getSession(HistoricActivityInstanceManager.class);
-  }
-
-  public HistoricCaseActivityInstanceManager getHistoricCaseActivityInstanceManager() {
-    return getSession(HistoricCaseActivityInstanceManager.class);
   }
 
   public HistoricTaskInstanceManager getHistoricTaskInstanceManager() {
@@ -471,20 +427,6 @@ public class CommandContext {
 
   public CamundaFormDefinitionManager getCamundaFormDefinitionManager() {
     return getSession(CamundaFormDefinitionManager.class);
-  }
-
-  // CMMN /////////////////////////////////////////////////////////////////////
-
-  public CaseDefinitionManager getCaseDefinitionManager() {
-    return getSession(CaseDefinitionManager.class);
-  }
-
-  public CaseExecutionManager getCaseExecutionManager() {
-    return getSession(CaseExecutionManager.class);
-  }
-
-  public CaseSentryPartManager getCaseSentryPartManager() {
-    return getSession(CaseSentryPartManager.class);
   }
 
   // DMN //////////////////////////////////////////////////////////////////////

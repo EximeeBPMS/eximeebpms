@@ -16,28 +16,24 @@
  */
 package org.eximeebpms.bpm.engine.impl.application;
 
+import org.eximeebpms.bpm.application.ProcessApplicationReference;
+import org.eximeebpms.bpm.application.ProcessApplicationRegistration;
+import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.cfg.TransactionState;
+import org.eximeebpms.bpm.engine.impl.context.Context;
+import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
+import org.eximeebpms.bpm.engine.impl.persistence.deploy.DeploymentFailListener;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionManager;
+import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.eximeebpms.bpm.application.ProcessApplicationReference;
-import org.eximeebpms.bpm.application.ProcessApplicationRegistration;
-import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
-import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
-import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cfg.TransactionState;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.context.Context;
-import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
-import org.eximeebpms.bpm.engine.impl.persistence.deploy.DeploymentFailListener;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionManager;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
-import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 
 /**
  * @author Daniel Meyer
@@ -157,11 +153,8 @@ public class ProcessApplicationManager {
       builder.append(". ");
 
       List<ProcessDefinition> processDefinitions = new ArrayList<ProcessDefinition>();
-      List<CaseDefinition> caseDefinitions = new ArrayList<CaseDefinition>();
 
       CommandContext commandContext = Context.getCommandContext();
-      ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
-      boolean cmmnEnabled = processEngineConfiguration.isCmmnEnabled();
 
       for (String deploymentId : deploymentIds) {
 
@@ -170,21 +163,11 @@ public class ProcessApplicationManager {
           .selectById(DeploymentEntity.class, deploymentId);
 
         if(deployment != null) {
-
           processDefinitions.addAll(getDeployedProcessDefinitionArtifacts(deployment));
-
-          if (cmmnEnabled) {
-            caseDefinitions.addAll(getDeployedCaseDefinitionArtifacts(deployment));
-          }
-
         }
       }
 
       logProcessDefinitionRegistrations(builder, processDefinitions);
-
-      if (cmmnEnabled) {
-        logCaseDefinitionRegistrations(builder, caseDefinitions);
-      }
 
       LOG.registrationSummary(builder.toString());
 
@@ -210,22 +193,6 @@ public class ProcessApplicationManager {
 
   }
 
-  protected List<CaseDefinition> getDeployedCaseDefinitionArtifacts(DeploymentEntity deployment) {
-    CommandContext commandContext = Context.getCommandContext();
-
-    // in case deployment was created by this command
-    List<CaseDefinition> entities = deployment.getDeployedCaseDefinitions();
-
-    if (entities == null) {
-      String deploymentId = deployment.getId();
-      CaseDefinitionManager caseDefinitionManager = commandContext.getCaseDefinitionManager();
-      return caseDefinitionManager.findCaseDefinitionByDeploymentId(deploymentId);
-    }
-
-    return entities;
-
-  }
-
   protected void logProcessDefinitionRegistrations(StringBuilder builder, List<ProcessDefinition> processDefinitions) {
     if(processDefinitions.isEmpty()) {
       builder.append("Deployment does not provide any process definitions.");
@@ -241,28 +208,6 @@ public class ProcessApplicationManager {
         builder.append(processDefinition.getVersion());
         builder.append(", id: ");
         builder.append(processDefinition.getId());
-        builder.append("]");
-      }
-      builder.append("\n");
-    }
-  }
-
-  protected void logCaseDefinitionRegistrations(StringBuilder builder, List<CaseDefinition> caseDefinitions) {
-    if(caseDefinitions.isEmpty()) {
-      builder.append("Deployment does not provide any case definitions.");
-
-    } else {
-      builder.append("\n");
-      builder.append("Will execute case definitions ");
-      builder.append("\n");
-      for (CaseDefinition caseDefinition : caseDefinitions) {
-        builder.append("\n");
-        builder.append("        ");
-        builder.append(caseDefinition.getKey());
-        builder.append("[version: ");
-        builder.append(caseDefinition.getVersion());
-        builder.append(", id: ");
-        builder.append(caseDefinition.getId());
         builder.append("]");
       }
       builder.append("\n");

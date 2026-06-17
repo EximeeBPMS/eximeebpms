@@ -45,7 +45,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eximeebpms.bpm.engine.BadUserRequestException;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.IdentityService;
@@ -119,7 +118,6 @@ public class FormServiceTest {
   private HistoryService historyService;
   private IdentityService identityService;
   private FormService formService;
-  private CaseService caseService;
   private ProcessEngineConfigurationImpl processEngineConfiguration;
 
   @Before
@@ -129,7 +127,6 @@ public class FormServiceTest {
     repositoryService = engineRule.getRepositoryService();
     historyService = engineRule.getHistoryService();
     formService = engineRule.getFormService();
-    caseService = engineRule.getCaseService();
     identityService = engineRule.getIdentityService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
     identityService.saveUser(identityService.newUser("fozzie"));
@@ -604,27 +601,6 @@ public class FormServiceTest {
 
     taskService.deleteTask(id, true);
   }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testSubmitTaskFormForCmmnHumanTask() {
-    caseService.createCaseInstanceByKey("oneTaskCase");
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    String stringValue = "some string";
-    String serializedValue = "some value";
-
-    formService.submitTaskForm(task.getId(), createVariables()
-        .putValueTyped("boolean", booleanValue(null))
-        .putValueTyped("string", stringValue(stringValue))
-        .putValueTyped("serializedObject", serializedObjectValue(serializedValue)
-            .objectTypeName(String.class.getName())
-            .serializationDataFormat(Variables.SerializationDataFormats.JAVA)
-            .create())
-        .putValueTyped("object", objectValue(serializedValue).create()));
-  }
-
 
   @Deployment
   @Test
@@ -1496,24 +1472,6 @@ public class FormServiceTest {
   public void testGetDeployedTaskForm() {
     // given
     runtimeService.startProcessInstanceByKey("FormsProcess");
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    // when
-    InputStream deployedTaskForm = formService.getDeployedTaskForm(taskId);
-
-    // then
-    assertNotNull(deployedTaskForm);
-    String fileAsString = IoUtil.fileAsString("org/eximeebpms/bpm/engine/test/api/form/task.html");
-    String deployedStartFormAsString = IoUtil.inputStreamAsString(deployedTaskForm);
-    assertEquals(deployedStartFormAsString, fileAsString);
-  }
-
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/form/DeployedFormsCase.cmmn11.xml",
-    "org/eximeebpms/bpm/engine/test/api/form/task.html" })
-  @Test
-  public void testGetDeployedTaskForm_Case() {
-    // given
-    caseService.createCaseInstanceByKey("Case_1");
     String taskId = taskService.createTaskQuery().singleResult().getId();
 
     // when

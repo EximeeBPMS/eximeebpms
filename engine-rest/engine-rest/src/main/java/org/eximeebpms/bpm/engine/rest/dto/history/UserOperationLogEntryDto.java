@@ -33,9 +33,6 @@ public class UserOperationLogEntryDto {
   protected String processDefinitionKey;
   protected String processInstanceId;
   protected String executionId;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String jobId;
   protected String jobDefinitionId;
@@ -63,9 +60,6 @@ public class UserOperationLogEntryDto {
     dto.processDefinitionKey = entry.getProcessDefinitionKey();
     dto.processInstanceId = entry.getProcessInstanceId();
     dto.executionId = entry.getExecutionId();
-    dto.caseDefinitionId = entry.getCaseDefinitionId();
-    dto.caseInstanceId = entry.getCaseInstanceId();
-    dto.caseExecutionId = entry.getCaseExecutionId();
     dto.taskId = entry.getTaskId();
     dto.jobId = entry.getJobId();
     dto.jobDefinitionId = entry.getJobDefinitionId();
@@ -119,18 +113,6 @@ public class UserOperationLogEntryDto {
     return executionId;
   }
 
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
   public String getTaskId() {
     return taskId;
   }
@@ -158,7 +140,7 @@ public class UserOperationLogEntryDto {
   public String getOperationId() {
     return operationId;
   }
-  
+
   public String getExternalTaskId() {
     return externalTaskId;
   }
@@ -190,7 +172,7 @@ public class UserOperationLogEntryDto {
   public String getRootProcessInstanceId() {
     return rootProcessInstanceId;
   }
-  
+
   public String getCategory() {
     return category;
   }

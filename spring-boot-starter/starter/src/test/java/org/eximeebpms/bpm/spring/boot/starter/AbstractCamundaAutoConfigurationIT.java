@@ -17,7 +17,6 @@
 package org.eximeebpms.bpm.spring.boot.starter;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -62,9 +61,6 @@ public abstract class AbstractCamundaAutoConfigurationIT {
 
   @Autowired
   protected AuthorizationService authorizationService;
-
-  @Autowired
-  protected CaseService caseService;
 
   @Autowired
   protected FilterService filterService;

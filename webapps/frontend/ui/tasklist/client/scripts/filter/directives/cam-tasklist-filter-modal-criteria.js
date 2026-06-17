@@ -106,44 +106,6 @@ var criteria = [
     ]
   },
   {
-    group: 'Case Instance',
-    options: [
-      {
-        name: 'caseInstanceId',
-        label: 'ID'
-      },
-      {
-        name: 'caseInstanceBusinessKey',
-        label: 'Business Key'
-      },
-      {
-        name: 'caseInstanceBusinessKeyLike',
-        label: 'Business Key Like'
-      }
-    ]
-  },
-  {
-    group: 'Case definition',
-    options: [
-      {
-        name: 'caseDefinitionId',
-        label: 'ID'
-      },
-      {
-        name: 'caseDefinitionKey',
-        label: 'Key'
-      },
-      {
-        name: 'caseDefinitionName',
-        label: 'Name'
-      },
-      {
-        name: 'caseDefinitionNameLike',
-        label: 'Name Like'
-      }
-    ]
-  },
-  {
     group: 'Other',
     options: [
       {

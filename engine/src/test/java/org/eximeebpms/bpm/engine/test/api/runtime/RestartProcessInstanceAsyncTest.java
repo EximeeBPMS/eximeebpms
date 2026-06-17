@@ -45,7 +45,6 @@ import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricProcessInstanceEntity;
@@ -889,8 +888,8 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldRestartProcessInstanceWithoutBusinessKey() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process", "businessKey1", (String) null);
-    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process", "businessKey2", (String) null);
+    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process", "businessKey1");
+    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process", "businessKey2");
 
     runtimeService.deleteProcessInstance(processInstance1.getId(), "test");
     runtimeService.deleteProcessInstance(processInstance2.getId(), "test");
@@ -915,8 +914,8 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldRestartProcessInstanceWithBusinessKey() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process", "businessKey1", (String) null);
-    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process", "businessKey2", (String) null);
+    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process", "businessKey1");
+    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process", "businessKey2");
 
     runtimeService.deleteProcessInstance(processInstance1.getId(), "test");
     runtimeService.deleteProcessInstance(processInstance2.getId(), "test");
@@ -934,31 +933,6 @@ public class RestartProcessInstanceAsyncTest {
     ProcessInstance restartedProcessInstance2 = restartedProcessInstances.get(1);
     assertNotNull(restartedProcessInstance1.getBusinessKey());
     assertNotNull(restartedProcessInstance2.getBusinessKey());
-  }
-
-  @Test
-  public void shouldRestartProcessInstanceWithoutCaseInstanceId() {
-    // given
-    ProcessDefinition processDefinition = testRule.deployAndGetDefinition(ProcessModels.TWO_TASKS_PROCESS);
-    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process", null, "caseInstanceId1");
-    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process", null, "caseInstanceId2");
-
-    runtimeService.deleteProcessInstance(processInstance1.getId(), "test");
-    runtimeService.deleteProcessInstance(processInstance2.getId(), "test");
-
-    // when
-    Batch batch = runtimeService.restartProcessInstances(processDefinition.getId())
-    .startBeforeActivity("userTask1")
-    .processInstanceIds(processInstance1.getId(), processInstance2.getId())
-    .executeAsync();
-
-    helper.completeBatch(batch);
-    // then
-    List<ProcessInstance> restartedProcessInstances = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).active().list();
-    ProcessInstance restartedProcessInstance1 = restartedProcessInstances.get(0);
-    ProcessInstance restartedProcessInstance2 = restartedProcessInstances.get(1);
-    assertNull(restartedProcessInstance1.getCaseInstanceId());
-    assertNull(restartedProcessInstance2.getCaseInstanceId());
   }
 
   @Test
@@ -1213,11 +1187,6 @@ public class RestartProcessInstanceAsyncTest {
 
     @Override
     public String provideTenantIdForProcessInstance(TenantIdProviderProcessInstanceContext ctx) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String provideTenantIdForCaseInstance(TenantIdProviderCaseInstanceContext ctx) {
       throw new UnsupportedOperationException();
     }
 

@@ -257,12 +257,8 @@ public class TaskResourceImpl implements TaskResource {
     // have READ permission on the corresponding process definition
     runWithoutAuthorization(() -> {
       String processDefinitionId = task.getProcessDefinitionId();
-      String caseDefinitionId = task.getCaseDefinitionId();
       if (processDefinitionId != null) {
         dto.setContextPath(ApplicationContextPathUtil.getApplicationPathByProcessDefinitionId(engine, processDefinitionId));
-
-      } else if (caseDefinitionId != null) {
-        dto.setContextPath(ApplicationContextPathUtil.getApplicationPathByCaseDefinitionId(engine, caseDefinitionId));
       }
       return null;
     });

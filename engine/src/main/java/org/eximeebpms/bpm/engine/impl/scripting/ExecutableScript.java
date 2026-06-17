@@ -20,7 +20,6 @@ import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
@@ -76,13 +75,6 @@ public abstract class ExecutableScript {
         activityId = task.getExecution().getActivityId();
         definitionIdMessage = " in the process definition with id '" + task.getProcessDefinitionId() + "'";
       }
-      if (task.getCaseExecution() != null) {
-        activityId = task.getCaseExecution().getActivityId();
-        definitionIdMessage = " in the case definition with id '" + task.getCaseDefinitionId() + "'";
-      }
-    } else if (variableScope instanceof DelegateCaseExecution) {
-      activityId = ((DelegateCaseExecution) variableScope).getActivityId();
-      definitionIdMessage = " in the case definition with id '" + ((DelegateCaseExecution) variableScope).getCaseDefinitionId() + "'";
     }
 
     if (activityId == null) {

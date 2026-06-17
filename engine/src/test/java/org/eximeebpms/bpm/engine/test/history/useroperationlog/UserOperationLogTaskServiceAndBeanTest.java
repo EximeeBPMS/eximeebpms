@@ -20,7 +20,6 @@ import static org.eximeebpms.bpm.engine.history.UserOperationLogEntry.OPERATION_
 import static org.eximeebpms.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
 import static org.eximeebpms.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
 import static org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
-import static org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity.CASE_INSTANCE_ID;
 import static org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
 import static org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
 import static org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity.DESCRIPTION;
@@ -280,46 +279,6 @@ public class UserOperationLogTaskServiceAndBeanTest extends AbstractUserOperatio
       taskService.saveTask(task);
     } catch (Exception e) {
       assertNotNull(e); // concurrent modification
-    }
-  }
-
-  @Test
-  public void testCaseInstanceId() {
-    // create new task
-    task = taskService.newTask();
-    taskService.saveTask(task);
-
-    UserOperationLogQuery query = queryOperationDetails(OPERATION_TYPE_UPDATE);
-    assertEquals(0, query.count());
-
-    // set case instance id and save task
-    task.setCaseInstanceId("aCaseInstanceId");
-    taskService.saveTask(task);
-
-    assertEquals(1, query.count());
-
-    UserOperationLogEntry entry = query.singleResult();
-    assertNotNull(entry);
-
-    assertNull(entry.getOrgValue());
-    assertEquals("aCaseInstanceId", entry.getNewValue());
-    assertEquals(CASE_INSTANCE_ID, entry.getProperty());
-
-    // change case instance id and save task
-    task.setCaseInstanceId("anotherCaseInstanceId");
-    taskService.saveTask(task);
-
-    assertEquals(2, query.count());
-
-    List<UserOperationLogEntry> entries = query.list();
-    assertEquals(2, entries.size());
-
-    for (UserOperationLogEntry currentEntry : entries) {
-      if (!currentEntry.getId().equals(entry.getId())) {
-        assertEquals("aCaseInstanceId", currentEntry.getOrgValue());
-        assertEquals("anotherCaseInstanceId", currentEntry.getNewValue());
-        assertEquals(CASE_INSTANCE_ID, currentEntry.getProperty());
-      }
     }
   }
 

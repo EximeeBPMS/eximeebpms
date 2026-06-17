@@ -37,7 +37,6 @@ In those examples, we use uncompiled versions of the library and its dependencie
 #### Available widgets
 
 - `cam-widget-bpmn-viewer`
-- `cam-widget-cmmn-viewer`
 - `cam-widget-dmn-viewer`
 - `cam-widget-debug`
 - `cam-widget-footer`

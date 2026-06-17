@@ -327,36 +327,6 @@ public class HistoricTaskInstanceRestServiceQueryTest extends AbstractRestServic
     inOrder.verify(mockedQuery).desc();
 
     inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseDefinitionId", "asc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseDefinitionId();
-    inOrder.verify(mockedQuery).asc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseDefinitionId", "desc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseDefinitionId();
-    inOrder.verify(mockedQuery).desc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseInstanceId", "asc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseInstanceId();
-    inOrder.verify(mockedQuery).asc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseInstanceId", "desc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseInstanceId();
-    inOrder.verify(mockedQuery).desc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseExecutionId", "asc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseExecutionId();
-    inOrder.verify(mockedQuery).asc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
-    executeAndVerifySorting("caseExecutionId", "desc", Status.OK);
-    inOrder.verify(mockedQuery).orderByCaseExecutionId();
-    inOrder.verify(mockedQuery).desc();
-
-    inOrder = Mockito.inOrder(mockedQuery);
     executeAndVerifySorting("tenantId", "asc", Status.OK);
     inOrder.verify(mockedQuery).orderByTenantId();
     inOrder.verify(mockedQuery).asc();
@@ -2179,146 +2149,6 @@ public class HistoricTaskInstanceRestServiceQueryTest extends AbstractRestServic
   }
 
   @Test
-  public void testQueryByCaseDefinitionId() {
-    String caseDefinitionId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_DEF_ID;
-
-    given()
-      .queryParam("caseDefinitionId", caseDefinitionId)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().get(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionId(caseDefinitionId);
-  }
-
-  @Test
-  public void testQueryByCaseDefinitionIdAsPost() {
-    String caseDefinitionId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_DEF_ID;
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("caseDefinitionId", caseDefinitionId);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(params)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().post(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionId(caseDefinitionId);
-  }
-
-  @Test
-  public void testQueryByCaseDefinitionKey() {
-    String caseDefinitionKey = "aCaseDefKey";
-
-    given()
-      .queryParam("caseDefinitionKey", caseDefinitionKey)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().get(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionKey(caseDefinitionKey);
-  }
-
-  @Test
-  public void testQueryByCaseDefinitionKeyAsPost() {
-    String caseDefinitionKey = "aCaseDefKey";
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("caseDefinitionKey", caseDefinitionKey);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(params)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().post(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionKey(caseDefinitionKey);
-  }
-
-  @Test
-  public void testQueryByCaseDefinitionName() {
-    String caseDefinitionName = "aCaseDefName";
-
-    given()
-      .queryParam("caseDefinitionName", caseDefinitionName)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().get(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionName(caseDefinitionName);
-  }
-
-  @Test
-  public void testQueryByCaseDefinitionNameAsPost() {
-    String caseDefinitionName = "aCaseDefName";
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("caseDefinitionName", caseDefinitionName);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(params)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().post(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseDefinitionName(caseDefinitionName);
-  }
-
-  @Test
-  public void testQueryByCaseInstanceId() {
-    String caseInstanceId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_INST_ID;
-
-    given()
-      .queryParam("caseInstanceId", caseInstanceId)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().get(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(caseInstanceId);
-  }
-
-  @Test
-  public void testQueryByCaseInstanceIdAsPost() {
-    String caseInstanceId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_INST_ID;
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("caseInstanceId", caseInstanceId);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(params)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().post(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(caseInstanceId);
-  }
-
-  @Test
-  public void testQueryByCaseExecutionId() {
-    String caseExecutionId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_EXEC_ID;
-
-    given()
-      .queryParam("caseExecutionId", caseExecutionId)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().get(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionId(caseExecutionId);
-  }
-
-  @Test
-  public void testQueryByCaseExecutionIdAsPost() {
-    String caseExecutionId = MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_EXEC_ID;
-
-    Map<String, Object> params = new HashMap<>();
-    params.put("caseExecutionId", caseExecutionId);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(params)
-      .then().expect().statusCode(Status.OK.getStatusCode())
-      .when().post(HISTORIC_TASK_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionId(caseExecutionId);
-  }
-
-  @Test
   public void testTenantIdListParameter() {
     mockedQuery = setUpMockHistoricTaskInstanceQuery(createMockHistoricTaskInstancesTwoTenants());
 
@@ -2566,10 +2396,6 @@ public class HistoricTaskInstanceRestServiceQueryTest extends AbstractRestServic
     String returnedParentTaskId = from(content).getString("[0].parentTaskId");
     Date returnedDue = DateTimeUtil.parseDate(from(content).getString("[0].due"));
     Date returnedFollow = DateTimeUtil.parseDate(from(content).getString("[0].followUp"));
-    String returnedCaseDefinitionKey = from(content).getString("[0].caseDefinitionKey");
-    String returnedCaseDefinitionId = from(content).getString("[0].caseDefinitionId");
-    String returnedCaseInstanceId = from(content).getString("[0].caseInstanceId");
-    String returnedCaseExecutionId = from(content).getString("[0].caseExecutionId");
     String returnedTenantId = from(content).getString("[0].tenantId");
     String returnedTaskState = from(content).getString("[0].taskState");
     Date returnedRemovalTime = DateTimeUtil.parseDate(from(content).getString("[0].removalTime"));
@@ -2594,10 +2420,6 @@ public class HistoricTaskInstanceRestServiceQueryTest extends AbstractRestServic
     Assert.assertEquals(DateTimeUtil.parseDate(MockProvider.EXAMPLE_HISTORIC_TASK_INST_DUE_DATE), returnedDue);
     Assert.assertEquals(DateTimeUtil.parseDate(MockProvider.EXAMPLE_HISTORIC_TASK_INST_FOLLOW_UP_DATE), returnedFollow);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_PARENT_TASK_ID, returnedParentTaskId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_DEF_KEY, returnedCaseDefinitionKey);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_DEF_ID, returnedCaseDefinitionId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_INST_ID, returnedCaseInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_CASE_EXEC_ID, returnedCaseExecutionId);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
     Assert.assertEquals(DateTimeUtil.parseDate(MockProvider.EXAMPLE_HISTORIC_TASK_INST_REMOVAL_TIME), returnedRemovalTime);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_TASK_INST_ROOT_PROC_INST_ID, returnedRootProcessInstanceId);

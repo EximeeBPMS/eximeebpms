@@ -27,7 +27,6 @@ import org.eximeebpms.bpm.application.InvocationContext;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.context.ProcessApplicationContextUtil;
 import org.eximeebpms.bpm.engine.impl.core.variable.CoreVariableInstance;
@@ -71,8 +70,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
   protected String executionId;
   protected String taskId;
   protected String batchId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String activityInstanceId;
   protected String tenantId;
 
@@ -195,8 +192,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     persistentState.put("concurrentLocal", isConcurrentLocal);
     persistentState.put("executionId", executionId);
     persistentState.put("taskId", taskId);
-    persistentState.put("caseExecutionId", caseExecutionId);
-    persistentState.put("caseInstanceId", caseInstanceId);
     persistentState.put("tenantId", tenantId);
     persistentState.put("processInstanceId", processInstanceId);
     persistentState.put("processDefinitionId", processDefinitionId);
@@ -220,27 +215,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
-  public void setCaseExecution(CaseExecutionEntity caseExecution) {
-    if (caseExecution != null) {
-      this.caseInstanceId = caseExecution.getCaseInstanceId();
-      this.caseExecutionId = caseExecution.getId();
-      this.tenantId = caseExecution.getTenantId();
-    }
-    else {
-      this.caseInstanceId = null;
-      this.caseExecutionId = null;
-      this.tenantId = null;
-    }
   }
 
   // byte array value /////////////////////////////////////////////////////////
@@ -373,18 +347,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   }
 
-  // case execution ///////////////////////////////////////////////////////////
-
-  public CaseExecutionEntity getCaseExecution() {
-    if (caseExecutionId != null) {
-      return Context
-          .getCommandContext()
-          .getCaseExecutionManager()
-          .findCaseExecutionById(caseExecutionId);
-    }
-    return null;
-  }
-
   // getters and setters //////////////////////////////////////////////////////
 
   public String getId() {
@@ -409,14 +371,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   public String getExecutionId() {
     return executionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
   }
 
   public Long getLongValue() {
@@ -499,15 +453,11 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
       if (task.getExecution() != null) {
         setExecution(task.getExecution());
       }
-      if (task.getCaseExecution() != null) {
-        setCaseExecution(task.getCaseExecution());
-      }
     }
     else {
       this.taskId = null;
       this.tenantId = null;
       setExecution(null);
-      setCaseExecution(null);
     }
 
 
@@ -542,7 +492,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
       return executionId;
     }
 
-    return caseExecutionId;
+    return null;
   }
 
   public void setVariableScopeId(String variableScopeId) {
@@ -556,9 +506,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     }
     else if (executionId != null) {
       return getExecution();
-    }
-    else if (caseExecutionId != null) {
-      return getCaseExecution();
     }
     else {
       return null;
@@ -630,9 +577,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     else if (executionId != null) {
       return ProcessApplicationContextUtil.getTargetProcessApplication(getExecution());
     }
-    else if (caseExecutionId != null) {
-      return ProcessApplicationContextUtil.getTargetProcessApplication(getCaseExecution());
-    }
     else {
       return null;
     }
@@ -647,8 +591,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
       + ", processDefinitionId=" + processDefinitionId
       + ", processInstanceId=" + processInstanceId
       + ", executionId=" + executionId
-      + ", caseInstanceId=" + caseInstanceId
-      + ", caseExecutionId=" + caseExecutionId
       + ", taskId=" + taskId
       + ", activityInstanceId=" + activityInstanceId
       + ", tenantId=" + tenantId
@@ -728,12 +670,6 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     if (executionId != null){
       referenceIdAndClass.put(executionId, ExecutionEntity.class);
     }
-    if (caseInstanceId != null){
-      referenceIdAndClass.put(caseInstanceId, CaseExecutionEntity.class);
-    }
-    if (caseExecutionId != null){
-      referenceIdAndClass.put(caseExecutionId, CaseExecutionEntity.class);
-    }
     if (getByteArrayValueId() != null){
       referenceIdAndClass.put(getByteArrayValueId(), ByteArrayEntity.class);
     }
@@ -742,7 +678,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
   }
 
   /**
-   * 
+   *
    * @return <code>true</code> <code>processDefinitionId</code> is introduced in 7.13,
    * the check is used to created missing history at {@link LegacyBehavior#createMissingHistoricVariables(org.eximeebpms.bpm.engine.impl.pvm.runtime.PvmExecutionImpl) LegacyBehavior#createMissingHistoricVariables}
    */

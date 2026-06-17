@@ -45,18 +45,6 @@ public class HistoricDetailManager extends AbstractHistoricManager {
     deleteHistoricDetails(parameters);
   }
 
-  public void deleteHistoricDetailsByCaseInstanceIds(List<String> historicCaseInstanceIds) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("caseInstanceIds", historicCaseInstanceIds);
-    deleteHistoricDetails(parameters);
-  }
-
-  public void deleteHistoricDetailsByTaskCaseInstanceIds(List<String> historicCaseInstanceIds) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("taskCaseInstanceIds", historicCaseInstanceIds);
-    deleteHistoricDetails(parameters);
-  }
-
   public void deleteHistoricDetailsByVariableInstanceId(String historicVariableInstanceId) {
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("variableInstanceId", historicVariableInstanceId);

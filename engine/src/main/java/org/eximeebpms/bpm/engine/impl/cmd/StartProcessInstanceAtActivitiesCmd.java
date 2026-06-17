@@ -73,7 +73,7 @@ public class StartProcessInstanceAtActivitiesCmd implements Command<ProcessInsta
     ActivityImpl initialActivity = determineFirstActivity(processDefinition, modificationBuilder);
 
     ExecutionEntity processInstance = processDefinition
-        .createProcessInstance(instantiationBuilder.getBusinessKey(), instantiationBuilder.getCaseInstanceId(), initialActivity);
+        .createProcessInstance(instantiationBuilder.getBusinessKey(), initialActivity);
 
     if (instantiationBuilder.getTenantId() != null) {
       processInstance.setTenantId(instantiationBuilder.getTenantId());

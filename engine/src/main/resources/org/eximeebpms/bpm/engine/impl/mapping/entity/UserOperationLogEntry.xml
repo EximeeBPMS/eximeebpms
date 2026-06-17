@@ -32,9 +32,6 @@
         ROOT_PROC_INST_ID_,
         PROC_INST_ID_,
         EXECUTION_ID_,
-        CASE_DEF_ID_,
-        CASE_INST_ID_,
-        CASE_EXECUTION_ID_,
         TASK_ID_,
         JOB_ID_,
         JOB_DEF_ID_,
@@ -60,9 +57,6 @@
         #{rootProcessInstanceId, jdbcType=VARCHAR},
         #{processInstanceId, jdbcType=VARCHAR},
         #{executionId, jdbcType=VARCHAR},
-        #{caseDefinitionId, jdbcType=VARCHAR},
-        #{caseInstanceId, jdbcType=VARCHAR},
-        #{caseExecutionId, jdbcType=VARCHAR},
         #{taskId ,jdbcType=VARCHAR},
         #{jobId, jdbcType=VARCHAR},
         #{jobDefinitionId, jdbcType=VARCHAR},
@@ -298,9 +292,6 @@
     <result property="rootProcessInstanceId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR" />
     <result property="processInstanceId" column="PROC_INST_ID_" jdbcType="VARCHAR" />
     <result property="executionId" column="EXECUTION_ID_" jdbcType="VARCHAR" />
-    <result property="caseDefinitionId" column="CASE_DEF_ID_" jdbcType="VARCHAR" />
-    <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
-    <result property="caseExecutionId" column="CASE_EXECUTION_ID_" jdbcType="VARCHAR" />
     <result property="taskId" column="TASK_ID_" jdbcType="VARCHAR" />
     <result property="jobId" column="JOB_ID_" jdbcType="VARCHAR" />
     <result property="jobDefinitionId" column="JOB_DEF_ID_" jdbcType="VARCHAR" />
@@ -377,15 +368,6 @@
       <if test="executionId != null">
         and RES.EXECUTION_ID_ = #{executionId}
       </if>
-      <if test="caseDefinitionId != null">
-        and RES.CASE_DEF_ID_ = #{caseDefinitionId}
-      </if>
-      <if test="caseInstanceId != null">
-        and RES.CASE_INST_ID_ = #{caseInstanceId}
-      </if>
-      <if test="caseExecutionId != null">
-        and RES.CASE_EXECUTION_ID_ = #{caseExecutionId}
-      </if>
       <if test="taskId != null">
         and RES.TASK_ID_ = #{taskId}
       </if>
@@ -449,7 +431,7 @@
           and RES.TENANT_ID_ is null
         </if>
       </if>
-      
+
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">
         <!-- may not exist in the context of a process definition -->
           and (

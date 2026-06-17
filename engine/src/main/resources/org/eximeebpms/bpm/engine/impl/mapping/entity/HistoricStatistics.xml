@@ -17,7 +17,7 @@
     limitations under the License.
 
 -->
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.eximeebpms.bpm.engine.history.HistoricActivityStatistics">
 
@@ -34,19 +34,9 @@
     <result property="deletedIncidents" column="DELETED_INCIDENT_COUNT_" jdbcType="INTEGER" />
   </resultMap>
 
-  <resultMap id="historicCaseActivityStatisticsResultMap" type="org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricCaseActivityStatisticsImpl">
-    <id property="id" column="ID_" jdbcType="VARCHAR" />
-    <result property="available" column="AVAILABLE_" jdbcType="INTEGER" />
-    <result property="enabled" column="ENABLED_" jdbcType="INTEGER" />
-    <result property="disabled" column="DISABLED_" jdbcType="INTEGER" />
-    <result property="active" column="ACTIVE_" jdbcType="INTEGER" />
-    <result property="terminated" column="TERMINATED_" jdbcType="INTEGER" />
-    <result property="completed" column="COMPLETED_" jdbcType="INTEGER" />
-  </resultMap>
-
   <!-- HistoricActivity statistics -->
 
-  <select id ="selectHistoricActivityStatistics" resultMap="historicActivityStatisticsResultMap" 
+  <select id ="selectHistoricActivityStatistics" resultMap="historicActivityStatisticsResultMap"
     parameterType="org.eximeebpms.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
     <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
@@ -57,7 +47,7 @@
     ${limitAfter}
   </select>
 
-  <select id ="selectHistoricActivityStatisticsCount" resultType="long" 
+  <select id ="selectHistoricActivityStatisticsCount" resultType="long"
     parameterType="org.eximeebpms.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricActivityStatisticsByQueryCriteriaSql"/>
@@ -195,44 +185,6 @@
     <if test="finishedAfter != null">
       and PI.END_TIME_ &gt;= #{finishedAfter}
     </if>
-  </sql>
-
-  <!-- HistoricCaseActivity statistics -->
-
-  <select id ="selectHistoricCaseActivityStatistics" resultMap="historicCaseActivityStatisticsResultMap" 
-    parameterType="org.eximeebpms.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
-    <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
-    ${limitBefore}
-    select RES.*
-    ${limitBetween}
-    <include refid="selectHistoricCaseActivityStatisticsByQueryCriteriaSql"/>
-    ${orderBy}
-    ${limitAfter}
-  </select>
-
-  <select id ="selectHistoricCaseActivityStatisticsCount" resultType="long" 
-    parameterType="org.eximeebpms.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
-    ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
-    <include refid="selectHistoricCaseActivityStatisticsByQueryCriteriaSql"/>
-    ${countDistinctAfterEnd}
-  </select>
-
-  <sql id="selectHistoricCaseActivityStatisticsByQueryCriteriaSql">
-    from (
-      select
-        HCAI.CASE_ACT_ID_ as ID_
-      , count( CASE WHEN HCAI.STATE_ = 1 THEN 1 ELSE null END ) as AVAILABLE_
-      , count( CASE WHEN HCAI.STATE_ = 2 THEN 1 ELSE null END ) as ENABLED_
-      , count( CASE WHEN HCAI.STATE_ = 3 THEN 1 ELSE null END ) as DISABLED_
-      , count( CASE WHEN HCAI.STATE_ = 4 THEN 1 ELSE null END ) as ACTIVE_
-      , count( CASE WHEN HCAI.STATE_ = 6 THEN 1 ELSE null END ) as TERMINATED_
-      , count( CASE WHEN HCAI.STATE_ = 7 THEN 1 ELSE null END ) as COMPLETED_
-      from
-        ${prefix}ACT_HI_CASEACTINST HCAI
-      where
-        HCAI.CASE_DEF_ID_ = #{caseDefinitionId}
-      group by HCAI.CASE_ACT_ID_
-    ) RES
   </sql>
 
 </mapper>

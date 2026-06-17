@@ -36,7 +36,6 @@
 
     <module name="org.eximeebpms.bpm.model.eximeebpms-xml-model" />
     <module name="org.eximeebpms.bpm.model.eximeebpms-bpmn-model" />
-    <module name="org.eximeebpms.bpm.model.eximeebpms-cmmn-model" />
     <module name="org.eximeebpms.bpm.model.eximeebpms-dmn-model" />
 
     <module name="org.eximeebpms.commons.eximeebpms-commons-logging" />

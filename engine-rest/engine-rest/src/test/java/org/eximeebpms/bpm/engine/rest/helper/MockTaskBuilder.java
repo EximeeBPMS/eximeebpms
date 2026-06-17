@@ -44,9 +44,6 @@ public class MockTaskBuilder {
   private String processDefinitionId;
   private String processInstanceId;
   private String taskDefinitionKey;
-  private String caseDefinitionId;
-  private String caseInstanceId;
-  private String caseExecutionId;
   private String formKey;
   private CamundaFormRef camundaFormRef;
   private String tenantId;
@@ -138,21 +135,6 @@ public class MockTaskBuilder {
     return this;
   }
 
-  public MockTaskBuilder caseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  public MockTaskBuilder caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public MockTaskBuilder caseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-    return this;
-  }
-
   public MockTaskBuilder formKey(String exampleFormKey) {
     this.formKey = exampleFormKey;
     return this;
@@ -203,9 +185,6 @@ public class MockTaskBuilder {
     when(mockTask.getProcessDefinitionId()).thenReturn(processDefinitionId);
     when(mockTask.getProcessInstanceId()).thenReturn(processInstanceId);
     when(mockTask.getTaskDefinitionKey()).thenReturn(taskDefinitionKey);
-    when(mockTask.getCaseDefinitionId()).thenReturn(caseDefinitionId);
-    when(mockTask.getCaseInstanceId()).thenReturn(caseInstanceId);
-    when(mockTask.getCaseExecutionId()).thenReturn(caseExecutionId);
     when(mockTask.getFormKey()).thenReturn(formKey);
     when(mockTask.getCamundaFormRef()).thenReturn(camundaFormRef);
     when(mockTask.getTenantId()).thenReturn(tenantId);

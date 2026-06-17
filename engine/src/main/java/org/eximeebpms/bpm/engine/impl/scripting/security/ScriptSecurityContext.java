@@ -18,7 +18,6 @@ public final class ScriptSecurityContext {
   private final String activityId;
   private final String processDefinitionId;
   private final String processDefinitionKey;
-  private final String caseDefinitionId;
   private final String processDefinitionName;
 
   private ScriptSecurityContext(Builder builder) {
@@ -30,7 +29,6 @@ public final class ScriptSecurityContext {
     this.activityId = normalize(builder.activityId).orElse(null);
     this.processDefinitionId = normalize(builder.processDefinitionId).orElse(null);
     this.processDefinitionKey = normalize(builder.processDefinitionKey).orElse(null);
-    this.caseDefinitionId = normalize(builder.caseDefinitionId).orElse(null);
     this.processDefinitionName = normalize(builder.processDefinitionName).orElse(null);
   }
 
@@ -52,10 +50,6 @@ public final class ScriptSecurityContext {
 
   public Optional<String> getProcessDefinitionKey() {
     return Optional.ofNullable(processDefinitionKey);
-  }
-
-  public Optional<String> getCaseDefinitionId() {
-    return Optional.ofNullable(caseDefinitionId);
   }
 
   public Optional<String> getProcessDefinitionName() {
@@ -98,7 +92,6 @@ public final class ScriptSecurityContext {
         + ", provider=" + provider
         + ", activityId=" + activityId
         + ", processDefinitionKey=" + processDefinitionKey
-        + ", caseDefinitionId=" + caseDefinitionId
         + ", processDefinitionId=" + processDefinitionId
         + ", processDefinitionName=" + processDefinitionName
         + '}';
@@ -114,7 +107,6 @@ public final class ScriptSecurityContext {
     private String activityId;
     private String processDefinitionId;
     private String processDefinitionKey;
-    private String caseDefinitionId;
     private String processDefinitionName;
 
     private Builder(String language) {
@@ -153,11 +145,6 @@ public final class ScriptSecurityContext {
 
     public Builder processDefinitionKey(String processDefinitionKey) {
       this.processDefinitionKey = processDefinitionKey;
-      return this;
-    }
-
-    public Builder caseDefinitionId(String caseDefinitionId) {
-      this.caseDefinitionId = caseDefinitionId;
       return this;
     }
 

@@ -95,20 +95,6 @@ public interface Task {
   /** Reference to the process definition or null if it is not related to a process. */
   String getProcessDefinitionId();
 
-  /** Reference to the case instance or null if it is not related to a case instance. */
-  String getCaseInstanceId();
-
-  /**
-   * The case instance id for which this task is associated for.
-   */
-  void setCaseInstanceId(String caseInstanceId);
-
-  /** Reference to the path of case execution or null if it is not related to a case instance. */
-  String getCaseExecutionId();
-
-  /** Reference to the case definition or null if it is not related to a case. */
-  String getCaseDefinitionId();
-
   /** The date/time when this task was created */
   Date getCreateTime();
 

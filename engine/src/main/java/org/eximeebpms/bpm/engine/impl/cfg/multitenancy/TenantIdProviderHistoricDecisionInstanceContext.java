@@ -16,7 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.impl.cfg.multitenancy;
 
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 
@@ -32,8 +31,6 @@ public class TenantIdProviderHistoricDecisionInstanceContext {
 
   protected DelegateExecution execution;
 
-  protected DelegateCaseExecution caseExecution;
-
   public TenantIdProviderHistoricDecisionInstanceContext(DecisionDefinition decisionDefinition) {
     this.decisionDefinition = decisionDefinition;
   }
@@ -41,11 +38,6 @@ public class TenantIdProviderHistoricDecisionInstanceContext {
   public TenantIdProviderHistoricDecisionInstanceContext(DecisionDefinition decisionDefinition, DelegateExecution execution) {
     this(decisionDefinition);
     this.execution = execution;
-  }
-
-  public TenantIdProviderHistoricDecisionInstanceContext(DecisionDefinition decisionDefinition, DelegateCaseExecution caseExecution) {
-    this(decisionDefinition);
-    this.caseExecution = caseExecution;
   }
 
   /**
@@ -61,14 +53,6 @@ public class TenantIdProviderHistoricDecisionInstanceContext {
    */
   public DelegateExecution getExecution() {
     return execution;
-  }
-
-  /**
-   * @return the case execution. This method returns the case execution of the CMMN case task
-   * which evaluated the decision definition.
-   */
-  public DelegateCaseExecution getCaseExecution() {
-    return caseExecution;
   }
 
 }

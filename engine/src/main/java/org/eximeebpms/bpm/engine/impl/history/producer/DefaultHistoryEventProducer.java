@@ -41,8 +41,6 @@ import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.batch.history.HistoricBatchEntity;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.history.DefaultHistoryRemovalTimeProvider;
@@ -167,21 +165,13 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     if (subProcessInstance != null) {
       evt.setCalledProcessInstanceId(subProcessInstance.getId());
     }
-
-    // update sub case reference
-    CaseExecutionEntity subCaseInstance = execution.getSubCaseInstance();
-    if (subCaseInstance != null) {
-      evt.setCalledCaseInstanceId(subCaseInstance.getId());
-    }
   }
-
 
   protected void initProcessInstanceEvent(HistoricProcessInstanceEventEntity evt, ExecutionEntity execution, HistoryEventType eventType) {
 
     String processInstanceId = execution.getProcessInstanceId();
     String executionId = execution.getId();
     // the given execution is the process instance!
-    String caseInstanceId = execution.getCaseInstanceId();
     String tenantId = execution.getTenantId();
 
     fillProcessDefinitionData(evt, execution);
@@ -191,14 +181,10 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     evt.setProcessInstanceId(processInstanceId);
     evt.setExecutionId(executionId);
     evt.setBusinessKey(execution.getProcessBusinessKey());
-    evt.setCaseInstanceId(caseInstanceId);
     evt.setTenantId(tenantId);
     evt.setRootProcessInstanceId(execution.getRootProcessInstanceId());
     evt.setRestartedProcessInstanceId(execution.getRestartedProcessInstanceId());
 
-    if (execution.getSuperCaseExecution() != null) {
-      evt.setSuperCaseInstanceId(execution.getSuperCaseExecution().getCaseInstanceId());
-    }
     if (execution.getSuperExecution() != null) {
       evt.setSuperProcessInstanceId(execution.getSuperExecution().getProcessInstanceId());
     }
@@ -211,15 +197,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     String processInstanceId = taskEntity.getProcessInstanceId();
     String executionId = taskEntity.getExecutionId();
 
-    String caseDefinitionKey = null;
-    CaseDefinitionEntity caseDefinition = taskEntity.getCaseDefinition();
-    if (caseDefinition != null) {
-      caseDefinitionKey = caseDefinition.getKey();
-    }
-
-    String caseDefinitionId = taskEntity.getCaseDefinitionId();
-    String caseExecutionId = taskEntity.getCaseExecutionId();
-    String caseInstanceId = taskEntity.getCaseInstanceId();
     String tenantId = taskEntity.getTenantId();
 
     evt.setId(taskEntity.getId());
@@ -228,11 +205,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
 
     evt.setProcessInstanceId(processInstanceId);
     evt.setExecutionId(executionId);
-
-    evt.setCaseDefinitionKey(caseDefinitionKey);
-    evt.setCaseDefinitionId(caseDefinitionId);
-    evt.setCaseExecutionId(caseExecutionId);
-    evt.setCaseInstanceId(caseInstanceId);
 
     evt.setAssignee(taskEntity.getAssignee());
     evt.setDescription(taskEntity.getDescription());
@@ -269,8 +241,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     evt.setVariableInstanceId(variableInstance.getId());
     evt.setProcessInstanceId(variableInstance.getProcessInstanceId());
     evt.setExecutionId(variableInstance.getExecutionId());
-    evt.setCaseInstanceId(variableInstance.getCaseInstanceId());
-    evt.setCaseExecutionId(variableInstance.getCaseExecutionId());
     evt.setTaskId(variableInstance.getTaskId());
     evt.setRevision(variableInstance.getRevision());
     evt.setVariableName(variableInstance.getName());
@@ -285,15 +255,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
 
       if (isHistoryRemovalTimeStrategyStart()) {
         provideRemovalTime(evt);
-      }
-    }
-
-    CaseExecutionEntity caseExecution = variableInstance.getCaseExecution();
-    if (caseExecution != null) {
-      CaseDefinitionEntity definition = (CaseDefinitionEntity) caseExecution.getCaseDefinition();
-      if (definition != null) {
-        evt.setCaseDefinitionId(definition.getId());
-        evt.setCaseDefinitionKey(definition.getKey());
       }
     }
 
@@ -318,9 +279,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     evt.setUserId(context.getUserId());
     evt.setProcessInstanceId(contextEntry.getProcessInstanceId());
     evt.setExecutionId(contextEntry.getExecutionId());
-    evt.setCaseDefinitionId(contextEntry.getCaseDefinitionId());
-    evt.setCaseInstanceId(contextEntry.getCaseInstanceId());
-    evt.setCaseExecutionId(contextEntry.getCaseExecutionId());
     evt.setTaskId(contextEntry.getTaskId());
     evt.setJobId(contextEntry.getJobId());
     evt.setJobDefinitionId(contextEntry.getJobDefinitionId());
@@ -410,12 +368,8 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
         scopeActivityInstanceId = scopeExecution.getActivityInstanceId();
       }
     }
-    else if (variableInstance.getCaseExecutionId() != null) {
-      scopeActivityInstanceId = variableInstance.getCaseExecutionId();
-    }
 
     ExecutionEntity sourceExecution = null;
-    CaseExecutionEntity sourceCaseExecution = null;
     if (sourceVariableScope instanceof ExecutionEntity) {
       sourceExecution = (ExecutionEntity) sourceVariableScope;
       sourceActivityInstanceId = sourceExecution.getActivityInstanceId();
@@ -425,16 +379,6 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
       if (sourceExecution != null) {
         sourceActivityInstanceId = sourceExecution.getActivityInstanceId();
       }
-      else {
-        sourceCaseExecution = ((TaskEntity) sourceVariableScope).getCaseExecution();
-        if (sourceCaseExecution != null) {
-          sourceActivityInstanceId = sourceCaseExecution.getId();
-        }
-      }
-    }
-    else if (sourceVariableScope instanceof CaseExecutionEntity) {
-      sourceCaseExecution = (CaseExecutionEntity) sourceVariableScope;
-      sourceActivityInstanceId = sourceCaseExecution.getId();
     }
 
     // create event

@@ -326,7 +326,7 @@ EximeebpmsForm.prototype.executeFormScript = function(script) {
  * something truthy.
  */
 EximeebpmsForm.prototype.store = function(callback) {
-  var formId = this.taskId || this.processDefinitionId || this.caseInstanceId;
+  var formId = this.taskId || this.processDefinitionId;
 
   if (!formId) {
     if (typeof callback === 'function') {
@@ -376,7 +376,7 @@ EximeebpmsForm.prototype.store = function(callback) {
  * @return {Boolean} `true` if there is something who can be restored
  */
 EximeebpmsForm.prototype.isRestorable = function() {
-  var formId = this.taskId || this.processDefinitionId || this.caseInstanceId;
+  var formId = this.taskId || this.processDefinitionId;
 
   if (!formId) {
     throw new Error('Cannot determine the storage ID');
@@ -415,7 +415,7 @@ EximeebpmsForm.prototype.isRestorable = function() {
 EximeebpmsForm.prototype.restore = function(callback) {
   var stored;
   var vars = this.variableManager.variables;
-  var formId = this.taskId || this.processDefinitionId || this.caseDefinitionId;
+  var formId = this.taskId || this.processDefinitionId;
 
   if (!formId) {
     if (typeof callback === 'function') {

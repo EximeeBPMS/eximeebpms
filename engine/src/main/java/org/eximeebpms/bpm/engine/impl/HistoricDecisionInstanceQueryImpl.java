@@ -51,10 +51,6 @@ public class HistoricDecisionInstanceQueryImpl extends AbstractQuery<HistoricDec
   protected String processDefinitionId;
   protected String processInstanceId;
 
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-
   protected String[] activityInstanceIds;
   protected String[] activityIds;
 
@@ -156,27 +152,6 @@ public class HistoricDecisionInstanceQueryImpl extends AbstractQuery<HistoricDec
   public HistoricDecisionInstanceQuery processInstanceId(String processInstanceId) {
     ensureNotNull(NotValidException.class, "processInstanceId", processInstanceId);
     this.processInstanceId = processInstanceId;
-    return this;
-  }
-
-  @Override
-  public HistoricDecisionInstanceQuery caseDefinitionKey(String caseDefinitionKey) {
-    ensureNotNull(NotValidException.class, "caseDefinitionKey", caseDefinitionKey);
-    this.caseDefinitionKey = caseDefinitionKey;
-    return this;
-  }
-
-  @Override
-  public HistoricDecisionInstanceQuery caseDefinitionId(String caseDefinitionId) {
-    ensureNotNull(NotValidException.class, "caseDefinitionId", caseDefinitionId);
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  @Override
-  public HistoricDecisionInstanceQuery caseInstanceId(String caseInstanceId) {
-    ensureNotNull(NotValidException.class, "caseInstanceId", caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
     return this;
   }
 
@@ -288,18 +263,6 @@ public class HistoricDecisionInstanceQueryImpl extends AbstractQuery<HistoricDec
 
   public String getProcessInstanceId() {
     return processInstanceId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   public String[] getActivityInstanceIds() {

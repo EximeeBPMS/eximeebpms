@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
@@ -200,11 +199,6 @@ public class DeploymentEntity implements Serializable, DeploymentWithDefinitions
   @Override
   public List<ProcessDefinition> getDeployedProcessDefinitions() {
     return deployedArtifacts == null ? null : deployedArtifacts.get(ProcessDefinitionEntity.class);
-  }
-
-  @Override
-  public List<CaseDefinition> getDeployedCaseDefinitions() {
-    return deployedArtifacts == null ? null : deployedArtifacts.get(CaseDefinitionEntity.class);
   }
 
   @Override

@@ -144,14 +144,6 @@ public final class CamundaSpringBootUtil {
       configuration.setCustomHistoryLevels(new ArrayList<>());
     }
 
-    // Cmmn Transform Listeners
-    if (configuration.getCustomPreCmmnTransformListeners() == null) {
-      configuration.setCustomPreCmmnTransformListeners(new ArrayList<>());
-    }
-    if (configuration.getCustomPostCmmnTransformListeners() == null) {
-      configuration.setCustomPostCmmnTransformListeners(new ArrayList<>());
-    }
-
     // BPMNParseListeners
     if (configuration.getCustomPreBPMNParseListeners() == null) {
       configuration.setCustomPreBPMNParseListeners(new ArrayList<>());

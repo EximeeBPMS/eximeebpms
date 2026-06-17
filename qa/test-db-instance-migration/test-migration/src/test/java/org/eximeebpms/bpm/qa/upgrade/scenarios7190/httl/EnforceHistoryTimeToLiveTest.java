@@ -25,7 +25,6 @@ import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.qa.upgrade.Origin;
@@ -95,24 +94,6 @@ public class EnforceHistoryTimeToLiveTest {
 
       // when re-parsing of process definition is triggered due to getDecisionDefinition and fresh cache
       DecisionDefinition result = repositoryService.getDecisionDefinition(id);
-      assertThat(result).isNotNull();
-    });
-  }
-
-  @Test
-  @ScenarioUnderTest("enforceHistoryTimeToLive.onExistingCase")
-  public void shouldNotFailDueToDefaultEnforceHistoryTimeToLiveTrueOnCase() {
-    // given a new deployment (clean cache) of 7.20 & the already deployed case 'caseWithoutHTTL' by 7.19
-
-    // then enforceHistoryTimeToLive=true should be ignored and not throw exception
-    assertDoesNotThrow(() -> {
-      String id = repositoryService.createCaseDefinitionQuery()
-          .caseDefinitionKey(SCENARIO_CASE)
-          .singleResult()
-          .getId();
-
-      // when re-parsing of process definition is triggered due to getCaseDefinition and fresh cache
-      CaseDefinition result = repositoryService.getCaseDefinition(id);
       assertThat(result).isNotNull();
     });
   }

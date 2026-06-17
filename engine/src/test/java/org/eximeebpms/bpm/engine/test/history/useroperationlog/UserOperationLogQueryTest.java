@@ -78,7 +78,6 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.TimerActivateJobDefinitionHand
 import org.eximeebpms.bpm.engine.impl.jobexecutor.TimerSuspendProcessDefinitionHandler;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.JobQuery;
@@ -94,7 +93,6 @@ import org.junit.Test;
 public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
   protected static final String ONE_TASK_PROCESS = "org/eximeebpms/bpm/engine/test/history/oneTaskProcess.bpmn20.xml";
-  protected static final String ONE_TASK_CASE = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
   protected static final String ONE_EXTERNAL_TASK_PROCESS = "org/eximeebpms/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml";
 
   private ProcessInstance process;
@@ -139,7 +137,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertEquals(1, query().operationType(OPERATION_TYPE_DELETE_GROUP_LINK).count());
     assertEquals(1, query().operationType(OPERATION_TYPE_ADD_ATTACHMENT).count());
     assertEquals(1, query().operationType(OPERATION_TYPE_DELETE_ATTACHMENT).count());
-    
+
     // category
     assertEquals(17, query().categoryIn(UserOperationLogEntry.CATEGORY_TASK_WORKER).count());
     assertEquals(1, query().categoryIn(UserOperationLogEntry.CATEGORY_OPERATOR).count());// start process instance
@@ -1431,42 +1429,6 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     verifySingleVariableOperationPropertyChange("name", "testVariable", UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
   }
 
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryDeleteVariableHistoryOperationOnCase() {
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-    caseService.setVariable(caseInstance.getId(), "myVariable", 1);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 2);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 3);
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
-
-    // then
-    verfiySingleCaseVariableOperationAsserts(caseInstance);
-    verifySingleVariableOperationPropertyChange("name", "myVariable", UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
-  }
-
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryDeleteVariableHistoryOperationOnTaskOfCase() {
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-    processTaskId = taskService.createTaskQuery().singleResult().getId();
-    taskService.setVariable(processTaskId, "myVariable", "1");
-    taskService.setVariable(processTaskId, "myVariable", "2");
-    taskService.setVariable(processTaskId, "myVariable", "3");
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
-
-    verfiySingleCaseVariableOperationAsserts(caseInstance);
-    verifySingleVariableOperationPropertyChange("name", "myVariable", UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
-  }
-
   @Test
   public void testQueryDeleteVariableHistoryOperationOnStandaloneTask() {
     // given
@@ -1565,111 +1527,6 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
     // then
     verifyHistoricVariableOperationAsserts(2, UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
-  }
-
-  // --------------- CMMN --------------------
-
-  @Deployment(resources={ONE_TASK_CASE})
-  @Test
-  public void testQueryByCaseDefinitionId() {
-    // given:
-    // a deployed case definition
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create();
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    assertNotNull(task);
-
-    // when
-    taskService.setAssignee(task.getId(), "demo");
-
-    // then
-
-    UserOperationLogQuery query = historyService
-      .createUserOperationLogQuery()
-      .caseDefinitionId(caseDefinitionId)
-      .category(UserOperationLogEntry.CATEGORY_TASK_WORKER);
-
-    verifyQueryResults(query, 1);
-  }
-
-  @Deployment(resources={ONE_TASK_CASE})
-  @Test
-  public void testQueryByCaseInstanceId() {
-    // given:
-    // a deployed case definition
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    String caseInstanceId = caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create()
-       .getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    assertNotNull(task);
-
-    // when
-    taskService.setAssignee(task.getId(), "demo");
-
-    // then
-
-    UserOperationLogQuery query = historyService
-      .createUserOperationLogQuery()
-      .caseInstanceId(caseInstanceId)
-      .category(UserOperationLogEntry.CATEGORY_TASK_WORKER);
-
-    verifyQueryResults(query, 1);
-  }
-
-  @Deployment(resources={ONE_TASK_CASE})
-  @Test
-  public void testQueryByCaseExecutionId() {
-    // given:
-    // a deployed case definition
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create();
-
-    String caseExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-
-    assertNotNull(task);
-
-    // when
-    taskService.setAssignee(task.getId(), "demo");
-
-    // then
-
-    UserOperationLogQuery query = historyService
-      .createUserOperationLogQuery()
-      .caseExecutionId(caseExecutionId)
-      .category(UserOperationLogEntry.CATEGORY_TASK_WORKER);
-
-    verifyQueryResults(query, 1);
   }
 
   @Deployment(resources={ONE_EXTERNAL_TASK_PROCESS})
@@ -1820,20 +1677,6 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     UserOperationLogEntry logEntry = logQuery.singleResult();
     assertEquals(property, logEntry.getProperty());
     assertEquals(newValue, logEntry.getNewValue());
-    assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, logEntry.getCategory());
-  }
-
-  private void verfiySingleCaseVariableOperationAsserts(CaseInstance caseInstance) {
-    String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
-    String operationType = UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY;
-    UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(operationType);
-    assertEquals(1, logQuery.count());
-
-    UserOperationLogEntry logEntry = logQuery.singleResult();
-    assertEquals(caseInstance.getCaseDefinitionId(), logEntry.getCaseDefinitionId());
-    assertEquals(caseInstance.getCaseInstanceId(), logEntry.getCaseInstanceId());
-    assertEquals(deploymentId, logEntry.getDeploymentId());
-    assertNull(logEntry.getTaskId());
     assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, logEntry.getCategory());
   }
 

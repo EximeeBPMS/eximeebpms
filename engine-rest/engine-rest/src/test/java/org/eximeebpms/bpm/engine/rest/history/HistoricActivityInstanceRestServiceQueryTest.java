@@ -405,7 +405,6 @@ public class HistoricActivityInstanceRestServiceQueryTest extends AbstractRestSe
     String returnedExecutionId = from(content).getString("[0].executionId");
     String returnedTaskId = from(content).getString("[0].taskId");
     String returnedCalledProcessInstanceId = from(content).getString("[0].calledProcessInstanceId");
-    String returnedCalledCaseInstanceId = from(content).getString("[0].calledCaseInstanceId");
     String returnedAssignee = from(content).getString("[0].assignee");
     Date returnedStartTime = DateTimeUtil.parseDate(from(content).getString("[0].startTime"));
     Date returnedEndTime = DateTimeUtil.parseDate(from(content).getString("[0].endTime"));
@@ -425,7 +424,6 @@ public class HistoricActivityInstanceRestServiceQueryTest extends AbstractRestSe
     Assert.assertEquals(MockProvider.EXAMPLE_EXECUTION_ID, returnedExecutionId);
     Assert.assertEquals(MockProvider.EXAMPLE_TASK_ID, returnedTaskId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_CALLED_PROCESS_INSTANCE_ID, returnedCalledProcessInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_CALLED_CASE_INSTANCE_ID, returnedCalledCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TASK_ASSIGNEE_NAME, returnedAssignee);
     Assert.assertEquals(DateTimeUtil.parseDate(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_START_TIME), returnedStartTime);
     Assert.assertEquals(DateTimeUtil.parseDate(MockProvider.EXAMPLE_HISTORIC_ACTIVITY_INSTANCE_END_TIME), returnedEndTime);

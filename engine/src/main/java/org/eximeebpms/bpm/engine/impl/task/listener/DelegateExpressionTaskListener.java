@@ -48,9 +48,6 @@ public class DelegateExpressionTaskListener implements TaskListener {
     // execution can change: eg. delegateExpression='${mySpringBeanFactory.randomSpringBean()}'
 
     VariableScope variableScope = delegateTask.getExecution();
-    if (variableScope == null) {
-      variableScope = delegateTask.getCaseExecution();
-    }
 
     Object delegate = expression.getValue(variableScope);
     applyFieldDeclaration(fieldDeclarations, delegate);

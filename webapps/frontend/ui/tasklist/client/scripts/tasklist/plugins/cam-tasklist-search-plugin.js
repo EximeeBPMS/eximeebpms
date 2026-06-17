@@ -130,11 +130,9 @@ var Controller = [
           tempQuery = baseQuery.orQueries[0];
           tempQuery.processVariables = [];
           tempQuery.taskVariables = [];
-          tempQuery.caseInstanceVariables = [];
         } else {
           baseQuery.processVariables = [];
           baseQuery.taskVariables = [];
-          baseQuery.caseInstanceVariables = [];
           tempQuery = baseQuery;
         }
 

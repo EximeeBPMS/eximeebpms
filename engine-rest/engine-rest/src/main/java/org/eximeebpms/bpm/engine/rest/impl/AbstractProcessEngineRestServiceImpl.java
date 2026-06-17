@@ -24,9 +24,6 @@ import javax.ws.rs.ext.Providers;
 
 import org.eximeebpms.bpm.engine.rest.AuthorizationRestService;
 import org.eximeebpms.bpm.engine.rest.BatchRestService;
-import org.eximeebpms.bpm.engine.rest.CaseDefinitionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseExecutionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.ConditionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
@@ -178,27 +175,6 @@ public abstract class AbstractProcessEngineRestServiceImpl {
   public DeploymentRestService getDeploymentRestService(String engineName) {
     String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
     DeploymentRestServiceImpl subResource = new DeploymentRestServiceImpl(engineName, getObjectMapper());
-    subResource.setRelativeRootResourceUri(rootResourcePath);
-    return subResource;
-  }
-
-  public CaseDefinitionRestService getCaseDefinitionRestService(String engineName) {
-    String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
-    CaseDefinitionRestServiceImpl subResource = new CaseDefinitionRestServiceImpl(engineName, getObjectMapper());
-    subResource.setRelativeRootResourceUri(rootResourcePath);
-    return subResource;
-  }
-
-  public CaseInstanceRestService getCaseInstanceRestService(String engineName) {
-    String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
-    CaseInstanceRestServiceImpl subResource = new CaseInstanceRestServiceImpl(engineName, getObjectMapper());
-    subResource.setRelativeRootResourceUri(rootResourcePath);
-    return subResource;
-  }
-
-  public CaseExecutionRestService getCaseExecutionRestService(String engineName) {
-    String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
-    CaseExecutionRestServiceImpl subResource = new CaseExecutionRestServiceImpl(engineName, getObjectMapper());
     subResource.setRelativeRootResourceUri(rootResourcePath);
     return subResource;
   }

@@ -4,8 +4,6 @@ dmn-js/node_modules
 dmn-js/index.js
 bpmn-js/node_modules
 bpmn-js/index.js
-cmmn-js/node_modules
-cmmn-js/index.js
 dist
 doc
 .tmp

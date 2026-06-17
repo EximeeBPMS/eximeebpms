@@ -34,7 +34,6 @@ import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
@@ -54,7 +53,6 @@ import org.junit.Test;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
 public class HistoricDecisionInstanceQueryTest extends PluggableProcessEngineTest {
 
-  protected static final String DECISION_CASE = "org/eximeebpms/bpm/engine/test/history/HistoricDecisionInstanceTest.caseWithDecisionTask.cmmn";
   protected static final String DECISION_PROCESS = "org/eximeebpms/bpm/engine/test/history/HistoricDecisionInstanceTest.processWithBusinessRuleTask.bpmn20.xml";
   protected static final String DECISION_PROCESS_WITH_UNDERSCORE = "org/eximeebpms/bpm/engine/test/history/HistoricDecisionInstanceTest.processWithBusinessRuleTask_.bpmn20.xml";
 
@@ -470,75 +468,6 @@ public class HistoricDecisionInstanceQueryTest extends PluggableProcessEngineTes
     ClockUtil.reset();
   }
 
-  @Deployment(resources = { DECISION_CASE, DECISION_SINGLE_OUTPUT_DMN })
-  @Test
-  public void testQueryByCaseDefinitionKey() {
-    createCaseInstanceAndEvaluateDecision();
-
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseDefinitionKey("case").count()).isEqualTo(1L);
-  }
-
-  @Test
-  public void testQueryByInvalidCaseDefinitionKey() {
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseDefinitionKey("invalid").count()).isEqualTo(0L);
-
-    try {
-      query.caseDefinitionKey(null);
-      fail("exception expected");
-    } catch (ProcessEngineException e) {
-    }
-  }
-
-  @Deployment(resources = { DECISION_CASE, DECISION_SINGLE_OUTPUT_DMN })
-  @Test
-  public void testQueryByCaseDefinitionId() {
-    CaseInstance caseInstance = createCaseInstanceAndEvaluateDecision();
-
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseDefinitionId(caseInstance.getCaseDefinitionId()).count()).isEqualTo(1L);
-  }
-
-  @Test
-  public void testQueryByInvalidCaseDefinitionId() {
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseDefinitionId("invalid").count()).isEqualTo(0L);
-
-    try {
-      query.caseDefinitionId(null);
-      fail("exception expected");
-    } catch (ProcessEngineException e) {
-    }
-  }
-
-  @Deployment(resources = { DECISION_CASE, DECISION_SINGLE_OUTPUT_DMN })
-  @Test
-  public void testQueryByCaseInstanceId() {
-    CaseInstance caseInstance = createCaseInstanceAndEvaluateDecision();
-
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseInstanceId(caseInstance.getId()).count()).isEqualTo(1L);
-  }
-
-  @Test
-  public void testQueryByInvalidCaseInstanceId() {
-    HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-
-    assertThat(query.caseInstanceId("invalid").count()).isEqualTo(0L);
-
-    try {
-      query.caseInstanceId(null);
-      fail("exception expected");
-    } catch (ProcessEngineException e) {
-    }
-  }
-
   @Deployment(resources = { DECISION_SINGLE_OUTPUT_DMN })
   @Test
   public void testQueryByUserId() {
@@ -684,13 +613,6 @@ public class HistoricDecisionInstanceQueryTest extends PluggableProcessEngineTes
 
   protected ProcessInstance startProcessInstanceAndEvaluateDecisionWithUnderscore() {
     return runtimeService.startProcessInstanceByKey("testProcess_", getVariables());
-  }
-
-  protected CaseInstance createCaseInstanceAndEvaluateDecision() {
-    return caseService
-        .withCaseDefinitionByKey("case")
-        .setVariables(getVariables())
-        .create();
   }
 
   protected void evaluateDecisionWithAuthenticatedUser(String userId) {

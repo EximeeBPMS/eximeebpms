@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.FormService;
@@ -67,7 +66,6 @@ public class MockedProcessEngineProvider implements ProcessEngineProvider {
     FormService formService = mock(FormService.class);
     HistoryService historyService = mock(HistoryService.class);
     ManagementService managementService = mock(ManagementService.class);
-    CaseService caseService = mock(CaseService.class);
     FilterService filterService = mock(FilterService.class);
     ExternalTaskService externalTaskService = mock(ExternalTaskService.class);
 
@@ -78,7 +76,6 @@ public class MockedProcessEngineProvider implements ProcessEngineProvider {
     when(engine.getFormService()).thenReturn(formService);
     when(engine.getHistoryService()).thenReturn(historyService);
     when(engine.getManagementService()).thenReturn(managementService);
-    when(engine.getCaseService()).thenReturn(caseService);
     when(engine.getFilterService()).thenReturn(filterService);
     when(engine.getExternalTaskService()).thenReturn(externalTaskService);
   }

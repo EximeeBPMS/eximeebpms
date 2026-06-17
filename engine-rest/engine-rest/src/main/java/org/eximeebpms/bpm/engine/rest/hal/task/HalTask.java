@@ -23,9 +23,6 @@ import javax.ws.rs.core.UriBuilder;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.form.CamundaFormRef;
-import org.eximeebpms.bpm.engine.rest.CaseDefinitionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseExecutionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.ExecutionRestService;
 import org.eximeebpms.bpm.engine.rest.IdentityRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessDefinitionRestService;
@@ -58,12 +55,6 @@ public class HalTask extends HalResource<HalTask> {
     HalRelation.build("processDefinition", ProcessDefinitionRestService.class, UriBuilder.fromPath(ProcessDefinitionRestService.PATH).path("{id}"));
   public static HalRelation REL_PROCESS_INSTANCE =
     HalRelation.build("processInstance", ProcessInstanceRestService.class, UriBuilder.fromPath(ProcessInstanceRestService.PATH).path("{id}"));
-  public static HalRelation REL_CASE_INSTANCE =
-    HalRelation.build("caseInstance", CaseInstanceRestService.class, UriBuilder.fromPath(CaseInstanceRestService.PATH).path("{id}"));
-  public static HalRelation REL_CASE_EXECUTION =
-    HalRelation.build("caseExecution", CaseExecutionRestService.class, UriBuilder.fromPath(CaseExecutionRestService.PATH).path("{id}"));
-  public static HalRelation REL_CASE_DEFINITION =
-    HalRelation.build("caseDefinition", CaseDefinitionRestService.class, UriBuilder.fromPath(CaseDefinitionRestService.PATH).path("{id}"));
   public static HalRelation REL_IDENTITY_LINKS =
     HalRelation.build("identityLink", IdentityRestService.class, UriBuilder.fromPath(TaskRestService.PATH).path("{taskId}").path("identity-links"));
 
@@ -82,9 +73,6 @@ public class HalTask extends HalResource<HalTask> {
   private String processDefinitionId;
   private String processInstanceId;
   private String taskDefinitionKey;
-  private String caseExecutionId;
-  private String caseInstanceId;
-  private String caseDefinitionId;
   private boolean suspended;
   private String formKey;
   private CamundaFormRef camundaFormRef;
@@ -93,7 +81,6 @@ public class HalTask extends HalResource<HalTask> {
   public static HalTask generate(Task task, ProcessEngine engine) {
     return fromTask(task)
       .embed(HalTask.REL_PROCESS_DEFINITION, engine)
-      .embed(HalTask.REL_CASE_DEFINITION, engine)
       .embed(HalTask.REL_IDENTITY_LINKS, engine)
       .embed(HalIdentityLink.REL_USER, engine)
       .embed(HalIdentityLink.REL_GROUP, engine);
@@ -118,9 +105,6 @@ public class HalTask extends HalResource<HalTask> {
     dto.processDefinitionId = task.getProcessDefinitionId();
     dto.processInstanceId = task.getProcessInstanceId();
     dto.taskDefinitionKey = task.getTaskDefinitionKey();
-    dto.caseDefinitionId = task.getCaseDefinitionId();
-    dto.caseExecutionId = task.getCaseExecutionId();
-    dto.caseInstanceId = task.getCaseInstanceId();
     dto.suspended = task.isSuspended();
     dto.tenantId = task.getTenantId();
     try {
@@ -139,9 +123,6 @@ public class HalTask extends HalResource<HalTask> {
     dto.linker.createLink(REL_PARENT_TASK, task.getParentTaskId());
     dto.linker.createLink(REL_PROCESS_DEFINITION, task.getProcessDefinitionId());
     dto.linker.createLink(REL_PROCESS_INSTANCE, task.getProcessInstanceId());
-    dto.linker.createLink(REL_CASE_INSTANCE, task.getCaseInstanceId());
-    dto.linker.createLink(REL_CASE_EXECUTION, task.getCaseExecutionId());
-    dto.linker.createLink(REL_CASE_DEFINITION, task.getCaseDefinitionId());
     dto.linker.createLink(REL_IDENTITY_LINKS, task.getId());
 
     return dto;
@@ -206,18 +187,6 @@ public class HalTask extends HalResource<HalTask> {
 
   public Date getFollowUp() {
     return followUp;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
   }
 
   public boolean isSuspended() {

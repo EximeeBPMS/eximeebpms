@@ -204,10 +204,8 @@ class ProcessInstanceBusinessEventFactoryTest {
     when(execution.getProcessInstanceId()).thenReturn("process-instance-id");
     when(execution.getRootProcessInstanceId()).thenReturn("root-process-instance-id");
     when(execution.getProcessBusinessKey()).thenReturn("business-key");
-    when(execution.getCaseInstanceId()).thenReturn("case-instance-id");
     when(execution.getTenantId()).thenReturn("tenant-id");
     when(execution.getSequenceCounter()).thenReturn(7L);
     when(execution.getSuperExecution()).thenReturn(null);
-    when(execution.getSuperCaseExecution()).thenReturn(null);
   }
 }

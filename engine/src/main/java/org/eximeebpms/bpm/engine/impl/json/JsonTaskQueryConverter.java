@@ -102,19 +102,10 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
   public static final String FOLLOW_UP_NULL_ACCEPTED = "followUpNullAccepted";
   public static final String FOLLOW_UP_AFTER = "followUpAfter";
   public static final String EXCLUDE_SUBTASKS = "excludeSubtasks";
-  public static final String CASE_DEFINITION_KEY = "caseDefinitionKey";
-  public static final String CASE_DEFINITION_ID = "caseDefinitionId";
-  public static final String CASE_DEFINITION_NAME = "caseDefinitionName";
-  public static final String CASE_DEFINITION_NAME_LIKE = "caseDefinitionNameLike";
-  public static final String CASE_INSTANCE_ID = "caseInstanceId";
-  public static final String CASE_INSTANCE_BUSINESS_KEY = "caseInstanceBusinessKey";
-  public static final String CASE_INSTANCE_BUSINESS_KEY_LIKE = "caseInstanceBusinessKeyLike";
-  public static final String CASE_EXECUTION_ID = "caseExecutionId";
   public static final String ACTIVE = "active";
   public static final String SUSPENDED = "suspended";
   public static final String PROCESS_VARIABLES = "processVariables";
   public static final String TASK_VARIABLES = "taskVariables";
-  public static final String CASE_INSTANCE_VARIABLES = "caseInstanceVariables";
   public static final String TENANT_IDS = "tenantIds";
   public static final String WITHOUT_TENANT_ID = "withoutTenantId";
   public static final String ORDERING_PROPERTIES = "orderingProperties";
@@ -209,14 +200,6 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
     JsonUtil.addDateField(json, FOLLOW_UP_AFTER, query.getFollowUpAfter());
     JsonUtil.addDefaultField(json, EXCLUDE_SUBTASKS, false, query.isExcludeSubtasks());
     addSuspensionStateField(json, query.getSuspensionState());
-    JsonUtil.addField(json, CASE_DEFINITION_KEY, query.getCaseDefinitionKey());
-    JsonUtil.addField(json, CASE_DEFINITION_ID, query.getCaseDefinitionId());
-    JsonUtil.addField(json, CASE_DEFINITION_NAME, query.getCaseDefinitionName());
-    JsonUtil.addField(json, CASE_DEFINITION_NAME_LIKE, query.getCaseDefinitionNameLike());
-    JsonUtil.addField(json, CASE_INSTANCE_ID, query.getCaseInstanceId());
-    JsonUtil.addField(json, CASE_INSTANCE_BUSINESS_KEY, query.getCaseInstanceBusinessKey());
-    JsonUtil.addField(json, CASE_INSTANCE_BUSINESS_KEY_LIKE, query.getCaseInstanceBusinessKeyLike());
-    JsonUtil.addField(json, CASE_EXECUTION_ID, query.getCaseExecutionId());
     addTenantIdFields(json, query);
 
     if (query.getQueries().size() > 1 && !isOrQueryActive) {
@@ -272,9 +255,6 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
       }
       else if(variable.isLocal()) {
         addVariable(jsonObject, TASK_VARIABLES, variable);
-      }
-      else {
-        addVariable(jsonObject, CASE_INSTANCE_VARIABLES, variable);
       }
     }
   }
@@ -457,9 +437,6 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
     if (json.has(PROCESS_VARIABLES)) {
       addVariables(query, JsonUtil.getArray(json, PROCESS_VARIABLES), false, true);
     }
-    if (json.has(CASE_INSTANCE_VARIABLES)) {
-      addVariables(query, JsonUtil.getArray(json, CASE_INSTANCE_VARIABLES), false, false);
-    }
     if (json.has(DUE)) {
       query.dueDate(new Date(JsonUtil.getLong(json, DUE)));
     }
@@ -492,30 +469,6 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
     }
     if (json.has(ACTIVE) && JsonUtil.getBoolean(json, ACTIVE)) {
       query.active();
-    }
-    if (json.has(CASE_DEFINITION_KEY)) {
-      query.caseDefinitionKey(JsonUtil.getString(json, CASE_DEFINITION_KEY));
-    }
-    if (json.has(CASE_DEFINITION_ID)) {
-      query.caseDefinitionId(JsonUtil.getString(json, CASE_DEFINITION_ID));
-    }
-    if (json.has(CASE_DEFINITION_NAME)) {
-      query.caseDefinitionName(JsonUtil.getString(json, CASE_DEFINITION_NAME));
-    }
-    if (json.has(CASE_DEFINITION_NAME_LIKE)) {
-      query.caseDefinitionNameLike(JsonUtil.getString(json, CASE_DEFINITION_NAME_LIKE));
-    }
-    if (json.has(CASE_INSTANCE_ID)) {
-      query.caseInstanceId(JsonUtil.getString(json, CASE_INSTANCE_ID));
-    }
-    if (json.has(CASE_INSTANCE_BUSINESS_KEY)) {
-      query.caseInstanceBusinessKey(JsonUtil.getString(json, CASE_INSTANCE_BUSINESS_KEY));
-    }
-    if (json.has(CASE_INSTANCE_BUSINESS_KEY_LIKE)) {
-      query.caseInstanceBusinessKeyLike(JsonUtil.getString(json, CASE_INSTANCE_BUSINESS_KEY_LIKE));
-    }
-    if (json.has(CASE_EXECUTION_ID)) {
-      query.caseExecutionId(JsonUtil.getString(json, CASE_EXECUTION_ID));
     }
     if (json.has(TENANT_IDS)) {
       query.tenantIdIn(getArray(JsonUtil.getArray(json, TENANT_IDS)));

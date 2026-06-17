@@ -125,9 +125,6 @@ public class HistoricDecisionInstanceRestServiceInteractionTest extends Abstract
     String returnedProcessDefinitionId = from(content).getString("processDefinitionId");
     String returnedProcessDefinitionKey = from(content).getString("processDefinitionKey");
     String returnedProcessInstanceId = from(content).getString("processInstanceId");
-    String returnedCaseDefinitionId = from(content).getString("caseDefinitionId");
-    String returnedCaseDefinitionKey = from(content).getString("caseDefinitionKey");
-    String returnedCaseInstanceId = from(content).getString("caseInstanceId");
     String returnedActivityId = from(content).getString("activityId");
     String returnedActivityInstanceId = from(content).getString("activityInstanceId");
     String returnedUserId = from(content).getString("userId");
@@ -147,9 +144,6 @@ public class HistoricDecisionInstanceRestServiceInteractionTest extends Abstract
     assertThat(returnedProcessDefinitionId, is(MockProvider.EXAMPLE_PROCESS_DEFINITION_ID));
     assertThat(returnedProcessDefinitionKey, is(MockProvider.EXAMPLE_PROCESS_DEFINITION_KEY));
     assertThat(returnedProcessInstanceId, is(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID));
-    assertThat(returnedCaseDefinitionId, is(MockProvider.EXAMPLE_CASE_DEFINITION_ID));
-    assertThat(returnedCaseDefinitionKey, is(MockProvider.EXAMPLE_CASE_DEFINITION_KEY));
-    assertThat(returnedCaseInstanceId, is(MockProvider.EXAMPLE_CASE_INSTANCE_ID));
     assertThat(returnedActivityId, is(MockProvider.EXAMPLE_HISTORIC_DECISION_INSTANCE_ACTIVITY_ID));
     assertThat(returnedActivityInstanceId, is(MockProvider.EXAMPLE_HISTORIC_DECISION_INSTANCE_ACTIVITY_INSTANCE_ID));
     assertThat(returnedUserId, is(MockProvider.EXAMPLE_HISTORIC_DECISION_INSTANCE_USER_ID));
@@ -284,21 +278,6 @@ public class HistoricDecisionInstanceRestServiceInteractionTest extends Abstract
     inOrder.verify(historicQueryMock).decisionInstanceId(MockProvider.EXAMPLE_HISTORIC_DECISION_INSTANCE_ID);
     inOrder.verify(historicQueryMock).disableCustomObjectDeserialization();
     inOrder.verify(historicQueryMock).singleResult();
-  }
-
-  @Test
-  public void testGetNonExistingHistoricCaseInstance() {
-    when(historicQueryMock.singleResult()).thenReturn(null);
-
-    given()
-      .pathParam("id", MockProvider.NON_EXISTING_ID)
-    .then().expect()
-      .statusCode(Status.NOT_FOUND.getStatusCode())
-      .contentType(ContentType.JSON)
-      .body("type", equalTo(InvalidRequestException.class.getSimpleName()))
-      .body("message", equalTo("Historic decision instance with id '" + MockProvider.NON_EXISTING_ID + "' does not exist"))
-    .when()
-      .get(HISTORIC_SINGLE_DECISION_INSTANCE_URL);
   }
 
   @Test

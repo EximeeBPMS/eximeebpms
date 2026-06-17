@@ -639,30 +639,6 @@ public class MigrationPlanGenerationTest {
   }
 
   @Test
-  public void testMapCallActivitiesToCmmnTest() {
-    assertGeneratedMigrationPlan(CallActivityModels.oneCmmnCallActivityProcess("foo"), CallActivityModels.oneCmmnCallActivityProcess("foo"))
-      .hasInstructions(
-        migrate("callActivity").to("callActivity"),
-        migrate("userTask").to("userTask"));
-  }
-
-  @Test
-  public void testMapCallActivitiesFromBpmnToCmmnTest() {
-    assertGeneratedMigrationPlan(CallActivityModels.oneBpmnCallActivityProcess("foo"), CallActivityModels.oneCmmnCallActivityProcess("foo"))
-      .hasInstructions(
-        migrate("callActivity").to("callActivity"),
-        migrate("userTask").to("userTask"));
-  }
-
-  @Test
-  public void testMapCallActivitiesFromCmmnToBpmnTest() {
-    assertGeneratedMigrationPlan(CallActivityModels.oneCmmnCallActivityProcess("foo"), CallActivityModels.oneBpmnCallActivityProcess("foo"))
-      .hasInstructions(
-        migrate("callActivity").to("callActivity"),
-        migrate("userTask").to("userTask"));
-  }
-
-  @Test
   public void testMapEventBasedGateway() {
     assertGeneratedMigrationPlan(EventBasedGatewayModels.TIMER_EVENT_BASED_GW_PROCESS, EventBasedGatewayModels.SIGNAL_EVENT_BASED_GW_PROCESS)
       .hasInstructions(

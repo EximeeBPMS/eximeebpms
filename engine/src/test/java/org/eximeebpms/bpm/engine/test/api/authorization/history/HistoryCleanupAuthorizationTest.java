@@ -32,7 +32,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.eximeebpms.bpm.engine.AuthorizationException;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.authorization.Groups;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricIncident;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
@@ -42,10 +41,8 @@ import org.eximeebpms.bpm.engine.impl.metrics.Meter;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricIncidentEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.test.Deployment;
@@ -77,10 +74,10 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
 
   @Test
   @Deployment(resources = { "org/eximeebpms/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+      "org/eximeebpms/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
   public void testHistoryCleanupWithAuthorization() {
     // given
-    prepareInstances(5, 5, 5);
+    prepareInstances(5, 5);
 
     ClockUtil.setCurrentTime(new Date());
     // when
@@ -96,10 +93,10 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
 
   @Test
   @Deployment(resources = { "org/eximeebpms/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+      "org/eximeebpms/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
   public void testHistoryCleanupWithoutAuthorization() {
     // given
-    prepareInstances(5, 5, 5);
+    prepareInstances(5, 5);
 
     ClockUtil.setCurrentTime(new Date());
 
@@ -114,7 +111,7 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
     }
   }
 
-  protected void prepareInstances(Integer processInstanceTimeToLive, Integer decisionTimeToLive, Integer caseTimeToLive) {
+  protected void prepareInstances(Integer processInstanceTimeToLive, Integer decisionTimeToLive) {
     // update time to live
     disableAuthorization();
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().processDefinitionKey("testProcess").list();
@@ -124,10 +121,6 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
     final List<DecisionDefinition> decisionDefinitions = repositoryService.createDecisionDefinitionQuery().decisionDefinitionKey("testDecision").list();
     assertEquals(1, decisionDefinitions.size());
     repositoryService.updateDecisionDefinitionHistoryTimeToLive(decisionDefinitions.get(0).getId(), decisionTimeToLive);
-
-    List<CaseDefinition> caseDefinitions = repositoryService.createCaseDefinitionQuery().caseDefinitionKey("oneTaskCase").list();
-    assertEquals(1, caseDefinitions.size());
-    repositoryService.updateCaseDefinitionHistoryTimeToLive(caseDefinitions.get(0).getId(), caseTimeToLive);
 
     Date oldCurrentTime = ClockUtil.getCurrentTime();
     ClockUtil.setCurrentTime(DateUtils.addDays(oldCurrentTime, -6));
@@ -146,22 +139,13 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
       decisionService.evaluateDecisionByKey("testDecision").variables(variables).evaluate();
     }
 
-    // create 4 case instances
-    for (int i = 0; i < 4; i++) {
-      CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase",
-          Variables.createVariables().putValue("pojo", new TestPojo("okay", 13.37 + i)));
-      caseService.terminateCaseExecution(caseInstance.getId());
-      caseService.closeCaseInstance(caseInstance.getId());
-    }
-
     ClockUtil.setCurrentTime(oldCurrentTime);
     enableAuthorization();
 
   }
 
   protected void assertResult(long expectedInstanceCount) {
-    long count = historyService.createHistoricProcessInstanceQuery().count() + historyService.createHistoricDecisionInstanceQuery().count()
-        + historyService.createHistoricCaseInstanceQuery().count();
+    long count = historyService.createHistoricProcessInstanceQuery().count() + historyService.createHistoricDecisionInstanceQuery().count();
     assertEquals(expectedInstanceCount, count);
   }
 
@@ -205,11 +189,6 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
     List<HistoricDecisionInstance> historicDecisionInstances = historyService.createHistoricDecisionInstanceQuery().list();
     for (HistoricDecisionInstance historicDecisionInstance : historicDecisionInstances) {
       historyService.deleteHistoricDecisionInstanceByInstanceId(historicDecisionInstance.getId());
-    }
-
-    List<HistoricCaseInstance> historicCaseInstances = historyService.createHistoricCaseInstanceQuery().list();
-    for (HistoricCaseInstance historicCaseInstance : historicCaseInstances) {
-      historyService.deleteHistoricCaseInstance(historicCaseInstance.getId());
     }
   }
 

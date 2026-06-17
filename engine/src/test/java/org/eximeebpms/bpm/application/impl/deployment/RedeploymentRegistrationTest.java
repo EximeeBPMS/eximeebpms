@@ -27,7 +27,6 @@ import org.eximeebpms.bpm.application.impl.EmbeddedProcessApplication;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.impl.application.ProcessApplicationManager;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.context.ProcessApplicationContextUtil;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
@@ -56,9 +55,6 @@ public class RedeploymentRegistrationTest {
 
   protected static final String BPMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/api/repository/processOne.bpmn20.xml";
   protected static final String BPMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
-
-  protected static final String CMMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String CMMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/api/cmmn/twoTaskCase.cmmn";
 
   protected static final String DMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/dmn/deployment/DecisionDefinitionDeployerTest.testDmnDeployment.dmn11.xml";
   protected static final String DMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/dmn/deployment/dmnScore.dmn11.xml";
@@ -96,7 +92,6 @@ public class RedeploymentRegistrationTest {
   public static Collection<Object[]> scenarios() {
     return Arrays.asList(new Object[][] {
       { BPMN_RESOURCE_1, BPMN_RESOURCE_2, "processOne", "processTwo", processDefinitionTestProvider() },
-      { CMMN_RESOURCE_1, CMMN_RESOURCE_2, "oneTaskCase", "twoTaskCase", caseDefinitionTestProvider() },
       { DMN_RESOURCE_1, DMN_RESOURCE_2, "decision", "score-decision", decisionDefinitionTestProvider() },
       { DRD_RESOURCE_1, DRD_RESOURCE_2, "score", "dish", decisionRequirementsDefinitionTestProvider() }
     });
@@ -488,7 +483,6 @@ public class RedeploymentRegistrationTest {
 
   protected void discardDefinitionCache() {
     processEngineConfiguration.getDeploymentCache().discardProcessDefinitionCache();
-    processEngineConfiguration.getDeploymentCache().discardCaseDefinitionCache();
     processEngineConfiguration.getDeploymentCache().discardDecisionDefinitionCache();
     processEngineConfiguration.getDeploymentCache().discardDecisionRequirementsDefinitionCache();
   }
@@ -527,30 +521,6 @@ public class RedeploymentRegistrationTest {
       @Override
       public String getLatestDefinitionIdByKey(RepositoryService repositoryService, String key) {
         return repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).latestVersion().singleResult().getId();
-      }
-
-    };
-  }
-
-  protected static TestProvider caseDefinitionTestProvider() {
-    return new TestProvider() {
-
-      @Override
-      public Command<ProcessApplicationReference> createGetProcessApplicationCommand(final String definitionId) {
-        return new Command<ProcessApplicationReference>() {
-
-          public ProcessApplicationReference execute(CommandContext commandContext) {
-            ProcessEngineConfigurationImpl configuration = commandContext.getProcessEngineConfiguration();
-            DeploymentCache deploymentCache = configuration.getDeploymentCache();
-            CaseDefinitionEntity definition = deploymentCache.findDeployedCaseDefinitionById(definitionId);
-            return ProcessApplicationContextUtil.getTargetProcessApplication(definition);
-          }
-        };
-      }
-
-      @Override
-      public String getLatestDefinitionIdByKey(RepositoryService repositoryService, String key) {
-        return repositoryService.createCaseDefinitionQuery().caseDefinitionKey(key).latestVersion().singleResult().getId();
       }
 
     };

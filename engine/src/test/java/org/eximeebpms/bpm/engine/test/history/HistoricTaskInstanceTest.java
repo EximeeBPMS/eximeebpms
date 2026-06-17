@@ -39,7 +39,6 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.Deployment;
@@ -86,9 +85,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertNull(historicTaskInstance.getEndTime());
     assertNull(historicTaskInstance.getDurationInMillis());
 
-    assertNull(historicTaskInstance.getCaseDefinitionId());
-    assertNull(historicTaskInstance.getCaseInstanceId());
-    assertNull(historicTaskInstance.getCaseExecutionId());
     assertEquals("Updated", historicTaskInstance.getTaskState());
 
     // the activity instance id is set
@@ -118,11 +114,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertTrue(historicTaskInstance.getDurationInMillis() >= 1000);
     assertTrue(((HistoricTaskInstanceEntity)historicTaskInstance).getDurationRaw() >= 1000);
     assertEquals("Completed", historicTaskInstance.getTaskState());
-
-
-    assertNull(historicTaskInstance.getCaseDefinitionId());
-    assertNull(historicTaskInstance.getCaseInstanceId());
-    assertNull(historicTaskInstance.getCaseExecutionId());
 
     historyService.deleteHistoricTaskInstance(taskId);
 
@@ -427,9 +418,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskId().asc().count());
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskDueDate().asc().count());
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskFollowUpDate().asc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseDefinitionId().asc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseInstanceId().asc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseExecutionId().asc().count());
 
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByDeleteReason().desc().count());
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByExecutionId().desc().count());
@@ -445,9 +433,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskId().desc().count());
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskDueDate().desc().count());
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByTaskFollowUpDate().desc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseDefinitionId().desc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseInstanceId().desc().count());
-    assertEquals(1, historyService.createHistoricTaskInstanceQuery().orderByCaseExecutionId().desc().count());
   }
 
   @Test
@@ -583,370 +568,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryByCaseDefinitionId() {
-    // given
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    String caseInstanceId = caseService
-        .withCaseDefinition(caseDefinitionId)
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionId(caseDefinitionId);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-    assertNotNull(query.singleResult());
-
-    HistoricTaskInstance task = query.singleResult();
-    assertNotNull(task);
-
-    assertEquals(caseDefinitionId, task.getCaseDefinitionId());
-    assertEquals(caseInstanceId, task.getCaseInstanceId());
-    assertEquals(humanTaskId, task.getCaseExecutionId());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseDefinitionId() {
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-    query.caseDefinitionId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryByCaseDefinitionKey() {
-    // given
-    String key = "oneTaskCase";
-
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .caseDefinitionKey(key)
-        .singleResult()
-        .getId();
-
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey(key)
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionKey(key);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-    assertNotNull(query.singleResult());
-
-    HistoricTaskInstance task = query.singleResult();
-    assertNotNull(task);
-
-    assertEquals(caseDefinitionId, task.getCaseDefinitionId());
-    assertEquals(caseInstanceId, task.getCaseInstanceId());
-    assertEquals(humanTaskId, task.getCaseExecutionId());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseDefinitionKey() {
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionKey("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-    query.caseDefinitionKey(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryByCaseDefinitionName() {
-    // given
-    CaseDefinition caseDefinition = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult();
-
-    String caseDefinitionName = caseDefinition.getName();
-    String caseDefinitionId = caseDefinition.getId();
-
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey("oneTaskCase")
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionName(caseDefinitionName);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-    assertNotNull(query.singleResult());
-
-    HistoricTaskInstance task = query.singleResult();
-    assertNotNull(task);
-
-    assertEquals(caseDefinitionId, task.getCaseDefinitionId());
-    assertEquals(caseInstanceId, task.getCaseInstanceId());
-    assertEquals(humanTaskId, task.getCaseExecutionId());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseDefinitionName() {
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseDefinitionName("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-    query.caseDefinitionName(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryByCaseInstanceId() {
-    // given
-    String key = "oneTaskCase";
-
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .caseDefinitionKey(key)
-        .singleResult()
-        .getId();
-
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey(key)
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-    assertNotNull(query.singleResult());
-
-    HistoricTaskInstance task = query.singleResult();
-    assertNotNull(task);
-
-    assertEquals(caseDefinitionId, task.getCaseDefinitionId());
-    assertEquals(caseInstanceId, task.getCaseInstanceId());
-    assertEquals(humanTaskId, task.getCaseExecutionId());
-  }
-
-
-
-  @Deployment(resources=
-    {
-      "org/eximeebpms/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.cmmn",
-      "org/eximeebpms/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.bpmn20.xml"
-    })
-  @Test
-  public void testQueryByCaseInstanceIdHierarchy() {
-    // given
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey("case")
-        .create()
-        .getId();
-
-    caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_ProcessTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(2, query.count());
-    assertEquals(2, query.list().size());
-
-    for (HistoricTaskInstance task : query.list()) {
-      assertEquals(caseInstanceId, task.getCaseInstanceId());
-
-      assertNull(task.getCaseDefinitionId());
-      assertNull(task.getCaseExecutionId());
-
-      taskService.complete(task.getId());
-    }
-
-    assertEquals(3, query.count());
-    assertEquals(3, query.list().size());
-
-    for (HistoricTaskInstance task : query.list()) {
-      assertEquals(caseInstanceId, task.getCaseInstanceId());
-
-      assertNull(task.getCaseDefinitionId());
-      assertNull(task.getCaseExecutionId());
-    }
-
-  }
-
-  @Test
-  public void testQueryByInvalidCaseInstanceId() {
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseInstanceId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-    query.caseInstanceId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testQueryByCaseExecutionId() {
-    // given
-    String key = "oneTaskCase";
-
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .caseDefinitionKey(key)
-        .singleResult()
-        .getId();
-
-    String caseInstanceId = caseService
-        .withCaseDefinitionByKey(key)
-        .create()
-        .getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    // then
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseExecutionId(humanTaskId);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-    assertNotNull(query.singleResult());
-
-    HistoricTaskInstance task = query.singleResult();
-    assertNotNull(task);
-
-    assertEquals(caseDefinitionId, task.getCaseDefinitionId());
-    assertEquals(caseInstanceId, task.getCaseInstanceId());
-    assertEquals(humanTaskId, task.getCaseExecutionId());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseExecutionId() {
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    query.caseExecutionId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-    query.caseExecutionId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-    assertNull(query.singleResult());
-
-  }
-
-  @Test
-  public void testHistoricTaskInstanceCaseInstanceId() {
-    Task task = taskService.newTask();
-    task.setCaseInstanceId("aCaseInstanceId");
-    taskService.saveTask(task);
-
-    HistoricTaskInstance hti = historyService
-        .createHistoricTaskInstanceQuery()
-        .taskId(task.getId())
-        .singleResult();
-
-    assertEquals("aCaseInstanceId", hti.getCaseInstanceId());
-
-    task.setCaseInstanceId("anotherCaseInstanceId");
-    taskService.saveTask(task);
-
-    hti = historyService
-        .createHistoricTaskInstanceQuery()
-        .taskId(task.getId())
-        .singleResult();
-
-    assertEquals("anotherCaseInstanceId", hti.getCaseInstanceId());
-
-    // Finally, delete task
-    taskService.deleteTask(task.getId(), true);
-
-  }
-
   @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @Test
   public void testProcessDefinitionKeyProperty() {
@@ -964,29 +585,6 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     // then
     assertNotNull(task.getProcessDefinitionKey());
     assertEquals(key, task.getProcessDefinitionKey());
-
-    assertNull(task.getCaseDefinitionKey());
-  }
-
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  @Test
-  public void testCaseDefinitionKeyProperty() {
-    // given
-    String key = "oneTaskCase";
-    String caseInstanceId = caseService.createCaseInstanceByKey(key).getId();
-
-    // when
-    HistoricTaskInstance task = historyService
-        .createHistoricTaskInstanceQuery()
-        .caseInstanceId(caseInstanceId)
-        .taskDefinitionKey("PI_HumanTask_1")
-        .singleResult();
-
-    // then
-    assertNotNull(task.getCaseDefinitionKey());
-    assertEquals(key, task.getCaseDefinitionKey());
-
-    assertNull(task.getProcessDefinitionKey());
   }
 
   @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
@@ -1010,14 +608,12 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testQueryByTaskDefinitionKeys() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
-    caseService.createCaseInstanceByKey("oneTaskCase");
 
     // when
     HistoricTaskInstanceQuery query = historyService
@@ -1025,7 +621,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
         .taskDefinitionKeyIn("theTask", "PI_HumanTask_1");
 
     // then
-    assertEquals(2, query.count());
+    assertEquals(1, query.count());
   }
 
   @Test

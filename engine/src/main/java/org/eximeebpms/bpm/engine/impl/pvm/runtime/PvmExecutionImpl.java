@@ -30,8 +30,6 @@ import org.eximeebpms.bpm.engine.ActivityTypes;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.eximeebpms.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.core.variable.event.VariableEvent;
@@ -130,11 +128,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
    */
   protected String activityInstanceId;
 
-  /**
-   * the id of a case associated with this execution
-   */
-  protected String caseInstanceId;
-
   protected PvmExecutionImpl replacedBy;
 
   // cascade deletion ////////////////////////////////////////////////////////
@@ -199,18 +192,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey) {
-    PvmExecutionImpl processInstance = getProcessInstance();
-
-    String caseInstanceId = null;
-    if (processInstance != null) {
-      caseInstanceId = processInstance.getCaseInstanceId();
-    }
-
-    return createSubProcessInstance(processDefinition, businessKey, caseInstanceId);
-  }
-
-  @Override
-  public PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey, String caseInstanceId) {
     PvmExecutionImpl subProcessInstance = newExecution();
 
     // manage bidirectional super-subprocess relation
@@ -226,22 +207,10 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       subProcessInstance.setBusinessKey(businessKey);
     }
 
-    if (caseInstanceId != null) {
-      subProcessInstance.setCaseInstanceId(caseInstanceId);
-    }
-
     return subProcessInstance;
   }
 
   protected abstract PvmExecutionImpl newExecution();
-
-  // sub case instance
-
-  @Override
-  public abstract CmmnExecution createSubCaseInstance(CmmnCaseDefinition caseDefinition);
-
-  @Override
-  public abstract CmmnExecution createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey);
 
   public abstract void initialize();
 
@@ -1251,16 +1220,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   public abstract void setProcessInstance(PvmExecutionImpl pvmExecutionImpl);
 
-  // case instance id /////////////////////////////////////////////////////////
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
   // activity /////////////////////////////////////////////////////////////////
 
   /**
@@ -1427,18 +1386,6 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   public abstract PvmExecutionImpl getSubProcessInstance();
 
   public abstract void setSubProcessInstance(PvmExecutionImpl subProcessInstance);
-
-  // super case execution /////////////////////////////////////////////////////
-
-  public abstract CmmnExecution getSuperCaseExecution();
-
-  public abstract void setSuperCaseExecution(CmmnExecution superCaseExecution);
-
-  // sub case execution ///////////////////////////////////////////////////////
-
-  public abstract CmmnExecution getSubCaseInstance();
-
-  public abstract void setSubCaseInstance(CmmnExecution subCaseInstance);
 
   // scopes ///////////////////////////////////////////////////////////////////
 

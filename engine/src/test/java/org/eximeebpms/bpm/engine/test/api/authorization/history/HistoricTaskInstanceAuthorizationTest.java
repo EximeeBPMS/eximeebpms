@@ -62,7 +62,6 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
 
   protected static final String PROCESS_KEY = "oneTaskProcess";
   protected static final String MESSAGE_START_PROCESS_KEY = "messageStartProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   protected String deploymentId;
 
@@ -71,8 +70,7 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
         "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
+        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml").getId();
     super.setUp();
 
   }
@@ -232,20 +230,6 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
     verifyQueryResults(query, 7);
   }
 
-  // historic task instance query (case task) ///////////////////////////////////////
-
-  @Test
-  public void testQueryAfterCaseTask() {
-    // given
-    testRule.createCaseInstanceByKey(CASE_KEY);
-
-    // when
-    HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
   // historic task instance query (mixed tasks) ////////////////////////////////////
 
   @Test
@@ -266,14 +250,11 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
     createTask("four");
     createTask("five");
 
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    testRule.createCaseInstanceByKey(CASE_KEY);
-
     // when
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
     // then
-    verifyQueryResults(query, 7);
+    verifyQueryResults(query, 5);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -300,16 +281,13 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
     createTask("four");
     createTask("five");
 
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    testRule.createCaseInstanceByKey(CASE_KEY);
-
     createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, READ_HISTORY);
 
     // when
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -336,16 +314,13 @@ public class HistoricTaskInstanceAuthorizationTest extends AuthorizationTest {
     createTask("four");
     createTask("five");
 
-    testRule.createCaseInstanceByKey(CASE_KEY);
-    testRule.createCaseInstanceByKey(CASE_KEY);
-
     createGrantAuthorization(PROCESS_DEFINITION, ANY, userId, READ_HISTORY);
 
     // when
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
     // then
-    verifyQueryResults(query, 14);
+    verifyQueryResults(query, 12);
 
     deleteTask("one", true);
     deleteTask("two", true);

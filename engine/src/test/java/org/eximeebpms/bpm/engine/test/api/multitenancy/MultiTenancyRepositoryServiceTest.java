@@ -23,13 +23,11 @@ import java.util.List;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.repository.ResourceDefinitionEntity;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
@@ -249,31 +247,6 @@ public class MultiTenancyRepositoryServiceTest {
 
     ProcessDefinitionEntity previousDefinitionTenantOne = getPreviousDefinition((ProcessDefinitionEntity) latestProcessDefinitions.get(0));
     ProcessDefinitionEntity previousDefinitionTenantTwo = getPreviousDefinition((ProcessDefinitionEntity) latestProcessDefinitions.get(1));
-
-    assertThat(previousDefinitionTenantOne.getVersion()).isEqualTo(2);
-    assertThat(previousDefinitionTenantOne.getTenantId()).isEqualTo(TENANT_ONE);
-
-    assertThat(previousDefinitionTenantTwo.getVersion()).isEqualTo(1);
-    assertThat(previousDefinitionTenantTwo.getTenantId()).isEqualTo(TENANT_TWO);
-  }
-
-  @Test
-  public void getPreviousCaseDefinitionWithTenantId() {
-    testRule.deployForTenant(TENANT_ONE, CMMN);
-    testRule.deployForTenant(TENANT_ONE, CMMN);
-    testRule.deployForTenant(TENANT_ONE, CMMN);
-
-    testRule.deployForTenant(TENANT_TWO, CMMN);
-    testRule.deployForTenant(TENANT_TWO, CMMN);
-
-    List<CaseDefinition> latestCaseDefinitions = repositoryService.createCaseDefinitionQuery()
-      .latestVersion()
-      .orderByTenantId()
-      .asc()
-      .list();
-
-    CaseDefinitionEntity previousDefinitionTenantOne = getPreviousDefinition((CaseDefinitionEntity) latestCaseDefinitions.get(0));
-    CaseDefinitionEntity previousDefinitionTenantTwo = getPreviousDefinition((CaseDefinitionEntity) latestCaseDefinitions.get(1));
 
     assertThat(previousDefinitionTenantOne.getVersion()).isEqualTo(2);
     assertThat(previousDefinitionTenantOne.getTenantId()).isEqualTo(TENANT_ONE);

@@ -19,7 +19,6 @@ package org.eximeebpms.bpm.engine.impl.el;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.ExternalTaskActivityBehavior;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import jakarta.el.ELContext;
 import jakarta.el.ELResolver;
@@ -43,7 +42,6 @@ import java.util.List;
 public class VariableScopeElResolver extends ELResolver {
 
   public static final String EXECUTION_KEY = "execution";
-  public static final String CASE_EXECUTION_KEY = "caseExecution";
   public static final String TASK_KEY = "task";
   public static final String EXTERNAL_TASK_KEY = "externalTask";
   public static final String LOGGED_IN_USER_KEY = "authenticatedUserId";
@@ -58,8 +56,7 @@ public class VariableScopeElResolver extends ELResolver {
 
         if( EXECUTION_KEY.equals(property) && variableScope instanceof ExecutionEntity
                 || TASK_KEY.equals(property) && variableScope instanceof TaskEntity
-                || variableScope instanceof CaseExecutionEntity
-                && (CASE_EXECUTION_KEY.equals(property) || EXECUTION_KEY.equals(property)) ) {
+                || EXECUTION_KEY.equals(property)) {
           context.setPropertyResolved(true);
           return variableScope;
         } else if(EXTERNAL_TASK_KEY.equals(property)

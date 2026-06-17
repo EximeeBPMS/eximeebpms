@@ -50,8 +50,6 @@ import org.eximeebpms.bpm.engine.impl.bpmn.helper.EscalationHandler;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.core.variable.CoreVariableInstance;
@@ -146,13 +144,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
 
   protected String processDefinitionId;
 
-  // caseExecution
-  protected String caseExecutionId;
-  protected transient CaseExecutionEntity caseExecution;
-
-  protected String caseInstanceId;
-  protected String caseDefinitionId;
-
   // taskDefinition
   protected transient TaskDefinition taskDefinition;
   protected String taskDefinitionKey;
@@ -194,7 +185,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public static final String OWNER = "owner";
   public static final String PARENT_TASK = "parentTask";
   public static final String PRIORITY = "priority";
-  public static final String CASE_INSTANCE_ID = "caseInstanceId";
 
   /**
    * Mybatis constructor
@@ -229,14 +219,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     this.skipCustomListeners = execution.isSkipCustomListeners();
     setTenantId(execution.getTenantId());
     execution.addTask(this);
-  }
-
-  /**
-   * CMMN execution constructor
-   */
-  public TaskEntity(CaseExecutionEntity caseExecution) {
-    this(TaskState.STATE_INIT);
-    setCaseExecution(caseExecution);
   }
 
   public void insert() {
@@ -310,17 +292,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
 
       throw LOG.invokeTaskListenerException(new IllegalStateException("invalid task state"));
     }
-    // if the task is associated with a case
-    // execution then call complete on the
-    // associated case execution. The case
-    // execution handles the completion of
-    // the task.
-    if (caseExecutionId != null) {
-      getCaseExecution().manualComplete();
-      return;
-    }
-
-    // in the other case:
 
     // ensure the the Task is not suspended
     ensureTaskActive();
@@ -340,7 +311,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
       .deleteTask(this, TaskEntity.DELETE_REASON_COMPLETED, false, skipCustomListeners);
 
       // if the task is associated with a
-      // execution (and not a case execution)
+      // execution
       // and it's still in the same activity
       // then call signal an the associated
       // execution.
@@ -350,20 +321,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
         execution.signal(null, null);
       }
     }
-  }
-
-  public void caseExecutionCompleted() {
-    // ensure the the Task is not suspended
-    ensureTaskActive();
-
-    // trigger TaskListener.complete event for a case execution associated task
-    transitionTo(TaskState.STATE_COMPLETED);
-
-    // delete the task
-    Context
-    .getCommandContext()
-    .getTaskManager()
-    .deleteTask(this, TaskEntity.DELETE_REASON_COMPLETED, false, false);
   }
 
   public void delete(String deleteReason, boolean cascade) {
@@ -417,15 +374,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     }
     if (processDefinitionId != null) {
       persistentState.put("processDefinitionId", this.processDefinitionId);
-    }
-    if (caseExecutionId != null) {
-      persistentState.put("caseExecutionId", this.caseExecutionId);
-    }
-    if (caseInstanceId != null) {
-      persistentState.put("caseInstanceId", this.caseInstanceId);
-    }
-    if (caseDefinitionId != null) {
-      persistentState.put("caseDefinitionId", this.caseDefinitionId);
     }
     if (createTime != null) {
       persistentState.put("createTime", this.createTime);
@@ -591,9 +539,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     if (getExecution()!=null) {
       return execution;
     }
-    if (getCaseExecution()!=null) {
-      return caseExecution;
-    }
     if (getParentTask() != null) {
       return parentTask;
     }
@@ -637,94 +582,13 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
 
       // get the process instance
       ExecutionEntity instance = this.execution.getProcessInstance();
-      if (instance != null) {
-        // set case instance id on this task
-        this.caseInstanceId = instance.getCaseInstanceId();
-      }
 
     } else {
       this.execution = null;
       this.executionId = null;
       this.processInstanceId = null;
       this.processDefinitionId = null;
-      this.caseInstanceId = null;
     }
-  }
-
-  // case execution ////////////////////////////////////////////////////////////////
-
-  @Override
-  public CaseExecutionEntity getCaseExecution() {
-    ensureCaseExecutionInitialized();
-    return caseExecution;
-  }
-
-  protected void ensureCaseExecutionInitialized() {
-    if (caseExecution==null && caseExecutionId!=null ) {
-      caseExecution = Context
-          .getCommandContext()
-          .getCaseExecutionManager()
-          .findCaseExecutionById(caseExecutionId);
-    }
-  }
-
-  public void setCaseExecution(CaseExecutionEntity caseExecution) {
-    if (caseExecution!=null) {
-
-      this.caseExecution = caseExecution;
-      this.caseExecutionId = this.caseExecution.getId();
-      this.caseInstanceId = this.caseExecution.getCaseInstanceId();
-      this.caseDefinitionId = this.caseExecution.getCaseDefinitionId();
-      this.tenantId = this.caseExecution.getTenantId();
-
-    } else {
-      this.caseExecution = null;
-      this.caseExecutionId = null;
-      this.caseInstanceId = null;
-      this.caseDefinitionId = null;
-      this.tenantId = null;
-
-    }
-  }
-
-  @Override
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
-  @Override
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  @Override
-  public void setCaseInstanceId(String caseInstanceId) {
-    registerCommandContextCloseListener();
-    propertyChanged(CASE_INSTANCE_ID, this.caseInstanceId, caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  public CaseDefinitionEntity getCaseDefinition() {
-    if (caseDefinitionId != null) {
-      return Context
-          .getProcessEngineConfiguration()
-          .getDeploymentCache()
-          .findDeployedCaseDefinitionById(caseDefinitionId);
-    }
-    return null;
-  }
-
-  @Override
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
   }
 
   // task assignment //////////////////////////////////////////////////////////
@@ -999,11 +863,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     this.priority = priority;
   }
 
-  /* plain setter for persistence */
-  public void setCaseInstanceIdWithoutCascade(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
   public void setParentTaskIdWithoutCascade(String parentTaskId) {
     this.parentTaskId = parentTaskId;
   }
@@ -1081,14 +940,10 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     boolean popProcessDataContext = false;
     CommandInvocationContext commandInvocationContext = Context.getCommandInvocationContext();
     CoreExecution execution = getExecution();
-    if (execution == null) {
-      execution = getCaseExecution();
-    } else {
+    if (execution != null) {
       if (commandInvocationContext != null) {
         popProcessDataContext = commandInvocationContext.getProcessDataContext().pushSection((ExecutionEntity) execution);
       }
-    }
-    if (execution != null) {
       setEventName(taskEventName);
     }
     try {
@@ -1248,7 +1103,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   protected void fireAuthorizationProvider(String property, String oldValue, String newValue) {
-    if (isAuthorizationEnabled() && caseExecutionId == null) {
+    if (isAuthorizationEnabled()) {
       ResourceAuthorizationProvider provider = getResourceAuthorizationProvider();
 
       AuthorizationEntity[] authorizations = null;
@@ -1264,7 +1119,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   protected void fireAddIdentityLinkAuthorizationProvider(String type, String userId, String groupId) {
-    if (isAuthorizationEnabled() && caseExecutionId == null) {
+    if (isAuthorizationEnabled()) {
       ResourceAuthorizationProvider provider = getResourceAuthorizationProvider();
 
       AuthorizationEntity[] authorizations = null;
@@ -1280,7 +1135,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   protected void fireDeleteIdentityLinkAuthorizationProvider(String type, String userId, String groupId) {
-    if (isAuthorizationEnabled() && caseExecutionId == null) {
+    if (isAuthorizationEnabled()) {
       ResourceAuthorizationProvider provider = getResourceAuthorizationProvider();
 
       AuthorizationEntity[] authorizations = null;
@@ -1335,13 +1190,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
 
         taskDefinitions = processDefinition.getTaskDefinitions();
 
-      } else {
-        CaseDefinitionEntity caseDefinition = Context
-            .getProcessEngineConfiguration()
-            .getDeploymentCache()
-            .findDeployedCaseDefinitionById(caseDefinitionId);
-
-        taskDefinitions = caseDefinition.getTaskDefinitions();
       }
 
       taskDefinition = taskDefinitions.get(taskDefinitionKey);
@@ -1419,7 +1267,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   public boolean isStandaloneTask() {
-    return executionId == null && caseExecutionId == null;
+    return executionId == null;
   }
 
   public ProcessDefinitionEntity getProcessDefinition() {
@@ -1759,12 +1607,6 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     }
     if (executionId != null) {
       referenceIdAndClass.put(executionId, ExecutionEntity.class);
-    }
-    if (caseDefinitionId != null) {
-      referenceIdAndClass.put(caseDefinitionId, CaseDefinitionEntity.class);
-    }
-    if (caseExecutionId != null) {
-      referenceIdAndClass.put(caseExecutionId, CaseExecutionEntity.class);
     }
 
     return referenceIdAndClass;

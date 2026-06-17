@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.IdentityService;
@@ -31,7 +30,6 @@ import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstance;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricJobLog;
@@ -39,7 +37,6 @@ import org.eximeebpms.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstance;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseInstanceBuilder;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
@@ -74,7 +71,6 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
   protected IdentityService identityService;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected DecisionService decisionService;
   protected HistoryService historyService;
   protected ProcessEngineConfiguration processEngineConfiguration;
@@ -96,8 +92,6 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
       .endEvent()
       .done();
 
-  protected static final String CMMN_PROCESS_WITH_MANUAL_ACTIVATION = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn";
-
   protected static final String DMN = "org/eximeebpms/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
 
   @Before
@@ -106,7 +100,6 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
     identityService = engineRule.getIdentityService();
     runtimeService = engineRule.getRuntimeService();
     taskService = engineRule.getTaskService();
-    caseService = engineRule.getCaseService();
     decisionService = engineRule.getDecisionService();
     historyService = engineRule.getHistoryService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
@@ -207,53 +200,6 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
 
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
-    assertThat(query.count()).isEqualTo(0L);
-  }
-
-  @Test
-  public void failToDeleteHistoricCaseInstanceNoAuthenticatedTenants() {
-    testRule.deployForTenant(TENANT_ONE, CMMN_PROCESS_WITH_MANUAL_ACTIVATION);
-    String caseInstanceId = createAndCloseCaseInstance(null);
-
-    identityService.setAuthentication("user", null, null);
-
-    // when/then
-    assertThatThrownBy(() -> historyService.deleteHistoricCaseInstance(caseInstanceId))
-      .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("Cannot delete the historic case instance");
-  }
-
-  @Test
-  public void deleteHistoricCaseInstanceWithAuthenticatedTenant() {
-    testRule.deployForTenant(TENANT_ONE, CMMN_PROCESS_WITH_MANUAL_ACTIVATION);
-    String caseInstanceId = createAndCloseCaseInstance(null);
-
-    identityService.setAuthentication("user", null, Arrays.asList(TENANT_ONE));
-
-    historyService.deleteHistoricCaseInstance(caseInstanceId);
-
-    identityService.clearAuthentication();
-
-    HistoricCaseInstanceQuery query = historyService.createHistoricCaseInstanceQuery();
-
-    assertThat(query.count()).isEqualTo(0L);
-  }
-
-  @Test
-  public void deleteHistoricCaseInstanceWithDisabledTenantCheck() {
-    testRule.deployForTenant(TENANT_ONE, CMMN_PROCESS_WITH_MANUAL_ACTIVATION);
-    testRule.deployForTenant(TENANT_TWO, CMMN_PROCESS_WITH_MANUAL_ACTIVATION);
-
-    String caseInstanceIdOne = createAndCloseCaseInstance(TENANT_ONE);
-    String caseInstanceIdTwo = createAndCloseCaseInstance(TENANT_TWO);
-
-    identityService.setAuthentication("user", null, null);
-    processEngineConfiguration.setTenantCheckEnabled(false);
-
-    historyService.deleteHistoricCaseInstance(caseInstanceIdOne);
-    historyService.deleteHistoricCaseInstance(caseInstanceIdTwo);
-
-    HistoricCaseInstanceQuery query = historyService.createHistoricCaseInstanceQuery();
     assertThat(query.count()).isEqualTo(0L);
   }
 
@@ -576,22 +522,6 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
       return runtimeService.createProcessInstanceByKey(PROCESS_DEFINITION_KEY)
           .processDefinitionTenantId(tenantId).execute().getId();
     }
-  }
-
-  protected String createAndCloseCaseInstance(String tenantId) {
-    String caseInstanceId;
-
-    CaseInstanceBuilder builder = caseService.withCaseDefinitionByKey("oneTaskCase");
-    if (tenantId == null) {
-      caseInstanceId = builder.create().getId();
-    } else {
-      caseInstanceId =  builder.caseDefinitionTenantId(tenantId).create().getId();
-    }
-
-    caseService.completeCaseExecution(caseInstanceId);
-    caseService.closeCaseInstance(caseInstanceId);
-
-    return caseInstanceId;
   }
 
   protected String evaluateDecisionTable(String tenantId) {

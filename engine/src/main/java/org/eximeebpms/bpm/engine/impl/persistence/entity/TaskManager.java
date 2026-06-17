@@ -57,20 +57,6 @@ public class TaskManager extends AbstractManager {
     }
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public void deleteTasksByCaseInstanceId(String caseInstanceId, String deleteReason, boolean cascade) {
-    List<TaskEntity> tasks = (List) getDbEntityManager()
-        .createTaskQuery()
-        .caseInstanceId(caseInstanceId)
-        .list();
-
-      String reason = (deleteReason == null || deleteReason.length() == 0) ? TaskEntity.DELETE_REASON_DELETED : deleteReason;
-
-      for (TaskEntity task: tasks) {
-        task.delete(reason, cascade, false);
-      }
-  }
-
   public void deleteTask(TaskEntity task, String deleteReason, boolean cascade, boolean skipCustomListeners) {
     if (!task.isDeleted()) {
       task.setDeleted(true);
@@ -114,10 +100,6 @@ public class TaskManager extends AbstractManager {
   @SuppressWarnings("unchecked")
   public List<TaskEntity> findTasksByExecutionId(String executionId) {
     return getDbEntityManager().selectList("selectTasksByExecutionId", executionId);
-  }
-
-  public TaskEntity findTaskByCaseExecutionId(String caseExecutionId) {
-    return (TaskEntity) getDbEntityManager().selectOne("selectTaskByCaseExecutionId", caseExecutionId);
   }
 
   @SuppressWarnings("unchecked")
@@ -187,14 +169,6 @@ public class TaskManager extends AbstractManager {
     parameters.put("processDefinitionTenantId", processDefinitionTenantId);
     parameters.put("suspensionState", suspensionState.getStateCode());
     getDbEntityManager().update(TaskEntity.class, "updateTaskSuspensionStateByParameters", configureParameterizedQuery(parameters));
-  }
-
-  public void updateTaskSuspensionStateByCaseExecutionId(String caseExecutionId, SuspensionState suspensionState) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("caseExecutionId", caseExecutionId);
-    parameters.put("suspensionState", suspensionState.getStateCode());
-    getDbEntityManager().update(TaskEntity.class, "updateTaskSuspensionStateByParameters", configureParameterizedQuery(parameters));
-
   }
 
   // helper ///////////////////////////////////////////////////////////

@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.time.DateUtils;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
@@ -118,7 +117,6 @@ public class HistoricProcessInstanceTest {
   protected ManagementService managementService;
   protected HistoryService historyService;
   protected TaskService taskService;
-  protected CaseService caseService;
 
   @Before
   public void initServices() {
@@ -127,7 +125,6 @@ public class HistoricProcessInstanceTest {
     managementService = engineRule.getManagementService();
     historyService = engineRule.getHistoryService();
     taskService = engineRule.getTaskService();
-    caseService = engineRule.getCaseService();
   }
 
   @Test
@@ -160,7 +157,6 @@ public class HistoricProcessInstanceTest {
     assertEquals(noon, historicProcessInstance.getStartTime());
     assertNull(historicProcessInstance.getEndTime());
     assertNull(historicProcessInstance.getDurationInMillis());
-    assertNull(historicProcessInstance.getCaseInstanceId());
 
     List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list();
 
@@ -183,7 +179,6 @@ public class HistoricProcessInstanceTest {
     assertEquals(twentyFiveSecsAfterNoon, historicProcessInstance.getEndTime());
     assertEquals(Long.valueOf(25 * 1000), historicProcessInstance.getDurationInMillis());
     assertTrue(((HistoricProcessInstanceEventEntity) historicProcessInstance).getDurationRaw() >= 25000);
-    assertNull(historicProcessInstance.getCaseInstanceId());
 
     assertEquals(0, historyService.createHistoricProcessInstanceQuery().unfinished().count());
     assertEquals(1, historyService.createHistoricProcessInstanceQuery().finished().count());
@@ -883,120 +878,6 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.bpmn20.xml" })
-  public void testQueryByCaseInstanceId() {
-    // given
-    String caseInstanceId = caseService.withCaseDefinitionByKey("case").create().getId();
-
-    // then
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-
-    HistoricProcessInstance historicProcessInstance = query.singleResult();
-    assertNotNull(historicProcessInstance);
-    assertNull(historicProcessInstance.getEndTime());
-
-    assertEquals(caseInstanceId, historicProcessInstance.getCaseInstanceId());
-
-    // complete existing user task -> completes the process instance
-    String taskId = taskService.createTaskQuery().caseInstanceId(caseInstanceId).singleResult().getId();
-    taskService.complete(taskId);
-
-    // the completed historic process instance is still associated with the
-    // case instance id
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-
-    historicProcessInstance = query.singleResult();
-    assertNotNull(historicProcessInstance);
-    assertNotNull(historicProcessInstance.getEndTime());
-
-    assertEquals(caseInstanceId, historicProcessInstance.getCaseInstanceId());
-
-  }
-
-  @Test
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-super.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-sub.bpmn20.xml" })
-  public void testQueryByCaseInstanceIdHierarchy() {
-    // given
-    String caseInstanceId = caseService.withCaseDefinitionByKey("case").create().getId();
-
-    // then
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(2, query.count());
-    assertEquals(2, query.list().size());
-
-    for (HistoricProcessInstance hpi : query.list()) {
-      assertEquals(caseInstanceId, hpi.getCaseInstanceId());
-    }
-
-    // complete existing user task -> completes the process instance(s)
-    String taskId = taskService.createTaskQuery().caseInstanceId(caseInstanceId).singleResult().getId();
-    taskService.complete(taskId);
-
-    // the completed historic process instance is still associated with the
-    // case instance id
-    assertEquals(2, query.count());
-    assertEquals(2, query.list().size());
-
-    for (HistoricProcessInstance hpi : query.list()) {
-      assertEquals(caseInstanceId, hpi.getCaseInstanceId());
-    }
-
-  }
-
-  @Test
-  public void testQueryByInvalidCaseInstanceId() {
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.caseInstanceId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-
-    query.caseInstanceId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.cmmn",
-      "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.bpmn20.xml" })
-  public void testBusinessKey() {
-    // given
-    String businessKey = "aBusinessKey";
-
-    caseService.withCaseDefinitionByKey("case").businessKey(businessKey).create().getId();
-
-    // then
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.processInstanceBusinessKey(businessKey);
-
-    assertEquals(1, query.count());
-    assertEquals(1, query.list().size());
-
-    HistoricProcessInstance historicProcessInstance = query.singleResult();
-    assertNotNull(historicProcessInstance);
-
-    assertEquals(businessKey, historicProcessInstance.getBusinessKey());
-
-  }
-
-  @Test
-  @Deployment(resources = {
       "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-super.bpmn20.xml",
       "org/eximeebpms/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-sub.bpmn20.xml" })
   public void testStartActivityId() {
@@ -1035,70 +916,6 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
-  public void testStartByKeyWithCaseInstanceId() {
-    String caseInstanceId = "aCaseInstanceId";
-
-    String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess", null, caseInstanceId).getId();
-
-    HistoricProcessInstance firstInstance = historyService.createHistoricProcessInstanceQuery()
-        .processInstanceId(processInstanceId)
-        .singleResult();
-
-    assertNotNull(firstInstance);
-
-    assertEquals(caseInstanceId, firstInstance.getCaseInstanceId());
-
-    // the second possibility to start a process instance /////////////////////////////////////////////
-
-    processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess", null, caseInstanceId, null).getId();
-
-    HistoricProcessInstance secondInstance = historyService.createHistoricProcessInstanceQuery()
-        .processInstanceId(processInstanceId)
-        .singleResult();
-
-    assertNotNull(secondInstance);
-
-    assertEquals(caseInstanceId, secondInstance.getCaseInstanceId());
-
-  }
-
-  @Test
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
-  public void testStartByIdWithCaseInstanceId() {
-    String processDefinitionId = repositoryService.createProcessDefinitionQuery()
-        .processDefinitionKey("oneTaskProcess")
-        .singleResult()
-        .getId();
-
-    String caseInstanceId = "aCaseInstanceId";
-    String processInstanceId = runtimeService.startProcessInstanceById(processDefinitionId, null, caseInstanceId)
-        .getId();
-
-    HistoricProcessInstance firstInstance = historyService.createHistoricProcessInstanceQuery()
-        .processInstanceId(processInstanceId)
-        .singleResult();
-
-    assertNotNull(firstInstance);
-
-    assertEquals(caseInstanceId, firstInstance.getCaseInstanceId());
-
-    // the second possibility to start a process instance /////////////////////////////////////////////
-
-    processInstanceId = runtimeService.startProcessInstanceById(processDefinitionId, null, caseInstanceId, null)
-        .getId();
-
-    HistoricProcessInstance secondInstance = historyService.createHistoricProcessInstanceQuery()
-        .processInstanceId(processInstanceId)
-        .singleResult();
-
-    assertNotNull(secondInstance);
-
-    assertEquals(caseInstanceId, secondInstance.getCaseInstanceId());
-
-  }
-
-  @Test
   @Deployment
   public void testEndTimeAndEndActivity() {
     // given
@@ -1125,100 +942,6 @@ public class HistoricProcessInstanceTest {
 
     assertNull(historicProcessInstance.getEndActivityId());
     assertNotNull(historicProcessInstance.getEndTime());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/eximeebpms/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
-  public void testQueryBySuperCaseInstanceId() {
-    String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
-
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
-        .superCaseInstanceId(superCaseInstanceId);
-
-    assertEquals(1, query.list().size());
-    assertEquals(1, query.count());
-
-    HistoricProcessInstance subProcessInstance = query.singleResult();
-    assertNotNull(subProcessInstance);
-    assertEquals(superCaseInstanceId, subProcessInstance.getSuperCaseInstanceId());
-    assertNull(subProcessInstance.getSuperProcessInstanceId());
-  }
-
-  @Test
-  public void testQueryByInvalidSuperCaseInstanceId() {
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.superCaseInstanceId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-
-    query.caseInstanceId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testQueryBySubCaseInstanceId() {
-    String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
-
-    String subCaseInstanceId = caseService.createCaseInstanceQuery()
-        .superProcessInstanceId(superProcessInstanceId)
-        .singleResult()
-        .getId();
-
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
-        .subCaseInstanceId(subCaseInstanceId);
-
-    assertEquals(1, query.list().size());
-    assertEquals(1, query.count());
-
-    HistoricProcessInstance superProcessInstance = query.singleResult();
-    assertNotNull(superProcessInstance);
-    assertEquals(superProcessInstanceId, superProcessInstance.getId());
-    assertNull(superProcessInstance.getSuperCaseInstanceId());
-    assertNull(superProcessInstance.getSuperProcessInstanceId());
-  }
-
-  @Test
-  public void testQueryByInvalidSubCaseInstanceId() {
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-
-    query.subCaseInstanceId("invalid");
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-
-    query.caseInstanceId(null);
-
-    assertEquals(0, query.count());
-    assertEquals(0, query.list().size());
-  }
-
-  @Test
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/eximeebpms/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
-  public void testSuperCaseInstanceIdProperty() {
-    String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
-
-    caseService.createCaseExecutionQuery().activityId("PI_ProcessTask_1").singleResult().getId();
-
-    HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery().singleResult();
-
-    assertNotNull(instance);
-    assertEquals(superCaseInstanceId, instance.getSuperCaseInstanceId());
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-    taskService.complete(taskId);
-
-    instance = historyService.createHistoricProcessInstanceQuery().singleResult();
-
-    assertNotNull(instance);
-    assertEquals(superCaseInstanceId, instance.getSuperCaseInstanceId());
   }
 
   @Test

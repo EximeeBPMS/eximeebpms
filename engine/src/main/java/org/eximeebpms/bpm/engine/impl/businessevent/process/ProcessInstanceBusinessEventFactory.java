@@ -6,7 +6,6 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventFactorySupport;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
@@ -100,13 +99,9 @@ public class ProcessInstanceBusinessEventFactory extends BusinessEventFactorySup
         .executionId(executionEntity.getId())
         .rootProcessInstanceId(executionEntity.getRootProcessInstanceId())
         .businessKey(executionEntity.getProcessBusinessKey())
-        .caseInstanceId(executionEntity.getCaseInstanceId())
         .tenantId(executionEntity.getTenantId())
         .superProcessInstanceId(Optional.ofNullable(executionEntity.getSuperExecution())
             .map(ExecutionEntity::getProcessInstanceId)
-            .orElse(null))
-        .superCaseInstanceId(Optional.ofNullable(executionEntity.getSuperCaseExecution())
-            .map(CaseExecutionEntity::getCaseInstanceId)
             .orElse(null))
         .timestamp(now)
         .userOperationId(Optional.ofNullable(Context.getCommandContext())

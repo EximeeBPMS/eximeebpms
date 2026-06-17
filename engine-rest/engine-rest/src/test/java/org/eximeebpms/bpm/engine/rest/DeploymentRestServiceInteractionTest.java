@@ -60,7 +60,6 @@ import static org.mockito.Mockito.*;
 public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTest {
 
   protected static final String PROPERTY_DEPLOYED_PROCESS_DEFINITIONS = "deployedProcessDefinitions";
-  protected static final String PROPERTY_DEPLOYED_CASE_DEFINITIONS = "deployedCaseDefinitions";
   protected static final String PROPERTY_DEPLOYED_DECISION_DEFINITIONS = "deployedDecisionDefinitions";
   protected static final String PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS = "deployedDecisionRequirementsDefinitions";
   @ClassRule
@@ -1112,7 +1111,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     // given
     DeploymentWithDefinitions mockDeployment = MockProvider.createMockDeploymentWithDefinitions();
     when(mockDeployment.getDeployedDecisionDefinitions()).thenReturn(null);
-    when(mockDeployment.getDeployedCaseDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedDecisionRequirementsDefinitions()).thenReturn(null);
     when(mockDeploymentBuilder.deployWithResult()).thenReturn(mockDeployment);
 
@@ -1171,7 +1169,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
   public void testCreateCompleteDmnDeployment() throws Exception {
     // given
     DeploymentWithDefinitions mockDeployment = MockProvider.createMockDeploymentWithDefinitions();
-    when(mockDeployment.getDeployedCaseDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedProcessDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedDecisionRequirementsDefinitions()).thenReturn(null);
     when(mockDeploymentBuilder.deployWithResult()).thenReturn(mockDeployment);
@@ -1201,7 +1198,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
   public void testCreateCompleteDrdDeployment() throws Exception {
     // given
     DeploymentWithDefinitions mockDeployment = MockProvider.createMockDeploymentWithDefinitions();
-    when(mockDeployment.getDeployedCaseDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedProcessDefinitions()).thenReturn(null);
     when(mockDeploymentBuilder.deployWithResult()).thenReturn(mockDeployment);
 
@@ -1232,7 +1228,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     // given
     DeploymentWithDefinitions mockDeployment = MockProvider.createMockDeploymentWithDefinitions();
     when(mockDeployment.getDeployedDecisionDefinitions()).thenReturn(null);
-    when(mockDeployment.getDeployedCaseDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedProcessDefinitions()).thenReturn(null);
     when(mockDeployment.getDeployedDecisionRequirementsDefinitions()).thenReturn(null);
     when(mockDeploymentBuilder.deployWithResult()).thenReturn(mockDeployment);
@@ -1954,14 +1949,11 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     verifyStandardDeploymentValues(mockDeployment, path);
 
     Map<String, HashMap<String, Object>> deployedProcessDefinitions = path.getMap(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS);
-    Map<String, HashMap<String, Object>> deployedCaseDefinitions = path.getMap(PROPERTY_DEPLOYED_CASE_DEFINITIONS);
     Map<String, HashMap<String, Object>>  deployedDecisionDefinitions = path.getMap(PROPERTY_DEPLOYED_DECISION_DEFINITIONS);
     Map<String, HashMap<String, Object>>  deployedDecisionRequirementsDefinitions = path.getMap(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS);
 
     assertEquals(1, deployedProcessDefinitions.size());
     assertNotNull(deployedProcessDefinitions.get(MockProvider.EXAMPLE_PROCESS_DEFINITION_ID));
-    assertEquals(1, deployedCaseDefinitions.size());
-    assertNotNull(deployedCaseDefinitions.get(EXAMPLE_CASE_DEFINITION_ID));
     assertEquals(1, deployedDecisionDefinitions.size());
     assertNotNull(deployedDecisionDefinitions.get(EXAMPLE_DECISION_DEFINITION_ID));
     assertEquals(1, deployedDecisionRequirementsDefinitions.size());
@@ -1979,7 +1971,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     assertNotNull(processDefinitionDto);
     verifyBpmnDeployment(processDefinitionDto);
 
-    assertNull(path.get(PROPERTY_DEPLOYED_CASE_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS));
   }
@@ -1987,13 +1978,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
   private void verifyCmmnDeploymentValues(Deployment mockDeployment, String responseContent) {
     JsonPath path = from(responseContent);
     verifyStandardDeploymentValues(mockDeployment, path);
-
-    Map<String, HashMap<String, Object>> deployedCaseDefinitions = path.getMap(PROPERTY_DEPLOYED_CASE_DEFINITIONS);
-
-    assertEquals(1, deployedCaseDefinitions.size());
-    HashMap caseDefinitionDto = deployedCaseDefinitions.get(EXAMPLE_CASE_DEFINITION_ID);
-    assertNotNull(caseDefinitionDto);
-    verifyCmnDeployment(caseDefinitionDto);
 
     assertNull(path.get(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_DEFINITIONS));
@@ -2013,7 +1997,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
 
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS));
-    assertNull(path.get(PROPERTY_DEPLOYED_CASE_DEFINITIONS));
   }
 
   private void verifyDrdDeploymentValues(Deployment mockDeployment, String responseContent) {
@@ -2036,7 +2019,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     verifyDrdDeployment(decisionRequirementsDefinitionDto);
 
     assertNull(path.get(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS));
-    assertNull(path.get(PROPERTY_DEPLOYED_CASE_DEFINITIONS));
   }
 
   private void verifyBpmnDeployment(HashMap<String, Object> dto) {
@@ -2050,15 +2032,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     assertEquals(dto.get("deploymentId"), EXAMPLE_DEPLOYMENT_ID);
     assertEquals(dto.get("diagram"), EXAMPLE_PROCESS_DEFINITION_DIAGRAM_RESOURCE_NAME);
     assertEquals(dto.get("suspended"), EXAMPLE_PROCESS_DEFINITION_IS_SUSPENDED);
-  }
-  private void verifyCmnDeployment(HashMap<String, Object> dto) {
-    assertEquals(dto.get("id"), EXAMPLE_CASE_DEFINITION_ID);
-    assertEquals(dto.get("category"), EXAMPLE_CASE_DEFINITION_CATEGORY);
-    assertEquals(dto.get("name"), EXAMPLE_CASE_DEFINITION_NAME);
-    assertEquals(dto.get("key"), EXAMPLE_CASE_DEFINITION_KEY);
-    assertEquals(dto.get("version"), EXAMPLE_CASE_DEFINITION_VERSION);
-    assertEquals(dto.get("resource"), EXAMPLE_CASE_DEFINITION_RESOURCE_NAME);
-    assertEquals(dto.get("deploymentId"), EXAMPLE_DEPLOYMENT_ID);
   }
 
   private void verifyDmnDeployment(HashMap<String, Object> dto) {
@@ -2088,7 +2061,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     verifyStandardDeploymentValues(mockDeployment, path);
 
     assertNull(path.get(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS));
-    assertNull(path.get(PROPERTY_DEPLOYED_CASE_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_DEFINITIONS));
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS));
   }

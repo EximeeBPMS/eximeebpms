@@ -43,10 +43,6 @@ public class MockHistoricVariableUpdateBuilder {
   protected String time;
   protected String executionId;
   protected String taskId;
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String tenantId;
   protected String userOperationId;
   protected boolean initial;
@@ -116,26 +112,6 @@ public class MockHistoricVariableUpdateBuilder {
     return this;
   }
 
-  public MockHistoricVariableUpdateBuilder caseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-    return this;
-  }
-
-  public MockHistoricVariableUpdateBuilder caseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  public MockHistoricVariableUpdateBuilder caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public MockHistoricVariableUpdateBuilder caseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-    return this;
-  }
-
   public MockHistoricVariableUpdateBuilder tenantId(String tenantId) {
     this.tenantId = tenantId;
     return this;
@@ -180,10 +156,6 @@ public class MockHistoricVariableUpdateBuilder {
     when(mockVariable.getTaskId()).thenReturn(taskId);
     when(mockVariable.getExecutionId()).thenReturn(executionId);
     when(mockVariable.getTypeName()).thenReturn(typedValue.getType().getName());
-    when(mockVariable.getCaseDefinitionKey()).thenReturn(caseDefinitionKey);
-    when(mockVariable.getCaseDefinitionId()).thenReturn(caseDefinitionId);
-    when(mockVariable.getCaseInstanceId()).thenReturn(caseInstanceId);
-    when(mockVariable.getCaseExecutionId()).thenReturn(caseExecutionId);
     when(mockVariable.getTenantId()).thenReturn(tenantId);
     when(mockVariable.getUserOperationId()).thenReturn(userOperationId);
     when(mockVariable.isInitial()).thenReturn(initial);
@@ -245,22 +217,6 @@ public class MockHistoricVariableUpdateBuilder {
 
   public String getTaskId() {
     return taskId;
-  }
-
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
   }
 
   public String getUserOperationId() {

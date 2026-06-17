@@ -281,50 +281,6 @@ public class PurgeDatabaseTest {
     }
   }
 
-  // CMMN //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  @Test
-  public void testPurgeCmmnProcess() {
-    // given cmmn process which is not managed by process engine rule
-
-    engineRule.getRepositoryService()
-      .createDeployment()
-      .addClasspathResource("org/eximeebpms/bpm/engine/test/standalone/db/entitymanager/PurgeDatabaseTest.testPurgeCmmnProcess.cmmn")
-      .deploy();
-    VariableMap variables = Variables.createVariables();
-    variables.put("key", "value");
-    engineRule.getCaseService().createCaseInstanceByKey(PROCESS_DEF_KEY, variables);
-
-    // when purge is executed
-    ManagementServiceImpl managementService = (ManagementServiceImpl) engineRule.getManagementService();
-    PurgeReport purge = managementService.purge();
-
-    // then database and cache is cleaned
-    assertAndEnsureCleanDbAndCache(engineRule.getProcessEngine(), true);
-
-    // and report contains deleted entities
-    assertFalse(purge.isEmpty());
-    CachePurgeReport cachePurgeReport = purge.getCachePurgeReport();
-    assertEquals(1, cachePurgeReport.getReportValue(CachePurgeReport.CASE_DEF_CACHE).size());
-
-    DatabasePurgeReport databasePurgeReport = purge.getDatabasePurgeReport();
-    assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RE_DEPLOYMENT"));
-    assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RU_TASK"));
-    assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_GE_BYTEARRAY"));
-    assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RE_CASE_DEF"));
-    assertEquals(3, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RU_CASE_EXECUTION"));
-    assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RU_VARIABLE"));
-    assertEquals(2, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_RU_CASE_SENTRY_PART"));
-
-    if (processEngineConfiguration.getHistoryLevel().equals(HistoryLevel.HISTORY_LEVEL_FULL)) {
-      assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_HI_DETAIL"));
-      assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_HI_TASKINST"));
-      assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_HI_VARINST"));
-      assertEquals(1, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_HI_CASEINST"));
-      assertEquals(2, (long) databasePurgeReport.getReportValue(databaseTablePrefix + "ACT_HI_CASEACTINST"));
-    }
-  }
-
   // DMN ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Test

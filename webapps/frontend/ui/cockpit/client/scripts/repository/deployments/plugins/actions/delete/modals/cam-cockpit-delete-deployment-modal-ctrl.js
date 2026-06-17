@@ -38,7 +38,6 @@ module.exports = [
   ) {
     var Deployment = camAPI.resource('deployment');
     var ProcessInstance = camAPI.resource('process-instance');
-    var CaseInstance = camAPI.resource('case-instance');
 
     var deleteDeploymentData = deploymentData.newChild($scope);
 
@@ -83,29 +82,6 @@ module.exports = [
       return deferred.promise;
     });
 
-    deleteDeploymentData.provide('caseInstanceCount', function() {
-      var deferred = $q.defer();
-
-      CaseInstance.count(
-        {
-          deploymentId: deployment.id
-        },
-        function(err, res) {
-          if (err) {
-            // reject error but do not handle the error
-            // it can happen that the case engine is disabled,
-            // so that an error should be received. In that
-            // case it should still be possible to delete
-            // the deployment.
-            return deferred.reject(err);
-          }
-          deferred.resolve(res);
-        }
-      );
-
-      return deferred.promise;
-    });
-
     // observe /////////////////////////////////////////////////////////
 
     $scope.processInstanceCountState = deleteDeploymentData.observe(
@@ -115,31 +91,19 @@ module.exports = [
       }
     );
 
-    $scope.caseInstanceCountState = deleteDeploymentData.observe(
-      'caseInstanceCount',
-      function(count) {
-        $scope.caseInstanceCount = count;
-      }
-    );
-
     // delete deployment ///////////////////////////////////////////////
 
     $scope.countsLoaded = function() {
       return (
         $scope.processInstanceCountState &&
         ($scope.processInstanceCountState.$loaded ||
-          $scope.processInstanceCountState.$error) &&
-        $scope.caseInstanceCountState &&
-        ($scope.caseInstanceCountState.$loaded ||
-          $scope.caseInstanceCountState.$error)
+          $scope.processInstanceCountState.$error)
       );
     };
 
     var hasInstances = ($scope.hasInstances = function() {
       return (
-        ($scope.processInstanceCount &&
-          $scope.processInstanceCount.count > 0) ||
-        $scope.caseInstanceCount > 0
+        $scope.processInstanceCount && $scope.processInstanceCount.count > 0
       );
     });
 
@@ -166,21 +130,9 @@ module.exports = [
 
       if (
         $scope.processInstanceCount &&
-        $scope.processInstanceCount.count > 0 &&
-        $scope.caseInstanceCount > 0
+        $scope.processInstanceCount.count > 0
       ) {
         info.push($translate.instant('REPOSITORY_DEPLOYMENTS_INFO_AND'));
-      }
-
-      if ($scope.caseInstanceCount > 0) {
-        info.push($scope.caseInstanceCount);
-        $scope.caseInstanceCount > 1
-          ? info.push(
-              $translate.instant('REPOSITORY_DEPLOYMENTS_INFO_OPEN_PLURAL')
-            )
-          : info.push(
-              $translate.instant('REPOSITORY_DEPLOYMENTS_INFO_OPEN_SINGULAR')
-            );
       }
 
       info.push($translate.instant('REPOSITORY_DEPLOYMENTS_INFO_WHICH_BELONG'));

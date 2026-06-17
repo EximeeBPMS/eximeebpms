@@ -50,21 +50,6 @@ public class VfsProcessApplicationScannerTest {
   }
 
   @Test
-  public void testScanProcessArchivePathForCmmnResources() throws MalformedURLException {
-
-    // given: scanning the relative test resource root
-    URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL("file:")});
-    String processRootPath = "classpath:org/eximeebpms/bpm/container/impl/jmx/deployment/case/";
-    Map<String, byte[]> scanResult = ProcessApplicationScanningUtil.findResources(classLoader, processRootPath, null);
-
-    // expect: finds only the CMMN process file and not treats the 'cmmn' folder
-    assertEquals(1, scanResult.size());
-    String processFileName = "VfsProcessScannerTest.cmmn";
-    assertTrue("'" + processFileName + "' not found", contains(scanResult, processFileName));
-    assertFalse("'cmmn' in resource path found", contains(scanResult, "caseResource.txt"));
-  }
-
-  @Test
   public void testScanProcessArchivePathWithAdditionalResourceSuffixes() throws MalformedURLException {
     URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL("file:")});
     String processRootPath = "classpath:org/eximeebpms/bpm/container/impl/jmx/deployment/script/";

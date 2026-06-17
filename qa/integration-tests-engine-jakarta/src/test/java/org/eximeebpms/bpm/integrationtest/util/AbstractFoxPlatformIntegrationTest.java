@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.integrationtest.util;
 
 import org.eximeebpms.bpm.BpmPlatform;
 import org.eximeebpms.bpm.ProcessEngineService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.HistoryService;
@@ -60,7 +59,6 @@ public abstract class AbstractFoxPlatformIntegrationTest {
   protected RepositoryService repositoryService;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected DecisionService decisionService;
 
   public static WebArchive initWebArchiveDeployment(String name, String processesXmlPath) {
@@ -98,7 +96,6 @@ public abstract class AbstractFoxPlatformIntegrationTest {
     repositoryService = processEngine.getRepositoryService();
     runtimeService = processEngine.getRuntimeService();
     taskService = processEngine.getTaskService();
-    caseService = processEngine.getCaseService();
     decisionService = processEngine.getDecisionService();
   }
 

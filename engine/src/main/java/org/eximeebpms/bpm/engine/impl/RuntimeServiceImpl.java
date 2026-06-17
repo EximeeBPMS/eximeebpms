@@ -96,14 +96,6 @@ public class RuntimeServiceImpl extends ServiceImpl implements RuntimeService {
   }
 
   @Override
-  public ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, String caseInstanceId) {
-    return createProcessInstanceByKey(processDefinitionKey)
-        .businessKey(businessKey)
-        .caseInstanceId(caseInstanceId)
-        .execute();
-  }
-
-  @Override
   public ProcessInstance startProcessInstanceByKey(String processDefinitionKey, Map<String, Object> variables) {
     return createProcessInstanceByKey(processDefinitionKey)
         .setVariables(variables)
@@ -114,15 +106,6 @@ public class RuntimeServiceImpl extends ServiceImpl implements RuntimeService {
   public ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables) {
     return createProcessInstanceByKey(processDefinitionKey)
         .businessKey(businessKey)
-        .setVariables(variables)
-        .execute();
-  }
-
-  @Override
-  public ProcessInstance startProcessInstanceByKey(String processDefinitionKey, String businessKey, String caseInstanceId, Map<String, Object> variables) {
-    return createProcessInstanceByKey(processDefinitionKey)
-        .businessKey(businessKey)
-        .caseInstanceId(caseInstanceId)
         .setVariables(variables)
         .execute();
   }
@@ -141,14 +124,6 @@ public class RuntimeServiceImpl extends ServiceImpl implements RuntimeService {
   }
 
   @Override
-  public ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, String caseInstanceId) {
-    return createProcessInstanceById(processDefinitionId)
-        .businessKey(businessKey)
-        .caseInstanceId(caseInstanceId)
-        .execute();
-  }
-
-  @Override
   public ProcessInstance startProcessInstanceById(String processDefinitionId, Map<String, Object> variables) {
     return createProcessInstanceById(processDefinitionId)
         .setVariables(variables)
@@ -159,15 +134,6 @@ public class RuntimeServiceImpl extends ServiceImpl implements RuntimeService {
   public ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, Map<String, Object> variables) {
     return createProcessInstanceById(processDefinitionId)
         .businessKey(businessKey)
-        .setVariables(variables)
-        .execute();
-  }
-
-  @Override
-  public ProcessInstance startProcessInstanceById(String processDefinitionId, String businessKey, String caseInstanceId, Map<String, Object> variables) {
-    return createProcessInstanceById(processDefinitionId)
-        .businessKey(businessKey)
-        .caseInstanceId(caseInstanceId)
         .setVariables(variables)
         .execute();
   }

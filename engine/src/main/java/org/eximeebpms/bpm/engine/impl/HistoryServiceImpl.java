@@ -23,14 +23,10 @@ import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.batch.Batch;
 import org.eximeebpms.bpm.engine.batch.history.HistoricBatchQuery;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricBatchReport;
-import org.eximeebpms.bpm.engine.history.CleanableHistoricCaseInstanceReport;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricDecisionInstanceReport;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricProcessInstanceReport;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatisticsQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
-import org.eximeebpms.bpm.engine.history.HistoricCaseInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
 import org.eximeebpms.bpm.engine.history.HistoricDetailQuery;
@@ -43,8 +39,6 @@ import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceReport;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.NativeHistoricCaseActivityInstanceQuery;
-import org.eximeebpms.bpm.engine.history.NativeHistoricCaseInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.history.NativeHistoricTaskInstanceQuery;
@@ -52,13 +46,9 @@ import org.eximeebpms.bpm.engine.history.NativeHistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
 import org.eximeebpms.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
 import org.eximeebpms.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
-import org.eximeebpms.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
-import org.eximeebpms.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
 import org.eximeebpms.bpm.engine.impl.batch.history.DeleteHistoricBatchCmd;
 import org.eximeebpms.bpm.engine.impl.batch.history.HistoricBatchQueryImpl;
-import org.eximeebpms.bpm.engine.impl.cmd.DeleteHistoricCaseInstanceCmd;
-import org.eximeebpms.bpm.engine.impl.cmd.DeleteHistoricCaseInstancesBulkCmd;
 import org.eximeebpms.bpm.engine.impl.cmd.DeleteHistoricProcessInstancesCmd;
 import org.eximeebpms.bpm.engine.impl.cmd.DeleteHistoricTaskInstanceCmd;
 import org.eximeebpms.bpm.engine.impl.cmd.DeleteHistoricVariableInstanceCmd;
@@ -98,10 +88,6 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
     return new HistoricActivityStatisticsQueryImpl(processDefinitionId, commandExecutor);
   }
 
-  public HistoricCaseActivityStatisticsQuery createHistoricCaseActivityStatisticsQuery(String caseDefinitionId) {
-    return new HistoricCaseActivityStatisticsQueryImpl(caseDefinitionId, commandExecutor);
-  }
-
   public HistoricTaskInstanceQuery createHistoricTaskInstanceQuery() {
     return new HistoricTaskInstanceQueryImpl(commandExecutor);
   }
@@ -124,14 +110,6 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
 
   public HistoricIdentityLinkLogQueryImpl createHistoricIdentityLinkLogQuery() {
     return new HistoricIdentityLinkLogQueryImpl(commandExecutor);
-  }
-
-  public HistoricCaseInstanceQuery createHistoricCaseInstanceQuery() {
-    return new HistoricCaseInstanceQueryImpl(commandExecutor);
-  }
-
-  public HistoricCaseActivityInstanceQuery createHistoricCaseActivityInstanceQuery() {
-    return new HistoricCaseActivityInstanceQueryImpl(commandExecutor);
   }
 
   public HistoricDecisionInstanceQuery createHistoricDecisionInstanceQuery() {
@@ -201,14 +179,6 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
     commandExecutor.execute(new DeleteUserOperationLogEntryCmd(entryId));
   }
 
-  public void deleteHistoricCaseInstance(String caseInstanceId) {
-    commandExecutor.execute(new DeleteHistoricCaseInstanceCmd(caseInstanceId));
-  }
-
-  public void deleteHistoricCaseInstancesBulk(List<String> caseInstanceIds) {
-    commandExecutor.execute(new DeleteHistoricCaseInstancesBulkCmd(caseInstanceIds));
-  }
-
   public void deleteHistoricDecisionInstance(String decisionDefinitionId) {
     deleteHistoricDecisionInstanceByDefinitionId(decisionDefinitionId);
   }
@@ -237,12 +207,12 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
   public Batch deleteHistoricDecisionInstancesAsync(List<String> decisionInstanceIds, HistoricDecisionInstanceQuery query, String deleteReason) {
     return commandExecutor.execute(new DeleteHistoricDecisionInstancesBatchCmd(decisionInstanceIds, query, deleteReason));
   }
-  
+
   @Override
   public void deleteHistoricVariableInstance(String variableInstanceId) {
     commandExecutor.execute(new DeleteHistoricVariableInstanceCmd(variableInstanceId));
   }
-  
+
   @Override
   public void deleteHistoricVariableInstancesByProcessInstanceId(String processInstanceId) {
     commandExecutor.execute(new DeleteHistoricVariableInstancesByProcessInstanceIdCmd(processInstanceId));
@@ -258,14 +228,6 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
 
   public NativeHistoricActivityInstanceQuery createNativeHistoricActivityInstanceQuery() {
     return new NativeHistoricActivityInstanceQueryImpl(commandExecutor);
-  }
-
-  public NativeHistoricCaseInstanceQuery createNativeHistoricCaseInstanceQuery() {
-    return new NativeHistoricCaseInstanceQueryImpl(commandExecutor);
-  }
-
-  public NativeHistoricCaseActivityInstanceQuery createNativeHistoricCaseActivityInstanceQuery() {
-    return new NativeHistoricCaseActivityInstanceQueryImpl(commandExecutor);
   }
 
   public NativeHistoricDecisionInstanceQuery createNativeHistoricDecisionInstanceQuery() {
@@ -298,10 +260,6 @@ public class HistoryServiceImpl extends ServiceImpl implements HistoryService {
 
   public CleanableHistoricDecisionInstanceReport createCleanableHistoricDecisionInstanceReport() {
     return new CleanableHistoricDecisionInstanceReportImpl(commandExecutor);
-  }
-
-  public CleanableHistoricCaseInstanceReport createCleanableHistoricCaseInstanceReport() {
-    return new CleanableHistoricCaseInstanceReportImpl(commandExecutor);
   }
 
   public CleanableHistoricBatchReport createCleanableHistoricBatchReport() {

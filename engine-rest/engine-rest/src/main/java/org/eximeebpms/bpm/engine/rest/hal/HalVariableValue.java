@@ -48,12 +48,6 @@ public class HalVariableValue extends HalResource<HalVariableValue> {
     else if (variableScopeId.equals(variableInstance.getExecutionId())) {
       return generateExecutionVariableValue(variableInstance, variableScopeId);
     }
-    else if (variableScopeId.equals(variableInstance.getCaseInstanceId())) {
-      return generateCaseInstanceVariableValue(variableInstance, variableScopeId);
-    }
-    else if (variableScopeId.equals(variableInstance.getCaseExecutionId())) {
-      return generateCaseExecutionVariableValue(variableInstance, variableScopeId);
-    }
     else {
       throw new RestException("Variable scope id '" + variableScopeId + "' does not match with variable instance '" + variableInstance + "'");
     }
@@ -72,16 +66,6 @@ public class HalVariableValue extends HalResource<HalVariableValue> {
   public static HalVariableValue generateProcessInstanceVariableValue(VariableInstance variableInstance, String processInstanceId) {
     return fromVariableInstance(variableInstance)
       .link(REL_SELF, ProcessInstanceRestService.PATH, processInstanceId, "variables");
-  }
-
-  public static HalVariableValue generateCaseExecutionVariableValue(VariableInstance variableInstance, String caseExecutionId) {
-    return fromVariableInstance(variableInstance)
-      .link(REL_SELF, CaseExecutionRestService.PATH, caseExecutionId, "localVariables");
-  }
-
-  public static HalVariableValue generateCaseInstanceVariableValue(VariableInstance variableInstance, String caseInstanceId) {
-    return fromVariableInstance(variableInstance)
-      .link(REL_SELF, CaseInstanceRestService.PATH, caseInstanceId, "variables");
   }
 
   private HalVariableValue link(HalRelation relation, String resourcePath, String resourceId, String variablesPath) {

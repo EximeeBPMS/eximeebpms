@@ -17,7 +17,6 @@
 package org.eximeebpms.bpm.engine.impl.history.producer;
 
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
 
@@ -44,20 +43,6 @@ public interface DmnHistoryEventProducer {
    * @see #createDecisionEvaluatedEvt(DmnDecisionEvaluationEvent)
    */
   HistoryEvent createDecisionEvaluatedEvt(DelegateExecution execution, DmnDecisionEvaluationEvent decisionEvaluationEvent);
-
-  /**
-   * Creates the history event fired when a decision is evaluated while execute
-   * a case instance.
-   *
-   * @param execution
-   *          the current case execution
-   * @param decisionEvaluationEvent
-   *          the evaluation event
-   * @return the history event
-   *
-   * @see #createDecisionEvaluatedEvt(DmnDecisionEvaluationEvent)
-   */
-  HistoryEvent createDecisionEvaluatedEvt(DelegateCaseExecution execution, DmnDecisionEvaluationEvent decisionEvaluationEvent);
 
   /**
    * Creates the history event fired when a decision is evaluated. If the

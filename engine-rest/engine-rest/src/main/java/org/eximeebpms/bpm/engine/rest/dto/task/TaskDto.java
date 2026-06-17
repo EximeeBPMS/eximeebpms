@@ -56,10 +56,6 @@ public class TaskDto {
   private String processDefinitionId;
   private String processInstanceId;
   private String taskDefinitionKey;
-  private String caseExecutionId;
-  @Setter
-  private String caseInstanceId;
-  private String caseDefinitionId;
   private boolean suspended;
   private String formKey;
   private CamundaFormRef camundaFormRef;
@@ -95,9 +91,6 @@ public class TaskDto {
     this.processDefinitionId = task.getProcessDefinitionId();
     this.processInstanceId = task.getProcessInstanceId();
     this.taskDefinitionKey = task.getTaskDefinitionKey();
-    this.caseDefinitionId = task.getCaseDefinitionId();
-    this.caseExecutionId = task.getCaseExecutionId();
-    this.caseInstanceId = task.getCaseInstanceId();
     this.suspended = task.isSuspended();
     this.tenantId = task.getTenantId();
     this.taskState = task.getTaskState();
@@ -132,9 +125,6 @@ public class TaskDto {
     dto.processDefinitionId = task.getProcessDefinitionId();
     dto.processInstanceId = task.getProcessInstanceId();
     dto.taskDefinitionKey = task.getTaskDefinitionKey();
-    dto.caseDefinitionId = task.getCaseDefinitionId();
-    dto.caseExecutionId = task.getCaseExecutionId();
-    dto.caseInstanceId = task.getCaseInstanceId();
     dto.suspended = task.isSuspended();
     dto.tenantId = task.getTenantId();
     dto.taskState = task.getTaskState();
@@ -166,7 +156,6 @@ public class TaskDto {
     task.setDueDate(getDue());
     task.setFollowUpDate(getFollowUp());
     task.setParentTaskId(getParentTaskId());
-    task.setCaseInstanceId(getCaseInstanceId());
     task.setTenantId(getTenantId());
   }
 

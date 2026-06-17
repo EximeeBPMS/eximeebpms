@@ -71,16 +71,6 @@ public class ProcessInstantiationAtStartEventTest extends PluggableProcessEngine
   }
 
   @Test
-  public void testStartProcessInstanceAndSetCaseInstanceId() {
-
-    runtimeService.createProcessInstanceByKey(PROCESS_DEFINITION_KEY).caseInstanceId("caseInstanceId").execute();
-
-    ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().singleResult();
-    assertThat(processInstance).isNotNull();
-    assertThat(processInstance.getCaseInstanceId()).isEqualTo("caseInstanceId");
-  }
-
-  @Test
   public void testStartProcessInstanceAndSetVariable() {
 
     ProcessInstance processInstance = runtimeService.createProcessInstanceByKey(PROCESS_DEFINITION_KEY).setVariable("var", "value").execute();

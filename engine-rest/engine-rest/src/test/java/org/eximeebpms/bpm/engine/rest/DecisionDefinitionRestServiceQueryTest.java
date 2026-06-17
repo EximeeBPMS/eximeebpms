@@ -440,7 +440,7 @@ public class DecisionDefinitionRestServiceQueryTest extends AbstractRestServiceT
   public void testDecisionDefinitionTenantIdList() {
     List<DecisionDefinition> decisionDefinitions = Arrays.asList(
         MockProvider.mockDecisionDefinition().tenantId(MockProvider.EXAMPLE_TENANT_ID).build(),
-        MockProvider.mockDecisionDefinition().id(MockProvider.ANOTHER_EXAMPLE_CASE_DEFINITION_ID).tenantId(MockProvider.ANOTHER_EXAMPLE_TENANT_ID).build());
+        MockProvider.mockDecisionDefinition().id(MockProvider.ANOTHER_EXAMPLE_DECISION_DEFINITION_ID).tenantId(MockProvider.ANOTHER_EXAMPLE_TENANT_ID).build());
     mockedQuery = createMockDecisionDefinitionQuery(decisionDefinitions);
 
     Response response = given()

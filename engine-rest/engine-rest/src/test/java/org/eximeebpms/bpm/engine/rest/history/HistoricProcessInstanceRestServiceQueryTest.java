@@ -427,8 +427,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     String returnedDeleteReason = from(content).getString("[0].deleteReason");
     String returnedRootProcessInstanceId = from(content).getString("[0].rootProcessInstanceId");
     String returnedSuperProcessInstanceId = from(content).getString("[0].superProcessInstanceId");
-    String returnedSuperCaseInstanceId = from(content).getString("[0].superCaseInstanceId");
-    String returnedCaseInstanceId = from(content).getString("[0].caseInstanceId");
     String returnedTenantId = from(content).getString("[0].tenantId");
     String returnedState = from(content).getString("[0].state");
     String restartedProcessInstanceId = from(content).getString("[0].restartedProcessInstanceId");
@@ -448,8 +446,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_DELETE_REASON, returnedDeleteReason);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_ROOT_PROCESS_INSTANCE_ID, returnedRootProcessInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_PROCESS_INSTANCE_ID, returnedSuperProcessInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_CASE_INSTANCE_ID, returnedSuperCaseInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_CASE_INSTANCE_ID, returnedCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STATE, returnedState);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, restartedProcessInstanceId);
@@ -488,8 +484,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     String returnedDeleteReason = from(content).getString("[0].deleteReason");
     String returnedRootProcessInstanceId = from(content).getString("[0].rootProcessInstanceId");
     String returnedSuperProcessInstanceId = from(content).getString("[0].superProcessInstanceId");
-    String returnedSuperCaseInstanceId = from(content).getString("[0].superCaseInstanceId");
-    String returnedCaseInstanceId = from(content).getString("[0].caseInstanceId");
     String returnedTenantId = from(content).getString("[0].tenantId");
     String returnedState = from(content).getString("[0].state");
     String restartedProcessInstanceId = from(content).getString("[0].restartedProcessInstanceId");
@@ -511,9 +505,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
         returnedRootProcessInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_PROCESS_INSTANCE_ID,
         returnedSuperProcessInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_CASE_INSTANCE_ID,
-        returnedSuperCaseInstanceId);
-    Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_CASE_INSTANCE_ID, returnedCaseInstanceId);
     Assert.assertEquals(MockProvider.EXAMPLE_TENANT_ID, returnedTenantId);
     Assert.assertEquals(MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STATE, returnedState);
     Assert.assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, restartedProcessInstanceId);
@@ -563,9 +554,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     parameters.put("startedBy", "startedBySomeone");
     parameters.put("superProcessInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_PROCESS_INSTANCE_ID);
     parameters.put("subProcessInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUB_PROCESS_INSTANCE_ID);
-    parameters.put("superCaseInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUPER_CASE_INSTANCE_ID);
-    parameters.put("subCaseInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_SUB_CASE_INSTANCE_ID);
-    parameters.put("caseInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_CASE_INSTANCE_ID);
     parameters.put("state", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STATE);
     parameters.put("incidentType", MockProvider.EXAMPLE_INCIDENT_TYPE);
     parameters.put("rootProcessInstanceId", MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_ROOT_PROCESS_INSTANCE_ID);
@@ -586,9 +574,6 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     verify(mockedQuery).startedBy(stringQueryParameters.get("startedBy"));
     verify(mockedQuery).superProcessInstanceId(stringQueryParameters.get("superProcessInstanceId"));
     verify(mockedQuery).subProcessInstanceId(stringQueryParameters.get("subProcessInstanceId"));
-    verify(mockedQuery).superCaseInstanceId(stringQueryParameters.get("superCaseInstanceId"));
-    verify(mockedQuery).subCaseInstanceId(stringQueryParameters.get("subCaseInstanceId"));
-    verify(mockedQuery).caseInstanceId(stringQueryParameters.get("caseInstanceId"));
     verify(mockedQuery).incidentType(stringQueryParameters.get("incidentType"));
     verify(mockedQuery).rootProcessInstanceId(stringQueryParameters.get("rootProcessInstanceId"));
 
@@ -1680,14 +1665,14 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "eq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variables", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1696,7 +1681,7 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_PROCESS_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueEquals("varName", "varValue");
   }
@@ -1707,14 +1692,14 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "neq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variables", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1723,7 +1708,7 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_PROCESS_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueNotEquals("varName", "varValue");
   }
@@ -1734,14 +1719,14 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "like");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variables", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1750,7 +1735,7 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_PROCESS_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueLike("varName", "varValue");
   }
@@ -1762,14 +1747,14 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "eq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variables", variables);
     json.put("variableNamesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1778,7 +1763,7 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_PROCESS_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).variableValueEquals("varName", "varValue");
   }
@@ -1789,14 +1774,14 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "neq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variables", variables);
     json.put("variableNamesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1805,7 +1790,7 @@ public class HistoricProcessInstanceRestServiceQueryTest extends AbstractRestSer
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_PROCESS_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).variableValueNotEquals("varName", "varValue");
   }

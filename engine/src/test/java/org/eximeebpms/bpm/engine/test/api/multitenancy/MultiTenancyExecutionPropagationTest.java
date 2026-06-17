@@ -27,10 +27,7 @@ import org.eximeebpms.bpm.engine.delegate.JavaDelegate;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.externaltask.LockedExternalTask;
 import org.eximeebpms.bpm.engine.management.JobDefinition;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.EventSubscription;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.Incident;
@@ -45,9 +42,6 @@ import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.junit.Test;
 
 public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngineTest {
-
-  protected static final String CMMN_FILE = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String SET_VARIABLE_CMMN_FILE = "org/eximeebpms/bpm/engine/test/api/multitenancy/HumanTaskSetVariableExecutionListener.cmmn";
 
   protected static final String PROCESS_DEFINITION_KEY = "testProcess";
   protected static final String TENANT_ID = "tenant1";
@@ -429,65 +423,6 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     assertThat(externalTasks.get(0).getTenantId()).isEqualTo(TENANT_ID);
   }
 
-  @Test
-  public void testPropagateTenantIdToVariableInstanceOnCreateCaseInstance() {
-
-    testRule.deployForTenant(TENANT_ID, CMMN_FILE);
-
-    VariableMap variables = Variables.putValue("var", "test");
-
-    CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
-    caseService.createCaseInstanceById(caseDefinition.getId(), variables);
-
-    VariableInstance variableInstance = runtimeService.createVariableInstanceQuery().singleResult();
-    assertThat(variableInstance).isNotNull();
-    // inherit the tenant id from case instance
-    assertThat(variableInstance.getTenantId()).isEqualTo(TENANT_ID);
-  }
-
-  @Test
-  public void testPropagateTenantIdToVariableInstanceFromCaseExecution() {
-
-    testRule.deployForTenant(TENANT_ID, SET_VARIABLE_CMMN_FILE);
-
-    createCaseInstance();
-
-    VariableInstance variableInstance = runtimeService.createVariableInstanceQuery().singleResult();
-    assertThat(variableInstance).isNotNull();
-    // inherit the tenant id from case execution
-    assertThat(variableInstance.getTenantId()).isEqualTo(TENANT_ID);
-  }
-
-  @Test
-  public void testPropagateTenantIdToVariableInstanceFromHumanTask() {
-
-    testRule.deployForTenant(TENANT_ID, CMMN_FILE);
-
-    createCaseInstance();
-
-    VariableMap variables = Variables.createVariables().putValue("var", "test");
-    CaseExecution caseExecution = caseService.createCaseExecutionQuery().activityId("PI_HumanTask_1").singleResult();
-    caseService.setVariables(caseExecution.getId(), variables);
-
-    VariableInstance variableInstance = runtimeService.createVariableInstanceQuery().singleResult();
-    assertThat(variableInstance).isNotNull();
-    // inherit the tenant id from human task
-    assertThat(variableInstance.getTenantId()).isEqualTo(TENANT_ID);
-  }
-
-  @Test
-  public void testPropagateTenantIdToTaskOnCreateCaseInstance() {
-    testRule.deployForTenant(TENANT_ID, CMMN_FILE);
-
-    CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
-    caseService.createCaseInstanceById(caseDefinition.getId());
-
-    Task task = taskService.createTaskQuery().taskName("A HumanTask").singleResult();
-    assertThat(task).isNotNull();
-    // inherit the tenant id from case instance
-    assertThat(task.getTenantId()).isEqualTo(TENANT_ID);
-  }
-
   public static class SetVariableTask implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -503,11 +438,6 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
         .singleResult();
 
     runtimeService.startProcessInstanceById(processDefinition.getId());
-  }
-
-  protected CaseInstance createCaseInstance() {
-    CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
-    return caseService.createCaseInstanceById(caseDefinition.getId());
   }
 
 }

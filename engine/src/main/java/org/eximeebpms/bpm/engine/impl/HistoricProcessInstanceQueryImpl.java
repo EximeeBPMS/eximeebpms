@@ -75,8 +75,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   protected boolean isRootProcessInstances;
   protected String superProcessInstanceId;
   protected String subProcessInstanceId;
-  protected String superCaseInstanceId;
-  protected String subCaseInstanceId;
   protected List<String> processKeyNotIn;
   protected Date startedBefore;
   protected Date startedAfter;
@@ -97,8 +95,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   protected String[] activityIds;
   protected String[] incidentIds;
   protected Set<String> state = new HashSet<>();
-
-  protected String caseInstanceId;
 
   protected List<HistoricProcessInstanceQueryImpl> queries = new ArrayList<>(Collections.singletonList(this));
   protected boolean isOrQueryActive = false;
@@ -273,9 +269,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     if (superProcessInstanceId != null) {
       throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superProcessInstanceId");
     }
-    if (superCaseInstanceId != null) {
-      throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superCaseInstanceId");
-    }
     isRootProcessInstances = true;
     return this;
   }
@@ -290,24 +283,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
 
   public HistoricProcessInstanceQuery subProcessInstanceId(String subProcessInstanceId) {
     this.subProcessInstanceId = subProcessInstanceId;
-    return this;
-  }
-
-  public HistoricProcessInstanceQuery superCaseInstanceId(String superCaseInstanceId) {
-    if (isRootProcessInstances) {
-      throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superCaseInstanceId");
-    }
-    this.superCaseInstanceId = superCaseInstanceId;
-    return this;
-  }
-
-  public HistoricProcessInstanceQuery subCaseInstanceId(String subCaseInstanceId) {
-    this.subCaseInstanceId = subCaseInstanceId;
-    return this;
-  }
-
-  public HistoricProcessInstanceQuery caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
     return this;
   }
 
@@ -622,10 +597,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return finishedBefore;
   }
 
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
   public String getIncidentType() {
     return incidentType;
   }
@@ -763,14 +734,6 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
 
   public String getSubProcessInstanceId() {
     return subProcessInstanceId;
-  }
-
-  public String getSuperCaseInstanceId() {
-    return superCaseInstanceId;
-  }
-
-  public String getSubCaseInstanceId() {
-    return subCaseInstanceId;
   }
 
   public String[] getTenantIds() {

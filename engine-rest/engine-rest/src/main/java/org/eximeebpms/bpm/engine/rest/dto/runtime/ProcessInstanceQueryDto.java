@@ -64,12 +64,9 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
   private List<String> processDefinitionKeyNotIn;
   private String businessKey;
   private String businessKeyLike;
-  private String caseInstanceId;
   private String processDefinitionId;
   private String superProcessInstance;
   private String subProcessInstance;
-  private String superCaseInstance;
-  private String subCaseInstance;
   private Boolean active;
   private Boolean suspended;
   private Set<String> processInstanceIds;
@@ -169,15 +166,6 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     this.businessKeyLike = businessKeyLike;
   }
 
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
   public String getProcessDefinitionId() {
     return processDefinitionId;
   }
@@ -203,24 +191,6 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
   @EximeeBPMSQueryParam("subProcessInstance")
   public void setSubProcessInstance(String subProcessInstance) {
     this.subProcessInstance = subProcessInstance;
-  }
-
-  public String getSuperCaseInstance() {
-    return superCaseInstance;
-  }
-
-  @EximeeBPMSQueryParam("superCaseInstance")
-  public void setSuperCaseInstance(String superCaseInstance) {
-    this.superCaseInstance = superCaseInstance;
-  }
-
-  public String getSubCaseInstance() {
-    return subCaseInstance;
-  }
-
-  @EximeeBPMSQueryParam("subCaseInstance")
-  public void setSubCaseInstance(String subCaseInstance) {
-    this.subCaseInstance = subCaseInstance;
   }
 
   public Boolean isActive() {
@@ -425,9 +395,6 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     if(TRUE.equals(withIncident)) {
       query.withIncident();
     }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
     if (processDefinitionId != null) {
       query.processDefinitionId(processDefinitionId);
     }
@@ -436,12 +403,6 @@ public class ProcessInstanceQueryDto extends AbstractQueryDto<ProcessInstanceQue
     }
     if (subProcessInstance != null) {
       query.subProcessInstanceId(subProcessInstance);
-    }
-    if (superCaseInstance != null) {
-      query.superCaseInstanceId(superCaseInstance);
-    }
-    if (subCaseInstance != null) {
-      query.subCaseInstanceId(subCaseInstance);
     }
     if (TRUE.equals(active)) {
       query.active();

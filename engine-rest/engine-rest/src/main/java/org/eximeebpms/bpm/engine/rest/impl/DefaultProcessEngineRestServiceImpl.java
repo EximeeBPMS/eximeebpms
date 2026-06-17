@@ -22,9 +22,6 @@ import javax.ws.rs.Path;
 
 import org.eximeebpms.bpm.engine.rest.AuthorizationRestService;
 import org.eximeebpms.bpm.engine.rest.BatchRestService;
-import org.eximeebpms.bpm.engine.rest.CaseDefinitionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseExecutionRestService;
-import org.eximeebpms.bpm.engine.rest.CaseInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.ConditionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
@@ -133,21 +130,6 @@ public class DefaultProcessEngineRestServiceImpl extends AbstractProcessEngineRe
   @Path(DeploymentRestService.PATH)
   public DeploymentRestService getDeploymentRestService() {
     return super.getDeploymentRestService(null);
-  }
-
-  @Path(CaseDefinitionRestService.PATH)
-  public CaseDefinitionRestService getCaseDefinitionRestService() {
-    return super.getCaseDefinitionRestService(null);
-  }
-
-  @Path(CaseInstanceRestService.PATH)
-  public CaseInstanceRestService getCaseInstanceRestService() {
-    return super.getCaseInstanceRestService(null);
-  }
-
-  @Path(CaseExecutionRestService.PATH)
-  public CaseExecutionRestService getCaseExecutionRestService() {
-    return super.getCaseExecutionRestService(null);
   }
 
   @Path(FilterRestService.PATH)

@@ -60,28 +60,18 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
 
   public PvmProcessInstance createProcessInstance() {
     ensureDefaultInitialExists();
-    return createProcessInstance(null, null, initial);
+    return createProcessInstance(null, initial);
   }
 
   public PvmProcessInstance createProcessInstance(String businessKey) {
     ensureDefaultInitialExists();
-    return createProcessInstance(businessKey, null, this.initial);
-  }
-
-  public PvmProcessInstance createProcessInstance(String businessKey, String caseInstanceId) {
-    ensureDefaultInitialExists();
-    return createProcessInstance(businessKey, caseInstanceId, this.initial);
+    return createProcessInstance(businessKey, this.initial);
   }
 
   public PvmProcessInstance createProcessInstance(String businessKey, ActivityImpl initial) {
-    return createProcessInstance(businessKey, null, initial);
-  }
-
-  public PvmProcessInstance createProcessInstance(String businessKey, String caseInstanceId, ActivityImpl initial) {
     PvmExecutionImpl processInstance = (PvmExecutionImpl) createProcessInstanceForInitial(initial);
 
     processInstance.setBusinessKey(businessKey);
-    processInstance.setCaseInstanceId(caseInstanceId);
 
     return processInstance;
   }

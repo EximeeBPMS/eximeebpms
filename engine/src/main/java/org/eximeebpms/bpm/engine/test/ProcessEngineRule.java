@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import org.eximeebpms.bpm.engine.AuthorizationService;
 import org.eximeebpms.bpm.engine.BusinessEventService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -122,7 +121,6 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
   protected FormService formService;
   protected FilterService filterService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
   protected ExternalTaskService externalTaskService;
   protected DecisionService decisionService;
 
@@ -218,7 +216,6 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
     managementService = processEngine.getManagementService();
     formService = processEngine.getFormService();
     authorizationService = processEngine.getAuthorizationService();
-    caseService = processEngine.getCaseService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
     decisionService = processEngine.getDecisionService();
@@ -235,7 +232,6 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
     identityService = null;
     managementService = null;
     authorizationService = null;
-    caseService = null;
     filterService = null;
     externalTaskService = null;
     decisionService = null;
@@ -363,15 +359,6 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
 
   public void setAuthorizationService(AuthorizationService authorizationService) {
     this.authorizationService = authorizationService;
-  }
-
-  @Override
-  public CaseService getCaseService() {
-    return caseService;
-  }
-
-  public void setCaseService(CaseService caseService) {
-    this.caseService = caseService;
   }
 
   @Override

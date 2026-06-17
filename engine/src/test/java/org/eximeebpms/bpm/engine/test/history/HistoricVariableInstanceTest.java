@@ -53,15 +53,12 @@ import org.eximeebpms.bpm.engine.history.HistoricTaskInstance;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstance;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.history.HistoricVariableUpdate;
-import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.CollectionUtil;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Execution;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.VariableInstance;
@@ -71,7 +68,7 @@ import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
 import org.eximeebpms.bpm.engine.test.api.runtime.util.CustomSerializable;
 import org.eximeebpms.bpm.engine.test.api.runtime.util.FailingSerializable;
-import org.eximeebpms.bpm.engine.test.cmmn.decisiontask.TestPojo;
+import org.eximeebpms.bpm.engine.test.dmn.businessruletask.TestPojo;
 import org.eximeebpms.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.eximeebpms.bpm.engine.variable.Variables;
 import org.eximeebpms.bpm.engine.variable.type.ValueType;
@@ -1427,126 +1424,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCaseVariableUpdateOrder() {
-    // given:
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-
-    // when (1)
-    caseService.setVariable(caseInstanceId, "myVariable", 1);
-    caseService.setVariable(caseInstanceId, "myVariable", 2);
-    caseService.setVariable(caseInstanceId, "myVariable", 3);
-
-    // then (1)
-    HistoricVariableInstance variable = historyService
-      .createHistoricVariableInstanceQuery()
-      .singleResult();
-    assertNotNull(variable);
-
-    String variableInstanceId = variable.getId();
-
-    if (isFullHistoryEnabled()) {
-
-      List<HistoricDetail> details = historyService
-        .createHistoricDetailQuery()
-        .variableInstanceId(variableInstanceId)
-        .orderPartiallyByOccurrence()
-        .asc()
-        .list();
-
-      assertEquals(3, details.size());
-
-      HistoricVariableUpdate firstUpdate = (HistoricVariableUpdate) details.get(0);
-      assertEquals(1, firstUpdate.getValue());
-
-      HistoricVariableUpdate secondUpdate = (HistoricVariableUpdate) details.get(1);
-      assertEquals(2, secondUpdate.getValue());
-      assertTrue(((HistoryEvent)secondUpdate).getSequenceCounter() > ((HistoryEvent)firstUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate thirdUpdate = (HistoricVariableUpdate) details.get(2);
-      assertEquals(3, thirdUpdate.getValue());
-      assertTrue(((HistoryEvent)thirdUpdate).getSequenceCounter() > ((HistoryEvent)secondUpdate).getSequenceCounter());
-    }
-
-    // when (2)
-    caseService.setVariable(caseInstanceId, "myVariable", "abc");
-
-    // then (2)
-    variable = historyService
-      .createHistoricVariableInstanceQuery()
-      .singleResult();
-    assertNotNull(variable);
-
-    if (isFullHistoryEnabled()) {
-
-      List<HistoricDetail> details = historyService
-        .createHistoricDetailQuery()
-        .variableInstanceId(variableInstanceId)
-        .orderPartiallyByOccurrence()
-        .asc()
-        .list();
-
-      assertEquals(4, details.size());
-
-      HistoricVariableUpdate firstUpdate = (HistoricVariableUpdate) details.get(0);
-      assertEquals(1, firstUpdate.getValue());
-
-      HistoricVariableUpdate secondUpdate = (HistoricVariableUpdate) details.get(1);
-      assertEquals(2, secondUpdate.getValue());
-      assertTrue(((HistoryEvent)secondUpdate).getSequenceCounter() > ((HistoryEvent)firstUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate thirdUpdate = (HistoricVariableUpdate) details.get(2);
-      assertEquals(3, thirdUpdate.getValue());
-      assertTrue(((HistoryEvent)thirdUpdate).getSequenceCounter() > ((HistoryEvent)secondUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate fourthUpdate = (HistoricVariableUpdate) details.get(3);
-      assertEquals("abc", fourthUpdate.getValue());
-      assertTrue(((HistoryEvent)fourthUpdate).getSequenceCounter() > ((HistoryEvent)thirdUpdate).getSequenceCounter());
-    }
-
-    // when (3)
-    caseService.removeVariable(caseInstanceId, "myVariable");
-
-    // then (3)
-    variable = historyService
-      .createHistoricVariableInstanceQuery()
-      .singleResult();
-    assertNull(variable);
-
-    if (isFullHistoryEnabled()) {
-
-      List<HistoricDetail> details = historyService
-        .createHistoricDetailQuery()
-        .variableInstanceId(variableInstanceId)
-        .orderPartiallyByOccurrence()
-        .asc()
-        .list();
-
-      assertEquals(5, details.size());
-
-      HistoricVariableUpdate firstUpdate = (HistoricVariableUpdate) details.get(0);
-      assertEquals(1, firstUpdate.getValue());
-
-      HistoricVariableUpdate secondUpdate = (HistoricVariableUpdate) details.get(1);
-      assertEquals(2, secondUpdate.getValue());
-      assertTrue(((HistoryEvent)secondUpdate).getSequenceCounter() > ((HistoryEvent)firstUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate thirdUpdate = (HistoricVariableUpdate) details.get(2);
-      assertEquals(3, thirdUpdate.getValue());
-      assertTrue(((HistoryEvent)thirdUpdate).getSequenceCounter() > ((HistoryEvent)secondUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate fourthUpdate = (HistoricVariableUpdate) details.get(3);
-      assertEquals("abc", fourthUpdate.getValue());
-      assertTrue(((HistoryEvent)fourthUpdate).getSequenceCounter() > ((HistoryEvent)thirdUpdate).getSequenceCounter());
-
-      HistoricVariableUpdate fifthUpdate = (HistoricVariableUpdate) details.get(4);
-      assertNull(fifthUpdate.getValue());
-      assertTrue(((HistoryEvent)fifthUpdate).getSequenceCounter() > ((HistoryEvent)fourthUpdate).getSequenceCounter());
-    }
-
-  }
-
   @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testSetSameVariableUpdateOrder() {
@@ -1620,9 +1497,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
     assertNotNull(instance.getProcessDefinitionId());
     assertEquals(processInstance.getProcessDefinitionId(), instance.getProcessDefinitionId());
 
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
-
     // when (2)
     instance = historyService
         .createHistoricVariableInstanceQuery()
@@ -1636,73 +1510,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
 
     assertNotNull(instance.getProcessDefinitionId());
     assertEquals(processInstance.getProcessDefinitionId(), instance.getProcessDefinitionId());
-
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
-  }
-
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  @Test
-  public void testCaseDefinitionProperty() {
-    // given
-    String key = "oneTaskCase";
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey(key);
-
-    String caseInstanceId = caseInstance.getId();
-
-    caseService.createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    caseService.setVariable(caseInstanceId, "aVariable", "aValue");
-    taskService.setVariableLocal(taskId, "aLocalVariable", "anotherValue");
-
-    VariableInstance variable = runtimeService.createVariableInstanceQuery().caseInstanceIdIn(caseInstanceId).variableName("aVariable").singleResult();
-    assertNotNull(variable);
-
-    // when (1)
-    HistoricVariableInstance instance = historyService
-        .createHistoricVariableInstanceQuery()
-        .caseInstanceId(caseInstanceId)
-        .variableName("aVariable")
-        .singleResult();
-
-    // then (1)
-    assertCaseVariable(key, caseInstance, instance);
-
-    // when (2)
-    instance = historyService
-        .createHistoricVariableInstanceQuery()
-        .caseInstanceId(caseInstanceId)
-        .variableName("aLocalVariable")
-        .singleResult();
-
-    // then (2)
-    assertCaseVariable(key, caseInstance, instance);
-
-    // when (3)
-    instance = historyService
-        .createHistoricVariableInstanceQuery()
-        .caseInstanceId(caseInstanceId)
-        .variableId(variable.getId())
-        .singleResult();
-
-    // then (4)
-    assertNotNull(instance);
-    assertCaseVariable(key, caseInstance, instance);
-  }
-
-  protected void assertCaseVariable(String key, CaseInstance caseInstance, HistoricVariableInstance instance) {
-    assertNotNull(instance.getCaseDefinitionKey());
-    assertEquals(key, instance.getCaseDefinitionKey());
-
-    assertNotNull(instance.getCaseDefinitionId());
-    assertEquals(caseInstance.getCaseDefinitionId(), instance.getCaseDefinitionId());
-
-    assertNull(instance.getProcessDefinitionKey());
-    assertNull(instance.getProcessDefinitionId());
   }
 
   @Test
@@ -1724,8 +1531,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
     // then (1)
     assertNull(instance.getProcessDefinitionKey());
     assertNull(instance.getProcessDefinitionId());
-    assertNull(instance.getCaseDefinitionKey());
-    assertNull(instance.getCaseDefinitionId());
 
     taskService.deleteTask(taskId, true);
   }
@@ -1862,80 +1667,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
     HistoricVariableInstance historicVariable = historyService.createHistoricVariableInstanceQuery().singleResult();
     assertNotNull(historicVariable);
     assertEquals("foo", historicVariable.getName());
-  }
-
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-  @Test
-  public void testQueryByCaseActivityId() {
-    // given
-    caseService.createCaseInstanceByKey("oneTaskCase", Variables.putValue("foo", "bar"));
-
-    CaseExecution caseExecution = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult();
-    caseService.setVariableLocal(caseExecution.getId(), "bar", "foo");
-
-    // when
-    HistoricVariableInstanceQuery query = historyService
-        .createHistoricVariableInstanceQuery()
-        .caseActivityIdIn("PI_HumanTask_1");
-
-    // then
-    assertEquals(1, query.count());
-    assertEquals("bar", query.singleResult().getName());
-    assertEquals("foo", query.singleResult().getValue());
-  }
-
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/cmmn/twoTaskCase.cmmn")
-  @Test
-  public void testQueryByCaseActivityIds() {
-    // given
-    caseService.createCaseInstanceByKey("twoTaskCase");
-
-    CaseExecution caseExecution1 = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult();
-    caseService.setVariableLocal(caseExecution1.getId(), "foo", "bar");
-
-    CaseExecution caseExecution2 = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_2")
-        .singleResult();
-    caseService.setVariableLocal(caseExecution2.getId(), "bar", "foo");
-
-    // when
-    HistoricVariableInstanceQuery query = historyService
-        .createHistoricVariableInstanceQuery()
-        .caseActivityIdIn("PI_HumanTask_1", "PI_HumanTask_2");
-
-    // then
-    assertEquals(2, query.count());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseActivityIds() {
-    HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-
-    query.caseActivityIdIn("invalid");
-    assertEquals(0, query.count());
-
-    try {
-      query.caseActivityIdIn((String[])null);
-      fail("A ProcessEngineExcpetion was expected.");
-    } catch (NullValueException e) {}
-
-    try {
-      query.caseActivityIdIn((String)null);
-      fail("A ProcessEngineExcpetion was expected.");
-    } catch (NullValueException e) {}
-
-    try {
-      String[] values = { "a", null, "b" };
-      query.caseActivityIdIn(values);
-      fail("A ProcessEngineExcpetion was expected.");
-    } catch (NullValueException e) {}
   }
 
   @Test

@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.test.assertions;
 
 
 import org.eximeebpms.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
-import org.eximeebpms.bpm.engine.test.assertions.cmmn.CmmnAwareTests;
 
 /**
  * Convenience class to access all available Camunda Platform related
@@ -29,7 +28,7 @@ import org.eximeebpms.bpm.engine.test.assertions.cmmn.CmmnAwareTests;
  * @see BpmnAwareTests if you only want to see BPMN related functionality
  *
  */
-public class ProcessEngineTests extends CmmnAwareTests {
+public class ProcessEngineTests extends BpmnAwareTests {
 
   protected ProcessEngineTests() {}
 

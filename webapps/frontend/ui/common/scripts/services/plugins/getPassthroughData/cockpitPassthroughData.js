@@ -57,16 +57,6 @@ module.exports = function(pluginPoint, scope) {
       result.decisionInstanceId = scope.decisionInstance.id;
       break;
 
-    case 'cockpit.caseDefinition.tab':
-    case 'cockpit.caseDefinition.action':
-      result.caseDefinitionId = scope.definition.id;
-      break;
-
-    case 'cockpit.caseInstance.tab':
-    case 'cockpit.caseInstance.action':
-      result.caseInstanceId = scope.instance.id;
-      break;
-
     case 'cockpit.repository.resource.action':
       result.deploymentId = scope.deployment.id;
       result.resourceId = scope.resource.id;

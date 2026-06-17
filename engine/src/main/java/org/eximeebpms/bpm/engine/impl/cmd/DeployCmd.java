@@ -39,7 +39,6 @@ import org.eximeebpms.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.eximeebpms.bpm.engine.impl.cfg.CommandChecker;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionState;
-import org.eximeebpms.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.DeploymentFailListener;
@@ -68,9 +67,6 @@ import org.eximeebpms.bpm.engine.repository.ResumePreviousBy;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.Process;
-import org.eximeebpms.bpm.model.cmmn.Cmmn;
-import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
-import org.eximeebpms.bpm.model.cmmn.instance.Case;
 
 /**
  * @author Tom Baeyens
@@ -519,13 +515,6 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
         for (Process process : model.getDefinitions().getChildElementsByType(Process.class)) {
           processDefinitionKeys.add(process.getId());
         }
-      } else if (isCmmnResource(resource)) {
-
-        ByteArrayInputStream byteStream = new ByteArrayInputStream(resource.getBytes());
-        CmmnModelInstance model = Cmmn.readModelFromStream(byteStream);
-        for (Case cmmnCase : model.getDefinitions().getCases()) {
-          processDefinitionKeys.add(cmmnCase.getId());
-        }
       }
     }
 
@@ -583,10 +572,6 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
 
   protected boolean isBpmnResource(Resource resourceEntity) {
     return StringUtil.hasAnySuffix(resourceEntity.getName(), BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
-  }
-
-  protected boolean isCmmnResource(Resource resourceEntity) {
-    return StringUtil.hasAnySuffix(resourceEntity.getName(), CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
   }
 
   // ensures

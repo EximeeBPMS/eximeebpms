@@ -19,7 +19,6 @@ package org.eximeebpms.bpm.engine.impl.test;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.eximeebpms.bpm.engine.delegate.Expression;
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
 import org.eximeebpms.bpm.engine.impl.el.FixedValue;
 
 
@@ -54,12 +53,6 @@ public class PvmTestCase extends TestCase {
    */
   public void assertTextPresentIgnoreCase(String expected, String actual) {
     assertTextPresent(expected.toLowerCase(), actual.toLowerCase());
-  }
-
-  public Object defaultManualActivation() {
-    Expression expression = new FixedValue(true);
-    CaseControlRuleImpl caseControlRule = new CaseControlRuleImpl(expression);
-    return caseControlRule;
   }
 
 }

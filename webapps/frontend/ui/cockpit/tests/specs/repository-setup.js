@@ -81,15 +81,6 @@ module.exports = {
         ]
       },
       {
-        deploymentName: 'cmmn',
-        files: [
-          {
-            name: 'loan-application.cmmn',
-            content: readResource('loan-application.cmmn')
-          }
-        ]
-      },
-      {
         deploymentName: 'dmn',
         files: [
           {

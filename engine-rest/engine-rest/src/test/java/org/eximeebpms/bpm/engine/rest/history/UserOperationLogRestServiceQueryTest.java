@@ -114,9 +114,6 @@ public class UserOperationLogRestServiceQueryTest extends AbstractRestServiceTes
     verify(queryMock, never()).processDefinitionKey(anyString());
     verify(queryMock, never()).processInstanceId(anyString());
     verify(queryMock, never()).executionId(anyString());
-    verify(queryMock, never()).caseDefinitionId(anyString());
-    verify(queryMock, never()).caseInstanceId(anyString());
-    verify(queryMock, never()).caseExecutionId(anyString());
     verify(queryMock, never()).taskId(anyString());
     verify(queryMock, never()).jobId(anyString());
     verify(queryMock, never()).jobDefinitionId(anyString());
@@ -144,9 +141,6 @@ public class UserOperationLogRestServiceQueryTest extends AbstractRestServiceTes
         .queryParam("processDefinitionKey", "6")
         .queryParam("processInstanceId", "2")
         .queryParam("executionId", "3")
-        .queryParam("caseDefinitionId", "x")
-        .queryParam("caseInstanceId", "y")
-        .queryParam("caseExecutionId", "z")
         .queryParam("taskId", "4")
         .queryParam("jobId", "7")
         .queryParam("jobDefinitionId", "8")
@@ -168,9 +162,6 @@ public class UserOperationLogRestServiceQueryTest extends AbstractRestServiceTes
     verify(queryMock).processDefinitionKey("6");
     verify(queryMock).processInstanceId("2");
     verify(queryMock).executionId("3");
-    verify(queryMock).caseDefinitionId("x");
-    verify(queryMock).caseInstanceId("y");
-    verify(queryMock).caseExecutionId("z");
     verify(queryMock).taskId("4");
     verify(queryMock).jobId("7");
     verify(queryMock).jobDefinitionId("8");
@@ -194,9 +185,6 @@ public class UserOperationLogRestServiceQueryTest extends AbstractRestServiceTes
     assertEquals(MockProvider.EXAMPLE_PROCESS_DEFINITION_KEY, actual.getProcessDefinitionKey());
     assertEquals(MockProvider.EXAMPLE_PROCESS_INSTANCE_ID, actual.getProcessInstanceId());
     assertEquals(MockProvider.EXAMPLE_EXECUTION_ID, actual.getExecutionId());
-    assertEquals(MockProvider.EXAMPLE_CASE_DEFINITION_ID, actual.getCaseDefinitionId());
-    assertEquals(MockProvider.EXAMPLE_CASE_INSTANCE_ID, actual.getCaseInstanceId());
-    assertEquals(MockProvider.EXAMPLE_CASE_EXECUTION_ID, actual.getCaseExecutionId());
     assertEquals(MockProvider.EXAMPLE_TASK_ID, actual.getTaskId());
     assertEquals(MockProvider.EXAMPLE_JOB_ID, actual.getJobId());
     assertEquals(MockProvider.EXAMPLE_JOB_DEFINITION_ID, actual.getJobDefinitionId());

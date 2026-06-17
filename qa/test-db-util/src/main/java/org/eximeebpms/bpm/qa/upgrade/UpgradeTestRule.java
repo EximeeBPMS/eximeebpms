@@ -19,9 +19,6 @@ package org.eximeebpms.bpm.qa.upgrade;
 import org.eximeebpms.bpm.engine.history.HistoricIncidentQuery;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
 import org.eximeebpms.bpm.engine.management.JobDefinitionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseExecutionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
-import org.eximeebpms.bpm.engine.runtime.CaseInstanceQuery;
 import org.eximeebpms.bpm.engine.runtime.ExecutionQuery;
 import org.eximeebpms.bpm.engine.runtime.IncidentQuery;
 import org.eximeebpms.bpm.engine.runtime.JobQuery;
@@ -154,29 +151,6 @@ public class UpgradeTestRule extends ProcessEngineRule {
   public void assertScenarioEnded() {
     Assert.assertTrue("Process instance for scenario " + getBuisnessKey() + " should have ended",
             processInstanceQuery().singleResult() == null);
-  }
-
-  // case //////////////////////////////////////////////////
-  public CaseInstanceQuery caseInstanceQuery() {
-    return caseService
-            .createCaseInstanceQuery()
-            .caseInstanceBusinessKey(getBuisnessKey());
-  }
-
-  public CaseExecutionQuery caseExecutionQuery() {
-    return caseService
-            .createCaseExecutionQuery()
-            .caseInstanceBusinessKey(getBuisnessKey());
-  }
-
-  public CaseInstance caseInstance() {
-    CaseInstance instance = caseInstanceQuery().singleResult();
-
-    if (instance == null) {
-      throw new RuntimeException("There is no case instance for scenario " + getBuisnessKey());
-    }
-
-    return instance;
   }
 
   public String getScenarioName() {

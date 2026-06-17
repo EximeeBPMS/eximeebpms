@@ -56,7 +56,6 @@ public class ModuleDependencyProcessor implements DeploymentUnitProcessor {
   public static String MODULE_IDENTIFIER_PROCESS_ENGINE = "org.eximeebpms.bpm.eximeebpms-engine";
   public static String MODULE_IDENTIFIER_XML_MODEL = "org.eximeebpms.bpm.model.eximeebpms-xml-model";
   public static String MODULE_IDENTIFIER_BPMN_MODEL = "org.eximeebpms.bpm.model.eximeebpms-bpmn-model";
-  public static String MODULE_IDENTIFIER_CMMN_MODEL = "org.eximeebpms.bpm.model.eximeebpms-cmmn-model";
   public static String MODULE_IDENTIFIER_DMN_MODEL = "org.eximeebpms.bpm.model.eximeebpms-dmn-model";
   public static String MODULE_IDENTIFIER_SPIN = "org.eximeebpms.spin.eximeebpms-spin-core";
   public static String MODULE_IDENTIFIER_CONNECT = "org.eximeebpms.connect.eximeebpms-connect-core";
@@ -142,7 +141,6 @@ public class ModuleDependencyProcessor implements DeploymentUnitProcessor {
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_PROCESS_ENGINE);
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_XML_MODEL);
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_BPMN_MODEL);
-    addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_CMMN_MODEL);
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_DMN_MODEL);
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_SPIN);
     addSystemDependency(moduleLoader, moduleSpecification, MODULE_IDENTIFIER_CONNECT);

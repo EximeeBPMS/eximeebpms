@@ -74,8 +74,6 @@ public class DeleteTaskCmd implements Command<Void>, Serializable {
     if (task != null) {
       if(task.getExecutionId() != null) {
         throw new ProcessEngineException("The task cannot be deleted because is part of a running process");
-      } else if (task.getCaseExecutionId() != null) {
-        throw new ProcessEngineException("The task cannot be deleted because is part of a running case instance");
       }
 
       checkDeleteTask(task, commandContext);

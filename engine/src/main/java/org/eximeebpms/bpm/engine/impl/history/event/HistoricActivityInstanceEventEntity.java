@@ -52,9 +52,6 @@ public class HistoricActivityInstanceEventEntity extends HistoricScopeInstanceEv
   /** the id of the child process instance */
   protected String calledProcessInstanceId;
 
-  /** the id of the child case instance */
-  protected String calledCaseInstanceId;
-
   protected String taskId;
   protected String taskAssignee;
 
@@ -115,14 +112,6 @@ public class HistoricActivityInstanceEventEntity extends HistoricScopeInstanceEv
     this.calledProcessInstanceId = calledProcessInstanceId;
   }
 
-  public String getCalledCaseInstanceId() {
-    return calledCaseInstanceId;
-  }
-
-  public void setCalledCaseInstanceId(String calledCaseInstanceId) {
-    this.calledCaseInstanceId = calledCaseInstanceId;
-  }
-
   public String getTaskId() {
     return taskId;
   }
@@ -181,7 +170,6 @@ public class HistoricActivityInstanceEventEntity extends HistoricScopeInstanceEv
            + ", activityInstanceState=" + activityInstanceState
            + ", parentActivityInstanceId=" + parentActivityInstanceId
            + ", calledProcessInstanceId=" + calledProcessInstanceId
-           + ", calledCaseInstanceId=" + calledCaseInstanceId
            + ", taskId=" + taskId
            + ", taskAssignee=" + taskAssignee
            + ", durationInMillis=" + durationInMillis

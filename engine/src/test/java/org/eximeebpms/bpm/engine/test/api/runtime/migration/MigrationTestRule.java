@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eximeebpms.bpm.engine.RuntimeService;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.TimerCatchIntermediateEventJobHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
@@ -371,8 +370,6 @@ public class MigrationTestRule extends ProcessEngineTestRule {
     Assert.assertNotNull("Variable with id " + variableBefore.getId() + " does not exist", variableAfter);
 
     Assert.assertEquals(activityInstanceId, variableAfter.getActivityInstanceId());
-    Assert.assertEquals(variableBefore.getCaseExecutionId(), variableAfter.getCaseExecutionId());
-    Assert.assertEquals(variableBefore.getCaseInstanceId(), variableAfter.getCaseInstanceId());
     Assert.assertEquals(variableBefore.getErrorMessage(), variableAfter.getErrorMessage());
     Assert.assertEquals(executionId, variableAfter.getExecutionId());
     Assert.assertEquals(variableBefore.getId(), variableAfter.getId());
@@ -382,15 +379,6 @@ public class MigrationTestRule extends ProcessEngineTestRule {
     Assert.assertEquals(variableBefore.getTenantId(), variableAfter.getTenantId());
     Assert.assertEquals(variableBefore.getTypeName(), variableAfter.getTypeName());
     Assert.assertEquals(variableBefore.getValue(), variableAfter.getValue());
-  }
-
-  public void assertSuperExecutionOfCaseInstance(String caseInstanceId, String expectedSuperExecutionId) {
-    CaseExecutionEntity calledInstance = (CaseExecutionEntity) processEngine.getCaseService()
-        .createCaseInstanceQuery()
-        .caseInstanceId(caseInstanceId)
-        .singleResult();
-
-    Assert.assertEquals(expectedSuperExecutionId, calledInstance.getSuperExecutionId());
   }
 
   public void assertSuperExecutionOfProcessInstance(String processInstance, String expectedSuperExecutionId) {

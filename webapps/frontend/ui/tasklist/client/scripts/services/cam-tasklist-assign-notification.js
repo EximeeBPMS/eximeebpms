@@ -36,13 +36,9 @@ module.exports = [
      * @param {Object} params
      * @param {String} [params.assignee]              The name of the user for which the tasks should be retrieved
      * @param {String} [params.processInstanceId]     The ID of the process instance.
-     * @param {String} [params.caseInstanceId]        The ID of the case instance.
      */
     return function(params) {
-      if (
-        !params.assignee ||
-        !(params.processInstanceId || params.caseInstanceId)
-      ) {
+      if (!params.assignee || !params.processInstanceId) {
         return;
       }
       Task.list(params, function(err, data) {
@@ -56,11 +52,7 @@ module.exports = [
               escapeHtml(task.name || task.taskDefinitionKey) +
               '</a>, ';
           }
-          $translate(
-            params.processInstanceId
-              ? 'ASSIGN_NOTE_PROCESS'
-              : 'ASSIGN_NOTE_CASE'
-          )
+          $translate('ASSIGN_NOTE_PROCESS')
             .then(function(translated) {
               Notifications.addMessage({
                 duration: 16000,

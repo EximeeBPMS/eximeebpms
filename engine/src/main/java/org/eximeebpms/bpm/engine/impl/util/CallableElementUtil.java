@@ -20,7 +20,6 @@ import static org.eximeebpms.bpm.engine.impl.ProcessEngineLogger.UTIL_LOGGER;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
-import org.eximeebpms.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.model.BaseCallableElement;
 import org.eximeebpms.bpm.engine.impl.el.StartProcessVariableScope;
@@ -100,28 +99,6 @@ public class CallableElementUtil {
     }
 
     return processDefinition;
-  }
-
-  public static CmmnCaseDefinition getCaseDefinitionToCall(VariableScope execution, String defaultTenantId, BaseCallableElement callableElement) {
-    String caseDefinitionKey = callableElement.getDefinitionKey(execution);
-    String tenantId = callableElement.getDefinitionTenantId(execution, defaultTenantId);
-
-    DeploymentCache deploymentCache = getDeploymentCache();
-
-    CmmnCaseDefinition caseDefinition = null;
-    if (callableElement.isLatestBinding()) {
-      caseDefinition = deploymentCache.findDeployedLatestCaseDefinitionByKeyAndTenantId(caseDefinitionKey, tenantId);
-
-    } else if (callableElement.isDeploymentBinding()) {
-      String deploymentId = callableElement.getDeploymentId();
-      caseDefinition = deploymentCache.findDeployedCaseDefinitionByDeploymentAndKey(deploymentId, caseDefinitionKey);
-
-    } else if (callableElement.isVersionBinding()) {
-      Integer version = callableElement.getVersion(execution);
-      caseDefinition = deploymentCache.findDeployedCaseDefinitionByKeyVersionAndTenantId(caseDefinitionKey, version, tenantId);
-    }
-
-    return caseDefinition;
   }
 
   public static DecisionDefinition getDecisionDefinitionToCall(VariableScope execution, String defaultTenantId, BaseCallableElement callableElement) {

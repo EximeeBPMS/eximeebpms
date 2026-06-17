@@ -42,9 +42,6 @@ History.path = 'history';
  * @param {String}   [params.processDefinitionKey]  Filter by process definition key.
  * @param {String}   [params.processInstanceId]     Filter by process instance id.
  * @param {String}   [params.executionId]           Filter by execution id.
- * @param {String}   [params.caseDefinitionId]      Filter by case definition id.
- * @param {String}   [params.caseInstanceId]        Filter by case instance id.
- * @param {String}   [params.caseExecutionId]       Filter by case execution id.
  * @param {String}   [params.taskId]                Only include operations on this task.
  * @param {String}   [params.userId]                Only include operations of this user.
  * @param {String}   [params.operationId]           Filter by the id of the operation. This allows fetching of multiple entries which are part of a composite operation.
@@ -134,11 +131,6 @@ History.clearUserOperationAnnotation = function(id, done) {
  * @param  {uuid}     [params.superProcessInstanceId]           Restrict query to all process instances that are sub process instances of the given process instance.
  *                                                              Takes a process instance id.
  * @param  {uuid}     [params.subProcessInstanceId]             Restrict query to one process instance that has a sub process instance with the given id.
- * @param  {uuid}     [params.superCaseInstanceId]              Restrict query to all process instances that are sub process instances of the given case instance.
- *                                                              Takes a case instance id.
- * @param  {uuid}     [params.subCaseInstanceId]                Restrict query to one process instance that has a sub case instance with the given id.
- * @param  {uuid}     [params.caseInstanceId]                   Restrict query to all process instances that are sub process instances of the given case instance.
- *                                                              Takes a case instance id.
  * @param  {uuid}     [params.processDefinitionId]              Filter by the process definition the instances run on.
  * @param  {String}   [params.processDefinitionKey]             Filter by the key of the process definition the instances run on.
  * @param  {String[]} [params.processDefinitionKeyNotIn]        Exclude instances that belong to a set of process definitions.
@@ -488,12 +480,7 @@ History.reportAsCsv = function(params, done) {
  * @param  {uuid}     [params.processDefinitionId]              Filter by process definition id.
  * @param  {String}   [params.processDefinitionKey]             Restrict to tasks that belong to a process definition with the given key.
  * @param  {String}   [params.processDefinitionName]            Restrict to tasks that belong to a process definition with the given name.
- * @param  {uuid}     [params.caseInstanceId]                   Filter by case instance id.
 
- * @param  {uuid}     [params.caseExecutionId]                  Filter by the id of the case execution that executed the task.
- * @param  {uuid}     [params.caseDefinitionId]                 Filter by case definition id.
- * @param  {String}   [params.caseDefinitionKey]                Restrict to tasks that belong to a case definition with the given key.
- * @param  {String}   [params.caseDefinitionName]               Restrict to tasks that belong to a case definition with the given name.
  * @param  {uuid[]}   [params.activityInstanceIdIn]             Only include tasks which belong to one of the passed activity instance ids.
  *                                                              Must be a json array of activity instance ids.
  * @param  {String}   [params.taskName]                         Restrict to tasks that have the given name.
@@ -559,8 +546,7 @@ History.reportAsCsv = function(params, done) {
  * @param  {String}   [params.sortBy]                           Sort the results by a given criterion.
  *                                                              Valid values are taskId, activityInstanceID, processDefinitionId, processInstanceId, executionId,
  *                                                              duration, endTime, startTime, taskName, taskDescription, assignee, owner, dueDate, followUpDate,
- *                                                              deleteReason, taskDefinitionKey, priority, caseDefinitionId, caseInstanceId, caseExecutionId and
- *                                                              tenantId. Must be used in conjunction with the sortOrder parameter.
+ *                                                              deleteReason, taskDefinitionKey, priority, tenantId. Must be used in conjunction with the sortOrder parameter.
  * @param  {String}   [params.sortOrder]                        Sort the results in a given order.
  *                                                              Values may be asc for ascending order or desc for descending order. Must be used in conjunction with the sortBy parameter.
  * @param  {Number}   [params.firstResult]                      Pagination of results. Specifies the index of the first result to return.
@@ -668,206 +654,6 @@ History.taskReport = function(params, done) {
 };
 
 /**
- * Query for historic case instances that fulfill the given parameters.
- *
- * @param  {Object}   [params]
- * @param  {uuid}     [params.caseInstanceId]                Filter by case instance id.
- * @param  {uuid[]}   [params.caseInstanceIds]               Filter by case instance ids.
- *                                                           Must be a json array case instance ids.
- *
- * @param  {uuid}     [params.caseDefinitionId]              Filter by the case definition the instances run on.
- * @param  {String}   [params.caseDefinitionKey]             Filter by the key of the case definition the instances run on.
- * @param  {String[]} [params.caseDefinitionKeyNotIn]        Exclude instances that belong to a set of case definitions.
- *
- * @param  {String}   [params.caseDefinitionName]            Filter by the name of the case definition the instances run on.
- * @param  {String}   [params.caseDefinitionNameLike]        Filter by case definition names that the parameter is a substring of.
- *
- * @param  {String}   [params.caseInstanceBusinessKey]       Filter by case instance business key.
- * @param  {String}   [params.caseInstanceBusinessKeyLike]   Filter by case instance business key that the parameter is a substring of.
- *
- *
- * @param  {String}   [params.createdBefore]                 Restrict to instances that were created before the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- * @param  {String}   [params.createdAfter]                  Restrict to instances that were created after the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- *
- * @param  {String}   [params.closedBefore]                  Restrict to instances that were closed before the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- * @param  {String}   [params.closedAfter]                   Restrict to instances that were closed after the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- *
- * @param  {String}   [params.createdBy]                     Only include case instances that were created by the given user.
- *
- *
- * @param  {uuid}     [params.superCaseInstanceId]           Restrict query to all case instances that are sub case instances of the given case instance.
- *                                                           Takes a case instance id.
- * @param  {uuid}     [params.subCaseInstanceId]             Restrict query to one case instance that has a sub case instance with the given id.
- *
- * @param  {uuid}     [params.superProcessInstanceId]        Restrict query to all process instances that are sub case instances of the given process instance.
- *                                                           Takes a process instance id.
- * @param  {uuid}     [params.subProcessInstanceId]          Restrict query to one case instance that has a sub process instance with the given id.
- *
- * @param  {uuid}     [params.tenantIdIn]                    Filter by a comma-separated list of tenant ids. A case instance must have one of the given tenant ids.
- *
- * @param  {Boolean}  [params.active]                        Only include active case instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.completed]                     Only include completed case instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.terminated]                    Only include terminated case instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.closed]                        Only include closed case instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.notClosed]                     Only include not closed case instances.
- *                                                           Values may be `true` or `false`.
- *
- * @param  {Object[]} [params.variables]                     A JSON array to only include case instances that have/had variables with certain values. The array consists of objects with the three properties name, operator and value. name (String) is the variable name, operator (String) is the comparison operator to be used and value the variable value.
- *                                                           `value` may be String, Number or Boolean.
- *                                                           Valid operator values are:
- *                                                           - `eq` - equal to
- *                                                           - `neq` - not equal to
- *                                                           - `gt` - greater than
- *                                                           - `gteq` - greater than or equal to
- *                                                           - `lt` - lower than
- *                                                           - `lteq` - lower than or equal to
- *                                                           - `like`
- *
- * @param  {String}   [params.sortBy]                        Sort the results by a given criterion.
- *                                                           Valid values are instanceId, definitionId, businessKey, startTime, endTime, duration. Must be used in conjunction with the sortOrder parameter.
- * @param  {String}   [params.sortOrder]                     Sort the results in a given order.
- *                                                           Values may be asc for ascending order or desc for descending order. Must be used in conjunction with the sortBy parameter.
- * @param  {Number}   [params.firstResult]                   Pagination of results. Specifies the index of the first result to return.
- * @param  {Number}   [params.maxResults]                    Pagination of results. Specifies the maximum number of results to return. Will return less results if there are no more results left.
-
- * @param  {Function} done
- */
-History.caseInstance = function(params, done) {
-  if (typeof params === 'function') {
-    done = arguments[0];
-    params = {};
-  }
-
-  var body = {};
-  var query = {};
-  var queryParams = ['firstResult', 'maxResults'];
-
-  for (var p in params) {
-    if (queryParams.indexOf(p) > -1) {
-      query[p] = params[p];
-    } else {
-      body[p] = params[p];
-    }
-  }
-
-  return this.http.post(this.path + '/case-instance', {
-    data: body,
-    query: query,
-    done: done
-  });
-};
-
-/**
- * Query for the number of historic case instances that fulfill the given parameters.
- * This method takes the same parameters as `History.caseInstance`.
- */
-History.caseInstanceCount = function(params, done) {
-  if (typeof params === 'function') {
-    done = arguments[0];
-    params = {};
-  }
-
-  return this.http.post(this.path + '/case-instance/count', {
-    data: params,
-    done: done
-  });
-};
-
-/**
- * Query for historic case activty instances that fulfill the given parameters.
- *
- * @param  {Object}   [params]
- * @param  {uuid}     [params.caseActivityInstanceId]        Filter by case activity instance id.
- * @param  {String}   [params.caseExecutionId]               Filter by the id of the case execution that executed the case activity instance.
- * @param  {uuid}     [params.caseInstanceId]                Filter by case instance id.
- *
- * @param  {uuid}     [params.caseDefinitionId]              Filter by the case definition the instances run on.
- *
- * @param  {String}   [params.caseActivityId]                Filter by the case activity id.
- * @param  {String}   [params.caseActivityName]              Filter by the case activity name.
- * @param  {String}   [params.caseActivityType]              Filter by the case activity type.
- *
- * @param  {String}   [params.createdBefore]                 Restrict to instances that were created before the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- * @param  {String}   [params.createdAfter]                  Restrict to instances that were created after the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- *
- * @param  {String}   [params.endedBefore]                   Restrict to instances that were ended before the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- * @param  {String}   [params.endedAfter]                    Restrict to instances that were ended after the given date.
- *                                                           The date must have the format `yyyy-MM-dd'T'HH:mm:ss`, e.g., 2013-01-23T14:42:45.
- *
- * @param  {Boolean}  [params.required]                      Only include required case activity instances.
- *                                                           Values may be `true` or `false`.
- *
- * @param  {Boolean}  [params.finished]                      Only include finished case activity instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.unfinished]                    Only include unfinished case activity instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.available]                     Only include available case activity instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.enabled]                       Only include enabled case activity instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.disabled]                      Only include disabled case activity instances.
- *                                                           Values may be `true` or `false`.
- * @param  {Boolean}  [params.active]                        Only include active case activity instances.
- *                                                           Values may be `true` or `false`.
- *
- * @param  {Boolean}  [params.completed]                     Only include completed case activity instances.
- *                                                           Values may be `true` or `false`.
- *
- * @param  {Boolean}  [params.terminated]                    Only include terminated case activity instances.
- *                                                           Values may be `true` or `false`.
- *
- * @param  {uuid[]}   [params.tenantIdIn]                    Filter by a comma-separated list of tenant ids. A case activity instance must have one of the given tenant ids.
- *
- * @param  {String}   [params.sortBy]                        Sort the results by a given criterion.
- *                                                           Valid values are caseActivityInstanceId, caseInstanceId, caseExecutionId, caseActivityId, caseActivityName, createTime, endTime, duration,
- *                                                           caseDefinitionId and tenantId. Must be used in conjunction with the sortOrder parameter.
- * @param  {String}   [params.sortOrder]                     Sort the results in a given order.
- *                                                           Values may be asc for ascending order or desc for descending order. Must be used in conjunction with the sortBy parameter.
- * @param  {Number}   [params.firstResult]                   Pagination of results. Specifies the index of the first result to return.
- * @param  {Number}   [params.maxResults]                    Pagination of results. Specifies the maximum number of results to return. Will return less results if there are no more results left.
-
- * @param  {Function} done
- */
-History.caseActivityInstance = function(params, done) {
-  if (typeof params === 'function') {
-    done = arguments[0];
-    params = {};
-  }
-
-  return this.http.get(this.path + '/case-activity-instance', {
-    data: params,
-    done: done
-  });
-};
-
-/**
- * Query for the number of historic case activity instances that fulfill the given parameters.
- * This method takes the same parameters as `History.caseActivityInstance`.
- */
-History.caseActivityInstanceCount = function(params, done) {
-  if (typeof params === 'function') {
-    done = arguments[0];
-    params = {};
-  }
-
-  return this.http.get(this.path + '/case-activity-instance/count', {
-    data: params,
-    done: done
-  });
-};
-
-/**
  * Queries for historic activity instances that fulfill the given parameters.
  * @param {Object}  [params]
  * @param {String}  params.activityInstanceId	    Filter by activity instance id.
@@ -947,12 +733,10 @@ History.incident = function(params, done) {
  *
  * @param  {uuid}     [params.processInstanceId]            Filter by the process instance the variable belongs to.
  * @param  {String[]} [params.executionIdIn]                Filter by the execution ids.
- * @param  {String}   [params.caseInstanceId]               Filter by the case instance id.
- * @param  {String[]} [params.caseExecutionIdIn]            Filter by the case execution ids.
  * @param  {String[]} [params.taskIdIn]                     Filter by the task ids.
  * @param  {String[]} [params.activityInstanceIdIn]         Filter by the activity instance ids.
  *
- * @param  {uuid[]}   [params.tenantIdIn]                    Filter by a comma-separated list of tenant ids. A case activity instance must have one of the given tenant ids.
+ * @param  {uuid[]}   [params.tenantIdIn]                    Filter by a comma-separated list of tenant ids. An activity instance must have one of the given tenant ids.
  *
  * @param  {String}   [params.sortBy]                        Sort the results by a given criterion.
  *                                                           Valid values are instanceId, variableName and tenantId. Must be used in conjunction with the sortOrder parameter.
@@ -1000,14 +784,6 @@ History.variableInstanceCount = function(params, done) {
 
   return this.http.post(this.path + '/variable-instance/count', {
     data: params,
-    done: done
-  });
-};
-
-History.caseActivityStatistics = function(params, done) {
-  var id = params.id || params;
-
-  return this.http.get(this.path + '/case-definition/' + id + '/statistics', {
     done: done
   });
 };
@@ -1133,45 +909,6 @@ History.cleanableProcessCount = function(params, done) {
  */
 History.cleanableProcess = function(params, done) {
   var url = this.path + '/process-definition/cleanable-process-instance-report';
-
-  if (typeof params === 'function') {
-    done = params;
-    params = {};
-  }
-
-  return this.http.get(url, {
-    data: params,
-    done: done
-  });
-};
-
-/**
- * Query for the count of the finished historic case instances, cleanable case instances and basic case definition data - id, key, name and version.
- * @param  {uuid[]}      [params.caseDefinitionIdIn]           Array of caseDefinition ids
- * @param  {uuid[]}      [params.caseDefinitionKeyIn]          Array of caseDefinition keys
- * @param  {Number}      [params.firstResult]                  Pagination of results. Specifies the index of the first result to return.
- * @param  {Number}      [params.maxResults]                   Pagination of results. Specifies the maximum number of results to return. Will return less results if there are no more results left.
- */
-History.cleanableCaseCount = function(params, done) {
-  var url = this.path + '/case-definition/cleanable-case-instance-report/count';
-
-  if (typeof params === 'function') {
-    done = params;
-    params = {};
-  }
-
-  return this.http.get(url, {
-    data: params,
-    done: done
-  });
-};
-
-/**
- * Query for the report results about a case definition and finished case instances relevant to history cleanup
- * This method takes the same parameterers as 'History.cleanableCaseInstanceCount '
- */
-History.cleanableCase = function(params, done) {
-  var url = this.path + '/case-definition/cleanable-case-instance-report';
 
   if (typeof params === 'function') {
     done = params;

@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.IdentityService;
 import org.eximeebpms.bpm.engine.OptimisticLockingException;
@@ -63,8 +62,6 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricDetailVariableI
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.IoUtil;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.VariableInstance;
 import org.eximeebpms.bpm.engine.task.Attachment;
@@ -124,7 +121,6 @@ public class TaskServiceTest {
   private TaskService taskService;
   private RepositoryService repositoryService;
   private HistoryService historyService;
-  private CaseService caseService;
   private IdentityService identityService;
   private ProcessEngineConfigurationImpl processEngineConfiguration;
 
@@ -136,7 +132,6 @@ public class TaskServiceTest {
     taskService = engineRule.getTaskService();
     repositoryService = engineRule.getRepositoryService();
     historyService = engineRule.getHistoryService();
-    caseService = engineRule.getCaseService();
     identityService = engineRule.getIdentityService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
   }
@@ -158,7 +153,6 @@ public class TaskServiceTest {
     task.setOwner("taskowner");
     Date dueDate = sdf.parse("01/02/2003 04:05:06");
     task.setDueDate(dueDate);
-    task.setCaseInstanceId("taskcaseinstanceid");
     taskService.saveTask(task);
 
     // Fetch the task again and update
@@ -169,7 +163,6 @@ public class TaskServiceTest {
     assertEquals("taskowner", task.getOwner());
     assertEquals(dueDate, task.getDueDate());
     assertEquals(0, task.getPriority());
-    assertEquals("taskcaseinstanceid", task.getCaseInstanceId());
     assertEquals("Created", task.getTaskState());
 
     if (processEngineConfiguration.getHistoryLevel().getId()>= ProcessEngineConfigurationImpl.HISTORYLEVEL_AUDIT) {
@@ -183,7 +176,6 @@ public class TaskServiceTest {
       assertEquals("taskowner", historicTaskInstance.getOwner());
       assertEquals(dueDate, historicTaskInstance.getDueDate());
       assertEquals(0, historicTaskInstance.getPriority());
-      assertEquals("taskcaseinstanceid", historicTaskInstance.getCaseInstanceId());
     }
 
     task.setName("updatedtaskname");
@@ -193,7 +185,6 @@ public class TaskServiceTest {
     task.setOwner("updatedowner");
     dueDate = sdf.parse("01/02/2003 04:05:06");
     task.setDueDate(dueDate);
-    task.setCaseInstanceId("updatetaskcaseinstanceid");
     taskService.saveTask(task);
 
     task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
@@ -203,7 +194,6 @@ public class TaskServiceTest {
     assertEquals("updatedowner", task.getOwner());
     assertEquals(dueDate, task.getDueDate());
     assertEquals(1, task.getPriority());
-    assertEquals("updatetaskcaseinstanceid", task.getCaseInstanceId());
     assertEquals("Updated", task.getTaskState());
 
     if (processEngineConfiguration.getHistoryLevel().getId()>= ProcessEngineConfigurationImpl.HISTORYLEVEL_AUDIT) {
@@ -217,7 +207,6 @@ public class TaskServiceTest {
       assertEquals("updatedowner", historicTaskInstance.getOwner());
       assertEquals(dueDate, historicTaskInstance.getDueDate());
       assertEquals(1, historicTaskInstance.getPriority());
-      assertEquals("updatetaskcaseinstanceid", historicTaskInstance.getCaseInstanceId());
     }
 
     // Finally, delete task
@@ -1460,70 +1449,6 @@ public class TaskServiceTest {
     assertThat(returnedValue.getValueSerialized()).isEqualTo(serializedValue);
   }
 
-  @Deployment(resources = { "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  @Test
-  public void testCompleteTaskWithVariablesInReturnCMMN() {
-    String taskVariableName = "taskVar";
-    String taskVariableValue = "taskVal";
-
-    String caseDefinitionId = repositoryService.createCaseDefinitionQuery().singleResult().getId();
-    caseService.withCaseDefinition(caseDefinitionId).create();
-
-    Task task1 = taskService.createTaskQuery().singleResult();
-    assertNotNull(task1);
-
-    taskService.setVariable(task1.getId(), taskVariableName, taskVariableValue);
-    Map<String, Object> vars = taskService.completeWithVariablesInReturn(task1.getId(), null, true);
-    assertNull(vars);
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testCompleteTaskShouldCompleteCaseExecution() {
-    // given
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create();
-
-    String caseExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-    assertNotNull(task);
-
-    // when
-    taskService.complete(task.getId());
-
-    // then
-
-    task = taskService.createTaskQuery().singleResult();
-
-    assertNull(task);
-
-    CaseExecution caseExecution = caseService
-      .createCaseExecutionQuery()
-      .activityId("PI_HumanTask_1")
-      .singleResult();
-
-    assertNull(caseExecution);
-
-    CaseInstance caseInstance = caseService
-        .createCaseInstanceQuery()
-        .singleResult();
-
-    assertNotNull(caseInstance);
-    assertTrue(caseInstance.isCompleted());
-  }
-
   @Test
   public void testResolveTaskNullTaskId() {
     try {
@@ -2458,72 +2383,6 @@ public class TaskServiceTest {
 
   }
 
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testDeleteTaskPartOfCaseInstance() {
-    String caseDefinitionId = repositoryService
-        .createCaseDefinitionQuery()
-        .singleResult()
-        .getId();
-
-    // an active case instance
-    caseService
-       .withCaseDefinition(caseDefinitionId)
-       .create();
-
-    String caseExecutionId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    Task task = taskService.createTaskQuery().singleResult();
-    assertNotNull(task);
-
-    try {
-      taskService.deleteTask(task.getId());
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-    try {
-      taskService.deleteTask(task.getId(), true);
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-    try {
-      taskService.deleteTask(task.getId(), "test");
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-    try {
-      taskService.deleteTasks(Arrays.asList(task.getId()));
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-    try {
-      taskService.deleteTasks(Arrays.asList(task.getId()), true);
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-    try {
-      taskService.deleteTasks(Arrays.asList(task.getId()), "test");
-      fail("Should not be possible to delete task");
-    } catch(ProcessEngineException ae) {
-      assertEquals("The task cannot be deleted because is part of a running case instance", ae.getMessage());
-    }
-
-  }
-
   @Test
   public void testGetTaskCommentByTaskIdAndCommentId() {
     if (processEngineConfiguration.getHistoryLevel().getId() > ProcessEngineConfigurationImpl.HISTORYLEVEL_NONE) {
@@ -2885,27 +2744,6 @@ public class TaskServiceTest {
     }
   }
 
-  @Test
-  public void testTaskCaseInstanceId() {
-    Task task = taskService.newTask();
-    task.setCaseInstanceId("aCaseInstanceId");
-    taskService.saveTask(task);
-
-    // Fetch the task again and update
-    task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
-    assertEquals("aCaseInstanceId", task.getCaseInstanceId());
-
-    task.setCaseInstanceId("anotherCaseInstanceId");
-    taskService.saveTask(task);
-
-    task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
-    assertEquals("anotherCaseInstanceId", task.getCaseInstanceId());
-
-    // Finally, delete task
-    taskService.deleteTask(task.getId(), true);
-
-  }
-
   @Deployment(resources={
   "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
@@ -3003,64 +2841,6 @@ public class TaskServiceTest {
 
   }
 
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testHumanTaskCompleteWithVariables() {
-    // given
-    caseService.createCaseInstanceByKey("oneTaskCase");
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    String variableName = "aVariable";
-    String variableValue = "aValue";
-
-    // when
-    taskService.complete(taskId, Variables.createVariables().putValue(variableName, variableValue));
-
-    // then
-    VariableInstance variable = runtimeService.createVariableInstanceQuery().singleResult();
-
-    assertEquals(variable.getName(), variableName);
-    assertEquals(variable.getValue(), variableValue);
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testHumanTaskWithLocalVariablesCompleteWithVariable() {
-    // given
-    caseService.createCaseInstanceByKey("oneTaskCase");
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    String variableName = "aVariable";
-    String variableValue = "aValue";
-    String variableAnotherValue = "anotherValue";
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    taskService.setVariableLocal(taskId, variableName, variableValue);
-
-    // when
-    taskService.complete(taskId, Variables.createVariables().putValue(variableName, variableAnotherValue));
-
-    // then
-    VariableInstance variable = runtimeService.createVariableInstanceQuery().singleResult();
-
-    assertEquals(variable.getName(), variableName);
-    assertEquals(variable.getValue(), variableAnotherValue);
-    taskService.deleteTask(taskId, true);
-  }
-
   @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/twoTasksProcess.bpmn20.xml"})
   @Test
   public void testUserTaskWithLocalVariablesCompleteWithVariable() {
@@ -3083,37 +2863,6 @@ public class TaskServiceTest {
 
     assertEquals(variable.getName(), variableName);
     assertEquals(variable.getValue(), variableAnotherValue);
-  }
-
-  @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testHumanTaskLocalVariables() {
-    // given
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-
-    String humanTaskId = caseService
-        .createCaseExecutionQuery()
-        .activityId("PI_HumanTask_1")
-        .singleResult()
-        .getId();
-
-    String variableName = "aVariable";
-    String variableValue = "aValue";
-
-    String taskId = taskService.createTaskQuery().singleResult().getId();
-
-    // when
-    taskService.setVariableLocal(taskId, variableName, variableValue);
-
-    // then
-    VariableInstance variableInstance = runtimeService
-      .createVariableInstanceQuery()
-      .taskIdIn(taskId)
-      .singleResult();
-    assertNotNull(variableInstance);
-
-    assertEquals(caseInstanceId, variableInstance.getCaseInstanceId());
-    assertEquals(humanTaskId, variableInstance.getCaseExecutionId());
   }
 
   @Test

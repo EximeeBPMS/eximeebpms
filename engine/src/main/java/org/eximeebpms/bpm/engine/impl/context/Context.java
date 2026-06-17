@@ -25,7 +25,6 @@ import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.ProcessApplicationUnavailableException;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandInvocationContext;
@@ -121,10 +120,6 @@ public class Context {
     return (BpmnExecutionContext) getCoreExecutionContext();
   }
 
-  public static CaseExecutionContext getCaseExecutionContext() {
-    return (CaseExecutionContext) getCoreExecutionContext();
-  }
-
   public static CoreExecutionContext<? extends CoreExecution> getCoreExecutionContext() {
     Deque<CoreExecutionContext<? extends CoreExecution>> stack = getStack(executionContextStackThreadLocal);
     if(stack == null || stack.isEmpty()) {
@@ -136,10 +131,6 @@ public class Context {
 
   public static void setExecutionContext(ExecutionEntity execution) {
     getStack(executionContextStackThreadLocal).push(new BpmnExecutionContext(execution));
-  }
-
-  public static void setExecutionContext(CaseExecutionEntity execution) {
-    getStack(executionContextStackThreadLocal).push(new CaseExecutionContext(execution));
   }
 
   public static void removeExecutionContext() {

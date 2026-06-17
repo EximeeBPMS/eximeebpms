@@ -22,9 +22,7 @@ import static org.eximeebpms.bpm.engine.authorization.Resources.PROCESS_DEFINITI
 import java.util.ArrayList;
 import java.util.List;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatistics;
-import org.eximeebpms.bpm.engine.history.HistoricCaseActivityStatistics;
 import org.eximeebpms.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
-import org.eximeebpms.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl;
 import org.eximeebpms.bpm.engine.impl.Page;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.AbstractManager;
@@ -53,15 +51,6 @@ public class HistoricStatisticsManager extends AbstractManager {
     else {
       return 0;
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<HistoricCaseActivityStatistics> getHistoricStatisticsGroupedByCaseActivity(HistoricCaseActivityStatisticsQueryImpl query, Page page) {
-    return getDbEntityManager().selectList("selectHistoricCaseActivityStatistics", query, page);
-  }
-
-  public long getHistoricStatisticsCountGroupedByCaseActivity(HistoricCaseActivityStatisticsQueryImpl query) {
-    return (Long) getDbEntityManager().selectOne("selectHistoricCaseActivityStatisticsCount", query);
   }
 
   protected boolean ensureHistoryReadOnProcessDefinition(HistoricActivityStatisticsQueryImpl query) {

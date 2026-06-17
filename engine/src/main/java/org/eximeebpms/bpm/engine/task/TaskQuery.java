@@ -505,58 +505,12 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
   TaskQuery taskParentTaskId(String parentTaskId);
 
   /**
-   * Only select tasks for the given case instance id.
-   */
-  TaskQuery caseInstanceId(String caseInstanceId);
-
-  /**
-   * Only select tasks for the given case instance business key
-   */
-  TaskQuery caseInstanceBusinessKey(String caseInstanceBusinessKey);
-
-  /**
-   * Only select tasks matching the given case instance business key.
-   * The syntax is that of SQL: for example usage: nameLike(%aBusinessKey%)
-   */
-  TaskQuery caseInstanceBusinessKeyLike(String caseInstanceBusinessKeyLike);
-
-  /**
-   * Only select tasks for the given case execution.
-   */
-  TaskQuery caseExecutionId(String caseExecutionId);
-
-  /**
-   * Only select tasks which are part of a case instance which has the given
-   * case definition key.
-   */
-  TaskQuery caseDefinitionKey(String caseDefinitionKey);
-
-  /**
-   * Only select tasks which are part of a case instance which has the given
-   * case definition id.
-   */
-  TaskQuery caseDefinitionId(String caseDefinitionId);
-
-  /**
-   * Only select tasks which are part of a case instance which has the given
-   * case definition name.
-   */
-  TaskQuery caseDefinitionName(String caseDefinitionName);
-
-  /**
-   * Only select tasks which are part of a case instance which case definition
-   * name is like the given parameter.
-   * The syntax is that of SQL: for example usage: nameLike(%processDefinitionName%)
-   */
-  TaskQuery caseDefinitionNameLike(String caseDefinitionNameLike);
-
-  /**
-   * All queries for task-, process- and case-variables will match the variable names in a case-insensitive way.
+   * All queries for task- and process-variables will match the variable names in a case-insensitive way.
    */
   TaskQuery matchVariableNamesIgnoreCase();
 
   /**
-   * All queries for task-, process- and case-variables will match the variable values in a case-insensitive way.
+   * All queries for task- and process-variables will match the variable values in a case-insensitive way.
    */
   TaskQuery matchVariableValuesIgnoreCase();
 
@@ -656,101 +610,6 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
    * with the given name and a value greater than or equal to the given one.
    */
   TaskQuery processVariableValueLessThanOrEquals(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable
-   * with the given name set to the given value. The type of variable is determined based
-   * on the value, using types configured in {@link ProcessEngineConfigurationImpl#getVariableSerializers()}.
-   * <p>
-   * Byte-arrays and {@link Serializable} objects (which are not primitive type wrappers)
-   * are not supported.
-   *
-   * @param variableName name of the variable, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueEquals(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable
-   * with the given name, but with a different value than the passed value. The
-   * type of variable is determined based on the value, using types configured
-   * in {@link ProcessEngineConfigurationImpl#getVariableSerializers()}.
-   * <p>
-   * Byte-arrays and {@link Serializable} objects (which are not primitive type wrappers)
-   * are not supported.
-   *
-   * @param variableName name of the variable, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueNotEquals(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable value
-   * like the given value.
-   * <p>
-   * This be used on string variables only.
-   *
-   * @param variableName  variable name, cannot be null.
-   * @param variableValue variable value. The string can include the
-   *                      wildcard character '%' to express like-strategy:
-   *                      starts with (string%), ends with (%string) or contains (%string%).
-   */
-  TaskQuery caseInstanceVariableValueLike(String variableName, String variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable value
-   * not like the given value.
-   * <p>
-   * This be used on string variables only.
-   *
-   * @param variableName  variable name, cannot be null.
-   * @param variableValue variable value. The string can include the
-   *                      wildcard character '%' to express like-strategy:
-   *                      starts with (string%), ends with (%string) or contains (%string%).
-   */
-  TaskQuery caseInstanceVariableValueNotLike(String variableName, String variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable
-   * with the given name and a variable value greater than the passed value.
-   * <p>
-   * Booleans, Byte-arrays and {@link Serializable} objects (which are not primitive type wrappers)
-   * are not supported.
-   *
-   * @param variableName variable name, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueGreaterThan(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a
-   * variable value greater than or equal to the passed value.
-   * <p>
-   * Booleans, Byte-arrays and {@link Serializable} objects (which
-   * are not primitive type wrappers) are not supported.
-   *
-   * @param variableName variable name, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueGreaterThanOrEquals(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable
-   * value less than the passed value.
-   * <p>
-   * Booleans, Byte-arrays and {@link Serializable} objects (which are not primitive type wrappers)
-   * are not supported.
-   *
-   * @param variableName variable name, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueLessThan(String variableName, Object variableValue);
-
-  /**
-   * Only select tasks which are part of a case instance that have a variable
-   * value less than or equal to the passed value.
-   * <p>
-   * Booleans, Byte-arrays and {@link Serializable} objects (which are not primitive type wrappers)
-   * are not supported.
-   *
-   * @param variableName variable name, cannot be null.
-   */
-  TaskQuery caseInstanceVariableValueLessThanOrEquals(String variableName, Object variableValue);
 
   /**
    * Only select tasks which are part of a process instance which has the given
@@ -1017,25 +876,11 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
   TaskQuery orderByProcessInstanceId();
 
   /**
-   * Order by case instance id (needs to be followed by {@link #asc()} or {@link #desc()}).
-   *
-   * @throws ProcessEngineException When method has been executed within "or query".
-   */
-  TaskQuery orderByCaseInstanceId();
-
-  /**
    * Order by execution id (needs to be followed by {@link #asc()} or {@link #desc()}).
    *
    * @throws ProcessEngineException When method has been executed within "or query".
    */
   TaskQuery orderByExecutionId();
-
-  /**
-   * Order by case execution id (needs to be followed by {@link #asc()} or {@link #desc()}).
-   *
-   * @throws ProcessEngineException When method has been executed within "or query".
-   */
-  TaskQuery orderByCaseExecutionId();
 
   /**
    * Order by due date (needs to be followed by {@link #asc()} or {@link #desc()}).
@@ -1077,24 +922,6 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
    * @throws ProcessEngineException When method has been executed within "or query".
    */
   TaskQuery orderByTaskVariable(String variableName, ValueType valueType);
-
-  /**
-   * Order by a task variable value of a certain type. Calling this method multiple times
-   * specifies secondary, tertiary orderings, etc. The ordering of variables with <code>null</code>
-   * values is database-specific.
-   *
-   * @throws ProcessEngineException When method has been executed within "or query".
-   */
-  TaskQuery orderByCaseExecutionVariable(String variableName, ValueType valueType);
-
-  /**
-   * Order by a task variable value of a certain type. Calling this method multiple times
-   * specifies secondary, tertiary orderings, etc. The ordering of variables with <code>null</code>
-   * values is database-specific.
-   *
-   * @throws ProcessEngineException When method has been executed within "or query".
-   */
-  TaskQuery orderByCaseInstanceVariable(String variableName, ValueType valueType);
 
   /**
    * Order by tenant id (needs to be followed by {@link #asc()} or {@link #desc()}).

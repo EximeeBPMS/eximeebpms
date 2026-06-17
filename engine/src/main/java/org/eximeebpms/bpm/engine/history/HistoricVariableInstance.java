@@ -114,26 +114,6 @@ public interface HistoricVariableInstance {
   String getActivityInstanceId();
 
   /**
-   * The case definition key reference.
-   */
-  String getCaseDefinitionKey();
-
-  /**
-   * The case definition reference.
-   */
-  String getCaseDefinitionId();
-
-  /**
-   * The case instance reference.
-   */
-  String getCaseInstanceId();
-
-  /**
-   * Return the corresponding case execution id.
-   */
-  String getCaseExecutionId();
-
-  /**
    * Return the corresponding task id.
    */
   String getTaskId();

@@ -65,9 +65,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
   protected String incidentId;
   protected String incidentMessage;
   protected String incidentMessageLike;
-  protected String caseInstanceId;
-  protected String superCaseInstanceId;
-  protected String subCaseInstanceId;
   protected String[] activityIds;
   protected boolean isRootProcessInstances;
   protected boolean isLeafProcessInstances;
@@ -163,24 +160,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
 
   public ProcessInstanceQuery subProcessInstanceId(String subProcessInstanceId) {
     this.subProcessInstanceId = subProcessInstanceId;
-    return this;
-  }
-
-  public ProcessInstanceQuery caseInstanceId(String caseInstanceId) {
-    ensureNotNull("caseInstanceId", caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public ProcessInstanceQuery superCaseInstanceId(String superCaseInstanceId) {
-    ensureNotNull("superCaseInstanceId", superCaseInstanceId);
-    this.superCaseInstanceId = superCaseInstanceId;
-    return this;
-  }
-
-  public ProcessInstanceQuery subCaseInstanceId(String subCaseInstanceId) {
-    ensureNotNull("subCaseInstanceId", subCaseInstanceId);
-    this.subCaseInstanceId = subCaseInstanceId;
     return this;
   }
 
@@ -468,18 +447,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
 
   public String getIncidentMessageLike() {
     return incidentMessageLike;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getSuperCaseInstanceId() {
-    return superCaseInstanceId;
-  }
-
-  public String getSubCaseInstanceId() {
-    return subCaseInstanceId;
   }
 
   public boolean isTenantIdSet() {

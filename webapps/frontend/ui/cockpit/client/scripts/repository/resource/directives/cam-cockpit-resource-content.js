@@ -42,7 +42,6 @@ module.exports = [
           var resource;
 
           $scope.isBpmnResource = $scope.control.isBpmnResource;
-          $scope.isCmmnResource = $scope.control.isCmmnResource;
           $scope.isDmnResource = $scope.control.isDmnResource;
           $scope.isImageResource = $scope.control.isImageResource;
           $scope.isHtmlResource = $scope.control.isHtmlResource;

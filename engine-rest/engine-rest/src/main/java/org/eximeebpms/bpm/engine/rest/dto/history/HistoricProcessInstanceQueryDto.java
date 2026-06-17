@@ -105,9 +105,6 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
   private String startedBy;
   private String superProcessInstanceId;
   private String subProcessInstanceId;
-  private String superCaseInstanceId;
-  private String subCaseInstanceId;
-  private String caseInstanceId;
   private List<String> tenantIds;
   private Boolean withoutTenantId;
   private List<String> executedActivityIdIn;
@@ -289,21 +286,6 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
   @EximeeBPMSQueryParam("subProcessInstanceId")
   public void setSubProcessInstanceId(String subProcessInstanceId) {
     this.subProcessInstanceId = subProcessInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("superCaseInstanceId")
-  public void setSuperCaseInstanceId(String superCaseInstanceId) {
-    this.superCaseInstanceId = superCaseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("subCaseInstanceId")
-  public void setSubCaseInstanceId(String subCaseInstanceId) {
-    this.subCaseInstanceId = subCaseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
   }
 
   @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
@@ -521,15 +503,6 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
     }
     if (subProcessInstanceId != null) {
       query.subProcessInstanceId(subProcessInstanceId);
-    }
-    if (superCaseInstanceId != null) {
-      query.superCaseInstanceId(superCaseInstanceId);
-    }
-    if (subCaseInstanceId != null) {
-      query.subCaseInstanceId(subCaseInstanceId);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
     }
     if (tenantIds != null && !tenantIds.isEmpty()) {
       query.tenantIdIn(tenantIds.toArray(new String[0]));

@@ -57,11 +57,6 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
   protected String activityInstanceId;
   protected String tenantId;
 
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
-
   protected String name;
   protected int revision;
   protected Date createTime;
@@ -95,10 +90,6 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.executionId = historyEvent.getExecutionId();
     this.activityInstanceId = historyEvent.getScopeActivityInstanceId();
     this.tenantId = historyEvent.getTenantId();
-    this.caseDefinitionKey = historyEvent.getCaseDefinitionKey();
-    this.caseDefinitionId = historyEvent.getCaseDefinitionId();
-    this.caseInstanceId = historyEvent.getCaseInstanceId();
-    this.caseExecutionId = historyEvent.getCaseExecutionId();
     this.name = historyEvent.getVariableName();
     this.longValue = historyEvent.getLongValue();
     this.doubleValue = historyEvent.getDoubleValue();
@@ -325,38 +316,6 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.activityInstanceId = activityInstanceId;
   }
 
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public void setCaseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
   public String getErrorMessage() {
     return typedValueField.getErrorMessage();
   }
@@ -414,10 +373,6 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
       + ", executionId=" + executionId
       + ", tenantId=" + tenantId
       + ", activityInstanceId=" + activityInstanceId
-      + ", caseDefinitionKey=" + caseDefinitionKey
-      + ", caseDefinitionId=" + caseDefinitionId
-      + ", caseInstanceId=" + caseInstanceId
-      + ", caseExecutionId=" + caseExecutionId
       + ", name=" + name
       + ", createTime=" + createTime
       + ", revision=" + revision

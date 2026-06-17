@@ -48,18 +48,6 @@ public interface HistoricTaskInstance {
   /** Execution reference. */
   String getExecutionId();
 
-  /** Case definition key reference. */
-  String getCaseDefinitionKey();
-
-  /** Case definition reference. */
-  String getCaseDefinitionId();
-
-  /** Case instance reference. */
-  String getCaseInstanceId();
-
-  /** Case execution reference. */
-  String getCaseExecutionId();
-
   /** Activity instance reference. */
   String getActivityInstanceId();
 

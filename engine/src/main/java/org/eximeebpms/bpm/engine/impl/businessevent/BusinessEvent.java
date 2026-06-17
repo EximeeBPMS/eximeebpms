@@ -44,21 +44,6 @@ public class BusinessEvent implements Serializable {
   /** the version of the process definition */
   protected Integer processDefinitionVersion;
 
-  /** the case instance in which the event has happened */
-  protected String caseInstanceId;
-
-  /** the id of the case execution in which the event has happened */
-  protected String caseExecutionId;
-
-  /** the id of the case definition */
-  protected String caseDefinitionId;
-
-  /** the key of the case definition */
-  protected String caseDefinitionKey;
-
-  /** the name of the case definition */
-  protected String caseDefinitionName;
-
   protected String eventType;
 
   protected String businessEventType;

@@ -44,10 +44,6 @@ public class MockHistoricVariableInstanceBuilder {
   protected String executionId;
   protected String errorMessage;
   protected String activityInstanceId;
-  protected String caseDefinitionKey;
-  protected String caseDefinitionId;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskId;
   protected String tenantId;
   protected Date createTime;
@@ -96,26 +92,6 @@ public class MockHistoricVariableInstanceBuilder {
 
   public MockHistoricVariableInstanceBuilder activityInstanceId(String activityInstanceId) {
     this.activityInstanceId = activityInstanceId;
-    return this;
-  }
-
-  public MockHistoricVariableInstanceBuilder caseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-    return this;
-  }
-
-  public MockHistoricVariableInstanceBuilder caseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-    return this;
-  }
-
-  public MockHistoricVariableInstanceBuilder caseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
-  public MockHistoricVariableInstanceBuilder caseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
     return this;
   }
 
@@ -184,22 +160,6 @@ public class MockHistoricVariableInstanceBuilder {
     return activityInstanceId;
   }
 
-  public String getCaseDefinitionKey() {
-    return caseDefinitionKey;
-  }
-
-  public String getCaseDefinitionId() {
-    return caseDefinitionId;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public String getCaseExecutionId() {
-    return caseExecutionId;
-  }
-
   public String getTaskId() {
     return taskId;
   }
@@ -247,10 +207,6 @@ public class MockHistoricVariableInstanceBuilder {
     when(mockVariable.getErrorMessage()).thenReturn(errorMessage);
     when(mockVariable.getActivtyInstanceId()).thenReturn(activityInstanceId);
     when(mockVariable.getActivityInstanceId()).thenReturn(activityInstanceId);
-    when(mockVariable.getCaseDefinitionKey()).thenReturn(caseDefinitionKey);
-    when(mockVariable.getCaseDefinitionId()).thenReturn(caseDefinitionId);
-    when(mockVariable.getCaseInstanceId()).thenReturn(caseInstanceId);
-    when(mockVariable.getCaseExecutionId()).thenReturn(caseExecutionId);
     when(mockVariable.getTaskId()).thenReturn(taskId);
     when(mockVariable.getTenantId()).thenReturn(tenantId);
     when(mockVariable.getCreateTime()).thenReturn(createTime);

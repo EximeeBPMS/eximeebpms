@@ -52,11 +52,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eximeebpms.bpm.model</groupId>
-      <artifactId>eximeebpms-cmmn-model</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.eximeebpms.bpm.juel</groupId>
       <artifactId>eximeebpms-juel</artifactId>
     </dependency>

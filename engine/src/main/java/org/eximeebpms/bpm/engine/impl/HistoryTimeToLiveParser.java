@@ -28,11 +28,10 @@ import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.util.ParseUtil;
 import org.eximeebpms.bpm.engine.impl.util.xml.Element;
-import org.eximeebpms.bpm.model.cmmn.instance.Case;
 import org.eximeebpms.bpm.model.dmn.instance.Decision;
 
 /**
- * Class that encapsulates the business logic of parsing HistoryTimeToLive of different deployable resources (process, definition, case).
+ * Class that encapsulates the business logic of parsing HistoryTimeToLive of different deployable resources (process, definition).
  */
 public class HistoryTimeToLiveParser {
 
@@ -78,12 +77,6 @@ public class HistoryTimeToLiveParser {
     return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
   }
 
-  public Integer parse(Case caseElement, String definitionKey, boolean skipEnforceTtl) {
-    String historyTimeToLiveString = caseElement.getCamundaHistoryTimeToLiveString();
-
-    return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
-  }
-
   public Integer parse(Decision decision, String definitionKey, boolean skipEnforceTtl) {
     String historyTimeToLiveString = decision.getCamundaHistoryTimeToLiveString();
 
@@ -96,7 +89,7 @@ public class HistoryTimeToLiveParser {
    *
    * @param historyTimeToLiveString the history time to live string expression in ISO-8601 format
    * @param definitionKey           the correlated definition key that this historyTimeToLive was fetched from
-   *                                (process definition key for processes, decision definition key for decisions, case definition key for cases).
+   *                                (process definition key for processes, decision definition key for decisions).
    * @param skipEnforceTtl skips enforcing the TTL.
    * @return the parsed integer value of history time to live
    * @throws NotValidException in case enforcement of non-null values is on and the parsed result was null

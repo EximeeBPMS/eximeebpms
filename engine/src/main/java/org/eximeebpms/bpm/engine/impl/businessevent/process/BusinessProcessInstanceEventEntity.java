@@ -14,7 +14,6 @@ public class BusinessProcessInstanceEventEntity extends BusinessDetailEventEntit
   protected String businessKey;
   protected String startUserId;
   protected String superProcessInstanceId;
-  protected String superCaseInstanceId;
   protected String deleteReason;
   protected String endActivityId;
   protected String startActivityId;

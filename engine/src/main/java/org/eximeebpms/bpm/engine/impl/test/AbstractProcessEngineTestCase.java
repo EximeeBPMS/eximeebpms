@@ -26,7 +26,6 @@ import java.util.concurrent.Callable;
 
 import org.apache.ibatis.logging.LogFactory;
 import org.eximeebpms.bpm.engine.AuthorizationService;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.FilterService;
@@ -48,7 +47,6 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.runtime.ActivityInstance;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
@@ -95,7 +93,6 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
   protected IdentityService identityService;
   protected ManagementService managementService;
   protected AuthorizationService authorizationService;
-  protected CaseService caseService;
   protected FilterService filterService;
   protected ExternalTaskService externalTaskService;
   protected DecisionService decisionService;
@@ -194,7 +191,6 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     authorizationService = processEngine.getAuthorizationService();
-    caseService = processEngine.getCaseService();
     filterService = processEngine.getFilterService();
     externalTaskService = processEngine.getExternalTaskService();
     decisionService = processEngine.getDecisionService();
@@ -210,7 +206,6 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     identityService = null;
     managementService = null;
     authorizationService = null;
-    caseService = null;
     filterService = null;
     externalTaskService = null;
     decisionService = null;
@@ -237,18 +232,6 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
 
     if (processInstance==null) {
       throw new AssertionFailedError("Expected process instance '"+processInstanceId+"' to be still active but it was not in the db");
-    }
-  }
-
-  public void assertCaseEnded(final String caseInstanceId) {
-    CaseInstance caseInstance = processEngine
-      .getCaseService()
-      .createCaseInstanceQuery()
-      .caseInstanceId(caseInstanceId)
-      .singleResult();
-
-    if (caseInstance!=null) {
-      throw new AssertionFailedError("Expected finished case instance '"+caseInstanceId+"' but it was still in the db");
     }
   }
 

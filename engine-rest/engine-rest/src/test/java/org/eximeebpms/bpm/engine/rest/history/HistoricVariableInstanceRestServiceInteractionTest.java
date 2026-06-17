@@ -106,10 +106,6 @@ public class HistoricVariableInstanceRestServiceInteractionTest extends Abstract
       .body("executionId", equalTo(builder.getExecutionId()))
       .body("errorMessage", equalTo(builder.getErrorMessage()))
       .body("activityInstanceId", equalTo(builder.getActivityInstanceId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("tenantId", equalTo(builder.getTenantId()))
       .body("createTime", equalTo(MockProvider.EXAMPLE_HISTORIC_VARIABLE_INSTANCE_CREATE_TIME))
@@ -150,10 +146,6 @@ public class HistoricVariableInstanceRestServiceInteractionTest extends Abstract
       .body("executionId", equalTo(builder.getExecutionId()))
       .body("errorMessage", equalTo(builder.getErrorMessage()))
       .body("activityInstanceId", equalTo(builder.getActivityInstanceId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("tenantId", equalTo(builder.getTenantId()))
       .body("createTime", equalTo(MockProvider.EXAMPLE_HISTORIC_VARIABLE_INSTANCE_CREATE_TIME))
@@ -195,10 +187,6 @@ public class HistoricVariableInstanceRestServiceInteractionTest extends Abstract
       .body("executionId", equalTo(builder.getExecutionId()))
       .body("errorMessage", equalTo(builder.getErrorMessage()))
       .body("activityInstanceId", equalTo(builder.getActivityInstanceId()))
-      .body("caseDefinitionKey", equalTo(builder.getCaseDefinitionKey()))
-      .body("caseDefinitionId", equalTo(builder.getCaseDefinitionId()))
-      .body("caseInstanceId", equalTo(builder.getCaseInstanceId()))
-      .body("caseExecutionId", equalTo(builder.getCaseExecutionId()))
       .body("taskId", equalTo(builder.getTaskId()))
       .body("tenantId", equalTo(builder.getTenantId()))
       .body("createTime", equalTo(MockProvider.EXAMPLE_HISTORIC_VARIABLE_INSTANCE_CREATE_TIME))
@@ -360,7 +348,7 @@ public class HistoricVariableInstanceRestServiceInteractionTest extends Abstract
     .and().body(is(equalTo(new String())))
     .when().get(VARIABLE_INSTANCE_BINARY_DATA_URL);
   }
-  
+
   @Test
   public void testDeleteSingleVariableInstanceById() {
     given()
@@ -372,12 +360,12 @@ public class HistoricVariableInstanceRestServiceInteractionTest extends Abstract
 
     verify(historyServiceMock).deleteHistoricVariableInstance(MockProvider.EXAMPLE_VARIABLE_INSTANCE_ID);
   }
-  
+
   @Test
   public void testDeleteNonExistingVariableInstanceById() {
     doThrow(new NotFoundException("No historic variable instance found with id: 'NON_EXISTING_ID'"))
     .when(historyServiceMock).deleteHistoricVariableInstance("NON_EXISTING_ID");
-    
+
     given()
       .pathParam("id", "NON_EXISTING_ID")
     .expect()

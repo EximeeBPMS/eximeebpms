@@ -53,11 +53,6 @@ public class ProcessInstanceWithVariablesImpl implements ProcessInstanceWithVari
   }
 
   @Override
-  public String getCaseInstanceId() {
-    return executionEntity.getCaseInstanceId();
-  }
-
-  @Override
   public boolean isSuspended() {
     return executionEntity.isSuspended();
   }

@@ -33,7 +33,6 @@ public class HistoryCleanupBatch extends HistoryCleanupHandler {
 
   protected List<String> historicProcessInstanceIds = Collections.emptyList();
   protected List<String> historicDecisionInstanceIds = Collections.emptyList();
-  protected List<String> historicCaseInstanceIds = Collections.emptyList();
   protected List<String> historicBatchIds = Collections.emptyList();
   protected List<String> taskMetricIds = Collections.emptyList();
 
@@ -51,14 +50,6 @@ public class HistoryCleanupBatch extends HistoryCleanupHandler {
 
   public void setHistoricDecisionInstanceIds(List<String> historicDecisionInstanceIds) {
     this.historicDecisionInstanceIds = historicDecisionInstanceIds;
-  }
-
-  public List<String> getHistoricCaseInstanceIds() {
-    return historicCaseInstanceIds;
-  }
-
-  public void setHistoricCaseInstanceIds(List<String> historicCaseInstanceIds) {
-    this.historicCaseInstanceIds = historicCaseInstanceIds;
   }
 
   public List<String> getHistoricBatchIds() {
@@ -81,7 +72,7 @@ public class HistoryCleanupBatch extends HistoryCleanupHandler {
    * Size of the batch.
    */
   public int size() {
-    return historicProcessInstanceIds.size() + historicDecisionInstanceIds.size() + historicCaseInstanceIds.size() + historicBatchIds.size() + taskMetricIds.size();
+    return historicProcessInstanceIds.size() + historicDecisionInstanceIds.size() + historicBatchIds.size() + taskMetricIds.size();
   }
 
   public void performCleanup() {
@@ -94,9 +85,6 @@ public class HistoryCleanupBatch extends HistoryCleanupHandler {
       }
       if (historicDecisionInstanceIds.size() > 0) {
         commandContext.getHistoricDecisionInstanceManager().deleteHistoricDecisionInstanceByIds(historicDecisionInstanceIds);
-      }
-      if (historicCaseInstanceIds.size() > 0) {
-        commandContext.getHistoricCaseInstanceManager().deleteHistoricCaseInstancesByIds(historicCaseInstanceIds);
       }
       if (historicBatchIds.size() > 0) {
         commandContext.getHistoricBatchManager().deleteHistoricBatchesByIds(historicBatchIds);
@@ -116,9 +104,6 @@ public class HistoryCleanupBatch extends HistoryCleanupHandler {
     }
     if (historicDecisionInstanceIds.size() > 0) {
       reports.put(Metrics.HISTORY_CLEANUP_REMOVED_DECISION_INSTANCES, (long) historicDecisionInstanceIds.size());
-    }
-    if (historicCaseInstanceIds.size() > 0) {
-      reports.put(Metrics.HISTORY_CLEANUP_REMOVED_CASE_INSTANCES, (long) historicCaseInstanceIds.size());
     }
     if (historicBatchIds.size() > 0) {
       reports.put(Metrics.HISTORY_CLEANUP_REMOVED_BATCH_OPERATIONS, (long) historicBatchIds.size());

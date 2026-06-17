@@ -20,8 +20,6 @@
     "BOOLEAN": "Boolean",
     "CAM_WIDGET_BPMN_VIEWER_ERROR": "Diagramm konnte nicht gerendert werden:",
     "CAM_WIDGET_BPMN_VIEWER_LOADING": "Diagramm laden",
-    "CAM_WIDGET_CMMN_VIEWER_ERROR": "Diagramm konnte nicht gerendert werden:",
-    "CAM_WIDGET_CMMN_VIEWER_LOADING": "Diagramm laden",
     "CAM_WIDGET_COPY": "Klicken, um '{{value}}' zu kopieren",
     "CAM_WIDGET_COPY_LINK": "Kopiere Link zu aktuellem Ort",
     "CAM_WIDGET_DMN_VIEWER_ERROR": "Diagramm konnte nicht gerendert werden:",

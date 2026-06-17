@@ -46,7 +46,7 @@
 
   <update id="updateAttachment" parameterType="org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentEntity">
     update
-    ${prefix}ACT_HI_ATTACHMENT 
+    ${prefix}ACT_HI_ATTACHMENT
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       NAME_ = #{name, jdbcType=VARCHAR},
@@ -209,21 +209,21 @@
   <!-- ATTACHMENT DELETE -->
 
   <delete id="deleteAttachment" parameterType="org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentEntity">
-    delete from ${prefix}ACT_HI_ATTACHMENT 
-    where ID_ = #{id} and REV_ = #{revision} 
+    delete from ${prefix}ACT_HI_ATTACHMENT
+    where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <delete id="deleteAttachmentByIds" parameterType="java.util.Map">
     delete from ${prefix}ACT_HI_ATTACHMENT
     <where>
       <include refid="selectAttachmentsProcessInstanceByIdsSql"/>
-      <include refid="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql"/>
+      <include refid="selectAttachmentsTaskProcessByIdsSql"/>
     </where>
   </delete>
 
   <delete id="deleteAttachmentByIds_mysql" parameterType="java.util.Map">
     delete A from ${prefix}ACT_HI_ATTACHMENT A
-    <include refid="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql_mysql"/>
+    <include refid="selectAttachmentsTaskProcessByIdsSql_mysql"/>
     <where>
       <include refid="selectAttachmentsProcessInstanceByIdsSql"/>
     </where>
@@ -236,7 +236,7 @@
       from ${prefix}ACT_HI_ATTACHMENT
       <where>
         <include refid="selectAttachmentsProcessInstanceByIdsSql"/>
-        <include refid="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql"/>
+        <include refid="selectAttachmentsTaskProcessByIdsSql"/>
         and CONTENT_ID_ is not NULL
       </where>)
   </delete>
@@ -245,7 +245,7 @@
     delete B from ${prefix}ACT_GE_BYTEARRAY B
     inner join ${prefix}ACT_HI_ATTACHMENT A
       on B.ID_ = A.CONTENT_ID_
-      <include refid="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql_mysql"/>
+      <include refid="selectAttachmentsTaskProcessByIdsSql_mysql"/>
       <where>
         <include refid="selectAttachmentsProcessInstanceByIdsSql"/>
         and A.CONTENT_ID_ is not NULL
@@ -315,22 +315,22 @@
     <result property="createTime" column="CREATE_TIME_" jdbcType="TIMESTAMP"/>
     <result property="removalTime" column="REMOVAL_TIME_" jdbcType="TIMESTAMP"/>
   </resultMap>
-  
+
   <!-- ATTACHMENT SELECT -->
   <select id="selectAttachment" parameterType="string" resultMap="attachmentResultMap">
     select * from ${prefix}ACT_HI_ATTACHMENT where ID_ = #{id,jdbcType=VARCHAR}
   </select>
-  
+
   <select id="selectAttachmentsByTaskId" parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
     select * from ${prefix}ACT_HI_ATTACHMENT where TASK_ID_ = #{parameter,jdbcType=VARCHAR}
   </select>
-  
+
   <select id="selectAttachmentsByProcessInstanceId" parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
     select * from ${prefix}ACT_HI_ATTACHMENT where PROC_INST_ID_ = #{parameter,jdbcType=VARCHAR}
   </select>
 
   <select id="selectAttachmentByTaskIdAndAttachmentId" parameterType="map" resultMap="attachmentResultMap">
-    select * from ${prefix}ACT_HI_ATTACHMENT 
+    select * from ${prefix}ACT_HI_ATTACHMENT
     where TASK_ID_ = #{taskId,jdbcType=VARCHAR}
     and ID_ = #{id,jdbcType=VARCHAR}
   </select>
@@ -344,7 +344,7 @@
     </if>
   </sql>
 
-  <sql id="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql">
+  <sql id="selectAttachmentsTaskProcessByIdsSql">
     <if test="taskProcessInstanceIds != null &amp;&amp; taskProcessInstanceIds.size > 0">
       and TASK_ID_ in (
       select ID_
@@ -355,33 +355,15 @@
         <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       )
     </if>
-    <if test="caseInstanceIds != null &amp;&amp; caseInstanceIds.size > 0">
-      and TASK_ID_ in (
-      select ID_ from
-      ${prefix}ACT_HI_TASKINST
-      where
-        <bind name="listOfIds" value="caseInstanceIds"/>
-        <bind name="fieldName" value="'CASE_INST_ID_'"/>
-        <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-      )
-    </if>
   </sql>
 
-  <sql id="selectAttachmentsTaskProcessAndCaseInstanceByIdsSql_mysql">
+  <sql id="selectAttachmentsTaskProcessByIdsSql_mysql">
     <if test="taskProcessInstanceIds != null &amp;&amp; taskProcessInstanceIds.size > 0">
       inner join ${prefix}ACT_HI_TASKINST T
         on TASK_ID_ = T.ID_
         and
           <bind name="listOfIds" value="taskProcessInstanceIds"/>
           <bind name="fieldName" value="'T.PROC_INST_ID_'"/>
-          <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-    </if>
-    <if test="caseInstanceIds != null &amp;&amp; caseInstanceIds.size > 0">
-      inner join ${prefix}ACT_HI_TASKINST T
-        on TASK_ID_ = T.ID_
-        and
-          <bind name="listOfIds" value="caseInstanceIds"/>
-          <bind name="fieldName" value="'T.CASE_INST_ID_'"/>
           <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     </if>
   </sql>

@@ -76,10 +76,6 @@ var Controller = [
       'cockpit.processes.dashboard',
       'search-process-instances'
     );
-    $scope.hasCaseSearch = hasPlugin(
-      'cockpit.cases.dashboard',
-      'case-instances-search'
-    );
     $scope.hasTaskSearch = hasPlugin('cockpit.tasks.dashboard', 'search-tasks');
 
     $scope.mainPlugins = [];
@@ -154,7 +150,6 @@ var Controller = [
       });
     }
 
-    var caseDefResource = camAPI.resource('case-definition');
     var decisionDefResource = camAPI.resource('decision-definition');
     var deploymentResource = camAPI.resource('deployment');
     var processDefinitionService = camAPI.resource('process-definition');
@@ -337,7 +332,6 @@ var Controller = [
     function fetchDeployed(cb) {
       // 5: GET /process-definition/count?latestVersion=true
       // 6: GET /decision-definition/count?latestVersion=true
-      // 7: GET /case-definition/count?latestVersion=true
       // 8: GET /deployment/count
       series(
         {
@@ -351,14 +345,6 @@ var Controller = [
           },
           decisionDefinitions: function(next) {
             decisionDefResource.count(
-              {
-                latestVersion: true
-              },
-              next
-            );
-          },
-          caseDefinitions: function(next) {
-            caseDefResource.count(
               {
                 latestVersion: true
               },

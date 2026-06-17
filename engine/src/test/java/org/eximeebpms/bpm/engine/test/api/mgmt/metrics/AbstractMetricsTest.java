@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.test.api.mgmt.metrics;
 
 import java.util.Collection;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.RepositoryService;
@@ -49,7 +48,6 @@ public abstract class AbstractMetricsTest {
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
-  protected CaseService caseService;
   protected HistoryService historyService;
   protected RepositoryService repositoryService;
   protected ManagementService managementService;
@@ -59,7 +57,6 @@ public abstract class AbstractMetricsTest {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
     runtimeService = engineRule.getRuntimeService();
     taskService = engineRule.getTaskService();
-    caseService = engineRule.getCaseService();
     historyService = engineRule.getHistoryService();
     repositoryService = engineRule.getRepositoryService();
     managementService = engineRule.getManagementService();

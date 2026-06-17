@@ -28,7 +28,6 @@ import org.eximeebpms.bpm.engine.authorization.Resources;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
-import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
 import org.eximeebpms.bpm.model.dmn.DmnModelInstance;
 
 /**
@@ -50,9 +49,6 @@ import org.eximeebpms.bpm.model.dmn.DmnModelInstance;
  * <tbody>
  *    <tr>
  *      <td>.bpmn20.xml, .bpmn</td><td>BPMN process definition</td>
- *    </tr>
- *    <tr>
- *      <td>.cmmn11.xml, .cmmn10.xml, .cmmn</td><td>CMMN case definition</td>
  *    </tr>
  *    <tr>
  *      <td>.dmn11.xml, .dmn</td><td>DMN decision table</td>
@@ -87,14 +83,6 @@ public interface DeploymentBuilder {
    * @return
    */
   DeploymentBuilder addModelInstance(String resourceName, DmnModelInstance modelInstance);
-
-  /**
-   * Adds a CMMN model to the deployment.
-   * @param resourceName resource name. See suffix requirements for resource names: {@see DeploymentBuilder}.
-   * @param modelInstance model instance
-   * @return
-   */
-  DeploymentBuilder addModelInstance(String resourceName, CmmnModelInstance modelInstance);
 
   DeploymentBuilder addZipInputStream(ZipInputStream zipInputStream);
 

@@ -82,11 +82,9 @@ public class RepositoryByteArrayTest {
 
     String bpmnDeploymentId = testRule.deploy("org/eximeebpms/bpm/engine/test/repository/one.bpmn20.xml").getId();
     String dmnDeploymentId = testRule.deploy("org/eximeebpms/bpm/engine/test/repository/one.dmn").getId();
-    String cmmnDeplymentId = testRule.deploy("org/eximeebpms/bpm/engine/test/repository/one.cmmn").getId();
 
     checkResource(fixedDate, bpmnDeploymentId);
     checkResource(fixedDate, dmnDeploymentId);
-    checkResource(fixedDate, cmmnDeplymentId);
   }
 
   @Test
@@ -97,11 +95,10 @@ public class RepositoryByteArrayTest {
     String deploymentId = testRule.deploy("org/eximeebpms/bpm/engine/test/api/form/DeployedFormsProcess.bpmn20.xml",
         "org/eximeebpms/bpm/engine/test/api/form/start.html",
         "org/eximeebpms/bpm/engine/test/api/form/task.html",
-        "org/eximeebpms/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
+        "org/eximeebpms/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml").getId();
 
     List<Resource> deploymentResources = repositoryService.getDeploymentResources(deploymentId);
-    assertEquals(5, deploymentResources.size());
+    assertEquals(4, deploymentResources.size());
     for (Resource resource : deploymentResources) {
       ResourceEntity entity = (ResourceEntity) resource;
       checkEntity(fixedDate, entity);

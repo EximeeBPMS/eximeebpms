@@ -53,9 +53,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
   private static final String SORT_BY_PROC_DEF_ID = "processDefinitionId";
   private static final String SORT_BY_PROC_INST_ID = "processInstanceId";
   private static final String SORT_BY_EXEC_ID = "executionId";
-  private static final String SORT_BY_CASE_DEF_ID = "caseDefinitionId";
-  private static final String SORT_BY_CASE_INST_ID = "caseInstanceId";
-  private static final String SORT_BY_CASE_EXEC_ID = "caseExecutionId";
   private static final String SORT_BY_TASK_DURATION = "duration";
   private static final String SORT_BY_END_TIME = "endTime";
   private static final String SORT_BY_START_TIME = "startTime";
@@ -78,9 +75,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
     VALID_SORT_BY_VALUES.add(SORT_BY_PROC_DEF_ID);
     VALID_SORT_BY_VALUES.add(SORT_BY_PROC_INST_ID);
     VALID_SORT_BY_VALUES.add(SORT_BY_EXEC_ID);
-    VALID_SORT_BY_VALUES.add(SORT_BY_CASE_DEF_ID);
-    VALID_SORT_BY_VALUES.add(SORT_BY_CASE_INST_ID);
-    VALID_SORT_BY_VALUES.add(SORT_BY_CASE_EXEC_ID);
     VALID_SORT_BY_VALUES.add(SORT_BY_TASK_DURATION);
     VALID_SORT_BY_VALUES.add(SORT_BY_TASK_DURATION);
     VALID_SORT_BY_VALUES.add(SORT_BY_END_TIME);
@@ -143,11 +137,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
   protected Date finishedBefore;
   protected Date finishedAfter;
 
-  protected String caseDefinitionId;
-  protected String caseDefinitionKey;
-  protected String caseDefinitionName;
-  protected String caseInstanceId;
-  protected String caseExecutionId;
   protected String taskInvolvedUser;
   protected String taskInvolvedGroup;
   protected String taskHadCandidateUser;
@@ -383,31 +372,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam("caseDefinitionId")
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionKey")
-  public void setCaseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionName")
-  public void setCaseDefinitionName(String caseDefinitionName) {
-    this.caseDefinitionName = caseDefinitionName;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("caseExecutionId")
-  public void setCaseExecutionId(String caseExecutionId) {
-    this.caseExecutionId = caseExecutionId;
-  }
-
   @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
@@ -606,21 +570,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
     if (taskFollowUpDateAfter != null) {
       query.taskFollowUpAfter(taskFollowUpDateAfter);
     }
-    if (caseDefinitionId != null) {
-      query.caseDefinitionId(caseDefinitionId);
-    }
-    if (caseDefinitionKey != null) {
-      query.caseDefinitionKey(caseDefinitionKey);
-    }
-    if (caseDefinitionName != null) {
-      query.caseDefinitionName(caseDefinitionName);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
-    }
-    if (caseExecutionId != null) {
-      query.caseExecutionId(caseExecutionId);
-    }
     if (tenantIds != null && !tenantIds.isEmpty()) {
       query.tenantIdIn(tenantIds.toArray(new String[tenantIds.size()]));
     }
@@ -749,12 +698,6 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
       query.orderByTaskDefinitionKey();
     } else if (sortBy.equals(SORT_BY_PRIORITY)) {
       query.orderByTaskPriority();
-    } else if (sortBy.equals(SORT_BY_CASE_DEF_ID)) {
-      query.orderByCaseDefinitionId();
-    } else if (sortBy.equals(SORT_BY_CASE_INST_ID)) {
-      query.orderByCaseInstanceId();
-    } else if (sortBy.equals(SORT_BY_CASE_EXEC_ID)) {
-      query.orderByCaseExecutionId();
     } else if (sortBy.equals(SORT_BY_TENANT_ID)) {
       query.orderByTenantId();
     }

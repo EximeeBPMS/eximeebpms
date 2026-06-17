@@ -32,7 +32,6 @@ import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.AbstractManager;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
 import org.eximeebpms.bpm.engine.repository.DecisionRequirementsDefinition;
 import org.eximeebpms.bpm.engine.repository.Deployment;
@@ -116,8 +115,6 @@ public class DeploymentManager extends AbstractManager {
               false));
     }
 
-    deleteCaseDeployment(deploymentId, cascade);
-
     deleteDecisionDeployment(deploymentId, cascade);
     deleteDecisionRequirementDeployment(deploymentId);
 
@@ -128,39 +125,6 @@ public class DeploymentManager extends AbstractManager {
     deleteAuthorizations(Resources.DEPLOYMENT, deploymentId);
     getDbEntityManager().delete(DeploymentEntity.class, "deleteDeployment", deploymentId);
 
-  }
-
-  protected void deleteCaseDeployment(String deploymentId, boolean cascade) {
-    ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
-    if (processEngineConfiguration.isCmmnEnabled()) {
-      List<CaseDefinition> caseDefinitions = getCaseDefinitionManager().findCaseDefinitionByDeploymentId(deploymentId);
-
-      if (cascade) {
-
-        // delete case instances
-        for (CaseDefinition caseDefinition: caseDefinitions) {
-          String caseDefinitionId = caseDefinition.getId();
-
-          getCaseInstanceManager()
-            .deleteCaseInstancesByCaseDefinition(caseDefinitionId, "deleted deployment", true);
-
-        }
-      }
-
-      // delete case definitions from db
-      getCaseDefinitionManager()
-        .deleteCaseDefinitionsByDeploymentId(deploymentId);
-
-      for (CaseDefinition caseDefinition : caseDefinitions) {
-        String processDefinitionId = caseDefinition.getId();
-
-        // remove case definitions from cache:
-        Context
-          .getProcessEngineConfiguration()
-          .getDeploymentCache()
-          .removeCaseDefinition(processDefinitionId);
-      }
-    }
   }
 
   protected void deleteDecisionDeployment(String deploymentId, boolean cascade) {

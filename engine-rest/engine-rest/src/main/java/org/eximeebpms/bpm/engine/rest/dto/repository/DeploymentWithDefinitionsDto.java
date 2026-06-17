@@ -28,16 +28,11 @@ import java.util.Map;
 public class DeploymentWithDefinitionsDto extends DeploymentDto {
 
   protected Map<String, ProcessDefinitionDto> deployedProcessDefinitions;
-  protected Map<String, CaseDefinitionDto> deployedCaseDefinitions;
   protected Map<String, DecisionDefinitionDto> deployedDecisionDefinitions;
   protected Map<String, DecisionRequirementsDefinitionDto> deployedDecisionRequirementsDefinitions;
 
   public Map<String, ProcessDefinitionDto> getDeployedProcessDefinitions() {
     return deployedProcessDefinitions;
-  }
-
-  public Map<String, CaseDefinitionDto> getDeployedCaseDefinitions() {
-    return deployedCaseDefinitions;
   }
 
   public Map<String, DecisionDefinitionDto> getDeployedDecisionDefinitions() {
@@ -68,15 +63,6 @@ public class DeploymentWithDefinitionsDto extends DeploymentDto {
       for (ProcessDefinition processDefinition : deployedProcessDefinitions) {
         dto.deployedProcessDefinitions
           .put(processDefinition.getId(), ProcessDefinitionDto.fromProcessDefinition(processDefinition));
-      }
-    }
-
-    List<CaseDefinition> deployedCaseDefinitions = deployment.getDeployedCaseDefinitions();
-    if (deployedCaseDefinitions != null) {
-      dto.deployedCaseDefinitions = new HashMap<String, CaseDefinitionDto>();
-      for (CaseDefinition caseDefinition : deployedCaseDefinitions) {
-        dto.deployedCaseDefinitions
-          .put(caseDefinition.getId(), CaseDefinitionDto.fromCaseDefinition(caseDefinition));
       }
     }
 

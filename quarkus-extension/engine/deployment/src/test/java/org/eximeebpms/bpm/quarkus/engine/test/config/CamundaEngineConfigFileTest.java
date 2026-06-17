@@ -57,7 +57,6 @@ public class CamundaEngineConfigFileTest {
 
     // then
     // assert engine config properties
-    assertThat(configuration.isCmmnEnabled()).isFalse();
     assertThat(configuration.isDmnEnabled()).isFalse();
     assertThat(configuration.getHistory()).isEqualTo("none");
     // assert job executor properties

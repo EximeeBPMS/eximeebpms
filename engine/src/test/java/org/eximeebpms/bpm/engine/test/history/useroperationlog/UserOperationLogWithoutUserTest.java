@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
@@ -153,7 +152,6 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_KEY);
     Task task = taskService.createTaskQuery().singleResult();
-    task.setCaseInstanceId("a-case-instance-id");
 
     // when
     taskService.saveTask(task);
@@ -320,7 +318,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     // then
     verifyNoUserOperationLogged();
   }
-  
+
   @Deployment(resources = PROCESS_PATH)
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
@@ -331,7 +329,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     runtimeService.deleteProcessInstance(id, "none");
     assertEquals(1, historyService.createHistoricVariableInstanceQuery().count());
     String historicVariableId = historyService.createHistoricVariableInstanceQuery().singleResult().getId();
-    
+
     // when
     historyService.deleteHistoricVariableInstance(historicVariableId);
 
@@ -339,7 +337,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     assertEquals(0, historyService.createHistoricVariableInstanceQuery().count());
     verifyNoUserOperationLogged();
   }
-  
+
   @Deployment(resources = PROCESS_PATH)
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
@@ -349,7 +347,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     runtimeService.setVariable(id, "aVariable", "aValue");
     runtimeService.deleteProcessInstance(id, "none");
     assertEquals(1, historyService.createHistoricVariableInstanceQuery().count());
-    
+
     // when
     historyService.deleteHistoricVariableInstancesByProcessInstanceId(id);
 
@@ -357,25 +355,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     assertEquals(0, historyService.createHistoricVariableInstanceQuery().count());
     verifyNoUserOperationLogged();
   }
-  
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Test
-  public void testQueryDeleteVariableHistoryOperationOnCase() {
-    // given
-    CaseInstance caseInstance = caseService.createCaseInstanceByKey("oneTaskCase");
-    caseService.setVariable(caseInstance.getId(), "myVariable", 1);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 2);
-    caseService.setVariable(caseInstance.getId(), "myVariable", 3);
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-    
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
 
-    // then
-    verifyNoUserOperationLogged();
-  }
-  
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   public void testQueryDeleteVariableHistoryOperationOnStandaloneTask() {
@@ -385,13 +365,13 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     taskService.setVariable(task.getId(), "testVariable", "testValue");
     taskService.setVariable(task.getId(), "testVariable", "testValue2");
     HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-    
+
     // when
     historyService.deleteHistoricVariableInstance(variableInstance.getId());
-    
+
     // then
     verifyNoUserOperationLogged();
-    
+
     taskService.deleteTask(task.getId(), true);
   }
 

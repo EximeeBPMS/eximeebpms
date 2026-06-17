@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
-import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CaseCallActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.EventSubProcessActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.SubProcessActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -35,9 +33,6 @@ public class SameBehaviorInstructionValidator implements MigrationInstructionVal
       new ArrayList<Set<Class<?>>>();
 
   static {
-    EQUIVALENT_BEHAVIORS.add(CollectionUtil.<Class<?>>asHashSet(
-      CallActivityBehavior.class, CaseCallActivityBehavior.class
-    ));
 
     EQUIVALENT_BEHAVIORS.add(CollectionUtil.<Class<?>>asHashSet(
       SubProcessActivityBehavior.class, EventSubProcessActivityBehavior.class

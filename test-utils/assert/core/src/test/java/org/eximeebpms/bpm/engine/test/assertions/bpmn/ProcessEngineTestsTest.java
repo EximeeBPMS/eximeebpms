@@ -34,7 +34,6 @@ import static org.eximeebpms.bpm.engine.test.assertions.bpmn.BpmnAwareTests.repo
 import static org.eximeebpms.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
 import static org.eximeebpms.bpm.engine.test.assertions.bpmn.BpmnAwareTests.taskQuery;
 import static org.eximeebpms.bpm.engine.test.assertions.bpmn.BpmnAwareTests.taskService;
-import static org.eximeebpms.bpm.engine.test.assertions.cmmn.CmmnAwareTests.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
@@ -57,11 +56,8 @@ import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
-import org.eximeebpms.bpm.engine.repository.CaseDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinitionQuery;
-import org.eximeebpms.bpm.engine.runtime.CaseExecution;
-import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.engine.runtime.ExecutionQuery;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.JobQuery;
@@ -69,9 +65,6 @@ import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstanceQuery;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.task.TaskQuery;
-import org.eximeebpms.bpm.engine.test.assertions.cmmn.CaseDefinitionAssert;
-import org.eximeebpms.bpm.engine.test.assertions.cmmn.CaseExecutionAssert;
-import org.eximeebpms.bpm.engine.test.assertions.cmmn.CaseInstanceAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -204,36 +197,6 @@ public class ProcessEngineTestsTest {
     assertThat(returnedAssert).isNotNull().isInstanceOf(JobAssert.class);
     JobAssert jobAssert = assertThat(job);
     assertThat(jobAssert.getActual()).isSameAs(job);
-  }
-
-  @Test
-  public void testAssertThat_CaseInstance() throws Exception {
-    //Given
-    CaseInstance caseInstance = Mockito.mock(CaseInstance.class);
-    // When
-    CaseInstanceAssert returnedAssert = assertThat(caseInstance);
-    // Then
-    assertThat(returnedAssert.getActual()).isSameAs(caseInstance);
-  }
-
-  @Test
-  public void testAssertThat_CaseExecution() throws Exception {
-    //Given
-    CaseExecution caseExecution = Mockito.mock(CaseExecution.class);
-    // When
-    CaseExecutionAssert returnedAssert = assertThat(caseExecution);
-    // Then
-    assertThat(returnedAssert.getActual()).isSameAs(caseExecution);
-  }
-
-  @Test
-  public void testAssertThat_CaseDefinition() throws Exception {
-    //Given
-    CaseDefinition caseDefinition = Mockito.mock(CaseDefinition.class);
-    // When
-    CaseDefinitionAssert returnedAssert = assertThat(caseDefinition);
-    // Then
-    assertThat(returnedAssert.getActual()).isSameAs(caseDefinition);
   }
 
   @Test

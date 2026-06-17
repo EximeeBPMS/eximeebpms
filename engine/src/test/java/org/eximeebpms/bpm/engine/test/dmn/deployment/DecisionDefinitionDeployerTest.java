@@ -116,7 +116,7 @@ public class DecisionDefinitionDeployerTest {
 
     assertEquals(1, deploymentQuery.count());
 
-    // there should be one case definition
+    // there should be one decision definition
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
     assertEquals(1, query.count());
 
@@ -445,7 +445,6 @@ public class DecisionDefinitionDeployerTest {
     assertEquals(1, deployedDecisionDefinitions.size());
     assertNull(deployment.getDeployedDecisionRequirementsDefinitions());
     assertNull(deployment.getDeployedProcessDefinitions());
-    assertNull(deployment.getDeployedCaseDefinitions());
 
     // and persisted definition are equal to deployed definition
     DecisionDefinition persistedDecisionDef = repositoryService.createDecisionDefinitionQuery()
@@ -492,7 +491,6 @@ public class DecisionDefinitionDeployerTest {
     assertEquals(1, deployedDecisionRequirementsDefinitions.size());
 
     assertNull(deployment.getDeployedProcessDefinitions());
-    assertNull(deployment.getDeployedCaseDefinitions());
 
     // and persisted definitions are equal to deployed definitions
     DecisionRequirementsDefinition persistedDecisionRequirementsDefinition = repositoryService.createDecisionRequirementsDefinitionQuery()

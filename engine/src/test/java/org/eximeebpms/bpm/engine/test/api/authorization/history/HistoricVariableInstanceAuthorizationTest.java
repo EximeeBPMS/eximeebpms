@@ -53,7 +53,6 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
 
   protected static final String PROCESS_KEY = "oneTaskProcess";
   protected static final String MESSAGE_START_PROCESS_KEY = "messageStartProcess";
-  protected static final String CASE_KEY = "oneTaskCase";
 
   protected boolean ensureSpecificVariablePermission;
   protected String deploymentId;
@@ -63,8 +62,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
         "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml",
-        "org/eximeebpms/bpm/engine/test/api/authorization/oneTaskCase.cmmn")
+        "org/eximeebpms/bpm/engine/test/api/authorization/messageStartEventProcess.bpmn20.xml")
             .getId();
 
     ensureSpecificVariablePermission = processEngineConfiguration.isEnforceSpecificVariablePermission();
@@ -283,20 +281,6 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     verifyQueryResults(query, 7);
   }
 
-  // historic variable instance query (case variables) /////////////////////////////////////////////
-
-  @Test
-  public void testQueryAfterCaseVariables() {
-    // given
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
-    // when
-    HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-
-    // then
-    verifyQueryResults(query, 1);
-  }
-
   // historic variable instance query (mixed variables) ////////////////////////////////////
 
   @Test
@@ -309,7 +293,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
 
     // then
-    verifyQueryResults(query, 7);
+    verifyQueryResults(query, 5);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -330,7 +314,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
 
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -351,7 +335,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
 
     // then
-    verifyQueryResults(query, 14);
+    verifyQueryResults(query, 12);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -374,7 +358,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
 
     // then
-    verifyQueryResults(query, 10);
+    verifyQueryResults(query, 8);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -397,7 +381,7 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
 
     // then
-    verifyQueryResults(query, 14);
+    verifyQueryResults(query, 12);
 
     deleteTask("one", true);
     deleteTask("two", true);
@@ -538,24 +522,6 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     // then
     verifyVariablesDeleted();
     cleanUpAfterDeploymentDeletion();
-  }
-
-  // delete historic variable instance (case variables) /////////////////////////////////////////////
-  @Test
-  public void testDeleteHistoricCaseVariableInstance() {
-    // given
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-
-    disableAuthorization();
-    String variableInstanceId = historyService.createHistoricVariableInstanceQuery().singleResult().getId();
-    assertEquals(1L, historyService.createHistoricDetailQuery().count());
-    enableAuthorization();
-
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstanceId);
-
-    // then
-    verifyVariablesDeleted();
   }
 
   // delete historic variable instance (task variables) /////////////////////////////////////////////
@@ -699,8 +665,6 @@ public class HistoricVariableInstanceAuthorizationTest extends AuthorizationTest
     taskService.setVariables("five", getVariables());
     enableAuthorization();
 
-    createCaseInstanceByKey(CASE_KEY, getVariables());
-    createCaseInstanceByKey(CASE_KEY, getVariables());
   }
 
   @Test

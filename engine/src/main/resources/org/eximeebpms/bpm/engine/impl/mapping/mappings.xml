@@ -36,12 +36,10 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Execution.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Group.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricActivityInstance.xml" />
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricCaseActivityInstance.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricDetail.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricIncident.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricIdentityLinkLog.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricProcessInstance.xml" />
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricCaseInstance.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricStatistics.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricVariableInstance.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricTaskInstance.xml" />
@@ -75,12 +73,6 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CamundaFormDefinition.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/BusinessEventOutbox.xml" />
-
-    <!-- CMMN -->
-
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CaseDefinition.xml" />
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CaseExecution.xml" />
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CaseSentryPart.xml" />
 
     <!-- DMN -->
 

@@ -416,20 +416,6 @@ describe('Repository Spec', function() {
         .true;
     });
 
-    it('should display cmmn diagram', function() {
-      // given
-      expect(resourcePage.cmmnDiagramFormElement().isPresent()).to.eventually.be
-        .false;
-
-      // when
-      deploymentsPage.selectDeployment('cmmn');
-      resourcesPage.selectResource(0);
-
-      // then
-      expect(resourcePage.cmmnDiagramFormElement().isPresent()).to.eventually.be
-        .true;
-    });
-
     it('should display dmn diagram', function() {
       // given
       expect(resourcePage.dmnDiagramFormElement().isPresent()).to.eventually.be
@@ -530,25 +516,6 @@ describe('Repository Spec', function() {
 
       // then
       expect(resourcePage.definitions.table().count()).to.eventually.eql(0);
-    });
-
-    it('should display deployed case definitions', function() {
-      // when
-      deploymentsPage.selectDeployment('cmmn');
-      resourcesPage.selectResource(0);
-
-      // then
-      expect(resourcePage.definitions.table().count()).to.eventually.eql(1);
-
-      expect(resourcePage.definitions.name(0).getText()).to.eventually.eql(
-        'Loan Application'
-      );
-      expect(resourcePage.definitions.key(0).getText()).to.eventually.eql(
-        'loanApplicationCase'
-      );
-      expect(
-        resourcePage.definitions.instanceCount(0).getText()
-      ).to.eventually.eql('0');
     });
 
     it('should display deployed decision definitions', function() {

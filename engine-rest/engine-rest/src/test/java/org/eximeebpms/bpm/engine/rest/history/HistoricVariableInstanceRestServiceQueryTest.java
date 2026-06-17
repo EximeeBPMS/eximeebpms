@@ -349,7 +349,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
   @Test
   public void testVariableNameLikeQueryIgnoreCase() {
     String variableNameLike = "aVariableNameLike";
-    
+
     given()
     .queryParam("variableNameLike", variableNameLike)
     .queryParam("variableNamesIgnoreCase", true)
@@ -358,7 +358,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
     .statusCode(Status.OK.getStatusCode())
     .when()
     .get(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).variableNameLike(variableNameLike);
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).list();
@@ -417,10 +417,6 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
           .body("[0].executionId", equalTo(mockInstanceBuilder.getExecutionId()))
           .body("[0].errorMessage", equalTo(mockInstanceBuilder.getErrorMessage()))
           .body("[0].activityInstanceId", equalTo(mockInstanceBuilder.getActivityInstanceId()))
-          .body("[0].caseDefinitionKey", equalTo(mockInstanceBuilder.getCaseDefinitionKey()))
-          .body("[0].caseDefinitionId", equalTo(mockInstanceBuilder.getCaseDefinitionId()))
-          .body("[0].caseInstanceId", equalTo(mockInstanceBuilder.getCaseInstanceId()))
-          .body("[0].caseExecutionId", equalTo(mockInstanceBuilder.getCaseExecutionId()))
           .body("[0].taskId", equalTo(mockInstanceBuilder.getTaskId()))
           .body("[0].tenantId", equalTo(mockInstanceBuilder.getTenantId()))
           .body("[0].createTime", equalTo(MockProvider.EXAMPLE_HISTORIC_VARIABLE_INSTANCE_CREATE_TIME))
@@ -549,7 +545,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
   public void testVariableNameAndValueIgnoreCaseQuery() {
     String variableName = MockProvider.EXAMPLE_VARIABLE_INSTANCE_NAME;
     String variableValue = MockProvider.EXAMPLE_PRIMITIVE_VARIABLE_VALUE.getValue();
-    
+
     given()
     .queryParam("variableName", variableName)
     .queryParam("variableNamesIgnoreCase", true)
@@ -564,7 +560,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
     .body("[0].value", equalTo(MockProvider.EXAMPLE_PRIMITIVE_VARIABLE_VALUE.getValue()))
     .when()
     .get(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).variableValueEquals(variableName, variableValue);
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).matchVariableValuesIgnoreCase();
@@ -697,66 +693,6 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
   }
 
   @Test
-  public void testHistoricVariableQueryByCaseInstanceId() {
-
-    given()
-      .queryParam("caseInstanceId", MockProvider.EXAMPLE_CASE_INSTANCE_ID)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .get(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-  }
-
-  @Test
-  public void testHistoricVariableQueryByCaseInstanceIdAsPost() {
-    Map<String, Object> json = new HashMap<String, Object>();
-    json.put("caseInstanceId", MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(json)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .post(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseInstanceId(MockProvider.EXAMPLE_CASE_INSTANCE_ID);
-  }
-
-  @Test
-  public void testHistoricVariableQueryByCaseExecutionIds() {
-
-    String caseExecutionIds = MockProvider.EXAMPLE_CASE_EXECUTION_ID + "," + MockProvider.ANOTHER_EXAMPLE_CASE_EXECUTION_ID;
-
-    given()
-      .queryParam("caseExecutionIdIn", caseExecutionIds)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .get(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionIdIn(MockProvider.EXAMPLE_CASE_EXECUTION_ID, MockProvider.ANOTHER_EXAMPLE_CASE_EXECUTION_ID);
-  }
-
-  @Test
-  public void testHistoricVariableQueryByCaseExecutionIdsAsPost() {
-    Map<String, Object> json = new HashMap<String, Object>();
-    json.put("caseExecutionIdIn", Arrays.asList(MockProvider.EXAMPLE_CASE_EXECUTION_ID, MockProvider.ANOTHER_EXAMPLE_CASE_EXECUTION_ID));
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(json)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .post(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseExecutionIdIn(MockProvider.EXAMPLE_CASE_EXECUTION_ID, MockProvider.ANOTHER_EXAMPLE_CASE_EXECUTION_ID);
-  }
-
-  @Test
   public void testTenantIdListParameter() {
     mockedQuery = setUpMockHistoricVariableInstanceQuery(createMockHistoricVariableInstancesTwoTenants());
 
@@ -868,36 +804,6 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
     assertThat(returnedTenantId).isEqualTo(null);
   }
 
-  @Test
-  public void testHistoricVariableQueryByCaseActivityIds() {
-
-    String caseExecutionIds = MockProvider.EXAMPLE_CASE_ACTIVITY_ID + "," + MockProvider.ANOTHER_EXAMPLE_CASE_ACTIVITY_ID;
-
-    given()
-      .queryParam("caseActivityIdIn", caseExecutionIds)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .get(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseActivityIdIn(MockProvider.EXAMPLE_CASE_ACTIVITY_ID, MockProvider.ANOTHER_EXAMPLE_CASE_ACTIVITY_ID);
-  }
-
-  @Test
-  public void testHistoricVariableQueryByCaseActivityIdsAsPost() {
-    Map<String, Object> json = new HashMap<String, Object>();
-    json.put("caseActivityIdIn", Arrays.asList(MockProvider.EXAMPLE_CASE_ACTIVITY_ID, MockProvider.ANOTHER_EXAMPLE_CASE_ACTIVITY_ID));
-
-    given()
-      .contentType(POST_JSON_CONTENT_TYPE)
-      .body(json)
-    .then().expect()
-      .statusCode(Status.OK.getStatusCode())
-    .when()
-      .post(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-
-    verify(mockedQuery).caseActivityIdIn(MockProvider.EXAMPLE_CASE_ACTIVITY_ID, MockProvider.ANOTHER_EXAMPLE_CASE_ACTIVITY_ID);
-  }
 
   @Test
   public void testIncludeDeletedVariables() {
@@ -1011,7 +917,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableNameLike", "aVariableName");
     json.put("variableNamesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1019,7 +925,7 @@ public class HistoricVariableInstanceRestServiceQueryTest extends AbstractRestSe
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(HISTORIC_VARIABLE_INSTANCE_RESOURCE_URL);
-    
+
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).variableNameLike("aVariableName");
   }

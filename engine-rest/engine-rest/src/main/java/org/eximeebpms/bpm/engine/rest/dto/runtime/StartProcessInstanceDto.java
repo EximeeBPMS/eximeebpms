@@ -26,7 +26,6 @@ public class StartProcessInstanceDto {
 
   protected Map<String, VariableValueDto> variables;
   protected String businessKey;
-  protected String caseInstanceId;
   protected List<ProcessInstanceModificationInstructionDto> startInstructions;
   protected boolean skipCustomListeners;
   protected boolean skipIoMappings;
@@ -46,14 +45,6 @@ public class StartProcessInstanceDto {
 
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
-  }
-
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
   }
 
   public List<ProcessInstanceModificationInstructionDto> getStartInstructions() {

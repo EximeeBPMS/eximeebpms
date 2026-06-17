@@ -16,8 +16,6 @@
  */
 package org.eximeebpms.bpm.pa.service;
 
-import org.eximeebpms.bpm.engine.delegate.CaseExecutionListener;
-import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.variable.VariableMap;
 import org.eximeebpms.bpm.engine.variable.Variables;
 

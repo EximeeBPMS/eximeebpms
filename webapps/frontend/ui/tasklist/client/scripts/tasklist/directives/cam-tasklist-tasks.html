@@ -48,11 +48,6 @@
               {{ task._embedded.processDefinition[0].name || task._embedded.processDefinition[0].key }}
             </h6>
 
-            <h6 class="case-definition"
-                ng-if="task.caseDefinitionId">
-              {{ task._embedded.caseDefinition[0].name || task._embedded.caseDefinition[0].key }}
-            </h6>
-
             <h5 class="assignee"
                 ng-if="hasAssignee(task)"
                 uib-tooltip="task.assignee">

@@ -17,29 +17,29 @@
     limitations under the License.
 
 -->
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricIdentityLinkLogEntity">
 
   <!-- INSERT HISTORIC IDENTITY LINK -->
-  
+
   <insert id="insertHistoricIdentityLinkLogEvent" parameterType="org.eximeebpms.bpm.engine.impl.history.event.HistoricIdentityLinkLogEventEntity">
     insert into ${prefix}ACT_HI_IDENTITYLINK (
     		ID_,
     		TIMESTAMP_,
     		TYPE_,
-    		USER_ID_, 
-    		GROUP_ID_, 
+    		USER_ID_,
+    		GROUP_ID_,
     		TASK_ID_,
     		ROOT_PROC_INST_ID_,
-    		PROC_DEF_ID_, 
+    		PROC_DEF_ID_,
     		OPERATION_TYPE_,
             ASSIGNER_ID_,
             PROC_DEF_KEY_,
             TENANT_ID_,
             REMOVAL_TIME_)
     values (#{id, jdbcType=VARCHAR},
-            #{time, jdbcType=TIMESTAMP},  
+            #{time, jdbcType=TIMESTAMP},
             #{type, jdbcType=VARCHAR},
             #{userId, jdbcType=VARCHAR},
             #{groupId, jdbcType=VARCHAR},
@@ -206,13 +206,13 @@
             TIMESTAMP_ = TIMESTAMP_
       </if>
   </update>
-  
+
   <!-- HISTORIC IDENTITY LINK DELETE -->
 
   <delete id="deleteHistoricIdentityLinksByProcessDefinitionId">
     delete from ${prefix}ACT_HI_IDENTITYLINK where PROC_DEF_ID_ = #{processDefinitionId}
   </delete>
-  
+
   <delete id="deleteHistoricIdentityLinksByTaskId">
     delete from ${prefix}ACT_HI_IDENTITYLINK where TASK_ID_ = #{taskId}
   </delete>
@@ -237,28 +237,6 @@
       and T.PROC_INST_ID_ in
         <foreach item="processInstanceId" index="index" collection="list" open="(" separator="," close=")">
           #{processInstanceId}
-        </foreach>
-  </delete>
-
-  <delete id="deleteHistoricIdentityLinksByTaskCaseInstanceIds">
-    delete from ${prefix}ACT_HI_IDENTITYLINK
-    where TASK_ID_ in (
-      select ID_
-      from ${prefix}ACT_HI_TASKINST
-      where
-        <bind name="listOfIds" value="list"/>
-        <bind name="fieldName" value="'CASE_INST_ID_'"/>
-        <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
-    )
-  </delete>
-
-  <delete id="deleteHistoricIdentityLinksByTaskCaseInstanceIds_mysql">
-    delete I from ${prefix}ACT_HI_IDENTITYLINK I
-    inner join ACT_HI_TASKINST T
-      on I.TASK_ID_ = T.ID_
-      and T.CASE_INST_ID_ in
-        <foreach item="caseInstanceId" index="index" collection="list" open="(" separator="," close=")">
-          #{caseInstanceId}
         </foreach>
   </delete>
 
@@ -325,7 +303,7 @@
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR" />
     <result property="removalTime" column="REMOVAL_TIME_" jdbcType="TIMESTAMP"/>
   </resultMap>
-  
+
   <select id="selectHistoricIdentityLinkByQueryCriteria" parameterType="org.eximeebpms.bpm.engine.impl.HistoricIdentityLinkLogQueryImpl" resultMap="historicIdentityLinkResultMap">
   	<include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
@@ -362,7 +340,7 @@
         )
       </if>
     </if>
-    
+
     <where>
       <if test="type != null">
         and RES.TYPE_ = #{type}
@@ -422,9 +400,9 @@
           </otherwise>
         </choose>
       </if>
-      
+
       <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
-      
+
     </where>
   </sql>
 

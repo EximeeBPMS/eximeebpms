@@ -31,20 +31,13 @@ var Controller = [
 
     var isBpmnResource = ($scope.isBpmnResource =
       $scope.control.isBpmnResource);
-    var isCmmnResource = ($scope.isCmmnResource =
-      $scope.control.isCmmnResource);
     var isDmnResource = ($scope.isDmnResource = $scope.control.isDmnResource);
 
     var ProcessInstance = camAPI.resource('process-instance');
-    var CaseInstance = camAPI.resource('case-instance');
     var DrdService = camAPI.resource('drd');
 
     var resource;
 
-    $scope.hasCasePlugin = hasPlugin(
-      'cockpit.cases.dashboard',
-      'case-definition'
-    );
     $scope.hasDrdPlugin = hasPlugin(
       'cockpit.drd.definition.tab',
       'decision-instance-table'
@@ -86,9 +79,7 @@ var Controller = [
     definitionsData.observe('resource', function(_resource) {
       resource = $scope.resource = _resource;
       $scope.hasDefinitions =
-        isBpmnResource(resource) ||
-        isCmmnResource(resource) ||
-        isDmnResource(resource);
+        isBpmnResource(resource) || isDmnResource(resource);
     });
 
     // instances ///////////////////////////////////////////////////
@@ -124,11 +115,6 @@ var Controller = [
           Service = ProcessInstance;
           query = {
             processDefinitionId: definition.id
-          };
-        } else if (isCmmnResource(definition.resource)) {
-          Service = CaseInstance;
-          query = {
-            caseDefinitionId: definition.id
           };
         }
 
@@ -171,8 +157,6 @@ var Controller = [
           path = 'process-definition';
         } else if (isDmnResource(resource)) {
           path = 'decision-definition';
-        } else if (isCmmnResource(resource)) {
-          path = 'case-definition';
         }
 
         return '#/' + path + '/' + definition.id;

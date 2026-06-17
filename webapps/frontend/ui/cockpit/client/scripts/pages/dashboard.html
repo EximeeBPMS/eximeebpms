@@ -189,21 +189,6 @@
               </a>
             </div>
 
-            <div class="stats-section cases col-xs-6 col-lg-3">
-              <div class="stats-label">{{ 'DASHBOARD_CASE_DEFINITIONS' | translate }}</div>
-              <a class="value"
-                 href="#/cases"
-                 ng-if="hasCaseSearch">
-                {{ (!data.deployed.caseDefinitions ? 0 : '') }}
-                {{ data.deployed.caseDefinitions | abbreviateNumber }}
-              </a>
-              <span class="value"
-                    ng-if="!hasCaseSearch">
-                {{ (!data.deployed.caseDefinitions ? 0 : '') }}
-                {{ data.deployed.caseDefinitions | abbreviateNumber }}
-              </span>
-            </div>
-
             <div class="stats-section deployments col-xs-6 col-lg-3">
               <div class="stats-label">{{ 'DASHBOARD_DEPLOYMENTS' | translate }}</div>
               <a class="value"
@@ -251,21 +236,6 @@
               {{ (!data.deployed.decisionDefinitions ? 0 : '') }}
               {{ data.deployed.decisionDefinitions | abbreviateNumber }}
             </a>
-          </div>
-
-          <div class="stats-section cases col-sm-12 col-md-6 col-lg-12">
-            <div class="stats-label">{{ 'DASHBOARD_CASE_DEFINITIONS' | translate }}</div>
-            <a class="value"
-               href="#/cases"
-               ng-if="hasCaseSearch">
-              {{ (!data.deployed.caseDefinitions ? 0 : '') }}
-              {{ data.deployed.caseDefinitions | abbreviateNumber }}
-            </a>
-            <span class="value"
-                  ng-if="!hasCaseSearch">
-              {{ (!data.deployed.caseDefinitions ? 0 : '') }}
-              {{ data.deployed.caseDefinitions | abbreviateNumber }}
-            </span>
           </div>
 
           <div class="stats-section deployments col-sm-12 col-md-6 col-lg-12">

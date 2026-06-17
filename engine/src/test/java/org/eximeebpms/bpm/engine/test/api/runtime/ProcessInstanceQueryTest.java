@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.RepositoryService;
@@ -106,7 +105,6 @@ public class ProcessInstanceQueryTest {
   protected RuntimeService runtimeService;
   protected RepositoryService repositoryService;
   protected ManagementService managementService;
-  protected CaseService caseService;
 
   protected List<String> processInstanceIds;
 
@@ -115,7 +113,6 @@ public class ProcessInstanceQueryTest {
     runtimeService = engineRule.getRuntimeService();
     repositoryService = engineRule.getRepositoryService();
     managementService = engineRule.getManagementService();
-    caseService = engineRule.getCaseService();
   }
 
 
@@ -1662,74 +1659,6 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
-    })
-  public void testQueryByCaseInstanceId() {
-    String caseInstanceId = caseService
-      .withCaseDefinitionByKey("oneProcessTaskCase")
-      .create()
-      .getId();
-
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(1, query.count());
-
-    List<ProcessInstance> result = query.list();
-    assertEquals(1, result.size());
-
-    ProcessInstance processInstance = result.get(0);
-    assertEquals(caseInstanceId, processInstance.getCaseInstanceId());
-  }
-
-  @Test
-  public void testQueryByInvalidCaseInstanceId() {
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-
-    query.caseInstanceId("invalid");
-
-    assertEquals(0, query.count());
-
-    try {
-      query.caseInstanceId(null);
-      fail("The passed case instance should not be null.");
-    } catch (Exception ignored) {}
-
-  }
-
-  @Test
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/runtime/superCase.cmmn",
-      "org/eximeebpms/bpm/engine/test/api/runtime/superProcessWithCallActivityInsideSubProcess.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"
-    })
-  public void testQueryByCaseInstanceIdHierarchy() {
-    String caseInstanceId = caseService
-      .withCaseDefinitionByKey("oneProcessTaskCase")
-      .businessKey("aBusinessKey")
-      .create()
-      .getId();
-
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-
-    query.caseInstanceId(caseInstanceId);
-
-    assertEquals(2, query.count());
-
-    List<ProcessInstance> result = query.list();
-    assertEquals(2, result.size());
-
-    ProcessInstance firstProcessInstance = result.get(0);
-    assertEquals(caseInstanceId, firstProcessInstance.getCaseInstanceId());
-
-    ProcessInstance secondProcessInstance = result.get(1);
-    assertEquals(caseInstanceId, secondProcessInstance.getCaseInstanceId());
-  }
-
-  @Test
   @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testProcessVariableValueEqualsNumber() throws Exception {
     // long
@@ -1810,102 +1739,6 @@ public class ProcessInstanceQueryTest {
     assertEquals(5, runtimeService.createProcessInstanceQuery().variableValueGreaterThanOrEqual("var", Variables.numberValue(123)).count());
     assertEquals(0, runtimeService.createProcessInstanceQuery().variableValueLessThan("var", Variables.numberValue(123)).count());
     assertEquals(4, runtimeService.createProcessInstanceQuery().variableValueLessThanOrEqual("var", Variables.numberValue(123)).count());
-  }
-
-  @Test
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn"})
-  public void testQueryBySuperCaseInstanceId() {
-    String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
-
-    ProcessInstanceQuery query = runtimeService
-        .createProcessInstanceQuery()
-        .superCaseInstanceId(superCaseInstanceId);
-
-    assertEquals(1, query.list().size());
-    assertEquals(1, query.count());
-
-    ProcessInstance subProcessInstance = query.singleResult();
-    assertNotNull(subProcessInstance);
-  }
-
-  @Test
-  public void testQueryByInvalidSuperCaseInstanceId() {
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-
-    assertNull(query.superProcessInstanceId("invalid").singleResult());
-    assertEquals(0, query.superProcessInstanceId("invalid").list().size());
-
-    try {
-      query.superCaseInstanceId(null);
-      fail();
-    } catch (NullValueException e) {
-      // expected
-    }
-  }
-
-  @Test
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testQueryBySubCaseInstanceId() {
-    String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
-
-    String subCaseInstanceId = caseService
-        .createCaseInstanceQuery()
-        .superProcessInstanceId(superProcessInstanceId)
-        .singleResult()
-        .getId();
-
-    ProcessInstanceQuery query = runtimeService
-        .createProcessInstanceQuery()
-        .subCaseInstanceId(subCaseInstanceId);
-
-    assertEquals(1, query.list().size());
-    assertEquals(1, query.count());
-
-    ProcessInstance superProcessInstance = query.singleResult();
-    assertNotNull(superProcessInstance);
-    assertEquals(superProcessInstanceId, superProcessInstance.getId());
-  }
-
-  @Test
-  @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/runtime/superProcessWithCaseCallActivityInsideSubProcess.bpmn20.xml",
-      "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
-  public void testQueryBySubCaseInstanceIdNested() {
-    String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
-
-    String subCaseInstanceId = caseService
-        .createCaseInstanceQuery()
-        .superProcessInstanceId(superProcessInstanceId)
-        .singleResult()
-        .getId();
-
-    ProcessInstanceQuery query = runtimeService
-        .createProcessInstanceQuery()
-        .subCaseInstanceId(subCaseInstanceId);
-
-    assertEquals(1, query.list().size());
-    assertEquals(1, query.count());
-
-    ProcessInstance superProcessInstance = query.singleResult();
-    assertNotNull(superProcessInstance);
-    assertEquals(superProcessInstanceId, superProcessInstance.getId());
-  }
-
-  @Test
-  public void testQueryByInvalidSubCaseInstanceId() {
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-
-    assertNull(query.subProcessInstanceId("invalid").singleResult());
-    assertEquals(0, query.subProcessInstanceId("invalid").list().size());
-
-    try {
-      query.subCaseInstanceId(null);
-      fail();
-    } catch (NullValueException e) {
-      // expected
-    }
   }
 
   @Test

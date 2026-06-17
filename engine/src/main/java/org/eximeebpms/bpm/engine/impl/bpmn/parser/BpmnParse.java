@@ -49,7 +49,6 @@ import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CallableElementActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CancelBoundaryEventActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CancelEndEventActivityBehavior;
-import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CaseCallActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.ClassDelegateActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.DmnBusinessRuleTaskActivityBehavior;
@@ -3966,16 +3965,10 @@ public class BpmnParse extends Parse {
       ParameterValueProvider definitionKeyProvider = createParameterValueProvider(calledElement, expressionManager);
       callableElement.setDefinitionKeyValueProvider(definitionKeyProvider);
 
-    } else {
-      behavior = new CaseCallActivityBehavior();
-      ParameterValueProvider definitionKeyProvider = createParameterValueProvider(caseRef, expressionManager);
-      callableElement.setDefinitionKeyValueProvider(definitionKeyProvider);
-      bindingAttributeName = "caseBinding";
-      versionAttributeName = "caseVersion";
-      tenantIdAttributeName = "caseTenantId";
     }
-
-    behavior.setCallableElement(callableElement);
+    if (behavior != null) {
+      behavior.setCallableElement(callableElement);
+    }
 
     // parse binding
     parseBinding(callActivityElement, activity, callableElement, bindingAttributeName);

@@ -48,7 +48,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
   protected String processInstanceId;
   protected String processDefinitionId;
   protected String processDefinitionKey;
-  protected String caseInstanceId;
   protected String variableName;
   protected String variableNameLike;
   protected QueryVariableValue queryVariableValue;
@@ -57,8 +56,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
   protected String[] variableTypes;
   protected String[] taskIds;
   protected String[] executionIds;
-  protected String[] caseExecutionIds;
-  protected String[] caseActivityIds;
   protected String[] activityInstanceIds;
 
   protected String[] tenantIds;
@@ -122,12 +119,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     return this;
   }
 
-  public HistoricVariableInstanceQuery caseInstanceId(String caseInstanceId) {
-    ensureNotNull("caseInstanceId", caseInstanceId);
-    this.caseInstanceId = caseInstanceId;
-    return this;
-  }
-
   @Override
   public HistoricVariableInstanceQuery variableTypeIn(String... variableTypes) {
     ensureNotNull("Variable types", (Object[]) variableTypes);
@@ -176,18 +167,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
   public HistoricVariableInstanceQuery executionIdIn(String... executionIds) {
     ensureNotNull("Execution Ids", (Object[]) executionIds);
     this.executionIds = executionIds;
-    return this;
-  }
-
-  public HistoricVariableInstanceQuery caseExecutionIdIn(String... caseExecutionIds) {
-    ensureNotNull("Case execution ids", (Object[]) caseExecutionIds);
-    this.caseExecutionIds = caseExecutionIds;
-    return this;
-  }
-
-  public HistoricVariableInstanceQuery caseActivityIdIn(String... caseActivityIds) {
-    ensureNotNull("Case activity ids", (Object[]) caseActivityIds);
-    this.caseActivityIds = caseActivityIds;
     return this;
   }
 
@@ -321,10 +300,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     return processInstanceId;
   }
 
-  public String getCaseInstanceId() {
-    return caseInstanceId;
-  }
-
   public String[] getActivityInstanceIds() {
     return activityInstanceIds;
   }
@@ -339,14 +314,6 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
 
   public String[] getExecutionIds() {
     return executionIds;
-  }
-
-  public String[] getCaseExecutionIds() {
-    return caseExecutionIds;
-  }
-
-  public String[] getCaseActivityIds() {
-    return caseActivityIds;
   }
 
   public boolean isTenantIdSet() {
@@ -390,7 +357,7 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
   public List<String> getVariableNameIn() {
     return variableNameIn;
   }
-  
+
   public Date getCreatedAfter() {
     return createdAfter;
   }

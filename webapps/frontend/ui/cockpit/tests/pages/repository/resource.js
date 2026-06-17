@@ -61,10 +61,6 @@ module.exports = Page.extend({
     return element(by.css('[cam-widget-dmn-viewer]'));
   },
 
-  cmmnDiagramFormElement: function() {
-    return element(by.css('[cam-widget-cmmn-viewer]'));
-  },
-
   imageFormElement: function() {
     return element(by.css('.image-resource'));
   },

@@ -974,57 +974,6 @@ public class HistoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testDeleteHistoricVariableAndDetailsFromCase() {
-    // given
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    caseService.setVariable(caseInstanceId, "myVariable", 1);
-    caseService.setVariable(caseInstanceId, "myVariable", 2);
-    caseService.setVariable(caseInstanceId, "myVariable", 3);
-
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-    HistoricDetailQuery detailsQuery = historyService.createHistoricDetailQuery()
-        .caseInstanceId(caseInstanceId)
-        .variableInstanceId(variableInstance.getId());
-    assertEquals(1, historyService.createHistoricVariableInstanceQuery().count());
-    assertEquals(3, detailsQuery.count());
-
-    // when
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
-
-    // then
-    assertEquals(0, historyService.createHistoricVariableInstanceQuery().count());
-    assertEquals(0, detailsQuery.count());
-  }
-
-  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = {"org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
-  @Test
-  public void testDeleteHistoricVariableAndDetailsFromCaseAndSetAgain() {
-    // given
-    String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
-    caseService.setVariable(caseInstanceId, "myVariable", 1);
-    caseService.setVariable(caseInstanceId, "myVariable", 2);
-    caseService.setVariable(caseInstanceId, "myVariable", 3);
-
-    HistoricVariableInstance variableInstance = historyService.createHistoricVariableInstanceQuery().singleResult();
-    HistoricDetailQuery detailsQuery = historyService.createHistoricDetailQuery()
-        .caseInstanceId(caseInstanceId)
-        .variableInstanceId(variableInstance.getId());
-    historyService.deleteHistoricVariableInstance(variableInstance.getId());
-    assertEquals(0, historyService.createHistoricVariableInstanceQuery().count());
-    assertEquals(0, detailsQuery.count());
-
-    // when
-    caseService.setVariable(caseInstanceId, "myVariable", 4);
-
-    // then
-    assertEquals(1, historyService.createHistoricVariableInstanceQuery().count());
-    assertEquals(1, detailsQuery.count());
-  }
-
-  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   public void testDeleteHistoricVariableAndDetailsFromStandaloneTask() {
     // given

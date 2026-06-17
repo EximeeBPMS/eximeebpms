@@ -19,11 +19,11 @@
     <tbody>
       <tr ng-repeat="definition in definitions">
         <td class="name">
-          <a ng-if="!isCmmnResource(resource) || hasCasePlugin"
+          <a ng-if="hasCasePlugin"
              ng-href="{{ getDefinitionLink(definition, resource) }}">
             {{ definition.name || definition.key || definition.id }}
           </a>
-          <span ng-if="isCmmnResource(resource) && !hasCasePlugin">
+          <span ng-if="!hasCasePlugin">
             {{ definition.name || definition.key || definition.id }}
           </span>
         </td>

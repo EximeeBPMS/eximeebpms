@@ -62,18 +62,6 @@ public class VariableInstanceManager extends AbstractManager {
     return getDbEntityManager().selectList("selectVariablesByProcessInstanceId", processInstanceId);
   }
 
-  public List<VariableInstanceEntity> findVariableInstancesByCaseExecutionId(String caseExecutionId) {
-    return findVariableInstancesByCaseExecutionIdAndVariableNames(caseExecutionId, null);
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<VariableInstanceEntity> findVariableInstancesByCaseExecutionIdAndVariableNames(String caseExecutionId, Collection<String> variableNames) {
-    Map<String, Object> parameter = new HashMap<String, Object>();
-    parameter.put("caseExecutionId", caseExecutionId);
-    parameter.put("variableNames", variableNames);
-    return getDbEntityManager().selectList("selectVariablesByCaseExecutionId", parameter);
-  }
-
   public void deleteVariableInstanceByTask(TaskEntity task) {
     List<VariableInstanceEntity> variableInstances = task.variableStore.getVariables();
     for (VariableInstanceEntity variableInstance: variableInstances) {

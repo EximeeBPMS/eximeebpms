@@ -20,8 +20,6 @@ import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
 import org.eximeebpms.bpm.engine.impl.application.ProcessApplicationManager;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -39,7 +37,7 @@ public class ProcessApplicationContextUtil {
     if (execution instanceof ExecutionEntity) {
       return getTargetProcessApplication((ExecutionEntity) execution);
     } else {
-      return getTargetProcessApplication((CaseExecutionEntity) execution);
+      return null;
     }
   }
 
@@ -58,29 +56,10 @@ public class ProcessApplicationContextUtil {
     return processApplicationForDeployment;
   }
 
-  public static ProcessApplicationReference getTargetProcessApplication(CaseExecutionEntity execution) {
-    if (execution == null) {
-      return null;
-    }
-
-    ProcessApplicationReference processApplicationForDeployment = getTargetProcessApplication((CaseDefinitionEntity) execution.getCaseDefinition());
-
-    // logg application context switch details
-    if(LOG.isContextSwitchLoggable() && processApplicationForDeployment == null) {
-      loggContextSwitchDetails(execution);
-    }
-
-    return processApplicationForDeployment;
-  }
-
   public static ProcessApplicationReference getTargetProcessApplication(TaskEntity task) {
     if (task.getProcessDefinition() != null) {
       return getTargetProcessApplication(task.getProcessDefinition());
-    }
-    else if (task.getCaseDefinition() != null) {
-      return getTargetProcessApplication(task.getCaseDefinition());
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -133,17 +112,6 @@ public class ProcessApplicationContextUtil {
     if(executionContext == null ||( executionContext.getExecution() != execution) ) {
       ProcessApplicationManager processApplicationManager = Context.getProcessEngineConfiguration().getProcessApplicationManager();
       LOG.debugNoTargetProcessApplicationFound(execution, processApplicationManager);
-    }
-
-  }
-
-  private static void loggContextSwitchDetails(CaseExecutionEntity execution) {
-
-    final CoreExecutionContext<? extends CoreExecution> executionContext = Context.getCoreExecutionContext();
-    // only log for first atomic op:
-    if(executionContext == null ||( executionContext.getExecution() != execution) ) {
-      ProcessApplicationManager processApplicationManager = Context.getProcessEngineConfiguration().getProcessApplicationManager();
-      LOG.debugNoTargetProcessApplicationFoundForCaseExecution(execution, processApplicationManager);
     }
 
   }

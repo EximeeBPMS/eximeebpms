@@ -63,9 +63,6 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
   protected String processDefinitionId;
   protected String processDefinitionKey;
   protected String processInstanceId;
-  protected String caseDefinitionId;
-  protected String caseDefinitionKey;
-  protected String caseInstanceId;
   protected String[] activityIdIn;
   protected String[] activityInstanceIdIn;
   protected Date evaluatedBefore;
@@ -142,21 +139,6 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
   @EximeeBPMSQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionId")
-  public void setCaseDefinitionId(String caseDefinitionId) {
-    this.caseDefinitionId = caseDefinitionId;
-  }
-
-  @EximeeBPMSQueryParam("caseDefinitionKey")
-  public void setCaseDefinitionKey(String caseDefinitionKey) {
-    this.caseDefinitionKey = caseDefinitionKey;
-  }
-
-  @EximeeBPMSQueryParam("caseInstanceId")
-  public void setCaseInstanceId(String caseInstanceId) {
-    this.caseInstanceId = caseInstanceId;
   }
 
   @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
@@ -278,15 +260,6 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
     }
     if (processInstanceId != null) {
       query.processInstanceId(processInstanceId);
-    }
-    if (caseDefinitionId != null) {
-      query.caseDefinitionId(caseDefinitionId);
-    }
-    if (caseDefinitionKey != null) {
-      query.caseDefinitionKey(caseDefinitionKey);
-    }
-    if (caseInstanceId != null) {
-      query.caseInstanceId(caseInstanceId);
     }
     if (activityIdIn != null) {
       query.activityIdIn(activityIdIn);

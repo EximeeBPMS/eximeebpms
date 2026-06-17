@@ -26,9 +26,6 @@ import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionLogger;
 import org.eximeebpms.bpm.engine.impl.cmd.CommandLogger;
-import org.eximeebpms.bpm.engine.impl.cmmn.behavior.CmmnBehaviorLogger;
-import org.eximeebpms.bpm.engine.impl.cmmn.operation.CmmnOperationLogger;
-import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformerLogger;
 import org.eximeebpms.bpm.engine.impl.core.CoreLogger;
 import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.eximeebpms.bpm.engine.impl.digest.SecurityLogger;
@@ -66,15 +63,6 @@ public class ProcessEngineLogger extends BaseLogger {
 
   public static final EnginePersistenceLogger PERSISTENCE_LOGGER = BaseLogger.createLogger(
       EnginePersistenceLogger.class, PROJECT_CODE, "org.eximeebpms.bpm.engine.persistence", "03");
-
-  public static final CmmnTransformerLogger CMMN_TRANSFORMER_LOGGER = BaseLogger.createLogger(
-      CmmnTransformerLogger.class, PROJECT_CODE, "org.eximeebpms.bpm.engine.cmmn.transformer", "04");
-
-  public static final CmmnBehaviorLogger CMNN_BEHAVIOR_LOGGER = BaseLogger.createLogger(
-      CmmnBehaviorLogger.class, PROJECT_CODE, "org.eximeebpms.bpm.engine.cmmn.behavior", "05");
-
-  public static final CmmnOperationLogger CMMN_OPERATION_LOGGER = BaseLogger.createLogger(
-      CmmnOperationLogger.class, PROJECT_CODE, "org.eximeebpms.bpm.engine.cmmn.operation", "06");
 
   public static final ProcessApplicationLogger PROCESS_APPLICATION_LOGGER = BaseLogger.createLogger(
       ProcessApplicationLogger.class, PROJECT_CODE, "org.eximeebpms.bpm.application", "07");

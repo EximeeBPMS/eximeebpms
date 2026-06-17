@@ -54,7 +54,7 @@ public class FilterRestServiceQueryTest extends AbstractRestServiceTest {
 
   @ClassRule
   public static TestContainerRule rule = new TestContainerRule();
-  
+
   protected static final String FILTER_QUERY_URL = TEST_RESOURCE_ROOT_PATH + FilterRestService.PATH;
   protected static final String SINGLE_FILTER_URL = FILTER_QUERY_URL + "/{id}";
   protected static final String FILTER_COUNT_QUERY_URL = FILTER_QUERY_URL + "/count";
@@ -277,7 +277,6 @@ public class FilterRestServiceQueryTest extends AbstractRestServiceTest {
     assertThat(returnedQuery.get("name")).isEqualTo(MockProvider.EXAMPLE_FILTER_QUERY_DTO.getName());
     assertThat((List<Map<String, String>>) returnedQuery.get("processVariables")).hasSize(1).containsExactly(expectedVariable);
     assertThat((List<Map<String, String>>) returnedQuery.get("taskVariables")).hasSize(1).containsExactly(expectedVariable);
-    assertThat((List<Map<String, String>>) returnedQuery.get("caseInstanceVariables")).hasSize(1).containsExactly(expectedVariable);
     assertThat(returnedProperties).isEqualTo(MockProvider.EXAMPLE_FILTER_PROPERTIES);
 
     assertThat(filters.get(1)).isNotNull();

@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.time.DateUtils;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
@@ -63,14 +62,12 @@ public class HistoricInstanceForCleanupQueryTest {
 
   private HistoryService historyService;
   private ManagementService managementService;
-  private CaseService caseService;
   private ProcessEngineConfigurationImpl processEngineConfiguration;
 
   @Before
   public void init() {
     historyService = engineRule.getHistoryService();
     managementService = engineRule.getManagementService();
-    caseService = engineRule.getCaseService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
   }
 

@@ -46,11 +46,6 @@ public interface ProcessInstantiationBuilder
   ProcessInstantiationBuilder businessKey(String businessKey);
 
   /**
-   * Associate a case instance with the process instance
-   */
-  ProcessInstantiationBuilder caseInstanceId(String caseInstanceId);
-
-  /**
    * Start the process instance.
    *
    * @return the newly created process instance

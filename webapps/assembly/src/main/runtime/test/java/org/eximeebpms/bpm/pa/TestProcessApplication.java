@@ -24,7 +24,6 @@ import org.eximeebpms.bpm.admin.impl.web.SetupResource;
 import org.eximeebpms.bpm.application.PostDeploy;
 import org.eximeebpms.bpm.application.ProcessApplication;
 import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
-import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
@@ -33,7 +32,6 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.rest.dto.identity.UserCredentialsDto;
 import org.eximeebpms.bpm.engine.rest.dto.identity.UserDto;
 import org.eximeebpms.bpm.engine.rest.dto.identity.UserProfileDto;
-import org.eximeebpms.bpm.engine.runtime.CaseExecutionQuery;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 
 /**

@@ -439,9 +439,6 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
       if (dbSqlSessionFactory.isDbIdentityUsed() && !isIdentityTablePresent()) {
         missingComponents.add("identity");
       }
-      if (dbSqlSessionFactory.isCmmnEnabled() && !isCmmnTablePresent()) {
-        missingComponents.add("case.engine");
-      }
       if (dbSqlSessionFactory.isDmnEnabled() && !isDmnTablePresent()) {
         missingComponents.add("decision.engine");
       }
@@ -495,16 +492,6 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   }
 
   @Override
-  protected void dbSchemaCreateCmmn() {
-    executeMandatorySchemaResource("create", "case.engine");
-  }
-
-  @Override
-  protected void dbSchemaCreateCmmnHistory() {
-    executeMandatorySchemaResource("create", "case.history");
-  }
-
-  @Override
   protected void dbSchemaCreateDmn() {
     executeMandatorySchemaResource("create", "decision.engine");
   }
@@ -541,16 +528,6 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   }
 
   @Override
-  protected void dbSchemaDropCmmn() {
-    executeMandatorySchemaResource("drop", "case.engine");
-  }
-
-  @Override
-  protected void dbSchemaDropCmmnHistory() {
-    executeMandatorySchemaResource("drop", "case.history");
-  }
-
-  @Override
   protected void dbSchemaDropDmn() {
     executeMandatorySchemaResource("drop", "decision.engine");
   }
@@ -583,16 +560,6 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   @Override
   public boolean isIdentityTablePresent(){
     return isTablePresent("ACT_ID_USER");
-  }
-
-  @Override
-  public boolean isCmmnTablePresent() {
-    return isTablePresent("ACT_RE_CASE_DEF");
-  }
-
-  @Override
-  public boolean isCmmnHistoryTablePresent() {
-    return isTablePresent("ACT_HI_CASEINST");
   }
 
   @Override

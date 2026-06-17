@@ -48,7 +48,6 @@ import org.eximeebpms.bpm.engine.impl.TaskQueryImpl;
 import org.eximeebpms.bpm.engine.impl.UserQueryImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.DbEntityLifecycleAware;
@@ -701,10 +700,6 @@ public class DbEntityManager implements Session, EntityLoadListener {
 
   public ProcessDefinitionQueryImpl createProcessDefinitionQuery() {
     return new ProcessDefinitionQueryImpl();
-  }
-
-  public CaseDefinitionQueryImpl createCaseDefinitionQuery() {
-    return new CaseDefinitionQueryImpl();
   }
 
   public ProcessInstanceQueryImpl createProcessInstanceQuery() {

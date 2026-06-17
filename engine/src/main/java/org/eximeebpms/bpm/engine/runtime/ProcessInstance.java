@@ -43,11 +43,6 @@ public interface ProcessInstance extends Execution {
   String getRootProcessInstanceId();
 
   /**
-   * The id of the case instance associated with this process instance.
-   */
-  String getCaseInstanceId();
-
-  /**
    * returns true if the process instance is suspended
    */
   boolean isSuspended();

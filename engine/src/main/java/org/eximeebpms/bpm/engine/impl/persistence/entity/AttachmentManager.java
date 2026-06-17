@@ -89,12 +89,6 @@ public class AttachmentManager extends AbstractHistoricManager {
     deleteAttachments(parameters);
   }
 
-  public void deleteAttachmentsByTaskCaseInstanceIds(List<String> caseInstanceIds) {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("caseInstanceIds", caseInstanceIds);
-    deleteAttachments(parameters);
-  }
-
   protected void deleteAttachments(Map<String, Object> parameters) {
     getDbEntityManager().deletePreserveOrder(ByteArrayEntity.class, "deleteAttachmentByteArraysByIds", parameters);
     getDbEntityManager().deletePreserveOrder(AttachmentEntity.class, "deleteAttachmentByIds", parameters);

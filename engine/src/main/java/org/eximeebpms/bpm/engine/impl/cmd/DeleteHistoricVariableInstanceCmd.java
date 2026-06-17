@@ -69,8 +69,6 @@ public class DeleteHistoricVariableInstanceCmd implements Command<Void>, Seriali
     try {
       if (variable.getProcessDefinitionId() != null) {
         definition = commandContext.getProcessEngineConfiguration().getDeploymentCache().findDeployedProcessDefinitionById(variable.getProcessDefinitionId());
-      } else if (variable.getCaseDefinitionId() != null) {
-        definition = commandContext.getProcessEngineConfiguration().getDeploymentCache().findDeployedCaseDefinitionById(variable.getCaseDefinitionId());
       }
     } catch (NotFoundException e) {
       // definition has been deleted already

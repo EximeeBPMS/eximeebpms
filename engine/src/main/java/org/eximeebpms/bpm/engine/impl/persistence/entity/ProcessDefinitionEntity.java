@@ -102,16 +102,6 @@ public class ProcessDefinitionEntity extends ProcessDefinitionImpl implements Pr
   }
 
   @Override
-  public ExecutionEntity createProcessInstance(String businessKey, String caseInstanceId) {
-    return (ExecutionEntity) super.createProcessInstance(businessKey, caseInstanceId);
-  }
-
-  @Override
-  public ExecutionEntity createProcessInstance(String businessKey, ActivityImpl initial) {
-    return (ExecutionEntity) super.createProcessInstance(businessKey, initial);
-  }
-
-  @Override
   protected PvmExecutionImpl newProcessInstance() {
     ExecutionEntity newExecution = ExecutionEntity.createNewExecution();
 
@@ -123,7 +113,7 @@ public class ProcessDefinitionEntity extends ProcessDefinitionImpl implements Pr
   }
 
   @Override
-  public ExecutionEntity createProcessInstance(String businessKey, String caseInstanceId, ActivityImpl initial) {
+  public ExecutionEntity createProcessInstance(String businessKey, ActivityImpl initial) {
     ensureNotSuspended();
 
     ExecutionEntity processInstance = (ExecutionEntity) createProcessInstanceForInitial(initial);
@@ -141,11 +131,6 @@ public class ProcessDefinitionEntity extends ProcessDefinitionImpl implements Pr
     // initialize business key
     if (businessKey != null) {
       processInstance.setBusinessKey(businessKey);
-    }
-
-    // initialize case instance id
-    if (caseInstanceId != null) {
-      processInstance.setCaseInstanceId(caseInstanceId);
     }
 
     if(tenantId != null) {

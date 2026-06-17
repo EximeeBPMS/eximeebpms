@@ -316,8 +316,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
           .body("[0].processDefinitionId", equalTo(mockInstanceBuilder.getProcessDefinitionId()))
           .body("[0].processInstanceId", equalTo(mockInstanceBuilder.getProcessInstanceId()))
           .body("[0].executionId", equalTo(mockInstanceBuilder.getExecutionId()))
-          .body("[0].caseInstanceId", equalTo(mockInstanceBuilder.getCaseInstanceId()))
-          .body("[0].caseExecutionId", equalTo(mockInstanceBuilder.getCaseExecutionId()))
           .body("[0].taskId", equalTo(mockInstanceBuilder.getTaskId()))
           .body("[0].batchId", equalTo(mockInstanceBuilder.getBatchId()))
           .body("[0].activityInstanceId", equalTo(mockInstanceBuilder.getActivityInstanceId()))
@@ -359,8 +357,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
           .body("[0].value", equalTo(mockInstanceBuilder.getTypedValue().getValue()))
           .body("[0].processInstanceId", equalTo(mockInstanceBuilder.getProcessInstanceId()))
           .body("[0].executionId", equalTo(mockInstanceBuilder.getExecutionId()))
-          .body("[0].caseInstanceId", equalTo(mockInstanceBuilder.getCaseInstanceId()))
-          .body("[0].caseExecutionId", equalTo(mockInstanceBuilder.getCaseExecutionId()))
           .body("[0].taskId", equalTo(mockInstanceBuilder.getTaskId()))
           .body("[0].batchId", equalTo(mockInstanceBuilder.getBatchId()))
           .body("[0].activityInstanceId", equalTo(mockInstanceBuilder.getActivityInstanceId()))
@@ -394,8 +390,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     queryParameters.put("variableNameLike", "aVariableNameLike");
     queryParameters.put("executionIdIn", "anExecutionId");
     queryParameters.put("processInstanceIdIn", "aProcessInstanceId");
-    queryParameters.put("caseExecutionIdIn", "aCaseExecutionId");
-    queryParameters.put("caseInstanceIdIn", "aCaseInstanceId");
     queryParameters.put("taskIdIn", "aTaskId");
     queryParameters.put("batchIdIn", "aBatchId");
     queryParameters.put("variableScopeIdIn", "aVariableScopeId");
@@ -410,8 +404,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     verify(mockedQuery).variableNameLike(queryParameters.get("variableNameLike"));
     verify(mockedQuery).processInstanceIdIn(queryParameters.get("processInstanceIdIn"));
     verify(mockedQuery).executionIdIn(queryParameters.get("executionIdIn"));
-    verify(mockedQuery).caseInstanceIdIn(queryParameters.get("caseInstanceIdIn"));
-    verify(mockedQuery).caseExecutionIdIn(queryParameters.get("caseExecutionIdIn"));
     verify(mockedQuery).taskIdIn(queryParameters.get("taskIdIn"));
     verify(mockedQuery).batchIdIn(queryParameters.get("batchIdIn"));
     verify(mockedQuery).variableScopeIdIn(queryParameters.get("variableScopeIdIn"));
@@ -436,8 +428,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     String aBatchId = "aBatchId";
     String aVariableScopeId = "aVariableScopeId";
     String anActivityInstanceId = "anActivityInstanceId";
-    String aCaseInstanceId = "aCaseInstanceId";
-    String aCaseExecutionId = "aCaseExecutionId";
     String aTenantId = "aTenantId";
 
     Map<String, Object> queryParameters = new HashMap<String, Object>();
@@ -452,14 +442,6 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     List<String> processInstanceIdIn = new ArrayList<String>();
     processInstanceIdIn.add(aProcessInstanceId);
     queryParameters.put("processInstanceIdIn", processInstanceIdIn);
-
-    List<String> caseExecutionIdIn = new ArrayList<String>();
-    caseExecutionIdIn.add(aCaseExecutionId);
-    queryParameters.put("caseExecutionIdIn", caseExecutionIdIn);
-
-    List<String> caseInstanceIdIn = new ArrayList<String>();
-    caseInstanceIdIn.add(aCaseInstanceId);
-    queryParameters.put("caseInstanceIdIn", caseInstanceIdIn);
 
     List<String> taskIdIn = new ArrayList<String>();
     taskIdIn.add(aTaskId);
@@ -916,14 +898,14 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "eq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableValues", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -932,7 +914,7 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(VARIABLE_INSTANCE_QUERY_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueEquals("varName", "varValue");
     verify(mockedQuery).disableBinaryFetching();
@@ -948,14 +930,14 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "neq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableValues", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -964,7 +946,7 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(VARIABLE_INSTANCE_QUERY_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueNotEquals("varName", "varValue");
     verify(mockedQuery).disableBinaryFetching();
@@ -980,14 +962,14 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "like");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableValues", variables);
     json.put("variableValuesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -996,7 +978,7 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(VARIABLE_INSTANCE_QUERY_URL);
-    
+
     verify(mockedQuery).matchVariableValuesIgnoreCase();
     verify(mockedQuery).variableValueLike("varName", "varValue");
     verify(mockedQuery).disableBinaryFetching();
@@ -1013,14 +995,14 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "eq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableValues", variables);
     json.put("variableNamesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1029,7 +1011,7 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(VARIABLE_INSTANCE_QUERY_URL);
-    
+
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).variableValueEquals("varName", "varValue");
     verify(mockedQuery).disableBinaryFetching();
@@ -1045,14 +1027,14 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     variableJson.put("name", "varName");
     variableJson.put("value", "varValue");
     variableJson.put("operator", "neq");
-    
+
     List<Map<String, Object>> variables = new ArrayList<Map<String, Object>>();
     variables.add(variableJson);
-    
+
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("variableValues", variables);
     json.put("variableNamesIgnoreCase", true);
-    
+
     given()
     .contentType(POST_JSON_CONTENT_TYPE)
     .body(json)
@@ -1061,7 +1043,7 @@ public class VariableInstanceRestServiceQueryTest extends AbstractRestServiceTes
     .statusCode(Status.OK.getStatusCode())
     .when()
     .post(VARIABLE_INSTANCE_QUERY_URL);
-    
+
     verify(mockedQuery).matchVariableNamesIgnoreCase();
     verify(mockedQuery).variableValueNotEquals("varName", "varValue");
     verify(mockedQuery).disableBinaryFetching();

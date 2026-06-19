@@ -5,7 +5,7 @@
   targetNamespace="Examples">
 
   <error id="myError" errorCode="MyError" />
-  <error id="myException" errorCode="integrationtest.functional.error.MyBusinessException" />
+  <error id="myException" errorCode="org.eximeebpms.bpm.integrationtest.functional.error.MyBusinessException" />
 
   <process id="testProcessSequentialMI" isExecutable="true" camunda:historyTimeToLive="5">
 
@@ -13,7 +13,7 @@
 
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:class="integrationtest.functional.error.ThrowErrorDelegate">
+    <serviceTask id="serviceTask" camunda:class="org.eximeebpms.bpm.integrationtest.functional.error.ThrowErrorDelegate">
       <multiInstanceLoopCharacteristics isSequential="true">
         <loopCardinality>5</loopCardinality>
       </multiInstanceLoopCharacteristics>

@@ -548,6 +548,320 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <!--
+        Runs the full integration-test matrix locally in a single Maven invocation.
+        Usage: ./mvnw -Pit-all verify
+
+        Prerequisites for postgresql combinations:
+          - PostgreSQL running on localhost:5432, database "process-engine", user/password "eximeebpms"
+          - Or override with Maven properties: -Dit.database.url=..., -Dit.database.username=..., -Dit.database.password=...
+
+        The build step is executed once per container (tomcat, wildfly) and reused across
+        all database variants and test suites to avoid redundant rebuilds.
+      -->
+      <id>it-all</id>
+      <properties>
+        <it.database.url>jdbc:postgresql://localhost:5432/process-engine</it.database.url>
+        <it.database.username>eximeebpms</it.database.username>
+        <it.database.password>eximeebpms</it.database.password>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <!-- BUILD: tomcat distribution (shared by all tomcat test combinations) -->
+              <execution>
+                <id>it-build-tomcat</id>
+                <phase>pre-integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-DskipTests</argument>
+                    <argument>-Dcargo.maven.skip=true</argument>
+                    <argument>-Pdistro-ce,distro,distro-webjar,h2-in-memory,tomcat,distro-tomcat</argument>
+                    <argument>clean</argument>
+                    <argument>install</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- BUILD: wildfly distribution (shared by all wildfly test combinations) -->
+              <execution>
+                <id>it-build-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-DskipTests</argument>
+                    <argument>-Dcargo.maven.skip=true</argument>
+                    <argument>-Pdistro-ce,distro,distro-webjar,h2-in-memory,wildfly,distro-wildfly</argument>
+                    <argument>clean</argument>
+                    <argument>install</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: engine + tomcat + h2 -->
+              <execution>
+                <id>it-engine-tomcat-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,tomcat,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: engine + tomcat + postgresql -->
+              <execution>
+                <id>it-engine-tomcat-postgresql</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,tomcat,postgresql</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.database.url}</argument>
+                    <argument>-Ddatabase.username=${it.database.username}</argument>
+                    <argument>-Ddatabase.password=${it.database.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: engine + wildfly + h2 -->
+              <execution>
+                <id>it-engine-wildfly-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,wildfly,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: engine + wildfly + postgresql -->
+              <execution>
+                <id>it-engine-wildfly-postgresql</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,wildfly,postgresql</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.database.url}</argument>
+                    <argument>-Ddatabase.username=${it.database.username}</argument>
+                    <argument>-Ddatabase.password=${it.database.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: webapps + tomcat + h2 -->
+              <execution>
+                <id>it-webapps-tomcat-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,webapps-integration,tomcat,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: webapps + tomcat + postgresql -->
+              <execution>
+                <id>it-webapps-tomcat-postgresql</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,webapps-integration,tomcat,postgresql</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.database.url}</argument>
+                    <argument>-Ddatabase.username=${it.database.username}</argument>
+                    <argument>-Ddatabase.password=${it.database.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: webapps + wildfly + h2 -->
+              <execution>
+                <id>it-webapps-wildfly-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,webapps-integration,wildfly,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: webapps + wildfly + postgresql -->
+              <execution>
+                <id>it-webapps-wildfly-postgresql</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,webapps-integration,wildfly,postgresql</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.database.url}</argument>
+                    <argument>-Ddatabase.username=${it.database.username}</argument>
+                    <argument>-Ddatabase.password=${it.database.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: DB instance migration (h2) -->
+              <execution>
+                <id>it-instance-migration-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pinstance-migration,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: DB rolling update (h2) -->
+              <execution>
+                <id>it-rolling-update-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Prolling-update,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: old engine backward compatibility (h2) -->
+              <execution>
+                <id>it-old-engine-h2</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pold-engine,h2</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: large data (h2-in-memory by default) -->
+              <execution>
+                <id>it-large-data</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Plarge-data-tests</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa/large-data-tests</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: performance — benchmark (h2-in-memory by default) -->
+              <execution>
+                <id>it-perf-benchmark</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pbenchmark</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa/performance-tests-engine</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: performance — SQL statement log (h2-in-memory by default) -->
+              <execution>
+                <id>it-perf-sql-statementlog</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Psql-statementlog</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa/performance-tests-engine</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <!-- TEST: performance — activity count (h2-in-memory by default) -->
+              <execution>
+                <id>it-perf-activity-count</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pactivity-count</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa/performance-tests-engine</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <distributionManagement>

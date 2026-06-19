@@ -108,30 +108,20 @@ public class InvoiceDemoDataGenerator {
       engine.getIdentityService().createMembership("mary", "accounting");
       engine.getIdentityService().createMembership("peter", "management");
 
-      // authorize groups for tasklist:
+      // authorize groups for tasklist, cockpit and admin:
 
       AuthorizationService authorizationService = engine.getAuthorizationService();
 
-      Authorization salesTasklistAuth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
-      salesTasklistAuth.setGroupId("sales");
-      salesTasklistAuth.addPermission(ACCESS);
-      salesTasklistAuth.setResourceId("tasklist");
-      salesTasklistAuth.setResource(APPLICATION);
-      authorizationService.saveAuthorization(salesTasklistAuth);
-
-      Authorization accountingTasklistAuth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
-      accountingTasklistAuth.setGroupId("accounting");
-      accountingTasklistAuth.addPermission(ACCESS);
-      accountingTasklistAuth.setResourceId("tasklist");
-      accountingTasklistAuth.setResource(APPLICATION);
-      authorizationService.saveAuthorization(accountingTasklistAuth);
-
-      Authorization managementTasklistAuth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
-      managementTasklistAuth.setGroupId("management");
-      managementTasklistAuth.addPermission(ACCESS);
-      managementTasklistAuth.setResourceId("tasklist");
-      managementTasklistAuth.setResource(APPLICATION);
-      authorizationService.saveAuthorization(managementTasklistAuth);
+      for (String groupId : new String[]{"sales", "accounting", "management"}) {
+        for (String appName : new String[]{"tasklist", "cockpit", "admin"}) {
+          Authorization auth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
+          auth.setGroupId(groupId);
+          auth.addPermission(ACCESS);
+          auth.setResourceId(appName);
+          auth.setResource(APPLICATION);
+          authorizationService.saveAuthorization(auth);
+        }
+      }
 
       Authorization salesDemoAuth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
       salesDemoAuth.setGroupId("sales");

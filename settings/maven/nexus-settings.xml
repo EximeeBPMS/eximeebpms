@@ -2,16 +2,6 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <mirrors>
-    <mirror>
-      <id>eximeebpms-nexus</id>
-      <mirrorOf>eximeebpms-nexus</mirrorOf>
-      <name>ExmeeBPMS Nexus</name>
-<!--      <url>https://artifacts.eximeebpms.com/artifactory/public/</url>-->
-      <url>https://maven.pkg.github.com/EximeeBPMS/eximeebpms</url>
-    </mirror>
-  </mirrors>
-
   <profiles>
     <profile>
       <id>db2</id>

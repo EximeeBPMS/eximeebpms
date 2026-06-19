@@ -82,9 +82,8 @@ module.exports = (_env, argv = {}) => {
         })),
         {
           context: ['/eximeebpms/api'],
-          target: 'http://localhost:8081/',
-          logLevel: 'debug',
-          pathRewrite: path => path.replace('/eximeebpms', '')
+          target: 'http://localhost:8080',
+          logLevel: 'debug'
         },
         {
           context: ['/eximeebpms'],

@@ -60,7 +60,7 @@ public class TimerRecalculationTest extends AbstractFoxPlatformIntegrationTest {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("TimerRecalculationProcess", variables);
 
     ProcessInstanceQuery instancesQuery = runtimeService.createProcessInstanceQuery().processInstanceId(instance.getId());
-    JobQuery jobQuery = managementService.createJobQuery();
+    JobQuery jobQuery = managementService.createJobQuery().processInstanceId(instance.getId());
     assertEquals(1, instancesQuery.count());
     assertEquals(1, jobQuery.count());
 

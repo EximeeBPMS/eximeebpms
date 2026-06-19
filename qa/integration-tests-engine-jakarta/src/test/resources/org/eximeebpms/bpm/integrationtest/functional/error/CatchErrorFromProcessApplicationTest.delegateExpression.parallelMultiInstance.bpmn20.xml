@@ -5,7 +5,7 @@
   targetNamespace="Examples">
 
   <error id="myError" errorCode="MyError" />
-  <error id="myException" errorCode="integrationtest.functional.error.MyBusinessException" />
+  <error id="myException" errorCode="org.eximeebpms.bpm.integrationtest.functional.error.MyBusinessException" />
 
   <process id="testProcessDelegateExpressionParallelMI" isExecutable="true" camunda:historyTimeToLive="5">
 

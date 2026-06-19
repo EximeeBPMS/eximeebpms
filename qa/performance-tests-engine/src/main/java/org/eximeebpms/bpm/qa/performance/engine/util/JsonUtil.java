@@ -17,7 +17,10 @@
 package org.eximeebpms.bpm.qa.performance.engine.util;
 
 import java.io.File;
+import java.sql.Connection;
+import javax.sql.DataSource;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
@@ -75,7 +78,15 @@ public class JsonUtil {
       mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
       mapper.setConfig(config);
 
+      // Prevent Jackson from calling DataSource.getConnection() / Connection methods
+      // via reflection during SQL parameter serialization — those calls borrow pool
+      // connections that are never closed, exhausting the pool.
+      mapper.addMixIn(DataSource.class, IgnoreJdbcMixin.class);
+      mapper.addMixIn(Connection.class, IgnoreJdbcMixin.class);
     }
     return mapper;
   }
+
+  @JsonIgnoreType
+  private static abstract class IgnoreJdbcMixin {}
 }

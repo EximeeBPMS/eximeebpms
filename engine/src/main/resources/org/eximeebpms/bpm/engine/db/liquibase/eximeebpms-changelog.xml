@@ -35,11 +35,6 @@
              relativeToChangelogFile="true"
              splitStatements="true"
              stripComments="true"/>
-    <sqlFile path="baseline/liquibase.${db.name}.create.business.event.sql"
-             encoding="UTF-8"
-             relativeToChangelogFile="true"
-             splitStatements="true"
-             stripComments="true"/>
     <sqlFile path="baseline/liquibase.${db.name}.create.history.sql"
              encoding="UTF-8"
              relativeToChangelogFile="true"

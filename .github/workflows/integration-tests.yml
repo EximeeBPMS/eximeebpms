@@ -26,6 +26,8 @@ on:
           - '["engine"]'
           - '["webapps"]'
           - '["engine", "webapps"]'
+          - '["instance-migration", "rolling-update", "old-engine"]'
+          - '["engine", "webapps", "instance-migration", "rolling-update", "old-engine"]'
       container:
         description: 'Container to use for integration tests'
         type: choice
@@ -67,9 +69,23 @@ jobs:
       max-parallel: 1
       matrix:
         java: ${{ fromJson(github.event.inputs.java_version || '["21"]') }}
-        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}
+        testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps", "instance-migration", "rolling-update", "old-engine"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
+        exclude:
+          # Migration suites don't use a server distro and only support h2 (embedded)
+          - testsuite: instance-migration
+            distro: wildfly
+          - testsuite: instance-migration
+            database: postgresql
+          - testsuite: rolling-update
+            distro: wildfly
+          - testsuite: rolling-update
+            database: postgresql
+          - testsuite: old-engine
+            distro: wildfly
+          - testsuite: old-engine
+            database: postgresql
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7

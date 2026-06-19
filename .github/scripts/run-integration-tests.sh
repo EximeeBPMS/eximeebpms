@@ -5,7 +5,7 @@ EXECUTE_TEST=true
 TEST_SUITE="engine"
 DATABASE="h2"
 DISTRO="tomcat"
-VALID_TEST_SUITES=("engine" "webapps")
+VALID_TEST_SUITES=("engine" "webapps" "instance-migration" "rolling-update" "old-engine")
 VALID_DISTROS=("tomcat" "wildfly")
 VALID_DATABASES=("h2" "postgresql")
 
@@ -48,11 +48,27 @@ parse_args() {
   done
 
   check_valid_values "testsuite" "$TEST_SUITE" "${VALID_TEST_SUITES[@]}"
-  check_valid_values "distro" "$DISTRO" "${VALID_DISTROS[@]}"
-  check_valid_values "db" "$DATABASE" "${VALID_DATABASES[@]}"
+  # --distro and --db are ignored for migration suites but still validated when provided
+  if [[ "$TEST_SUITE" != "instance-migration" && "$TEST_SUITE" != "rolling-update" && "$TEST_SUITE" != "old-engine" ]]; then
+    check_valid_values "distro" "$DISTRO" "${VALID_DISTROS[@]}"
+    check_valid_values "db" "$DATABASE" "${VALID_DATABASES[@]}"
+  fi
 }
 
 run_build () {
+  # Migration suites don't deploy to a server; only engine artifacts need to be installed
+  if [[ "$TEST_SUITE" == "instance-migration" || "$TEST_SUITE" == "rolling-update" || "$TEST_SUITE" == "old-engine" ]]; then
+    echo "ℹ️ Installing engine artifacts for $TEST_SUITE tests"
+    echo "./mvnw -DskipTests -Pcheck-engine clean install"
+    ./mvnw -DskipTests -Pcheck-engine clean install
+    if [[ $? -ne 0 ]]; then
+      echo "❌ Error: Build failed"
+      popd > /dev/null
+      exit 1
+    fi
+    return
+  fi
+
   PROFILES=(distro distro-webjar h2-in-memory)
 
   if [[ "$DISTRO" == "eximeebpms" ]]; then
@@ -77,11 +93,26 @@ run_build () {
 
 ##########################################################################
 run_tests () {
+  # Migration suites run directly against h2; no server distro needed
+  case "$TEST_SUITE" in
+    instance-migration|rolling-update|old-engine)
+      echo "ℹ️ Running $TEST_SUITE tests with h2"
+      echo "./mvnw -P${TEST_SUITE},h2 clean verify -f qa"
+      ./mvnw -P${TEST_SUITE},h2 clean verify -f qa
+      if [[ $? -ne 0 ]]; then
+        echo "❌ Error: Tests failed"
+        popd > /dev/null
+        exit 1
+      fi
+      return
+      ;;
+  esac
+
   PROFILES=()
 
   case "$TEST_SUITE" in
     engine)
-      PROFILES+=(engine-integration)
+      PROFILES+=(engine-integration-jakarta)
       ;;
     webapps)
       PROFILES+=(webapps-integration)

@@ -8,6 +8,6 @@
     <bean id="processApplication" class="org.eximeebpms.bpm.engine.spring.application.SpringProcessApplication" />
 
     <!-- Spring bean to be invoked through the ApplicationContextElResolver -->
-    <bean id="exampleBean" class="integrationtest.functional.spring.beans.ExampleBean" />
+    <bean id="exampleBean" class="org.eximeebpms.bpm.integrationtest.functional.spring.beans.ExampleBean" />
 
 </beans>

@@ -62,6 +62,9 @@ public class PerfTestProcessEngine {
 
     processEngineConfiguration.setHistory(properties.getProperty("historyLevel"));
 
+    processEngineConfiguration.setEnforceHistoryTimeToLive(false);
+    processEngineConfiguration.setJobExecutorActivate(true);
+
     processEngineConfiguration.setJdbcBatchProcessing(Boolean.valueOf(properties.getProperty("jdbcBatchProcessing")));
 
     // load plugins
@@ -115,6 +118,9 @@ public class PerfTestProcessEngine {
 
     p.setMaxActive(100);
     p.setInitialSize(10);
+    p.setRemoveAbandoned(true);
+    p.setRemoveAbandonedTimeout(60);
+    p.setLogAbandoned(true);
 
     DataSource datasource = new DataSource();
     datasource.setPoolProperties(p);

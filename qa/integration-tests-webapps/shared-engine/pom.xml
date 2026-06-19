@@ -239,6 +239,8 @@
                   <groupId>org.eximeebpms.bpm.example</groupId>
                   <artifactId>eximeebpms-example-invoice-jakarta</artifactId>
                   <type>war</type>
+                  <pingURL>http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/user/demo/profile</pingURL>
+                  <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                   <properties>
                     <context>invoice</context>
                   </properties>

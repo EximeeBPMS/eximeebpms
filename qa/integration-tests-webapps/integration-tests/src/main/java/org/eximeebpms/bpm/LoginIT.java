@@ -33,6 +33,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginIT extends AbstractWebappUiIntegrationTest {
 
+  // Allows overriding via -Dselenium.timeout.seconds=N for slow CI runners
+  private static final long WAIT_SECONDS =
+      Long.getLong("selenium.timeout.seconds", 60);
+
   protected WebDriverWait wait;
 
   public void login(String appName) {
@@ -40,7 +44,7 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
 
     driver.get(appUrl + "app/" + appName + "/default/");
 
-    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_SECONDS));
 
     WebElement userNameInput = wait.until(visibilityOfElementLocated(By.cssSelector("input[type=\"text\"]")));
     sendKeys(userNameInput, "demo");

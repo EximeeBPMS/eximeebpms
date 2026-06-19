@@ -536,6 +536,7 @@
             <configuration>
               <webApp>
                 <contextPath>/eximeebpms</contextPath>
+                <descriptor>${jakarta.webapp}/WEB-INF/web.xml</descriptor>
                 <defaultsDescriptor>${jakarta.runtime}/develop/jetty/webdefault.xml</defaultsDescriptor>
                 <resourceBases>
                   <resourceBase>${project.basedir}/target/webapp</resourceBase>

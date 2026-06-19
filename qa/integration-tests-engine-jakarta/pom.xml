@@ -400,6 +400,9 @@
       <build>
         <testResources>
           <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
+          <testResource>
             <directory>src/test/resources-tomcat</directory>
             <filtering>true</filtering>
           </testResource>
@@ -466,8 +469,10 @@
                 <!-- See Relevant issue: https://github.com/camunda/camunda-bpm-platform/issues/4434 -->
                 <exclude>**/CallActivityContextSwitchTest.java</exclude>
                 <exclude>**/CdiBeanCallActivityResolutionTest.java</exclude>
+                <exclude>**/CdiBeanCaseTaskResolutionTest.java</exclude>
 
                 <!-- TODO and weld-servlet-shaded is resolved with integration-tests-engine-jakarta -->
+                <exclude>**/GroovyPaClassImportTest.java</exclude>
 
               </excludes>
               <redirectTestOutputToFile>${redirect.test.output}</redirectTestOutputToFile>
@@ -503,6 +508,9 @@
       </dependencies>
       <build>
         <testResources>
+          <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
           <testResource>
             <directory>src/test/resources-wildfly</directory>
             <filtering>true</filtering>
@@ -555,6 +563,10 @@
                 <exclude>**/SpringServletPATimerStartEventExpressionTest.java</exclude>
                 <!-- https://github.com/camunda/camunda-bpm-platform/issues/5037-->
                 <exclude>**/FeelEngineTest.java</exclude>
+                <!-- Jython not included in WildFly distribution -->
+                <exclude>**/PythonPaClassImportTest.java</exclude>
+                <!-- Groovy classloader cannot resolve PA classes in WildFly -->
+                <exclude>**/GroovyPaClassImportTest.java</exclude>
               </excludes>
               <redirectTestOutputToFile>${redirect.test.output}</redirectTestOutputToFile>
             </configuration>

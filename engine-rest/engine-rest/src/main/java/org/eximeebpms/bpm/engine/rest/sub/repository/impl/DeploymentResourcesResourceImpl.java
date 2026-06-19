@@ -43,7 +43,6 @@ public class DeploymentResourcesResourceImpl implements DeploymentResourcesResou
 
   static {
     MEDIA_TYPE_MAPPING.put("bpmn", MediaType.APPLICATION_XML);
-    MEDIA_TYPE_MAPPING.put("cmmn", MediaType.APPLICATION_XML);
     MEDIA_TYPE_MAPPING.put("dmn", MediaType.APPLICATION_XML);
     MEDIA_TYPE_MAPPING.put("json", MediaType.APPLICATION_JSON);
     MEDIA_TYPE_MAPPING.put("xml", MediaType.APPLICATION_XML);

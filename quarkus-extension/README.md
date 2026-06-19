@@ -23,7 +23,6 @@ can look like the following:
 
 ```properties
 # process engine configuration
-quarkus.eximeebpms.generic-config.cmmn-enabled=false
 quarkus.eximeebpms.generic-config.dmn-enabled=false
 quarkus.eximeebpms.generic-config.history=none
 

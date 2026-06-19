@@ -18,9 +18,6 @@
   '"deleteReason"',
   '"taskDefinitionKey"',
   '"priority"',
-  '"caseDefinitionId"',
-  '"caseInstanceId"',
-  '"caseExecutionId"',
   '"tenantId"'
 ]>
 <#assign dateFormatDescription = "By [default](${docsUrl}/reference/rest/overview/date-format/),
@@ -33,7 +30,7 @@
 <#elseif requestMethod == "POST">
   <#assign listType = "">
 </#if>
-            
+
 <#assign params = {
   "taskId": {
     "type": "string",
@@ -80,26 +77,6 @@
   "processDefinitionName": {
     "type": "string",
     "desc": "Restrict to tasks that belong to a process definition with the given name."
-  },
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Filter by case instance id."
-  },
-  "caseExecutionId": {
-    "type": "string",
-    "desc": "Filter by the id of the case execution that executed the task."
-  },
-  "caseDefinitionId": {
-    "type": "string",
-    "desc": "Filter by case definition id."
-  },
-  "caseDefinitionKey": {
-    "type": "string",
-    "desc": "Restrict to tasks that belong to a case definition with the given key."
-  },
-  "caseDefinitionName": {
-    "type": "string",
-    "desc": "Restrict to tasks that belong to a case definition with the given name."
   },
   "activityInstanceIdIn": {
     "type": "array",

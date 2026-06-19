@@ -1,6 +1,6 @@
 <#macro dto_macro docsUrl="">
 <@lib.dto >
-    
+
   <@lib.property
       name = "id"
       type = "string"
@@ -103,27 +103,6 @@
       name = "executionId"
       type = "string"
       desc = "If not `null`, the operation is restricted to entities in relation to this
-              execution."
-  />
-
-  <@lib.property
-      name = "caseDefinitionId"
-      type = "string"
-      desc = "If not `null`, the operation is restricted to entities in relation to this case
-              definition."
-  />
-
-  <@lib.property
-      name = "caseInstanceId"
-      type = "string"
-      desc = "If not `null`, the operation is restricted to entities in relation to this case
-              instance."
-  />
-
-  <@lib.property
-      name = "caseExecutionId"
-      type = "string"
-      desc = "If not `null`, the operation is restricted to entities in relation to this case
               execution."
   />
 

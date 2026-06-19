@@ -5,7 +5,7 @@
       id = "deliverMessage"
       tag = "Message"
       summary = "Correlate"
-      desc = "Correlates a message to the process engine to either trigger a message start event or an intermediate message 
+      desc = "Correlates a message to the process engine to either trigger a message start event or an intermediate message
               catching event. Internally this maps to the engine's message correlation builder methods
               `MessageCorrelationBuilder#correlateWithResult()` and `MessageCorrelationBuilder#correlateAllWithResult()`.
               For more information about the correlation behavior, see the [Message Events](${docsUrl}/bpmn20/events/message-events/)
@@ -24,7 +24,7 @@
                           "aVariable" : {"value" : "aValue", "type": "String"}
                         },
                         "processVariables" : {
-                          "aVariable" : {"value" : "aNewValue", "type": "String", 
+                          "aVariable" : {"value" : "aNewValue", "type": "String",
                                           "valueInfo" : { "transient" : true }
                                         },
                           "anotherVariable" : {"value" : true, "type": "Boolean"}
@@ -91,7 +91,6 @@
                              "definitionId": "aProcDefId",
                              "definitionKey": "aProcDefKey",
                              "businessKey": "aKey",
-                             "caseInstanceId": "aCaseInstId",
                              "ended": false,
                              "suspended": false,
                              "tenantId": "aTenantId"

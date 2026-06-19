@@ -79,20 +79,6 @@ public enum HistoryEventTypes implements HistoryEventType {
   /** fired when an incident is updated. */
   INCIDENT_UPDATE("incident", "update"),
 
-  /** fired when a case instance is created. */
-  CASE_INSTANCE_CREATE("case-instance", "create"),
-  /** fired when a case instance is updated. */
-  CASE_INSTANCE_UPDATE("case-instance", "update"),
-  /** fired when a case instance is closed. */
-  CASE_INSTANCE_CLOSE("case-instance", "close"),
-
-  /** fired when a case activity instance is created. */
-  CASE_ACTIVITY_INSTANCE_CREATE("case-activity-instance", "create"),
-  /** fired when a case activity instance is updated. */
-  CASE_ACTIVITY_INSTANCE_UPDATE("case-activity-instance", "update"),
-  /** fired when a case instance is ended. */
-  CASE_ACTIVITY_INSTANCE_END("case-activity_instance", "end"),
-
   /**
    * fired when a job is created.
    *

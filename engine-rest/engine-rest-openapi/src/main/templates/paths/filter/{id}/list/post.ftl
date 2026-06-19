@@ -6,7 +6,7 @@
       tag = "Filter"
       summary = "Execute Filter List (POST)"
       desc = "Executes the saved query of the filter by id and returns the result list. This
-              method is slightly more powerful then the 
+              method is slightly more powerful then the
               [Get Execute FilterList](${docsUrl}/reference/rest/filter/get-execute-list/) method
               because it allows to extend the saved query of the filter."
   />
@@ -53,9 +53,6 @@
                        "value": [
                          {
                            "assignee": "jonny1",
-                           "caseDefinitionId": null,
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "created": "2014-09-15T15:45:48.000+0200",
                            "delegationState": null,
                            "description": null,

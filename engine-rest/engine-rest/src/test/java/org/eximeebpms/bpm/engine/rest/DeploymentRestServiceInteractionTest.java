@@ -557,62 +557,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
   }
 
   @Test
-  public void testGetDeploymentCmmnResourceData() {
-    Resource resource = MockProvider.createMockDeploymentCmmnResource();
-
-    List<Resource> resources = new ArrayList<>();
-    resources.add(resource);
-
-    InputStream input = new ByteArrayInputStream(createMockDeploymentResourceByteData());
-
-    when(mockRepositoryService.getDeploymentResources(eq(EXAMPLE_DEPLOYMENT_ID))).thenReturn(resources);
-    when(mockRepositoryService.getResourceAsStreamById(eq(EXAMPLE_DEPLOYMENT_ID), eq(EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_ID))).thenReturn(input);
-
-    Response response = given()
-        .pathParam("id", EXAMPLE_DEPLOYMENT_ID)
-        .pathParam("resourceId", EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_ID)
-      .then()
-        .expect()
-          .statusCode(Status.OK.getStatusCode())
-          .contentType(ContentType.XML)
-          .header("Content-Disposition", "attachment; " +
-                  "filename=\"" + MockProvider.EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_NAME + "\"; " +
-                  "filename*=UTF-8''" + MockProvider.EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_NAME)
-      .when().get(SINGLE_RESOURCE_DATA_URL);
-
-    String responseContent = response.asString();
-    assertNotNull(responseContent);
-  }
-
-  @Test
-  public void testGetDeploymentCmmnXmlResourceData() {
-    Resource resource = MockProvider.createMockDeploymentCmmnXmlResource();
-
-    List<Resource> resources = new ArrayList<>();
-    resources.add(resource);
-
-    InputStream input = new ByteArrayInputStream(createMockDeploymentResourceByteData());
-
-    when(mockRepositoryService.getDeploymentResources(eq(EXAMPLE_DEPLOYMENT_ID))).thenReturn(resources);
-    when(mockRepositoryService.getResourceAsStreamById(eq(EXAMPLE_DEPLOYMENT_ID), eq(EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_ID))).thenReturn(input);
-
-    Response response = given()
-        .pathParam("id", EXAMPLE_DEPLOYMENT_ID)
-        .pathParam("resourceId", EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_ID)
-      .then()
-        .expect()
-          .statusCode(Status.OK.getStatusCode())
-          .contentType(ContentType.XML)
-          .header("Content-Disposition", "attachment; " +
-                  "filename=\"" + MockProvider.EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_NAME + "\"; " +
-                  "filename*=UTF-8''" + MockProvider.EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_NAME)
-      .when().get(SINGLE_RESOURCE_DATA_URL);
-
-    String responseContent = response.asString();
-    assertNotNull(responseContent);
-  }
-
-  @Test
   public void testGetDeploymentDmnResourceData() {
     Resource resource = MockProvider.createMockDeploymentDmnResource();
 
@@ -1129,36 +1073,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
 
     // then
     verifyCreatedBpmnDeployment(mockDeployment, response);
-
-    verify(mockDeploymentBuilder).name(MockProvider.EXAMPLE_DEPLOYMENT_ID);
-    verify(mockDeploymentBuilder).enableDuplicateFiltering(false);
-
-  }
-
-  @Test
-  public void testCreateCompleteCmmnDeployment() throws Exception {
-    // given
-    DeploymentWithDefinitions mockDeployment = MockProvider.createMockDeploymentWithDefinitions();
-    when(mockDeployment.getDeployedDecisionDefinitions()).thenReturn(null);
-    when(mockDeployment.getDeployedProcessDefinitions()).thenReturn(null);
-    when(mockDeployment.getDeployedDecisionRequirementsDefinitions()).thenReturn(null);
-    when(mockDeploymentBuilder.deployWithResult()).thenReturn(mockDeployment);
-
-    // when
-    resourceNames.addAll(Arrays.asList("data", "more-data"));
-
-    Response response = given()
-        .multiPart("data", "unspecified", createMockDeploymentResourceByteData())
-        .multiPart("more-data", "unspecified", createMockDeploymentResourceBpmnData())
-        .multiPart("deployment-name", MockProvider.EXAMPLE_DEPLOYMENT_ID)
-        .multiPart("enable-duplicate-filtering", "true")
-      .expect()
-        .statusCode(Status.OK.getStatusCode())
-      .when()
-        .post(CREATE_DEPLOYMENT_URL);
-
-    // then
-    verifyCreatedCmmnDeployment(mockDeployment, response);
 
     verify(mockDeploymentBuilder).name(MockProvider.EXAMPLE_DEPLOYMENT_ID);
     verify(mockDeploymentBuilder).enableDuplicateFiltering(false);
@@ -1915,12 +1829,6 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     verifyDeploymentLink(mockDeployment, content);
   }
 
-  private void verifyCreatedCmmnDeployment(Deployment mockDeployment, Response response) {
-    String content = response.asString();
-    verifyCmmnDeploymentValues(mockDeployment, content);
-    verifyDeploymentLink(mockDeployment, content);
-  }
-
   private void verifyCreatedDmnDeployment(Deployment mockDeployment, Response response) {
     String content = response.asString();
     verifyDmnDeploymentValues(mockDeployment, content);
@@ -1975,16 +1883,7 @@ public class DeploymentRestServiceInteractionTest extends AbstractRestServiceTes
     assertNull(path.get(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS));
   }
 
-  private void verifyCmmnDeploymentValues(Deployment mockDeployment, String responseContent) {
-    JsonPath path = from(responseContent);
-    verifyStandardDeploymentValues(mockDeployment, path);
-
-    assertNull(path.get(PROPERTY_DEPLOYED_PROCESS_DEFINITIONS));
-    assertNull(path.get(PROPERTY_DEPLOYED_DECISION_DEFINITIONS));
-    assertNull(path.get(PROPERTY_DEPLOYED_DECISION_REQUIREMENTS_DEFINITIONS));
-  }
-
-  private void verifyDmnDeploymentValues(Deployment mockDeployment, String responseContent) {
+    private void verifyDmnDeploymentValues(Deployment mockDeployment, String responseContent) {
     JsonPath path = from(responseContent);
     verifyStandardDeploymentValues(mockDeployment, path);
 

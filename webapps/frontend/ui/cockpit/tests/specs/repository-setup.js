@@ -120,18 +120,6 @@ module.exports = {
       {
         key: 'user-tasks'
       }
-    ]),
-
-    operation('case-definition', 'create', [
-      {
-        key: 'loanApplicationCase'
-      },
-      {
-        key: 'loanApplicationCase'
-      },
-      {
-        key: 'loanApplicationCase'
-      }
     ])
   ),
 

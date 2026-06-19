@@ -43,8 +43,6 @@
                                   "deleteReason":null,
                                   "rootProcessInstanceId": "f8259e5d-ab9d-11e8-8449-e4a7a094a9d6",
                                   "superProcessInstanceId":null,
-                                  "superCaseInstanceId":null,
-                                  "caseInstanceId":null,
                                   "tenantId":null,
                                   "state":"ACTIVE",
                                   "restartedProcessInstanceId":"2bef365d-3406-11ef-bd73-0a0027000003"

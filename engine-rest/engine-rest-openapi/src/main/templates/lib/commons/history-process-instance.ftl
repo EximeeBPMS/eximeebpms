@@ -228,21 +228,6 @@
     "desc": "Restrict query to one process instance that has a sub process instance with the given id."
   },
 
-  "superCaseInstanceId": {
-    "type": "string",
-    "desc": "Restrict query to all process instances that are sub process instances of the given case instance. Takes a case instance id."
-  },
-
-  "subCaseInstanceId": {
-    "type": "string",
-    "desc": "Restrict query to one process instance that has a sub case instance with the given id."
-  },
-
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Restrict query to all process instances that are sub process instances of the given case instance. Takes a case instance id."
-  },
-
   "tenantIdIn": {
     "type": "array",
     "itemType": "string",

@@ -43,7 +43,7 @@ EximeeBPMS provides a rich set of components centered around the BPM lifecycle.
 
 #### And there's more...
 
-- [bpmn.io](https://bpmn.io/) - Toolkits for BPMN, CMMN, and DMN in JavaScript (rendering, modeling)
+- [bpmn.io](https://bpmn.io/) - Toolkits for BPMN and DMN in JavaScript (rendering, modeling)
 - [Community Extensions](https://docs.eximeebpms.org/manual/latest/introduction/latest/extensions/) - Extensions on top of EximeeBPMS provided and maintained by our great open source community
 
 ## A Framework

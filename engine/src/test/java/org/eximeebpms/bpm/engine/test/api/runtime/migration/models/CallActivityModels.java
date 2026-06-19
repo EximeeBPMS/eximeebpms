@@ -49,16 +49,6 @@ public class CallActivityModels {
         .done();
   }
 
-  public static BpmnModelInstance oneCmmnCallActivityProcess(String caseCaseKey) {
-    return ProcessModels.newModel()
-        .startEvent()
-        .callActivity("callActivity")
-          .camundaCaseRef(caseCaseKey)
-        .userTask("userTask")
-        .endEvent()
-        .done();
-  }
-
   public static BpmnModelInstance oneBpmnCallActivityProcessAsExpression(int processNumber){
     return ProcessModels.newModel(processNumber)
         .startEvent()

@@ -40,8 +40,8 @@ public class DmnModelInstanceCache extends ModelInstanceCache<DmnModelInstance, 
   }
 
   @Override
-  protected DmnModelInstance readModelFromStream(InputStream cmmnResourceInputStream) {
-    return Dmn.readModelFromStream(cmmnResourceInputStream);
+  protected DmnModelInstance readModelFromStream(InputStream dmnResourceInputStream) {
+    return Dmn.readModelFromStream(dmnResourceInputStream);
   }
 
   @Override

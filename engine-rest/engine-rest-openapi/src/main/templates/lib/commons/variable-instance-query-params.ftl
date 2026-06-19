@@ -59,16 +59,6 @@
     "desc": "Only include variable instances which belong to one of the passed ${itemSeperator}
             execution ids."
   },
-  "caseInstanceIdIn": {
-    "type": "array",
-    "itemType": "string",
-    "desc": "Only include variable instances which belong to one of the passed ${itemSeperator} case instance ids."
-  },
-  "caseExecutionIdIn": {
-    "type": "array",
-    "itemType": "string",
-    "desc": "Only include variable instances which belong to one of the passed ${itemSeperator} case execution ids."
-  },
   "taskIdIn": {
     "type": "array",
     "itemType": "string",

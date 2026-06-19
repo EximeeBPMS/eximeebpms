@@ -64,7 +64,6 @@
                          "definitionId":"aProcessDefinitionId",
                          "definitionKey":"aProcessDefinitionKey",
                          "businessKey":"myBusinessKey",
-                         "caseInstanceId": null,
                          "tenantId":null,
                          "ended":false,
                          "suspended":false

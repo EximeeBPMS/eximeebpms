@@ -81,7 +81,6 @@ public class DeploymentTest {
                 "            \"versionTag\": null" +
                 "        }" +
                 "    }," +
-                "    \"deployedCaseDefinitions\": null," +
                 "    \"deployedDecisionDefinitions\": null," +
                 "    \"deployedDecisionRequirementsDefinitions\": null" +
                 "}"))

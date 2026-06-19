@@ -39,14 +39,6 @@
     "type": "string",
     "desc": "Filter by activity instance id."
   },
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Filter by case instance id."
-  },
-  "caseExecutionId": {
-    "type": "string",
-    "desc": "Filter by case execution id."
-  },
   "variableInstanceId": {
     "type": "string",
     "desc": "Filter by variable instance id."

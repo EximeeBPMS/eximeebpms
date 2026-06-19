@@ -9,7 +9,7 @@
 <#elseif requestMethod == "POST">
   <#assign listType = "">
 </#if>
-            
+
 <#assign params = {
   "deploymentId": {
     "type": "string",
@@ -30,18 +30,6 @@
   "executionId": {
     "type": "string",
     "desc": "Filter by execution id."
-  },
-  "caseDefinitionId": {
-    "type": "string",
-    "desc": "Filter by case definition id."
-  },
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Filter by case instance id."
-  },
-  "caseExecutionId": {
-    "type": "string",
-    "desc": "Filter by case execution id."
   },
   "taskId": {
     "type": "string",

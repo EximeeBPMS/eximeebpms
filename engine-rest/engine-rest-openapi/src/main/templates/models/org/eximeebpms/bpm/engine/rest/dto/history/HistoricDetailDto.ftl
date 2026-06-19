@@ -57,30 +57,6 @@
     />
 
     <@lib.property
-        name = "caseDefinitionKey"
-        type = "string"
-        desc = "The key of the case definition that this historic detail belongs to."
-    />
-
-    <@lib.property
-        name = "caseDefinitionId"
-        type = "string"
-        desc = "The id of the case definition that this historic detail belongs to."
-    />
-
-    <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "The id of the case instance the historic detail belongs to."
-    />
-
-    <@lib.property
-        name = "caseExecutionId"
-        type = "string"
-        desc = "The id of the case execution the historic detail belongs to."
-    />
-
-    <@lib.property
         name = "taskId"
         type = "string"
         desc = "The id of the task the historic detail belongs to."

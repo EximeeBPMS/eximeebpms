@@ -2187,7 +2187,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   }
 
   /**
-   * @return true if the query is not supposed to find CMMN or standalone tasks
+   * @return true if the query is not supposed to find standalone tasks
    */
   public boolean isQueryForProcessTasksOnly() {
     ProcessEngineConfigurationImpl engineConfiguration = Context.getProcessEngineConfiguration();

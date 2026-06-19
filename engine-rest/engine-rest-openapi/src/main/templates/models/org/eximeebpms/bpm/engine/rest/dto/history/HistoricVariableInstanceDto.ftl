@@ -1,13 +1,13 @@
 <#-- Generated From File: camunda-docs-manual/public/reference/rest/history/variable-instance/get-variable-instance-query/index.html -->
 <#macro dto_macro docsUrl="">
 <@lib.dto extends="VariableValueDto">
-    
+
     <@lib.property
         name = "id"
         type = "string"
         desc = "The id of the variable instance."
     />
-    
+
     <@lib.property
         name = "name"
         type = "string"
@@ -43,30 +43,6 @@
         name = "activityInstanceId"
         type = "string"
         desc = "The id of the activity instance in which the variable is valid."
-    />
-
-    <@lib.property
-        name = "caseDefinitionKey"
-        type = "string"
-        desc = "The key of the case definition the variable instance belongs to."
-    />
-
-    <@lib.property
-        name = "caseDefinitionId"
-        type = "string"
-        desc = "The id of the case definition the variable instance belongs to."
-    />
-
-    <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "The case instance id the variable instance belongs to."
-    />
-
-    <@lib.property
-        name = "caseExecutionId"
-        type = "string"
-        desc = "The case execution id the variable instance belongs to."
     />
 
     <@lib.property

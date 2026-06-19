@@ -7,7 +7,7 @@ Lightweight Execution Engine for DMN (Decision Model and Notation) written in Ja
   <a href="https://eximeebpms.org/">Home</a>
 </p>
 
-The Decision Engine can be used seamlessly in combination with BPMN and CMMN or standalone.
+The Decision Engine can be used seamlessly in combination with BPMN or standalone.
 
 ## Standalone Usage
 

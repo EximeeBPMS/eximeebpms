@@ -32,8 +32,6 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
 
-  protected static final String CMMN = "org/eximeebpms/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn";
-
   protected static final BpmnModelInstance SUB_PROCESS = Bpmn.createExecutableProcess("subProcess")
       .startEvent()
       .userTask()

@@ -12,7 +12,7 @@
   <#assign variableValueDescription = "May be `String`, `Number` or `Boolean`.">
   <#assign paramListType = "">
 </#if>
-            
+
 <#assign params = {
   "variableName": {
     "type": "string",
@@ -71,20 +71,6 @@
     "type": "array",
     "itemType": "string",
     "desc": "Only include historic variable instances which belong to one of the passed and ${paramListType} execution ids."
-  },
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Filter by the case instance the variable belongs to."
-  },
-  "caseExecutionIdIn": {
-    "type": "array",
-    "itemType": "string",
-    "desc": "Only include historic variable instances which belong to one of the passed and ${paramListType} case execution ids."
-  },
-  "caseActivityIdIn": {
-    "type": "array",
-    "itemType": "string",
-    "desc": "Only include historic variable instances which belong to one of the passed and ${paramListType} case activity ids."
   },
   "taskIdIn": {
     "type": "array",

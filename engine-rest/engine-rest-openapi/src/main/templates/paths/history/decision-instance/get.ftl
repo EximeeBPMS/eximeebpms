@@ -5,9 +5,9 @@
       id = "getHistoricDecisionInstances"
       tag = "Historic Decision Instance"
       summary = "Get Historic Decision Instances"
-      desc = "Queries for historic decision instances that fulfill the given parameters. 
-              The size of the result set can be retrieved by using the 
-              [Get Historic Decision Instance Count](${docsUrl}/reference/rest/history/decision-instance/get-decision-instance-query-count/) 
+      desc = "Queries for historic decision instances that fulfill the given parameters.
+              The size of the result set can be retrieved by using the
+              [Get Historic Decision Instance Count](${docsUrl}/reference/rest/history/decision-instance/get-decision-instance-query-count/)
               method."
   />
 
@@ -101,9 +101,6 @@
                            "processDefinitionKey": "invoice",
                            "processInstanceId": "67e98fec-579d-11e5-9848-f0def1e59da8",
                            "rootProcessInstanceId": "f8259e5d-ab9d-11e8-8449-e4a7a094a9d6",
-                           "caseDefinitionId": null,
-                           "caseDefinitionKey": null,
-                           "caseInstanceId": null,
                            "tenantId": null,
                            "userId": null,
                            "rootDecisionInstanceId": null,

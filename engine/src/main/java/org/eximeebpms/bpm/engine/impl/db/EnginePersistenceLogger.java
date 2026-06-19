@@ -612,14 +612,6 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
         ));
   }
 
-  public ProcessEngineException multipleTenantsForCaseDefinitionKeyException(String caseDefinitionKey) {
-    return new ProcessEngineException(exceptionMessage(
-        "075",
-        "Cannot resolve a unique case definition for key '{}' because it exists for multiple tenants.",
-        caseDefinitionKey
-        ));
-  }
-
   public ProcessEngineException deleteProcessDefinitionWithProcessInstancesException(String processDefinitionId, Long processInstanceCount) {
     return new ProcessEngineException(exceptionMessage(
         "076",
@@ -640,17 +632,6 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
   public void noHistoryCleanupLockPropertyFound() {
     logError(
         "078", "No history cleanup lock property found in database");
-  }
-
-  public void logUpdateUnrelatedCaseDefinitionEntity(String thisKey, String thatKey, String thisDeploymentId, String thatDeploymentId) {
-    logDebug(
-      "079",
-      "Cannot update entity from an unrelated case definition: this key '{}', that key '{}', this deploymentId '{}', that deploymentId '{}'",
-      thisKey,
-      thatKey,
-      thisDeploymentId,
-      thatDeploymentId
-    );
   }
 
   public void logUpdateUnrelatedDecisionDefinitionEntity(String thisKey, String thatKey, String thisDeploymentId, String thatDeploymentId) {

@@ -13,12 +13,6 @@
       type = "string"
       desc = "Filter by process instance business key that the parameter is a substring of."/>
 
-  <@lib.parameter
-      name = "caseInstanceId"
-      location = "query"
-      type = "string"
-      desc = "Filter by case instance id."/>
-
   <@lib.parameter name = "processDefinitionId"
       location = "query"
       type = "string"
@@ -57,18 +51,6 @@
       type = "string"
       desc = "Restrict query to all process instances that have the given process instance as a sub process instance.
               Takes a process instance id."/>
-
-  <@lib.parameter name = "superCaseInstance"
-      location = "query"
-      type = "string"
-      desc = "Restrict query to all process instances that are sub process instances of the given case instance.
-              Takes a case instance id."/>
-
-  <@lib.parameter name = "subCaseInstance"
-      location = "query"
-      type = "string"
-      desc = "Restrict query to all process instances that have the given case instance as a sub case instance.
-              Takes a case instance id."/>
 
   <@lib.parameter name = "active"
       location = "query"

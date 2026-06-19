@@ -161,7 +161,6 @@ public class DbHistoryEventHandler implements HistoryEventHandler {
         || historyEvent.isEventOfType(HistoryEventTypes.TASK_INSTANCE_CREATE)
         || historyEvent.isEventOfType(HistoryEventTypes.FORM_PROPERTY_UPDATE)
         || historyEvent.isEventOfType(HistoryEventTypes.INCIDENT_CREATE)
-        || historyEvent.isEventOfType(HistoryEventTypes.CASE_INSTANCE_CREATE)
         || historyEvent.isEventOfType(HistoryEventTypes.DMN_DECISION_EVALUATE)
         || historyEvent.isEventOfType(HistoryEventTypes.BATCH_START)
         || historyEvent.isEventOfType(HistoryEventTypes.IDENTITY_LINK_ADD)

@@ -32,9 +32,6 @@
                        "description": "GET `/filter/aTaskFilterId/singleResult`. **Note**: The examples show the result of a task filter. So the response corresponds to a task, but for other filters the response format will differ.",
                        "value": {
                          "assignee": "jonny1",
-                         "caseDefinitionId": null,
-                         "caseExecutionId": null,
-                         "caseInstanceId": null,
                          "created": "2014-09-15T15:45:48.000+0200",
                          "delegationState": null,
                          "description": null,

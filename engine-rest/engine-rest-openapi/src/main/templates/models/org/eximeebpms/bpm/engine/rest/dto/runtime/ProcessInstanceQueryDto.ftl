@@ -42,11 +42,6 @@
         desc = "Filter by process instance business key that the parameter is a substring of." />
 
     <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "Filter by case instance id." />
-
-    <@lib.property
         name = "superProcessInstance"
         type = "string"
         desc = "Restrict query to all process instances that are sub process instances of the given process instance.
@@ -57,18 +52,6 @@
         type = "string"
         desc = "Restrict query to all process instances that have the given process instance as a sub process instance.
                 Takes a process instance id." />
-
-    <@lib.property
-        name = "superCaseInstance"
-        type = "string"
-        desc = "Restrict query to all process instances that are sub process instances of the given case instance.
-                Takes a case instance id." />
-
-    <@lib.property
-        name = "subCaseInstance"
-        type = "string"
-        desc = "Restrict query to all process instances that have the given case instance as a sub case instance.
-                Takes a case instance id." />
 
     <@lib.property
         name = "active"

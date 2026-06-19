@@ -62,11 +62,6 @@
         desc = "The id of the called process instance. Is only set if the activity is a call activity and the called instance a process instance."/>
 
     <@lib.property
-        name = "calledCaseInstanceId"
-        type = "string"
-        desc = "The id of the called case instance. Is only set if the activity is a call activity and the called instance a case instance."/>
-
-    <@lib.property
         name = "startTime"
         type = "string"
         format = "date-time"

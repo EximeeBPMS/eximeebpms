@@ -737,7 +737,7 @@ public class AuthorizationCommandChecker implements CommandChecker {
      *        UPDATE/DELETE OPERATION_LOG_CATEGORY with category
      *
      * (2) if entry has a category but no process definition key:
-     *   => standalone entry (task, job, batch, ...), admin entry (user, tenant, ...) or CMMN related
+     *   => standalone entry (task, job, batch, ...) or admin entry (user, tenant, ...) related
      *   => check UPDATE/DELETE on OPERATION_LOG_CATEGORY with category
      *
      * (3) if entry has no category but a process definition key:
@@ -745,7 +745,7 @@ public class AuthorizationCommandChecker implements CommandChecker {
      *   => check UPDATE_/DELETE_HISTORY on PROCESS_DEFINITION with processDefinitionKey
      *
      * (4) if entry has no category and no process definition key:
-     *   => pre-7.11.0 standalone entry (task, job, batch, ...) or CMMN related
+     *   => pre-7.11.0 standalone entry (task, job, batch, ...) related
      *   => no authorization check like before 7.11.0
      */
     if (entry != null) {

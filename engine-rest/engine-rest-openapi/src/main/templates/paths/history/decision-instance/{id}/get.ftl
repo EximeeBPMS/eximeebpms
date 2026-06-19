@@ -5,7 +5,7 @@
       id = "getHistoricDecisionInstance"
       tag = "Historic Decision Instance"
       summary = "Get Historic Decision Instance"
-      desc = "Retrieves a historic decision instance by id, according to the 
+      desc = "Retrieves a historic decision instance by id, according to the
               `HistoricDecisionInstance` interface in the engine."
   />
 
@@ -18,7 +18,7 @@
         required = true
         desc = "The id of the historic decision instance to be retrieved."
     />
-      
+
     <#assign last = true >
     <#include "/lib/commons/historic-decision-instance-single-query-params.ftl" >
     <@lib.parameters
@@ -97,9 +97,6 @@
                          "processDefinitionKey": "invoice",
                          "processInstanceId": "67e98fec-579d-11e5-9848-f0def1e59da8",
                          "rootProcessInstanceId": "f8259e5d-ab9d-11e8-8449-e4a7a094a9d6",
-                         "caseDefinitionId": null,
-                         "caseDefinitionKey": null,
-                         "caseInstanceId": null,
                          "tenantId": null,
                          "userId": null,
                          "rootDecisionInstanceId": null,

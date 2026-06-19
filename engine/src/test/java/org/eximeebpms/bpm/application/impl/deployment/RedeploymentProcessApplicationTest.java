@@ -60,9 +60,6 @@ public class RedeploymentProcessApplicationTest {
   protected static final String BPMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/api/repository/processOne.bpmn20.xml";
   protected static final String BPMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
 
-  protected static final String CMMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String CMMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/api/cmmn/twoTaskCase.cmmn";
-
   protected static final String DMN_RESOURCE_1 = "org/eximeebpms/bpm/engine/test/dmn/deployment/DecisionDefinitionDeployerTest.testDmnDeployment.dmn11.xml";
   protected static final String DMN_RESOURCE_2 = "org/eximeebpms/bpm/engine/test/dmn/deployment/dmnScore.dmn11.xml";
 

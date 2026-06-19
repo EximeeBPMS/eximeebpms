@@ -390,7 +390,7 @@ public class Dmn {
   }
 
   /**
-   * @param dmnModel the cmmnModel to set
+   * @param dmnModel the dmnModel to set
    */
   public void setDmnModel(Model dmnModel) {
     this.dmnModel = dmnModel;

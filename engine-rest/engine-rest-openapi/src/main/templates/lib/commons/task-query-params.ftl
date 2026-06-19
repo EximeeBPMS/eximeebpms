@@ -83,48 +83,6 @@
       type = "string"
       desc = "Restrict to tasks that belong to an execution with the given id." />
 
-  <@lib.parameter name = "caseInstanceId"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to case instances with the given id." />
-
-  <@lib.parameter name = "caseInstanceBusinessKey"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to case instances with the given business key." />
-
-  <@lib.parameter name = "caseInstanceBusinessKeyLike"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that have a case instance business key that has the parameter value
-              as a substring." />
-
-  <@lib.parameter name = "caseDefinitionId"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to a case definition with the given id." />
-
-  <@lib.parameter name = "caseDefinitionKey"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to a case definition with the given key." />
-
-  <@lib.parameter name = "caseDefinitionName"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to a case definition with the given name." />
-
-  <@lib.parameter name = "caseDefinitionNameLike"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that have a case definition name that has the parameter value as a
-              substring." />
-
-  <@lib.parameter name = "caseExecutionId"
-      location = "query"
-      type = "string"
-      desc = "Restrict to tasks that belong to a case execution with the given id." />
-
   <@lib.parameter name = "activityInstanceIdIn"
       location = "query"
       type = "string"
@@ -271,7 +229,7 @@
       type = "string"
       desc = "Restrict to tasks that have one of the given keys. The keys need to be in a
               comma-separated list." />
-  
+
   <@lib.parameter name = "taskDefinitionKeyNotIn"
       location = "query"
       type = "string"
@@ -627,28 +585,6 @@
               `lteq` - lower than or equal to;
               `like`;
               `notLike`.
-              `key` and `value` may not contain underscore or comma characters." />
-
-  <@lib.parameter name = "caseInstanceVariables"
-      location = "query"
-      type = "string"
-      desc = "Only include tasks that belong to case instances that have variables with certain
-              values. Variable filtering expressions are comma-separated and are structured as
-              follows:
-
-              A valid parameter value has the form `key_operator_value`. `key` is the variable name,
-              `operator` is the comparison operator to be used and `value` the variable value.
-
-              **Note**: Values are always treated as String objects on server side.
-
-              Valid `operator` values are:
-              `eq` - equal to;
-              `neq` - not equal to;
-              `gt` - greater than;
-              `gteq` - greater than or equal to;
-              `lt` - lower than;
-              `lteq` - lower than or equal to;
-              `like`.
               `key` and `value` may not contain underscore or comma characters." />
 
   <@lib.parameter name = "variableNamesIgnoreCase"

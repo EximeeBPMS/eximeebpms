@@ -156,10 +156,6 @@ For example calling Maven in the engine directory with
 mvn clean test -Dtest.includes=bpmn
 ```
 will test all packages that contain "bpmn". This will include e.g. ``*test.bpmn*`` and ``*api.bpmn*``. If you want to limit this further you have to get more concrete. Additionally, you can combine certain packages with a pipe:
-```
-mvn clean test -Dtest.includes=bpmn|cmmn
-```
-will execute all bpmn and cmmn tests.
 
 The same works for excludes. Also, you can combine both:
 ```
@@ -169,11 +165,7 @@ Please note that excludes take precedence over includes.
 
 To make it easier for you we created some profiles with predefined in- and excludes:
 - testBpmn
-- testCmmn
-- testBpmnCmmn
 - testExceptBpmn
-- testExceptCmmn
-- testExceptBpmnCmmn
 
 So simply call
 ```

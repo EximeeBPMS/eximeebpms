@@ -362,12 +362,6 @@ public abstract class MockProvider {
   public static final String EXAMPLE_DEPLOYMENT_BPMN_XML_RESOURCE_ID = "aDeploymentBpmnXmlResourceId";
   public static final String EXAMPLE_DEPLOYMENT_BPMN_XML_RESOURCE_NAME = "a-bpmn-resource.bpmn20.xml";
 
-  public static final String EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_ID = "aDeploymentCmmnResourceId";
-  public static final String EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_NAME = "a-cmmn-resource.cmmn";
-
-  public static final String EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_ID = "aDeploymentCmmnXmlResourceId";
-  public static final String EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_NAME = "a-cmmn-resource.cmmn10.xml";
-
   public static final String EXAMPLE_DEPLOYMENT_DMN_RESOURCE_ID = "aDeploymentDmnResourceId";
   public static final String EXAMPLE_DEPLOYMENT_DMN_RESOURCE_NAME = "a-dmn-resource.dmn";
 
@@ -1534,22 +1528,6 @@ public abstract class MockProvider {
     Resource mockResource = mock(ResourceEntity.class);
     when(mockResource.getId()).thenReturn(EXAMPLE_DEPLOYMENT_BPMN_XML_RESOURCE_ID);
     when(mockResource.getName()).thenReturn(EXAMPLE_DEPLOYMENT_BPMN_XML_RESOURCE_NAME);
-    when(mockResource.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
-    return mockResource;
-  }
-
-  public static Resource createMockDeploymentCmmnResource() {
-    Resource mockResource = mock(ResourceEntity.class);
-    when(mockResource.getId()).thenReturn(EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_ID);
-    when(mockResource.getName()).thenReturn(EXAMPLE_DEPLOYMENT_CMMN_RESOURCE_NAME);
-    when(mockResource.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
-    return mockResource;
-  }
-
-  public static Resource createMockDeploymentCmmnXmlResource() {
-    Resource mockResource = mock(ResourceEntity.class);
-    when(mockResource.getId()).thenReturn(EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_ID);
-    when(mockResource.getName()).thenReturn(EXAMPLE_DEPLOYMENT_CMMN_XML_RESOURCE_NAME);
     when(mockResource.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
     return mockResource;
   }

@@ -91,21 +91,6 @@
         desc = "The id of the process instance the task belongs to." />
 
     <@lib.property
-        name = "caseExecutionId"
-        type = "string"
-        desc = "The id of the case execution the task belongs to." />
-
-    <@lib.property
-        name = "caseDefinitionId"
-        type = "string"
-        desc = "The id of the case definition the task belongs to." />
-
-    <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "The id of the case instance the task belongs to." />
-
-    <@lib.property
         name = "taskDefinitionKey"
         type = "string"
         desc = "The task's key." />

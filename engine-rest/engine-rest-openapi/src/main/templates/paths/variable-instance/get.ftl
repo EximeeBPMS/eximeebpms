@@ -52,8 +52,6 @@
                            "taskId": null,
                            "batchId": null,
                            "activityInstanceId": "Task_1:b68b71ca-e310-11e2-beb0-f0def1557726",
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "errorMessage": null,
                            "tenantId": null
                          },
@@ -68,8 +66,6 @@
                            "taskId": null,
                            "batchId": null,
                            "activityInstanceId": "Task_1:b68b71ca-e310-11e2-beb0-f0def1557726",
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "errorMessage": null,
                            "tenantId": null
                          },
@@ -84,8 +80,6 @@
                            "taskId": null,
                            "batchId": null,
                            "activityInstanceId": "Task_2:b68b71ca-e310-11e2-beb0-f0def1557726",
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "errorMessage": null,
                            "tenantId": null
                          }

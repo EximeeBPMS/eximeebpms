@@ -182,11 +182,11 @@ public abstract class AbstractModelParser {
   }
 
   protected Schema createSchema(String location, ClassLoader classLoader) {
-    URL cmmnSchema = ReflectUtil.getResource(location, classLoader);
+    URL schema = ReflectUtil.getResource(location, classLoader);
     try {
-      return schemaFactory.newSchema(cmmnSchema);
+      return schemaFactory.newSchema(schema);
     } catch (SAXException e) {
-      throw new ModelValidationException("Unable to parse schema:" + cmmnSchema);
+      throw new ModelValidationException("Unable to parse schema:" + schema, e);
     }
   }
 

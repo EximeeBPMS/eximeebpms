@@ -36,9 +36,6 @@
                        "value": [
                          {
                            "assignee": "jonny1",
-                           "caseDefinitionId": null,
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "created": "2014-09-15T15:45:48.000+0200",
                            "delegationState": null,
                            "description": null,
@@ -59,9 +56,6 @@
                          },
                          {
                            "assignee": "demo",
-                           "caseDefinitionId": null,
-                           "caseExecutionId": null,
-                           "caseInstanceId": null,
                            "created": "2014-09-15T10:42:18.000+0200",
                            "delegationState": null,
                            "description": null,

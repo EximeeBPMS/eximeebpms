@@ -17,11 +17,6 @@
       dto = "VariableValueDto" />
 
     <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "The case instance id the process instance is to be initialized with." />
-
-    <@lib.property
         name = "startInstructions"
         type = "array"
         dto = "ProcessInstanceModificationInstructionDto"

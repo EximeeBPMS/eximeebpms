@@ -26,7 +26,6 @@
                 "job-locked-exclusive",
                 "executed-decision-elements",
                 "history-cleanup-removed-process-instances",
-                "history-cleanup-removed-case-instances",
                 "history-cleanup-removed-decision-instances",
                 "history-cleanup-removed-batch-operations",
                 "history-cleanup-removed-task-metrics",

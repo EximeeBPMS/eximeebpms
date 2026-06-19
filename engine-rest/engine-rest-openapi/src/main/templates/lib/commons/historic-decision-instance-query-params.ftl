@@ -56,18 +56,6 @@
     "type": "string",
     "desc": "Filter by the process instance the instances belongs to."
   },
-  "caseDefinitionId": {
-    "type": "string",
-    "desc": "Filter by the case definition the instances belongs to."
-  },
-  "caseDefinitionKey": {
-    "type": "string",
-    "desc": "Filter by the key of the case definition the instances belongs to."
-  },
-  "caseInstanceId": {
-    "type": "string",
-    "desc": "Filter by the case instance the instances belongs to."
-  },
   "activityIdIn": {
     "type": "array",
     "itemType": "string",

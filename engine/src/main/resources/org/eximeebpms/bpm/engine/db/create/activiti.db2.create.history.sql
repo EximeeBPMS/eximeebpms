@@ -30,8 +30,6 @@ create table ACT_HI_PROCINST (
     END_ACT_ID_ varchar(255),
     SUPER_PROCESS_INSTANCE_ID_ varchar(64),
     ROOT_PROC_INST_ID_ varchar(64),
-    SUPER_CASE_INSTANCE_ID_ varchar(64),
-    CASE_INST_ID_ varchar(64),
     DELETE_REASON_ varchar(4000),
     TENANT_ID_ varchar(64),
     STATE_ varchar(255),
@@ -52,7 +50,6 @@ create table ACT_HI_ACTINST (
     ACT_ID_ varchar(255) not null,
     TASK_ID_ varchar(64),
     CALL_PROC_INST_ID_ varchar(64),
-    CALL_CASE_INST_ID_ varchar(64),
     ACT_NAME_ varchar(255),
     ACT_TYPE_ varchar(255) not null,
     ASSIGNEE_ varchar(255),
@@ -74,10 +71,6 @@ create table ACT_HI_TASKINST (
     ROOT_PROC_INST_ID_ varchar(64),
     PROC_INST_ID_ varchar(64),
     EXECUTION_ID_ varchar(64),
-    CASE_DEF_KEY_ varchar(255),
-    CASE_DEF_ID_ varchar(64),
-    CASE_INST_ID_ varchar(64),
-    CASE_EXECUTION_ID_ varchar(64),
     ACT_INST_ID_ varchar(64),
     NAME_ varchar(255),
     PARENT_TASK_ID_ varchar(64),
@@ -105,10 +98,6 @@ create table ACT_HI_VARINST (
     PROC_INST_ID_ varchar(64),
     EXECUTION_ID_ varchar(64),
     ACT_INST_ID_ varchar(64),
-    CASE_DEF_KEY_ varchar(255),
-    CASE_DEF_ID_ varchar(64),
-    CASE_INST_ID_ varchar(64),
-    CASE_EXECUTION_ID_ varchar(64),
     TASK_ID_ varchar(64),
     NAME_ varchar(255) not null,
     VAR_TYPE_ varchar(100),
@@ -133,10 +122,6 @@ create table ACT_HI_DETAIL (
     ROOT_PROC_INST_ID_ varchar(64),
     PROC_INST_ID_ varchar(64),
     EXECUTION_ID_ varchar(64),
-    CASE_DEF_KEY_ varchar(255),
-    CASE_DEF_ID_ varchar(64),
-    CASE_INST_ID_ varchar(64),
-    CASE_EXECUTION_ID_ varchar(64),
     TASK_ID_ varchar(64),
     ACT_INST_ID_ varchar(64),
     VAR_INST_ID_ varchar(64),
@@ -217,9 +202,6 @@ create table ACT_HI_OP_LOG (
     ROOT_PROC_INST_ID_ varchar(64),
     PROC_INST_ID_ varchar(64),
     EXECUTION_ID_ varchar(64),
-    CASE_DEF_ID_ varchar(64),
-    CASE_INST_ID_ varchar(64),
-    CASE_EXECUTION_ID_ varchar(64),
     TASK_ID_ varchar(64),
     JOB_ID_ varchar(64),
     JOB_DEF_ID_ varchar(64),
@@ -368,8 +350,6 @@ create index ACT_IDX_HI_TASK_INST_END on ACT_HI_TASKINST(END_TIME_);
 create index ACT_IDX_HI_DETAIL_ROOT_PI on ACT_HI_DETAIL(ROOT_PROC_INST_ID_);
 create index ACT_IDX_HI_DETAIL_PROC_INST on ACT_HI_DETAIL(PROC_INST_ID_);
 create index ACT_IDX_HI_DETAIL_ACT_INST on ACT_HI_DETAIL(ACT_INST_ID_);
-create index ACT_IDX_HI_DETAIL_CASE_INST on ACT_HI_DETAIL(CASE_INST_ID_);
-create index ACT_IDX_HI_DETAIL_CASE_EXEC on ACT_HI_DETAIL(CASE_EXECUTION_ID_);
 create index ACT_IDX_HI_DETAIL_TIME on ACT_HI_DETAIL(TIME_);
 create index ACT_IDX_HI_DETAIL_NAME on ACT_HI_DETAIL(NAME_);
 create index ACT_IDX_HI_DETAIL_TASK_ID on ACT_HI_DETAIL(TASK_ID_);
@@ -392,7 +372,6 @@ create index ACT_IDX_HI_IDENT_LNK_TIMESTAMP on ACT_HI_IDENTITYLINK(TIMESTAMP_);
 create index ACT_IDX_HI_VARINST_ROOT_PI on ACT_HI_VARINST(ROOT_PROC_INST_ID_);
 create index ACT_IDX_HI_PROCVAR_PROC_INST on ACT_HI_VARINST(PROC_INST_ID_);
 create index ACT_IDX_HI_PROCVAR_NAME_TYPE on ACT_HI_VARINST(NAME_, VAR_TYPE_);
-create index ACT_IDX_HI_CASEVAR_CASE_INST on ACT_HI_VARINST(CASE_INST_ID_);
 create index ACT_IDX_HI_VAR_INST_TENANT_ID on ACT_HI_VARINST(TENANT_ID_);
 create index ACT_IDX_HI_VAR_INST_PROC_DEF_KEY on ACT_HI_VARINST(PROC_DEF_KEY_);
 create index ACT_IDX_HI_VARINST_BYTEAR on ACT_HI_VARINST(BYTEARRAY_ID_);

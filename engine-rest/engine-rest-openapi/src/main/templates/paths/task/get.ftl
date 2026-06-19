@@ -19,10 +19,9 @@
     <#assign last = false >
     <#include "/lib/commons/task-query-params.ftl" >
 
-    <#assign sortByValues = [ '"instanceId"', '"caseInstanceId"', '"dueDate"', '"executionId"', '"caseExecutionId"',
+    <#assign sortByValues = [ '"instanceId"', '"dueDate"', '"executionId"',
                               '"assignee"', '"created"', '"lastUpdated"', '"description"', '"id"', '"name"', '"nameCaseInsensitive"',
-                              '"priority"', '"processVariable"', '"executionVariable"', '"taskVariable"',
-                              '"caseExecutionVariable"', '"caseInstanceVariable"' ] >
+                              '"priority"', '"processVariable"', '"executionVariable"', '"taskVariable"'] >
     <#include "/lib/commons/sort-params.ftl" >
 
     <#assign last = true >
@@ -57,9 +56,6 @@
                            "priority":42,
                            "processDefinitionId":"aProcDefId",
                            "processInstanceId":"aProcInstId",
-                           "caseDefinitionId":"aCaseDefId",
-                           "caseInstanceId":"aCaseInstId",
-                           "caseExecutionId":"aCaseExecution",
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
@@ -93,9 +89,6 @@
                            "priority":42,
                            "processDefinitionId":"aProcDefId",
                            "processInstanceId":"aProcInstId",
-                           "caseDefinitionId":"aCaseDefId",
-                           "caseInstanceId":"aCaseInstId",
-                           "caseExecutionId":"aCaseExecution",
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
@@ -131,9 +124,6 @@
                            "priority":42,
                            "processDefinitionId":"aProcDefId",
                            "processInstanceId":"aProcInstId",
-                           "caseDefinitionId":"aCaseDefId",
-                           "caseInstanceId":"aCaseInstId",
-                           "caseExecutionId":"aCaseExecution",
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
@@ -181,9 +171,6 @@
                            "priority":42,
                            "processDefinitionId":"aProcDefId",
                            "processInstanceId":"aProcInstId",
-                           "caseDefinitionId":"aCaseDefId",
-                           "caseInstanceId":"aCaseInstId",
-                           "caseExecutionId":"aCaseExecution",
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",

@@ -36,7 +36,6 @@
                            "definitionId": "aProcDefId",
                            "definitionKey": "aProcDefKey",
                            "businessKey": "aKey",
-                           "caseInstanceId": "aCaseInstanceId",
                            "ended": false,
                            "suspended": false,
                            "tenantId": null

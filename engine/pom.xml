@@ -975,21 +975,9 @@
      </properties>
     </profile>
     <profile>
-     <id>testCmmn</id>
-     <properties>
-      <test.includes>cmmn</test.includes>
-     </properties>
-    </profile>
-    <profile>
      <id>testDmn</id>
      <properties>
       <test.includes>dmn</test.includes>
-     </properties>
-    </profile>
-    <profile>
-     <id>testBpmnCmmn</id>
-     <properties>
-      <test.includes>bpmn|cmmn</test.includes>
      </properties>
     </profile>
     <profile>
@@ -999,21 +987,9 @@
      </properties>
     </profile>
     <profile>
-     <id>testExceptCmmn</id>
-     <properties>
-      <test.excludes>cmmn</test.excludes>
-     </properties>
-    </profile>
-    <profile>
      <id>testExceptDmn</id>
      <properties>
       <test.excludes>dmn</test.excludes>
-     </properties>
-    </profile>
-    <profile>
-     <id>testExceptBpmnCmmn</id>
-     <properties>
-      <test.excludes>bpmn|cmmn</test.excludes>
      </properties>
     </profile>
 

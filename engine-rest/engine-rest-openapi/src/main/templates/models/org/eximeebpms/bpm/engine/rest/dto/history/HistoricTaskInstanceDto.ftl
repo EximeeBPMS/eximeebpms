@@ -4,13 +4,13 @@
   <#assign dateFormatDescription = "Default [format](${docsUrl}/reference/rest/overview/date-format/)
                                     `yyyy-MM-dd'T'HH:mm:ss.SSSZ`."
   />
-    
+
   <@lib.property
     name = "id"
     type = "string"
     desc = "The task id."
   />
-    
+
   <@lib.property
       name = "processDefinitionKey"
       type = "string"
@@ -33,30 +33,6 @@
       name = "executionId"
       type = "string"
       desc = "The id of the execution the task belongs to."
-  />
-
-  <@lib.property
-      name = "caseDefinitionKey"
-      type = "string"
-      desc = "The key of the case definition the task belongs to."
-  />
-
-  <@lib.property
-      name = "caseDefinitionId"
-      type = "string"
-      desc = "The id of the case definition the task belongs to."
-  />
-
-  <@lib.property
-      name = "caseInstanceId"
-      type = "string"
-      desc = "The id of the case instance the task belongs to."
-  />
-
-  <@lib.property
-      name = "caseExecutionId"
-      type = "string"
-      desc = "The id of the case execution the task belongs to."
   />
 
   <@lib.property

@@ -20,12 +20,6 @@ import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.ACT
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.ACTIVITY_INSTANCE_START;
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.ACTIVITY_INSTANCE_UPDATE;
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.ACTIVITY_INSTANCE_MIGRATE;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_ACTIVITY_INSTANCE_CREATE;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_ACTIVITY_INSTANCE_END;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_ACTIVITY_INSTANCE_UPDATE;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_INSTANCE_CLOSE;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_INSTANCE_CREATE;
-import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.CASE_INSTANCE_UPDATE;
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.PROCESS_INSTANCE_END;
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.PROCESS_INSTANCE_START;
 import static org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes.PROCESS_INSTANCE_UPDATE;
@@ -69,14 +63,6 @@ public class HistoryLevelActivity extends AbstractHistoryLevel {
         || ACTIVITY_INSTANCE_UPDATE == eventType
         || ACTIVITY_INSTANCE_MIGRATE == eventType
         || ACTIVITY_INSTANCE_END == eventType
-
-        || CASE_INSTANCE_CREATE == eventType
-        || CASE_INSTANCE_UPDATE == eventType
-        || CASE_INSTANCE_CLOSE == eventType
-
-        || CASE_ACTIVITY_INSTANCE_CREATE == eventType
-        || CASE_ACTIVITY_INSTANCE_UPDATE == eventType
-        || CASE_ACTIVITY_INSTANCE_END == eventType
     ;
   }
 

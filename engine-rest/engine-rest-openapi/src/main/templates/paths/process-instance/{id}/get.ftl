@@ -21,7 +21,7 @@
 
     <@lib.response
         code = "200"
-        desc = "Request successful." 
+        desc = "Request successful."
         dto = "ProcessInstanceDto"
         examples = ['"example-1": {
                        "summary": "GET `/process-instance/aProcessInstanceId`",
@@ -30,7 +30,6 @@
                          "definitionId":"aProcDefId",
                          "definitionKey":"aProcDefKey",
                          "businessKey":"aKey",
-                         "caseInstanceId":"aCaseInstanceId",
                          "ended":false,
                          "suspended":false,
                          "tenantId":null
@@ -41,7 +40,7 @@
         code = "404"
         dto = "ExceptionDto"
         last = true
-        desc = "Process instance with given id does not exist. See the 
+        desc = "Process instance with given id does not exist. See the
                [Introduction](${docsUrl}/reference/rest/overview/#error-handling) for the error response format. " />
 
   }

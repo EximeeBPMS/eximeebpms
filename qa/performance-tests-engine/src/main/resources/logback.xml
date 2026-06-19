@@ -25,10 +25,6 @@
   <logger name="org.eximeebpms.bpm.engine.bpmn.parser" level="debug" />
   <logger name="org.eximeebpms.bpm.engine.bpmn.behavior" level="debug" />
 
-  <logger name="org.eximeebpms.bpm.engine.cmmn.transformer" level="debug" />
-  <logger name="org.eximeebpms.bpm.engine.cmmn.behavior" level="debug" />
-  <logger name="org.eximeebpms.bpm.engine.cmmn.operation" level="debug" />
-
   <logger name="org.eximeebpms.bpm.engine.cmd" level="debug" />
   <logger name="org.eximeebpms.bpm.engine.persistence" level="debug" />
   <logger name="org.eximeebpms.bpm.engine.tx" level="debug" />

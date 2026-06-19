@@ -1,6 +1,6 @@
 # EximeeBPMS Assert
 
-**EximeeBPMS Assert** makes it easy to assert the status of your BPMN processes and CMMN cases when driving them forward in your typical unit test methods. Simply write code like
+**EximeeBPMS Assert** makes it easy to assert the status of your BPMN processes when driving them forward in your typical unit test methods. Simply write code like
 
 ```groovy
 assertThat(instance).isWaitingAt("UserTask_InformCustomer");

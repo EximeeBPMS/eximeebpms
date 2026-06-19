@@ -51,7 +51,6 @@
                                     "activityType": "userTask",
                                     "assignee": "peter",
                                     "calledProcessInstanceId": "aHistoricCalledProcessInstanceId",
-                                    "calledCaseInstanceId": null,
                                     "canceled": true,
                                     "completeScope": false,
                                     "durationInMillis": 2000,

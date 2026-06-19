@@ -1175,7 +1175,6 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     Collection<CalledProcessDefinition> mappings = repositoryService.getStaticCalledProcessDefinitions(callingProcessId);
 
     //then
-    //cmmn tasks are not resolved
     assertThat(mappings).hasSize(4);
 
     assertThat(mappings.stream()

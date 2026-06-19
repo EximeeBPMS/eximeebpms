@@ -18,16 +18,6 @@
       desc = "The id of the parent process instance, if it exists."/>
 
   <@lib.property
-      name = "superCaseInstanceId"
-      type = "string"
-      desc = "The id of the parent case instance, if it exists."/>
-
-  <@lib.property
-      name = "caseInstanceId"
-      type = "string"
-      desc = "The id of the parent case instance, if it exists."/>
-
-  <@lib.property
       name = "processDefinitionName"
       type = "string"
       desc = "The name of the process definition that this process instance belongs to."/>

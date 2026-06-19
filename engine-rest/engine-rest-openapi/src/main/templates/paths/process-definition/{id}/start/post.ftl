@@ -115,7 +115,6 @@
                          "definitionId":"aProcessDefinitionId",
                          "definitionKey":"aProcessDefinitionKey",
                          "businessKey":"myBusinessKey",
-                         "caseInstanceId": null,
                          "tenantId":null,
                          "ended":false,
                          "suspended":false
@@ -136,7 +135,6 @@
                          "definitionId": "aProcessDefinitionId",
                          "definitionKey":"aProcessDefinitionKey",
                          "businessKey": "myBusinessKey",
-                         "caseInstanceId": null,
                          "ended": false,
                          "suspended": false,
                          "tenantId": null,
@@ -171,7 +169,6 @@
                          "definitionId":"aProcessDefinitionId",
                          "definitionKey":"aProcessDefinitionKey",
                          "businessKey":"myBusinessKey",
-                         "caseInstanceId": null,
                          "tenantId":null,
                          "ended":false,
                          "suspended":false

@@ -23,11 +23,6 @@
         desc = "The business key of the process instance." />
 
     <@lib.property
-        name = "caseInstanceId"
-        type = "string"
-        desc = "The id of the case instance associated with the process instance." />
-
-    <@lib.property
         name = "ended"
         type = "boolean"
         deprecated = true

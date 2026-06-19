@@ -1,7 +1,7 @@
 # Vendor
 
 The scripts located in this directory are dependencies of the
-[eximeebpms-commons-ui](http://github.com/camunda/eximeebpms-commons-ui)
+[eximeebpms-commons-ui](https://github.com/EximeeBPMS/eximeebpms-enterprise/tree/master/webapps/frontend/eximeebpms-commons-ui)
 and were downloaded manually.
 
 

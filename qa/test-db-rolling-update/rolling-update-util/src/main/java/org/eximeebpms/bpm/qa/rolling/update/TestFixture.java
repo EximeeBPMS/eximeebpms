@@ -89,7 +89,7 @@ public class TestFixture {
     processEngine.close();
 
     processEngineConfiguration = (ProcessEngineConfigurationImpl) ProcessEngineConfiguration
-        .createProcessEngineConfigurationFromResource("camunda.auth.cfg.xml");
+        .createProcessEngineConfigurationFromResource("eximeebpms.auth.cfg.xml");
     processEngine = processEngineConfiguration.buildProcessEngine();
 
     // register test auth scenarios

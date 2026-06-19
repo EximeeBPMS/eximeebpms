@@ -21,8 +21,8 @@
   </properties>
 
   <modules>
-    <module>test-fixture-723</module>
-    <module>test-fixture-724</module>
+    <module>test-fixture-100</module>
+    <module>test-fixture-120</module>
     <module>test-migration</module>
   </modules>
 

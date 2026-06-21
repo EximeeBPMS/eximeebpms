@@ -68,7 +68,7 @@ public class HistoryCleanupScenario {
         ProcessEngineConfigurationImpl configuration =
           ((ProcessEngineConfigurationImpl) engine.getProcessEngineConfiguration());
 
-        configuration.setHistoryCleanupBatchWindowStartTime("13:00");
+        configuration.setHistoryCleanupBatchWindowStartTime("12:00");
         configuration.setHistoryCleanupBatchWindowEndTime("14:00");
         configuration.setHistoryCleanupDegreeOfParallelism(3);
         configuration.initHistoryCleanup();

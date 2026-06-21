@@ -67,6 +67,12 @@ public class SeleniumScreenshotRule implements TestRule {
       }
 
       public void captureScreenShot(Description describe) {
+        try {
+          log.info("Browser URL at failure: " + webDriver.getCurrentUrl());
+        } catch (Exception e) {
+          log.warning("Could not get browser URL: " + e.getMessage());
+        }
+
         String screenshotDirectory = System.getProperty(OUTPUT_DIR_PROPERTY_NAME);
 
         if (screenshotDirectory == null) {

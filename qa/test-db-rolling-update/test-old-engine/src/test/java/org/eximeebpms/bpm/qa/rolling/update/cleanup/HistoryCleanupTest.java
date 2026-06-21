@@ -58,8 +58,8 @@ public class HistoryCleanupTest extends AbstractRollingUpdateTestCase {
       ProcessEngineConfigurationImpl configuration =
         rule.getProcessEngineConfiguration();
 
-      configuration.setHistoryCleanupBatchWindowStartTime("13:00");
-      configuration.setHistoryCleanupBatchWindowEndTime("15:00");
+      configuration.setHistoryCleanupBatchWindowStartTime("12:00");
+      configuration.setHistoryCleanupBatchWindowEndTime("14:00");
       configuration.setHistoryCleanupDegreeOfParallelism(3);
       configuration.initHistoryCleanup();
 

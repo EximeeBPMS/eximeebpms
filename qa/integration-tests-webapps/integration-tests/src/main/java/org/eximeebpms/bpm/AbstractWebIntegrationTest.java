@@ -180,12 +180,28 @@ public abstract class AbstractWebIntegrationTest {
     return testProperties.getRestCtxPath();
   }
 
-  protected void preventRaceConditions() {
-    try {
-      Thread.sleep(500); // Simple delay to prevent race conditions
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
+  protected void preventRaceConditions() throws Exception {
+    // Wait until the demo user has the eximeebpms-admin group membership,
+    // which signals that DemoDataGenerator has fully completed its setup.
+    // Cargo's ping URL (/user/demo/profile) returns 200 as soon as the user
+    // is created (early in @PostDeploy), but group membership and authorization
+    // grants are set up later in the same @PostDeploy execution. Without this
+    // wait the login tests start before the demo user is authorized.
+    String groupCheckUrl = testProperties.getApplicationPath(
+        "/" + getRestCtxPath() + "engine/default/group?memberId=demo");
+    long deadline = System.currentTimeMillis() + 120_000;
+    while (System.currentTimeMillis() < deadline) {
+      try {
+        HttpResponse<String> response = Unirest.get(groupCheckUrl).asString();
+        if (response.getStatus() == 200 && response.getBody().contains("eximeebpms-admin")) {
+          return;
+        }
+      } catch (Exception e) {
+        // Server may not be ready yet, retry
+      }
+      Thread.sleep(1_000);
     }
+    LOGGER.warning("Timed out waiting for demo user to have eximeebpms-admin group membership");
   }
 
 }

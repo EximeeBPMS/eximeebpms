@@ -769,7 +769,8 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <systemPropertyVariables>
-                <org.apache.maven.user-settings>../../settings.xml</org.apache.maven.user-settings>
+                <org.apache.maven.user-settings>${user.home}/.m2/settings.xml</org.apache.maven.user-settings>
+                <maven.repo.local>${settings.localRepository}</maven.repo.local>
               </systemPropertyVariables>
               <redirectTestOutputToFile>${redirect.test.output}</redirectTestOutputToFile>
             </configuration>

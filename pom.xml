@@ -372,12 +372,27 @@
         <module>commons/bom</module>
         <module>connect/bom</module>
 
+        <module>model-api</module>
+        <module>engine-dmn</module>
+        <module>connect</module>
+        <module>juel</module>
+        <module>spin</module>
+        <module>commons</module>
+        <module>freemarker-template-engine</module>
+
+        <module>test-utils/testcontainers</module>
+        <module>test-utils/junit5-extension</module>
+        <module>test-utils/junit5-extension-dmn</module>
+        <module>test-utils/assert</module>
+        <module>test-utils/archunit</module>
+
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
 
         <module>engine</module>
+        <module>distro/sql-script</module>
         <module>engine-cdi</module>
         <module>engine-spring</module>
         <module>engine-rest</module>
@@ -618,6 +633,10 @@
                     <argument>verify</argument>
                     <argument>-f</argument>
                     <argument>qa</argument>
+                    <argument>-Ddatabase.url=jdbc:h2:mem:eximeebpms;DB_CLOSE_DELAY=1000;LOCK_TIMEOUT=10000</argument>
+                    <argument>-Ddatabase.driver=org.h2.Driver</argument>
+                    <argument>-Ddatabase.username=sa</argument>
+                    <argument>-Ddatabase.password=</argument>
                   </arguments>
                 </configuration>
               </execution>
@@ -653,6 +672,10 @@
                     <argument>verify</argument>
                     <argument>-f</argument>
                     <argument>qa</argument>
+                    <argument>-Ddatabase.url=jdbc:h2:mem:eximeebpms;DB_CLOSE_DELAY=1000;LOCK_TIMEOUT=10000</argument>
+                    <argument>-Ddatabase.driver=org.h2.Driver</argument>
+                    <argument>-Ddatabase.username=sa</argument>
+                    <argument>-Ddatabase.password=</argument>
                   </arguments>
                 </configuration>
               </execution>

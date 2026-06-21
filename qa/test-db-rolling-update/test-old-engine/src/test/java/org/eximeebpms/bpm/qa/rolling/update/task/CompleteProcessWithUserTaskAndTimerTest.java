@@ -21,6 +21,7 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
 import org.eximeebpms.bpm.qa.upgrade.ScenarioUnderTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,13 +35,24 @@ import org.junit.Test;
 @ScenarioUnderTest("ProcessWithUserTaskAndTimerScenario")
 public class CompleteProcessWithUserTaskAndTimerTest extends AbstractRollingUpdateTestCase {
 
+  @After
+  public void resetClock() {
+    ClockUtil.reset();
+  }
+
   @Test
   @ScenarioUnderTest("init.1")
   public void testCompleteProcessWithUserTaskAndTimer() throws InterruptedException {
     //given a process instance with user task and timer boundary event
     Job job = rule.jobQuery().singleResult();
     Assert.assertNotNull(job);
-    //job is not available since timer is set to 2 mintues in the future
+    // Pin clock to 1 minute before the timer fires so the test is not sensitive to CI build duration.
+    // The scenario sets a PT2M timer; on slow CI runners more than 2 minutes may elapse
+    // between scenario setup and test execution.
+    if (job.getDuedate() != null) {
+      ClockUtil.setCurrentTime(new Date(job.getDuedate().getTime() - 60_000));
+    }
+    //job is not available since timer is set to 2 minutes in the future
     Assert.assertFalse(!job.isSuspended()
             && job.getRetries() > 0
             && (job.getDuedate() == null

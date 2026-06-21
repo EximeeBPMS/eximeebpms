@@ -276,15 +276,24 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>3.0.0-M3</version>
-            <configuration>
-              <redirectTestOutputToFile>true</redirectTestOutputToFile>
-              <dependenciesToScan>
-                <dependency>org.eximeebpms.bpm.qa:eximeebpms-qa-integration-tests-webapps</dependency>
-              </dependenciesToScan>
-              <systemPropertyVariables>
-                <selenium.screenshot.directory>${project.build.directory}/selenium-screenshots</selenium.screenshot.directory>
-              </systemPropertyVariables>
-            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                  <dependenciesToScan>
+                    <dependency>org.eximeebpms.bpm.qa:eximeebpms-qa-integration-tests-webapps</dependency>
+                  </dependenciesToScan>
+                  <systemPropertyVariables>
+                    <selenium.screenshot.directory>${project.build.directory}/selenium-screenshots</selenium.screenshot.directory>
+                    <selenium.timeout.seconds>120</selenium.timeout.seconds>
+                  </systemPropertyVariables>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

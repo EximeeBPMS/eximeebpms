@@ -32,7 +32,7 @@ public class ProcessWithExternalTaskScenario {
   public static final String PROCESS_DEF_KEY = "processWithExternalTask";
   public static final String EXTERNAL_TASK = "externalTask";
   public static final String EXTERNAL_TASK_TYPE = "external";
-  public static final long LOCK_TIME = 5 * 60 * 1000;
+  public static final long LOCK_TIME = 24 * 60 * 60 * 1000L;
 
   /**
    * Deploy a process model, which contains an external task. The topic is

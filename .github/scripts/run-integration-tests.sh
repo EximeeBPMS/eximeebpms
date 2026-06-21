@@ -112,7 +112,7 @@ run_tests () {
 
   case "$TEST_SUITE" in
     engine)
-      PROFILES+=(engine-integration-jakarta)
+      PROFILES+=(engine-integration-jakarta ci)
       ;;
     webapps)
       PROFILES+=(webapps-integration)
@@ -138,6 +138,16 @@ run_tests () {
   case "$DATABASE" in
     h2)
       PROFILES+=(h2)
+      if [[ "$TEST_SUITE" == "engine" ]]; then
+        # Pass H2 connection props explicitly via CLI (-D has highest Maven precedence)
+        # so that settings.xml profile overrides (e.g. postgresql) cannot replace them.
+        DB_ARGS=(
+          "-Ddatabase.url=jdbc:h2:mem:eximeebpms;DB_CLOSE_DELAY=1000;LOCK_TIMEOUT=10000"
+          -Ddatabase.driver=org.h2.Driver
+          -Ddatabase.username=sa
+          "-Ddatabase.password="
+        )
+      fi
       ;;
     postgresql)
       PROFILES+=(postgresql)

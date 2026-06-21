@@ -173,4 +173,5 @@ jobs:
             ${{ github.workspace }}/**/target/failsafe-reports/**
             ${{ github.workspace }}/qa/**/target/**/logs/**
             ${{ github.workspace }}/**/target/cargo.log
+            ${{ github.workspace }}/**/target/selenium-screenshots/**
           retention-days: 30

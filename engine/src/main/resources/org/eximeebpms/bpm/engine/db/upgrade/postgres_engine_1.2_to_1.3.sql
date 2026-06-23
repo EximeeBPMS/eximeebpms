@@ -26,10 +26,6 @@ alter table ACT_RU_TASK drop constraint ACT_FK_TASK_CASE_EXE;
 alter table ACT_RU_TASK drop constraint ACT_FK_TASK_CASE_DEF;
 
 -- drop indexes on CMMN columns in non-CMMN tables --
-drop index ACT_IDX_VARIABLE_CASE_EXEC;
-drop index ACT_IDX_VARIABLE_CASE_INST;
-drop index ACT_IDX_TASK_CASE_EXEC;
-drop index ACT_IDX_TASK_CASE_DEF_ID;
 drop index ACT_IDX_HI_DETAIL_CASE_INST;
 drop index ACT_IDX_HI_DETAIL_CASE_EXEC;
 drop index ACT_IDX_HI_CASEVAR_CASE_INST;

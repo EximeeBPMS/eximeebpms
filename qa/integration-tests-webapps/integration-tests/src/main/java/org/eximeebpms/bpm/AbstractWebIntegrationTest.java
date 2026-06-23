@@ -18,11 +18,13 @@ package org.eximeebpms.bpm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.ws.rs.core.MediaType;
 
 import kong.unirest.ObjectMapper;
+import org.awaitility.Awaitility;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -180,28 +182,52 @@ public abstract class AbstractWebIntegrationTest {
     return testProperties.getRestCtxPath();
   }
 
-  protected void preventRaceConditions() throws Exception {
-    // Wait until the demo user has the eximeebpms-admin group membership,
-    // which signals that DemoDataGenerator has fully completed its setup.
-    // Cargo's ping URL (/user/demo/profile) returns 200 as soon as the user
-    // is created (early in @PostDeploy), but group membership and authorization
-    // grants are set up later in the same @PostDeploy execution. Without this
-    // wait the login tests start before the demo user is authorized.
-    String groupCheckUrl = testProperties.getApplicationPath(
-        "/" + getRestCtxPath() + "engine/default/group?memberId=demo");
-    long deadline = System.currentTimeMillis() + 120_000;
-    while (System.currentTimeMillis() < deadline) {
-      try {
-        HttpResponse<String> response = Unirest.get(groupCheckUrl).asString();
-        if (response.getStatus() == 200 && response.getBody().contains("eximeebpms-admin")) {
-          return;
-        }
-      } catch (Exception e) {
-        // Server may not be ready yet, retry
-      }
-      Thread.sleep(1_000);
-    }
-    LOGGER.warning("Timed out waiting for demo user to have eximeebpms-admin group membership");
+  /**
+   * Waits until the application is fully initialized and ready to serve test requests.
+   *
+   * <p><b>Why this is needed — the race condition:</b><br>
+   * Cargo fires the {@code pingURL} as soon as the first deployed WAR responds (in practice: when
+   * {@code /engine-rest/engine/default/user/demo/profile} returns 200, which happens after
+   * DemoDataGenerator step 1 creates the demo user). At that point the remaining DemoDataGenerator
+   * steps are still running asynchronously: group creation, authorization grants, and group
+   * membership. Tests that start immediately therefore find an empty group list and fail with
+   * authorization errors or missing data.
+   *
+   * <p><b>The signal we wait for:</b><br>
+   * We poll {@code GET /engine-rest/engine/default/group?memberId=demo} until the response body
+   * contains {@code "eximeebpms-admin"}. That group appears only after DemoDataGenerator has
+   * completed all four steps (user → group → authorizations → membership), so its presence is a
+   * reliable "fully ready" indicator.
+   *
+   * <p><b>Why HTTP Basic Auth on the REST endpoint (not a webapp session):</b><br>
+   * When {@code authorizationEnabled=true} is set in {@code bpm-platform.xml}, anonymous REST
+   * calls return an empty list {@code []} for group queries — authorization checks apply.
+   * The webapp session approach (CSRF token → form login → session cookie) requires the webapp
+   * to be up and correctly routing the proxy path, which introduces its own timing dependency.
+   * HTTP Basic Auth on the REST endpoint is simpler, stateless, and works as soon as the REST
+   * layer is up. The {@code getRestCtxPath()} value ({@code engine-rest/} by default) is read
+   * from test properties, keeping the path configurable.
+   *
+   * <p><b>Polling strategy:</b><br>
+   * Awaitility polls every 1 second for up to 120 seconds. Any exception during a poll attempt
+   * (server not yet responding, connection refused) is silently ignored and treated as "not ready"
+   * so the poll retries. A timeout causes the test to fail with a clear Awaitility message.
+   */
+  protected void preventRaceConditions() {
+    String groupUrl = testProperties.getApplicationPath("/" + getRestCtxPath())
+        + "engine/default/group?memberId=demo";
+
+    Awaitility.await("demo user in eximeebpms-admin group")
+        .atMost(120, TimeUnit.SECONDS)
+        .pollInterval(1, TimeUnit.SECONDS)
+        .ignoreExceptions()
+        .until(() -> {
+          HttpResponse<String> response = Unirest.get(groupUrl)
+              .basicAuth("demo", "demo")
+              .asString();
+          return response.getStatus() == 200
+              && response.getBody().contains("eximeebpms-admin");
+        });
   }
 
 }

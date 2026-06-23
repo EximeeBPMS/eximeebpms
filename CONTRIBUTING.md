@@ -61,8 +61,6 @@ Integration tests live in `qa/` and are not part of the default build:
 ./mvnw clean install -f qa/pom.xml -Pengine-integration,tomcat,postgresql
 ```
 
-See [CLAUDE.md](CLAUDE.md) for the full test matrix and CI script details.
-
 # Create a pull request
 
 1. Create a feature branch from `main`. Use the naming convention `BPMS-NNN-short-description` (e.g. `BPMS-332-fix-chrome-dependencies`).

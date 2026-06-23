@@ -7,7 +7,7 @@ DATABASE="h2"
 DISTRO="tomcat"
 VALID_TEST_SUITES=("engine" "webapps" "instance-migration" "rolling-update" "old-engine")
 VALID_DISTROS=("tomcat" "wildfly")
-VALID_DATABASES=("h2" "postgresql")
+VALID_DATABASES=("h2" "postgresql" "mysql" "sqlserver")
 
 ##########################################################################
 check_valid_values() {
@@ -48,10 +48,10 @@ parse_args() {
   done
 
   check_valid_values "testsuite" "$TEST_SUITE" "${VALID_TEST_SUITES[@]}"
-  # --distro and --db are ignored for migration suites but still validated when provided
+  check_valid_values "db" "$DATABASE" "${VALID_DATABASES[@]}"
+  # --distro is ignored for migration suites; still validated for other suites
   if [[ "$TEST_SUITE" != "instance-migration" && "$TEST_SUITE" != "rolling-update" && "$TEST_SUITE" != "old-engine" ]]; then
     check_valid_values "distro" "$DISTRO" "${VALID_DISTROS[@]}"
-    check_valid_values "db" "$DATABASE" "${VALID_DATABASES[@]}"
   fi
 }
 
@@ -93,12 +93,38 @@ run_build () {
 
 ##########################################################################
 run_tests () {
-  # Migration suites run directly against h2; no server distro needed
+  # Migration suites run directly against the target database; no server distro needed
   case "$TEST_SUITE" in
     instance-migration|rolling-update|old-engine)
-      echo "ℹ️ Running $TEST_SUITE tests with h2"
-      echo "./mvnw -P${TEST_SUITE},h2 clean verify -f qa"
-      ./mvnw -P${TEST_SUITE},h2 clean verify -f qa
+      MIG_DB_ARGS=()
+      case "$DATABASE" in
+        h2)
+          ;;
+        postgresql)
+          MIG_DB_ARGS=(
+            -Ddatabase.url="${DATABASE_URL:-jdbc:postgresql://localhost:5432/process-engine}"
+            -Ddatabase.username="${DATABASE_USERNAME:-eximeebpms}"
+            -Ddatabase.password="${DATABASE_PASSWORD:-eximeebpms}"
+          )
+          ;;
+        mysql)
+          MIG_DB_ARGS=(
+            -Ddatabase.url="${MYSQL_URL:-jdbc:mysql://localhost:3306/process-engine?serverTimezone=UTC}"
+            -Ddatabase.username="${MYSQL_USERNAME:-eximeebpms}"
+            -Ddatabase.password="${MYSQL_PASSWORD:-eximeebpms}"
+          )
+          ;;
+        sqlserver)
+          MIG_DB_ARGS=(
+            -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine}"
+            -Ddatabase.username="${MSSQL_USERNAME:-sa}"
+            -Ddatabase.password="${MSSQL_PASSWORD:-EximeeBpms1!}"
+          )
+          ;;
+      esac
+      echo "ℹ️ Running $TEST_SUITE tests with $DATABASE"
+      echo "./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
+      ./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
       if [[ $? -ne 0 ]]; then
         echo "❌ Error: Tests failed"
         popd > /dev/null
@@ -155,6 +181,22 @@ run_tests () {
         -Ddatabase.url="${DATABASE_URL:-jdbc:postgresql://localhost:5432/process-engine}"
         -Ddatabase.username="${DATABASE_USERNAME:-eximeebpms}"
         -Ddatabase.password="${DATABASE_PASSWORD:-eximeebpms}"
+      )
+      ;;
+    mysql)
+      PROFILES+=(mysql)
+      DB_ARGS=(
+        -Ddatabase.url="${MYSQL_URL:-jdbc:mysql://localhost:3306/process-engine?serverTimezone=UTC}"
+        -Ddatabase.username="${MYSQL_USERNAME:-eximeebpms}"
+        -Ddatabase.password="${MYSQL_PASSWORD:-eximeebpms}"
+      )
+      ;;
+    sqlserver)
+      PROFILES+=(sqlserver)
+      DB_ARGS=(
+        -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine}"
+        -Ddatabase.username="${MSSQL_USERNAME:-sa}"
+        -Ddatabase.password="${MSSQL_PASSWORD:-EximeeBpms1!}"
       )
       ;;
   esac

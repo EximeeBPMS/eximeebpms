@@ -26,6 +26,9 @@ on:
           - '["engine"]'
           - '["webapps"]'
           - '["engine", "webapps"]'
+          - '["instance-migration"]'
+          - '["rolling-update"]'
+          - '["old-engine"]'
           - '["instance-migration", "rolling-update", "old-engine"]'
           - '["engine", "webapps", "instance-migration", "rolling-update", "old-engine"]'
       container:
@@ -45,7 +48,10 @@ on:
         options:
           - '["h2"]'
           - '["postgresql"]'
+          - '["mysql"]'
+          - '["sqlserver"]'
           - '["h2", "postgresql"]'
+          - '["h2", "postgresql", "mysql", "sqlserver"]'
 
 permissions:
   contents: read
@@ -73,19 +79,13 @@ jobs:
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
         exclude:
-          # Migration suites don't use a server distro and only support h2 (embedded)
+          # Migration suites don't deploy to a server distro; wildfly is excluded as meaningless
           - testsuite: instance-migration
             distro: wildfly
-          - testsuite: instance-migration
-            database: postgresql
           - testsuite: rolling-update
             distro: wildfly
-          - testsuite: rolling-update
-            database: postgresql
           - testsuite: old-engine
             distro: wildfly
-          - testsuite: old-engine
-            database: postgresql
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
@@ -105,6 +105,41 @@ jobs:
           java-version: ${{ matrix.java }}
           overwrite-settings: false
 
+      - name: Create custom settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <localRepository>${{ github.workspace }}/.m2/repository</localRepository>
+            <profiles>
+              <profile>
+                <id>postgresql</id>
+                <properties>
+                  <database.url>jdbc:postgresql://localhost:5432/process-engine</database.url>
+                  <database.username>eximeebpms</database.username>
+                  <database.password>eximeebpms</database.password>
+                </properties>
+              </profile>
+              <profile>
+                <id>mysql</id>
+                <properties>
+                  <database.url>jdbc:mysql://localhost:3306/process-engine?serverTimezone=UTC</database.url>
+                  <database.username>eximeebpms</database.username>
+                  <database.password>eximeebpms</database.password>
+                </properties>
+              </profile>
+              <profile>
+                <id>sqlserver</id>
+                <properties>
+                  <database.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine</database.url>
+                  <database.username>sa</database.username>
+                  <database.password>EximeeBpms1!</database.password>
+                </properties>
+              </profile>
+            </profiles>
+          </settings>
+          EOF
+
       - name: Remove corrupted Maven cache files
         run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
 
@@ -122,6 +157,40 @@ jobs:
             docker exec postgres-test pg_isready -U eximeebpms && break
             sleep 2
           done
+
+      - name: Start MySQL
+        if: matrix.database == 'mysql'
+        run: |
+          docker run -d --name mysql-test \
+            -e MYSQL_DATABASE=process-engine \
+            -e MYSQL_USER=eximeebpms \
+            -e MYSQL_PASSWORD=eximeebpms \
+            -e MYSQL_ROOT_PASSWORD=eximeebpms \
+            -p 3306:3306 \
+            mysql:8 --transaction-isolation=READ-COMMITTED
+          echo "Waiting for MySQL to be ready..."
+          for i in $(seq 1 30); do
+            docker exec mysql-test mysqladmin ping -u root --password=eximeebpms --silent && break
+            sleep 2
+          done
+
+      - name: Start MSSQL
+        if: matrix.database == 'sqlserver'
+        run: |
+          docker run -d --name mssql-test \
+            -e ACCEPT_EULA=Y \
+            -e SA_PASSWORD=EximeeBpms1! \
+            -p 1433:1433 \
+            mcr.microsoft.com/mssql/server:2019-latest
+          echo "Waiting for MSSQL to be ready..."
+          for i in $(seq 1 30); do
+            docker exec mssql-test /opt/mssql-tools18/bin/sqlcmd \
+              -S localhost -U sa -P EximeeBpms1! -No -Q "SELECT 1" 2>/dev/null && break
+            sleep 2
+          done
+          docker exec mssql-test /opt/mssql-tools18/bin/sqlcmd \
+            -S localhost -U sa -P EximeeBpms1! -No \
+            -Q "CREATE DATABASE [process-engine]"
 
       - name: Maven Build
         id: maven-build
@@ -162,6 +231,14 @@ jobs:
       - name: Stop PostgreSQL
         if: always() && matrix.database == 'postgresql'
         run: docker stop postgres-test && docker rm postgres-test || true
+
+      - name: Stop MySQL
+        if: always() && matrix.database == 'mysql'
+        run: docker stop mysql-test && docker rm mysql-test || true
+
+      - name: Stop MSSQL
+        if: always() && matrix.database == 'sqlserver'
+        run: docker stop mssql-test && docker rm mssql-test || true
 
       - name: Upload Artifacts
         if: always()

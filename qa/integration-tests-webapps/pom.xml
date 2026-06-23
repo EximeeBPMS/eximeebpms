@@ -154,6 +154,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>${version.awaitility}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-engine</artifactId>
       <scope>test</scope>

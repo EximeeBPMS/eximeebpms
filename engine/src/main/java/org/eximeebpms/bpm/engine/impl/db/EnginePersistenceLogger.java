@@ -807,6 +807,14 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
     );
   }
 
+  public void uuidV1GeneratorDeprecated() {
+    logWarn(
+      "111",
+      "ID generator UuidV1Generator (UUID v1) is deprecated and will be removed in EximeeBPMS 1.4.0. "
+      + "Migrate to StrongUuidGenerator (UUID v7, the default)."
+    );
+  }
+
   // exception code 110 is already taken. See requiredCamundaAdminOrPermissionException() for details.
 
   public static List<SQLException> findRelatedSqlExceptions(Throwable exception) {

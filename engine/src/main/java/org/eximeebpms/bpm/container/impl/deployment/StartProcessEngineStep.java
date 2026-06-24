@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.container.impl.deployment;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
@@ -35,6 +36,7 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
+import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.eximeebpms.bpm.engine.impl.util.ReflectUtil;
 
 import static org.eximeebpms.bpm.container.impl.deployment.Attachments.PROCESS_APPLICATION;
@@ -83,10 +85,11 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
     Class<? extends ProcessEngineConfigurationImpl> configurationClass = loadClass(configurationClassName, classLoader, ProcessEngineConfigurationImpl.class);
     ProcessEngineConfigurationImpl configuration = ReflectUtil.createInstance(configurationClass);
 
-    // set UUid generator
-    // TODO: move this to configuration and use as default?
-    ProcessEngineConfigurationImpl configurationImpl = configuration;
-    configurationImpl.setIdGenerator(new StrongUuidGenerator());
+    // set UUID generator — defaults to UUID v7 (StrongUuidGenerator); use property id-generator=uuid-v1 for legacy UUID v1
+    Map<String, String> properties = new HashMap<>(processEngineXml.getProperties());
+    configuration.setIdGenerator(createIdGenerator(properties));
+    // remove id-generator before applyProperties — it is kebab-case and has no matching setter
+    properties.remove("id-generator");
 
     // set configuration values
     String name = processEngineXml.getName();
@@ -96,7 +99,6 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
     configuration.setDataSourceJndiName(datasourceJndiName);
 
     // apply properties
-    Map<String, String> properties = processEngineXml.getProperties();
     setJobExecutorActivate(configuration, properties);
     PropertyHelper.applyProperties(configuration, properties);
 
@@ -109,7 +111,7 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
       ensureNotNull("Cannot find referenced job executor with name '" + processEngineXml.getJobAcquisitionName() + "'", "jobExecutor", jobExecutor);
 
       // set JobExecutor on process engine
-      configurationImpl.setJobExecutor(jobExecutor);
+      configuration.setJobExecutor(jobExecutor);
     }
 
     additionalConfiguration(configuration);
@@ -124,6 +126,14 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
     // override job executor auto activate: set to true in shared engine scenario
     // if it is not specified (see #CAM-4817)
     configuration.setJobExecutorActivate(true);
+  }
+
+  @SuppressWarnings({"deprecation", "removal"})
+  protected org.eximeebpms.bpm.engine.impl.cfg.IdGenerator createIdGenerator(Map<String, String> properties) {
+    if ("uuid-v1".equals(properties.get("id-generator"))) {
+      return new UuidV1Generator();
+    }
+    return new StrongUuidGenerator();
   }
 
   protected JmxManagedProcessEngineController createProcessEngineControllerInstance(ProcessEngineConfigurationImpl configuration) {

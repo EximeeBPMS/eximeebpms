@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 public class IdGeneratorConfiguration {
 
   public static final String PROPERTY_NAME = "id-generator";
+  public static final String UUID_V1 = "uuid-v1";
 
   public static final String SIMPLE = "simple";
   public static final String STRONG = "strong";
@@ -40,6 +41,17 @@ public class IdGeneratorConfiguration {
     return new StrongUuidGenerator();
   }
 
+  /**
+   * @deprecated Use {@link #strongUuidGenerator()} (UUID v7) instead. Will be removed in 1.4.0.
+   */
+  @Bean
+  @ConditionalOnMissingBean(IdGenerator.class)
+  @ConditionalOnProperty(prefix = CamundaBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = UUID_V1)
+  @Deprecated(since = "1.3.0", forRemoval = true)
+  @SuppressWarnings({"java:S1874", "java:S1133", "removal"})
+  public IdGenerator uuidV1Generator() {
+    return new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator();
+  }
 
   @Bean
   @ConditionalOnMissingBean(IdGenerator.class)

@@ -14,17 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eximeebpms.bpm.spring.boot.starter.configuration.id;
+package org.eximeebpms.bpm.run.test.config.id;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
@@ -32,32 +34,27 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * StrongUuidGenerator (UUID v7) is the default one.
+ * Verifies that EximeeBPMS Run uses StrongUuidGenerator (UUID v7) by default.
  */
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { TestApplication.class })
-public class StrongUuidGeneratorIT {
+@SpringBootTest(classes = { EximeeBpmsBpmRun.class })
+@ActiveProfiles(profiles = { "test-auth-disabled", "test-monitoring-disabled" })
+public class DefaultIdGeneratorRunTest {
 
   @Autowired
-  private IdGenerator idGenerator;
-
-  @Autowired
-  private ProcessEngine processEngine;
+  ProcessEngine engine;
 
   @Test
-  public void configured_idGenerator_is_strongUuidGenerator() {
-    IdGenerator idGenerator = ((ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration()).getIdGenerator();
-    assertThat(idGenerator).isOfAnyClassIn(StrongUuidGenerator.class);
-  }
+  public void defaultIdGeneratorIsStrongUuidGeneratorV7() {
+    // given
+    IdGenerator idGenerator = ((ProcessEngineConfigurationImpl) engine.getProcessEngineConfiguration()).getIdGenerator();
 
-  @Test
-  public void nextId_is_uuid_with_5_parts() {
-    assertThat(idGenerator.getNextId().split("-")).hasSize(5);
-  }
-
-  @Test
-  public void nextId_is_uuid_version_7() {
+    // then
+    assertThat(idGenerator).isInstanceOf(StrongUuidGenerator.class);
     UUID uuid = UUID.fromString(idGenerator.getNextId());
     assertThat(uuid.version()).isEqualTo(7);
   }
+
 }
+

@@ -17,6 +17,7 @@
 package org.eximeebpms.bpm.container.impl.jboss.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -40,6 +41,7 @@ import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.JakartaTransactionProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.jboss.as.connector.subsystems.datasources.DataSourceReferenceFactoryService;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.msc.service.ServiceBuilder;
@@ -180,7 +182,17 @@ public class MscManagedProcessEngineController extends MscManagedProcessEngine {
     MscRuntimeContainerJobExecutor mscRuntimeContainerJobExecutor = mscRuntimeContainerJobExecutorSupplier.get();
     processEngineConfiguration.setJobExecutor(mscRuntimeContainerJobExecutor);
 
-    PropertyHelper.applyProperties(processEngineConfiguration, processEngineMetadata.getConfigurationProperties());
+    // consume id-generator before applyProperties so PropertyHelper does not choke on the kebab-case key
+    Map<String, String> configProperties = new HashMap<>(processEngineMetadata.getConfigurationProperties());
+    String idGeneratorProperty = configProperties.remove("id-generator");
+    if ("uuid-v1".equals(idGeneratorProperty)) {
+      @SuppressWarnings("removal")
+      UuidV1Generator idGen = new UuidV1Generator();
+      processEngineConfiguration.setIdGenerator(idGen);
+    }
+    // otherwise let initIdGenerator() handle defaulting, preserving any value set by a custom subclass
+
+    PropertyHelper.applyProperties(processEngineConfiguration, configProperties);
 
     addProcessEnginePlugins(processEngineConfiguration);
 

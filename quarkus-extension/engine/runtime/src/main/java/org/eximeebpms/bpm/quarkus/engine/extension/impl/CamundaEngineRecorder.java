@@ -37,6 +37,7 @@ import org.eximeebpms.bpm.engine.cdi.impl.util.BeanManagerLookup;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
+import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.eximeebpms.bpm.quarkus.engine.extension.CamundaEngineConfig;
 import org.eximeebpms.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
 import org.eximeebpms.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
@@ -70,6 +71,8 @@ public class CamundaEngineRecorder {
       configuration.setTransactionManager(transactionManager());
     }
 
+    configureIdGenerator(configuration, config);
+
     // configure job executor,
     // if not already configured by a custom configuration
     if (configuration.getJobExecutor() == null) {
@@ -79,6 +82,16 @@ public class CamundaEngineRecorder {
     configureCdiEventBridge(configuration);
 
     return new RuntimeValue<>(configuration);
+  }
+
+  @SuppressWarnings("removal")
+  protected void configureIdGenerator(QuarkusProcessEngineConfiguration configuration, CamundaEngineConfig config) {
+    config.idGenerator().ifPresent(idGeneratorType -> {
+      if ("uuid-v1".equals(idGeneratorType)) {
+        configuration.setIdGenerator(new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator());
+      }
+      // else: StrongUuidGenerator (UUID v7) is already set in QuarkusProcessEngineConfiguration constructor
+    });
   }
 
   protected void configureCdiEventBridge(QuarkusProcessEngineConfiguration configuration) {

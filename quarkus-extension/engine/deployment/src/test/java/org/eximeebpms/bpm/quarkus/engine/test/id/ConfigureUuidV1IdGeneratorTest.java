@@ -20,7 +20,6 @@ import io.quarkus.test.QuarkusUnitTest;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
 import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -34,12 +33,18 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DefaultIdGeneratorTest {
+/**
+ * Verifies that setting {@code quarkus.camunda.id-generator=uuid-v1} configures UuidV1Generator.
+ *
+ * @deprecated This test will be removed when UuidV1Generator is removed in EximeeBPMS 1.4.0.
+ */
+@SuppressWarnings("removal")
+class ConfigureUuidV1IdGeneratorTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
-      .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
-
+      .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class))
+      .overrideConfigKey("quarkus.camunda.id-generator", "uuid-v1");
 
   @Inject
   public TaskService taskService;
@@ -48,19 +53,22 @@ public class DefaultIdGeneratorTest {
   protected ProcessEngine processEngine;
 
   @Test
-  public void shouldConfigureStrongIdGenerator() {
+  void shouldConfigureUuidV1IdGenerator() {
     Task task = taskService.newTask();
     taskService.saveTask(task);
 
     String id = taskService.createTaskQuery().singleResult().getId();
-    assertThat(id).matches("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
-    assertThat(UUID.fromString(id).version()).isEqualTo(7);
+
+    // UUID v1 has version bit = 1
+    assertThat(UUID.fromString(id).version()).isEqualTo(1);
 
     ProcessEngineConfigurationImpl engineConfig =
         (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
-    assertThat(engineConfig.getIdGenerator()).isInstanceOf(StrongUuidGenerator.class);
+    assertThat(engineConfig.getIdGenerator())
+        .isInstanceOf(org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator.class);
 
     taskService.deleteTask(id, true);
   }
 
 }
+

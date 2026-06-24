@@ -34,6 +34,7 @@ public class ManagedJtaProcessEngineConfiguration extends JakartaTransactionProc
     setJobExecutorActivate(true);
   }
 
+  @Override
   protected void initIdGenerator() {
     if (idGenerator == null) {
       idGenerator = new StrongUuidGenerator();

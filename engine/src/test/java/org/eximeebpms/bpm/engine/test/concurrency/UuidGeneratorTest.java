@@ -18,17 +18,18 @@ package org.eximeebpms.bpm.engine.test.concurrency;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
+import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Daniel Meyer
- *
  */
 public class UuidGeneratorTest {
 
@@ -36,24 +37,20 @@ public class UuidGeneratorTest {
   private static final int LOOP_COUNT = 10000;
 
   @Test
-  public void testMultithreaded() throws InterruptedException {
-    final List<Thread> threads = new ArrayList<Thread>();
+  public void testMultithreadedV1() throws InterruptedException {
+    final List<Thread> threads = new ArrayList<>();
 
     final TimeBasedGenerator timeBasedGenerator = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
-    final ConcurrentSkipListSet<String> generatedIds = new ConcurrentSkipListSet<String>();
-    final ConcurrentSkipListSet<String> duplicatedIds = new ConcurrentSkipListSet<String>();
+    final ConcurrentSkipListSet<String> generatedIds = new ConcurrentSkipListSet<>();
+    final ConcurrentSkipListSet<String> duplicatedIds = new ConcurrentSkipListSet<>();
 
     for (int i = 0; i < THREAD_COUNT; i++) {
-      Thread thread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          for (int j = 0; j < LOOP_COUNT; j++) {
-
-            String id = timeBasedGenerator.generate().toString();
-            boolean wasAdded = generatedIds.add(id);
-            if (!wasAdded) {
-              duplicatedIds.add(id);
-            }
+      Thread thread = new Thread(() -> {
+        for (int j = 0; j < LOOP_COUNT; j++) {
+          String id = timeBasedGenerator.generate().toString();
+          boolean wasAdded = generatedIds.add(id);
+          if (!wasAdded) {
+            duplicatedIds.add(id);
           }
         }
       });
@@ -68,4 +65,42 @@ public class UuidGeneratorTest {
     Assert.assertEquals(THREAD_COUNT * LOOP_COUNT, generatedIds.size());
     Assert.assertTrue(duplicatedIds.isEmpty());
   }
+
+  @Test
+  public void testMultithreadedV7StrongUuidGenerator() throws InterruptedException {
+    final StrongUuidGenerator generator = new StrongUuidGenerator();
+    final List<Thread> threads = new ArrayList<>();
+    final ConcurrentSkipListSet<String> generatedIds = new ConcurrentSkipListSet<>();
+    final ConcurrentSkipListSet<String> duplicatedIds = new ConcurrentSkipListSet<>();
+
+    for (int i = 0; i < THREAD_COUNT; i++) {
+      Thread thread = new Thread(() -> {
+        for (int j = 0; j < LOOP_COUNT; j++) {
+          String id = generator.getNextId();
+          boolean wasAdded = generatedIds.add(id);
+          if (!wasAdded) {
+            duplicatedIds.add(id);
+          }
+        }
+      });
+      threads.add(thread);
+      thread.start();
+    }
+
+    for (Thread thread : threads) {
+      thread.join();
+    }
+
+    Assert.assertEquals(THREAD_COUNT * LOOP_COUNT, generatedIds.size());
+    Assert.assertTrue(duplicatedIds.isEmpty());
+  }
+
+  @Test
+  public void testStrongUuidGeneratorProducesVersion7() {
+    final StrongUuidGenerator generator = new StrongUuidGenerator();
+    final String id = generator.getNextId();
+    final UUID uuid = UUID.fromString(id);
+    Assert.assertEquals("UUID version should be 7", 7, uuid.version());
+  }
+
 }

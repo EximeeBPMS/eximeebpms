@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.id;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
+import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,13 +30,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eximeebpms.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration.UUID_V1;
 
 /**
- * StrongUuidGenerator (UUID v7) is the default one.
+ * UuidV1Generator is configurable via 'eximeebpms.bpm.id-generator=uuid-v1'.
+ *
+ * @deprecated UUID v1 is deprecated. This test will be removed when UuidV1Generator is removed in 1.4.0.
  */
+@SuppressWarnings("removal")
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { TestApplication.class })
-public class StrongUuidGeneratorIT {
+@SpringBootTest(classes = { TestApplication.class }, properties = "eximeebpms.bpm.id-generator=" + UUID_V1)
+public class UuidV1GeneratorIT {
 
   @Autowired
   private IdGenerator idGenerator;
@@ -45,9 +49,9 @@ public class StrongUuidGeneratorIT {
   private ProcessEngine processEngine;
 
   @Test
-  public void configured_idGenerator_is_strongUuidGenerator() {
-    IdGenerator idGenerator = ((ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration()).getIdGenerator();
-    assertThat(idGenerator).isOfAnyClassIn(StrongUuidGenerator.class);
+  public void configured_idGenerator_is_uuidV1Generator() {
+    IdGenerator configured = ((ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration()).getIdGenerator();
+    assertThat(configured).isInstanceOf(UuidV1Generator.class);
   }
 
   @Test
@@ -56,8 +60,9 @@ public class StrongUuidGeneratorIT {
   }
 
   @Test
-  public void nextId_is_uuid_version_7() {
+  public void nextId_is_uuid_version_1() {
     UUID uuid = UUID.fromString(idGenerator.getNextId());
-    assertThat(uuid.version()).isEqualTo(7);
+    assertThat(uuid.version()).isEqualTo(1);
   }
 }
+

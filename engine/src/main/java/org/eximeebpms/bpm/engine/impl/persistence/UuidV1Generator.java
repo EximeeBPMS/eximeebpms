@@ -16,17 +16,32 @@
  */
 package org.eximeebpms.bpm.engine.impl.persistence;
 
+import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
-import com.fasterxml.uuid.impl.TimeBasedEpochGenerator;
+import com.fasterxml.uuid.impl.TimeBasedGenerator;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 
 /**
- * Secure random UUID (v7) based {@link IdGenerator}.
+ * <p>
+ * {@link IdGenerator} implementation based on the current time and the ethernet
+ * address of the machine it is running on.
+ * </p>
  *
+ * @deprecated UUID v1 reveals the MAC address and creation timestamp.
+ *     Use {@link StrongUuidGenerator} (UUID v7) instead. Will be removed in EximeeBPMS 1.4.0.
+ * @author Daniel Meyer
  */
-public class StrongUuidGenerator implements IdGenerator {
+@Deprecated(since = "1.3.0", forRemoval = true)
+@SuppressWarnings({"java:S1874", "java:S1133"})
+public class UuidV1Generator implements IdGenerator {
 
-  private static final TimeBasedEpochGenerator GENERATOR = Generators.timeBasedEpochGenerator();
+  // different ProcessEngines on the same classloader share one generator.
+  private static final TimeBasedGenerator GENERATOR = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
+
+  public UuidV1Generator() {
+    ProcessEngineLogger.PERSISTENCE_LOGGER.uuidV1GeneratorDeprecated();
+  }
 
   public String getNextId() {
     return GENERATOR.generate().toString();

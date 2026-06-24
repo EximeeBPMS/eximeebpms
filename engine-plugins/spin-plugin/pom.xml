@@ -40,7 +40,7 @@
 
     <dependency>
       <groupId>org.eximeebpms.spin</groupId>
-      <artifactId>eximeebpms-spin-dataformat-xml-dom</artifactId>
+      <artifactId>eximeebpms-spin-dataformat-xml-dom-jakarta</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -55,13 +55,13 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
       <scope>test</scope>
    </dependency>
-   
+
    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
@@ -73,13 +73,13 @@
       <artifactId>groovy-jsr223</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
@@ -129,10 +129,12 @@
     </dependency>
 
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>${version.jaxb-runtime}</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <build>

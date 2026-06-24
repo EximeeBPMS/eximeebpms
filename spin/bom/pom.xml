@@ -24,7 +24,7 @@
         <artifactId>eximeebpms-spin-core</artifactId>
         <version>${project.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.eximeebpms.spin</groupId>
         <artifactId>eximeebpms-spin-core</artifactId>
@@ -44,15 +44,11 @@
           </exclusion>
           <exclusion>
             <groupId>org.eximeebpms.spin</groupId>
-            <artifactId>eximeebpms-spin-dataformat-xml-dom</artifactId>
+            <artifactId>eximeebpms-spin-dataformat-xml-dom-jakarta</artifactId>
           </exclusion>
           <exclusion>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -60,12 +56,6 @@
       <dependency>
         <groupId>org.eximeebpms.spin</groupId>
         <artifactId>eximeebpms-spin-dataformat-json-jackson</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eximeebpms.spin</groupId>
-        <artifactId>eximeebpms-spin-dataformat-xml-dom</artifactId>
         <version>${project.version}</version>
       </dependency>
 

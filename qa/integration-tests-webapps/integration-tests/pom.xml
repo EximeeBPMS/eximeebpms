@@ -10,12 +10,12 @@
     <version>1.4.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
-  
-  <!-- 
+
+  <!--
     Maven modules running these tests with the failsafe plugin should declare the following system property:
-    
-    * selenium.screenshot.directory: defines where to store screenshots on test failures 
-        (e.g. set to "${project.build.directory}/selenium-screenshots"); 
+
+    * selenium.screenshot.directory: defines where to store screenshots on test failures
+        (e.g. set to "${project.build.directory}/selenium-screenshots");
         no screenshots created if not set
    -->
 
@@ -58,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-rest</artifactId>
+      <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
       <type>jar</type>
       <classifier>classes</classifier>
       <scope>provided</scope>

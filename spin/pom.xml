@@ -17,7 +17,7 @@
   <modules>
     <module>core</module>
     <module>dataformat-json-jackson</module>
-    <module>dataformat-xml-dom</module>
+    <module>dataformat-xml-dom-jakarta</module>
     <module>dataformat-all</module>
   </modules>
 
@@ -60,7 +60,7 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${mockito.version}</version>
-      </dependency>      
+      </dependency>
 
       <dependency>
         <groupId>org.powermock</groupId>
@@ -101,13 +101,7 @@
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
         <artifactId>jakarta.xml.bind-api</artifactId>
-        <version>${version.xml.bind-api}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${version.xml.jaxb-impl}</version>
+        <version>${version.jakarta.xml.bind-api}</version>
       </dependency>
 
       <dependency>

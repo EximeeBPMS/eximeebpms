@@ -22,7 +22,7 @@
   <dependencies>
     <dependency>
       <groupId>org.eximeebpms.bpm.webapp</groupId>
-      <artifactId>eximeebpms-webapp</artifactId>
+      <artifactId>eximeebpms-webapp-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>runtime</scope>

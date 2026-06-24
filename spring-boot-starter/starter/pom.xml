@@ -149,11 +149,7 @@
       <artifactId>spring-boot-resttestclient</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>${version.xml.jaxb-impl4}</version>
-    </dependency>
+    <!--com.sun.xml.bind jaxb-impl -->
   </dependencies>
 
   <build>

@@ -174,7 +174,7 @@
 
     <dependency>
       <groupId>org.eximeebpms.bpm.example</groupId>
-      <artifactId>eximeebpms-example-invoice</artifactId>
+      <artifactId>eximeebpms-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
@@ -182,7 +182,7 @@
 
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
-      <artifactId>eximeebpms-engine-rest</artifactId>
+      <artifactId>eximeebpms-engine-rest-jakarta</artifactId>
       <type>jar</type>
       <classifier>classes</classifier>
       <scope>test</scope>

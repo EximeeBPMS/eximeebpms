@@ -14,20 +14,6 @@
   <name>EximeeBPMS - engine - Spring - Root</name>
 
   <modules>
-    <module>core</module>
+    <module>core-6</module>
   </modules>
-
-  <profiles>
-    <profile>
-      <id>jdk17</id>
-      <activation>
-        <jdk>[17,)</jdk>
-      </activation>
-      <modules>
-        <module>core-6</module>
-      </modules>
-    </profile>
-  </profiles>
-
-  
 </project>

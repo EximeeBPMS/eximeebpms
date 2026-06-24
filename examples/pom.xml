@@ -93,7 +93,6 @@
   </build>
 
   <modules>
-    <module>invoice</module>
     <module>invoice-jakarta</module>
   </modules>
 

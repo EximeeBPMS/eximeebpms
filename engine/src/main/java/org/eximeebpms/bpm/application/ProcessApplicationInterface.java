@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.eximeebpms.bpm.ProcessApplicationService;
-import org.eximeebpms.bpm.application.impl.EjbProcessApplication;
+import org.eximeebpms.bpm.application.impl.JakartaEjbProcessApplication;
 import org.eximeebpms.bpm.application.impl.EmbeddedProcessApplication;
-import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
+import org.eximeebpms.bpm.application.impl.JakartaServletProcessApplication;
 import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
 import org.eximeebpms.bpm.engine.delegate.TaskListener;
 import jakarta.el.BeanELResolver;
@@ -65,10 +65,8 @@ import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
  * your application and the process engine. There are different base classes you can extent to reflect
  * different environments (e.g. Servlet vs. EJB Container):
  * <ul>
- *  <li> {@link ServletProcessApplication}: To be used for Process Applications in a Servlet Container like Apache Tomcat.
- *  Use the JakartaServletProcessApplication in a Jakarta Servlet 5+ Container.</li>
- *  <li> {@link EjbProcessApplication}: To be used in a Java EE application server.
- *  Use the JakartaEjbProcessApplication in a Jakarta EE 9+ application server.</li>
+ *  <li> {@link JakartaServletProcessApplication}: To be used for Process Applications in a Servlet 5+ Container like Apache Tomcat.
+ *  <li> {@link JakartaEjbProcessApplication}: To be used in a Java EE 9+ application server.</li>
  *  <li> {@link EmbeddedProcessApplication}: To be used when embedding the process engine is an ordinary Java SE application.</li>
  *  <li> org.eximeebpms.bpm.engine.spring.application.SpringProcessApplication: To be used for bootstrapping the process application from a Spring Application Context.</li>
  * </ul>

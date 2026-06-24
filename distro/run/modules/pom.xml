@@ -13,7 +13,7 @@
   <name>EximeeBPMS - Run - Modules</name>
   <packaging>pom</packaging>
 
-  <!-- define provided dependencies that will already be present in the Spring 
+  <!-- define provided dependencies that will already be present in the Spring
     Boot ZIP and are not needed in the resulting dependency sets here -->
   <dependencyManagement>
     <dependencies>
@@ -97,7 +97,7 @@
       </dependency>
       <dependency>
         <groupId>org.eximeebpms.bpm</groupId>
-        <artifactId>eximeebpms-engine-rest-core</artifactId>
+        <artifactId>eximeebpms-engine-rest-core-jakarta</artifactId>
         <version>${project.version}</version>
         <scope>provided</scope>
       </dependency>

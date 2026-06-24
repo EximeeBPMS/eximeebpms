@@ -3,9 +3,6 @@ REST API Jakarta
 
 A Jakarta JAX-RS-based REST API for EximeeBPMS Platform.
 
-> This module copies and transforms the `eximeebpms-engine-rest-core` module.  
-> It contains only implementations for classes where there are breaking changes either in the updated dependencies or due to JakartaEE.
-
 Running Tests
 -------------
 

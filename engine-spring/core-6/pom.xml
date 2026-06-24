@@ -78,14 +78,14 @@
       <!--  do not expose -->
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- servlet API -->
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
@@ -184,78 +184,6 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sources</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
-               <resources>
-                <resource>
-                  <directory>${basedir}/../core/src/main/java</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>resources</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/generated-resources/java</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../core/src/main/resources</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>test-sources</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/generated-test-sources/java</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../core/src/test/java</directory>
-                  <filtering>false</filtering>
-                  <!-- Nashorn is not part of the JDK anymore in Java 15+ -->
-                  <excludes>**/*NashornTest.java</excludes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>test-resources</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/generated-test-resources/java</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../core/src/test/resources</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -263,115 +191,6 @@
             <goals>
               <goal>properties</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.transformer</groupId>
-        <artifactId>transformer-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>transform-java-sources</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformDirectory>${project.build.directory}/generated-sources/java</transformDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>transform-resources</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformDirectory>${project.build.directory}/generated-resources/java</transformDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>transform-java-test-sources</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformDirectory>${project.build.directory}/generated-test-sources/java</transformDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>transform-test-resources</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformDirectory>${project.build.directory}/generated-test-resources/java</transformDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          <dependenciesToScan>
-            <dependency>org.eximeebpms.bpm:eximeebpms-bpm-archunit</dependency>
-          </dependenciesToScan>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>add-java-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${basedir}/target/generated-sources/java</source>
-              </sources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>add-resources</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>add-resource</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource><directory>${basedir}/target/generated-resources/java</directory></resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>add-java-test-source</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>add-test-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${basedir}/target/generated-test-sources/java</source>
-              </sources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>add-test-resources</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>add-test-resource</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource><directory>${basedir}/target/generated-test-resources/java</directory></resource>
-              </resources>
-            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -14,7 +14,6 @@
   <name>EximeeBPMS - engine - CDI - Root</name>
 
   <modules>
-    <module>core</module>
     <module>jakarta</module>
   </modules>
 

@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.ProcessApplicationUnavailableException;
-import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
@@ -29,7 +28,6 @@ import org.jboss.msc.service.StopContext;
 
 /**
  * <p>Start Service for process applications that do not expose an EE Component View
- * (like {@link ServletProcessApplication}</p>
  *
  * @author Daniel Meyer
  *

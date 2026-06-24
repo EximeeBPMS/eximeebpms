@@ -32,11 +32,6 @@
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${version.xml.jaxb-impl}</version>
-      </dependency>
-      <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
         <version>${version.rest-assured}</version>
@@ -80,11 +75,9 @@
   </dependencyManagement>
 
   <modules>
-    <module>engine-rest</module>
     <module>engine-rest-jakarta</module>
     <module>engine-rest-openapi</module>
     <module>engine-rest-openapi-generator</module>
-    <module>assembly</module>
     <module>assembly-jakarta</module>
     <module>docs</module>
   </modules>

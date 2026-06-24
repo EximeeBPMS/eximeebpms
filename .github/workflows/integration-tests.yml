@@ -77,7 +77,7 @@ jobs:
         java: ${{ fromJson(github.event.inputs.java_version || '["21"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps", "instance-migration", "rolling-update", "old-engine"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
-        database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
+        database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql", "mysql", "sqlserver"]') }}
         exclude:
           # Migration suites don't deploy to a server distro; wildfly is excluded as meaningless
           - testsuite: instance-migration

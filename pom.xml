@@ -396,6 +396,7 @@
         <module>engine-cdi</module>
         <module>engine-spring</module>
         <module>engine-rest</module>
+        <module>engine-plugins</module>
       </modules>
     </profile>
 

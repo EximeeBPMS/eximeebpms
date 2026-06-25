@@ -89,10 +89,10 @@ public class TopicSubscriptionManagerTest {
 
     @After
     public void tearDown() {
+        executor.shutdownNow();
         if (manager.isRunning()) {
             manager.stop();
         }
-        executor.shutdownNow();
     }
 
     @Test
@@ -1077,6 +1077,7 @@ public class TopicSubscriptionManagerTest {
     public void shouldExecuteTaskWhenLockIsNotYetExpired() throws Exception {
         // Given: Task with lock expiring in the future
         ExternalTaskImpl validTask = mock(ExternalTaskImpl.class);
+        when(validTask.getId()).thenReturn("valid-task-id");
         when(validTask.getTopicName()).thenReturn("testTopic");
         when(validTask.getProcessDefinitionKey()).thenReturn("process-testTopic");
         when(validTask.getVariables()).thenReturn(Collections.emptyMap());
@@ -1113,12 +1114,14 @@ public class TopicSubscriptionManagerTest {
         when(expiredTask.getLockExpirationTime()).thenReturn(Date.from(Instant.now().minus(1, ChronoUnit.MINUTES)));
 
         ExternalTaskImpl validTask1 = mock(ExternalTaskImpl.class);
+        when(validTask1.getId()).thenReturn("valid-task-id-1");
         when(validTask1.getTopicName()).thenReturn("testTopic");
         when(validTask1.getProcessDefinitionKey()).thenReturn("process-testTopic");
         when(validTask1.getVariables()).thenReturn(Collections.emptyMap());
         when(validTask1.getLockExpirationTime()).thenReturn(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)));
 
         ExternalTaskImpl validTask2 = mock(ExternalTaskImpl.class);
+        when(validTask2.getId()).thenReturn("valid-task-id-2");
         when(validTask2.getTopicName()).thenReturn("testTopic");
         when(validTask2.getProcessDefinitionKey()).thenReturn("process-testTopic");
         when(validTask2.getVariables()).thenReturn(Collections.emptyMap());
@@ -1153,6 +1156,7 @@ public class TopicSubscriptionManagerTest {
         List<ExternalTask> tasks = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             ExternalTaskImpl task = mock(ExternalTaskImpl.class);
+            when(task.getId()).thenReturn("task-" + topicName + "-" + i);
             when(task.getTopicName()).thenReturn(topicName);
             when(task.getProcessDefinitionKey()).thenReturn("process-" + topicName);
             when(task.getVariables()).thenReturn(Collections.emptyMap());

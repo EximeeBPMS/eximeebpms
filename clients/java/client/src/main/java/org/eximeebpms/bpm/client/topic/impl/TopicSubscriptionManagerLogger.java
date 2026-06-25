@@ -83,4 +83,16 @@ public class TopicSubscriptionManagerLogger extends ExternalTaskClientLogger {
       "009",
       String.format("All threads are busy for topics [%s]. Active threads: %d, queue size: %d", topics, activeCount, queueSize));
     }
+
+  public void exceptionWhileUnlockingTaskOnShutdown(String taskId, Throwable e) {
+    logError(
+      "011",
+      String.format("Exception while unlocking task '%s' during graceful shutdown. The task lock will expire naturally.", taskId), e);
+  }
+
+  public void pendingTasksUnlockOnShutdown(int count) {
+    logInfo(
+      "012",
+      String.format("Unlocking %d pending task(s) on shutdown to prevent lock expiry delays.", count));
+  }
 }

@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -85,6 +86,8 @@ public class ExecutorRunnerTest {
         // Make spy.copy() return itself so we can verify calls
         when(spyBackoffStrategy.copy()).thenReturn(spyBackoffStrategy);
 
+        when(typedValues.wrapVariables(any(), any())).thenReturn(Collections.emptyMap());
+
         runner = new ExecutorRunner(
                 engineClient,
                 typedValues,
@@ -99,10 +102,10 @@ public class ExecutorRunnerTest {
 
     @After
     public void tearDown() {
+        executor.shutdownNow();
         if (runner.isRunning.get()) {
             runner.stop();
         }
-        executor.shutdownNow();
     }
 
     @Test
@@ -850,6 +853,139 @@ public class ExecutorRunnerTest {
         assertTrue("Thread should stop well under 10s", stopElapsed < 5_000);
     }
 
+    @Test
+    public void shouldUnlockPendingTasksOnStop() throws Exception {
+        // Given: all 10 core threads are occupied so the fetched task lands in the
+        // executor queue (pending state) and cannot start yet.
+        CountDownLatch coresFilled = new CountDownLatch(10);
+        CountDownLatch coresBlocker = new CountDownLatch(1);
+        for (int i = 0; i < 10; i++) {
+            executor.submit(() -> {
+                coresFilled.countDown();
+                try { coresBlocker.await(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            });
+        }
+        assertTrue("All core threads should start", coresFilled.await(2, TimeUnit.SECONDS));
+
+        ExternalTaskImpl task = createSingleTask("task-to-unlock", "testTopic");
+        // First fetch returns the task; subsequent cycles return empty (cores stay busy, queue stays full)
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(task))
+                .thenReturn(Collections.emptyList());
+
+        runner.disableBackoffStrategy();
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+        runner.start();
+
+        // Wait until at least one acquire cycle completed (task is now in pendingTasks)
+        verify(engineClient, timeout(2000).atLeastOnce()).fetchAndLock(anyList(), anyInt());
+
+        // When: stop the runner while cores are still blocked (task remains in pendingTasks)
+        runner.stop();
+
+        // Then: unlock must be called for the pending task
+        verify(engineClient, times(1)).unlock("task-to-unlock");
+
+        coresBlocker.countDown(); // cleanup
+    }
+
+    @Test
+    public void shouldNotCallUnlockWhenNoPendingTasksOnStop() throws Exception {
+        // Given: no tasks fetched
+        when(engineClient.fetchAndLock(anyList(), anyInt())).thenReturn(Collections.emptyList());
+
+        runner.disableBackoffStrategy();
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+        runner.start();
+
+        verify(engineClient, timeout(2000).atLeastOnce()).fetchAndLock(anyList(), anyInt());
+
+        // When
+        runner.stop();
+
+        // Then: unlock must never be called
+        verify(engineClient, never()).unlock(any());
+    }
+
+    @Test
+    public void shouldUnlockMultiplePendingTasksOnStop() throws Exception {
+        // Given: 10 core threads blocked; multiplier 1.5 → maxTasks=15, so up to 5 tasks
+        // can be fetched even when all 10 cores are busy (they go into queue / pendingTasks).
+        CountDownLatch coresFilled = new CountDownLatch(10);
+        CountDownLatch coresBlocker = new CountDownLatch(1);
+        for (int i = 0; i < 10; i++) {
+            executor.submit(() -> {
+                coresFilled.countDown();
+                try { coresBlocker.await(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            });
+        }
+        assertTrue("All core threads should start", coresFilled.await(2, TimeUnit.SECONDS));
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(
+                        createSingleTask("pending-1", "testTopic"),
+                        createSingleTask("pending-2", "testTopic"),
+                        createSingleTask("pending-3", "testTopic")))
+                .thenReturn(Collections.emptyList());
+
+        runner.disableBackoffStrategy();
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+        runner.start();
+
+        verify(engineClient, timeout(2000).atLeastOnce()).fetchAndLock(anyList(), anyInt());
+
+        // When
+        runner.stop();
+
+        // Then: all 3 tasks unlocked
+        verify(engineClient, times(1)).unlock("pending-1");
+        verify(engineClient, times(1)).unlock("pending-2");
+        verify(engineClient, times(1)).unlock("pending-3");
+
+        coresBlocker.countDown();
+    }
+
+    @Test
+    public void shouldContinueUnlockingRemainingTasksWhenOneUnlockFails() throws Exception {
+        // Given: two tasks in pendingTasks; unlock of the first throws.
+        CountDownLatch coresFilled = new CountDownLatch(10);
+        CountDownLatch coresBlocker = new CountDownLatch(1);
+        for (int i = 0; i < 10; i++) {
+            executor.submit(() -> {
+                coresFilled.countDown();
+                try { coresBlocker.await(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            });
+        }
+        assertTrue("All core threads should start", coresFilled.await(2, TimeUnit.SECONDS));
+
+        when(engineClient.fetchAndLock(anyList(), anyInt()))
+                .thenReturn(List.of(
+                        createSingleTask("fail-task", "testTopic"),
+                        createSingleTask("ok-task", "testTopic")))
+                .thenReturn(Collections.emptyList());
+        doThrow(new RuntimeException("unlock error"))
+                .when(engineClient).unlock("fail-task");
+
+        runner.disableBackoffStrategy();
+        TopicSubscription subscription = createSubscription("testTopic", taskHandler);
+        runner.subscribe(subscription);
+        runner.start();
+
+        verify(engineClient, timeout(2000).atLeastOnce()).fetchAndLock(anyList(), anyInt());
+
+        // When: stop must not throw even if one unlock fails
+        runner.stop();
+
+        // Then: both unlocks were attempted
+        verify(engineClient, times(1)).unlock("fail-task");
+        verify(engineClient, times(1)).unlock("ok-task");
+
+        coresBlocker.countDown();
+    }
+
     private List<ExternalTask> createMockTasks(int count) {
         return createMockTasks(count, "testTopic");
     }
@@ -876,6 +1012,17 @@ public class ExecutorRunnerTest {
         when(subscription.getExternalTaskHandler()).thenReturn(handler);
         when(subscription.getLockDuration()).thenReturn(CLIENT_LOCK_DURATION);
         return subscription;
+    }
+
+    private ExternalTaskImpl createSingleTask(String id, String topicName) {
+        final ExternalTaskImpl task = new ExternalTaskImpl();
+        task.setId(id);
+        task.setTopicName(topicName);
+        task.setProcessDefinitionKey("process-" + topicName);
+        task.setVariables(Collections.emptyMap());
+        task.setLockExpirationTime(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)));
+        task.setReceivedVariableMap(Collections.emptyMap());
+        return task;
     }
 }
 

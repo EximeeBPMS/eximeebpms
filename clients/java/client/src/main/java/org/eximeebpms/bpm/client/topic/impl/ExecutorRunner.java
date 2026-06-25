@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -96,6 +98,22 @@ public class ExecutorRunner implements Runnable {
 
     protected AtomicBoolean isRunning = new AtomicBoolean(false);
 
+    /**
+     * Set to true when {@link #stop()} is called. Checked inside the executor lambdas
+     * to skip execution of tasks that were queued before shutdown was initiated but haven't
+     * started yet. Separate from {@link #isRunning} so that calling {@link #acquire()} without
+     * {@link #start()} (e.g. in tests) does not suppress task execution.
+     */
+    private final AtomicBoolean isStopped = new AtomicBoolean(false);
+
+    /**
+     * Tracks tasks that have been fetched and submitted to the executor queue but whose
+     * execution has not yet started. Used during graceful shutdown to unlock these tasks
+     * in the engine, preventing them from being "frozen" until lock expiry.
+     * Key: task id, Value: the fetched ExternalTask.
+     */
+    private final ConcurrentHashMap<String, ExternalTask> pendingTasks = new ConcurrentHashMap<>();
+
     public ExecutorRunner(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
                           ThreadPoolExecutor taskExecutor, double maxFetchedTasksMultiplier,
                           ExternalTaskExecutionStats executionStats) {
@@ -140,8 +158,14 @@ public class ExecutorRunner implements Runnable {
                     ExternalTaskHandler taskHandler = externalTaskHandlers.get(topicName);
 
                     if (taskHandler != null) {
-                        CompletableFuture.runAsync(() -> handleExternalTask(externalTask, taskHandler),
-                                taskExecutor);
+                        pendingTasks.put(externalTask.getId(), externalTask);
+                        CompletableFuture.runAsync(() -> {
+                            if (isStopped.get()) {
+                                return;
+                            }
+                            pendingTasks.remove(externalTask.getId());
+                            handleExternalTask(externalTask, taskHandler);
+                        }, taskExecutor);
                     } else {
                         LOG.taskHandlerIsNull(topicName);
                     }
@@ -153,7 +177,13 @@ public class ExecutorRunner implements Runnable {
             } else {
                 LOG.allThreadsAreBusy(taskExecutor.getActiveCount(), taskExecutor.getQueue().size(),
                         externalTaskHandlers.keySet().stream().sorted().collect(java.util.stream.Collectors.joining(", ")));
-                CompletableFuture.runAsync(() ->{}, taskExecutor).join(); // wait for currently running tasks to complete
+                try {
+                    CompletableFuture.runAsync(() -> {}, taskExecutor).get();
+                } catch (ExecutionException e) {
+                    // no-op task completed exceptionally (e.g. executor rejected it on shutdown)
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
@@ -216,13 +246,11 @@ public class ExecutorRunner implements Runnable {
      */
     protected void handleExternalTask(ExternalTask externalTask, ExternalTaskHandler taskHandler) {
         ExternalTaskImpl task = (ExternalTaskImpl) externalTask;
-
-        Map<String, TypedValueField> variables = task.getVariables();
-        Map<String, VariableValue<?>> wrappedVariables = typedValues.wrapVariables(task, variables);
-        task.setReceivedVariableMap(wrappedVariables);
-
         long startTime = System.currentTimeMillis();
         try {
+            Map<String, TypedValueField> variables = task.getVariables();
+            Map<String, VariableValue<?>> wrappedVariables = typedValues.wrapVariables(task, variables);
+            task.setReceivedVariableMap(wrappedVariables);
             if (checkLockExpired(task)) {
                 return;
             }
@@ -353,6 +381,7 @@ public class ExecutorRunner implements Runnable {
      */
     public synchronized void start() {
         if (isRunning.compareAndSet(false, true)) {
+            isStopped.set(false);
             thread = new Thread(this, threadName);
             thread.start();
         }
@@ -363,19 +392,52 @@ public class ExecutorRunner implements Runnable {
      *
      * <p>If the runner is not running this method has no effect. It is {@code synchronized}
      * to prevent concurrent stop attempts.
+     *
+     * <p>After the acquisition loop stops, any tasks that were already fetched from the engine
+     * but are still waiting in the executor queue (not yet executing) are unlocked by sending
+     * an unlock request to the engine. This prevents tasks from being "frozen" in the engine
+     * database until their lock expires after an application restart.
      */
     public synchronized void stop() {
         if (isRunning.compareAndSet(true, false)) {
+            isStopped.set(true);
             resume();
             try {
                 if (thread != null) {
+                    thread.interrupt();
                     thread.join();
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 LOG.exceptionWhileShuttingDown(e);
             }
+            unlockPendingTasks();
         }
+    }
+
+    /**
+     * Unlocks all tasks that were fetched from the engine but are still waiting in the
+     * executor queue (i.e. their execution has not yet started).
+     *
+     * <p>This is called during {@link #stop()} to prevent tasks from being locked in the
+     * engine database until lock expiry after an application restart.
+     */
+    private void unlockPendingTasks() {
+        if (pendingTasks.isEmpty()) {
+            return;
+        }
+        LOG.pendingTasksUnlockOnShutdown(pendingTasks.size());
+        pendingTasks.forEach((taskId, task) -> {
+            // Only unlock if the task is still tracked as pending at the time of unlocking
+            if (!pendingTasks.remove(taskId, task)) {
+                return;
+            }
+            try {
+                engineClient.unlock(taskId);
+            } catch (Exception e) {
+                LOG.exceptionWhileUnlockingTaskOnShutdown(taskId, e);
+            }
+        });
     }
 
     /**

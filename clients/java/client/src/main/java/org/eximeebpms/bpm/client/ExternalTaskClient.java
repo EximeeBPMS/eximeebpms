@@ -61,4 +61,19 @@ public interface ExternalTaskClient {
    */
   boolean isActive();
 
+  /**
+   * Returns in-memory execution statistics for all processed external tasks,
+   * aggregated per process definition key and topic name.
+   * <p>
+   * The statistics are always maintained regardless of whether periodic logging
+   * (configured via {@link ExternalTaskClientBuilder#statsSchedulerEnabled(boolean)}) is enabled.
+   * They can be used to integrate with monitoring systems such as Micrometer / Spring Boot Actuator.
+   * <p>
+   * Statistics are reset after each periodic logging cycle (if enabled) or can be reset manually
+   * via {@link ExternalTaskExecutionStats#reset()}.
+   *
+   * @return the current execution statistics; never {@code null}
+   */
+  ExternalTaskExecutionStats getExecutionStats();
+
 }

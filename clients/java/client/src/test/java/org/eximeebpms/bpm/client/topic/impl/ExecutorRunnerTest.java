@@ -31,6 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.backoff.ExponentialBackoffStrategy;
 import org.eximeebpms.bpm.client.impl.EngineClient;
@@ -45,6 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -65,6 +67,12 @@ public class ExecutorRunnerTest {
     private TypedValues typedValues;
     @Mock
     private ExternalTaskHandler taskHandler;
+    @Captor
+    private ArgumentCaptor<List<ExternalTask>> tasksCaptor;
+    @Captor
+    private ArgumentCaptor<List<ExternalTask>> tasksCaptor1;
+    @Captor
+    private ArgumentCaptor<List<ExternalTask>> tasksCaptor2;
 
     private ThreadPoolExecutor executor;
     private ExecutorRunner runner;
@@ -122,7 +130,6 @@ public class ExecutorRunnerTest {
         runner.acquire();
 
         // Then: Backoff strategy SHOULD be invoked with the fetched tasks
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(1)).reconfigure(tasksCaptor.capture());
         verify(spyBackoffStrategy, times(1)).calculateBackoffTime();
 
@@ -204,7 +211,6 @@ public class ExecutorRunnerTest {
         runner.acquire();
 
         // Then: calculateBackoffTime should return > 0 (exponential backoff increases)
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor1 = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(1)).reconfigure(tasksCaptor1.capture());
         assertTrue("First reconfigure should get empty list", tasksCaptor1.getValue().isEmpty());
 
@@ -212,7 +218,6 @@ public class ExecutorRunnerTest {
         runner.acquire();
 
         // Then: calculateBackoffTime should be called again, this time with tasks
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor2 = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(2)).reconfigure(tasksCaptor2.capture());
         assertEquals("Second reconfigure should get 5 tasks", 5, tasksCaptor2.getAllValues().get(1).size());
         verify(spyBackoffStrategy, times(2)).calculateBackoffTime();
@@ -291,7 +296,6 @@ public class ExecutorRunnerTest {
         verify(handler2, timeout(1000).times(3)).execute(any(), any());
 
         // Backoff should be called with combined tasks
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(1)).reconfigure(tasksCaptor.capture());
         assertEquals("Should receive all 5 tasks", 5, tasksCaptor.getValue().size());
     }
@@ -391,7 +395,6 @@ public class ExecutorRunnerTest {
         runner.acquire();
 
         // Then: Backoff should be invoked 3 times
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(3)).reconfigure(tasksCaptor.capture());
         verify(spyBackoffStrategy, times(3)).calculateBackoffTime();
 
@@ -506,7 +509,6 @@ public class ExecutorRunnerTest {
         assertEquals("Should request 7 tasks", Integer.valueOf(7), maxTasksCaptor.getValue());
 
         // Backoff should be invoked with the 3 fetched tasks
-        ArgumentCaptor<List<ExternalTask>> tasksCaptor = ArgumentCaptor.forClass(List.class);
         verify(spyBackoffStrategy, times(1)).reconfigure(tasksCaptor.capture());
         assertEquals("Should receive 3 tasks", 3, tasksCaptor.getValue().size());
 

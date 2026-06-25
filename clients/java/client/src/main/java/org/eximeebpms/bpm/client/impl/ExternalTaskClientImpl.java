@@ -18,6 +18,7 @@ package org.eximeebpms.bpm.client.impl;
 
 import org.eximeebpms.bpm.client.ExternalTaskClient;
 import org.eximeebpms.bpm.client.topic.TopicSubscriptionBuilder;
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
 import org.eximeebpms.bpm.client.topic.impl.TopicSubscriptionBuilderImpl;
 import org.eximeebpms.bpm.client.topic.impl.TopicSubscriptionManager;
 
@@ -46,6 +47,10 @@ public class ExternalTaskClientImpl implements ExternalTaskClient {
 
   public boolean isActive() {
     return topicSubscriptionManager.isRunning();
+  }
+
+  public ExternalTaskExecutionStats getExecutionStats() {
+    return topicSubscriptionManager.getExecutionStats();
   }
 
   public TopicSubscriptionManager getTopicSubscriptionManager() {

@@ -2,7 +2,7 @@ package org.eximeebpms.bpm.client.topic.impl;
 
 import java.util.Map;
 
-import org.eximeebpms.bpm.client.topic.impl.ExternalTaskExecutionStats.TaskStats;
+import org.eximeebpms.bpm.client.TaskStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +23,9 @@ public class ExternalTaskExecutionStatsLogger {
     /**
      * Logs all execution statistics in a formatted manner.
      *
-     * @param stats the execution statistics to log
+     * @param allStats snapshot of stats for the current interval
      */
-    public static void logStats(ExternalTaskExecutionStats stats) {
-        Map<String, TaskStats> allStats = stats.getAllStats();
-
+    public static void logStats(Map<String, TaskStats> allStats) {
         if (allStats.isEmpty()) {
             LOGGER.info("No execution statistics available");
             return;

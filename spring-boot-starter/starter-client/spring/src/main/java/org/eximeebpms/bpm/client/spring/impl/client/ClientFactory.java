@@ -25,6 +25,7 @@ import org.eximeebpms.bpm.client.ExternalTaskClient;
 import org.eximeebpms.bpm.client.ExternalTaskClientBuilder;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.interceptor.ClientRequestInterceptor;
+import org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener;
 import org.eximeebpms.bpm.client.spring.exception.SpringExternalTaskClientException;
 import org.eximeebpms.bpm.client.spring.impl.client.util.ClientLoggerUtil;
 import org.springframework.beans.factory.FactoryBean;
@@ -44,6 +45,7 @@ public class ClientFactory
 
   protected BackoffStrategy backoffStrategy;
   protected List<ClientRequestInterceptor> requestInterceptors = new ArrayList<>();
+  protected List<ExternalTaskExecutionStatsListener> statsListeners = new ArrayList<>();
 
   protected ExternalTaskClient client;
 
@@ -91,6 +93,8 @@ public class ClientFactory
       if (backoffStrategy != null) {
         clientBuilder.backoffStrategy(backoffStrategy);
       }
+
+      statsListeners.forEach(clientBuilder::addStatsListener);
 
       tryConfigureCreateTimeOrder(clientBuilder);
 
@@ -163,6 +167,14 @@ public class ClientFactory
   public void setClientBackoffStrategy(BackoffStrategy backoffStrategy) {
     this.backoffStrategy = backoffStrategy;
     LOG.backoffStrategyFound();
+  }
+
+  @Autowired(required = false)
+  public void setStatsListeners(List<ExternalTaskExecutionStatsListener> statsListeners) {
+    if (statsListeners != null) {
+      this.statsListeners.addAll(statsListeners);
+      LOG.statsListenersFound(this.statsListeners.size());
+    }
   }
 
   @Override

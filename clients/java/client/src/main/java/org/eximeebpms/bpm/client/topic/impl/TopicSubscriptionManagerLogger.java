@@ -55,6 +55,11 @@ public class TopicSubscriptionManagerLogger extends ExternalTaskClientLogger {
       "005", "Exception while executing back off strategy method.", e);
   }
 
+  protected void exceptionWhileExecutingStatsListener(Throwable e) {
+    logError(
+      "011", "Exception while executing stats listener.", e);
+  }
+
   protected void exceptionWhileAcquiringTasks(Throwable e) {
     logError(
       "006", "Exception while acquiring tasks.", e);

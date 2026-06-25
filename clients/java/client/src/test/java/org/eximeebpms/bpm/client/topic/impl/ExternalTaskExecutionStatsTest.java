@@ -16,7 +16,8 @@
  */
 package org.eximeebpms.bpm.client.topic.impl;
 
-import org.eximeebpms.bpm.client.topic.impl.ExternalTaskExecutionStats.TaskStats;
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
+import org.eximeebpms.bpm.client.TaskStats;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

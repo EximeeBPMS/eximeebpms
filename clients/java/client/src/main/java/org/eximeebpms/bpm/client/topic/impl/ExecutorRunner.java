@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.backoff.ErrorAwareBackoffStrategy;
 import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;

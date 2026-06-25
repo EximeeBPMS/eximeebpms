@@ -22,13 +22,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eximeebpms.bpm.client.TaskStats;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
+import org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener;
 import org.eximeebpms.bpm.client.backoff.ErrorAwareBackoffStrategy;
 import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;
 import org.eximeebpms.bpm.client.impl.EngineClient;
@@ -45,6 +48,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -61,6 +65,8 @@ public class TopicSubscriptionManagerTest {
     private ExternalTaskHandler taskHandler;
     @Mock
     private BackoffStrategy backoffStrategy;
+    @Captor
+    private ArgumentCaptor<Map<String, TaskStats>> captor;
     private ThreadPoolExecutor executor;
     private TopicSubscriptionManager manager;
 
@@ -416,7 +422,7 @@ public class TopicSubscriptionManagerTest {
         when(engineClient.fetchAndLock(anyList(), anyInt()))
                 .thenAnswer(invocation -> {
                     List<TopicRequestDto> topics = invocation.getArgument(0);
-                    String topicName = topics.get(0).getTopicName();
+                    String topicName = topics.getFirst().getTopicName();
                     if ("defaultTopic".equals(topicName)) {
                         return defaultTasks;
                     } else if ("customTopic".equals(topicName)) {
@@ -542,7 +548,7 @@ public class TopicSubscriptionManagerTest {
                 .thenAnswer(inv -> {
                     List<TopicRequestDto> topics = inv.getArgument(0);
                     if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
-                        capturedTopicName[0] = topics.get(0).getTopicName();
+                        capturedTopicName[0] = topics.getFirst().getTopicName();
                     }
                     firstFetchDone.countDown();
                     return defaultTasks;
@@ -616,7 +622,7 @@ public class TopicSubscriptionManagerTest {
                 .thenAnswer(inv -> {
                     List<TopicRequestDto> topics = inv.getArgument(0);
                     if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
-                        capturedTopicName[0] = topics.get(0).getTopicName();
+                        capturedTopicName[0] = topics.getFirst().getTopicName();
                     }
                     firstFetchDone.countDown();
                     return customTasks;
@@ -819,7 +825,7 @@ public class TopicSubscriptionManagerTest {
         when(engineClient.fetchAndLock(anyList(), anyInt()))
                 .thenAnswer(invocation -> {
                     List<TopicRequestDto> topics = invocation.getArgument(0);
-                    String topicName = topics.get(0).getTopicName();
+                    String topicName = topics.getFirst().getTopicName();
                     if ("defaultTopic".equals(topicName) && defaultFetched.compareAndSet(false, true)) {
                         return defaultTasks;
                     } else if ("customTopic2".equals(topicName) && custom2Fetched.compareAndSet(false, true)) {
@@ -905,7 +911,7 @@ public class TopicSubscriptionManagerTest {
     }
 
     @Test
-    public void shouldInvokeBackoffStrategyAfterFetchingTasks() throws Exception {
+    public void shouldInvokeBackoffStrategyAfterFetchingTasks() {
         // Given: backoff returns 0 so suspend() is a no-op
         when(backoffStrategy.calculateBackoffTime()).thenReturn(0L);
         List<ExternalTask> mockTasks = createMockTasks(3);
@@ -1051,7 +1057,7 @@ public class TopicSubscriptionManagerTest {
     }
 
     @Test
-    public void shouldSkipTaskExecutionWhenLockExpired() throws Exception {
+    public void shouldSkipTaskExecutionWhenLockExpired() {
         // Given: Task with lock already expired (in the past)
         ExternalTaskImpl expiredTask = mock(ExternalTaskImpl.class);
         when(expiredTask.getTopicName()).thenReturn("testTopic");
@@ -1145,6 +1151,119 @@ public class TopicSubscriptionManagerTest {
         // Then: only 2 valid tasks should be executed, expired task is skipped
         assertTrue("Both valid tasks should be executed", latch.await(2, TimeUnit.SECONDS));
         verify(taskHandler, times(2)).execute(any(ExternalTask.class), any());
+    }
+
+    @Test
+    public void shouldCallStatsListenerOnRunStatsTask() {
+        // Given: listener registered; one task execution recorded
+        ExternalTaskExecutionStatsListener listener = mock(ExternalTaskExecutionStatsListener.class);
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(listener));
+
+        mgr.getExecutionStats().recordExecution("proc", "topic", 100L);
+
+        // When: trigger one stats cycle directly (avoids 5-minute wait)
+        mgr.runStatsTask();
+
+        // Then: listener received the snapshot with the recorded entry
+        verify(listener, times(1)).onStats(captor.capture());
+        Map<String, TaskStats> snapshot = captor.getValue();
+        assertTrue("Snapshot should contain recorded entry", snapshot.containsKey("proc:topic"));
+        assertEquals("Count should be 1", 1L, snapshot.get("proc:topic").getCount());
+    }
+
+    @Test
+    public void shouldResetStatsAfterRunStatsTask() {
+        // Given: one execution recorded
+        ExternalTaskExecutionStatsListener listener = mock(ExternalTaskExecutionStatsListener.class);
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(listener));
+
+        mgr.getExecutionStats().recordExecution("proc", "topic", 50L);
+
+        // When
+        mgr.runStatsTask();
+
+        // Then: stats are reset after the cycle
+        assertEquals("Count should be 0 after reset", 0L,
+                mgr.getExecutionStats().getStats("proc", "topic").getCount());
+    }
+
+    @Test
+    public void shouldCallAllRegisteredListeners() {
+        // Given: two listeners registered
+        ExternalTaskExecutionStatsListener listener1 = mock(ExternalTaskExecutionStatsListener.class);
+        ExternalTaskExecutionStatsListener listener2 = mock(ExternalTaskExecutionStatsListener.class);
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(listener1, listener2));
+
+        mgr.getExecutionStats().recordExecution("proc", "topic", 10L);
+
+        // When
+        mgr.runStatsTask();
+
+        // Then: both listeners notified
+        verify(listener1, times(1)).onStats(any());
+        verify(listener2, times(1)).onStats(any());
+    }
+
+    @Test
+    public void shouldContinueNotifyingRemainingListenersWhenOneFails() {
+        // Given: first listener throws, second is well-behaved
+        ExternalTaskExecutionStatsListener failingListener = mock(ExternalTaskExecutionStatsListener.class);
+        ExternalTaskExecutionStatsListener okListener = mock(ExternalTaskExecutionStatsListener.class);
+        org.mockito.Mockito.doThrow(new RuntimeException("listener error"))
+                .when(failingListener).onStats(any());
+
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(failingListener, okListener));
+
+        mgr.getExecutionStats().recordExecution("proc", "topic", 10L);
+
+        // When: runStatsTask must not throw
+        mgr.runStatsTask();
+
+        // Then: both listeners were attempted
+        verify(failingListener, times(1)).onStats(any());
+        verify(okListener, times(1)).onStats(any());
+    }
+
+    @Test
+    public void shouldCallListenerWithEmptySnapshotWhenNoStatsRecorded() {
+        // Given: listener registered but no task executions recorded
+        ExternalTaskExecutionStatsListener listener = mock(ExternalTaskExecutionStatsListener.class);
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(listener));
+
+        // When
+        mgr.runStatsTask();
+
+        // Then: listener is still called (with an empty map is fine), stats are reset
+        // The manager always calls the listener when one is registered; the map may be empty.
+        verify(listener, times(1)).onStats(any());
+    }
+
+    @Test
+    public void shouldStartStatsSchedulerWhenListenerRegisteredEvenIfLoggingDisabled() {
+        // Given: logging disabled but a listener is registered
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        ExternalTaskExecutionStatsListener listener = snapshot -> listenerCalled.set(true);
+        TopicSubscriptionManager mgr = new TopicSubscriptionManager(
+                engineClient, typedValues, CLIENT_LOCK_DURATION, executor, DEFAULT_MULTIPLIER,
+                false, List.of(listener));
+
+        // When: start manager and manually trigger one stats cycle
+        mgr.start();
+        mgr.runStatsTask();
+        mgr.stop();
+
+        // Then: listener was invoked
+        assertTrue("Listener should have been called", listenerCalled.get());
     }
 
     // Helper methods

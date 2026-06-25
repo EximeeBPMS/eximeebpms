@@ -16,6 +16,9 @@
  */
 package org.eximeebpms.bpm.client.topic.impl;
 
+import static java.util.Collections.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,9 +28,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import lombok.Getter;
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
+import org.eximeebpms.bpm.client.TaskStats;
 import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.impl.EngineClient;
 import org.eximeebpms.bpm.client.impl.ExternalTaskClientLogger;
+import org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener;
 import org.eximeebpms.bpm.client.task.ExternalTaskHandlerWithSpecificExecutor;
 import org.eximeebpms.bpm.client.task.impl.ExternalTaskServiceImpl;
 import org.eximeebpms.bpm.client.topic.TopicSubscription;
@@ -65,6 +72,7 @@ public class TopicSubscriptionManager {
 
     protected final AtomicBoolean isRunning = new AtomicBoolean(false);
     protected final ExternalTaskServiceImpl externalTaskService;
+    @Getter
     protected final EngineClient engineClient;
     protected final TypedValues typedValues;
     protected final long clientLockDuration;
@@ -74,19 +82,30 @@ public class TopicSubscriptionManager {
 
     protected final Map<ThreadPoolExecutor, ExecutorRunner> runnersByExecutor = new ConcurrentHashMap<>();
     protected final AtomicBoolean isBackoffStrategyDisabled;
+    @Getter
     protected final ExternalTaskExecutionStats executionStats;
     protected BackoffStrategy backoffStrategy;
     protected ScheduledExecutorService statsScheduler;
     private final boolean statsSchedulerEnabled;
+    private final List<ExternalTaskExecutionStatsListener> statsListeners;
 
     public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
                                     ThreadPoolExecutor defaultThreadPoolExecutor, double maxFetchedTasksMultiplier,
                                     boolean statsSchedulerEnabled) {
+        this(engineClient, typedValues, clientLockDuration, defaultThreadPoolExecutor,
+                maxFetchedTasksMultiplier, statsSchedulerEnabled, new ArrayList<>());
+    }
+
+    public TopicSubscriptionManager(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
+                                    ThreadPoolExecutor defaultThreadPoolExecutor, double maxFetchedTasksMultiplier,
+                                    boolean statsSchedulerEnabled,
+                                    List<ExternalTaskExecutionStatsListener> statsListeners) {
         this.engineClient = engineClient;
         this.clientLockDuration = clientLockDuration;
         this.typedValues = typedValues;
         this.externalTaskService = new ExternalTaskServiceImpl(engineClient);
         this.statsSchedulerEnabled = statsSchedulerEnabled;
+        this.statsListeners = new ArrayList<>(statsListeners == null ? emptyList() : statsListeners);
         this.isBackoffStrategyDisabled = new AtomicBoolean(false);
         this.executionStats = new ExternalTaskExecutionStats();
         this.defaultThreadPoolExecutor = defaultThreadPoolExecutor;
@@ -163,7 +182,7 @@ public class TopicSubscriptionManager {
     public synchronized void start() {
         if (isRunning.compareAndSet(false, true)) {
             runnersByExecutor.values().forEach(ExecutorRunner::start);
-            if (statsSchedulerEnabled) {
+            if (statsSchedulerEnabled || !statsListeners.isEmpty()) {
                 startStatsScheduler();
             }
         }
@@ -214,30 +233,42 @@ public class TopicSubscriptionManager {
 
 
     protected void startStatsScheduler() {
-        // Start scheduled task for stats logging and cleanup every 5 minutes
         statsScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "ExternalTaskStatsLogger");
             t.setDaemon(true);
             return t;
         });
+        statsScheduler.scheduleAtFixedRate(this::runStatsTask, 5, 5, TimeUnit.MINUTES);
+    }
 
-        statsScheduler.scheduleAtFixedRate(() -> {
-            try {
-                // Log current statistics
-                ExternalTaskExecutionStatsLogger.logStats(executionStats);
-                // Reset statistics for next period
-                executionStats.reset();
-            } catch (Exception e) {
-                LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
+    /**
+     * Executes one stats-reporting cycle: notifies all registered listeners with a
+     * current-interval snapshot, optionally logs to file, then resets the counters.
+     *
+     * <p>Extracted from the scheduler lambda so that tests can invoke it directly
+     * without waiting for the 5-minute interval.
+     */
+    void runStatsTask() {
+        try {
+            Map<String, TaskStats> snapshot = executionStats.snapshotAndReset();
+            if (!statsListeners.isEmpty()) {
+                for (ExternalTaskExecutionStatsListener listener : statsListeners) {
+                    try {
+                        listener.onStats(snapshot);
+                    } catch (Exception e) {
+                        LOG.exceptionWhileExecutingStatsListener(e);
+                    }
+                }
             }
-        }, 5, 5, TimeUnit.MINUTES);
+            if (statsSchedulerEnabled) {
+                ExternalTaskExecutionStatsLogger.logStats(snapshot);
+            }
+        } catch (Exception e) {
+            LOG.exceptionWhileExecutingBackoffStrategyMethod(e);
+        }
     }
 
-    public EngineClient getEngineClient() {
-        return engineClient;
-    }
-
-    public List<TopicSubscription> getSubscriptions() {
+  public List<TopicSubscription> getSubscriptions() {
         return runnersByExecutor.values().stream()
                 .flatMap(runner -> runner.getSubscriptions().stream())
                 .toList();
@@ -245,10 +276,6 @@ public class TopicSubscriptionManager {
 
     public boolean isRunning() {
         return isRunning.get();
-    }
-
-    public ExternalTaskExecutionStats getExecutionStats() {
-        return executionStats;
     }
 
 }

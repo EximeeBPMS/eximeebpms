@@ -55,4 +55,8 @@ public class ClientLoggerUtil extends LoggerUtil {
             "when only one matching client annotation was expected."));
   }
 
+  public void statsListenersFound(int count) {
+    logDebug("008", "Found '{}' external task execution stats listeners", count);
+  }
+
 }

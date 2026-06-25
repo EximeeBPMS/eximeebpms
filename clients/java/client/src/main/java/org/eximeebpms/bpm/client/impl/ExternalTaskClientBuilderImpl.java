@@ -45,6 +45,7 @@ import org.eximeebpms.bpm.client.interceptor.impl.RequestInterceptorHandler;
 import org.eximeebpms.bpm.client.spi.DataFormat;
 import org.eximeebpms.bpm.client.spi.DataFormatConfigurator;
 import org.eximeebpms.bpm.client.spi.DataFormatProvider;
+import org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener;
 import org.eximeebpms.bpm.client.task.OrderingConfig;
 import org.eximeebpms.bpm.client.topic.impl.TopicSubscriptionManager;
 import org.eximeebpms.bpm.client.variable.impl.DefaultValueMappers;
@@ -102,6 +103,7 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
     private int threadPoolSize;
     private double maxFetchedTasksMultiplier;
     private boolean statsSchedulerEnabled;
+    private final List<ExternalTaskExecutionStatsListener> statsListeners = new ArrayList<>();
 
     public ExternalTaskClientBuilderImpl() {
         // default values
@@ -117,7 +119,7 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
         this.urlResolver = new PermanentUrlResolver(null);
         this.threadPoolSize = 1;
         this.maxFetchedTasksMultiplier = 1;
-        this.statsSchedulerEnabled = true;
+        this.statsSchedulerEnabled = false;
     }
 
     public ExternalTaskClientBuilder baseUrl(String baseUrl) {
@@ -213,11 +215,13 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
         return this;
     }
 
+    @Override
     public ExternalTaskClientBuilder threadPoolSize(int threadPoolSize) {
         this.threadPoolSize = threadPoolSize;
         return this;
     }
 
+    @Override
     public ExternalTaskClientBuilder maxFetchedTasksMultiplier(double maxFetchedTasksMultiplier) {
         this.maxFetchedTasksMultiplier = maxFetchedTasksMultiplier;
         return this;
@@ -225,6 +229,14 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
 
     public ExternalTaskClientBuilder statsSchedulerEnabled(boolean statsSchedulerEnabled) {
         this.statsSchedulerEnabled = statsSchedulerEnabled;
+        return this;
+    }
+
+    public ExternalTaskClientBuilder addStatsListener(ExternalTaskExecutionStatsListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Stats listener must not be null");
+        }
+        this.statsListeners.add(listener);
         return this;
     }
 
@@ -346,7 +358,7 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
     protected void initTopicSubscriptionManager() {
         topicSubscriptionManager = new TopicSubscriptionManager(engineClient, typedValues, lockDuration,
                 (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSize), maxFetchedTasksMultiplier,
-                statsSchedulerEnabled);
+                statsSchedulerEnabled, statsListeners);
         topicSubscriptionManager.setBackoffStrategy(getBackoffStrategy());
 
         if (isBackoffStrategyDisabled) {
@@ -454,6 +466,10 @@ public class ExternalTaskClientBuilderImpl implements ExternalTaskClientBuilder 
 
     protected BackoffStrategy getBackoffStrategy() {
         return backoffStrategy;
+    }
+
+    protected List<ExternalTaskExecutionStatsListener> getStatsListeners() {
+        return statsListeners;
     }
 
     public String getDefaultSerializationFormat() {

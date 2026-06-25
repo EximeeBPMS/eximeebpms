@@ -22,6 +22,7 @@ import org.eximeebpms.bpm.client.backoff.BackoffStrategy;
 import org.eximeebpms.bpm.client.backoff.ExponentialBackoffStrategy;
 import org.eximeebpms.bpm.client.exception.ExternalTaskClientException;
 import org.eximeebpms.bpm.client.interceptor.ClientRequestInterceptor;
+import org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener;
 
 /**
  * <p>A fluent builder to configure the Camunda client</p>
@@ -210,6 +211,70 @@ public interface ExternalTaskClientBuilder {
    * @return the builder
    */
   ExternalTaskClientBuilder disableBackoffStrategy();
+
+  /**
+   * Specifies the number of worker threads in the default thread pool used to execute fetched
+   * external tasks. This information is optional. Default is {@code 1}.
+   *
+   * <p>Setting a value greater than 1 enables parallel task execution. The number of tasks
+   * fetched per acquisition cycle is bounded by
+   * {@code floor(threadPoolSize * maxFetchedTasksMultiplier)} to avoid flooding the pool.
+   *
+   * @param threadPoolSize number of worker threads; must be greater than zero
+   * @return the builder
+   * @see #maxFetchedTasksMultiplier(double)
+   */
+  ExternalTaskClientBuilder threadPoolSize(int threadPoolSize);
+
+  /**
+   * Specifies the multiplier used to calculate the maximum number of tasks fetched per
+   * acquisition cycle relative to the thread pool size. This information is optional.
+   * Default is {@code 1.0}.
+   *
+   * <p>The effective fetch limit per cycle is
+   * {@code floor(threadPoolSize * maxFetchedTasksMultiplier) - tasksInProgress}.
+   * A value of {@code 1.5} with {@code threadPoolSize = 10} allows up to 15 tasks to be
+   * fetched and locked at once, keeping some tasks pre-loaded in the queue while all
+   * threads are busy.
+   *
+   * <p>Must be {@code >= 1.0}.
+   *
+   * @param maxFetchedTasksMultiplier the multiplier; must be &gt;= 1.0
+   * @return the builder
+   * @see #threadPoolSize(int)
+   */
+  ExternalTaskClientBuilder maxFetchedTasksMultiplier(double maxFetchedTasksMultiplier);
+
+  /**
+   * Enables or disables periodic logging of external task execution statistics.
+   * <p>
+   * When enabled, execution statistics (count, min/max/avg execution time per topic and process definition key)
+   * are logged every 5 minutes. This is an optional diagnostic feature.
+   * <p>
+   * NOTE: In high-throughput systems this generates additional I/O. The statistics are always
+   * maintained in-memory and accessible via {@link ExternalTaskClient#getExecutionStats()}
+   * regardless of this setting. Default is {@code false}.
+   *
+   * @param statsSchedulerEnabled {@code true} to enable periodic logging, {@code false} to disable it
+   * @return the builder
+   */
+  ExternalTaskClientBuilder statsSchedulerEnabled(boolean statsSchedulerEnabled);
+
+  /**
+   * Registers a listener that receives periodic snapshots of external task execution statistics.
+   *
+   * <p>The listener is invoked on the stats scheduler thread every 5 minutes (whether or not
+   * built-in log output via {@link #statsSchedulerEnabled(boolean)} is enabled). This is the
+   * recommended integration point for exporting metrics to monitoring backends such as
+   * Micrometer, Prometheus, Spring Boot Actuator, InfluxDB, etc.
+   *
+   * <p>Multiple listeners can be registered by calling this method multiple times.
+   *
+   * @param listener the listener to register; must not be {@code null}
+   * @return the builder
+   * @see org.eximeebpms.bpm.client.spi.ExternalTaskExecutionStatsListener
+   */
+  ExternalTaskClientBuilder addStatsListener(ExternalTaskExecutionStatsListener listener);
 
   /**
    * Exposes the internal Apache {@link HttpClientBuilder} for custom client configurations.

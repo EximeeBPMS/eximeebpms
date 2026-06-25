@@ -1,5 +1,6 @@
 package org.eximeebpms.bpm.client.topic.impl;
 
+import org.eximeebpms.bpm.client.ExternalTaskExecutionStats;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,12 +46,12 @@ public class ExternalTaskExecutionStatsLoggerTest {
     @Test
     public void shouldLogNoStatisticsAvailableWhenEmpty() {
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
-        assertEquals("No execution statistics available", messages.get(0));
+        assertEquals("No execution statistics available", messages.getFirst());
     }
 
     @Test
@@ -61,13 +62,13 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("order-process", "validate-order", 150);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
 
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
         assertNotNull(logOutput);
 
         // Verify header
@@ -109,13 +110,13 @@ public class ExternalTaskExecutionStatsLoggerTest {
         }
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
 
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Verify all tasks are present
         assertTrue("Should contain process-a", logOutput.contains("process-a"));
@@ -138,12 +139,12 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution(longProcessKey, "short-topic", 100);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
         assertFalse("Should have captured log messages", messages.isEmpty());
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Debug: print actual output
         System.out.println("Actual log output: " + logOutput);
@@ -162,11 +163,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("short-process", longTopic, 100);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Should be truncated to 27 chars + "..."
         assertTrue("Should contain truncated topic with ellipsis",
@@ -181,11 +182,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution(null, "test-topic", 100);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         assertTrue("Should contain 'null' for null process key", logOutput.contains("null"));
     }
@@ -196,11 +197,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("test-process", null, 100);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         assertTrue("Should contain 'null' for null topic name", logOutput.contains("null"));
     }
@@ -213,11 +214,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("test-process", "test-topic", 175);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Average should be 141.67 (425 / 3)
         assertTrue("Should format average with 2 decimal places",
@@ -230,11 +231,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("test-process", "test-topic", 100);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Should contain separator lines (130 characters of dashes/equals)
         assertTrue("Should contain header separator",
@@ -248,11 +249,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.reset();
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         // Should log the task with zero counts
         assertTrue("Should contain task with zero values",
@@ -267,11 +268,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         }
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         assertTrue("Should contain count 1000", logOutput.contains("1000"));
         assertTrue("Should contain total 5000000", logOutput.contains("5000000"));
@@ -286,11 +287,11 @@ public class ExternalTaskExecutionStatsLoggerTest {
         stats.recordExecution("test-process", "test-topic", 200);
 
         // When
-        ExternalTaskExecutionStatsLogger.logStats(stats);
+        ExternalTaskExecutionStatsLogger.logStats(stats.getAllStats());
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.get(0);
+        String logOutput = messages.getFirst();
 
         assertTrue("Should show min as 50", logOutput.contains("50"));
         assertTrue("Should show max as 1000", logOutput.contains("1000"));

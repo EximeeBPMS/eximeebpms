@@ -30,7 +30,6 @@ import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -149,7 +148,12 @@ public abstract class AbstractFoxPlatformIntegrationTest {
   }
 
   public boolean isJobAvailable(Job job) {
-    return job.getRetries() > 0 && (job.getDuedate() == null || ClockUtil.getCurrentTime().after(job.getDuedate()));
+    // A job with retries > 0 is considered available: we must wait for it regardless of whether
+    // its duedate is in the past or still in the future.  Checking only strictly-past duedates
+    // causes waitForJobExecutorToProcessAllJobs to exit early when the check happens exactly at
+    // the duedate boundary (e.g. PT1S timer + MySQL latency = check fires at duedate == now(),
+    // Date.after() is false, loop exits before the job executes).
+    return job.getRetries() > 0;
   }
 
   public int numberOfJobsAvailable() {

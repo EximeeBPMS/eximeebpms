@@ -19,15 +19,15 @@
   <properties>
 
     <!-- database driver versions -->
-    <version.h2>2.3.232</version.h2>
+    <version.h2>2.4.240</version.h2>
     <version.h2-v1>1.4.200</version.h2-v1><!-- used for instance migration qa -->
-    <version.oracle>23.5.0.24.07</version.oracle>
-    <version.mysql>8.3.0</version.mysql>
-    <version.sqlserver>8.4.1.jre8</version.sqlserver>
-    <version.db2-11.5>11.5.0.0</version.db2-11.5>
+    <version.oracle>23.26.2.0.0</version.oracle>
+    <version.mysql>9.7.0</version.mysql>
+    <version.sqlserver>13.4.0.jre11</version.sqlserver>
+    <version.db2-11.5>11.5.9.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>
-    <version.postgresql>42.5.5</version.postgresql>
-    <version.liquibase>5.0.1</version.liquibase>
+    <version.postgresql>42.7.11</version.postgresql>
+    <version.liquibase>5.0.3</version.liquibase>
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.23.0</camunda.version.old>
@@ -91,7 +91,7 @@
           <version>${version.liquibase}</version>
           <configuration>
             <driver>${database.driver}</driver>
-            <url>${database.url}</url> 
+            <url>${database.url}</url>
             <username>${database.username}</username>
             <password>${database.password}</password>
             <hubMode>off</hubMode>
@@ -366,7 +366,7 @@
         <database.driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</database.driver>
         <database.datasource.class>com.microsoft.sqlserver.jdbc.SQLServerDataSource</database.datasource.class>
         <database.tc.url>camsqlserver:2019</database.tc.url>
-        <database.tc.params>;DatabaseName=${database.name};user=${database.username};password=${database.password};</database.tc.params>
+        <database.tc.params>;DatabaseName=${database.name};user=${database.username};password=${database.password};trustServerCertificate=true;</database.tc.params>
         <jboss.datasource.filename>sqlserver-ds.xml</jboss.datasource.filename>
       </properties>
 

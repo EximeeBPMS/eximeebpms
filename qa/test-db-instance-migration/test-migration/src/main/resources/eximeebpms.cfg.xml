@@ -28,6 +28,8 @@
     <property name="jdbcBatchProcessing" value="false"/>
     <property name="enforceHistoryTimeToLive" value="false" />
 
+    <property name="skipIsolationLevelCheck" value="true" />
+
   </bean>
   
 </beans>

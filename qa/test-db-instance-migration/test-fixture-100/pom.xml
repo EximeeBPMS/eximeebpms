@@ -64,6 +64,17 @@
             <artifactId>liquibase-maven-plugin</artifactId>
             <executions>
               <execution>
+                <id>drop-db-before-setup</id>
+                <phase>generate-test-resources</phase>
+                <goals>
+                  <goal>dropAll</goal>
+                </goals>
+                <configuration>
+                  <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
+                  <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
+                </configuration>
+              </execution>
+              <execution>
                 <id>update-db</id>
                 <phase>generate-test-resources</phase>
                 <goals>

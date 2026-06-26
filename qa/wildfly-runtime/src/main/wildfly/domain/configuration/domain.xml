@@ -36,7 +36,7 @@
         <extension module="org.wildfly.extension.microprofile.config-smallrye"/>
         <extension module="org.wildfly.extension.microprofile.jwt-smallrye"/>
         <extension module="org.wildfly.extension.request-controller"/>
-        <extension module="org.wildfly.extension.security.manager"/>
+        
         <extension module="org.wildfly.extension.undertow"/>
         <extension module="org.wildfly.iiop-openjdk"/>
         <extension module="org.eximeebpms.bpm.wildfly.eximeebpms-wildfly-subsystem"/>
@@ -127,7 +127,7 @@
                 </datasources>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:distributable-ejb:2.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-ejb:community:2.0">
                 <bean-management default="default">
                     <infinispan-bean-management name="default" max-active-beans="10000" cache-container="ejb" cache="passivation"/>
                 </bean-management>
@@ -135,7 +135,7 @@
                 <infinispan-timer-management name="persistent" cache-container="ejb" cache="persistent" max-active-timers="10000"/>
                 <infinispan-timer-management name="transient" cache-container="ejb" cache="transient" max-active-timers="10000"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:distributable-web:5.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-web:community:5.0">
                 <session-management default="default">
                     <infinispan-session-management name="default" cache-container="web" granularity="SESSION">
                         <local-affinity/>
@@ -208,7 +208,7 @@
                 <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
                 <log-system-exceptions value="true"/>
             </subsystem>
-            <subsystem xmlns="urn:wildfly:elytron:community:18.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+            <subsystem xmlns="urn:wildfly:elytron:19.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
                 <providers>
                     <aggregate-providers name="combined-providers">
                         <providers name="elytron"/>
@@ -308,11 +308,8 @@
                         <server-ssl-context name="applicationSSC" key-manager="applicationKM"/>
                     </server-ssl-contexts>
                 </tls>
-                <policy name="jacc">
-                    <jacc-policy/>
-                </policy>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:infinispan:15.0">
+            <subsystem xmlns="urn:jboss:domain:infinispan:16.0">
                 <cache-container name="ejb" default-cache="passivation" aliases="sfsb" modules="org.wildfly.clustering.ejb.infinispan" marshaller="PROTOSTREAM">
                     <local-cache name="passivation">
                         <expiration interval="0"/>
@@ -365,7 +362,7 @@
             <subsystem xmlns="urn:jboss:domain:io:4.0" default-worker="default">
                 <worker name="default"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:jaxrs:4.0"/>
+            <subsystem xmlns="urn:jboss:domain:jaxrs:5.0"/>
             <subsystem xmlns="urn:jboss:domain:jca:6.0">
                 <archive-validation enabled="true" fail-on-error="true" fail-on-warn="false"/>
                 <bean-validation enabled="true"/>
@@ -412,13 +409,6 @@
             <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
             <subsystem xmlns="urn:jboss:domain:resource-adapters:7.1"/>
             <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
-                <deployment-permissions>
-                    <maximum-set>
-                        <permission class="java.security.AllPermission"/>
-                    </maximum-set>
-                </deployment-permissions>
-            </subsystem>
             <subsystem xmlns="urn:jboss:domain:transactions:6.0">
                 <core-environment node-identifier="${jboss.tx.node.id:1}">
                     <process-id>
@@ -568,7 +558,7 @@
                 </datasources>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:distributable-ejb:2.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-ejb:community:2.0">
                 <bean-management default="default">
                     <infinispan-bean-management name="default" max-active-beans="10000" cache-container="ejb"/>
                 </bean-management>
@@ -576,7 +566,7 @@
                 <infinispan-timer-management name="persistent" cache-container="ejb" cache="persistent" max-active-timers="10000"/>
                 <infinispan-timer-management name="transient" cache-container="ejb" cache="transient" max-active-timers="10000"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:distributable-web:5.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-web:community:5.0">
                 <session-management default="default">
                     <infinispan-session-management name="default" cache-container="web" granularity="SESSION">
                         <primary-owner-affinity/>
@@ -649,7 +639,7 @@
                 <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
                 <log-system-exceptions value="true"/>
             </subsystem>
-            <subsystem xmlns="urn:wildfly:elytron:community:18.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+            <subsystem xmlns="urn:wildfly:elytron:19.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
                 <providers>
                     <aggregate-providers name="combined-providers">
                         <providers name="elytron"/>
@@ -749,11 +739,8 @@
                         <server-ssl-context name="applicationSSC" key-manager="applicationKM"/>
                     </server-ssl-contexts>
                 </tls>
-                <policy name="jacc">
-                    <jacc-policy/>
-                </policy>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:infinispan:15.0">
+            <subsystem xmlns="urn:jboss:domain:infinispan:16.0">
                 <cache-container name="ejb" default-cache="dist" aliases="sfsb" modules="org.wildfly.clustering.ejb.infinispan" marshaller="PROTOSTREAM">
                     <transport lock-timeout="60000"/>
                     <local-cache name="transient">
@@ -823,7 +810,7 @@
             <subsystem xmlns="urn:jboss:domain:io:4.0" default-worker="default">
                 <worker name="default"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:jaxrs:4.0"/>
+            <subsystem xmlns="urn:jboss:domain:jaxrs:5.0"/>
             <subsystem xmlns="urn:jboss:domain:jca:6.0">
                 <archive-validation enabled="true" fail-on-error="true" fail-on-warn="false"/>
                 <bean-validation enabled="true"/>
@@ -915,13 +902,6 @@
             <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
             <subsystem xmlns="urn:jboss:domain:resource-adapters:7.1"/>
             <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
-                <deployment-permissions>
-                    <maximum-set>
-                        <permission class="java.security.AllPermission"/>
-                    </maximum-set>
-                </deployment-permissions>
-            </subsystem>
             <subsystem xmlns="urn:jboss:domain:singleton:1.0">
                 <singleton-policies default="default">
                     <singleton-policy name="default" cache-container="server">
@@ -1040,7 +1020,7 @@
                 </datasources>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:distributable-ejb:2.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-ejb:community:2.0">
                 <bean-management default="default">
                     <infinispan-bean-management name="default" max-active-beans="10000" cache-container="ejb" cache="passivation"/>
                 </bean-management>
@@ -1048,7 +1028,7 @@
                 <infinispan-timer-management name="persistent" cache-container="ejb" cache="persistent" max-active-timers="10000"/>
                 <infinispan-timer-management name="transient" cache-container="ejb" cache="transient" max-active-timers="10000"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:distributable-web:5.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-web:community:5.0">
                 <session-management default="default">
                     <infinispan-session-management name="default" cache-container="web" granularity="SESSION">
                         <local-affinity/>
@@ -1126,7 +1106,7 @@
                 <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
                 <log-system-exceptions value="true"/>
             </subsystem>
-            <subsystem xmlns="urn:wildfly:elytron:community:18.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+            <subsystem xmlns="urn:wildfly:elytron:19.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
                 <providers>
                     <aggregate-providers name="combined-providers">
                         <providers name="elytron"/>
@@ -1226,16 +1206,13 @@
                         <server-ssl-context name="applicationSSC" key-manager="applicationKM"/>
                     </server-ssl-contexts>
                 </tls>
-                <policy name="jacc">
-                    <jacc-policy/>
-                </policy>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:iiop-openjdk:3.0">
                 <orb socket-binding="iiop"/>
                 <initializers security="elytron" transactions="spec"/>
                 <security server-requires-ssl="false" client-requires-ssl="false"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:infinispan:15.0">
+            <subsystem xmlns="urn:jboss:domain:infinispan:16.0">
                 <cache-container name="ejb" default-cache="passivation" aliases="sfsb" modules="org.wildfly.clustering.ejb.infinispan" marshaller="PROTOSTREAM">
                     <local-cache name="passivation">
                         <expiration interval="0"/>
@@ -1288,7 +1265,7 @@
             <subsystem xmlns="urn:jboss:domain:io:4.0" default-worker="default">
                 <worker name="default"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:jaxrs:4.0"/>
+            <subsystem xmlns="urn:jboss:domain:jaxrs:5.0"/>
             <subsystem xmlns="urn:jboss:domain:jca:6.0">
                 <archive-validation enabled="true" fail-on-error="true" fail-on-warn="false"/>
                 <bean-validation enabled="true"/>
@@ -1365,13 +1342,6 @@
             <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
             <subsystem xmlns="urn:jboss:domain:resource-adapters:7.1"/>
             <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
-                <deployment-permissions>
-                    <maximum-set>
-                        <permission class="java.security.AllPermission"/>
-                    </maximum-set>
-                </deployment-permissions>
-            </subsystem>
             <subsystem xmlns="urn:jboss:domain:transactions:6.0">
                 <core-environment node-identifier="${jboss.tx.node.id:1}">
                     <process-id>
@@ -1482,7 +1452,7 @@
                 </datasources>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:distributable-ejb:2.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-ejb:community:2.0">
                 <bean-management default="default">
                     <infinispan-bean-management name="default" max-active-beans="10000" cache-container="ejb"/>
                 </bean-management>
@@ -1490,7 +1460,7 @@
                 <infinispan-timer-management name="persistent" cache-container="ejb" cache="persistent" max-active-timers="10000"/>
                 <infinispan-timer-management name="transient" cache-container="ejb" cache="transient" max-active-timers="10000"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:distributable-web:5.0">
+            <subsystem xmlns="urn:jboss:domain:distributable-web:community:5.0">
                 <session-management default="default">
                     <infinispan-session-management name="default" cache-container="web" granularity="SESSION">
                         <primary-owner-affinity/>
@@ -1568,7 +1538,7 @@
                 <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
                 <log-system-exceptions value="true"/>
             </subsystem>
-            <subsystem xmlns="urn:wildfly:elytron:community:18.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+            <subsystem xmlns="urn:wildfly:elytron:19.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
                 <providers>
                     <aggregate-providers name="combined-providers">
                         <providers name="elytron"/>
@@ -1668,16 +1638,13 @@
                         <server-ssl-context name="applicationSSC" key-manager="applicationKM"/>
                     </server-ssl-contexts>
                 </tls>
-                <policy name="jacc">
-                    <jacc-policy/>
-                </policy>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:iiop-openjdk:3.0">
                 <orb socket-binding="iiop"/>
                 <initializers security="elytron" transactions="spec"/>
                 <security server-requires-ssl="false" client-requires-ssl="false"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:infinispan:15.0">
+            <subsystem xmlns="urn:jboss:domain:infinispan:16.0">
                 <cache-container name="ejb" default-cache="dist" aliases="sfsb" modules="org.wildfly.clustering.ejb.infinispan" marshaller="PROTOSTREAM">
                     <transport lock-timeout="60000"/>
                     <local-cache name="transient">
@@ -1747,7 +1714,7 @@
             <subsystem xmlns="urn:jboss:domain:io:4.0" default-worker="default">
                 <worker name="default"/>
             </subsystem>
-            <subsystem xmlns="urn:jboss:domain:jaxrs:4.0"/>
+            <subsystem xmlns="urn:jboss:domain:jaxrs:5.0"/>
             <subsystem xmlns="urn:jboss:domain:jca:6.0">
                 <archive-validation enabled="true" fail-on-error="true" fail-on-warn="false"/>
                 <bean-validation enabled="true"/>
@@ -1873,13 +1840,6 @@
             <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
             <subsystem xmlns="urn:jboss:domain:resource-adapters:7.1"/>
             <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-            <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
-                <deployment-permissions>
-                    <maximum-set>
-                        <permission class="java.security.AllPermission"/>
-                    </maximum-set>
-                </deployment-permissions>
-            </subsystem>
             <subsystem xmlns="urn:jboss:domain:singleton:1.0">
                 <singleton-policies default="default">
                     <singleton-policy name="default" cache-container="server">

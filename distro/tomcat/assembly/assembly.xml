@@ -37,6 +37,8 @@
         <include>com.h2database:h2:jar</include>
 
         <include>org.eximeebpms.bpm:eximeebpms-engine:jar</include>
+        <include>jakarta.transaction:jakarta.transaction-api:jar</include>
+        <include>jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-api:jar</include>
         <include>org.eximeebpms.bpm.identity:eximeebpms-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
@@ -48,7 +50,6 @@
         <include>org.apache.groovy:groovy-templates:jar:*</include>
         <include>org.apache.groovy:groovy-dateutil:jar:*</include>
         <include>org.apache.groovy:groovy-datetime:jar:*</include>
-
         <include>org.graalvm.js:*</include>
         <include>org.graalvm.regex:regex:jar:*</include>
         <include>org.graalvm.truffle:truffle-api:jar:*</include>
@@ -64,6 +65,7 @@
         <include>org.eximeebpms.commons:*:jar</include>
 
         <include>org.eximeebpms.bpm.model:*:jar</include>
+
         <include>org.eximeebpms.bpm.dmn:*:jar</include>
         <include>org.eximeebpms.bpm.juel:*:jar</include>
 
@@ -92,6 +94,8 @@
         <include>com.h2database:h2:jar</include>
 
         <include>org.eximeebpms.bpm:eximeebpms-engine:jar</include>
+        <include>jakarta.transaction:jakarta.transaction-api:jar</include>
+        <include>jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-api:jar</include>
         <include>org.eximeebpms.bpm.identity:eximeebpms-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>

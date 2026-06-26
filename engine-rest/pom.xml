@@ -15,15 +15,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- explicitly declare groovy dependencies, so it prevents our groovy version
-            from overriding the groovy version from rest-assured -->
-      <dependency>
-        <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-bom</artifactId>
-        <version>${version.groovy-bom}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
       <dependency>
         <groupId>org.eximeebpms.bpm</groupId>
         <artifactId>eximeebpms-core-internal-dependencies</artifactId>

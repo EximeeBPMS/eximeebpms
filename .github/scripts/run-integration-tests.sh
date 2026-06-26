@@ -116,13 +116,12 @@ run_tests () {
           ;;
         sqlserver)
           MIG_DB_ARGS=(
-            -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine}"
+            -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine;trustServerCertificate=true}"
             -Ddatabase.username="${MSSQL_USERNAME:-sa}"
             -Ddatabase.password="${MSSQL_PASSWORD:-EximeeBpms1!}"
           )
           ;;
       esac
-      echo "ℹ️ Running $TEST_SUITE tests with $DATABASE"
       echo "./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
       ./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
       if [[ $? -ne 0 ]]; then
@@ -194,7 +193,7 @@ run_tests () {
     sqlserver)
       PROFILES+=(sqlserver)
       DB_ARGS=(
-        -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine}"
+        -Ddatabase.url="${MSSQL_URL:-jdbc:sqlserver://localhost:1433;DatabaseName=process-engine;trustServerCertificate=true}"
         -Ddatabase.username="${MSSQL_USERNAME:-sa}"
         -Ddatabase.password="${MSSQL_PASSWORD:-EximeeBpms1!}"
       )

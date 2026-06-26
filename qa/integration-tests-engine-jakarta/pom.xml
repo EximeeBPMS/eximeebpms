@@ -14,9 +14,9 @@
   <properties>
     <!-- Needs to be updated after a new WildFly release -->
     <wildfly.container.adapter.groupId>org.wildfly.arquillian</wildfly.container.adapter.groupId>
-    <wildfly.container.adapter.version>5.0.1.Final</wildfly.container.adapter.version>
+    <wildfly.container.adapter.version>5.1.0.Final</wildfly.container.adapter.version>
 
-    <version.arquillian>1.7.0.Final</version.arquillian>
+    <version.arquillian>1.10.2.Final</version.arquillian>
 
     <redirect.test.output>true</redirect.test.output>
 
@@ -41,6 +41,14 @@
         <version>${version.arquillian}</version>
         <scope>import</scope>
         <type>pom</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.arquillian.jakarta</groupId>
+        <artifactId>arquillian-jakarta-bom</artifactId>
+        <version>${version.arquillian-jakarta}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
 
       <dependency>
@@ -110,11 +118,6 @@
     <dependency>
       <groupId>org.jboss.arquillian.junit</groupId>
       <artifactId>arquillian-junit-container</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian.protocol</groupId>
-      <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -375,15 +378,13 @@
           <scope>test</scope>
         </dependency>
 
-        <!-- This dependency can be updated when arquillian releases the managed tomcat 10 artifact -->
         <dependency>
           <groupId>org.jboss.arquillian.container</groupId>
-          <artifactId>arquillian-tomcat-managed-8</artifactId>
-          <version>1.1.0.Final</version>
+          <artifactId>arquillian-tomcat-managed-10</artifactId>
+          <version>1.2.5.Final</version>
           <scope>test</scope>
         </dependency>
 
-        <!-- switch to use Jakarta Servlet 5.0 protocol -->
         <dependency>
           <groupId>org.jboss.arquillian.protocol</groupId>
           <artifactId>arquillian-protocol-servlet-jakarta</artifactId>

@@ -10,10 +10,6 @@
   <artifactId>eximeebpms-bpm-quarkus-engine-qa</artifactId>
   <name>EximeeBPMS - Quarkus Extension - Engine - CDI QA</name>
 
-  <properties>
-    <arquillian.version>1.7.0.Final</arquillian.version>
-  </properties>
-
   <dependencyManagement>
     <dependencies>
       <!-- Add Quarkus BOM to fix Maven artifact dependencies overriden by Arquillian BOM -->
@@ -34,7 +30,14 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>${arquillian.version}</version>
+        <version>${version.arquillian}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.arquillian.jakarta</groupId>
+        <artifactId>arquillian-jakarta-bom</artifactId>
+        <version>${version.arquillian-jakarta}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

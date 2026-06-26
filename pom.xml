@@ -583,7 +583,7 @@
         <it.mysql.url>jdbc:mysql://localhost:3306/process-engine?serverTimezone=UTC</it.mysql.url>
         <it.mysql.username>eximeebpms</it.mysql.username>
         <it.mysql.password>eximeebpms</it.mysql.password>
-        <it.mssql.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine</it.mssql.url>
+        <it.mssql.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine;trustServerCertificate=true</it.mssql.url>
         <it.mssql.username>sa</it.mssql.username>
         <it.mssql.password>EximeeBpms1!</it.mssql.password>
       </properties>
@@ -592,6 +592,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
+            <version>3.6.3</version>
             <executions>
               <!-- BUILD: tomcat distribution (shared by all tomcat test combinations) -->
               <execution>

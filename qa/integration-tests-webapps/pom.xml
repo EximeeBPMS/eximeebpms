@@ -13,8 +13,8 @@
   </parent>
 
   <properties>
-    <cargo.timeout>120000</cargo.timeout>
-    <cargo.deploy.timeout>60000</cargo.deploy.timeout>
+    <cargo.timeout>300000</cargo.timeout>
+    <cargo.deploy.timeout>300000</cargo.deploy.timeout>
 
     <!-- Needs to be adjusted with every WildFly update -->
     <cargo.wildfly.container.id>wildfly37x</cargo.wildfly.container.id>

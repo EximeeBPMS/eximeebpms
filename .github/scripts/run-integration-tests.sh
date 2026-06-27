@@ -82,8 +82,8 @@ run_build () {
   fi
 
   echo "ℹ️ Building $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -U -DskipTests -Dcargo.maven.skip=true -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
-  ./mvnw -U -DskipTests -Dcargo.maven.skip=true -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
+  echo "./mvnw -U -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
+  ./mvnw -U -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null

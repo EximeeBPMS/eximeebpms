@@ -218,7 +218,7 @@ public abstract class AbstractWebIntegrationTest {
         + "engine/default/group?memberId=demo";
 
     Awaitility.await("demo user in eximeebpms-admin group")
-        .atMost(120, TimeUnit.SECONDS)
+        .atMost(300, TimeUnit.SECONDS)
         .pollInterval(1, TimeUnit.SECONDS)
         .ignoreExceptions()
         .until(() -> {

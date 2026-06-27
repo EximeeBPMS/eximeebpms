@@ -19,10 +19,11 @@ package org.eximeebpms.bpm;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.eximeebpms.bpm.util.SeleniumScreenshotRule;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,11 +32,22 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 
 public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest {
 
   protected static WebDriver driver;
+
+  // Pre-warm all webapp JAX-RS applications once per JVM run.
+  // Without this, lazy deployments happen concurrently with the first Selenium auth POST,
+  // and cold SQL Server query plans make the first auth call for each app take >120 s
+  // (causing LoginIT to fail on wildfly+sqlserver before things are warm enough).
+  private static volatile boolean appsWarmedUp = false;
 
   @Rule
   public SeleniumScreenshotRule screenshotRule = new SeleniumScreenshotRule(driver);
@@ -58,6 +70,9 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
         .usingDriverExecutable(chromeDriver)
         .build();
 
+    LoggingPreferences logPrefs = new LoggingPreferences();
+    logPrefs.enable(LogType.BROWSER, Level.ALL);
+
     ChromeOptions chromeOptions = new ChromeOptions()
         .addArguments("--headless=new")
         .addArguments("--window-size=1920,1200")
@@ -65,6 +80,7 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
         .addArguments("--no-sandbox")
         .addArguments("--disable-dev-shm-usage")
         .addArguments("--remote-allow-origins=*");
+    chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
 
     driver = new ChromeDriver(chromeDriverService, chromeOptions);
   }
@@ -98,8 +114,50 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
   @Before
   public void createClient() throws Exception {
     preventRaceConditions();
+    ensureAppsWarmedUp();
     createClient(getWebappCtxPath());
     appUrl = testProperties.getApplicationPath("/" + getWebappCtxPath());
+  }
+
+  private void ensureAppsWarmedUp() {
+    if (appsWarmedUp) return;
+    synchronized (AbstractWebappUiIntegrationTest.class) {
+      if (appsWarmedUp) return;
+      try {
+        warmupApps();
+      } catch (Exception ignored) {
+      } finally {
+        appsWarmedUp = true;
+      }
+    }
+  }
+
+  /**
+   * For each webapp (admin, cockpit, tasklist, welcome):
+   * 1. GET the app page → triggers lazy JAX-RS deployment and retrieves the CSRF token.
+   * 2. POST a demo login → executes the auth SQL query against the DB, warming up the
+   *    SQL Server execution-plan cache so the first Selenium login does not time out.
+   */
+  private void warmupApps() throws Exception {
+    String base = testProperties.getApplicationPath("/eximeebpms/");
+    for (String app : new String[] {"admin", "cockpit", "tasklist", "welcome"}) {
+      try {
+        HttpResponse<String> pageResp = Unirest.get(base + "app/" + app + "/default/").asString();
+        List<String> cookies = pageResp.getHeaders().get("Set-Cookie");
+        String xsrfToken = getCookie(cookies, XSRF_TOKEN_IDENTIFIER);
+        String sessionId = getCookie(cookies, JSESSIONID_IDENTIFIER);
+        if (xsrfToken.isEmpty()) {
+          continue;
+        }
+        Unirest.post(base + "api/" + app + "/auth/user/default/login/" + app)
+            .body("username=demo&password=demo")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header(COOKIE_HEADER, createCookieHeader(xsrfToken, sessionId))
+            .header(X_XSRF_TOKEN_HEADER, xsrfToken)
+            .asString();
+      } catch (Exception ignored) {
+      }
+    }
   }
 
   @AfterClass

@@ -83,6 +83,24 @@ rem set "JAVA_OPTS=%JAVA_OPTS% -Djava.security.properties==C:\path\to\custom\jav
 
 :JAVA_OPTS_SET
 
+rem Java 9+ (JPMS) module access flags required by WildFly 40 with Java 17+.
+rem Without these, Infinispan's protostream library fails to initialise (EnumMapMarshaller
+rem needs VarHandle access to java.util internals), causing the web-session and SFSB
+rem Infinispan cache containers to fail on startup.
+set "JAVA_OPTS=%JAVA_OPTS% --add-exports=java.desktop/sun.awt=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.lang=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.lang.reflect=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.io=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.security=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.util=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/java.util.concurrent=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.management/sun.management=ALL-UNNAMED"
+set "JAVA_OPTS=%JAVA_OPTS% --add-opens=java.naming/javax.naming=ALL-UNNAMED"
+
 rem # Uncomment to add a Java agent. If an agent is added to the module options, then jboss-modules.jar is added as an agent
 rem # on the JVM. This allows things like the log manager or security manager to be configured before the agent is invoked.
 rem set "MODULE_OPTS=-javaagent:agent.jar"

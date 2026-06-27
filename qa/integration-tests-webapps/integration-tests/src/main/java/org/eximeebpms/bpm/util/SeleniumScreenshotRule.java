@@ -23,6 +23,9 @@ import org.junit.runners.model.Statement;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -73,6 +76,26 @@ public class SeleniumScreenshotRule implements TestRule {
           log.warning("Could not get browser URL: " + e.getMessage());
         }
 
+        try {
+          log.info("Browser title at failure: " + webDriver.getTitle());
+        } catch (Exception e) {
+          log.warning("Could not get browser title: " + e.getMessage());
+        }
+
+        try {
+          LogEntries browserLogs = webDriver.manage().logs().get(LogType.BROWSER);
+          if (browserLogs != null && !browserLogs.getAll().isEmpty()) {
+            log.info("Browser console logs at failure (" + browserLogs.getAll().size() + " entries):");
+            for (LogEntry entry : browserLogs.getAll()) {
+              log.info("  [" + entry.getLevel() + "] " + entry.getMessage());
+            }
+          } else {
+            log.info("Browser console logs at failure: (empty)");
+          }
+        } catch (Exception e) {
+          log.warning("Could not get browser console logs: " + e.getMessage());
+        }
+
         String screenshotDirectory = System.getProperty(OUTPUT_DIR_PROPERTY_NAME);
 
         if (screenshotDirectory == null) {
@@ -81,19 +104,26 @@ public class SeleniumScreenshotRule implements TestRule {
           return;
         }
 
-        File scrFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
         String now = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
-        String scrFilename = describe.getClassName() + "-" + describe.getMethodName() + "-" + now + ".png";
-        File outputFile = new File(screenshotDirectory, scrFilename);
+        String baseName = describe.getClassName() + "-" + describe.getMethodName() + "-" + now;
 
+        File scrFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+        File screenshotFile = new File(screenshotDirectory, baseName + ".png");
         try {
-          FileUtils.copyFile(scrFile, outputFile);
+          FileUtils.copyFile(scrFile, screenshotFile);
+          log.info("Screenshot created at: " + screenshotFile.getPath());
         } catch (IOException ioe) {
           log.severe("No screenshot created due to an error on copying: " + ioe.getMessage());
-          return;
         }
 
-        log.info("Screenshot created at: " + outputFile.getPath());
+        try {
+          String pageSource = webDriver.getPageSource();
+          File sourceFile = new File(screenshotDirectory, baseName + ".html");
+          FileUtils.write(sourceFile, pageSource, "UTF-8");
+          log.info("Page source saved at: " + sourceFile.getPath());
+        } catch (Exception e) {
+          log.warning("Could not save page source: " + e.getMessage());
+        }
       }
 
     };

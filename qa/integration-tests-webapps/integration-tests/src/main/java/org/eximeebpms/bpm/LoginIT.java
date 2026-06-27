@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.Arrays;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -116,7 +115,7 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
     String appName = "admin";
     login(appName);
     wait.until(textToBePresentInElementLocated(
-        By.cssSelector("[ng-class=\"activeClass('#/authorization')\"] a"),
+        By.cssSelector("a[href='#/authorization?resource=0']"),
         "Authorizations"));
 
     wait.until(currentURIIs(new URI(appUrl

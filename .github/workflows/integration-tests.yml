@@ -99,6 +99,12 @@ jobs:
           path: ${{ github.workspace }}/.m2/repository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Cache npm packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
@@ -235,10 +241,6 @@ jobs:
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
         run: |
-          if [[ "${{ matrix.distro }}" == "wildfly" && "${{ matrix.database }}" == "postgresql" && "${{ github.event_name }}" == "schedule" ]]; then
-            echo "Warning: Skipping build for distro 'wildfly' with database 'postgresql' due."
-            exit 0
-          fi
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-build
       - name: Stop PostgreSQL
         if: always() && matrix.database == 'postgresql'

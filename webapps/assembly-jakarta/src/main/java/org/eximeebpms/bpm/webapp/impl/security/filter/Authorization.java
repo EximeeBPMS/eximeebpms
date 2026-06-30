@@ -17,6 +17,8 @@
 package org.eximeebpms.bpm.webapp.impl.security.filter;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import org.eximeebpms.bpm.webapp.impl.security.auth.Authentication;
@@ -57,7 +59,7 @@ public class Authorization {
     if (authentication != null) {
       // header != null checks required for websphere compatibility
       if (authentication.getIdentityId() != null) {
-        response.addHeader("X-Authorized-User", authentication.getIdentityId());
+        response.addHeader("X-Authorized-User", encodeHeaderValue(authentication.getIdentityId()));
       }
 
       if (authentication.getProcessEngineName() != null) {
@@ -81,6 +83,14 @@ public class Authorization {
   }
 
   ////// static helpers //////////////////////////////
+
+  /**
+   * Encodes a header value using percent-encoding (UTF-8) to handle non-ASCII characters.
+   * HTTP headers only allow printable ASCII; user identities may contain Unicode (e.g. Polish names).
+   */
+  private static String encodeHeaderValue(String value) {
+    return URLEncoder.encode(value, StandardCharsets.UTF_8);
+  }
 
   public static Authorization granted(Authentication authentication) {
     return new Authorization(authentication, true);

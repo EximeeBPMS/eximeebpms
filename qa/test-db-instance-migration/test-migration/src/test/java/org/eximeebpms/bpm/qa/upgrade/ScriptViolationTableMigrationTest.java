@@ -42,17 +42,20 @@ public class ScriptViolationTableMigrationTest {
       DatabaseMetaData meta = conn.getMetaData();
       String tableName = "ACT_RU_SCRIPT_VIOLATION";
 
-      // then — try exact name first; Oracle/DB2 may uppercase table names
-      try (ResultSet rs = meta.getTables(null, null, tableName, new String[]{"TABLE"})) {
-        if (rs.next()) {
-          return;
+      // then — compare case-insensitively: unquoted identifiers are folded to
+      // uppercase by H2/Oracle/DB2 but to lowercase by PostgreSQL/MySQL
+      boolean found = false;
+      try (ResultSet rs = meta.getTables(null, null, "%", new String[]{"TABLE"})) {
+        while (rs.next()) {
+          if (tableName.equalsIgnoreCase(rs.getString("TABLE_NAME"))) {
+            found = true;
+            break;
+          }
         }
       }
-      try (ResultSet rs = meta.getTables(null, null, tableName.toUpperCase(), new String[]{"TABLE"})) {
-        assertThat(rs.next())
-            .as("Table ACT_RU_SCRIPT_VIOLATION should exist after migration")
-            .isTrue();
-      }
+      assertThat(found)
+          .as("Table ACT_RU_SCRIPT_VIOLATION should exist after migration")
+          .isTrue();
     }
   }
 }

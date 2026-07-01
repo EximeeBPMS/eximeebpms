@@ -96,6 +96,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaCreateHistory();
     }
 
+    if (processEngineConfiguration.isScriptSecurityEnabled()) {
+      dbSchemaCreateScriptSecurity();
+    }
+
     if (processEngineConfiguration.isDbIdentityUsed()) {
       dbSchemaCreateIdentity();
     }
@@ -120,6 +124,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
   protected abstract void dbSchemaCreateIdentity();
 
   protected abstract void dbSchemaCreateHistory();
+
+  protected abstract void dbSchemaCreateScriptSecurity();
 
   protected abstract void dbSchemaCreateEngine();
 
@@ -157,6 +163,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaDropHistory();
     }
 
+    if (processEngineConfiguration.isScriptSecurityEnabled()) {
+      dbSchemaDropScriptSecurity();
+    }
+
     if (processEngineConfiguration.isDbIdentityUsed()) {
       dbSchemaDropIdentity();
     }
@@ -165,6 +175,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
   protected abstract void dbSchemaDropIdentity();
 
   protected abstract void dbSchemaDropHistory();
+
+  protected abstract void dbSchemaDropScriptSecurity();
 
   protected abstract void dbSchemaDropEngine();
 
@@ -202,6 +214,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
 
   public abstract boolean isHistoryTablePresent();
 
+  public abstract boolean isScriptViolationTablePresent();
+
   public abstract boolean isIdentityTablePresent();
 
   public abstract boolean isCmmnTablePresent();
@@ -221,6 +235,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
 
     if (!isHistoryTablePresent() && processEngineConfiguration.isDbHistoryUsed()) {
       dbSchemaCreateHistory();
+    }
+
+    if (!isScriptViolationTablePresent() && processEngineConfiguration.isScriptSecurityEnabled()) {
+      dbSchemaCreateScriptSecurity();
     }
 
     if (!isIdentityTablePresent() && processEngineConfiguration.isDbIdentityUsed()) {

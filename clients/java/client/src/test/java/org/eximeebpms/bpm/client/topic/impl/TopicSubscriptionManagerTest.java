@@ -422,7 +422,7 @@ public class TopicSubscriptionManagerTest {
         when(engineClient.fetchAndLock(anyList(), anyInt()))
                 .thenAnswer(invocation -> {
                     List<TopicRequestDto> topics = invocation.getArgument(0);
-                    String topicName = topics.getFirst().getTopicName();
+                    String topicName = topics.get(0).getTopicName();
                     if ("defaultTopic".equals(topicName)) {
                         return defaultTasks;
                     } else if ("customTopic".equals(topicName)) {
@@ -548,7 +548,7 @@ public class TopicSubscriptionManagerTest {
                 .thenAnswer(inv -> {
                     List<TopicRequestDto> topics = inv.getArgument(0);
                     if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
-                        capturedTopicName[0] = topics.getFirst().getTopicName();
+                        capturedTopicName[0] = topics.get(0).getTopicName();
                     }
                     firstFetchDone.countDown();
                     return defaultTasks;
@@ -622,7 +622,7 @@ public class TopicSubscriptionManagerTest {
                 .thenAnswer(inv -> {
                     List<TopicRequestDto> topics = inv.getArgument(0);
                     if (!topics.isEmpty() && firstFetchDone.getCount() > 0) {
-                        capturedTopicName[0] = topics.getFirst().getTopicName();
+                        capturedTopicName[0] = topics.get(0).getTopicName();
                     }
                     firstFetchDone.countDown();
                     return customTasks;
@@ -825,7 +825,7 @@ public class TopicSubscriptionManagerTest {
         when(engineClient.fetchAndLock(anyList(), anyInt()))
                 .thenAnswer(invocation -> {
                     List<TopicRequestDto> topics = invocation.getArgument(0);
-                    String topicName = topics.getFirst().getTopicName();
+                    String topicName = topics.get(0).getTopicName();
                     if ("defaultTopic".equals(topicName) && defaultFetched.compareAndSet(false, true)) {
                         return defaultTasks;
                     } else if ("customTopic2".equals(topicName) && custom2Fetched.compareAndSet(false, true)) {

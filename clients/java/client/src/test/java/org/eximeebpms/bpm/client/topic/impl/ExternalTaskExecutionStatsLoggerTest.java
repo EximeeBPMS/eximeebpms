@@ -51,7 +51,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
         // Then
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
-        assertEquals("No execution statistics available", messages.getFirst());
+        assertEquals("No execution statistics available", messages.get(0));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
 
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
         assertNotNull(logOutput);
 
         // Verify header
@@ -116,7 +116,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
         List<String> messages = logHandler.getMessages();
         assertEquals(1, messages.size());
 
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Verify all tasks are present
         assertTrue("Should contain process-a", logOutput.contains("process-a"));
@@ -144,7 +144,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
         // Then
         List<String> messages = logHandler.getMessages();
         assertFalse("Should have captured log messages", messages.isEmpty());
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Debug: print actual output
         System.out.println("Actual log output: " + logOutput);
@@ -167,7 +167,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Should be truncated to 27 chars + "..."
         assertTrue("Should contain truncated topic with ellipsis",
@@ -186,7 +186,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         assertTrue("Should contain 'null' for null process key", logOutput.contains("null"));
     }
@@ -201,7 +201,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         assertTrue("Should contain 'null' for null topic name", logOutput.contains("null"));
     }
@@ -218,7 +218,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Average should be 141.67 (425 / 3)
         assertTrue("Should format average with 2 decimal places",
@@ -235,7 +235,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Should contain separator lines (130 characters of dashes/equals)
         assertTrue("Should contain header separator",
@@ -253,7 +253,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         // Should log the task with zero counts
         assertTrue("Should contain task with zero values",
@@ -272,7 +272,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         assertTrue("Should contain count 1000", logOutput.contains("1000"));
         assertTrue("Should contain total 5000000", logOutput.contains("5000000"));
@@ -291,7 +291,7 @@ public class ExternalTaskExecutionStatsLoggerTest {
 
         // Then
         List<String> messages = logHandler.getMessages();
-        String logOutput = messages.getFirst();
+        String logOutput = messages.get(0);
 
         assertTrue("Should show min as 50", logOutput.contains("50"));
         assertTrue("Should show max as 1000", logOutput.contains("1000"));

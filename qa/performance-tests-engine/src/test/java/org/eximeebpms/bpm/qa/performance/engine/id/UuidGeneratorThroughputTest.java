@@ -160,7 +160,8 @@ public class UuidGeneratorThroughputTest {
     AtomicLong totalIds = new AtomicLong(0);
     long[] durationNsRef = new long[1];
 
-    try (ExecutorService executor = Executors.newFixedThreadPool(threads)) {
+    ExecutorService executor = Executors.newFixedThreadPool(threads);
+    try {
       for (int t = 0; t < threads; t++) {
         executor.submit(() -> {
           try {
@@ -185,6 +186,8 @@ public class UuidGeneratorThroughputTest {
       durationNsRef[0] = System.nanoTime() - startNs;
 
       Assert.assertTrue("Benchmark did not finish within 60 seconds", finished);
+    } finally {
+      executor.shutdown();
     }
 
     long durationNs       = durationNsRef[0];

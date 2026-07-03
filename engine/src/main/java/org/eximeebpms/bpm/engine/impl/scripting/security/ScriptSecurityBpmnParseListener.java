@@ -1,7 +1,9 @@
 package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.Objects;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import org.eximeebpms.bpm.engine.impl.scripting.ScriptLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.core.variable.mapping.IoMapping;
@@ -14,6 +16,7 @@ import org.eximeebpms.bpm.model.bpmn.impl.BpmnModelConstants;
 
 public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
 
+  private static final ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
   private static final String UNSPECIFIED_LANGUAGE = "unspecified";
 
   protected final ScriptSecurityPolicy scriptSecurityPolicy;
@@ -326,7 +329,10 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
 
     ScriptSecurityDecision decision = policy.evaluate(context);
 
-    if (decision.isDenied()) {
+    if (decision.isAudit()) {
+      LOG.warnScriptDeploymentAllowedByAuditMode(activityId, processDefinitionKey,
+          decision.getCode().orElse(null), decision.getReason().orElse(null));
+    } else if (decision.isDenied()) {
       throw new ScriptSecurityException(
           buildDeploymentSecurityExceptionMessage(activityId, processDefinitionKey, decision),
           decision.getCode().orElse(null));

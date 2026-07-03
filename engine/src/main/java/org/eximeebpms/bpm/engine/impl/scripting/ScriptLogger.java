@@ -39,4 +39,17 @@ public class ScriptLogger extends ProcessEngineLogger {
         "001", "Evaluating non-compiled script {}", scriptSource);
   }
 
+  public void warnScriptExecutionAllowedByAuditMode(String reason, String scopeMessage) {
+    logWarn("003", "Script execution allowed by audit mode: {}{}", reason, scopeMessage);
+  }
+
+  public void warnScriptDeploymentAllowedByAuditMode(String activityId, String processDefinitionKey, String ruleCode, String reason) {
+    logWarn("004", "Script deployment allowed by audit mode. activityId={}, processDefinitionKey={}, ruleCode={}, reason={}",
+        activityId, processDefinitionKey, ruleCode, reason);
+  }
+
+  public void warnExpressionAllowedByAuditMode(String reason) {
+    logWarn("005", "Expression allowed by audit mode: {}", reason);
+  }
+
 }

@@ -2,6 +2,7 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import java.util.Objects;
 import java.util.Optional;
+import lombok.Getter;
 
 /**
  * Immutable decision returned by the script security policy.
@@ -10,11 +11,13 @@ public final class ScriptSecurityDecision {
 
   public enum Outcome {
     ALLOW,
+    AUDIT,
     DENY
   }
 
   private static final ScriptSecurityDecision ALLOW_DECISION = new ScriptSecurityDecision(Outcome.ALLOW, null, null);
 
+  @Getter
   private final Outcome outcome;
   private final String reason;
   private final String code;
@@ -44,8 +47,15 @@ public final class ScriptSecurityDecision {
         normalize(code).orElse(null));
   }
 
-  public Outcome getOutcome() {
-    return outcome;
+  public static ScriptSecurityDecision audit(String reason, String code) {
+    if (reason == null || reason.isBlank()) {
+      throw new IllegalArgumentException("Audit decision must contain a non-blank reason");
+    }
+
+    return new ScriptSecurityDecision(
+        Outcome.AUDIT,
+        reason,
+        normalize(code).orElse(null));
   }
 
   public boolean isAllowed() {
@@ -54,6 +64,10 @@ public final class ScriptSecurityDecision {
 
   public boolean isDenied() {
     return outcome == Outcome.DENY;
+  }
+
+  public boolean isAudit() {
+    return outcome == Outcome.AUDIT;
   }
 
   public Optional<String> getReason() {

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEntity">
+
+  <!-- SCRIPT VIOLATION INSERT -->
+
+  <insert id="insertScriptViolation" parameterType="org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEntity">
+    insert into ${prefix}ACT_RU_SCRIPT_VIOLATION (
+      ID_,
+      TIMESTAMP_,
+      PROC_DEF_KEY_,
+      ACTIVITY_ID_,
+      LANGUAGE_,
+      SOURCE_TYPE_,
+      ORIGIN_,
+      RULE_CODE_,
+      REASON_
+    ) values (
+      #{id, jdbcType=VARCHAR},
+      #{timestamp, jdbcType=TIMESTAMP},
+      #{processDefinitionKey, jdbcType=VARCHAR},
+      #{activityId, jdbcType=VARCHAR},
+      #{language, jdbcType=VARCHAR},
+      #{sourceType, jdbcType=VARCHAR},
+      #{origin, jdbcType=VARCHAR},
+      #{ruleCode, jdbcType=VARCHAR},
+      #{reason, jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <!-- SCRIPT VIOLATION DELETE -->
+
+  <delete id="deleteScriptViolation" parameterType="org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEntity">
+    delete from ${prefix}ACT_RU_SCRIPT_VIOLATION where ID_ = #{id}
+  </delete>
+
+  <delete id="deleteScriptViolationsOlderThan" parameterType="java.util.Date">
+    delete from ${prefix}ACT_RU_SCRIPT_VIOLATION
+    where TIMESTAMP_ &lt; #{parameter, jdbcType=TIMESTAMP}
+  </delete>
+
+  <!-- SCRIPT VIOLATION SELECT -->
+
+  <resultMap id="scriptViolationResultMap" type="org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEntity">
+    <id property="id" column="ID_" jdbcType="VARCHAR"/>
+    <result property="timestamp" column="TIMESTAMP_" jdbcType="TIMESTAMP"/>
+    <result property="processDefinitionKey" column="PROC_DEF_KEY_" jdbcType="VARCHAR"/>
+    <result property="activityId" column="ACTIVITY_ID_" jdbcType="VARCHAR"/>
+    <result property="language" column="LANGUAGE_" jdbcType="VARCHAR"/>
+    <result property="sourceType" column="SOURCE_TYPE_" jdbcType="VARCHAR"/>
+    <result property="origin" column="ORIGIN_" jdbcType="VARCHAR"/>
+    <result property="ruleCode" column="RULE_CODE_" jdbcType="VARCHAR"/>
+    <result property="reason" column="REASON_" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <select id="selectRecentScriptViolations" resultMap="scriptViolationResultMap">
+    ${limitBefore}
+    select ${distinct} RES.*
+    ${limitBetween}
+    from ${prefix}ACT_RU_SCRIPT_VIOLATION RES
+    order by RES.TIMESTAMP_ desc
+    ${limitAfter}
+  </select>
+
+  <select id="countScriptViolations" resultType="long">
+    select count(*) from ${prefix}ACT_RU_SCRIPT_VIOLATION
+  </select>
+
+</mapper>

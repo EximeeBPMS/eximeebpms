@@ -31,8 +31,10 @@ import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.delegate.DelegateCaseExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
+import org.eximeebpms.bpm.engine.impl.scripting.ScriptLogger;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.DynamicResourceExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.DynamicSourceExecutableScript;
@@ -61,6 +63,8 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
  * @author Daniel Meyer
  */
 public class ScriptingEnvironment {
+
+  private static final ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
 
   /**
    * The cached platform environment scripts per script language.
@@ -172,7 +176,9 @@ public class ScriptingEnvironment {
     }
 
     ScriptSecurityDecision decision = policy.evaluate(context);
-    if (decision.isDenied()) {
+    if (decision.isAudit()) {
+      LOG.warnScriptExecutionAllowedByAuditMode(decision.getReason().orElse(""), getScopeExceptionMessage(scope));
+    } else if (decision.isDenied()) {
       throw new ScriptSecurityException(
           buildSecurityExceptionMessage(scope, decision),
           decision.getCode().orElse(null));

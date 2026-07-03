@@ -16,24 +16,31 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
-import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
-
-import java.util.Optional;
 
 @Slf4j
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
 
   @Autowired
   private IdGenerator idGenerator;
+
+  @Autowired
+  private ApplicationContext applicationContext;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -65,7 +72,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
       if (camundaBpmProperties.getGenerateUniqueProcessEngineName()) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
-            + "if a custom processEngineName is already set: %s", processEngineName));
+              + "if a custom processEngineName is already set: %s", processEngineName));
         }
         processEngineName = CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
       }
@@ -78,7 +85,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
 
   private void setJobExecutorAcquireByPriority(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getJobExecutorAcquireByPriority())
-      .ifPresent(configuration::setJobExecutorAcquireByPriority);
+        .ifPresent(configuration::setJobExecutorAcquireByPriority);
   }
 
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
@@ -92,9 +99,22 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   }
 
   private void configureScriptSecurity(SpringProcessEngineConfiguration configuration, ScriptSecurityProperty scriptSecurity) {
-    configuration.setScriptSecurityEnabled(scriptSecurity.isEnabled());
-    if (scriptSecurity.isEnabled()) {
-      configuration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy(scriptSecurity.getAllowlistedProcessDefinitionKeys()));
+    if (scriptSecurity.isDisabled()) {
+      configuration.setScriptSecurityEnabled(false);
+      return;
     }
+
+    DbScriptViolationStore violationStore = new DbScriptViolationStore(configuration);
+    configuration.setScriptViolationStore(violationStore);
+
+    List<ScriptViolationListener> listeners = new ArrayList<>();
+    if (applicationContext != null) {
+      listeners.addAll(applicationContext.getBeansOfType(ScriptViolationListener.class).values());
+    }
+
+    DbAwareScriptSecurityPolicy.Config initialConfig = new DbAwareScriptSecurityPolicy.Config(
+        scriptSecurity.isAuditMode(),
+        scriptSecurity.getAllowlistedProcessDefinitionKeys());
+    configuration.setScriptSecurityPolicy(new DbAwareScriptSecurityPolicy(initialConfig, violationStore, listeners));
   }
 }

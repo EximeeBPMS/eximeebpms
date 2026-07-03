@@ -57,6 +57,7 @@ import org.eximeebpms.bpm.engine.impl.history.event.HistoricExternalTaskLogEntit
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricIncidentEventEntity;
 import org.eximeebpms.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.AbstractManager;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEntity;
 import org.eximeebpms.bpm.engine.impl.util.DatabaseUtil;
 import org.eximeebpms.bpm.engine.management.TableMetaData;
 import org.eximeebpms.bpm.engine.management.TablePage;
@@ -158,6 +159,8 @@ public class TableDataManager extends AbstractManager {
     persistentObjectToTableNameMap.put(SchemaLogEntryEntity.class, "ACT_GE_SCHEMA_LOG");
     persistentObjectToTableNameMap.put(FilterEntity.class, "ACT_RU_FILTER");
 
+    persistentObjectToTableNameMap.put(ScriptViolationEntity.class, "ACT_RU_SCRIPT_VIOLATION");
+
     // and now the map for the API types (does not cover all cases)
     apiTypeToTableNameMap.put(Task.class, "ACT_RU_TASK");
     apiTypeToTableNameMap.put(Execution.class, "ACT_RU_EXECUTION");
@@ -202,9 +205,8 @@ public class TableDataManager extends AbstractManager {
 
   protected long getTableCount(String tableName) {
     LOG.selectTableCountForTable(tableName);
-    Long count = (Long) getDbEntityManager().selectOne("selectTableCount",
-            Collections.singletonMap("tableName", tableName));
-    return count;
+    return (Long) getDbEntityManager().selectOne("selectTableCount",
+        Collections.singletonMap("tableName", tableName));
   }
 
   @SuppressWarnings("unchecked")

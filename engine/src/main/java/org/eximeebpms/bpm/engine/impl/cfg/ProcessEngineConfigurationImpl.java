@@ -323,6 +323,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.PropertyManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ReportManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ResourceManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.SchemaLogManager;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ScriptViolationManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.StatisticsManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TableDataManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskManager;
@@ -348,9 +349,11 @@ import org.eximeebpms.bpm.engine.impl.scripting.engine.VariableScopeResolverFact
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.NoOpScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAware;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityBpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.SecureJuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.DatabaseImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.InternalsImpl;
@@ -606,6 +609,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected ScriptEngineResolver scriptEngineResolver;
   protected boolean scriptSecurityEnabled = true;
   protected ScriptSecurityPolicy scriptSecurityPolicy;
+  protected ScriptViolationStore scriptViolationStore = NoOpScriptViolationStore.INSTANCE;
   protected String scriptEngineNameJavaScript;
   protected boolean autoStoreScriptVariables = false;
   protected boolean enableScriptCompilation = true;
@@ -2003,6 +2007,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
       addSessionFactory(new GenericManagerFactory(OptimizeManager.class));
 
+      addSessionFactory(new GenericManagerFactory(ScriptViolationManager.class));
+
       sessionFactories.put(ReadOnlyIdentityProvider.class, identityProviderSessionFactory);
 
       // check whether identityProviderSessionFactory implements WritableIdentityProvider
@@ -2626,7 +2632,10 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
 
     if (scriptSecurityPolicy == null) {
-      scriptSecurityPolicy = new DefaultScriptSecurityPolicy(scriptSecurityAllowlistedProcessDefinitionKeys);
+      scriptSecurityPolicy = new DefaultScriptSecurityPolicy(
+          scriptSecurityAllowlistedProcessDefinitionKeys,
+          false,
+          scriptViolationStore);
     }
   }
 
@@ -4346,6 +4355,15 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
+  public ScriptViolationStore getScriptViolationStore() {
+    return scriptViolationStore;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptViolationStore(ScriptViolationStore scriptViolationStore) {
+    this.scriptViolationStore = scriptViolationStore != null ? scriptViolationStore : NoOpScriptViolationStore.INSTANCE;
+    return this;
+  }
+
   public Set<String> getScriptSecurityAllowlistedProcessDefinitionKeys() {
     return scriptSecurityAllowlistedProcessDefinitionKeys;
   }
@@ -5398,7 +5416,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   public boolean isLegacyJobRetryBehaviorEnabled() {
     return legacyJobRetryBehaviorEnabled;
   }
-  
+
   public ProcessEngineConfiguration setLegacyJobRetryBehaviorEnabled(boolean legacyJobRetryBehaviorEnabled) {
     this.legacyJobRetryBehaviorEnabled = legacyJobRetryBehaviorEnabled;
     return this;

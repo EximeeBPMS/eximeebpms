@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.test.standalone.scripting;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Set;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
@@ -295,5 +296,49 @@ public class ScriptSecurityBpmnParseListenerTest {
     } finally {
       engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
     }
+  }
+
+  @Test
+  public void shouldAllowDeploymentOfForbiddenScriptTaskInAuditMode() {
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy(Set.of(), true));
+
+    Deployment deployment = engineRule.getRepositoryService()
+        .createDeployment()
+        .addClasspathResource("org/eximeebpms/bpm/engine/test/standalone/scripting/script-security-forbidden-script-task.bpmn20.xml")
+        .deploy();
+
+    try {
+      assertThat(deployment).isNotNull();
+    } finally {
+      engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
+    }
+  }
+
+  @Test
+  public void shouldAllowDeploymentOfForbiddenSequenceFlowConditionInAuditMode() {
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy(Set.of(), true));
+
+    Deployment deployment = engineRule.getRepositoryService()
+        .createDeployment()
+        .addClasspathResource("org/eximeebpms/bpm/engine/test/standalone/scripting/script-security-forbidden-sequence-flow.bpmn20.xml")
+        .deploy();
+
+    try {
+      assertThat(deployment).isNotNull();
+    } finally {
+      engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
+    }
+  }
+
+  @Test
+  public void shouldStillBlockInEnforceModeAfterAuditModeTest() {
+    processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
+
+    assertThatThrownBy(() -> engineRule.getRepositoryService()
+        .createDeployment()
+        .addClasspathResource("org/eximeebpms/bpm/engine/test/standalone/scripting/script-security-forbidden-script-task.bpmn20.xml")
+        .deploy())
+        .isInstanceOf(ProcessEngineException.class)
+        .hasMessageContaining("Process deployment blocked by script security policy");
   }
 }

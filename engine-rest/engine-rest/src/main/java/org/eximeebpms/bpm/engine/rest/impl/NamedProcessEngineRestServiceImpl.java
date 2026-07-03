@@ -55,6 +55,7 @@ import org.eximeebpms.bpm.engine.rest.ModificationRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.SchemaLogRestService;
+import org.eximeebpms.bpm.engine.rest.ScriptSecurityRestService;
 import org.eximeebpms.bpm.engine.rest.SignalRestService;
 import org.eximeebpms.bpm.engine.rest.TaskRestService;
 import org.eximeebpms.bpm.engine.rest.TelemetryRestService;
@@ -271,6 +272,12 @@ public class NamedProcessEngineRestServiceImpl extends AbstractProcessEngineRest
   @Path("/{name}" + TelemetryRestService.PATH)
   public TelemetryRestService getTelemetryRestService(@PathParam("name") String engineName) {
     return super.getTelemetryRestService(engineName);
+  }
+
+  @Override
+  @Path("/{name}" + ScriptSecurityRestService.PATH)
+  public ScriptSecurityRestService getScriptSecurityRestService(@PathParam("name") String engineName) {
+    return super.getScriptSecurityRestService(engineName);
   }
 
   @GET

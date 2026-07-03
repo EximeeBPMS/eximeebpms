@@ -2,6 +2,7 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -502,6 +503,108 @@ public class DefaultScriptSecurityPolicyTest {
     assertThat(decision.isDenied()).isTrue();
     assertThat(decision.getReason()).contains("Process execution via ProcessBuilder is forbidden");
     assertThat(decision.getCode()).contains("SCRIPT_SECURITY_PROCESS_BUILDER");
+  }
+
+  @Test
+  public void shouldReturnAuditDecisionInAuditModeForRegexMatchedForbiddenScript() {
+    policy = new DefaultScriptSecurityPolicy(Set.of(), true);
+
+    ScriptSecurityDecision decision = policy.evaluate(context("javascript", "System.getenv('HOME');"));
+
+    assertThat(decision.isAudit()).isTrue();
+    assertThat(decision.isAllowed()).isFalse();
+    assertThat(decision.isDenied()).isFalse();
+    assertThat(decision.getReason()).contains("Access to environment variables is forbidden");
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_SYSTEM_GETENV");
+  }
+
+  @Test
+  public void shouldReturnAuditDecisionInAuditModeForDenyRuleMatchedForbiddenScript() {
+    policy = new DefaultScriptSecurityPolicy(Set.of(), true);
+
+    ScriptSecurityDecision decision = policy.evaluate(context("groovy", "new ProcessBuilder('sh', '-c', 'id').start();"));
+
+    assertThat(decision.isAudit()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_PROCESS_BUILDER");
+  }
+
+  @Test
+  public void shouldReturnAuditDecisionInAuditModeForHostClassLookup() {
+    policy = new DefaultScriptSecurityPolicy(Set.of(), true);
+    ScriptSecurityContext context = ScriptSecurityContext.builder("javascript")
+        .source("Java.type('org.eximeebpms.spin.Spin');")
+        .sourceType(ScriptSourceType.INLINE_SOURCE)
+        .origin(ScriptOrigin.USER)
+        .build();
+
+    ScriptSecurityDecision decision = policy.evaluate(context);
+
+    assertThat(decision.isAudit()).isTrue();
+    assertThat(decision.getCode()).contains("SCRIPT_SECURITY_JAVA_TYPE");
+  }
+
+  @Test
+  public void shouldAllowSafeScriptInAuditMode() {
+    policy = new DefaultScriptSecurityPolicy(Set.of(), true);
+
+    ScriptSecurityDecision decision = policy.evaluate(context("javascript", "1 + 1;"));
+
+    assertThat(decision.isAllowed()).isTrue();
+    assertThat(decision.isAudit()).isFalse();
+    assertThat(decision.isDenied()).isFalse();
+  }
+
+  @Test
+  public void shouldRecordViolationEventToStoreWhenDenied() {
+    InMemoryScriptViolationStore store = new InMemoryScriptViolationStore(100);
+    policy = new DefaultScriptSecurityPolicy(Set.of(), false, store);
+
+    policy.evaluate(context("groovy", "Runtime.getRuntime().exec('id');"));
+
+    assertThat(store.getTotalCount()).isEqualTo(1);
+    ScriptViolationEvent event = store.getRecent(1).get(0);
+    assertThat(event.language()).isEqualTo("groovy");
+    assertThat(event.ruleCode()).isEqualTo("SCRIPT_SECURITY_RUNTIME_EXEC");
+    assertThat(event.reason()).isNotBlank();
+    assertThat(event.timestamp()).isNotNull();
+  }
+
+  @Test
+  public void shouldRecordViolationEventToStoreWhenAudit() {
+    InMemoryScriptViolationStore store = new InMemoryScriptViolationStore(100);
+    policy = new DefaultScriptSecurityPolicy(Set.of(), true, store);
+
+    policy.evaluate(context("javascript", "System.getenv('HOME');"));
+
+    assertThat(store.getTotalCount()).isEqualTo(1);
+    ScriptViolationEvent event = store.getRecent(1).get(0);
+    assertThat(event.ruleCode()).isEqualTo("SCRIPT_SECURITY_SYSTEM_GETENV");
+  }
+
+  @Test
+  public void shouldNotRecordEventToStoreWhenAllowed() {
+    InMemoryScriptViolationStore store = new InMemoryScriptViolationStore(100);
+    policy = new DefaultScriptSecurityPolicy(Set.of(), false, store);
+
+    policy.evaluate(context("javascript", "1 + 1;"));
+
+    assertThat(store.getTotalCount()).isEqualTo(0);
+    assertThat(store.getRecent(10)).isEmpty();
+  }
+
+  @Test
+  public void shouldRecordMultipleViolationEventsForMultipleEvaluations() {
+    InMemoryScriptViolationStore store = new InMemoryScriptViolationStore(100);
+    policy = new DefaultScriptSecurityPolicy(Set.of(), false, store);
+
+    policy.evaluate(context("groovy", "Runtime.getRuntime().exec('id');"));
+    policy.evaluate(context("javascript", "new java.io.File('/etc/passwd');"));
+    policy.evaluate(context("javascript", "1 + 1;"));  // safe, not recorded
+
+    List<ScriptViolationEvent> events = store.getRecent(10);
+    assertThat(store.getTotalCount()).isEqualTo(2);
+    assertThat(events).hasSize(2);
+    assertThat(events).extracting(ScriptViolationEvent::language).containsExactlyInAnyOrder("groovy", "javascript");
   }
 
   protected ScriptSecurityContext context(String language, String source) {

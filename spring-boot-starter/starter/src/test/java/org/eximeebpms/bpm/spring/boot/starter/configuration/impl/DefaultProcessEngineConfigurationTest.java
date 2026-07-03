@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Set;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
-import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
@@ -122,7 +122,7 @@ public class DefaultProcessEngineConfigurationTest {
 
   @Test
   public void setScriptSecurityEnabled_false() {
-    properties.getScriptSecurity().setEnabled(false);
+    properties.getScriptSecurity().setMode(ScriptSecurityProperty.Mode.DISABLED);
     instance.preInit(configuration);
     assertThat(configuration.isScriptSecurityEnabled()).isFalse();
   }
@@ -131,7 +131,6 @@ public class DefaultProcessEngineConfigurationTest {
   public void shouldConfigureScriptSecurityPolicyWithAllowlistedProcessDefinitionKeys() {
     // given
     ScriptSecurityProperty scriptSecurity = new ScriptSecurityProperty();
-    scriptSecurity.setEnabled(true);
     scriptSecurity.setAllowlistedProcessDefinitionKeys(Set.of("legacyInvoiceProcess"));
 
     properties.setScriptSecurity(scriptSecurity);
@@ -141,8 +140,9 @@ public class DefaultProcessEngineConfigurationTest {
 
     // then
     assertThat(configuration.isScriptSecurityEnabled()).isTrue();
-    assertThat(configuration.getScriptSecurityPolicy()).isInstanceOf(DefaultScriptSecurityPolicy.class);
+    assertThat(configuration.getScriptSecurityPolicy()).isInstanceOf(DbAwareScriptSecurityPolicy.class);
 
+    // Before ManagementService is wired, DbAwareScriptSecurityPolicy uses initial config from env.
     ScriptSecurityContext allowlistedContext = ScriptSecurityContext.builder("javascript")
         .source("System.getenv('HOME');")
         .sourceType(ScriptSourceType.INLINE_SOURCE)

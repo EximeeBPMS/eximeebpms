@@ -29,7 +29,7 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Authorization.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Report.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Tenant.xml" />
-    
+
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Attachment.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Comment.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Deployment.xml" />
@@ -73,6 +73,7 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricBatch.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/TenantMembership.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CamundaFormDefinition.xml" />
+    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />
 
     <!-- CMMN -->
 

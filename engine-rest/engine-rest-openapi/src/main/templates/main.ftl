@@ -76,6 +76,7 @@
     {"name": "Process Instance"},
     {"name": "Signal"},
     {"name": "Schema Log"},
+    {"name": "Script Security"},
     {"name": "Task"},
     {"name": "Task Attachment"},
     {"name": "Task Comment"},

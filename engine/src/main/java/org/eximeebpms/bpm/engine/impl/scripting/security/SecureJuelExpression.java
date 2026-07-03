@@ -3,6 +3,8 @@ package org.eximeebpms.bpm.engine.impl.scripting.security;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.eximeebpms.bpm.engine.delegate.BaseDelegateExecution;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.scripting.ScriptLogger;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpression;
@@ -11,6 +13,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
 
 public class SecureJuelExpression extends JuelExpression {
+
+  private static final ScriptLogger LOG = ProcessEngineLogger.SCRIPT_LOGGER;
 
   private final Supplier<ScriptSecurityPolicy> scriptSecurityPolicySupplier;
 
@@ -50,7 +54,9 @@ public class SecureJuelExpression extends JuelExpression {
             .processDefinitionKey(resolveProcessDefinitionKey(variableScope, contextExecution).orElse(null))
             .build());
 
-    if (decision.isDenied()) {
+    if (decision.isAudit()) {
+      LOG.warnExpressionAllowedByAuditMode(decision.getReason().orElse("unknown"));
+    } else if (decision.isDenied()) {
       throw new ScriptSecurityException(
           "Expression blocked by script security policy: " + decision.getReason().orElse("unknown"),
           decision.getCode().orElse(null)

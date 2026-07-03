@@ -80,18 +80,48 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
 
   private final List<Rule> denyRules;
   private final Set<String> allowlistedProcessDefinitionKeys;
+  private final boolean auditMode;
+  private final ScriptViolationStore violationStore;
+  private final List<ScriptViolationListener> listeners;
 
   public DefaultScriptSecurityPolicy() {
-    this(RULES, Set.of());
+    this(RULES, Set.of(), false, NoOpScriptViolationStore.INSTANCE, List.of());
   }
 
   public DefaultScriptSecurityPolicy(Set<String> allowlistedProcessDefinitionKeys) {
-    this(RULES, allowlistedProcessDefinitionKeys);
+    this(RULES, allowlistedProcessDefinitionKeys, false, NoOpScriptViolationStore.INSTANCE, List.of());
   }
 
-  DefaultScriptSecurityPolicy(List<Rule> denyRules, Set<String> allowlistedProcessDefinitionKeys) {
+  public DefaultScriptSecurityPolicy(Set<String> allowlistedProcessDefinitionKeys, boolean auditMode) {
+    this(RULES, allowlistedProcessDefinitionKeys, auditMode, NoOpScriptViolationStore.INSTANCE, List.of());
+  }
+
+  public DefaultScriptSecurityPolicy(
+      Set<String> allowlistedProcessDefinitionKeys,
+      boolean auditMode,
+      ScriptViolationStore violationStore) {
+    this(RULES, allowlistedProcessDefinitionKeys, auditMode, violationStore, List.of());
+  }
+
+  public DefaultScriptSecurityPolicy(
+      Set<String> allowlistedProcessDefinitionKeys,
+      boolean auditMode,
+      ScriptViolationStore violationStore,
+      List<ScriptViolationListener> listeners) {
+    this(RULES, allowlistedProcessDefinitionKeys, auditMode, violationStore, listeners);
+  }
+
+  DefaultScriptSecurityPolicy(
+      List<Rule> denyRules,
+      Set<String> allowlistedProcessDefinitionKeys,
+      boolean auditMode,
+      ScriptViolationStore violationStore,
+      List<ScriptViolationListener> listeners) {
     this.denyRules = List.copyOf(Objects.requireNonNull(denyRules, "denyRules must not be null"));
     this.allowlistedProcessDefinitionKeys = normalizeProcessDefinitionKeys(allowlistedProcessDefinitionKeys);
+    this.auditMode = auditMode;
+    this.violationStore = Objects.requireNonNull(violationStore, "violationStore must not be null");
+    this.listeners = List.copyOf(Objects.requireNonNull(listeners, "listeners must not be null"));
   }
 
   @Override
@@ -132,7 +162,7 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
 
   private ScriptSecurityDecision evaluateRegexRules(ScriptSecurityContext context, String source) {
     if (SYSTEM_GETENV_PATTERN.matcher(source).matches()) {
-      ScriptSecurityDecision decision = ScriptSecurityDecision.deny(
+      ScriptSecurityDecision decision = makeDecision(
           "Access to environment variables is forbidden",
           "SCRIPT_SECURITY_SYSTEM_GETENV");
       logDenied(context, decision);
@@ -140,7 +170,7 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
     }
 
     if (SYSTEM_GET_PROPERTY_PATTERN.matcher(source).matches()) {
-      ScriptSecurityDecision decision = ScriptSecurityDecision.deny(
+      ScriptSecurityDecision decision = makeDecision(
           "Access to JVM system properties is forbidden",
           "SCRIPT_SECURITY_SYSTEM_GET_PROPERTY");
       logDenied(context, decision);
@@ -161,6 +191,9 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
         .orElse(null);
 
     if (decision != null) {
+      if (auditMode) {
+        decision = ScriptSecurityDecision.audit(decision.getReason().orElse(""), decision.getCode().orElse(null));
+      }
       logDenied(context, decision);
     }
 
@@ -243,13 +276,42 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
   }
 
   private void logDenied(ScriptSecurityContext context, ScriptSecurityDecision decision) {
-    log.warn(
-        "Script security policy denied execution. sourceType={}, language={}, origin={}, provider={}, processDefinitionKey={}, ruleCode={}, reason={}",
+    final String action = decision.isAudit() ? "audit (execution allowed)" : "denied execution";
+    log.warn("Script security policy {}. sourceType={}, language={}, origin={}, provider={}, processDefinitionKey={}, ruleCode={}, reason={}",
+        action,
         context.getSourceType(),
         context.getLanguage(),
         context.getOrigin(),
         context.getProvider().orElse(null),
         context.getProcessDefinitionKey().orElse(null),
+        decision.getCode().orElse(null),
+        decision.getReason().orElse(null));
+    final ScriptViolationEvent violation = buildEvent(context, decision);
+    violationStore.record(violation);
+    listeners.forEach(listener -> {
+      try {
+        listener.onViolation(violation);
+      } catch (Exception e) {
+        log.warn("ScriptViolationListener threw an exception, skipping: {}", e.getMessage());
+      }
+    });
+  }
+
+  private ScriptSecurityDecision makeDecision(String reason, String code) {
+    return auditMode
+        ? ScriptSecurityDecision.audit(reason, code)
+        : ScriptSecurityDecision.deny(reason, code);
+  }
+
+  private ScriptViolationEvent buildEvent(ScriptSecurityContext context, ScriptSecurityDecision decision) {
+    return new ScriptViolationEvent(
+        java.time.Instant.now(),
+        context.getProcessDefinitionKey().orElse(null),
+        context.getProcessDefinitionId().orElse(null),
+        context.getActivityId().orElse(null),
+        context.getLanguage(),
+        context.getSourceType(),
+        context.getOrigin(),
         decision.getCode().orElse(null),
         decision.getReason().orElse(null));
   }
@@ -269,7 +331,7 @@ public final class DefaultScriptSecurityPolicy implements ScriptSecurityPolicy {
       return null;
     }
 
-    ScriptSecurityDecision decision = ScriptSecurityDecision.deny(
+    ScriptSecurityDecision decision = makeDecision(
         usesPackages
             ? "Host class lookup via Packages is forbidden"
             : "Host class lookup is forbidden",

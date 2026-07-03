@@ -608,3 +608,17 @@ create index ACT_IDX_PROCDEF_VER_TAG ON ACT_RE_PROCDEF(VERSION_TAG_);
 -- indices for history cleanup: https://jira.camunda.com/browse/CAM-11616
 create index ACT_IDX_AUTH_ROOT_PI on ACT_RU_AUTHORIZATION(ROOT_PROC_INST_ID_);
 create index ACT_IDX_AUTH_RM_TIME on ACT_RU_AUTHORIZATION(REMOVAL_TIME_);
+
+-- script guard violation log --
+create table ACT_RU_SCRIPT_VIOLATION (
+    ID_               NVARCHAR2(64) not null,
+    TIMESTAMP_        TIMESTAMP(6) not null,
+    PROC_DEF_KEY_     NVARCHAR2(255),
+    ACTIVITY_ID_      NVARCHAR2(255),
+    LANGUAGE_         NVARCHAR2(64),
+    SOURCE_TYPE_      NVARCHAR2(64),
+    ORIGIN_           NVARCHAR2(64),
+    RULE_CODE_        NVARCHAR2(255),
+    REASON_           NVARCHAR2(1000),
+    primary key (ID_)
+);

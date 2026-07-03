@@ -47,6 +47,7 @@ import org.eximeebpms.bpm.engine.rest.ModificationRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessDefinitionRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessInstanceRestService;
 import org.eximeebpms.bpm.engine.rest.SchemaLogRestService;
+import org.eximeebpms.bpm.engine.rest.ScriptSecurityRestService;
 import org.eximeebpms.bpm.engine.rest.SignalRestService;
 import org.eximeebpms.bpm.engine.rest.TaskRestService;
 import org.eximeebpms.bpm.engine.rest.TelemetryRestService;
@@ -310,6 +311,13 @@ public abstract class AbstractProcessEngineRestServiceImpl {
   public TelemetryRestService getTelemetryRestService(String engineName) {
     String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
     TelemetryRestServiceImpl subResource = new TelemetryRestServiceImpl(engineName, getObjectMapper());
+    subResource.setRelativeRootResourceUri(rootResourcePath);
+    return subResource;
+  }
+
+  public ScriptSecurityRestService getScriptSecurityRestService(String engineName) {
+    String rootResourcePath = getRelativeEngineUri(engineName).toASCIIString();
+    ScriptSecurityRestServiceImpl subResource = new ScriptSecurityRestServiceImpl(engineName, getObjectMapper());
     subResource.setRelativeRootResourceUri(rootResourcePath);
     return subResource;
   }

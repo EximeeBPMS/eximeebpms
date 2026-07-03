@@ -1,1 +1,2 @@
 org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration
+org.eximeebpms.bpm.spring.boot.starter.ScriptSecurityAutoConfiguration

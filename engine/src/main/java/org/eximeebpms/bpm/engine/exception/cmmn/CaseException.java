@@ -18,13 +18,16 @@ package org.eximeebpms.bpm.engine.exception.cmmn;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 
+// TODO replace <link> with the published CMMN migration guide URL
 /**
  * <p>This is exception is thrown when something happens in the execution
  * of a case instance.</p>
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
  */
+@Deprecated
 public class CaseException extends ProcessEngineException {
 
   private static final long serialVersionUID = 1L;

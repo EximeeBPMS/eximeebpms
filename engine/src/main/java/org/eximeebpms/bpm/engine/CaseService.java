@@ -34,6 +34,7 @@ import org.eximeebpms.bpm.engine.variable.VariableMap;
 import org.eximeebpms.bpm.engine.variable.value.SerializableValue;
 import org.eximeebpms.bpm.engine.variable.value.TypedValue;
 
+// TODO replace <link> with the published CMMN migration guide URL
 /**
  * Service which provides access to {@link CaseInstance case instances}
  * and {@link CaseExecution case executions}.
@@ -42,7 +43,9 @@ import org.eximeebpms.bpm.engine.variable.value.TypedValue;
  *
  * @since 7.2
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
  */
+@Deprecated
 public interface CaseService {
 
   /**

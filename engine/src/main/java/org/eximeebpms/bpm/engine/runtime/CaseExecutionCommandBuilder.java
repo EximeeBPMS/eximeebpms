@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.runtime;
 
+// TODO replace <link> with the published CMMN migration guide URL
 import java.util.Collection;
 import java.util.Map;
 
@@ -76,7 +77,9 @@ import org.eximeebpms.bpm.model.cmmn.instance.Task;
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
  */
+@Deprecated
 public interface CaseExecutionCommandBuilder {
 
   /**

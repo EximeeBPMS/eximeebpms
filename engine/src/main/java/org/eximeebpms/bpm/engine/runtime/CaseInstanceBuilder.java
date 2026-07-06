@@ -22,12 +22,15 @@ import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
 
+// TODO replace <link> with the published CMMN migration guide URL
 /**
  * <p>A fluent builder to create a new case instance.</p>
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
  */
+@Deprecated
 public interface CaseInstanceBuilder {
 
   /**

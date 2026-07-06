@@ -24,11 +24,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 
+// TODO replace <link> with the published CMMN migration guide URL
 /**
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
  */
+@Deprecated
 public interface CaseExecutionResource {
 
   @GET

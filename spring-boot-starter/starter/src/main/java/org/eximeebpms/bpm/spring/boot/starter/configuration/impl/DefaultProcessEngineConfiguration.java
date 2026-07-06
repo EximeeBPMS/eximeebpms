@@ -50,6 +50,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     setJobExecutorAcquireByPriority(configuration);
     setDefaultNumberOfRetries(configuration);
     setScriptSecurity(configuration);
+    setCmmnEnabled(configuration);
   }
 
   private void setIdGenerator(SpringProcessEngineConfiguration configuration) {
@@ -91,6 +92,10 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
         .ifPresent(configuration::setDefaultNumberOfRetries);
+  }
+
+  private void setCmmnEnabled(SpringProcessEngineConfiguration configuration) {
+    configuration.setCmmnEnabled(camundaBpmProperties.isCmmnEnabled());
   }
 
   private void setScriptSecurity(SpringProcessEngineConfiguration configuration) {

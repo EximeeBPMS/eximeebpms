@@ -154,6 +154,19 @@ public class DefaultProcessEngineConfigurationTest {
         .isAllowed()).isTrue();
   }
 
+  @Test
+  public void setCmmnEnabled_default_true() {
+    instance.preInit(configuration);
+    assertThat(configuration.isCmmnEnabled()).isTrue();
+  }
+
+  @Test
+  public void setCmmnEnabled_false() {
+    properties.setCmmnEnabled(false);
+    instance.preInit(configuration);
+    assertThat(configuration.isCmmnEnabled()).isFalse();
+  }
+
   private void initIdGenerator(IdGenerator idGenerator) {
     ReflectionTestUtils.setField(instance, "idGenerator", idGenerator);
   }

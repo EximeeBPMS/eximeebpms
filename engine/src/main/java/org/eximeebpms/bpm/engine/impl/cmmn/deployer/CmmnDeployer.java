@@ -19,6 +19,8 @@ package org.eximeebpms.bpm.engine.impl.cmmn.deployer;
 import java.util.List;
 
 import org.eximeebpms.bpm.engine.impl.AbstractDefinitionDeployer;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
@@ -41,8 +43,27 @@ public class CmmnDeployer extends AbstractDefinitionDeployer<CaseDefinitionEntit
 
   public static final String[] CMMN_RESOURCE_SUFFIXES = new String[] { "cmmn11.xml", "cmmn10.xml", "cmmn" };
 
+  private final static ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
+
   protected ExpressionManager expressionManager;
   protected CmmnTransformer transformer;
+
+  @Override
+  public void deploy(DeploymentEntity deployment) {
+    if (hasCmmnResource(deployment)) {
+      LOG.cmmnResourceDeployed(deployment.getName());
+    }
+    super.deploy(deployment);
+  }
+
+  protected boolean hasCmmnResource(DeploymentEntity deployment) {
+    for (ResourceEntity resource : deployment.getResources().values()) {
+      if (isResourceHandled(resource)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @Override
   protected String[] getResourcesSuffixes() {

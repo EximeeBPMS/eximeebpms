@@ -161,24 +161,22 @@ public class ConfigurationLogger extends ProcessEngineLogger {
     );
   }
 
-  // TODO replace <link> with the published CMMN migration guide URL
   public void cmmnUsageDetected() {
     logWarn(
         "022",
         "CMMN support is DEPRECATED and will be REMOVED in EximeeBPMS 1.4.0. "
             + "CMMN definitions and/or case instances were detected in this database. "
             + "Active case instances will block the upgrade to 1.4.0. "
-            + "Migration guide: <link>"
+            + "Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/"
     );
   }
 
-  // TODO replace <link> with the published CMMN migration guide URL
   public void cmmnResourceDeployed(String deploymentName) {
     logWarn(
         "023",
         "CMMN support is DEPRECATED and will be REMOVED in EximeeBPMS 1.4.0. "
             + "Deployment '{}' contains a CMMN resource. "
-            + "Migration guide: <link>",
+            + "Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/",
         deploymentName
     );
   }

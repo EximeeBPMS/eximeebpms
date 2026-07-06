@@ -22,9 +22,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-// TODO replace <link> with the published CMMN migration guide URL
 /**
- * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
 @Deprecated
 public interface HistoricCaseInstanceResource {

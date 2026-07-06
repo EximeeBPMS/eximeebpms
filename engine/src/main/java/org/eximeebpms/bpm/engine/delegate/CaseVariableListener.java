@@ -16,7 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.delegate;
 
-// TODO replace <link> with the published CMMN migration guide URL
 /**
  * <p>A variable listener can be defined on a scope in a case model.
  * Depending on its configuration, it is invoked when a variable is create/updated/deleted
@@ -30,7 +29,7 @@ package org.eximeebpms.bpm.engine.delegate;
  *
  * @author Thorben Lindhauer
  *
- * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
 @Deprecated
 public interface CaseVariableListener extends VariableListener<DelegateCaseVariableInstance> {

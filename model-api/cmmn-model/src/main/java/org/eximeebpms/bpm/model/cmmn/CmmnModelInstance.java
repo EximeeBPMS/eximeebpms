@@ -19,11 +19,10 @@ package org.eximeebpms.bpm.model.cmmn;
 import org.eximeebpms.bpm.model.cmmn.instance.Definitions;
 import org.eximeebpms.bpm.model.xml.ModelInstance;
 
-// TODO replace <link> with the published CMMN migration guide URL
 /**
  * @author Roman Smirnov
  *
- * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
 @Deprecated
 public interface CmmnModelInstance extends ModelInstance {

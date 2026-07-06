@@ -21,7 +21,6 @@ import org.eximeebpms.bpm.engine.runtime.CaseInstance;
 import org.eximeebpms.bpm.model.cmmn.instance.Stage;
 import org.eximeebpms.bpm.model.cmmn.instance.Task;
 
-// TODO replace <link> with the published CMMN migration guide URL
 /**
  * Listener interface implemented by user code which wants to be notified
  * when a state transition happens on a {@link CaseExecution}.
@@ -59,7 +58,7 @@ import org.eximeebpms.bpm.model.cmmn.instance.Task;
  *
  * @author Roman Smirnov
  *
- * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
 @Deprecated
 public interface CaseExecutionListener extends DelegateListener<DelegateCaseExecution> {

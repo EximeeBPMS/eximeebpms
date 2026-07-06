@@ -32,12 +32,11 @@ import org.eximeebpms.bpm.engine.rest.dto.CountResultDto;
 import org.eximeebpms.bpm.engine.rest.dto.repository.CaseDefinitionDto;
 import org.eximeebpms.bpm.engine.rest.sub.repository.CaseDefinitionResource;
 
-// TODO replace <link> with the published CMMN migration guide URL
 /**
  *
  * @author Roman Smirnov
  *
- * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: <link>
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
 @Deprecated
 @Produces(MediaType.APPLICATION_JSON)

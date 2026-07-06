@@ -21,6 +21,11 @@ import ch.qos.logback.classic.Level;
 import org.eximeebpms.bpm.engine.impl.cmmn.cmd.CheckCmmnUsageCmd;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.test.util.PluggableProcessEngineTest;
+import org.eximeebpms.bpm.model.cmmn.Cmmn;
+import org.eximeebpms.bpm.model.cmmn.CmmnModelInstance;
+import org.eximeebpms.bpm.model.cmmn.instance.Case;
+import org.eximeebpms.bpm.model.cmmn.instance.CasePlanModel;
+import org.eximeebpms.bpm.model.cmmn.instance.Definitions;
 import org.eximeebpms.commons.testing.ProcessEngineLoggingRule;
 import org.eximeebpms.commons.testing.WatchLogger;
 import org.junit.After;
@@ -59,6 +64,37 @@ public class CmmnDeprecationWarningTest extends PluggableProcessEngineTest {
     // then
     assertThat(loggingRule.getFilteredLog("ENGINE-12023")).hasSize(1);
     assertThat(loggingRule.getFilteredLog("CMMN support is DEPRECATED")).hasSize(1);
+  }
+
+  @Test
+  @WatchLogger(loggerNames = {CONFIG_LOGGER}, level = "WARN")
+  public void shouldLogWarningOnlyOnceWhenDeploymentContainsMultipleCmmnResources() {
+    // when
+    Deployment deployment = repositoryService
+        .createDeployment()
+        .addClasspathResource("org/eximeebpms/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn")
+        .addModelInstance("another.cmmn", createCmmnModelInstance("another-case"))
+        .deploy();
+    deploymentId = deployment.getId();
+
+    // then a single deployment with two CMMN resources logs the warning exactly once, not per resource
+    assertThat(loggingRule.getFilteredLog("ENGINE-12023")).hasSize(1);
+  }
+
+  protected static CmmnModelInstance createCmmnModelInstance(String caseId) {
+    CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
+    Definitions definitions = modelInstance.newInstance(Definitions.class);
+    definitions.setTargetNamespace("http://eximeebpms.org/examples");
+    modelInstance.setDefinitions(definitions);
+
+    Case caseElement = modelInstance.newInstance(Case.class);
+    caseElement.setId(caseId);
+    definitions.addChildElement(caseElement);
+
+    CasePlanModel casePlanModel = modelInstance.newInstance(CasePlanModel.class);
+    caseElement.setCasePlanModel(casePlanModel);
+
+    return modelInstance;
   }
 
   @Test

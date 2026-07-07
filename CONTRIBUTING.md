@@ -106,6 +106,12 @@ Rules:
 
 ## Security / CVE remediation commits
 
+EximeeBPMS has fixed security issues since its 1.0.0 fork from Camunda 7 —
+see the `### Security` entries in `CHANGELOG.md`. What changes starting after
+the 1.3.0 release is not whether we fix vulnerabilities, but how we document
+it: from that point on, we cite the specific CVE identifier(s) a commit
+addresses, rather than describing the fix only in generic terms.
+
 When a commit's purpose is to remediate a published CVE (a dependency bump or
 a code fix), use this format for both the commit message and the pull
 request title:
@@ -128,7 +134,7 @@ BPMS-422 - chore(deps): update spring-boot to 3.5.11 to fix CVEs: CVE-2026-24733
 ```
 
 Rules:
-* Applies starting with the 1.4.0 development cycle, to **every**
+* Applies starting after the 1.3.0 release, to **every**
   dependency/security bump commit and its PR title, whether it originates
   from Dependabot, Renovate, or manual remediation, as soon as a CVE
   identifier is known. Commits made before this convention was introduced
@@ -148,32 +154,32 @@ Rules:
 # Security maintenance branches
 
 [SECURITY.md](SECURITY.md) commits us to shipping security fixes for the
-latest release and the previous minor release, **starting with the 1.4.0
-release** — the maintenance-branch mechanism described below is not in place
-before that, so no branch is cut for 1.2.x when 1.3.0 ships. Day-to-day
-development still happens entirely on `main` (see
-[Create a pull request](#create-a-pull-request)) — we only cut a short-lived
-branch for the *previous* minor line once a new minor version ships.
+latest release and the previous minor release. Day-to-day development still
+happens entirely on `main` (see [Create a pull request](#create-a-pull-request))
+— a maintenance branch for the *previous* minor line only exists when it's
+actually needed for a backport, not as a standing branch kept alive for
+every release regardless of whether anything needs to be backported to it.
 
-**Naming:** `release/<major>.<minor>.x`, e.g. `release/1.3.x`.
+**Naming:** `release/<major>.<minor>.x`, e.g. `release/1.2.x`.
 
-**When it's created:** at the moment a new minor version is released. E.g.
-when `1.4.0` ships from `main`, a maintainer creates `release/1.3.x` from the
-`v1.3.0` tag — the last minor release before it.
-
-**Who creates it:** a maintainer, as a manual step (not an automated
-workflow), immediately after cutting the new minor release:
+**When it's created:** on demand, the first time a security fix needs to be
+backported to the previous supported minor version — not automatically the
+moment a new minor version ships. A maintainer cuts it from that version's
+release tag:
 
 ```bash
 git fetch origin --tags
-git branch release/1.3.x v1.3.0
-git push origin release/1.3.x
+git branch release/1.2.x v1.2.0
+git push origin release/1.2.x
 ```
 
-**Lifetime:** the branch is deleted once that line falls out of support —
-i.e. when the *next* minor version ships and the support window shifts (when
-`1.5.0` ships, `release/1.3.x` is deleted and `release/1.4.x` is cut from
-`v1.4.0`).
+If the branch already exists (an earlier fix was already backported to this
+line), reuse it instead of creating a new one.
+
+**Lifetime:** kept for as long as that version line is within the supported
+window (see Supported Versions in `SECURITY.md`). Once a version falls out
+of support, its maintenance branch — if one was ever created — can be
+deleted; there's no obligation to keep one around if it was never needed.
 
 **Backporting a fix:**
 
@@ -193,8 +199,8 @@ i.e. when the *next* minor version ships and the support window shifts (when
 4. Trigger the `Release` workflow (`release.yml`) from the GitHub Actions UI,
    selecting `release/<major>.<minor>.x` in the **"Use workflow from"** branch
    picker (instead of `main`), with `release_version` set to the next patch
-   on that line (e.g. `1.3.1`) and `development_version` set to the one after
-   it (e.g. `1.3.2`). No changes to `release.yml` are needed — it does not
+   on that line (e.g. `1.2.1`) and `development_version` set to the one after
+   it (e.g. `1.2.2`). No changes to `release.yml` are needed — it does not
    hardcode a branch/ref, so it operates against whichever branch it is
    dispatched from.
 5. Update `CHANGELOG.md` with a `### Security` entry citing the CVE ID(s)

@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-Starting with 1.4.0, every `### Security` entry must cite the CVE
-identifier(s) it addresses (e.g. "Fix CVE-2026-12345 in jackson-databind"),
-matching the commit message convention documented in
-[CONTRIBUTING.md](CONTRIBUTING.md#security--cve-remediation-commits). Entries
-from before this convention remain as originally published.
+EximeeBPMS (and the upstream Camunda 7 codebase it started from) has
+addressed security issues throughout its history — see the `### Security`
+entries below in earlier releases. Starting after the 1.3.0 release, every
+`### Security` entry must additionally cite the CVE identifier(s) it
+addresses (e.g. "Fix CVE-2026-12345 in jackson-databind"), matching the
+commit message convention documented in
+[CONTRIBUTING.md](CONTRIBUTING.md#security--cve-remediation-commits). This is
+a change to how fixes are documented, not a change to whether they're made —
+entries from before this convention remain as originally published, without
+retroactively added CVE IDs.
 
 ---
 

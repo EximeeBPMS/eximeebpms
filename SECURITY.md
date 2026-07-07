@@ -7,29 +7,19 @@ treat vulnerability handling as a first-class concern.
 
 ## Supported Versions
 
-Starting with the **1.4.0** release, we provide security fixes for the
-latest released minor version and the previous minor version, maintained via
-a short-lived maintenance branch (see
-[CONTRIBUTING.md](CONTRIBUTING.md#security-maintenance-branches)). Until
-1.4.0 ships, the maintenance-branch mechanism is not yet in place, so only
-the latest released version is supported:
-
-| Version | Supported                          |
-| ------- | ----------------------------------- |
-| 1.3.x   | Yes (latest, until 1.4.0 ships)    |
-| ≤ 1.2.x | No                                  |
-
-From 1.4.0 onward:
+We provide security fixes for the latest released minor version and the
+previous minor version:
 
 | Version | Supported                 |
 | ------- | -------------------------- |
-| 1.4.x   | Yes                         |
-| 1.3.x   | Yes (security fixes only)  |
-| ≤ 1.2.x | No                          |
+| 1.3.x   | Yes                         |
+| 1.2.x   | Yes (security fixes only)  |
+| ≤ 1.1.x | No                          |
 
-When a later minor version ships, the support window shifts again: the
-previous "latest" becomes the "previous minor" and the version before that
-falls out of support.
+When a new minor version ships, the support window shifts: the previous
+"latest" becomes the "previous minor" and the version before that falls out
+of support. See [CONTRIBUTING.md](CONTRIBUTING.md#security-maintenance-branches)
+for how we mechanically maintain both lines in parallel.
 
 ## Reporting a Vulnerability
 

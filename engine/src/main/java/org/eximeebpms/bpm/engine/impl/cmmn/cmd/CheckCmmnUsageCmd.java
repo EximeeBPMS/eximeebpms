@@ -17,6 +17,7 @@ package org.eximeebpms.bpm.engine.impl.cmmn.cmd;
 
 import java.util.Optional;
 import org.eximeebpms.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
+import org.eximeebpms.bpm.engine.impl.Page;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -47,25 +48,30 @@ public class CheckCmmnUsageCmd implements Command<Void> {
       return null;
     }
 
-    if (caseDefinitionCount(commandContext) > 0
-        || caseInstanceCount(commandContext) > 0
-        || (processEngineConfiguration.isDbHistoryUsed() && historicCaseInstanceCount(commandContext) > 0)) {
+    if (hasCmmnData(commandContext, processEngineConfiguration)) {
       LOG.cmmnUsageDetected();
     }
 
     return null;
   }
 
-  private static long historicCaseInstanceCount(CommandContext commandContext) {
-    return commandContext.getHistoricCaseInstanceManager().findHistoricCaseInstanceCountByQueryCriteria(new HistoricCaseInstanceQueryImpl());
-  }
 
-  private static long caseInstanceCount(CommandContext commandContext) {
-    return commandContext.getCaseExecutionManager().findCaseInstanceCountByQueryCriteria(new CaseInstanceQueryImpl());
-  }
-
-  private static long caseDefinitionCount(CommandContext commandContext) {
-    return commandContext.getCaseDefinitionManager().findCaseDefinitionCountByQueryCriteria(new CaseDefinitionQueryImpl());
+  private static boolean hasCmmnData(CommandContext commandContext, ProcessEngineConfigurationImpl processEngineConfiguration) {
+    final Page page = new Page(0, 1);
+    if (!commandContext.getCaseDefinitionManager()
+        .findCaseDefinitionsByQueryCriteria(new CaseDefinitionQueryImpl(), page)
+        .isEmpty()) {
+      return true;
+    }
+    if (!commandContext.getCaseExecutionManager()
+        .findCaseInstanceByQueryCriteria(new CaseInstanceQueryImpl(), page)
+        .isEmpty()) {
+      return true;
+    }
+    return processEngineConfiguration.isDbHistoryUsed()
+        && !commandContext.getHistoricCaseInstanceManager()
+        .findHistoricCaseInstancesByQueryCriteria(new HistoricCaseInstanceQueryImpl(), page)
+        .isEmpty();
   }
 
 }

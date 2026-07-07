@@ -165,7 +165,7 @@ public class ConfigurationLogger extends ProcessEngineLogger {
     logWarn(
         "022",
         "CMMN support is DEPRECATED and will be REMOVED in EximeeBPMS 1.4.0. "
-            + "CMMN definitions and/or case instances were detected in this database. "
+            + "CMMN definitions, case instances, and/or historic case data were detected in this database. "
             + "Active case instances will block the upgrade to 1.4.0. "
             + "Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/"
     );

@@ -37,10 +37,12 @@ public class CmmnDeprecationHeaderFilter implements Filter {
   protected static final Pattern CMMN_PATH_PATTERN =
       Pattern.compile(".*/(case-definition|case-instance|case-execution|case-activity-instance)(/.*)?$");
 
-  // TODO set the actual sunset date once the 1.4.0 release date is planned
-  protected static final String SUNSET_DATE = "<date>";
+  // Sunset is optional; set this to a valid HTTP-date (RFC 7231 IMF-fixdate) once the 1.4.0 date is known
+  protected static final String SUNSET_DATE = null;
 
+  @Override
   public void init(FilterConfig filterConfig) throws ServletException {
+    // no initialization necessary
   }
 
   public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -49,13 +51,17 @@ public class CmmnDeprecationHeaderFilter implements Filter {
 
     if (CMMN_PATH_PATTERN.matcher(request.getRequestURI()).matches()) {
       response.setHeader("Deprecation", "true");
-      response.setHeader("Sunset", SUNSET_DATE);
+      if (SUNSET_DATE != null) {
+        response.setHeader("Sunset", SUNSET_DATE);
+      }
     }
 
     chain.doFilter(req, resp);
   }
 
+  @Override
   public void destroy() {
+    // no cleanup necessary
   }
 
 }

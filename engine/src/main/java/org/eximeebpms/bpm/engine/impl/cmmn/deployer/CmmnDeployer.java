@@ -16,8 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.impl.cmmn.deployer;
 
+import java.util.Collection;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.impl.AbstractDefinitionDeployer;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
@@ -25,6 +28,7 @@ import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntit
 import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
 import org.eximeebpms.bpm.engine.impl.core.model.Properties;
+import org.eximeebpms.bpm.engine.impl.core.model.PropertyKey;
 import org.eximeebpms.bpm.engine.impl.el.ExpressionManager;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.Deployer;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
@@ -39,30 +43,26 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ResourceEntity;
  * @author Simon Zambrovski
  *
  */
+@Setter
+@Getter
 public class CmmnDeployer extends AbstractDefinitionDeployer<CaseDefinitionEntity> {
 
   public static final String[] CMMN_RESOURCE_SUFFIXES = new String[] { "cmmn11.xml", "cmmn10.xml", "cmmn" };
 
-  private final static ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
+  private static final PropertyKey<Boolean> CMMN_DEPRECATION_WARNING_LOGGED = new PropertyKey<>("cmmnDeprecationWarningLogged");
+  private static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
   protected ExpressionManager expressionManager;
   protected CmmnTransformer transformer;
 
-  @Override
-  public void deploy(DeploymentEntity deployment) {
-    if (hasCmmnResource(deployment)) {
-      LOG.cmmnResourceDeployed(deployment.getName());
-    }
-    super.deploy(deployment);
-  }
 
-  protected boolean hasCmmnResource(DeploymentEntity deployment) {
-    for (ResourceEntity resource : deployment.getResources().values()) {
-      if (isResourceHandled(resource)) {
-        return true;
-      }
+  @Override
+  protected Collection<CaseDefinitionEntity> transformResource(DeploymentEntity deployment, ResourceEntity resource, Properties properties) {
+    if (properties.get(CMMN_DEPRECATION_WARNING_LOGGED) == null) {
+      LOG.cmmnResourceDeployed(deployment.getName());
+      properties.set(CMMN_DEPRECATION_WARNING_LOGGED, true);
     }
-    return false;
+    return super.transformResource(deployment, resource, properties);
   }
 
   @Override
@@ -99,24 +99,6 @@ public class CmmnDeployer extends AbstractDefinitionDeployer<CaseDefinitionEntit
 
   protected CaseDefinitionManager getCaseDefinitionManager() {
     return getCommandContext().getCaseDefinitionManager();
-  }
-
-  // getters/setters ///////////////////////////////////////////////////////////////////////////////////
-
-  public ExpressionManager getExpressionManager() {
-    return expressionManager;
-  }
-
-  public void setExpressionManager(ExpressionManager expressionManager) {
-    this.expressionManager = expressionManager;
-  }
-
-  public CmmnTransformer getTransformer() {
-    return transformer;
-  }
-
-  public void setTransformer(CmmnTransformer transformer) {
-    this.transformer = transformer;
   }
 
 }

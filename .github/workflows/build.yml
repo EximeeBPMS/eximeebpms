@@ -101,11 +101,18 @@ jobs:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          overwrite-settings: false
+        run: |
+          if java -version 2>&1 | grep -qE '"17\.'; then
+            echo "Java 17 already installed"
+          else
+            echo "Java 17 not found, installing via package manager..."
+            sudo apt-get update -q
+            sudo apt-get install -y openjdk-17-jdk
+          fi
+          JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
 
       - name: Create custom settings.xml
         run: |

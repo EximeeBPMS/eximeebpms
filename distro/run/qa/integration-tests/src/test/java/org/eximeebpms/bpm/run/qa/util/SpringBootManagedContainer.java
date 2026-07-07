@@ -45,7 +45,7 @@ public class SpringBootManagedContainer {
   public static final String USERLIB_PATH = "configuration/userlib";
 
   protected static final String BASE_TEST_APPLICATION_YML = "base-test-application.yml";
-  protected static final String RUN_HOME_VARIABLE = "camunda.run.home";
+  protected static final String RUN_HOME_VARIABLE = "eximeebpms.run.home";
 
   protected static final long RAMP_UP_SECONDS = 60;
   protected static final long RAMP_DOWN_SECONDS = 20;
@@ -78,7 +78,7 @@ public class SpringBootManagedContainer {
 
   /**
    * @return the home directory of Camunda Platform Run based on the
-   *         "camunda.run.home" system property.
+   *         "eximeebpms.run.home" system property.
    */
   public static String getRunHome() {
     String runHomeDirectory = System.getProperty(RUN_HOME_VARIABLE);

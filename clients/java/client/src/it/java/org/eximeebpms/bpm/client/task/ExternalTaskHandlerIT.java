@@ -245,6 +245,7 @@ public class ExternalTaskHandlerIT {
 
     // when
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+            .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
 
@@ -282,6 +283,7 @@ public class ExternalTaskHandlerIT {
 
     // when
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+            .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
 
@@ -319,6 +321,7 @@ public class ExternalTaskHandlerIT {
 
     // when
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+            .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
 
@@ -442,8 +445,10 @@ public class ExternalTaskHandlerIT {
     // given
     final AtomicBoolean unlocked = new AtomicBoolean(false);
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
-      if (!unlocked.get()) {
+      if (!unlocked.getAndSet(true)) {
         client.unlock(task);
+      } else {
+        client.complete(task);
       }
     });
 
@@ -583,9 +588,13 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldInvokeHandleFailureWithRetries() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
-      client.handleFailure(task, "my-message", "my-details", 1, 0);
-    });
+    // Second handler completes the task so the process ends cleanly before teardown,
+    // avoiding a race where retryTimeout=0 causes an immediate re-fetch that conflicts
+    // with deleteDeployment(cascade=true) on slow runners.
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler(
+        (task, client) -> client.handleFailure(task, "my-message", "my-details", 1, 0),
+        (task, client) -> client.complete(task)
+    );
 
     // when
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
@@ -593,15 +602,11 @@ public class ExternalTaskHandlerIT {
             .handler(handler)
             .open();
 
+    // then — wait for both invocations in one call; the second task has the metadata
+    // set by the first handleFailure (engine persists errorMessage/retries before re-queuing)
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() >= 2);
 
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
-
-    handler.clear();
-
-    // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
-
-    ExternalTask task = handler.getHandledTasks().get(0);
+    ExternalTask task = handler.getHandledTasks().get(1);
     assertThat(task.getErrorMessage()).isEqualTo("my-message");
     assertThat(task.getErrorDetails()).isEqualTo("my-details");
     assertThat(task.getRetries()).isEqualTo(1);

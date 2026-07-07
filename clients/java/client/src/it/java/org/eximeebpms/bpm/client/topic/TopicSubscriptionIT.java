@@ -616,9 +616,9 @@ public class TopicSubscriptionIT {
         .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
 
   }
 

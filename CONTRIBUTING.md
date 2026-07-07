@@ -5,6 +5,7 @@
 * [Create a pull request](#create-a-pull-request)
 * [Contribution checklist](#contribution-checklist)
 * [Commit message conventions](#commit-message-conventions)
+* [Security maintenance branches](#security-maintenance-branches)
 * [License headers](#license-headers)
 
 # File bugs or feature requests
@@ -59,8 +60,8 @@ See [CLAUDE.md](CLAUDE.md) for the full test matrix and CI script details.
 
 1. Create a feature branch from `main`. Use the naming convention `BPMS-NNN-short-description` (e.g. `BPMS-332-fix-chrome-dependencies`).
 1. Implement your change and go through the [contribution checklist](#contribution-checklist).
-1. Open a pull request against `main` in [https://github.com/EximeeBPMS/eximeebpms-enterprise](https://github.com/EximeeBPMS/eximeebpms-enterprise).
-1. Reference the Jira ticket in the PR description.
+1. Open a pull request against `main` in [https://github.com/EximeeBPMS/eximeebpms](https://github.com/EximeeBPMS/eximeebpms).
+1. Reference the Jira ticket in the PR description, if applicable — external contributors without access to the internal Jira instance can skip this (see [Commit message conventions](#commit-message-conventions)).
 1. At least **1 approval** from a team member is required to merge.
 
 There are no long-lived release or hotfix branches — all contributions go through `main`.
@@ -102,6 +103,109 @@ Rules:
 * Use the `BPMS-NNN` prefix for all changes tracked in Jira.
 * The description should be concise and written in imperative form (e.g. *fix*, *add*, *bump* — not *fixed*, *added*).
 * Commits without a Jira prefix are acceptable for minor changes coming from upstream or external contributors.
+
+## Security / CVE remediation commits
+
+When a commit's purpose is to remediate a published CVE (a dependency bump or
+a code fix), use this format for both the commit message and the pull
+request title:
+
+```
+BPMS-NNN - chore(deps): update <dependency> to fix CVE-YYYY-NNNNN
+```
+
+For a change addressing more than one CVE:
+
+```
+BPMS-NNN - chore(deps): update <dependency> to fix CVEs: CVE-YYYY-NNNNN, CVE-YYYY-MMMMM
+```
+
+With the PR number appended, as usual:
+
+```
+BPMS-421 - chore(deps): update jackson-databind to fix CVE-2026-12345 (#215)
+BPMS-422 - chore(deps): update spring-boot to 3.5.11 to fix CVEs: CVE-2026-24733, CVE-2026-24734 in embedded Tomcat 10.1.50 (#216)
+```
+
+Rules:
+* Applies starting with the 1.4.0 development cycle, to **every**
+  dependency/security bump commit and its PR title, whether it originates
+  from Dependabot, Renovate, or manual remediation, as soon as a CVE
+  identifier is known. Commits made before this convention was introduced
+  are not retroactively renamed.
+* If no CVE ID is assigned yet at merge time, use the ordinary
+  `BPMS-NNN - chore(deps): bump <dep> from X to Y` form, and add the CVE ID to
+  the commit/PR title in a follow-up once assigned.
+* The corresponding `CHANGELOG.md` `### Security` entry for the release
+  **must** cite the same CVE ID(s) — see the convention note at the top of
+  `CHANGELOG.md`.
+* As with the general commit convention, the `BPMS-NNN` prefix is optional
+  for commits from external contributors or automated tools (Dependabot,
+  Renovate) — external reporters and contributors don't have access to the
+  internal Jira instance, so the CVE identifier itself is the publicly
+  meaningful reference in that case.
+
+# Security maintenance branches
+
+[SECURITY.md](SECURITY.md) commits us to shipping security fixes for the
+latest release and the previous minor release, **starting with the 1.4.0
+release** — the maintenance-branch mechanism described below is not in place
+before that, so no branch is cut for 1.2.x when 1.3.0 ships. Day-to-day
+development still happens entirely on `main` (see
+[Create a pull request](#create-a-pull-request)) — we only cut a short-lived
+branch for the *previous* minor line once a new minor version ships.
+
+**Naming:** `release/<major>.<minor>.x`, e.g. `release/1.3.x`.
+
+**When it's created:** at the moment a new minor version is released. E.g.
+when `1.4.0` ships from `main`, a maintainer creates `release/1.3.x` from the
+`v1.3.0` tag — the last minor release before it.
+
+**Who creates it:** a maintainer, as a manual step (not an automated
+workflow), immediately after cutting the new minor release:
+
+```bash
+git fetch origin --tags
+git branch release/1.3.x v1.3.0
+git push origin release/1.3.x
+```
+
+**Lifetime:** the branch is deleted once that line falls out of support —
+i.e. when the *next* minor version ships and the support window shifts (when
+`1.5.0` ships, `release/1.3.x` is deleted and `release/1.4.x` is cut from
+`v1.4.0`).
+
+**Backporting a fix:**
+
+1. Fix and merge the issue on `main` first, targeting the current release —
+   either as new work, a port of a fix already available upstream (Camunda
+   7) or in a dependency's own patched release, or a port from Consdata's
+   internal, non-public codebase (fixes normally flow from there into this
+   public repository; a security fix reported directly here is the accepted
+   exception to that direction). A patch release for this is not tied to the
+   regular release cadence — it can and should go out via `release.yml` as
+   soon as the fix is ready, independent of any larger feature release in
+   progress.
+2. `git cherry-pick` the fix commit(s) onto the relevant
+   `release/<major>.<minor>.x` branch.
+3. Open a pull request against that branch — same review rules as `main`
+   (at least 1 approval).
+4. Trigger the `Release` workflow (`release.yml`) from the GitHub Actions UI,
+   selecting `release/<major>.<minor>.x` in the **"Use workflow from"** branch
+   picker (instead of `main`), with `release_version` set to the next patch
+   on that line (e.g. `1.3.1`) and `development_version` set to the one after
+   it (e.g. `1.3.2`). No changes to `release.yml` are needed — it does not
+   hardcode a branch/ref, so it operates against whichever branch it is
+   dispatched from.
+5. Update `CHANGELOG.md` with a `### Security` entry citing the CVE ID(s)
+   under the new patch version, on both `main` (if not already fixed there)
+   and the maintenance branch.
+
+Known limitation (accepted for now): Dependabot is currently only configured
+against the default branch (`main`), so it will not open automated update PRs
+against `release/<major>.<minor>.x` branches. Backports are manual/cherry-pick
+only. Extending automated scanning to maintenance branches is tracked
+separately and is out of scope of this policy.
 
 # License headers
 

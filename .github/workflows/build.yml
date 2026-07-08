@@ -4,11 +4,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-  checks: write
-  id-token: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -18,6 +13,8 @@ jobs:
   check:
     name: Check
     runs-on: self-hosted
+    permissions:
+      contents: read
     outputs:
       skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
@@ -93,6 +90,10 @@ jobs:
     needs: check
     if: needs.check.outputs.skip_build == 'false'
     runs-on: self-hosted
+    permissions:
+      contents: read
+      checks: write
+      id-token: write
 
     steps:
       - name: Checkout Code
@@ -155,14 +156,14 @@ jobs:
 
       - name: Publish Test Report
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@db71d41eb79864e25ab0337e395c352e84523afe # v4
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
           require_passed_tests: true
 
       - name: Upload Surefire Reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: surefire-reports
           path: ${{ github.workspace }}/**/target/surefire-reports/**

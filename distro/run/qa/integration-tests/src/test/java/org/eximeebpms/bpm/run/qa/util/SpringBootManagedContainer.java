@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,12 +68,15 @@ public class SpringBootManagedContainer {
     this.commands.add(getScriptPath());
     this.commands.add("start");
     if (commands != null && commands.length > 0) {
-      Arrays.stream(commands).forEach(e -> this.commands.add(e));
+      this.commands.addAll(Arrays.asList(commands));
     }
     InputStream defaultYml = SpringBootManagedContainer.class.getClassLoader().getResourceAsStream(BASE_TEST_APPLICATION_YML);
     createConfigurationYml(APPLICATION_YML_PATH, defaultYml);
     Path resourcesPath = Paths.get(baseDirectory, RESOURCES_PATH);
-    resourcesPath.toFile().mkdir();
+    File resourcesDir = resourcesPath.toFile();
+    if (!resourcesDir.mkdir() && !resourcesDir.isDirectory()) {
+      log.warn("Could not create resources directory {}", resourcesPath);
+    }
   }
 
   /**
@@ -100,7 +103,7 @@ public class SpringBootManagedContainer {
       final ProcessBuilder startupProcessBuilder = new ProcessBuilder(commands);
       startupProcessBuilder.redirectErrorStream(true);
       startupProcessBuilder.directory(new File(baseDirectory));
-      log.info("Starting Spring Boot application with: " + startupProcessBuilder.command());
+      log.info("Starting Spring Boot application with: {}", startupProcessBuilder.command());
       startupProcess = startupProcessBuilder.start();
       pid = startupProcess.pid();
       new Thread(new ConsoleConsumer()).start();
@@ -112,7 +115,7 @@ public class SpringBootManagedContainer {
       });
       Runtime.getRuntime().addShutdownHook(shutdownThread);
 
-      if (!isStarted(RAMP_UP_SECONDS * 1000)) {
+      if (!isStarted()) {
         killProcess(false);
         throw new TimeoutException(String.format("Managed Spring Boot application was not started within [%d] s", RAMP_UP_SECONDS));
       }
@@ -131,7 +134,7 @@ public class SpringBootManagedContainer {
       if (startupProcess != null) {
         if (isRunning()) {
           killProcess(false);
-          if (!isShutDown(RAMP_DOWN_SECONDS * 1000)) {
+          if (!isShutDown()) {
             throw new RuntimeException("Could not kill the application.");
           }
         }
@@ -156,12 +159,12 @@ public class SpringBootManagedContainer {
   // determine server status
   // ---------------------------
 
-  protected boolean isStarted(long millisToWait) throws InterruptedException {
-    return waitForServerStatus(millisToWait, true);
+  protected boolean isStarted() throws InterruptedException {
+    return waitForServerStatus(RAMP_UP_SECONDS * 1000, true);
   }
 
-  protected boolean isShutDown(long millisToWait) throws InterruptedException {
-    return waitForServerStatus(millisToWait, false);
+  protected boolean isShutDown() throws InterruptedException {
+    return waitForServerStatus(RAMP_DOWN_SECONDS * 1000, false);
   }
 
   protected boolean waitForServerStatus(long millisToWait, boolean shouldBeRunning) throws InterruptedException {
@@ -170,7 +173,8 @@ public class SpringBootManagedContainer {
     while (System.currentTimeMillis() < targetTime && serverAvailable == !shouldBeRunning) {
       serverAvailable = isRunning();
       if (shouldBeRunning ^ serverAvailable) {
-        Thread.sleep(100);
+        //noinspection BusyWait - polling wait for external OS process readiness, no callback available
+        Thread.sleep(100); // NOSONAR
       }
     }
     return serverAvailable == shouldBeRunning;
@@ -187,7 +191,7 @@ public class SpringBootManagedContainer {
   }
 
   protected void processOptionsRequests(String urlToCall) throws IOException {
-    URLConnection conn = new URL(urlToCall).openConnection();
+    URLConnection conn = URI.create(urlToCall).toURL().openConnection();
     HttpURLConnection hconn = (HttpURLConnection) conn;
     hconn.setAllowUserInteraction(false);
     hconn.setDoInput(true);
@@ -206,7 +210,7 @@ public class SpringBootManagedContainer {
 
   protected static void killProcess(boolean failOnException) {
     try {
-      Process p = null;
+      Process p;
 
       // must kill a hierachy of processes: the script process (which corresponds to the pid value)
       // and the Java process it has spawned
@@ -230,7 +234,7 @@ public class SpringBootManagedContainer {
   }
 
   protected static boolean isUnixLike() {
-    return !System.getProperty("os.name").startsWith("Windows", 0);
+    return !System.getProperty("os.name").startsWith("Windows");
   }
 
   public void replaceConfigurationYml(String filePath, InputStream source) {
@@ -257,7 +261,9 @@ public class SpringBootManagedContainer {
   private void cleanup() {
     // cleanup test YAML
     for (File configFile : configurationFiles) {
-      configFile.delete();
+      if (!configFile.delete()) {
+        log.warn("Could not delete configuration file {}", configFile);
+      }
     }
 
     // cleanup resources
@@ -271,12 +277,14 @@ public class SpringBootManagedContainer {
       for (File f : files) {
         if (f.isDirectory()) {
           deleteDirectory(f);
-        } else {
-          f.delete();
+        } else if (!f.delete()) {
+          log.warn("Could not delete file {}", f);
         }
       }
     }
-    directory.delete();
+    if (!directory.delete()) {
+      log.warn("Could not delete directory {}", directory);
+    }
   }
 
   // ---------------------------
@@ -293,7 +301,7 @@ public class SpringBootManagedContainer {
 
       final InputStream stream = startupProcess.getInputStream();
       final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-      String line = null;
+      String line;
       try {
         while ((line = reader.readLine()) != null) {
           System.out.println(line);

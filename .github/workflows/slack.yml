@@ -265,11 +265,22 @@ jobs:
             ;;
           esac
 
-          echo "EVENT_MSG=$msg" >> $GITHUB_ENV
-          echo "DETAILS=$details" >> $GITHUB_ENV
+          # $msg/$details can embed user-controlled, free-text fields (e.g. PR_TITLE) that may
+          # contain newlines. A plain KEY=VALUE append lets a crafted value inject arbitrary
+          # extra environment variables into $GITHUB_ENV for later steps, so use a randomized
+          # heredoc delimiter an attacker cannot predict in advance.
+          delimiter="ghadelim_${RANDOM}_${RANDOM}_$$"
+          {
+            echo "EVENT_MSG<<$delimiter"
+            echo "$msg"
+            echo "$delimiter"
+            echo "DETAILS<<$delimiter"
+            echo "$details"
+            echo "$delimiter"
+          } >> "$GITHUB_ENV"
 
       - name: Send Slack Notification
-        uses: slackapi/slack-github-action@v1.24.0
+        uses: slackapi/slack-github-action@e28cf165c92ffef168d23c5c9000cffc8a25e117 # v1.24.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL }}
           payload: |

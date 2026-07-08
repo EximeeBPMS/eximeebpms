@@ -16,7 +16,7 @@
 package org.eximeebpms.bpm.engine.rest.filter;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -34,11 +34,10 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class CmmnDeprecationHeaderFilter implements Filter {
 
-  protected static final Pattern CMMN_PATH_PATTERN =
-      Pattern.compile(".*/(case-definition|case-instance|case-execution|case-activity-instance)(/.*)?$");
+  protected static final Set<String> CMMN_PATH_SEGMENTS =
+      Set.of("case-definition", "case-instance", "case-execution", "case-activity-instance");
 
-  // Sunset is optional; set this to a valid HTTP-date (RFC 7231 IMF-fixdate) once the 1.4.0 date is known
-  protected static final String SUNSET_DATE = null;
+  protected static final String SUNSET_DATE = "Tue, 15 Sep 2026 23:59:59 GMT";
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -49,14 +48,21 @@ public class CmmnDeprecationHeaderFilter implements Filter {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) resp;
 
-    if (CMMN_PATH_PATTERN.matcher(request.getRequestURI()).matches()) {
+    if (isDeprecatedCmmnPath(request.getRequestURI())) {
       response.setHeader("Deprecation", "true");
-      if (SUNSET_DATE != null) {
-        response.setHeader("Sunset", SUNSET_DATE);
-      }
+      response.setHeader("Sunset", SUNSET_DATE);
     }
 
     chain.doFilter(req, resp);
+  }
+
+  private static boolean isDeprecatedCmmnPath(String requestUri) {
+    for (String segment : requestUri.split("/")) {
+      if (CMMN_PATH_SEGMENTS.contains(segment)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

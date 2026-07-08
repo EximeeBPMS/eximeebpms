@@ -477,6 +477,11 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   }
 
   @Override
+  protected void dbSchemaCreateScriptSecurity() {
+    executeMandatorySchemaResource("create", "script.security");
+  }
+
+  @Override
   protected void dbSchemaCreateEngine() {
     executeMandatorySchemaResource("create", "engine");
   }
@@ -510,6 +515,11 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   @Override
   protected void dbSchemaDropHistory() {
     executeMandatorySchemaResource("drop", "history");
+  }
+
+  @Override
+  protected void dbSchemaDropScriptSecurity() {
+    executeMandatorySchemaResource("drop", "script.security");
   }
 
   @Override
@@ -548,6 +558,10 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   @Override
   public boolean isHistoryTablePresent(){
     return isTablePresent("ACT_HI_PROCINST");
+  }
+  @Override
+  public boolean isScriptViolationTablePresent(){
+    return isTablePresent("ACT_RU_SCRIPT_VIOLATION");
   }
   @Override
   public boolean isIdentityTablePresent(){

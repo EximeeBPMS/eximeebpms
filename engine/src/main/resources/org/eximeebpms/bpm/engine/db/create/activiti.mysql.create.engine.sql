@@ -589,17 +589,3 @@ create index ACT_IDX_PROCDEF_VER_TAG ON ACT_RE_PROCDEF(VERSION_TAG_);
 -- indices for history cleanup: https://jira.camunda.com/browse/CAM-11616
 create index ACT_IDX_AUTH_ROOT_PI on ACT_RU_AUTHORIZATION(ROOT_PROC_INST_ID_);
 create index ACT_IDX_AUTH_RM_TIME on ACT_RU_AUTHORIZATION(REMOVAL_TIME_);
-
--- script guard violation log --
-create table ACT_RU_SCRIPT_VIOLATION (
-    ID_               varchar(64) not null,
-    TIMESTAMP_        datetime(3) not null,
-    PROC_DEF_KEY_     varchar(255),
-    ACTIVITY_ID_      varchar(255),
-    LANGUAGE_         varchar(64),
-    SOURCE_TYPE_      varchar(64),
-    ORIGIN_           varchar(64),
-    RULE_CODE_        varchar(255),
-    REASON_           varchar(1000),
-    primary key (ID_)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;

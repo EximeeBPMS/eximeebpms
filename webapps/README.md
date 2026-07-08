@@ -51,46 +51,28 @@ Contains resources like images, [`.less`](http://lesscss.org) stylesheets as wel
 
 ### Prerequisite
 
-You need [node.js](http://nodejs.org) >= 17 and npm.
+You need [node.js](http://nodejs.org) 20.14.0 and npm 10.7.0. Both are installed automatically by `frontend-maven-plugin` during a Maven build — manual installation is only needed for standalone frontend development.
 
 ### Setup
 
-#### Adjusting Maven Settings
-
-See https://github.com/EximeeBPMS/eximeebpms/blob/master/CONTRIBUTING.md#build-from-source
-
 #### Using Webpack
 
-Build the web apps using Webpack:
+Start the backend and frontend dev servers in separate terminals:
 
 ```sh
-# cd <path to your workspace>
-git clone git@github.com:EximeeBPMS/eximeebpms.git
-cd eximeebpms-bpm-platform/webapps/frontend
+# Terminal 1 — backend (REST API + engine) on http://localhost:8080
+cd webapps/assembly-jakarta
+mvn jetty:run -Pdevelop
+
+# Terminal 2 — frontend dev server on http://localhost:8081
+cd webapps/frontend
 npm install
 npm start
 ```
 
-To start the server in development mode, call
+The webapps are then available at [http://localhost:8081/eximeebpms/app/cockpit/default/](http://localhost:8081/eximeebpms/app/cockpit/default/).
 
-```sh
-cd eximeebpms-bpm-platform/webapps/assembly
-mvn jetty:run -Pdevelop
-```
-
-The webapps are then available pointing a browser at [http://localhost:8080](http://localhost:8080). To login as an admin user, use `jonny1` as username and password.
-
-You can now start developing using the `npm run start` command in the frontend directory.
-
-##### Jakarta Webapps
-
-In order to run the Jakarta Webapps start Jetty the same way from the `assembly-jakarta` folder
-
-```sh
-cd eximeebpms-bpm-platform/webapps/assembly
-mvn jetty:run -Pdevelop
-npm run start
-```
+Demo users created on first start (login = password): `demo`, `john`, `mary`, `peter`.
 
 ## Browsers support
 
@@ -109,7 +91,6 @@ Have a look at our [contribution guide](https://github.com/EximeeBPMS/eximeebpms
 
 * [Documentation](http://docs.eximeebpms.org/manual/)
 * [Stackoverflow](https://stackoverflow.com/questions/tagged/camunda)
-<!-- * [Forum](https://forum.camunda.org)-->
 
 ## License
 

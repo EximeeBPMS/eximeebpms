@@ -1,0 +1,1 @@
+drop table ACT_RU_SCRIPT_VIOLATION if exists;

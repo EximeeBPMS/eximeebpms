@@ -29,7 +29,6 @@ import org.eximeebpms.bpm.engine.variable.value.TypedValue;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.RuleChain;
 
 import java.util.HashMap;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.eximeebpms.bpm.client.util.ProcessModels.*;
 
 /**
@@ -55,10 +55,9 @@ public class TopicSubscriptionIT {
 
   protected ClientRule clientRule = new ClientRule();
   protected EngineRule engineRule = new EngineRule();
-  protected ExpectedException thrown = ExpectedException.none();
 
   @Rule
-  public RuleChain ruleChain = RuleChain.outerRule(engineRule).around(clientRule).around(thrown);
+  public RuleChain ruleChain = RuleChain.outerRule(engineRule).around(clientRule);
 
   protected ExternalTaskClient client;
 
@@ -67,7 +66,7 @@ public class TopicSubscriptionIT {
   protected RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler();
 
   @Before
-  public void setup() throws Exception {
+  public void setup() {
     client = clientRule.client();
     handler.clear();
     processDefinition = engineRule.deploy(BPMN_ERROR_EXTERNAL_TASK_PROCESS).get(0);
@@ -137,7 +136,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
     ExternalTask task = handler.getHandledTasks().get(0);
     assertThat(task.getProcessDefinitionId()).isEqualTo(processDefinitionId2);
     assertThat(topicSubscription.getProcessDefinitionId()).isEqualTo(processDefinitionId2);
@@ -182,7 +181,7 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks.size()).isEqualTo(2);
+    assertThat(handledTasks).hasSize(2);
   }
 
   @Test
@@ -200,7 +199,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
     ExternalTask task = handler.getHandledTasks().get(0);
     assertThat(task.getProcessDefinitionKey()).isEqualTo(PROCESS_KEY_2);
     assertThat(topicSubscription.getProcessDefinitionKey()).isEqualTo(PROCESS_KEY_2);
@@ -242,7 +241,7 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks.size()).isEqualTo(2);
+    assertThat(handledTasks).hasSize(2);
   }
 
   @Test
@@ -262,7 +261,7 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks.size()).isEqualTo(1);
+    assertThat(handledTasks).hasSize(1);
     assertThat(handledTasks.get(0).getProcessDefinitionKey()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
     assertThat(handledTasks.get(0).getProcessDefinitionVersionTag()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
   }
@@ -283,8 +282,8 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks.size()).isEqualTo(2);
-    assertThat(handledTasks.get(0).getProcessDefinitionVersionTag()).isEqualTo(null);
+    assertThat(handledTasks).hasSize(2);
+    assertThat(handledTasks.get(0).getProcessDefinitionVersionTag()).isNull();
     assertThat(handledTasks.get(1).getProcessDefinitionVersionTag()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
   }
 
@@ -302,7 +301,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
   }
 
   @Test
@@ -321,7 +320,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
@@ -341,7 +340,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
     ExternalTask task = handler.getHandledTasks().get(0);
     assertThat(task.getTenantId()).isNull();
     assertThat(task.getProcessInstanceId()).isEqualTo(processInstance.getId());
@@ -365,7 +364,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
     ExternalTask task = handler.getHandledTasks().get(0);
     assertThat(task.getTenantId()).isEqualTo(tenantId);
     assertThat(task.getProcessInstanceId()).isEqualTo(processInstance.getId());
@@ -388,20 +387,20 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    assertThat(topicSubscription.getVariableNames().size()).isEqualTo(1);
+    assertThat(topicSubscription.getVariableNames()).hasSize(1);
     assertThat(topicSubscription.getVariableNames().get(0)).isEqualTo(VARIABLE_NAME);
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks.size()).isEqualTo(2);
+    assertThat(handledTasks).hasSize(2);
 
     ExternalTask task = handledTasks.get(0);
     assertThat(task.getBusinessKey()).isEqualTo(BUSINESS_KEY);
 
     if (task.getVariable(VARIABLE_NAME) != null) {
-      assertThat(task.getAllVariables().size()).isEqualTo(1);
+      assertThat(task.getAllVariables()).hasSize(1);
       assertThat((String) task.getVariable(VARIABLE_NAME)).isEqualTo(VARIABLE_VALUE);
     } else {
-      assertThat(task.getAllVariables().size()).isEqualTo(0);
+      assertThat(task.getAllVariables()).isEmpty();
     }
   }
 
@@ -421,10 +420,10 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     ExternalTask taskOne = handler.getHandledTasks().get(0);
-    assertThat(taskOne.getAllVariables().size()).isEqualTo(0);
+    assertThat(taskOne.getAllVariables()).isEmpty();
 
     ExternalTask taskTwo = handler.getHandledTasks().get(1);
-    assertThat(taskTwo.getAllVariables().size()).isEqualTo(0);
+    assertThat(taskTwo.getAllVariables()).isEmpty();
   }
 
   @Test
@@ -443,10 +442,10 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     ExternalTask taskOne = handler.getHandledTasks().get(0);
-    assertThat(taskOne.getAllVariables().size()).isEqualTo(0);
+    assertThat(taskOne.getAllVariables()).isEmpty();
 
     ExternalTask taskTwo = handler.getHandledTasks().get(0);
-    assertThat(taskTwo.getAllVariables().size()).isEqualTo(0);
+    assertThat(taskTwo.getAllVariables()).isEmpty();
   }
 
   @Test
@@ -474,54 +473,42 @@ public class TopicSubscriptionIT {
   public void shouldThrowExceptionDueToClientLockDurationNotGreaterThanZero() {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
+    TopicSubscriptionBuilder builder = client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      .lockDuration(0);
 
-    // then
-    thrown.expect(ExternalTaskClientException.class);
-
-    // when
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-      .lockDuration(0)
-      .open();
+    // when/then
+    assertThrows(ExternalTaskClientException.class, builder::open);
   }
 
   @Test
   public void shouldThrowExceptionDueToTopicNameNull() {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
+    TopicSubscriptionBuilder builder = client.subscribe(null);
 
-    // then
-    thrown.expect(ExternalTaskClientException.class);
-
-    // when
-    client.subscribe(null)
-      .open();
+    // when/then
+    assertThrows(ExternalTaskClientException.class, builder::open);
   }
 
   @Test
   public void shouldThrowExceptionDueToMissingHandler() {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
+    TopicSubscriptionBuilder builder = client.subscribe(EXTERNAL_TASK_TOPIC_FOO);
 
-    // then
-    thrown.expect(ExternalTaskClientException.class);
-
-    // when
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-      .open();
+    // when/then
+    assertThrows(ExternalTaskClientException.class, builder::open);
   }
 
   @Test
   public void shouldThrowExceptionDueToHandlerNull() {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
+    TopicSubscriptionBuilder builder = client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      .handler(null);
 
-    // then
-    thrown.expect(ExternalTaskClientException.class);
-
-    // when
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-      .handler(null)
-      .open();
+    // when/then
+    assertThrows(ExternalTaskClientException.class, builder::open);
   }
 
   @Test
@@ -535,9 +522,13 @@ public class TopicSubscriptionIT {
     topicSubscription.close();
 
     // then
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    // resubscribing to the same topic only succeeds if the previous subscription was
+    // actually released; ExternalTaskClientException would otherwise be thrown here
+    TopicSubscription resubscription = client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
       .handler(handler)
       .open();
+
+    assertThat(resubscription.getTopicName()).isEqualTo(EXTERNAL_TASK_TOPIC_FOO);
   }
 
   @Test
@@ -546,14 +537,11 @@ public class TopicSubscriptionIT {
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
       .handler(handler)
       .open();
+    TopicSubscriptionBuilder builder = client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+      .handler(handler);
 
-    // then
-    thrown.expect(ExternalTaskClientException.class);
-
-    // when
-    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
-      .handler(handler)
-      .open();
+    // when/then
+    assertThrows(ExternalTaskClientException.class, builder::open);
   }
 
   @Test
@@ -571,7 +559,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
   }
 
   @Test
@@ -594,7 +582,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
@@ -616,9 +604,9 @@ public class TopicSubscriptionIT {
         .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
 
   }
 
@@ -646,7 +634,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(0);
+    assertThat(handler.getHandledTasks()).isEmpty();
   }
 
   @Test
@@ -667,7 +655,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(1);
+    assertThat(handler.getHandledTasks()).hasSize(1);
   }
 
   @Test
@@ -692,7 +680,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
@@ -719,7 +707,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
@@ -733,11 +721,8 @@ public class TopicSubscriptionIT {
 
     // when
     Map<String, Object> processVariables = new HashMap<>();
-    processVariables.put(VARIABLE_NAME, ANOTHER_VARIABLE_VALUE);
     processVariables.put(VARIABLE_NAME, NOT_EXISTING_VARIABLE_VALUE);
-    processVariables.put(ANOTHER_VARIABLE_NAME, VARIABLE_VALUE);
     processVariables.put(ANOTHER_VARIABLE_NAME, NOT_EXISTING_VARIABLE_VALUE);
-    processVariables.put(NOT_EXISTING_VARIABLE_NAME, VARIABLE_VALUE);
     processVariables.put(NOT_EXISTING_VARIABLE_NAME, ANOTHER_VARIABLE_VALUE);
 
     client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
@@ -748,7 +733,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().isEmpty());
 
-    assertThat(handler.getHandledTasks().size()).isEqualTo(0);
+    assertThat(handler.getHandledTasks()).isEmpty();
   }
 
 }

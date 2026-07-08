@@ -74,7 +74,7 @@ The EximeeBPMS Assert project used to be the community extension, created and su
 <a href="http://www.holisticon.de"><img src="https://www.holisticon.de/wp-content/uploads/2020/08/logo2016_black_242.png" align="right" /></a>[Simon Zambrovski](https://github.com/zambrovski) (Holisticon AG)
 
 
-... and [many others](https://github.com/camunda/camunda-bpm-assert/graphs/contributors).
+... and [many others](https://github.com/EximeeBPMS/eximeebpms-enterprise/graphs/contributors).
 
 In 2014, the library won the **EximeeBPMS Community Award**.
 

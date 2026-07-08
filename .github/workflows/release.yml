@@ -23,12 +23,12 @@ jobs:
           echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
           
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets[env.GITHUB_PAT_USER] }}
         
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'

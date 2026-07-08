@@ -4,8 +4,6 @@ eximeebpms-connect
 <p>
   <a href="https://eximeebpms.com/">Home</a> |
   <a href="https://docs.eximeebpms.org/manual/latest/reference/connect/">Documentation</a> |
-  <!-- <a href="https://forum.camunda.org/">Forum</a> | -->
-  <!-- <a href="https://jira.camunda.com/browse/CAM">Issues</a> | -->
   <a href="../LICENSE">License</a> |
   <a href="../CONTRIBUTING.md">Contribute</a>
 </p>

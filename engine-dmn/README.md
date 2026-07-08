@@ -4,9 +4,7 @@
 Lightweight Execution Engine for DMN (Decision Model and Notation) written in Java.
 
 <p>
-  <a href="https://eximeebpms.org/">Home</a> <!-- | -->
-  <!-- <a href="http://camunda.org/community/forum.html">Forum</a> | -->
-  <!-- <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> | -->
+  <a href="https://eximeebpms.org/">Home</a>
 </p>
 
 The Decision Engine can be used seamlessly in combination with BPMN and CMMN or standalone.

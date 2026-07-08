@@ -4,11 +4,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-  checks: write
-  id-token: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -18,6 +13,8 @@ jobs:
   check:
     name: Check
     runs-on: self-hosted
+    permissions:
+      contents: read
     outputs:
       skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
@@ -93,6 +90,10 @@ jobs:
     needs: check
     if: needs.check.outputs.skip_build == 'false'
     runs-on: self-hosted
+    permissions:
+      contents: read
+      checks: write
+      id-token: write
 
     steps:
       - name: Checkout Code
@@ -101,11 +102,18 @@ jobs:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          overwrite-settings: false
+        run: |
+          if java -version 2>&1 | grep -qE '"17\.'; then
+            echo "Java 17 already installed"
+          else
+            echo "Java 17 not found, installing via package manager..."
+            sudo apt-get update -q
+            sudo apt-get install -y openjdk-17-jdk
+          fi
+          JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
 
       - name: Create custom settings.xml
         run: |
@@ -131,6 +139,17 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Cache Maven packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Remove corrupted Maven cache files
+        run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
+
       - name: Maven Build
         id: maven-build
         shell: bash
@@ -138,19 +157,20 @@ jobs:
           ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
         env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Publish Test Report
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@db71d41eb79864e25ab0337e395c352e84523afe # v4
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
           require_passed_tests: true
 
       - name: Upload Surefire Reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: surefire-reports
           path: ${{ github.workspace }}/**/target/surefire-reports/**

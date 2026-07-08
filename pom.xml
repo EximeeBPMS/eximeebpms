@@ -43,9 +43,25 @@
         </configuration>
       </plugin>
       <plugin>
+        <!--
+          Produces a single, whole-project coverage report aggregated from every module
+          listed (transitively) under this POM's <modules>. This execution intentionally
+          does not inherit to child POMs (see <inherited>false</inherited> below): the
+          jacoco-maven-plugin report-aggregate goal collects data via
+          MavenProject#getCollectedProjects(), i.e. the <modules> reachable from the
+          POM that runs it. If this execution were inherited, every descendant module in
+          the reactor - including leaf modules with no <modules> of their own, such as
+          the qa/** integration-test harness - would redundantly re-run report-aggregate
+          on every partial build (e.g. `mvn -f qa verify`), producing no useful output
+          while still writing a full report site to disk. That inflates CI's already
+          disk-pressured runs (WildFly, browser binaries, per-database Docker containers)
+          and previously caused intermittent
+          "Can't create directory .../jacoco-aggregate/jacoco-resources" build failures.
+        -->
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.8.13</version>
+        <inherited>false</inherited>
         <executions>
           <execution>
             <id>report-aggregate</id>

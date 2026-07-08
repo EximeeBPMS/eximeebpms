@@ -3,7 +3,6 @@
 This project provides a Spring Boot Starter that allows you to implement an External Task Worker for EximeeBPMS. It uses the EximeeBPMS REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
 
 * [Documentation](https://docs.eximeebpms.org/manual/latest/user-guide/ext-client/spring-boot-starter/)
-* [Examples](https://github.com/camunda/camunda-bpm-examples/tree/master/spring-boot-starter/external-task-client)
 
 ## Dependency
 

@@ -1,6 +1,6 @@
 # eximeebpms-bpm-sdk-js
 
-Javascript client library for [Camunda Platform](https://github.com/camunda/eximeebpms-bpm-platform)
+Javascript client library for [EximeeBPMS](https://github.com/EximeeBPMS/eximeebpms-enterprise)
 
 ## Install using bower
 
@@ -49,7 +49,7 @@ grunt watch:mochacli
 
 ### Issues
 
-https://app.camunda.com/jira/browse/CAM/component/12351
+https://github.com/EximeeBPMS/eximeebpms-enterprise/issues
 
 ## Releasing
 
@@ -61,11 +61,11 @@ To create a release:
 grunt publish:release --setversion='myReleaseVersion'
 ```
 
-This will update the version, commit and tag it, then publish it to [bower-eximeebpms-bpm-sdk-js](https://github.com/camunda/bower-eximeebpms-bpm-sdk-js)
+This will update the version, commit and tag it.
 
 ### Snapshot
 
-To create a snapshot release which just builds current head and publishes it to [bower-eximeebpms-bpm-sdk-js](https://github.com/camunda/bower-eximeebpms-bpm-sdk-js) on a branch named the current version:
+To create a snapshot release which just builds current head on a branch named the current version:
 
 ```sh
 grunt publish:snapshot
@@ -84,10 +84,6 @@ grunt publish:version --setversion='myNewVersion'
 * --no-bower -> skip bower release
 * --no-write -> dryRun mode
 
-### Examples
-
-* [standalone usage](https://github.com/camunda/camunda-bpm-examples/tree/master/sdk-js)
-
 ### Contributing
 
 You are __more than welcome__ to take part on the development of this project!
@@ -96,7 +92,7 @@ You are __more than welcome__ to take part on the development of this project!
 
 Clone the repository, add, fix or improve and send us a pull request.
 But please take care about the commit messages, [our conventions can be found
-here](https://github.com/camunda/eximeebpms-bpm-platform/blob/master/CONTRIBUTING.md).
+here](https://github.com/EximeeBPMS/eximeebpms-enterprise/blob/master/CONTRIBUTING.md).
 
 #### Coding style guide
 

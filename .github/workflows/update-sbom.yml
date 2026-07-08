@@ -1,0 +1,95 @@
+name: Update SBOM
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+# Runs on self-hosted, matching build.yml/codeql.yml. Only runs when a push
+# looks dependency-related, to avoid generating pointless commits/noise on
+# every push to main.
+jobs:
+  update-sbom:
+    name: Generate and commit SBOM
+    runs-on: self-hosted
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(join(github.event.commits.*.message, ' '), 'deps')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        run: |
+          if java -version 2>&1 | grep -qE '"17\.'; then
+            echo "Java 17 already installed"
+          else
+            echo "Java 17 not found, installing via package manager..."
+            sudo apt-get update -q
+            sudo apt-get install -y openjdk-17-jdk
+          fi
+          JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
+
+      - name: Create custom settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${GITHUB_ACTOR}</username>
+                <password>${GITHUB_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Maven packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-sbom-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Generate Maven SBOM (CycloneDX)
+        run: |
+          ./mvnw -B org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom \
+            -DoutputFormat=json \
+            -DoutputName=eximeebpms-bom
+        env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate npm SBOM (CycloneDX)
+        working-directory: webapps/frontend
+        run: |
+          npm ci
+          npx --yes @cyclonedx/cyclonedx-npm --output-format json --output-file cyclonedx-npm-bom.json
+
+      - name: Collect SBOMs
+        run: |
+          mkdir -p sbom
+          cp target/eximeebpms-bom.json sbom/
+          cp webapps/frontend/cyclonedx-npm-bom.json sbom/eximeebpms-frontend-bom.json
+
+      - name: Commit SBOMs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(deps): update SBOM"
+          file_pattern: "sbom/*.json"

@@ -31,8 +31,13 @@ jobs:
     runs-on: self-hosted
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'
     steps:
-      - name: Set Event Message
+      - name: Set Event Message and Send Slack Notification
         env:
+          CREATED_AT: ${{ github.event.created_at }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          REPO_NAME: ${{ github.repository }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_EVENT_HTML_URL: ${{ github.event.html_url || '-' }}
           GITHUB_EVENT_ACTION: ${{ github.event.action }}
@@ -54,6 +59,28 @@ jobs:
           REVIEW_HTML_URL: ${{ github.event.review.html_url }}
         run: |
           set -u
+
+          # Strip newlines/carriage-returns from every value sourced from the GitHub
+          # event payload before it is used to build $msg/$details, so a free-text
+          # field such as a PR title can't break the single-line Slack message layout.
+          GITHUB_EVENT_NAME=$(tr -d '\n\r' <<< "$GITHUB_EVENT_NAME")
+          GITHUB_EVENT_HTML_URL=$(tr -d '\n\r' <<< "$GITHUB_EVENT_HTML_URL")
+          GITHUB_EVENT_ACTION=$(tr -d '\n\r' <<< "$GITHUB_EVENT_ACTION")
+          SENDER_LOGIN=$(tr -d '\n\r' <<< "$SENDER_LOGIN")
+          REF_NAME=$(tr -d '\n\r' <<< "$REF_NAME")
+          ACTOR=$(tr -d '\n\r' <<< "$ACTOR")
+          COMPARE_URL=$(tr -d '\n\r' <<< "$COMPARE_URL")
+          RELEASE_TAG_NAME=$(tr -d '\n\r' <<< "$RELEASE_TAG_NAME")
+          RELEASE_HTML_URL=$(tr -d '\n\r' <<< "$RELEASE_HTML_URL")
+          WORKFLOW_RUN_NAME=$(tr -d '\n\r' <<< "$WORKFLOW_RUN_NAME")
+          WORKFLOW_RUN_HEAD_BRANCH=$(tr -d '\n\r' <<< "$WORKFLOW_RUN_HEAD_BRANCH")
+          WORKFLOW_RUN_HTML_URL=$(tr -d '\n\r' <<< "$WORKFLOW_RUN_HTML_URL")
+          DISCUSSION_HTML_URL=$(tr -d '\n\r' <<< "$DISCUSSION_HTML_URL")
+          COMMENT_HTML_URL=$(tr -d '\n\r' <<< "$COMMENT_HTML_URL")
+          ISSUE_HTML_URL=$(tr -d '\n\r' <<< "$ISSUE_HTML_URL")
+          PR_HTML_URL=$(tr -d '\n\r' <<< "$PR_HTML_URL")
+          PR_TITLE=$(tr -d '\n\r' <<< "$PR_TITLE")
+          REVIEW_HTML_URL=$(tr -d '\n\r' <<< "$REVIEW_HTML_URL")
 
           msg="🔔 New event of type *$GITHUB_EVENT_NAME* detected!"
           details="Details: $GITHUB_EVENT_HTML_URL"
@@ -265,56 +292,22 @@ jobs:
             ;;
           esac
 
-          # $msg/$details can embed user-controlled, free-text fields (e.g. PR_TITLE) that may
-          # contain newlines. A plain KEY=VALUE append lets a crafted value inject arbitrary
-          # extra environment variables into $GITHUB_ENV for later steps, so use a randomized
-          # heredoc delimiter an attacker cannot predict in advance.
-          delimiter="ghadelim_${RANDOM}_${RANDOM}_$$"
-          {
-            echo "EVENT_MSG<<$delimiter"
-            echo "$msg"
-            echo "$delimiter"
-            echo "DETAILS<<$delimiter"
-            echo "$details"
-            echo "$delimiter"
-          } >> "$GITHUB_ENV"
+          # $msg/$details/$CREATED_AT/$REPO_URL/$REPO_NAME are used directly below to build the
+          # Slack payload in this same step and posted via curl - they are never written to
+          # $GITHUB_ENV/$GITHUB_OUTPUT, so there is no environment-file injection sink to exploit
+          # regardless of their content. json_escape guards against quotes/backslashes breaking
+          # the JSON structure (newlines were already stripped above).
+          json_escape() {
+            local s=$1
+            s=${s//\\/\\\\}
+            s=${s//\"/\\\"}
+            printf '%s' "$s"
+          }
 
-      - name: Send Slack Notification
-        uses: slackapi/slack-github-action@e28cf165c92ffef168d23c5c9000cffc8a25e117 # v1.24.0
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL }}
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🔔 *New event* ${{ github.event.created_at }} 🔔"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ env.EVENT_MSG }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Repository:* <${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> _(OSS)_"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ env.DETAILS }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          printf -v payload '{"channel":"%s","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"🔔 *New event* %s 🔔"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}},{"type":"section","text":{"type":"mrkdwn","text":"*Repository:* <%s|%s> _(OSS)_"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}}]}' \
+            "$SLACK_CHANNEL" "$(json_escape "$CREATED_AT")" "$(json_escape "$msg")" "$(json_escape "$REPO_URL")" "$(json_escape "$REPO_NAME")" "$(json_escape "$details")"
+
+          curl -sf -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "$payload"

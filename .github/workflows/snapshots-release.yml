@@ -20,7 +20,7 @@ jobs:
       contents: write
       packages: write
 
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     steps:
       - name: Check out the latest main branch
         uses: actions/checkout@v4

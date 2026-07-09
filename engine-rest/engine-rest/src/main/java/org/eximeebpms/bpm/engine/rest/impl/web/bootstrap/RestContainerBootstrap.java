@@ -16,15 +16,36 @@
  */
 package org.eximeebpms.bpm.engine.rest.impl.web.bootstrap;
 
+import java.util.regex.Pattern;
+
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.eximeebpms.bpm.engine.rest.util.WebApplicationUtil;
 
 public class RestContainerBootstrap implements ServletContextListener {
 
+  private static final BootstrapLogger LOG = BootstrapLogger.BOOTSTRAP_LOGGER;
+
+  // TODO before 1.4.0 release: remove this detection together with dropping Tomcat 9 / WildFly 26 support
+  protected static final Pattern DEPRECATED_TOMCAT_9_PATTERN = Pattern.compile("Tomcat/9\\.");
+  protected static final Pattern DEPRECATED_WILDFLY_26_PATTERN = Pattern.compile("WildFly.*\\b26\\.\\d");
+
   @Override
   public void contextInitialized(ServletContextEvent sce) {
-    WebApplicationUtil.setApplicationServer(sce.getServletContext().getServerInfo());
+    String serverInfo = sce.getServletContext().getServerInfo();
+    WebApplicationUtil.setApplicationServer(serverInfo);
+    warnIfDeprecatedApplicationServer(serverInfo);
+  }
+
+  protected void warnIfDeprecatedApplicationServer(String serverInfo) {
+    if (serverInfo == null) {
+      return;
+    }
+
+    if (DEPRECATED_TOMCAT_9_PATTERN.matcher(serverInfo).find()
+        || DEPRECATED_WILDFLY_26_PATTERN.matcher(serverInfo).find()) {
+      LOG.deprecatedApplicationServerDetected(serverInfo);
+    }
   }
 
   @Override

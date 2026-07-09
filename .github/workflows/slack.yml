@@ -28,7 +28,7 @@ on:
 
 jobs:
   notify_slack:
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'
     steps:
       - name: Set Event Message and Send Slack Notification

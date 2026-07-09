@@ -67,9 +67,11 @@
     <version.wildfly>37.0.0.Final</version.wildfly>
     <version.wildfly.core>29.0.0.Final</version.wildfly.core>
 
+    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 (distro/wildfly26, qa/wildfly26-runtime) -->
     <version.wildfly26>26.0.1.Final</version.wildfly26>
     <version.wildfly26.core>18.0.4.Final</version.wildfly26.core>
 
+    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 (qa/tomcat9-runtime) -->
     <version.tomcat9>9.0.113</version.tomcat9>
     <version.tomcat>10.1.50</version.tomcat>
 

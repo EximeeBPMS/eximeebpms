@@ -36,7 +36,9 @@ import org.eximeebpms.bpm.engine.rest.sub.repository.CaseDefinitionResource;
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
+@Deprecated(since = "1.3.0", forRemoval = true)
 @Produces(MediaType.APPLICATION_JSON)
 public interface CaseDefinitionRestService {
 

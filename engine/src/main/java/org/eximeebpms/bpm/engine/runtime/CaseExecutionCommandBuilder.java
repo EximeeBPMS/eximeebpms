@@ -76,7 +76,9 @@ import org.eximeebpms.bpm.model.cmmn.instance.Task;
  *
  * @author Roman Smirnov
  *
+ * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
+@Deprecated(since = "1.3.0", forRemoval = true)
 public interface CaseExecutionCommandBuilder {
 
   /**

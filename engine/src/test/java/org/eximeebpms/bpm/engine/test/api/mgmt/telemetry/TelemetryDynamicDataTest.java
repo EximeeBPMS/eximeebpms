@@ -107,7 +107,8 @@ public class TelemetryDynamicDataTest {
         "SchemaOperationsProcessEngineBuild",
         "HistoryLevelSetupCommand",
         "BootstrapEngineCommand",
-        "GetLicenseKeyCmd");
+        "GetLicenseKeyCmd",
+        "CheckCmmnUsageCmd");
     for (String commandName : entries.keySet()) {
       assertThat(entries.get(commandName).get()).isEqualTo(1);
     }

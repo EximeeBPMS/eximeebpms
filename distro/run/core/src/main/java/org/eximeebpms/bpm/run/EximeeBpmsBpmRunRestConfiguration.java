@@ -17,7 +17,9 @@
 package org.eximeebpms.bpm.run;
 
 import jakarta.servlet.Filter;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.filters.CorsFilter;
+import org.eximeebpms.bpm.engine.rest.filter.CmmnDeprecationHeaderFilter;
 import org.eximeebpms.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAuthenticationProperties;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunCorsProperty;
@@ -25,7 +27,6 @@ import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
 import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBPMSJerseyResourceConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,10 +42,10 @@ import java.util.Collections;
 @Configuration
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
 @ConditionalOnClass(CamundaBpmRestInitializer.class)
+@RequiredArgsConstructor
 public class EximeeBpmsBpmRunRestConfiguration {
 
-  @Autowired
-  EximeeBpmsBpmRunProperties eximeeBpmsBpmRunProperties;
+  private final EximeeBpmsBpmRunProperties eximeeBpmsBpmRunProperties;
 
   /*
    * The CORS and Authentication filters need to run before other camunda
@@ -61,6 +62,7 @@ public class EximeeBpmsBpmRunRestConfiguration {
    */
   private static int CORS_FILTER_PRECEDENCE = 0;
   private static int AUTH_FILTER_PRECEDENCE = 1;
+  private static int CMMN_DEPRECATION_HEADER_FILTER_PRECEDENCE = 2;
 
   @Bean
   @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = EximeeBpmsBpmRunAuthenticationProperties.PREFIX)
@@ -105,6 +107,19 @@ public class EximeeBpmsBpmRunRestConfiguration {
                                   String.valueOf(eximeeBpmsBpmRunProperties.getCors().getAllowCredentials()));
     registration.addInitParameter(CorsFilter.PARAM_CORS_PREFLIGHT_MAXAGE,
                                   eximeeBpmsBpmRunProperties.getCors().getPreflightMaxAge());
+
+    return registration;
+  }
+
+  @Bean
+  public FilterRegistrationBean<Filter> cmmnDeprecationHeaderFilter(JerseyApplicationPath applicationPath) {
+    final FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+    registration.setName("cmmn-deprecation-header");
+    registration.setFilter(new CmmnDeprecationHeaderFilter());
+    registration.setOrder(CMMN_DEPRECATION_HEADER_FILTER_PRECEDENCE);
+
+    String restApiPathPattern = applicationPath.getUrlMapping();
+    registration.addUrlPatterns(restApiPathPattern);
 
     return registration;
   }

@@ -178,7 +178,7 @@ public class TopicSubscriptionIT {
       .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
     assertThat(handledTasks).hasSize(2);
@@ -238,7 +238,7 @@ public class TopicSubscriptionIT {
       .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
     assertThat(handledTasks).hasSize(2);
@@ -279,7 +279,7 @@ public class TopicSubscriptionIT {
       .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
     assertThat(handledTasks).hasSize(2);
@@ -318,7 +318,7 @@ public class TopicSubscriptionIT {
       .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     assertThat(handler.getHandledTasks()).hasSize(2);
   }
@@ -580,7 +580,7 @@ public class TopicSubscriptionIT {
         .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     assertThat(handler.getHandledTasks()).hasSize(2);
   }
@@ -678,7 +678,7 @@ public class TopicSubscriptionIT {
         .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     assertThat(handler.getHandledTasks()).hasSize(2);
   }
@@ -705,7 +705,7 @@ public class TopicSubscriptionIT {
         .open();
 
     // then
-    clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
+    clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     assertThat(handler.getHandledTasks()).hasSize(2);
   }

@@ -17,6 +17,7 @@
 package org.eximeebpms.bpm.run;
 
 import jakarta.servlet.Filter;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.filters.CorsFilter;
 import org.eximeebpms.bpm.engine.rest.filter.CmmnDeprecationHeaderFilter;
 import org.eximeebpms.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
@@ -26,7 +27,6 @@ import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
 import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
 import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBPMSJerseyResourceConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,10 +42,10 @@ import java.util.Collections;
 @Configuration
 @AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
 @ConditionalOnClass(CamundaBpmRestInitializer.class)
+@RequiredArgsConstructor
 public class EximeeBpmsBpmRunRestConfiguration {
 
-  @Autowired
-  EximeeBpmsBpmRunProperties eximeeBpmsBpmRunProperties;
+  private final EximeeBpmsBpmRunProperties eximeeBpmsBpmRunProperties;
 
   /*
    * The CORS and Authentication filters need to run before other camunda

@@ -25,6 +25,12 @@
   <dependencies>
 
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter</artifactId>
     </dependency>

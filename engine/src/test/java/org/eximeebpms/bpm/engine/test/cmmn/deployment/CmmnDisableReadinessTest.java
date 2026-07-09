@@ -86,7 +86,7 @@ public class CmmnDisableReadinessTest {
 
     // then startup succeeds without failing fast, and the leftover CMMN data is ignored
     assertThat(processEngine).isNotNull();
-    assertThat(processEngine.getRepositoryService().createCaseDefinitionQuery().count()).isEqualTo(0);
+    assertThat(processEngine.getRepositoryService().createCaseDefinitionQuery().count()).isZero();
   }
 
 }

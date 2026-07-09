@@ -21,6 +21,7 @@ import static org.eximeebpms.bpm.spring.boot.starter.jdbc.HistoryLevelDeterminat
 import java.util.List;
 
 import org.eximeebpms.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
+import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
@@ -57,6 +58,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -79,8 +81,9 @@ public class CamundaBpmConfiguration {
 
   @Bean
   @ConditionalOnMissingBean(DefaultProcessEngineConfiguration.class)
-  public static CamundaProcessEngineConfiguration camundaProcessEngineConfiguration() {
-    return new DefaultProcessEngineConfiguration();
+  public static CamundaProcessEngineConfiguration camundaProcessEngineConfiguration(IdGenerator idGenerator,
+      ApplicationContext applicationContext) {
+    return new DefaultProcessEngineConfiguration(idGenerator, applicationContext);
   }
 
   @Bean

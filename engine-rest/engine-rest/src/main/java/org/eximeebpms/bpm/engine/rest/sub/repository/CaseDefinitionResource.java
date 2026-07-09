@@ -33,7 +33,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @deprecated CMMN support is deprecated and will be removed in EximeeBPMS 1.4.0. Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/
  */
-@Deprecated
+@Deprecated(since = "1.3.0", forRemoval = true)
 public interface CaseDefinitionResource {
 
   @GET

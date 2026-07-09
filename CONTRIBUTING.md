@@ -9,7 +9,7 @@
 
 # File bugs or feature requests
 
-Issues are tracked in the internal Jira instance at [https://jira.consdata.pl](https://jira.consdata.pl), project key **BPMS**.
+Found a bug or have a feature request? [Open a GitHub Issue](https://github.com/EximeeBPMS/eximeebpms/issues/new/choose) in this repository — that's the right place for anything coming from outside the core team.
 
 When creating an issue:
 
@@ -17,6 +17,13 @@ When creating an issue:
 * Be concise — only add what's needed to understand the core of the problem.
 * For bug reports: describe the steps to reproduce, specify your environment (EximeeBPMS version, modules used, database, application server).
 * For feature requests: describe the expected behavior and, if possible, provide mockup code or a test case.
+* Found a security vulnerability? Do **not** open a public issue — follow our [security policy](SECURITY.md) instead.
+
+## Triage
+
+New issues start with the `needs-triage` label. A maintainer reviews them, tags them (`bug`, `enhancement`, `question`, ...), and links the corresponding internal Jira ticket (project **BPMS**) used to schedule and track the actual fix — the GitHub issue itself is not migrated anywhere, it just stays open as the public record of the request.
+
+Issues are closed once the linked change ships, referencing the PR or commit that resolved them. Released changes — regardless of whether they started as a GitHub issue or an internal Jira ticket — are aggregated in [CHANGELOG.md](CHANGELOG.md) for every release.
 
 # Build from source
 

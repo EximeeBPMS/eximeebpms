@@ -4,7 +4,11 @@
   <artifactId>eximeebpms-qa-wildfly26-runtime</artifactId>
   <packaging>jar</packaging>
 
-  <name>EximeeBPMS - QA Wildfly 26 Test Runtime</name>
+  <name>EximeeBPMS - QA Wildfly 26 Test Runtime (Deprecated, removal in 1.4.0)</name>
+  <description>
+    DEPRECATED since 1.3.0. WildFly 26 support will be REMOVED in EximeeBPMS 1.4.0.
+    Migrate to WildFly 37+ (module qa/wildfly-runtime).
+  </description>
 
   <parent>
     <groupId>org.eximeebpms.bpm.qa</groupId>

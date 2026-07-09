@@ -4,7 +4,11 @@
   <artifactId>eximeebpms-qa-tomcat9-runtime</artifactId>
   <packaging>pom</packaging>
 
-  <name>EximeeBPMS - QA Tomcat 9 Test Runtime</name>
+  <name>EximeeBPMS - QA Tomcat 9 Test Runtime (Deprecated, removal in 1.4.0)</name>
+  <description>
+    DEPRECATED since 1.3.0. Tomcat 9 support will be REMOVED in EximeeBPMS 1.4.0.
+    Migrate to Tomcat 10+ (module qa/tomcat-runtime).
+  </description>
 
   <parent>
     <groupId>org.eximeebpms.bpm.qa</groupId>

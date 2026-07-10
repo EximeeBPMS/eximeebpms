@@ -367,6 +367,19 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <!--
+        Activates the jacoco-maven-plugin executions (prepare-agent, report) declared
+        above in pluginManagement, for this POM and every module that inherits it.
+        The whole-project report-aggregate execution lives separately in the root
+        pom.xml, scoped with <inherited>false</inherited> so it never reaches here -
+        see the comment there for the rationale.
+      -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
   </build>
 
   <profiles>

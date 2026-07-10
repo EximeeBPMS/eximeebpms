@@ -18,6 +18,16 @@
     <!--
       all maven properties used in QA/CI
     -->
+
+    <!--
+      This module tree is the integration-test harness itself (server runtimes, DB
+      fixtures, Selenium/REST test suites), not measured product code, so instrumenting
+      it for coverage has no value. Skipping avoids pointless prepare-agent/report work
+      (and the disk writes that come with it) during the already disk-heavy CI
+      integration test runs (WildFly, browser binaries, per-database Docker containers).
+    -->
+    <jacoco.skip>true</jacoco.skip>
+
     <!-- override mail port so subethawiser does not try to bind itself on port 25 -->
     <mail.server.port>5025</mail.server.port>
 

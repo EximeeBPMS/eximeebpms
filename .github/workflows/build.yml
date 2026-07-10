@@ -35,11 +35,8 @@ jobs:
           echo "$CHANGED_FILES"
 
           IGNORED_PATTERNS=(
-            ".github/scripts/"
-            ".github/workflows/"
-            ".github/jreleaser/changelog.tpl"
+            ".github/"
             ".md"
-            "distro/"
             "settings/"
             ".gitignore"
             "LICENSE"
@@ -154,8 +151,9 @@ jobs:
         id: maven-build
         shell: bash
         run: |
-          ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
+          ./mvnw -B verify
           ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
+          ./mvnw --non-recursive org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

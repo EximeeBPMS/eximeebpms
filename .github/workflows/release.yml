@@ -3,6 +3,7 @@ name: Release
 permissions:
   contents: write
   packages: write
+  id-token: write  # required for Sigstore keyless signing
 
 on:
   workflow_dispatch:
@@ -21,19 +22,19 @@ jobs:
       - name: Determine user and set secret
         run: |
           echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
-          
+
       - name: Check out the code
         uses: actions/checkout@v7
         with:
           token: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
+
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Create custom settings.xml 
+      - name: Create custom settings.xml
         run: |
             mkdir -p ~/.m2
             cat <<EOF > ~/.m2/settings.xml
@@ -57,7 +58,7 @@ jobs:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-        
+
       - name: Import GPG key
         run: |
           echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
@@ -83,7 +84,8 @@ jobs:
 
       - name: Release perform
         run: |
-          ./mvnw release:perform -Dgoals=""
+          ./mvnw release:perform -Dgoals="" \
+          -Darguments="-Psbom -DskipTests"
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
@@ -96,6 +98,33 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Collect SBOM
+        run: |
+          VERSION="${{ github.event.inputs.release_version }}-ee"
+          cp target/checkout/target/bom.json "sbom-${VERSION}.cdx.json"
+          cp target/checkout/target/bom.xml  "sbom-${VERSION}.cdx.xml"
+
+      - name: GPG-sign SBOM
+        run: |
+          for f in sbom-*.cdx.json sbom-*.cdx.xml; do
+            gpg --batch --yes --armor \
+                --pinentry-mode loopback \
+                --passphrase "$GPG_PASSPHRASE" \
+                --detach-sign "$f"
+          done
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Sign SBOM with Sigstore (cosign keyless)
+        run: |
+          for f in sbom-*.cdx.json sbom-*.cdx.xml; do
+            cosign sign-blob --yes "$f" \
+                --bundle "${f}.sigstore.bundle"
+          done
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -103,6 +132,13 @@ jobs:
           tag_name: v${{ github.event.inputs.release_version }}
           draft: false
           prerelease: false
+          files: |
+            sbom-*.cdx.json
+            sbom-*.cdx.json.asc
+            sbom-*.cdx.json.sigstore.bundle
+            sbom-*.cdx.xml
+            sbom-*.cdx.xml.asc
+            sbom-*.cdx.xml.sigstore.bundle
           body: |
             Release generated on ${{ github.event.head_commit.timestamp }}
             with commit message: ${{ github.event.head_commit.message }}

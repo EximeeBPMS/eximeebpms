@@ -178,6 +178,87 @@
     </profile>
 
     <profile>
+      <id>sbom</id>
+      <!--
+        Generates an aggregate CycloneDX SBOM for all production modules.
+        Run standalone: ./mvnw package -Psbom -DskipTests
+        Excludes qa, test-utils and examples (not shipped artifacts).
+      -->
+      <modules>
+        <module>spring-boot-starter</module>
+        <module>quarkus-extension</module>
+
+        <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client-jakarta</module>
+        <module>javaee/jobexecutor-ra</module>
+        <module>javaee/jobexecutor-rar</module>
+
+        <module>model-api</module>
+        <module>engine-dmn</module>
+        <module>connect</module>
+        <module>juel</module>
+        <module>spin</module>
+        <module>commons</module>
+        <module>freemarker-template-engine</module>
+
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
+
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
+
+        <module>webapps</module>
+
+        <module>engine-plugins</module>
+
+        <module>distro/license-book</module>
+        <module>distro/jboss</module>
+        <module>distro/tomcat</module>
+        <module>distro/wildfly</module>
+        <module>distro/sql-script</module>
+        <module>distro/run</module>
+        <module>distro/webjar</module>
+
+        <module>clients/java</module>
+      </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.cyclonedx</groupId>
+            <artifactId>cyclonedx-maven-plugin</artifactId>
+            <version>2.9.2</version>
+            <executions>
+              <execution>
+                <id>generate-sbom</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>makeAggregateBom</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <projectType>library</projectType>
+              <schemaVersion>1.6</schemaVersion>
+              <includeBomSerialNumber>true</includeBomSerialNumber>
+              <includeCompileScope>true</includeCompileScope>
+              <includeProvidedScope>true</includeProvidedScope>
+              <includeRuntimeScope>true</includeRuntimeScope>
+              <includeSystemScope>false</includeSystemScope>
+              <includeTestScope>false</includeTestScope>
+              <includeLicenseText>false</includeLicenseText>
+              <outputFormat>all</outputFormat>
+              <outputName>bom</outputName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
       <id>distro-serverless</id>
       <modules>
         <module>qa</module>

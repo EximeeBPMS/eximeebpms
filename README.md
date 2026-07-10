@@ -1,8 +1,12 @@
-# EximeeBPMS - The open source BPMN platform
+# EximeeBPMS - The mission-critical open source BPMN platform
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/) [![License](https://img.shields.io/github/license/EximeeBPMS/eximeebpms-enterprise?color=blue&logo=apache)](https://github.com/EximeeBPMS/eximeebpms-enterprise/blob/master/LICENSE)
 
-EximeeBPMS is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
+EximeeBPMS is a native BPMN 2.0 process engine, forked from Camunda 7, hardened for **mission-critical process automation**. It runs inside the Java Virtual Machine, can be embedded inside any Java application or Runtime Container, and integrates with Java EE and the Spring Framework. On top of the process engine, you get a full stack of tools for human workflow management, operations, and monitoring.
+
+**Who it's for:** teams running regulated, high-availability workloads (finance, insurance, public sector) who need a fully compatible, actively maintained Camunda 7 successor without adopting an open-core or cloud-only model.
+
+**Migrating from Camunda 7:** EximeeBPMS keeps the REST API, database schema, and BPMN/DMN models compatible with Camunda 7. Use the [EximeeBPMS Migration Tool](https://github.com/EximeeBPMS/eximeebpms-migration) (OpenRewrite-based) to move an existing Camunda 7 project over with minimal changes.
 
 - Web Site: https://eximeebpms.org/
 - Getting Started: https://docs.eximeebpms.org/get-started/ 
@@ -50,6 +54,20 @@ Out of the box, EximeeBPMS provides infrastructure-level integration with Java E
 ### Embeddable
 
 Most of the components that make up the platform can even be completely embedded inside an application. For instance, you can add the process engine and the REST API as a library to your application and assemble your custom BPM platform configuration.
+
+## Ecosystem
+
+| Project | Description |
+|---------|-------------|
+| [eximeebpms-docs](https://github.com/EximeeBPMS/eximeebpms-docs) | Source of the EximeeBPMS documentation site |
+| [eximeebpms-migration](https://github.com/EximeeBPMS/eximeebpms-migration) | OpenRewrite-based tool to migrate a Camunda 7 project to EximeeBPMS |
+| [eximeebpms-docker](https://github.com/EximeeBPMS/eximeebpms-docker) | Official Docker images for EximeeBPMS releases |
+| [eximeebpms-k8s](https://github.com/EximeeBPMS/eximeebpms-k8s) | Official Helm chart and Kustomize manifests for Kubernetes / OpenShift |
+| [eximeebpms-bpm-monitor](https://github.com/EximeeBPMS/eximeebpms-bpm-monitor) | Spring Boot Actuator / Micrometer monitoring extension for EximeeBPMS |
+| [eximeebpms-release-parent](https://github.com/EximeeBPMS/eximeebpms-release-parent) | Parent POM used to build and release EximeeBPMS artifacts |
+| [eximeebpms-get-started-quickstart](https://github.com/EximeeBPMS/eximeebpms-get-started-quickstart) | Example project for the Quick Start guide |
+| [eximeebpms-get-started-spring-boot](https://github.com/EximeeBPMS/eximeebpms-get-started-spring-boot) | Example project for the Spring Boot getting-started guide |
+| [eximeebpms-get-started-dmn](https://github.com/EximeeBPMS/eximeebpms-get-started-dmn) | Example project for the DMN getting-started guide |
 
 ## Contributing
 

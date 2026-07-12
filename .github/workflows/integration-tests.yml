@@ -55,7 +55,7 @@ concurrency:
 jobs:
   build:
     name: Integration Tests
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     strategy:
       fail-fast: false
       matrix:

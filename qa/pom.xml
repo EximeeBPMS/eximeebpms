@@ -104,12 +104,14 @@
       </modules>
     </profile>
     
+    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 - see qa/wildfly26-runtime/pom.xml -->
     <profile>
       <id>wildfly26</id>
       <modules>
         <module>wildfly26-runtime</module>
       </modules>
     </profile>
+    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 - see qa/wildfly26-runtime/pom.xml -->
     <profile>
       <id>wildfly26-domain</id>
       <modules>
@@ -117,6 +119,7 @@
       </modules>
     </profile>
 
+    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 - see qa/tomcat9-runtime/pom.xml -->
     <profile>
       <id>tomcat9</id>
       <modules>

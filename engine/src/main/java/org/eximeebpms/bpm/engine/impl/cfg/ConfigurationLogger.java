@@ -130,12 +130,11 @@ public class ConfigurationLogger extends ProcessEngineLogger {
   }
 
   public NotValidException logErrorNoTTLConfigured() {
-    return new NotValidException(exceptionMessage("018",
-        "History Time To Live (TTL) cannot be null. "
-        + "TTL is necessary for the History Cleanup to work. The following options are possible:\n"
-        + "* Set historyTimeToLive in the model\n"
-        + "* Set a default historyTimeToLive as a global process engine configuration\n"
-        + "* (Not recommended) Deactivate the enforceTTL config to disable this check"));
+    return new NotValidException(exceptionMessage("018", """
+        History Time To Live (TTL) cannot be null. TTL is necessary for the History Cleanup to work. The following options are possible:
+        * Set historyTimeToLive in the model
+        * Set a default historyTimeToLive as a global process engine configuration
+        * (Not recommended) Deactivate the enforceTTL config to disable this check"""));
   }
 
   public ProcessEngineException invalidTransactionIsolationLevel(String transactionIsolationLevel) {
@@ -158,6 +157,26 @@ public class ConfigurationLogger extends ProcessEngineLogger {
     logWarn(
         "021",
         "Script security is disabled. Script deployment and runtime validation are turned off."
+    );
+  }
+
+  public void cmmnUsageDetected() {
+    logWarn(
+        "022",
+        "CMMN support is DEPRECATED and will be REMOVED in EximeeBPMS 1.4.0. "
+            + "CMMN definitions, case instances, and/or historic case data were detected in this database. "
+            + "Active case instances will block the upgrade to 1.4.0. "
+            + "Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/"
+    );
+  }
+
+  public void cmmnResourceDeployed(String deploymentName) {
+    logWarn(
+        "023",
+        "CMMN support is DEPRECATED and will be REMOVED in EximeeBPMS 1.4.0. "
+            + "Deployment '{}' contains a CMMN resource. "
+            + "Migration guide: https://docs.eximeebpms.org/update/cmmn-removal/",
+        deploymentName
     );
   }
 }

@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 import org.eximeebpms.bpm.engine.ProcessEngines;
-import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
@@ -33,14 +32,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class DefaultProcessEngineConfigurationTest {
 
-  private final DefaultProcessEngineConfiguration instance = new DefaultProcessEngineConfiguration();
+  private final DefaultProcessEngineConfiguration instance = new DefaultProcessEngineConfiguration(null, null);
   private final SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
   private final CamundaBpmProperties properties = new CamundaBpmProperties();
 
   @Before
   public void setUp() throws Exception {
     ReflectionTestUtils.setField(instance, "camundaBpmProperties", properties);
-    initIdGenerator(null);
   }
 
   @Test
@@ -154,7 +152,16 @@ public class DefaultProcessEngineConfigurationTest {
         .isAllowed()).isTrue();
   }
 
-  private void initIdGenerator(IdGenerator idGenerator) {
-    ReflectionTestUtils.setField(instance, "idGenerator", idGenerator);
+  @Test
+  public void setCmmnEnabled_default_true() {
+    instance.preInit(configuration);
+    assertThat(configuration.isCmmnEnabled()).isTrue();
+  }
+
+  @Test
+  public void setCmmnEnabled_false() {
+    properties.setCmmnEnabled(false);
+    instance.preInit(configuration);
+    assertThat(configuration.isCmmnEnabled()).isFalse();
   }
 }

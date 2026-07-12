@@ -1,6 +1,6 @@
 # EximeeBPMS - The mission-critical open source BPMN platform
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eximeebpms.bpm/eximeebpms-parent) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/) [![License](https://img.shields.io/github/license/EximeeBPMS/eximeebpms-enterprise?color=blue&logo=apache)](https://github.com/EximeeBPMS/eximeebpms-enterprise/blob/master/LICENSE)
+[![Build Status](https://github.com/EximeeBPMS/eximeebpms/actions/workflows/snapshots-on-main.yml/badge.svg?branch=main)](https://github.com/EximeeBPMS/eximeebpms/actions/workflows/snapshots-on-main.yml) [![Maven Central](https://img.shields.io/maven-central/v/org.eximeebpms.bpm/eximeebpms-bom?color=blue&logo=apachemaven)](https://central.sonatype.com/search?q=org.eximeebpms) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/) [![License](https://img.shields.io/github/license/EximeeBPMS/eximeebpms?color=blue&logo=apache)](https://github.com/EximeeBPMS/eximeebpms/blob/main/LICENSE) [![JVM](https://img.shields.io/badge/JVM-17--21-brightgreen?logo=openjdk)](https://openjdk.org/) [![Discussions](https://img.shields.io/badge/discussions-EximeeBPMS-green)](https://github.com/orgs/EximeeBPMS/discussions) [![GitHub Stars](https://img.shields.io/github/stars/EximeeBPMS/eximeebpms?style=flat)](https://github.com/EximeeBPMS/eximeebpms/stargazers)
 
 EximeeBPMS is a native BPMN 2.0 process engine, forked from Camunda 7, hardened for **mission-critical process automation**. It runs inside the Java Virtual Machine, can be embedded inside any Java application or Runtime Container, and integrates with Java EE and the Spring Framework. On top of the process engine, you get a full stack of tools for human workflow management, operations, and monitoring.
 
@@ -9,8 +9,11 @@ EximeeBPMS is a native BPMN 2.0 process engine, forked from Camunda 7, hardened 
 **Migrating from Camunda 7:** EximeeBPMS keeps the REST API, database schema, and BPMN/DMN models compatible with Camunda 7. Use the [EximeeBPMS Migration Tool](https://github.com/EximeeBPMS/eximeebpms-migration) (OpenRewrite-based) to move an existing Camunda 7 project over with minimal changes.
 
 - Web Site: https://eximeebpms.org/
-- Getting Started: https://docs.eximeebpms.org/get-started/ 
-<!-- - User Forum: https://forum.camunda.org/ -->
+- Documentation: https://docs.eximeebpms.org/
+- Getting Started: https://docs.eximeebpms.org/get-started/
+- Release Notes: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/EximeeBPMS/eximeebpms/releases)
+- Security Policy: [SECURITY.md](SECURITY.md)
+- Discussions: https://github.com/orgs/EximeeBPMS/discussions
 - Issue Tracker: https://github.com/EximeeBPMS/eximeebpms/issues
 <!-- - Contribution Guidelines: https://eximeebpms.org/contribute/ -->
 
@@ -71,7 +74,7 @@ Most of the components that make up the platform can even be completely embedded
 
 ## Contributing
 
-Please see our [contribution guidelines](CONTRIBUTING.md) for how to raise issues and how to contribute code to our project.
+Please see our [contribution guidelines](CONTRIBUTING.md) for how to raise issues and how to contribute code to our project. Participation in this project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Tests
 
@@ -83,3 +86,7 @@ To run the tests in this repository, please see our [testing tips and tricks](TE
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
 
 EximeeBPMS uses and includes third-party dependencies published under various licenses. By downloading and using EximeeBPMS artifacts, you agree to their terms and conditions. Refer to https://docs.eximeebpms.org/manual/latest/introduction/third-party-libraries/ for an overview of third-party libraries and particularly important third-party licenses we want to make you aware of.
+
+## Security
+
+Please see our [security policy](SECURITY.md) for how to report security vulnerabilities.

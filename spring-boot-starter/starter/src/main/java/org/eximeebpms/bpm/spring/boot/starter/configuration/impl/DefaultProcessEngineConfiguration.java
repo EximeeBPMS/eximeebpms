@@ -19,6 +19,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
@@ -29,18 +30,16 @@ import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 @Slf4j
+@RequiredArgsConstructor
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
 
-  @Autowired
-  private IdGenerator idGenerator;
+  private final IdGenerator idGenerator;
 
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -50,6 +49,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     setJobExecutorAcquireByPriority(configuration);
     setDefaultNumberOfRetries(configuration);
     setScriptSecurity(configuration);
+    setCmmnEnabled(configuration);
   }
 
   private void setIdGenerator(SpringProcessEngineConfiguration configuration) {
@@ -91,6 +91,10 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
     Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
         .ifPresent(configuration::setDefaultNumberOfRetries);
+  }
+
+  private void setCmmnEnabled(SpringProcessEngineConfiguration configuration) {
+    configuration.setCmmnEnabled(camundaBpmProperties.isCmmnEnabled());
   }
 
   private void setScriptSecurity(SpringProcessEngineConfiguration configuration) {

@@ -1,8 +1,8 @@
-# EximeeBPMS - The banking-grade open source BPMN platform
+# EximeeBPMS - The mission-critical open source BPMN platform
 
 [![Build Status](https://github.com/EximeeBPMS/eximeebpms/actions/workflows/snapshots-on-main.yml/badge.svg?branch=main)](https://github.com/EximeeBPMS/eximeebpms/actions/workflows/snapshots-on-main.yml) [![Maven Central](https://img.shields.io/maven-central/v/org.eximeebpms.bpm/eximeebpms-bom?color=blue&logo=apachemaven)](https://central.sonatype.com/search?q=org.eximeebpms) [![eximeebpms manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.eximeebpms.org/manual/latest/) [![License](https://img.shields.io/github/license/EximeeBPMS/eximeebpms?color=blue&logo=apache)](https://github.com/EximeeBPMS/eximeebpms/blob/main/LICENSE) [![JVM](https://img.shields.io/badge/JVM-17--21-brightgreen?logo=openjdk)](https://openjdk.org/) [![Discussions](https://img.shields.io/badge/discussions-EximeeBPMS-green)](https://github.com/orgs/EximeeBPMS/discussions) [![GitHub Stars](https://img.shields.io/github/stars/EximeeBPMS/eximeebpms?style=flat)](https://github.com/EximeeBPMS/eximeebpms/stargazers)
 
-EximeeBPMS is a native BPMN 2.0 process engine, forked from Camunda 7, hardened for **mission-critical, banking-grade process automation**. It runs inside the Java Virtual Machine, can be embedded inside any Java application or Runtime Container, and integrates with Java EE and the Spring Framework. On top of the process engine, you get a full stack of tools for human workflow management, operations, and monitoring.
+EximeeBPMS is a native BPMN 2.0 process engine, forked from Camunda 7, hardened for **mission-critical process automation**. It runs inside the Java Virtual Machine, can be embedded inside any Java application or Runtime Container, and integrates with Java EE and the Spring Framework. On top of the process engine, you get a full stack of tools for human workflow management, operations, and monitoring.
 
 **Who it's for:** teams running regulated, high-availability workloads (finance, insurance, public sector) who need a fully compatible, actively maintained Camunda 7 successor without adopting an open-core or cloud-only model.
 
@@ -65,6 +65,7 @@ Most of the components that make up the platform can even be completely embedded
 | [eximeebpms-docs](https://github.com/EximeeBPMS/eximeebpms-docs) | Source of the EximeeBPMS documentation site |
 | [eximeebpms-migration](https://github.com/EximeeBPMS/eximeebpms-migration) | OpenRewrite-based tool to migrate a Camunda 7 project to EximeeBPMS |
 | [eximeebpms-docker](https://github.com/EximeeBPMS/eximeebpms-docker) | Official Docker images for EximeeBPMS releases |
+| [eximeebpms-k8s](https://github.com/EximeeBPMS/eximeebpms-k8s) | Official Helm chart and Kustomize manifests for Kubernetes / OpenShift |
 | [eximeebpms-bpm-monitor](https://github.com/EximeeBPMS/eximeebpms-bpm-monitor) | Spring Boot Actuator / Micrometer monitoring extension for EximeeBPMS |
 | [eximeebpms-release-parent](https://github.com/EximeeBPMS/eximeebpms-release-parent) | Parent POM used to build and release EximeeBPMS artifacts |
 | [eximeebpms-get-started-quickstart](https://github.com/EximeeBPMS/eximeebpms-get-started-quickstart) | Example project for the Quick Start guide |

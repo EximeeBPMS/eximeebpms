@@ -1,0 +1,80 @@
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# Auto-merges Dependabot PRs once required checks pass. Patch updates are
+# eligible for any dependency not on the denylist below; minor updates are
+# eligible only for development-scope (test/build) dependencies. Everything
+# else (major bumps, denylisted deps) is left for manual review.
+jobs:
+  dependabot:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Determine eligibility
+        id: eligibility
+        env:
+          DEP_NAMES: ${{ steps.metadata.outputs.dependency-names }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          DEP_TYPE: ${{ steps.metadata.outputs.dependency-type }}
+          PACKAGE_ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+        run: |
+          # GitHub Actions bumps always require manual review: a compromised
+          # action version has full pipeline/secrets access (cf. the
+          # tj-actions/changed-files supply-chain incident), so patch-level
+          # trust doesn't apply here the way it does for a Java/JS library.
+          if [[ "$PACKAGE_ECOSYSTEM" == *action* ]]; then
+            echo "::notice::GitHub Actions ecosystem - always requires manual review"
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Always requires manual review, regardless of update type:
+          # - JDBC drivers: not fully exercised by build.yml, only by the
+          #   nightly integration-tests.yml matrix
+          # - tomcat- / wildfly-: pinned to Camunda's supported app-server matrix
+          # - angular / bootstrap / jquery: legacy frontend stack, frozen on
+          #   purpose and normally patched deliberately via the security notice
+          #   process rather than routine bumps
+          DENYLIST=(postgresql mysql-connector mssql-jdbc ojdbc mariadb-java-client db2jcc tomcat- wildfly- angular bootstrap jquery)
+
+          eligible=true
+          for name in $DEP_NAMES; do
+            for pattern in "${DENYLIST[@]}"; do
+              if [[ "$name" == *"$pattern"* ]]; then
+                echo "::notice::$name matches denylist pattern '$pattern' - requires manual review"
+                eligible=false
+              fi
+            done
+          done
+
+          if [[ "$UPDATE_TYPE" == "version-update:semver-patch" ]]; then
+            : # patch updates are candidates (subject to the denylist above)
+          elif [[ "$UPDATE_TYPE" == "version-update:semver-minor" && "$DEP_TYPE" == "direct:development" ]]; then
+            : # minor bumps of dev/test-only dependencies are candidates
+          else
+            eligible=false
+          fi
+
+          echo "eligible=$eligible" >> "$GITHUB_OUTPUT"
+
+      - name: Approve and enable auto-merge
+        if: steps.eligibility.outputs.eligible == 'true'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review --approve "$PR_URL" -b "Auto-approved: patch/dev-minor update, not on the manual-review denylist."
+          gh pr merge --auto --squash "$PR_URL"

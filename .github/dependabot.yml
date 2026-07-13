@@ -8,9 +8,85 @@ updates:
   - package-ecosystem: "maven"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
+    # Delay patch-level PRs by 5 days after release so a compromised/broken
+    # patch has time to get pulled or flagged upstream before we auto-merge
+    # it (see auto-merge.yml). Does not apply to Dependabot security updates
+    # (CVE alerts always bypass cooldown) or to minor/major bumps, which
+    # already require manual review regardless of age.
+    cooldown:
+      semver-patch-days: 5
+    groups:
+      spring:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework:*"
+      httpcomponents:
+        patterns:
+          - "org.apache.httpcomponents*"
+      tomcat:
+        patterns:
+          - "org.apache.tomcat:*"
+      wildfly:
+        patterns:
+          - "org.wildfly*"
+          - "wildfly.container.adapter.version"
+      jackson:
+        patterns:
+          - "com.fasterxml.jackson*"
+      logging:
+        patterns:
+          - "ch.qos.logback:*"
+          - "org.slf4j:*"
+      testing:
+        patterns:
+          - "org.junit*"
+          - "org.mockito*"
+          - "org.assertj*"
+          - "org.xmlunit:*"
 
   - package-ecosystem: "npm"
     directory: "/webapps/frontend"  # Location of package.json
     schedule:
       interval: "weekly"
+    cooldown:
+      semver-patch-days: 5
+    groups:
+      webpack:
+        patterns:
+          - "webpack*"
+          - "*-loader"
+          - "*-webpack-plugin"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "prettier"
+      babel:
+        patterns:
+          - "@babel/*"
+          - "babel-loader"
+      bpmn-dmn-js:
+        patterns:
+          - "bpmn-js"
+          - "camunda-dmn-js"
+          - "dmn-js"
+          - "dmn-js-*"
+          - "@bpmn-io/*"
+    # angular*, bootstrap, jquery are intentionally left out of any group and
+    # off the auto-merge allowlist (see auto-merge.yml) - legacy frontend
+    # stack, frozen on purpose and patched deliberately via the security
+    # notice process rather than routine bumps.
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      semver-patch-days: 5
+    groups:
+      github-actions:
+        patterns:
+          - "actions/*"
+      third-party-actions:
+        patterns:
+          - "*"

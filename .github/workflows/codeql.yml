@@ -1,0 +1,88 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 3 * * 1' # weekly, Monday 03:30 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Runs on self-hosted, matching build.yml. Unlike the enterprise repo, this
+# reactor resolves everything from public Maven Central (no internal Nexus),
+# so no CA-cert import or Nexus profile is needed here. Deliberately not
+# triggered on every PR - it would double self-hosted runner load on top of
+# build.yml; push-to-main + weekly is the same cadence CIB seven uses for
+# their CodeQL scan.
+jobs:
+  analyze:
+    name: Analyze (Java, JavaScript)
+    runs-on: self-hosted
+    permissions:
+      security-events: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        run: |
+          if java -version 2>&1 | grep -qE '"17\.'; then
+            echo "Java 17 already installed"
+          else
+            echo "Java 17 not found, installing via package manager..."
+            sudo apt-get update -q
+            sudo apt-get install -y openjdk-17-jdk
+          fi
+          JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
+
+      - name: Create custom settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${GITHUB_ACTOR}</username>
+                <password>${GITHUB_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Maven packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Remove corrupted Maven cache files
+        run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java, javascript
+
+      - name: Build (compile only, tests not needed for analysis)
+        run: ./mvnw -B verify -DskipTests
+        env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

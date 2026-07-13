@@ -1,0 +1,95 @@
+name: Check for ChromeDriver updates
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# The version pinned in qa/integration-tests-webapps/pom.xml (version.chromedriver) is a
+# custom download-maven-plugin URL, not a real Maven artifact coordinate, so Dependabot's
+# maven ecosystem never sees or bumps it (see .github/dependabot.yml). Left unattended it
+# only drifts further from whatever "current stable" apt installs during integration-tests.yml,
+# which is exactly what caused the LoginIT Chrome/ChromeDriver version-mismatch failures.
+#
+# This never auto-merges: the webapps UI is a legacy AngularJS stack that has already broken
+# once on a Chrome version bump, so every bump here needs a manual run of the webapps
+# integration test suite before merging.
+jobs:
+  check-chromedriver-version:
+    runs-on: github-actions-runner-new
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Compare pinned version against latest stable Chrome for Testing release
+        id: check
+        run: |
+          command -v jq >/dev/null || sudo apt-get update -q && sudo apt-get install -y jq
+
+          CURRENT=$(grep -m1 'version.chromedriver' qa/integration-tests-webapps/pom.xml | sed 's/.*>\(.*\)<.*/\1/')
+          LATEST=$(curl -sSL https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json | jq -r '.channels.Stable.version')
+
+          echo "Current pinned version: $CURRENT"
+          echo "Latest stable version:  $LATEST"
+
+          if [ -z "$LATEST" ] || [ "$LATEST" == "null" ]; then
+            echo "::error::Could not determine latest stable Chrome for Testing version"
+            exit 1
+          fi
+
+          if [ "$CURRENT" == "$LATEST" ]; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+            echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+            echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip if a bump PR is already open
+        if: steps.check.outputs.up_to_date == 'false'
+        id: existing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT=$(gh pr list --state open --search "in:title \"Bump ChromeDriver\"" --json number --jq 'length')
+          echo "exists=$([ "$COUNT" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR bumping the pinned version
+        if: steps.check.outputs.up_to_date == 'false' && steps.existing.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT: ${{ steps.check.outputs.current }}
+          LATEST: ${{ steps.check.outputs.latest }}
+        run: |
+          BRANCH="chore/bump-chromedriver-${LATEST}"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout -b "$BRANCH"
+          sed -i "s#<version.chromedriver>.*</version.chromedriver>#<version.chromedriver>${LATEST}</version.chromedriver>#" qa/integration-tests-webapps/pom.xml
+          git commit -am "chore - bump pinned ChromeDriver/Chrome-for-Testing version to ${LATEST}"
+          git push origin "$BRANCH"
+
+          {
+            echo "Chrome for Testing published a newer stable release than the version currently"
+            echo "pinned in \`qa/integration-tests-webapps/pom.xml\` (\`version.chromedriver\`):"
+            echo ""
+            echo "- Current: \`${CURRENT}\`"
+            echo "- Latest stable: \`${LATEST}\`"
+            echo ""
+            echo "**Do not merge on green CI alone.** The webapps UI is a legacy AngularJS stack"
+            echo "(see \`LoginIT\`) that has already broken once on a Chrome version bump. Before merging:"
+            echo ""
+            echo "- [ ] Manually dispatch the \`webapps\` integration test suite (\`integration-tests.yml\`, workflow_dispatch) against this branch"
+            echo "- [ ] Confirm \`LoginIT\` passes for both the tomcat and wildfly distros"
+            echo ""
+            echo "This PR was opened automatically by \`update-chromedriver.yml\`."
+          } > /tmp/chromedriver-bump-pr-body.md
+
+          gh pr create \
+            --title "Bump ChromeDriver to ${LATEST}" \
+            --body-file /tmp/chromedriver-bump-pr-body.md

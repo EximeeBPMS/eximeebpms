@@ -45,7 +45,7 @@ var angular = require('eximeebpms-commons-ui/vendor/angular'),
   sortableTableHead = require('./sortableTableHead');
 
 var directivesModule = angular.module('cam.cockpit.directives', [
-  camCommon.name
+  camCommon.name,
 ]);
 
 directivesModule.directive('camBreadcrumbsPanel', breadcrumbs);

@@ -23,7 +23,7 @@ var angular = require('angular');
 
 module.exports = [
   'ViewsProvider',
-  function(ViewsProvider) {
+  function (ViewsProvider) {
     ViewsProvider.registerDefaultView('admin.dashboard.section', {
       id: 'system',
       label: 'SYSTEM_SYSTEM',
@@ -33,14 +33,14 @@ module.exports = [
         '$scope',
         'Views',
         '$injector',
-        function($scope, Views, $injector) {
+        function ($scope, Views, $injector) {
           $scope.systemSettingsProviders = Views.getProviders({
-            component: 'admin.system'
-          }).map(function(plugin) {
+            component: 'admin.system',
+          }).map(function (plugin) {
             if (angular.isArray(plugin.access)) {
               var fn = $injector.invoke(plugin.access);
 
-              fn(function(err, access) {
+              fn(function (err, access) {
                 if (err) {
                   throw err;
                 }
@@ -53,7 +53,7 @@ module.exports = [
 
             return plugin;
           });
-        }
+        },
       ],
       access: [
         'AuthorizationResource',
@@ -72,7 +72,7 @@ module.exports = [
         },
       ],
 
-      priority: 0
+      priority: 0,
     });
-  }
+  },
 ];

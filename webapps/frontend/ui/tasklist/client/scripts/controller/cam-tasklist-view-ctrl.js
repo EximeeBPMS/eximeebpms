@@ -27,7 +27,7 @@ module.exports = [
   'search',
   'dataDepend',
   'camAPI',
-  function($scope, $q, $location, $interval, search, dataDepend, camAPI) {
+  function ($scope, $q, $location, $interval, search, dataDepend, camAPI) {
     function getPropertyFromLocation(property) {
       var search = $location.search() || {};
       return search[property] || null;
@@ -55,14 +55,14 @@ module.exports = [
     /**
      * Provides the list of filters
      */
-    tasklistData.provide('filters', function() {
+    tasklistData.provide('filters', function () {
       var deferred = $q.defer();
 
       Filter.count({
         itemCount: false,
-        resourceType: 'Task'
+        resourceType: 'Task',
       })
-        .then(function(count) {
+        .then(function (count) {
           var paginationSize = 2000;
 
           var pages = Math.ceil(count / paginationSize);
@@ -73,17 +73,17 @@ module.exports = [
                 firstResult: i * paginationSize,
                 maxResults: paginationSize,
                 itemCount: false,
-                resourceType: 'Task'
-              })
+                resourceType: 'Task',
+              }),
             );
           }
 
           return $q.all(requests);
         })
-        .then(function(res) {
+        .then(function (res) {
           deferred.resolve(res.flat(2));
         })
-        .catch(function(err) {
+        .catch(function (err) {
           deferred.reject(err);
         });
 
@@ -92,7 +92,7 @@ module.exports = [
 
     tasklistData.provide('currentFilter', [
       'filters',
-      function(filters) {
+      function (filters) {
         var focused,
           filterId = getPropertyFromLocation('filter');
 
@@ -114,30 +114,30 @@ module.exports = [
           var currentPage = getPropertyFromLocation('page');
           if (currentPage) {
             updateSilently({
-              page: '1'
+              page: '1',
             });
           }
         }
 
         if (focused && focused.id !== filterId) {
           updateSilently({
-            filter: focused.id
+            filter: focused.id,
           });
         }
 
         return angular.copy(focused);
-      }
+      },
     ]);
 
     tasklistData.provide('searchQuery', {
       processVariables: [],
-      taskVariables: []
+      taskVariables: [],
     });
 
     tasklistData.provide('taskListQuery', [
       'currentFilter',
       'searchQuery',
-      function(currentFilter, searchQuery) {
+      function (currentFilter, searchQuery) {
         if (!currentFilter) {
           return null;
         }
@@ -162,7 +162,7 @@ module.exports = [
         taskListQuery.active = true;
 
         return taskListQuery;
-      }
+      },
     ]);
 
     /**
@@ -175,7 +175,7 @@ module.exports = [
     var lastQuery = {};
 
     // trigger reloading of the tasks if the query changes
-    tasklistData.observe('taskListQuery', function(taskListQuery) {
+    tasklistData.observe('taskListQuery', function (taskListQuery) {
       var lastRequestIsPending = lastRequest.promise.$$state.status === 0;
       if (
         lastRequestIsPending &&
@@ -187,7 +187,7 @@ module.exports = [
 
     tasklistData.provide('taskList', [
       'taskListQuery',
-      function(taskListQuery) {
+      function (taskListQuery) {
         var lastRequestIsPending = lastRequest.promise.$$state.status === 0;
         if (
           !lastRequestIsPending ||
@@ -201,11 +201,11 @@ module.exports = [
             // no filter selected
             deferred.resolve({
               count: 0,
-              _embedded: {}
+              _embedded: {},
             });
           } else {
             // filter selected
-            Filter.getTasks(angular.copy(taskListQuery), function(err, res) {
+            Filter.getTasks(angular.copy(taskListQuery), function (err, res) {
               if (err) {
                 deferred.resolve(err);
               } else {
@@ -217,7 +217,7 @@ module.exports = [
         } else {
           return lastRequest.promise;
         }
-      }
+      },
     ]);
 
     /**
@@ -230,7 +230,7 @@ module.exports = [
      */
     tasklistData.provide('task', [
       'taskId',
-      function(task) {
+      function (task) {
         var deferred = $q.defer();
 
         var taskId = task.taskId;
@@ -238,7 +238,7 @@ module.exports = [
         if (typeof taskId !== 'string') {
           deferred.resolve(null);
         } else {
-          Task.get(taskId, function(err, res) {
+          Task.get(taskId, function (err, res) {
             if (err) {
               deferred.reject(err);
             } else {
@@ -248,12 +248,12 @@ module.exports = [
         }
 
         return deferred.promise;
-      }
+      },
     ]);
 
     // observe //////////////////////////////////////////////////////////////////////////////
 
-    tasklistData.observe('currentFilter', function(_currentFilter) {
+    tasklistData.observe('currentFilter', function (_currentFilter) {
       currentFilter = _currentFilter;
     });
 
@@ -261,7 +261,7 @@ module.exports = [
      * automatically refresh the taskList every 10 seconds so that changes
      * (such as claims) are represented in realtime
      */
-    $scope.$on('refresh', function() {
+    $scope.$on('refresh', function () {
       if (!currentFilter || !currentFilter.properties.refresh) return;
 
       tasklistData.changed('taskList');
@@ -272,7 +272,7 @@ module.exports = [
     /**
      * Update task if location changes
      */
-    $scope.$on('$routeChanged', function() {
+    $scope.$on('$routeChanged', function () {
       var oldTaskId = taskId;
       var oldDetailsTab = detailsTab;
 
@@ -286,5 +286,5 @@ module.exports = [
       currentFilter = null;
       tasklistData.changed('currentFilter');
     });
-  }
+  },
 ];

@@ -1,7 +1,6 @@
 {
   "rules": {
     "space-before-blocks": [ 2, "always"],
-    "space-before-function-paren": [ 2, "never" ],
     "semi": [ 2, "always" ],
     "no-console": 1,
     "no-useless-escape": "off"
@@ -18,6 +17,12 @@
   "parserOptions": {
     "sourceType": "module"
   },
+  "overrides": [
+    {
+      "files": ["*.json"],
+      "rules": { "license-header/header": "off", "prettier/prettier": "off" }
+    }
+  ],
   "globals": {
     "requirejs": false,
     "expect": false,

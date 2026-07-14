@@ -2,3 +2,5 @@ node_modules/**/*.js
 **/*test*/**/*.js
 target/
 node/
+public/lib/**
+package.json

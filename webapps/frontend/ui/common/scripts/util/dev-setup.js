@@ -32,12 +32,12 @@ export const setupDev = () => {
       body: JSON.stringify({}),
       headers: {
         'X-XSRF-TOKEN': document.cookie.replace('XSRF-TOKEN=', ''),
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
       response
         .json()
-        .then(json => {
+        .then((json) => {
           if (json.message !== 'Setup action not available') {
             window.location.href = `/eximeebpms/app/admin/${engine}/setup/#setup`;
           }

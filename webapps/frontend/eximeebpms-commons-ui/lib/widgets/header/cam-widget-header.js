@@ -25,20 +25,20 @@ var angular = require('eximeebpms-bpm-sdk-js/vendor/angular'),
 
 var apps = {
   welcome: {
-    label: 'Welcome'
+    label: 'Welcome',
   },
   admin: {
-    label: 'Admin'
+    label: 'Admin',
   },
   cockpit: {
-    label: 'Cockpit'
+    label: 'Cockpit',
   },
   tasklist: {
-    label: 'Tasklist'
-  }
+    label: 'Tasklist',
+  },
 };
 
-module.exports = function() {
+module.exports = function () {
   return {
     transclude: true,
 
@@ -51,10 +51,10 @@ module.exports = function() {
       signOut: '@?',
       toggleNavigation: '@?',
       myProfile: '@?',
-      smallScreenWarning: '@?'
+      smallScreenWarning: '@?',
     },
 
-    compile: function(el, attrs) {
+    compile: function (el, attrs) {
       if (!attrs.toggleNavigation) {
         attrs.toggleNavigation = 'CAM_WIDGET_HEADER_TOGGLE_NAVIGATION';
       }
@@ -74,7 +74,7 @@ module.exports = function() {
       'AuthenticationService',
       '$sce',
       'configuration',
-      function($scope, AuthenticationService, $sce, configuration) {
+      function ($scope, AuthenticationService, $sce, configuration) {
         $scope.logo = $sce.trustAsHtml(logo);
         $scope.brandName =
           configuration.getAppVendor() + ' ' + configuration.getAppName();
@@ -85,7 +85,7 @@ module.exports = function() {
         $scope.isCommunityEdition = EXIMEEBPMS_EDITION === 'CE';
 
         $scope.logout = AuthenticationService.logout;
-        $scope.getTargetRoute = function() {
+        $scope.getTargetRoute = function () {
           return $scope.authentication ? '' : '#/login';
         };
 
@@ -103,7 +103,7 @@ module.exports = function() {
           if ($scope.authentication && $scope.authentication.name) {
             delete kept.welcome;
 
-            Object.keys(kept).forEach(function(appName) {
+            Object.keys(kept).forEach(function (appName) {
               if ($scope.authentication.authorizedApps.indexOf(appName) < 0) {
                 delete kept[appName];
               }
@@ -117,7 +117,7 @@ module.exports = function() {
 
         $scope.$watch('currentApp', setApps);
         $scope.$watch('authentication', setApps);
-      }
-    ]
+      },
+    ],
   };
 };

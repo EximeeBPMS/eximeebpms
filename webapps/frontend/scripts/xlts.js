@@ -36,10 +36,10 @@ const exec = (cmd, successMsg) => {
 const lastOpenSourceVersions = {
   'angular-translate': '2.19.1',
   'angular-moment': '1.3.0',
-  'angular-ui-bootstrap': '2.5.6'
+  'angular-ui-bootstrap': '2.5.6',
 };
 
-const getVersionPostFix = angularPackage =>
+const getVersionPostFix = (angularPackage) =>
   angularPackage === 'angular' ? '' : '-' + angularPackage.split('-')[1];
 
 const getDependencyVersion = (nameSpace, npmPackage, xltsVersion) => {
@@ -48,7 +48,7 @@ const getDependencyVersion = (nameSpace, npmPackage, xltsVersion) => {
       return `${npmPackage}@npm:@${scope}/${nameSpace}@${lastOpenSourceVersions[npmPackage]}-${npmPackage}-${xltsVersion}`;
     case 'angular':
       return `${npmPackage}@npm:@${scope}/angularjs@${xltsVersion}${getVersionPostFix(
-        npmPackage
+        npmPackage,
       )}`;
     default:
       return `${npmPackage}@npm:@${scope}/${npmPackage}@${xltsVersion}`;
@@ -62,12 +62,12 @@ const {HERODEVS_REGISTRY, HERODEVS_AUTH_TOKEN} = process.env;
 if (!registryConfigured && HERODEVS_REGISTRY && HERODEVS_AUTH_TOKEN) {
   exec(
     `npm set @${scope}:registry https://${HERODEVS_REGISTRY}/`,
-    'XLTS registry configured.'
+    'XLTS registry configured.',
   );
 
   exec(
     `npm set //${HERODEVS_REGISTRY}/:_authToken ${HERODEVS_AUTH_TOKEN}`,
-    'XLTS auth token configured.'
+    'XLTS auth token configured.',
   );
 }
 
@@ -80,8 +80,8 @@ if (
   const npmPackages = Object.entries(xlts)
     .flatMap(([nameSpace, settings]) =>
       Object.entries(settings).map(([npmPackage, version]) =>
-        getDependencyVersion(nameSpace, npmPackage, version)
-      )
+        getDependencyVersion(nameSpace, npmPackage, version),
+      ),
     )
     .join(' ');
 

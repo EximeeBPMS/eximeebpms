@@ -1,15 +1,11 @@
 {
   "rules": {
     "space-before-blocks": [ 2, "always"],
-    "space-before-function-paren": [ 2, "never" ],
     "semi": [ 2, "always" ],
     "no-console": 1,
     "no-self-assign": 0,
     "no-useless-escape": "off",
-    "i18n-json/sorted-keys": [2, {
-      "order": "asc",
-      "indentSpaces": 2
-    }],
+    "i18n-json/sorted-keys": 0,
     "i18n-json/valid-json": 0,
     "i18n-json/valid-message-syntax": 0
   },
@@ -24,6 +20,17 @@
       "rules": {
         "license-header/header": "off",
         "prettier/prettier": "off"
+      }
+    },
+    {
+      "files": ["public/app/*/locales/*.json"],
+      "rules": {
+        "i18n-json/sorted-keys": [2, {
+          "order": "asc",
+          "indentSpaces": 2
+        }],
+        "i18n-json/valid-json": 0,
+        "i18n-json/valid-message-syntax": 0
       }
     }
   ],

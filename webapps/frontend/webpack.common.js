@@ -37,70 +37,70 @@ module.exports = (_env, argv = {}) => {
       'app/cockpit/eximeebpms-cockpit-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/cockpit/client/scripts/eximeebpms-cockpit-bootstrap.js'
-        )
+          'ui/cockpit/client/scripts/eximeebpms-cockpit-bootstrap.js',
+        ),
       },
       'plugin/cockpit/app/plugin': {
-        import: path.resolve(__dirname, 'ui/cockpit/plugins/cockpitPlugins.js')
+        import: path.resolve(__dirname, 'ui/cockpit/plugins/cockpitPlugins.js'),
       },
 
       /* Tasklist */
       'app/tasklist/eximeebpms-tasklist-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/tasklist/client/scripts/eximeebpms-tasklist-bootstrap.js'
-        )
+          'ui/tasklist/client/scripts/eximeebpms-tasklist-bootstrap.js',
+        ),
       },
       'plugin/tasklist/app/plugin': {
         import: path.resolve(
           __dirname,
-          'ui/tasklist/plugins/tasklistPlugins.js'
-        )
+          'ui/tasklist/plugins/tasklistPlugins.js',
+        ),
       },
 
       /* Admin */
       'app/admin/eximeebpms-admin-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/admin/client/scripts/eximeebpms-admin-bootstrap.js'
-        )
+          'ui/admin/client/scripts/eximeebpms-admin-bootstrap.js',
+        ),
       },
       'plugin/admin/app/plugin': {
-        import: path.resolve(__dirname, 'ui/admin/plugins/adminPlugins.js')
+        import: path.resolve(__dirname, 'ui/admin/plugins/adminPlugins.js'),
       },
 
       /* Welcome */
       'app/welcome/eximeebpms-welcome-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/welcome/client/scripts/eximeebpms-welcome-bootstrap.js'
-        )
-      }
+          'ui/welcome/client/scripts/eximeebpms-welcome-bootstrap.js',
+        ),
+      },
     },
     stats: {
-      errorDetails: true
+      errorDetails: true,
     },
     output: {
       library: '[name]',
       libraryTarget: 'umd',
       filename: `[name].js?bust=${version}`,
       assetModuleFilename: `assets/[name][ext]?bust=${version}`,
-      path: path.resolve(__dirname, 'target/webapp')
+      path: path.resolve(__dirname, 'target/webapp'),
     },
     resolve: {
       fallback: {
-        fs: false
+        fs: false,
       },
       extensions: ['.js', '.less'],
       alias: {
         'eximeebpms-commons-ui': path.resolve(
           __dirname,
-          'eximeebpms-commons-ui'
+          'eximeebpms-commons-ui',
         ),
         ui: path.resolve(__dirname, 'ui'),
         'eximeebpms-bpm-sdk-js': path.resolve(
           __dirname,
-          'eximeebpms-bpm-sdk-js'
+          'eximeebpms-bpm-sdk-js',
         ),
         'cam-common': path.resolve(__dirname, 'ui/common/scripts/module'),
         jquery: path.resolve(__dirname, 'node_modules/jquery'),
@@ -111,21 +111,21 @@ module.exports = (_env, argv = {}) => {
         // prevent`preact-markup`being tree shaken (transitive dependency of form-js
         'preact-markup': path.resolve(
           __dirname,
-          'node_modules/preact-markup/dist/preact-markup.umd.js'
+          'node_modules/preact-markup/dist/preact-markup.umd.js',
         ),
         // prevent `flatpickr` being tree shaken (transitive dependency of form-js)
         flatpickr: path.resolve(
           __dirname,
-          'node_modules/flatpickr/dist/flatpickr.js'
-        )
-      }
+          'node_modules/flatpickr/dist/flatpickr.js',
+        ),
+      },
     },
     module: {
       rules: [
         {
           test: /(\.html)|(\.svg)$/,
           resourceQuery: /raw/,
-          type: 'asset/source'
+          type: 'asset/source',
         },
         {
           test: /\.less$/i,
@@ -137,19 +137,19 @@ module.exports = (_env, argv = {}) => {
               options: {
                 lessOptions: {
                   globalVars: {
-                    'ce-banner-height': eeBuild ? '0' : '20px'
-                  }
-                }
-              }
-            }
-          ]
+                    'ce-banner-height': eeBuild ? '0' : '20px',
+                  },
+                },
+              },
+            },
+          ],
         },
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          use: ['babel-loader']
-        }
-      ]
+          use: ['babel-loader'],
+        },
+      ],
     },
     plugins: [
       new HtmlWebPackPlugin({
@@ -158,13 +158,13 @@ module.exports = (_env, argv = {}) => {
         appName: 'cockpit',
         template: path.resolve(
           __dirname,
-          'ui/cockpit/client/scripts/index.html'
+          'ui/cockpit/client/scripts/index.html',
         ),
         filename: 'app/cockpit/index.html',
         chunks: ['app/cockpit/eximeebpms-cockpit-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
-        version
+        version,
       }),
       new HtmlWebPackPlugin({
         minify: false,
@@ -175,7 +175,7 @@ module.exports = (_env, argv = {}) => {
         chunks: ['app/tasklist/eximeebpms-tasklist-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
-        version
+        version,
       }),
       new HtmlWebPackPlugin({
         minify: false,
@@ -186,7 +186,7 @@ module.exports = (_env, argv = {}) => {
         chunks: ['app/admin/eximeebpms-admin-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
-        version
+        version,
       }),
       new HtmlWebPackPlugin({
         minify: false,
@@ -194,60 +194,60 @@ module.exports = (_env, argv = {}) => {
         appName: 'welcome',
         template: path.resolve(
           __dirname,
-          'ui/welcome/client/scripts/index.html'
+          'ui/welcome/client/scripts/index.html',
         ),
         filename: 'app/welcome/index.html',
         chunks: ['app/welcome/eximeebpms-welcome-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
-        version
+        version,
       }),
       new MiniCssExtractPlugin({
         // both options are optional, similar to the same options in webpackOptions.output
         filename: `[name].css?bust=${version}`,
-        chunkFilename: `[id].css?bust=${version}`
+        chunkFilename: `[id].css?bust=${version}`,
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
             from: path.resolve(__dirname, 'public'),
-            to: './'
+            to: './',
           },
           {
             from: path.resolve(
               __dirname,
-              'node_modules/requirejs-angular-define/dist/ngDefine.js'
+              'node_modules/requirejs-angular-define/dist/ngDefine.js',
             ),
             to: './lib',
-            noErrorOnMissing: true
+            noErrorOnMissing: true,
           },
           {
             from: path.resolve(
               __dirname,
-              '../../node_modules/requirejs-angular-define/dist/ngDefine.js'
+              '../../node_modules/requirejs-angular-define/dist/ngDefine.js',
             ),
             to: './lib',
-            noErrorOnMissing: true
-          }
-        ]
+            noErrorOnMissing: true,
+          },
+        ],
       }),
       new webpack.DefinePlugin({
         EXIMEEBPMS_VERSION: `'${version}'`,
         EXIMEEBPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
         DEV_MODE: devMode,
-        _import: 'function(filePath) { return import(filePath) }' // dynamic import workaround
+        _import: 'function(filePath) { return import(filePath) }', // dynamic import workaround
       }),
       new webpack.ProvidePlugin({
         EXIMEEBPMS_EDITION: eeBuild ? '"EE"' : '"CE"',
-        DEV_MODE: devMode
+        DEV_MODE: devMode,
       }),
-      new ESLintPlugin()
+      new ESLintPlugin(),
     ],
     optimization: {
       // Avoids that imported modules are initialized for each chunk separately
       runtimeChunk: {
-        name: 'lib/runtime'
-      }
-    }
+        name: 'lib/runtime',
+      },
+    },
   };
 };

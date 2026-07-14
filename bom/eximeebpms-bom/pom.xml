@@ -32,6 +32,11 @@
     <dependencies>
       <!-- external dependencies -->
       <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>${version.hamcrest}</version>
+      </dependency>
+      <dependency>
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis</artifactId>
         <version>${version.mybatis}</version>

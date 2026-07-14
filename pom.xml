@@ -26,6 +26,7 @@
     <version.mybatis>3.5.19</version.mybatis>
     <version.joda-time>2.14.0</version.joda-time>
     <version.uuid-generator>5.2.0</version.uuid-generator>
+    <version.hamcrest>3.0</version.hamcrest>
     <version.feel-scala>1.19.3</version.feel-scala>
     <sonar.organization>eximeebpms</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>

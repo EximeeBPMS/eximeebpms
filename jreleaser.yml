@@ -1,0 +1,35 @@
+project:
+  name: EximeeBPMS
+  description: BPMN process automation
+  links:
+    homepage: https://eximeebpms.org
+  languages:
+    java:
+      groupId: org.eximeebpms.bpm
+      version: '17'
+
+deploy:
+  maven:
+    mavenCentral:
+      MavenCentral:
+        active: RELEASE
+        applyMavenCentralRules: true
+        # Artifacts are already GPG-signed by maven-gpg-plugin during the build (release
+        # profile, verify phase) before staging - JReleaser doesn't need to sign anything
+        # itself, only upload what's already there.
+        sign: false
+        # Upload only, don't auto-publish (default stage is FULL = upload + publish).
+        # The deployment sits in Central Publisher Portal awaiting manual confirmation:
+        # https://central.sonatype.com/publishing/deployments
+        stage: UPLOAD
+        url: https://central.sonatype.com/api/v1/publisher
+        stagingRepositories:
+          - target/staging-deploy
+        retryDelay: 30
+        maxRetries: 99
+    # PomChecker still runs, but non-strict: our POMs inherit <description>/<url> from their
+    # parent rather than declaring them explicitly, which strict mode rejects. Same accepted
+    # trade-off as operaton (github.com/operaton/operaton/issues/293), a sibling Camunda 7 fork
+    # publishing the same shape of reactor through JReleaser.
+    pomchecker:
+      strict: false

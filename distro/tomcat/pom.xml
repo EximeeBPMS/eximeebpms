@@ -46,5 +46,18 @@
         <module>webapp-jakarta</module>
       </modules>
     </profile>
+    <profile>
+      <!-- Pulls in just `assembly`, mirroring the `distro` profile above, so
+        clients/java/client's test-scope dependency on eximeebpms-tomcat-assembly resolves
+        when only sonatype-oss-release is active (no distro-* profile alongside it). Not
+        published: see maven.deploy.skip below and in distro/tomcat/assembly's own pom. -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+      <modules>
+        <module>assembly</module>
+      </modules>
+    </profile>
   </profiles>
 </project>

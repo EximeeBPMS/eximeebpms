@@ -22,6 +22,13 @@ jobs:
 
     runs-on: github-actions-runner-new
     steps:
+      - name: Set isolated local repo
+        run: |
+          # github-actions-runner-new is shared with build.yml/snapshots-on-main.yml/etc.
+          # An isolated, per-run local repo avoids corrupting ~/.m2/repository metadata
+          # (e.g. maven-metadata-local.xml) via concurrent writes from other workflows.
+          echo "MAVEN_REPO_LOCAL=${{ runner.temp }}/m2-repo-${{ github.run_id }}" >> $GITHUB_ENV
+
       - name: Check out the latest main branch
         uses: actions/checkout@v4
         with:
@@ -63,7 +70,7 @@ jobs:
 
       - name: Build and deploy snapshots
         run: |
-          ./mvnw clean deploy -B -Prelease,sonatype-oss-release -DskipTests --settings ~/.m2-snapshot-release/settings.xml
+          ./mvnw clean deploy -B -Prelease,sonatype-oss-release -DskipTests --settings ~/.m2-snapshot-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}"
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 

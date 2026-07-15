@@ -9,6 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 2
     # Delay patch-level PRs by 5 days after release so a compromised/broken
     # patch has time to get pulled or flagged upstream before we auto-merge
     # it (see auto-merge.yml). Does not apply to Dependabot security updates
@@ -45,44 +46,11 @@ updates:
           - "org.assertj*"
           - "org.xmlunit:*"
 
-  - package-ecosystem: "npm"
-    directory: "/webapps/frontend"  # Location of package.json
-    schedule:
-      interval: "weekly"
-    cooldown:
-      semver-patch-days: 5
-    groups:
-      webpack:
-        patterns:
-          - "webpack*"
-          - "*-loader"
-          - "*-webpack-plugin"
-      eslint:
-        patterns:
-          - "eslint*"
-          - "prettier"
-      babel:
-        patterns:
-          - "@babel/*"
-          - "babel-loader"
-      bpmn-dmn-js:
-        patterns:
-          - "bpmn-js"
-          - "camunda-dmn-js"
-          - "dmn-js"
-          - "dmn-js-*"
-          - "@bpmn-io/*"
-    # angular*, bootstrap, jquery are intentionally left out of any group and
-    # off the auto-merge allowlist (see auto-merge.yml) - legacy frontend
-    # stack, frozen on purpose and patched deliberately via the security
-    # notice process rather than routine bumps.
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    cooldown:
-      semver-patch-days: 5
+    open-pull-requests-limit: 2
     groups:
       github-actions:
         patterns:

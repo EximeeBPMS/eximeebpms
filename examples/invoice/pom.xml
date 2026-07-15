@@ -30,4 +30,15 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <!-- Built only because it's a sibling of invoice-jakarta under the examples
+        aggregator (see examples/pom.xml); not published. -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

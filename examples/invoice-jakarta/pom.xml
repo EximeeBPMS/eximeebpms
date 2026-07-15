@@ -219,4 +219,16 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <!-- Built (as a dependency of spring-boot-starter's own qa submodule) but not
+        published: not a library meant for public consumption. See root pom's
+        sonatype-oss-release profile. -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

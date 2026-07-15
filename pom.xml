@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -182,13 +182,35 @@
       <!--
         Generates an aggregate CycloneDX SBOM for all production modules.
         Run standalone: ./mvnw package -Psbom -DskipTests
-        Excludes qa, test-utils and examples (not shipped artifacts).
+
+        qa, test-utils and examples aren't shipped artifacts, but several kept modules have
+        real (compile/test-scope) dependencies reaching into them regardless - this used to
+        be satisfied for free because sbom always ran combined with a larger profile set
+        that happened to include them. Now that it runs standalone, they're listed here
+        explicitly:
+          - qa: distro/wildfly/distro has a scope=provided, type=pom dependency on
+            eximeebpms-qa purely to force build order (see that module's own comment).
+            qa/pom.xml's own "distro" profile is activeByDefault, so listing `qa` here
+            also pulls in its full integration-test tree (wildfly/tomcat runtimes,
+            selenium-based webapp ITs, DB migration fixtures, ...), which in turn needs
+            javaee/ejb-client and test-utils/junit5-extension - this doesn't affect what's
+            published anywhere (this step only packages, never deploys), so it's just
+            extra build time, not a correctness concern.
+          - javaee/ejb-client: needed by qa/integration-tests-engine (see above).
+          - test-utils/archunit, test-utils/testcontainers: real test-scope dependencies of
+            engine and several model-api/engine-* modules (ArchUnit architecture tests).
+          - test-utils/assert: a scope=compile dependency of spring-boot-starter/starter-test;
+            its own qa submodule needs test-utils/junit5-extension, which in turn needs
+            test-utils/junit5-extension-dmn.
+          - examples: distro/tomcat/distro, distro/wildfly/distro and distro/run/modules/example
+            all depend on eximeebpms-example-invoice-jakarta.
       -->
       <modules>
         <module>spring-boot-starter</module>
         <module>quarkus-extension</module>
 
         <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client</module>
         <module>javaee/ejb-client-jakarta</module>
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
@@ -224,6 +246,15 @@
         <module>distro/webjar</module>
 
         <module>clients/java</module>
+
+        <!-- built only, to satisfy the dependencies explained above -->
+        <module>qa</module>
+        <module>test-utils/archunit</module>
+        <module>test-utils/testcontainers</module>
+        <module>test-utils/assert</module>
+        <module>test-utils/junit5-extension</module>
+        <module>test-utils/junit5-extension-dmn</module>
+        <module>examples</module>
       </modules>
       <build>
         <plugins>
@@ -353,6 +384,28 @@
     </profile>
 
     <profile>
+      <!-- Scope of what gets published to Maven Central: consumable libraries only. Excludes
+        qa, examples, distro/license-book, distro/jboss, distro/tomcat and distro/run - none of
+        those are libraries meant for public consumption, and staging them (plus javadoc/sources)
+        pushed the JReleaser upload bundle past the ~2GB JVM array-size ceiling in
+        Files.readAllBytes, which reliably OOM'd (see BPMS-385). Verified locally: this trimmed
+        scope stages ~183MB across 2048 files, vs. multiple GB before.
+
+        Three module trees from that excluded set are still reachable below - distro/license-book,
+        distro/tomcat and examples - because kept modules have a real build-time dependency on
+        one of their children (clients/java/client on eximeebpms-tomcat-assembly, itself needing
+        distro/license-book; spring-boot-starter's own qa submodule on
+        eximeebpms-example-invoice-jakarta). They still need to be built so those dependencies
+        resolve, but each carries its own sonatype-oss-release-scoped profile (or, for
+        distro/tomcat, a same-named profile mirroring its existing "distro" one) setting
+        maven.deploy.skip=true, so none of them is actually staged for Central.
+
+        distro/tomcat and examples are listed by their aggregator path, not their specific child,
+        because other profiles active alongside this one during "Release prepare"/"Release
+        perform" (distro-tomcat, distro-serverless, check-webapps, ...) already reach the same
+        child module via a different module path; listing that same aggregator path here instead
+        of a second, different path to the same child avoids Maven's reactor rejecting it as a
+        duplicate project. -->
       <id>sonatype-oss-release</id>
       <modules>
         <module>spring-boot-starter</module>
@@ -375,16 +428,15 @@
         <module>javaee/ejb-client-jakarta</module>
 
         <module>webapps</module>
-        <module>examples</module>
 
         <module>engine-plugins</module>
 
-        <module>distro/license-book</module>
-        <module>distro/jboss</module>
-        <module>distro/tomcat</module>
         <module>distro/sql-script</module>
-        <module>distro/run</module>
         <module>distro/webjar</module>
+        <!-- built only, not deployed - see comment above -->
+        <module>distro/license-book</module>
+        <module>distro/tomcat</module>
+        <module>examples</module>
 
         <module>clients/java</module>
 
@@ -393,8 +445,6 @@
         <module>test-utils/assert</module>
         <module>test-utils/testcontainers</module>
         <module>test-utils/archunit</module>
-
-        <module>qa</module>
 
         <module>internal-dependencies</module>
         <module>database</module>

@@ -3,7 +3,8 @@ name: build
 on:
   # Regular PRs use pull_request as before - unchanged, no elevated trust.
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - '**'
   # PRs opened by Dependabot cannot be dispatched to self-hosted runners
   # under plain pull_request - GitHub queues them forever regardless of
   # runner availability. pull_request_target runs with the trusted base-repo
@@ -12,7 +13,16 @@ on:
   # human-authored PRs keep building under plain pull_request without
   # base-repo secrets exposed to their (untrusted-until-reviewed) code.
   pull_request_target:
-    branches: [ "main" ]
+    branches:
+      - '**'
+  push:
+    branches:
+    - main
+
+permissions:
+  contents: read
+  checks: write
+  id-token: write
 
 concurrency:
   # github.ref resolves to the base branch under pull_request_target, not a
@@ -46,13 +56,13 @@ jobs:
       skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
       - name: Checkout PR code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
           # pull_request_target defaults to checking out the base branch;
           # pin the actual PR head so Dependabot's proposed changes get
           # built. github.sha already matches the correct commit for the
-          # regular pull_request event, so this is a no-op for that.
+          # regular pull_request/push events, so this is a no-op for those.
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Get list of changed files
@@ -156,13 +166,13 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v5.4.0
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -186,7 +196,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache SonarQube packages
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -296,14 +306,14 @@ jobs:
 
       - name: Publish Test Report
         if: always()
-        uses: mikepenz/action-junit-report@d9f48fc87bc235f7e214acf696ca5abc0a986f16 # v6.4.2
+        uses: mikepenz/action-junit-report@v6.4.2
         with:
           report_paths: ${{ github.workspace }}/**/target/surefire-reports/*.xml
           require_passed_tests: true
 
       - name: Upload Surefire Reports
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: surefire-reports
           path: ${{ github.workspace }}/**/target/surefire-reports/**

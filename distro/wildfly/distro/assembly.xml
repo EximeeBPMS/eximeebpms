@@ -14,6 +14,7 @@
   <dependencySets>
 
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <unpack>true</unpack>
       <includes>
         <include>org.eximeebpms.bpm.wildfly:eximeebpms-wildfly-assembly</include>
@@ -22,6 +23,7 @@
     </dependencySet>
 
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory />
       <unpack>true</unpack>
       <unpackOptions>
@@ -35,6 +37,7 @@
     </dependencySet>
 
     <dependencySet>
+        <useProjectArtifact>false</useProjectArtifact>
         <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
         <includes>
             <include>org.eximeebpms.bpm:eximeebpms-engine-rest-jakarta:war:*</include>
@@ -43,6 +46,7 @@
     </dependencySet>
 
     <dependencySet>
+        <useProjectArtifact>false</useProjectArtifact>
         <includes>
           <include>org.eximeebpms.bpm.webapp:eximeebpms-webapp-wildfly:war:*</include>
         </includes>
@@ -50,28 +54,11 @@
     </dependencySet>
 
     <dependencySet>
+        <useProjectArtifact>false</useProjectArtifact>
         <includes>
           <include>org.eximeebpms.bpm.example:eximeebpms-example-invoice-jakarta:war:*</include>
         </includes>
         <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments</outputDirectory>
-    </dependencySet>
-
-    <dependencySet>
-      <outputDirectory>server/wildfly-${version.wildfly}/modules/org/eximeebpms/bpm/engine/plugins/events/kafka/main</outputDirectory>
-      <useProjectArtifact>false</useProjectArtifact>
-      <useTransitiveDependencies>false</useTransitiveDependencies>
-      <includes>
-        <include>org.eximeebpms.bpm:eximeebpms-engine-plugin-events-kafka:jar</include>
-        <include>org.apache.kafka:kafka-clients:jar</include>
-        <include>org.lz4:lz4-java:jar</include>
-        <include>org.xerial.snappy:snappy-java:jar</include>
-        <include>com.github.luben:zstd-jni:jar</include>
-        <include>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:*</include>
-        <include>com.fasterxml.jackson.core:jackson-databind:jar</include>
-        <include>com.fasterxml.jackson.core:jackson-core:jar</include>
-        <include>com.fasterxml.jackson.core:jackson-annotations:jar</include>
-        <include>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar</include>
-      </includes>
     </dependencySet>
 
   </dependencySets>

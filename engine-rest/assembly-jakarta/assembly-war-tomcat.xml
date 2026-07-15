@@ -39,6 +39,14 @@
         <!-- Resteasy -->
         <include>org.jboss.resteasy:resteasy-core</include>
 
+        <!-- GraalJS "javascript" scripting engine (replacement for Nashorn).
+             js-scriptengine only brings the JSR-223 facade (+ polyglot API);
+             js-language/truffle-runtime bring the actual language runtime
+             (truffle-api, regex, icu4j, ...) needed at runtime. -->
+        <include>org.graalvm.js:js-scriptengine</include>
+        <include>org.graalvm.js:js-language</include>
+        <include>org.graalvm.truffle:truffle-runtime</include>
+
       </includes>
       <excludes>
         <exclude>org.eximeebpms.bpm:eximeebpms-engine-rest-core-jakarta:jar:tests</exclude>

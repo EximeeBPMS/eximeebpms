@@ -57,6 +57,14 @@ echo Java version is "$JAVA_VERSION"
     exit 1
   fi
 
+  # silence JDK restricted native access warning raised by GraalJS (Truffle); available since JDK 17
+  JAVA_OPTS="$JAVA_OPTS --enable-native-access=ALL-UNNAMED"
+
+  # silence JDK sun.misc.Unsafe deprecation warning raised by GraalJS (Truffle); flag only exists since JDK 23
+  if [[ "$JAVA_VERSION" -ge "23" ]]; then
+    JAVA_OPTS="$JAVA_OPTS --sun-misc-unsafe-memory-access=allow"
+  fi
+
   if [ "x$JAVA_OPTS" != "x" ]; then
     echo JAVA_OPTS: $JAVA_OPTS
   fi

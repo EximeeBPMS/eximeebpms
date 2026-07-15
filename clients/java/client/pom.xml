@@ -270,6 +270,9 @@
             <goals>
               <goal>run</goal>
             </goals>
+            <configuration>
+              <wait>false</wait>
+            </configuration>
           </execution>
         </executions>
         <configuration>
@@ -320,7 +323,6 @@
               <type>war</type>
             </deployable>
           </deployables>
-          <wait>false</wait>
         </configuration>
       </plugin>
 

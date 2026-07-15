@@ -30,6 +30,7 @@
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
         <version>${version.graal.js}</version>
+        <type>pom</type>
       </dependency>
 
       <dependency>

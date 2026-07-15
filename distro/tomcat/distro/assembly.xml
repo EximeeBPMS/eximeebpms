@@ -13,6 +13,7 @@
   <dependencySets>
     <dependencySet>
       <unpack>true</unpack>
+      <useProjectArtifact>false</useProjectArtifact>
       <includes>
         <include>org.eximeebpms.bpm.tomcat:eximeebpms-tomcat-assembly</include>
       </includes>
@@ -22,6 +23,7 @@
 
     <dependencySet>
       <unpack>true</unpack>
+      <useProjectArtifact>false</useProjectArtifact>
       <unpackOptions>
         <excludes>
           <exclude>**/META-INF/**</exclude>
@@ -38,6 +40,7 @@
         </includes>
         <outputDirectory>server/apache-tomcat-${version.tomcat}/webapps/engine-rest</outputDirectory>
         <unpack>true</unpack>
+        <useProjectArtifact>false</useProjectArtifact>
     </dependencySet>
 
     <dependencySet>
@@ -46,6 +49,7 @@
         </includes>
         <outputDirectory>server/apache-tomcat-${version.tomcat}/webapps/eximeebpms</outputDirectory>
         <unpack>true</unpack>
+        <useProjectArtifact>false</useProjectArtifact>
     </dependencySet>
 
     <dependencySet>
@@ -54,6 +58,7 @@
         </includes>
         <outputDirectory>server/apache-tomcat-${version.tomcat}/webapps/eximeebpms-invoice</outputDirectory>
         <unpack>true</unpack>
+        <useProjectArtifact>false</useProjectArtifact>
     </dependencySet>
 
     <dependencySet>

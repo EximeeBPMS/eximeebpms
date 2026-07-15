@@ -12,6 +12,7 @@
 
   <dependencySets>
    <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>org.eximeebpms.bpm:license-book:zip</include>
@@ -19,6 +20,7 @@
       <unpack>true</unpack>
     </dependencySet>
    <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>server/</outputDirectory>
       <includes>
         <include>org.apache.tomcat:tomcat:tar.gz</include>
@@ -31,6 +33,7 @@
       <unpack>true</unpack>
     </dependencySet>
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>server/apache-tomcat-${version.tomcat}/lib</outputDirectory>
       <includes>
 
@@ -50,11 +53,15 @@
         <include>org.apache.groovy:groovy-templates:jar:*</include>
         <include>org.apache.groovy:groovy-dateutil:jar:*</include>
         <include>org.apache.groovy:groovy-datetime:jar:*</include>
+        <!-- GraalJS "javascript" engine and its full runtime (language impl, Truffle,
+             polyglot API, ICU, regex). The GraalVM SDK was split into multiple
+             artifacts/groupIds since 22.x (no more single "graal-sdk"/"com.ibm.icu:icu4j"). -->
         <include>org.graalvm.js:*</include>
-        <include>org.graalvm.regex:regex:jar:*</include>
-        <include>org.graalvm.truffle:truffle-api:jar:*</include>
-        <include>org.graalvm.sdk:graal-sdk:jar:*</include>
-        <include>com.ibm.icu:icu4j:jar:*</include>
+        <include>org.graalvm.polyglot:*</include>
+        <include>org.graalvm.regex:*</include>
+        <include>org.graalvm.truffle:*</include>
+        <include>org.graalvm.sdk:*</include>
+        <include>org.graalvm.shadowed:*</include>
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 
@@ -88,6 +95,7 @@
     </dependencySet>
 
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>lib/</outputDirectory>
       <includes>
 
@@ -107,11 +115,15 @@
         <include>org.apache.groovy:groovy-templates:jar:*</include>
         <include>org.apache.groovy:groovy-dateutil:jar:*</include>
         <include>org.apache.groovy:groovy-datetime:jar:*</include>
+        <!-- GraalJS "javascript" engine and its full runtime (language impl, Truffle,
+             polyglot API, ICU, regex). The GraalVM SDK was split into multiple
+             artifacts/groupIds since 22.x (no more single "graal-sdk"/"com.ibm.icu:icu4j"). -->
         <include>org.graalvm.js:*</include>
-        <include>org.graalvm.regex:regex:jar:*</include>
-        <include>org.graalvm.truffle:truffle-api:jar:*</include>
-        <include>org.graalvm.sdk:graal-sdk:jar:*</include>
-        <include>com.ibm.icu:icu4j:jar:*</include>
+        <include>org.graalvm.polyglot:*</include>
+        <include>org.graalvm.regex:*</include>
+        <include>org.graalvm.truffle:*</include>
+        <include>org.graalvm.sdk:*</include>
+        <include>org.graalvm.shadowed:*</include>
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 

@@ -95,6 +95,24 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- GraalJS engine for "javascript" scripting support (replaces the JDK-bundled
+         Nashorn engine, which was removed after JDK 14). Bundled here so that the
+         standalone Tomcat WAR (built without the full Tomcat distro) still supports
+         JavaScript scripting; WildFly resolves this via the "js-scriptengine" module
+         referenced in the manifest Dependencies entry below instead. -->
+    <dependency>
+      <groupId>org.graalvm.js</groupId>
+      <artifactId>js</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.graalvm.js</groupId>
+      <artifactId>js-scriptengine</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
   <build>

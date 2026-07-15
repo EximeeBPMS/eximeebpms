@@ -82,19 +82,20 @@
       <artifactId>jruby-complete</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
+      <type>pom</type>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -148,7 +149,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>jdk-15-and-onwards</id>
       <activation>
@@ -191,7 +192,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <!-- check for api differences between latest minor release -->
     <profile>
       <id>check-api-compatibility</id>

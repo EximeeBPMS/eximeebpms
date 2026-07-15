@@ -57,6 +57,7 @@ import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.eximeebpms.bpm.engine.impl.pvm.process.TransitionImpl;
 import org.eximeebpms.bpm.engine.impl.test.TestHelper;
+import org.eximeebpms.bpm.engine.impl.util.xml.Parser;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.repository.DeploymentWithDefinitions;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
@@ -111,6 +112,8 @@ public class BpmnParseTest {
     for (org.eximeebpms.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
       repositoryService.deleteDeployment(deployment.getId(), true);
     }
+    System.clearProperty("jdk.xml.elementAttributeLimit");
+    Parser.resetSaxParserFactory();
   }
 
   @Test

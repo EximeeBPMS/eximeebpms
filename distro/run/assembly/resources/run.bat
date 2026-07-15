@@ -49,6 +49,7 @@ REM Remove the surrounding quotes
 SET JAVA_VERSION=%JAVA_VERSION:"=%
 ECHO Java version is %JAVA_VERSION%
 FOR /f "delims=. tokens=1" %%v in ("%JAVA_VERSION%") do (
+  SET JAVA_MAJOR_VERSION=%%v
   IF %%v LSS %EXPECTED_JAVA_VERSION% (
     ECHO You must use at least JDK 17 to start Camunda Platform Run.
     GOTO :EOF
@@ -56,6 +57,14 @@ FOR /f "delims=. tokens=1" %%v in ("%JAVA_VERSION%") do (
 )
 REM revert PATH variable to its initial value
 SET "PATH=%RESTORE_PATH%"
+
+REM silence JDK restricted native access warning raised by GraalJS (Truffle); available since JDK 17
+SET "JAVA_OPTS=%JAVA_OPTS% --enable-native-access=ALL-UNNAMED"
+
+REM silence JDK sun.misc.Unsafe deprecation warning raised by GraalJS (Truffle); flag only exists since JDK 23
+IF %JAVA_MAJOR_VERSION% GEQ 23 (
+  SET "JAVA_OPTS=%JAVA_OPTS% --sun-misc-unsafe-memory-access=allow"
+)
 
 IF NOT "x%JAVA_OPTS%" == "x" (
   ECHO JAVA_OPTS: %JAVA_OPTS%

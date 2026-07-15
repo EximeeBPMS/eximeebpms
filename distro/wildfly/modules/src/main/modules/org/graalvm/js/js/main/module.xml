@@ -1,17 +1,11 @@
+<!-- org.graalvm.js:js is a pom-only aggregator artifact (no jar is published for it in
+     GraalVM 25.x), so this module carries no resources of its own. It only re-exports the
+     real language runtime jars (js-language, truffle-runtime) it aggregates. -->
 <module xmlns="urn:jboss:module:1.0" name="org.graalvm.js.js">
-  <resources>
-    <resource-root path="js-@version.graal.js@.jar" />
-  </resources>
-
   <dependencies>
     <module name="java.base" />
-    <module name="java.management" />
-    <module name="jdk.unsupported" />
-    <module name="sun.jdk" />
     <module name="org.eximeebpms.spin.eximeebpms-spin-core" />
-    <module name="org.graalvm.regex.regex" services="export" export="true" />
-    <module name="org.graalvm.truffle.truffle-api" services="export" export="true" />
-    <module name="org.graalvm.sdk.graal-sdk" services="export" export="true" />
-    <module name="com.ibm.icu.icu4j" />
+    <module name="org.graalvm.js.js-language" services="export" export="true" />
+    <module name="org.graalvm.truffle.truffle-runtime" services="export" export="true" />
   </dependencies>
 </module>

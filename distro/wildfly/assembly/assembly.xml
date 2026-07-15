@@ -12,6 +12,7 @@
 
   <dependencySets>
    <dependencySet>
+     <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>org.eximeebpms.bpm:license-book:zip</include>
@@ -19,6 +20,7 @@
       <unpack>true</unpack>
     </dependencySet>
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>server</outputDirectory>
       <includes>
         <include>org.wildfly:wildfly-dist:tar.gz:${version.wildfly}</include>
@@ -36,6 +38,7 @@
       </unpackOptions>      
     </dependencySet>
     <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>lib</outputDirectory>
       <includes>
         <include>org.eximeebpms.bpm.javaee:eximeebpms-ejb-client-jakarta:jar:${project.version}</include>
@@ -53,20 +56,32 @@
         <include>org.apache.groovy:groovy-dateutil:jar:*</include>
         <include>org.apache.groovy:groovy-datetime:jar:*</include>
         <include>org.graalvm.js:*</include>
-        <include>org.graalvm.regex:regex:jar:*</include>
-        <include>org.graalvm.truffle:truffle-api:jar:*</include>
-        <include>org.graalvm.sdk:graal-sdk:jar:*</include>
-        <include>com.ibm.icu:icu4j:jar:*</include>
+        <include>org.graalvm.regex:*</include>
+        <include>org.graalvm.truffle:*</include>
+        <include>org.graalvm.sdk:*</include>
+        <include>org.graalvm.polyglot:*</include>
+        <include>org.graalvm.shadowed:*</include>
 
-        <include>org.apache.kafka:kafka-clients:jar:*</include>
-        <include>org.lz4:lz4-java:jar:*</include>
-        <include>org.xerial.snappy:snappy-java:jar:*</include>
-        <include>com.github.luben:zstd-jni:jar:*</include>
         <include>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:*</include>
         <include>com.fasterxml.jackson.core:jackson-databind:jar</include>
         <include>com.fasterxml.jackson.core:jackson-core:jar</include>
         <include>com.fasterxml.jackson.core:jackson-annotations:jar</include>
-        <include>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar</include>
+      </includes>
+    </dependencySet>
+
+    <!-- the kafka events plugin and its runtime dependencies are declared with
+      scope "provided" (they are bundled as JBoss modules, not on the default
+      classpath), so they need their own dependencySet with a matching scope -->
+    <dependencySet>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>lib</outputDirectory>
+      <scope>provided</scope>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <includes>
+        <include>org.apache.kafka:kafka-clients:jar:*</include>
+        <include>at.yawk.lz4:lz4-java:jar:*</include>
+        <include>org.xerial.snappy:snappy-java:jar:*</include>
+        <include>com.github.luben:zstd-jni:jar:*</include>
       </includes>
     </dependencySet>
   </dependencySets>

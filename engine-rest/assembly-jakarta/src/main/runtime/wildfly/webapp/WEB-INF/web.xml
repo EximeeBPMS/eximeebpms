@@ -5,6 +5,14 @@
 
   <display-name>EximeeBPMS rest api</display-name>
 
+  <!-- explicitly declare Jackson as the JSON provider (all DTOs already use Jackson
+       annotations) so RESTEasy doesn't have to auto-detect and emit its noisy
+       WFLYRS0018 warning about disabling Jakarta JSON Binding -->
+  <context-param>
+    <param-name>resteasy.preferJacksonOverJsonB</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
   <!-- Fetch And Lock Handler (long polling): -->
 
   <!-- Unique Worker Request (default value: false)

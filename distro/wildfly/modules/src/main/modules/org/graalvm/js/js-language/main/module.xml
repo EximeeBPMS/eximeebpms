@@ -1,0 +1,16 @@
+<module xmlns="urn:jboss:module:1.0" name="org.graalvm.js.js-language">
+  <resources>
+    <resource-root path="js-language-@version.graal.js@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+    <module name="java.logging" />
+    <module name="jdk.unsupported" />
+    <module name="sun.jdk" />
+    <module name="org.graalvm.regex.regex" services="export" export="true" />
+    <module name="org.graalvm.truffle.truffle-api" services="export" export="true" />
+    <module name="org.graalvm.polyglot.polyglot" services="export" export="true" />
+    <module name="org.graalvm.shadowed.icu4j" export="true" />
+  </dependencies>
+</module>

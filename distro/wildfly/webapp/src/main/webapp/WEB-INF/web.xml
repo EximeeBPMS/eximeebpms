@@ -7,6 +7,14 @@
 
   <display-name>EximeeBPMS webapp</display-name>
 
+  <!-- explicitly declare Jackson as the JSON provider (all DTOs already use Jackson
+       annotations) so RESTEasy doesn't have to auto-detect and emit its noisy
+       WFLYRS0018 warning about disabling Jakarta JSON Binding -->
+  <context-param>
+    <param-name>resteasy.preferJacksonOverJsonB</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
   <!-- cockpit bootstrap listener -->
   <listener>
     <listener-class>org.eximeebpms.bpm.cockpit.impl.web.bootstrap.CockpitContainerBootstrap</listener-class>

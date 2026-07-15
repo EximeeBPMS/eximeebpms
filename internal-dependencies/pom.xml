@@ -29,11 +29,6 @@
         <version>${version.gson}</version>
       </dependency>
       <dependency>
-        <groupId>cglib</groupId>
-        <artifactId>cglib</artifactId>
-        <version>2.2.2</version>
-      </dependency>
-      <dependency>
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
         <version>${version.hikaricp}</version>
@@ -180,6 +175,7 @@
       <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
+        <type>pom</type>
         <version>${version.graal.js}</version>
       </dependency>
       <dependency>

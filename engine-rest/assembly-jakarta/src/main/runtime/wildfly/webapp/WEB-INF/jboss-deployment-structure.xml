@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-deployment-structure>
   <deployment>
-    <exclusions>
-      <module name="org.jboss.resteasy.resteasy-jackson-provider" />
-      <module name="org.jboss.resteasy.resteasy-jettison-provider" />
-    </exclusions>
+    <!-- resteasy-jackson-provider (Jackson 1.x) and resteasy-jettison-provider modules
+         were removed from modern RESTEasy/WildFly; excluding them used to log a
+         harmless but noisy WFLYSRV0274 warning since there was nothing to exclude -->
   </deployment>
 </jboss-deployment-structure>

@@ -14,9 +14,11 @@ on:
         description: 'Java version to use'
         type: choice
         required: true
-        default: '["21"]'
+        default: '["21", "25"]'
         options:
           - '["21"]'
+          - '["25"]'
+          - '["21", "25"]'
       testsuite:
         description: 'Integration test suite to run'
         type: choice
@@ -75,7 +77,7 @@ jobs:
       # queue.
       max-parallel: 1
       matrix:
-        java: ${{ fromJson(github.event.inputs.java_version || '["21"]') }}
+        java: ${{ fromJson(github.event.inputs.java_version || '["21", "25"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps", "instance-migration", "rolling-update", "old-engine"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql", "mysql", "sqlserver"]') }}

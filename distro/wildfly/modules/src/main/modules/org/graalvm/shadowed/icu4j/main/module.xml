@@ -1,0 +1,14 @@
+<module xmlns="urn:jboss:module:1.0" name="org.graalvm.shadowed.icu4j">
+  <resources>
+    <resource-root path="icu4j-@version.graal.js@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+    <module name="java.desktop" />
+    <module name="java.logging" />
+    <module name="sun.jdk" />
+    <module name="org.graalvm.sdk.nativeimage" services="export" export="true" />
+    <module name="org.graalvm.shadowed.xz" export="true" />
+  </dependencies>
+</module>

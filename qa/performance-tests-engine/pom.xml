@@ -72,6 +72,36 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
+            <configuration>
+              <!-- this shaded jar is an internal test tool, not a published artifact,
+                   so it doesn't need an attached sources jar (avoids failed sources
+                   downloads for -SNAPSHOT deps and related overlap warnings) -->
+              <createSourcesJar>false</createSourcesJar>
+              <!-- eximeebpms-engine already bundles (shades) these dependencies into its own
+                   jar, so re-including them here as separate jars only produces duplicate
+                   class/resource warnings without changing runtime behavior -->
+              <artifactSet>
+                <excludes>
+                  <exclude>commons-logging:commons-logging</exclude>
+                  <exclude>javax.validation:validation-api</exclude>
+                  <exclude>com.fasterxml.uuid:java-uuid-generator</exclude>
+                  <exclude>org.jspecify:jspecify</exclude>
+                  <exclude>org.apache.groovy:groovy-jsr223</exclude>
+                </excludes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>module-info.class</exclude>
+                    <exclude>META-INF/versions/*/module-info.class</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
             <executions>
               <execution>
                 <phase>package</phase>

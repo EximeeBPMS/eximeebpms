@@ -14,7 +14,7 @@
     <artifactId>eximeebpms-tomcat</artifactId>
     <version>1.4.0-SNAPSHOT</version>
   </parent>
-  
+
   <properties>
     <skip-third-party-bom>false</skip-third-party-bom>
   </properties>
@@ -83,6 +83,7 @@
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>org.graalvm.js</groupId>

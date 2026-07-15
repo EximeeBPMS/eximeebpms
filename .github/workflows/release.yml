@@ -26,6 +26,10 @@ jobs:
       - name: Determine user and set secret
         run: |
           echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
+          # github-actions-runner-new is shared with build.yml/snapshots-on-main.yml/etc.
+          # An isolated, per-run local repo avoids corrupting ~/.m2/repository metadata
+          # (e.g. maven-metadata-local.xml) via concurrent writes from other workflows.
+          echo "MAVEN_REPO_LOCAL=${{ runner.temp }}/m2-repo-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: Check out the code
         uses: actions/checkout@v7
@@ -76,7 +80,7 @@ jobs:
 
       - name: Release prepare
         run: |
-          ./mvnw release:prepare -B --settings ~/.m2-release/settings.xml -Darguments="-DskipTests" \
+          ./mvnw release:prepare -B --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -Darguments="-DskipTests -Dmaven.repo.local=${MAVEN_REPO_LOCAL}" \
             -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
@@ -87,19 +91,31 @@ jobs:
 
       - name: Release perform
         run: |
-          ./mvnw release:perform --settings ~/.m2-release/settings.xml -Dgoals="" \
-          -Darguments="-DskipTests"
+          ./mvnw release:perform --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -Dgoals="" \
+          -Darguments="-DskipTests -Dmaven.repo.local=${MAVEN_REPO_LOCAL}"
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
-      - name: Deploy base libs
+      - name: Deploy base libs (stage locally, no network)
         run: |
           cd target/checkout
-          ./mvnw deploy -Prelease,sonatype-oss-release,sbom -B --settings ~/.m2-release/settings.xml -DskipTests
+          ./mvnw deploy -Prelease,sonatype-oss-release,sbom -B --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -DskipTests \
+            -DaltDeploymentRepository=local::file:$(pwd)/target/staging-deploy
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+
+      - name: Publish staged artifacts to Maven Central (JReleaser)
+        uses: jreleaser/release-action@v2
+        with:
+          working-directory: target/checkout
+          arguments: deploy
+        env:
+          JRELEASER_PROJECT_VERSION: ${{ github.event.inputs.release_version }}
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_MAVENCENTRAL_USERNAME: ${{ secrets.CPP_USERNAME }}
+          JRELEASER_MAVENCENTRAL_PASSWORD: ${{ secrets.CPP_PASSWORD }}
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3

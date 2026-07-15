@@ -1,0 +1,21 @@
+project:
+  name: EximeeBPMS
+  description: BPMN process automation
+  links:
+    homepage: https://eximeebpms.org
+  languages:
+    java:
+      groupId: org.eximeebpms.bpm
+      version: '17'
+
+deploy:
+  maven:
+    mavenCentral:
+      MavenCentral:
+        active: RELEASE
+        applyMavenCentralRules: true
+        url: https://central.sonatype.com/api/v1/publisher
+        stagingRepositories:
+          - target/staging-deploy
+        retryDelay: 30
+        maxRetries: 99

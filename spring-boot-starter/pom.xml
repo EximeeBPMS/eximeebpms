@@ -77,6 +77,24 @@
       </modules>
     </profile>
     <profile>
+      <!-- Activating this profile at the reactor root deactivates the activeByDefault
+        distro/distro-ce profiles above (Maven only auto-deactivates a POM's own
+        activeByDefault profiles when another profile declared in that same POM is
+        explicitly activated). Excludes starter-qa: those are integration-test webapps,
+        not shipped artifacts, and they depend on non-release modules like examples. -->
+      <id>sonatype-oss-release</id>
+      <modules>
+        <module>starter</module>
+        <module>starter-rest</module>
+        <module>starter-security</module>
+        <module>starter-test</module>
+        <module>starter-client/spring</module>
+        <module>starter-client/spring-boot</module>
+        <module>starter-webapp-core</module>
+        <module>starter-webapp</module>
+      </modules>
+    </profile>
+    <profile>
       <id>integration-test-spring-boot-starter</id>
       <modules>
         <!-- All modules that contain *IT.java test classes need to be listed here -->

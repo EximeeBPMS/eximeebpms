@@ -114,8 +114,8 @@ jobs:
 
       - name: Create custom settings.xml
         run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
+          mkdir -p ~/.m2-build
+          cat <<EOF > ~/.m2-build/settings.xml
           <settings>
             <servers>
               <server>
@@ -151,9 +151,9 @@ jobs:
         id: maven-build
         shell: bash
         run: |
-          ./mvnw -B verify
-          ./mvnw --non-recursive org.jacoco:jacoco-maven-plugin:report-aggregate
-          ./mvnw --non-recursive org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
+          ./mvnw -B --settings ~/.m2-build/settings.xml verify
+          ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
+          ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

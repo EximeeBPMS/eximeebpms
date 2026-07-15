@@ -5,6 +5,10 @@ permissions:
   packages: write
   id-token: write  # required for Sigstore keyless signing
 
+concurrency:
+  group: release-${{ github.workflow }}
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
@@ -36,8 +40,8 @@ jobs:
 
       - name: Create custom settings.xml
         run: |
-            mkdir -p ~/.m2
-            cat <<EOF > ~/.m2/settings.xml
+            mkdir -p ~/.m2-release
+            cat <<EOF > ~/.m2-release/settings.xml
             <settings>
               <servers>
                 <server>
@@ -53,7 +57,6 @@ jobs:
               </servers>
             </settings>
             EOF
-            cat ~/.m2/settings.xml
         env:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
@@ -73,7 +76,7 @@ jobs:
 
       - name: Release prepare
         run: |
-          ./mvnw release:prepare -B -Darguments="-DskipTests" \
+          ./mvnw release:prepare -B --settings ~/.m2-release/settings.xml -Darguments="-DskipTests" \
             -Prelease,distro,distro-ce,javadocs,distro-serverless,distro-tomcat,distro-wildfly,distro-webjar,distro-run,distro-starter,check-engine,check-webapps,sonatype-oss-release \
             -DtagNameFormat=v@{project.version} \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
@@ -84,8 +87,8 @@ jobs:
 
       - name: Release perform
         run: |
-          ./mvnw release:perform -Dgoals="" \
-          -Darguments="-Psbom -DskipTests"
+          ./mvnw release:perform --settings ~/.m2-release/settings.xml -Dgoals="" \
+          -Darguments="-DskipTests"
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
@@ -93,7 +96,7 @@ jobs:
       - name: Deploy base libs
         run: |
           cd target/checkout
-          ./mvnw deploy -Prelease,sonatype-oss-release -B -DskipTests
+          ./mvnw deploy -Prelease,sonatype-oss-release,sbom -B --settings ~/.m2-release/settings.xml -DskipTests
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
@@ -103,7 +106,7 @@ jobs:
 
       - name: Collect SBOM
         run: |
-          VERSION="${{ github.event.inputs.release_version }}-ee"
+          VERSION="${{ github.event.inputs.release_version }}"
           cp target/checkout/target/bom.json "sbom-${VERSION}.cdx.json"
           cp target/checkout/target/bom.xml  "sbom-${VERSION}.cdx.xml"
 
@@ -125,6 +128,17 @@ jobs:
                 --bundle "${f}.sigstore.bundle"
           done
 
+      - name: Get release commit info
+        id: release_commit
+        run: |
+          TAG="v${{ github.event.inputs.release_version }}"
+          {
+            echo "timestamp=$(git log -1 --format=%cI "$TAG")"
+            echo "message<<COMMIT_EOF"
+            git log -1 --format=%s "$TAG"
+            echo "COMMIT_EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -140,8 +154,8 @@ jobs:
             sbom-*.cdx.xml.asc
             sbom-*.cdx.xml.sigstore.bundle
           body: |
-            Release generated on ${{ github.event.head_commit.timestamp }}
-            with commit message: ${{ github.event.head_commit.message }}
+            Release generated on ${{ steps.release_commit.outputs.timestamp }}
+            with commit message: ${{ steps.release_commit.outputs.message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

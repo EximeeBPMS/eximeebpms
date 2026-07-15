@@ -44,8 +44,8 @@ jobs:
 
       - name: Create custom settings.xml
         run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
+          mkdir -p ~/.m2-sbom
+          cat <<EOF > ~/.m2-sbom/settings.xml
           <settings>
             <servers>
               <server>
@@ -69,7 +69,7 @@ jobs:
 
       - name: Generate Maven SBOM (CycloneDX)
         run: |
-          ./mvnw -B org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom \
+          ./mvnw -B --settings ~/.m2-sbom/settings.xml org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom \
             -DoutputFormat=json \
             -DoutputName=eximeebpms-bom
         env:

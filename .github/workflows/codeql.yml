@@ -24,6 +24,7 @@ jobs:
     permissions:
       security-events: write
       contents: read
+      actions: read
 
     steps:
       - name: Checkout Code
@@ -47,8 +48,8 @@ jobs:
 
       - name: Create custom settings.xml
         run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
+          mkdir -p ~/.m2-codeql
+          cat <<EOF > ~/.m2-codeql/settings.xml
           <settings>
             <servers>
               <server>
@@ -79,7 +80,7 @@ jobs:
           languages: java, javascript
 
       - name: Build (compile only, tests not needed for analysis)
-        run: ./mvnw -B verify -DskipTests
+        run: ./mvnw -B --settings ~/.m2-codeql/settings.xml verify -DskipTests
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

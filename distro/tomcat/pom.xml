@@ -27,6 +27,15 @@
   </dependencyManagement>
 
   <profiles>
+    <!-- Do not add a "sonatype-oss-release"-id profile here to scope which of these
+      children get pulled in: activating ANY profile explicitly defined in this POM (e.g.
+      by name-matching a -P flag) deactivates every OTHER activeByDefault profile in this
+      SAME POM, including the other one below. That would silently drop distro/webapp-jakarta
+      from the reactor whenever only sonatype-oss-release is active - which is exactly what
+      broke eximeebpms-docker's tomcat image build (it needs the published eximeebpms-bpm-tomcat
+      from distro/tomcat/distro, which needs webapp-jakarta). Both `distro` and `distro-ce`
+      below are deliberately left as plain activeByDefault so they stay active under any -P
+      combination that doesn't otherwise match a profile ID here. -->
     <profile>
       <id>distro</id>
       <activation>
@@ -44,19 +53,6 @@
       <modules>
         <module>distro</module>
         <module>webapp-jakarta</module>
-      </modules>
-    </profile>
-    <profile>
-      <!-- Pulls in just `assembly`, mirroring the `distro` profile above, so
-        clients/java/client's test-scope dependency on eximeebpms-tomcat-assembly resolves
-        when only sonatype-oss-release is active (no distro-* profile alongside it). Not
-        published: see maven.deploy.skip below and in distro/tomcat/assembly's own pom. -->
-      <id>sonatype-oss-release</id>
-      <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-      </properties>
-      <modules>
-        <module>assembly</module>
       </modules>
     </profile>
   </profiles>

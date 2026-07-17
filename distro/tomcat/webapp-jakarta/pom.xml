@@ -46,4 +46,15 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <!-- Built only, to produce distro/tomcat/distro's eximeebpms-bpm-tomcat (needed by
+        eximeebpms-docker); not published separately.
+        See root pom's sonatype-oss-release profile (eximeebpms-docker build). -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
 </project>

@@ -39,4 +39,14 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <!-- Built only, bundled into distro/run/distro's eximeebpms-bpm-run; not published separately.
+        See root pom's sonatype-oss-release profile (eximeebpms-docker build). -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
 </project>

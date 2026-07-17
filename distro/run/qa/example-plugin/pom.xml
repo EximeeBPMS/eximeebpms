@@ -34,4 +34,15 @@
     </dependency>
 
   </dependencies>
+
+  <profiles>
+    <profile>
+      <!-- Built only (part of distro/run's qa tree); not published.
+        See root pom's sonatype-oss-release profile (eximeebpms-docker build). -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
 </project>

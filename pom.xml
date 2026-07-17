@@ -384,28 +384,36 @@
     </profile>
 
     <profile>
-      <!-- Scope of what gets published to Maven Central: consumable libraries only. Excludes
-        qa, examples, distro/license-book, distro/jboss, distro/tomcat and distro/run - none of
-        those are libraries meant for public consumption, and staging them (plus javadoc/sources)
-        pushed the JReleaser upload bundle past the ~2GB JVM array-size ceiling in
-        Files.readAllBytes, which reliably OOM'd (see BPMS-385). Verified locally: this trimmed
-        scope stages ~183MB across 2048 files, vs. multiple GB before.
+      <!-- Scope of what gets published to Maven Central: consumable libraries, plus the two
+        downloadable distributions eximeebpms-docker actually downloads from Central
+        (eximeebpms-bpm-run, eximeebpms-bpm-tomcat - see distro/run and distro/tomcat below).
+        Excludes qa, examples, distro/license-book, distro/jboss - none of those are things
+        anyone consumes from Central, and staging them (plus javadoc/sources) pushed the
+        JReleaser upload bundle past the ~2GB JVM array-size ceiling in Files.readAllBytes,
+        which reliably OOM'd (see BPMS-385).
 
-        Three module trees from that excluded set are still reachable below - distro/license-book,
-        distro/tomcat and examples - because kept modules have a real build-time dependency on
-        one of their children (clients/java/client on eximeebpms-tomcat-assembly, itself needing
-        distro/license-book; spring-boot-starter's own qa submodule on
-        eximeebpms-example-invoice-jakarta). They still need to be built so those dependencies
-        resolve, but each carries its own sonatype-oss-release-scoped profile (or, for
-        distro/tomcat, a same-named profile mirroring its existing "distro" one) setting
-        maven.deploy.skip=true, so none of them is actually staged for Central.
+        distro/license-book and examples are still reachable below - not because anything
+        downloads them from Central, but because kept modules have a real build-time
+        dependency on one of their children (clients/java/client on eximeebpms-tomcat-assembly,
+        itself needing distro/license-book; spring-boot-starter's own qa submodule, and
+        distro/tomcat's and distro/run's own "distro" assemblies, on
+        eximeebpms-example-invoice-jakarta). They carry their own sonatype-oss-release-scoped
+        profile setting maven.deploy.skip=true, so they're built but never staged for Central.
 
-        distro/tomcat and examples are listed by their aggregator path, not their specific child,
-        because other profiles active alongside this one during "Release prepare"/"Release
-        perform" (distro-tomcat, distro-serverless, check-webapps, ...) already reach the same
-        child module via a different module path; listing that same aggregator path here instead
-        of a second, different path to the same child avoids Maven's reactor rejecting it as a
-        duplicate project. -->
+        distro/tomcat and distro/run are listed by their aggregator path rather than their
+        specific "distro" child for two reasons: (1) other profiles active alongside this one
+        during "Release prepare"/"Release perform" (distro-tomcat, distro-run, ...) already
+        reach the same child via a different module path, and listing a second, different path
+        to the same child makes Maven reject it as a duplicate project; (2) do NOT add a
+        same-named "sonatype-oss-release" profile to distro/tomcat/pom.xml or distro/run/pom.xml
+        to scope this down further - activating any profile explicitly defined in a POM
+        deactivates every OTHER activeByDefault profile in that SAME POM, which is exactly what
+        silently dropped distro/tomcat/distro (eximeebpms-bpm-tomcat) and its webapp-jakarta
+        dependency out of the 1.3.0 release despite this comment's predecessor's best intentions.
+        Their own non-"distro" children (modules/rest, modules/oauth2, core, qa, ...) each carry
+        their own maven.deploy.skip=true instead, so only eximeebpms-bpm-tomcat and
+        eximeebpms-bpm-run actually get staged, verified locally at ~695MB (well within the 2GB
+        ceiling) alongside the ~183MB from everything else already in this scope. -->
       <id>sonatype-oss-release</id>
       <modules>
         <module>spring-boot-starter</module>
@@ -433,9 +441,12 @@
 
         <module>distro/sql-script</module>
         <module>distro/webjar</module>
+        <!-- distro/tomcat and distro/run each publish only their own "distro" child (see
+          comment above); everything else reachable through them is build-only. -->
+        <module>distro/tomcat</module>
+        <module>distro/run</module>
         <!-- built only, not deployed - see comment above -->
         <module>distro/license-book</module>
-        <module>distro/tomcat</module>
         <module>examples</module>
 
         <module>clients/java</module>

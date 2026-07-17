@@ -114,9 +114,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
 
       - name: Publish staged artifacts to Maven Central (JReleaser)
-        uses: jreleaser/release-action@v2
+        # Pinned to a commit SHA, not @v2: this is a self-hosted runner, which caches actions
+        # under _work/_actions keyed by ref string and can keep reusing an already-cached
+        # checkout for a moving branch ref instead of re-resolving it. That silently ignored
+        # java-opts below even after it was pushed and live on GitHub. A distinct ref (this SHA)
+        # forces a fresh fetch. Corresponds to jreleaser/release-action v2.5.0.
+        uses: jreleaser/release-action@97b5e2f0e845de2fe1dbbdf451ac6a21233fafff
         with:
           version: '1.25.0' # pinned: 'latest' (default) resolves via jreleaser.org, unreachable from this runner
+          # Default JVM heap is too small to multipart-encode a several-hundred-MB bundle (feign
+          # copies it into a second in-memory buffer while form-encoding, needing ~2-3x the file
+          # size in heap) - fails with "OutOfMemoryError: Java heap space" without this.
+          java-opts: '-Xmx6144m'
           working-directory: target/checkout
           arguments: deploy
         env:

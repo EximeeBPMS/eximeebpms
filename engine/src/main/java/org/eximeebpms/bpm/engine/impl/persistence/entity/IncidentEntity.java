@@ -25,6 +25,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
@@ -173,6 +177,7 @@ public class IncidentEntity implements Incident, DbEntity, HasDbRevision, HasDbR
       .getDbEntityManager()
       .insert(incident);
 
+    incident.fireBusinessIncidentEvent(BusinessEventTypes.INCIDENT_CREATE);
     incident.fireHistoricIncidentEvent(HistoryEventTypes.INCIDENT_CREATE);
   }
 
@@ -217,9 +222,24 @@ public class IncidentEntity implements Incident, DbEntity, HasDbRevision, HasDbR
       .getDbEntityManager()
       .delete(this);
 
+    fireBusinessIncidentEvent(resolved ? BusinessEventTypes.INCIDENT_RESOLVE : BusinessEventTypes.INCIDENT_DELETE);
     // update historic incident
     HistoryEventType eventType = resolved ? HistoryEventTypes.INCIDENT_RESOLVE : HistoryEventTypes.INCIDENT_DELETE;
     fireHistoricIncidentEvent(eventType);
+  }
+
+  protected void fireBusinessIncidentEvent(final BusinessEventTypes eventType) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return switch (eventType) {
+          case BusinessEventTypes.INCIDENT_CREATE -> producer.createBusinessIncidentCreateEvt(IncidentEntity.this);
+          case BusinessEventTypes.INCIDENT_RESOLVE -> producer.createBusinessIncidentResolveEvt(IncidentEntity.this);
+          case BusinessEventTypes.INCIDENT_DELETE -> producer.createBusinessIncidentDeleteEvt(IncidentEntity.this);
+          default -> throw new IllegalArgumentException("Unsupported incident business event type: " + eventType);
+        };
+      }
+    });
   }
 
   protected void fireHistoricIncidentEvent(final HistoryEventType eventType) {

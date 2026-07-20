@@ -5,6 +5,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.ProcessInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.script.ScriptViolationBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEventFactory;
@@ -13,6 +14,7 @@ import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
+import org.eximeebpms.bpm.engine.runtime.Incident;
 
 public class DefaultBusinessEventProducer implements BusinessEventProducer {
 
@@ -21,6 +23,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected IdentityLinkBusinessEventFactory identityLinkEvtFactory = new IdentityLinkBusinessEventFactory();
   protected TaskInstanceBusinessEventFactory taskInstanceEvtFactory = new TaskInstanceBusinessEventFactory();
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
+  protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
 
   protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
@@ -92,5 +95,30 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createScriptViolationEvt(ScriptViolationEvent violation) {
     return scriptViolationEvtFactory.createScriptViolationEvent(violation);
+  }
+
+  @Override
+  public BusinessEvent createBusinessIncidentCreateEvt(Incident incident) {
+    return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_CREATE);
+  }
+
+  @Override
+  public BusinessEvent createBusinessIncidentResolveEvt(Incident incident) {
+    return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_RESOLVE);
+  }
+
+  @Override
+  public BusinessEvent createBusinessIncidentDeleteEvt(Incident incident) {
+    return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_DELETE);
+  }
+
+  @Override
+  public BusinessEvent createBusinessIncidentMigrateEvt(Incident incident) {
+    return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_MIGRATE);
+  }
+
+  @Override
+  public BusinessEvent createBusinessIncidentUpdateEvt(Incident incident) {
+    return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_UPDATE);
   }
 }

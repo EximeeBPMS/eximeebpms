@@ -24,7 +24,7 @@ import java.util.Date;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.history.HistoricIncident;
 import org.eximeebpms.bpm.engine.history.HistoricIncidentQuery;
-import org.eximeebpms.bpm.engine.history.IncidentState;
+import org.eximeebpms.bpm.engine.incident.IncidentState;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 

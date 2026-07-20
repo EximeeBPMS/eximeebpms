@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.impl.history.event;
 
 import java.util.Date;
 
-import org.eximeebpms.bpm.engine.history.IncidentState;
+import org.eximeebpms.bpm.engine.incident.IncidentState;
 
 /**
  * @author Roman Smirnov

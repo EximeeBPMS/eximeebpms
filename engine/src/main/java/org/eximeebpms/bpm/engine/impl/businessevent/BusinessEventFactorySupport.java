@@ -4,6 +4,7 @@ import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.eximeebpms.bpm.engine.runtime.Incident;
 
 public abstract class BusinessEventFactorySupport {
 
@@ -15,6 +16,16 @@ public abstract class BusinessEventFactorySupport {
     } else {
       event.setProcessDefinitionId(execution.getProcessDefinitionId());
       event.setProcessDefinitionKey(execution.getProcessDefinitionKey());
+    }
+  }
+
+  protected void fillProcessDefinitionData(BusinessEvent event, Incident incident) {
+    String processDefinitionId = incident.getProcessDefinitionId();
+
+    if (processDefinitionId != null) {
+      fillProcessDefinitionData(event, processDefinitionId);
+    } else {
+      event.setProcessDefinitionId(incident.getProcessDefinitionId());
     }
   }
 

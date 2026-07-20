@@ -16,6 +16,9 @@
  */
 package org.eximeebpms.bpm.engine.impl.migration.instance;
 
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
@@ -64,7 +67,17 @@ public class MigratingIncident implements MigratingInstance {
     incident.setProcessDefinitionId(targetScope.getProcessDefinition().getId());
     incident.setJobDefinitionId(targetJobDefinitionId);
 
+    migrateBusinessEvent();
     migrateHistory();
+  }
+
+  protected void migrateBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createBusinessIncidentMigrateEvt(incident);
+      }
+    });
   }
 
   protected void migrateHistory() {

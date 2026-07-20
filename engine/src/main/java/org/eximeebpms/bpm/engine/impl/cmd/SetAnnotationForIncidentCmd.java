@@ -18,6 +18,9 @@ package org.eximeebpms.bpm.engine.impl.cmd;
 
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.cfg.CommandChecker;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricIncidentEventEntity;
@@ -60,6 +63,7 @@ public class SetAnnotationForIncidentCmd implements Command<Void> {
 
     incident.setAnnotation(annotation);
 
+    triggerBusinessEvent(incident);
     triggerHistoryEvent(commandContext, incident);
 
     String tenantId = execution != null ? execution.getTenantId() : null;
@@ -73,6 +77,15 @@ public class SetAnnotationForIncidentCmd implements Command<Void> {
     }
 
     return null;
+  }
+
+  protected void triggerBusinessEvent(IncidentEntity incident) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createBusinessIncidentUpdateEvt(incident);
+      }
+    });
   }
 
   protected void triggerHistoryEvent(CommandContext commandContext, IncidentEntity incident) {

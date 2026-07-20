@@ -6,6 +6,7 @@ import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
+import org.eximeebpms.bpm.engine.runtime.Incident;
 
 /**
  * <p>The producer for business events. The business event producer is
@@ -19,7 +20,7 @@ public interface BusinessEventProducer {
    * Creates the business event fired when a variable is <strong>created</strong>.
    *
    * @param variableInstance the runtime variable instance
-   * @param the scope to which the variable is linked
+   * @param sourceVariableScope the scope to which the variable is linked
    * @return the business event
    */
   BusinessEvent createVariableCreateEvt(VariableInstanceEntity variableInstance, VariableScope sourceVariableScope);
@@ -28,7 +29,7 @@ public interface BusinessEventProducer {
    * Creates the business event fired when a variable is <strong>updated</strong>.
    *
    * @param variableInstance the runtime variable instance
-   * @param the scope to which the variable is linked
+   * @param sourceVariableScope the scope to which the variable is linked
    * @return the business event
    */
   BusinessEvent createVariableUpdateEvt(VariableInstanceEntity variableInstance, VariableScope sourceVariableScope);
@@ -37,7 +38,6 @@ public interface BusinessEventProducer {
    * Creates the business event fired when a variable is <strong>migrated</strong>.
    *
    * @param variableInstance the runtime variable instance
-   * @param the scope to which the variable is linked
    * @return the business event
    */
   BusinessEvent createVariableMigrateEvt(VariableInstanceEntity variableInstance);
@@ -45,8 +45,8 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when a variable is <strong>deleted</strong>.
    *
-   * @param variableInstance
-   * @param sourceVariableScope
+   * @param variableInstance the runtime variable instance
+   * @param sourceVariableScope the scope to which the variable is linked
    * @return the business event
    */
   BusinessEvent createVariableDeleteEvt(VariableInstanceEntity variableInstance, VariableScope sourceVariableScope);
@@ -54,21 +54,21 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when a process is <strong>started</strong>.
    *
-   * @param execution
+   * @param execution the execution of the process instance that was started
    * @return the business event
    */
   BusinessEvent createProcessInstanceStartEvt(DelegateExecution execution);
   /**
    * Creates the business event fired when a process is <strong>ended</strong>.
    *
-   * @param execution
+   * @param execution the execution of the process instance that ended
    * @return the business event
    */
   BusinessEvent createProcessInstanceEndEvt(DelegateExecution execution);
   /**
    * Creates the business event fired when a process is <strong>updated</strong>.
    *
-   * @param execution
+   * @param execution the execution of the process instance that was updated
    * @return the business event
    */
   BusinessEvent createProcessInstanceUpdateEvt(DelegateExecution execution);
@@ -76,7 +76,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an identity-link is <strong>added</strong>.
    *
-   * @param identityLinkEntity
+   * @param identityLinkEntity the identity-link entity that was added
    * @return the business event
    */
   BusinessEvent createIdentityLinkAddEvt(IdentityLinkEntity identityLinkEntity);
@@ -84,7 +84,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an identity-link is <strong>deleted</strong>.
    *
-   * @param identityLinkEntity
+   * @param identityLinkEntity the identity-link entity that was deleted
    * @return the business event
    */
   BusinessEvent createIdentityLinkDeleteEvt(IdentityLinkEntity identityLinkEntity);
@@ -92,7 +92,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an task-instance is <strong>created</strong>.
    *
-   * @param task
+   * @param task the task that was created
    * @return the business event
    */
   BusinessEvent createTaskInstanceCreateEvt(DelegateTask task);
@@ -100,7 +100,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an task-instance is <strong>updated</strong>.
    *
-   * @param task
+   * @param task the task that was updated
    * @return the business event
    */
   BusinessEvent createTaskInstanceUpdateEvt(DelegateTask task);
@@ -108,7 +108,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an task-instance is <strong>completed</strong>.
    *
-   * @param task
+   * @param task the task that was completed
    * @return the business event
    */
   BusinessEvent createTaskInstanceCompleteEvt(DelegateTask task);
@@ -116,7 +116,7 @@ public interface BusinessEventProducer {
   /**
    * Creates the business event fired when an task-instance is <strong>deleted</strong>.
    *
-   * @param task
+   * @param task the task that was deleted
    * @return the business event
    */
   BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task);
@@ -128,5 +128,45 @@ public interface BusinessEventProducer {
    * @return the business event
    */
   BusinessEvent createScriptViolationEvt(ScriptViolationEvent violation);
+
+  /**
+   * Creates the business event fired when an incident is <strong>created</strong>.
+   *
+   * @param incident the incident that was created
+   * @return the business event
+   */
+  BusinessEvent createBusinessIncidentCreateEvt(Incident incident);
+
+  /**
+   * Creates the business event fired when an incident is <strong>resolved</strong>.
+   *
+   * @param incident the incident that was resolved
+   * @return the business event
+   */
+  BusinessEvent createBusinessIncidentResolveEvt(Incident incident);
+
+  /**
+   * Creates the business event fired when an incident is <strong>deleted</strong>.
+   *
+   * @param incident the incident that was deleted
+   * @return the business event
+   */
+  BusinessEvent createBusinessIncidentDeleteEvt(Incident incident);
+
+  /**
+   * Creates the business event fired when an incident is <strong>migrated</strong>.
+   *
+   * @param incident the incident that was migrated
+   * @return the business event
+   */
+  BusinessEvent createBusinessIncidentMigrateEvt(Incident incident);
+
+  /**
+   * Creates the business event fired when an incident is <strong>updated</strong>.
+   *
+   * @param incident the incident that was updated
+   * @return the business event
+   */
+  BusinessEvent createBusinessIncidentUpdateEvt(Incident incident);
 
 }

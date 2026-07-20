@@ -24,7 +24,7 @@
     <http.ctx-path.webapp>eximeebpms/</http.ctx-path.webapp>
     <http.ctx-path.rest>engine-rest/</http.ctx-path.rest>
 
-    <version.chromedriver>149.0.7827.155</version.chromedriver>
+    <version.chromedriver>151.0.7922.34</version.chromedriver>
 
     <!-- default os -->
     <os.type>linux64</os.type>

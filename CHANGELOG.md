@@ -17,7 +17,7 @@ retroactively added CVE IDs.
 
 ---
 
-## [1.3.0] – 2026-07-xx Unreleased
+## [1.3.0] – 2026-07-17
 
 ### Added
 - Multithreaded task handling via `ThreadPoolExecutor`; Task execution statistics; Graceful shutdown: unlock pending tasks on stop; SPI listener for external task execution stats

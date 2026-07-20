@@ -55,6 +55,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          command -v gh >/dev/null || sudo apt-get update -q && sudo apt-get install -y gh
+
           COUNT=$(gh pr list --state open --search "in:title \"Bump ChromeDriver\"" --json number --jq 'length')
           echo "exists=$([ "$COUNT" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 

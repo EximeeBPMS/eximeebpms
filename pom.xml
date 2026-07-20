@@ -28,6 +28,7 @@
     <version.uuid-generator>5.2.0</version.uuid-generator>
     <version.hamcrest>3.0</version.hamcrest>
     <version.feel-scala>1.19.3</version.feel-scala>
+    <version.lombok>1.18.46</version.lombok>
     <sonar.organization>eximeebpms</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
@@ -173,6 +174,13 @@
                 <additionalJOption>--ignore-source-errors</additionalJOption>
                 <additionalJOption>--allow-script-in-comments</additionalJOption>
               </additionalJOptions>
+              <additionalDependencies>
+                <additionalDependency>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+                  <version>${version.lombok}</version>
+                </additionalDependency>
+              </additionalDependencies>
               <doctitle>EximeeBPMS Javadocs ${project.version}</doctitle>
               <windowtitle>EximeeBPMS Javadocs ${project.version}</windowtitle>
             </configuration>

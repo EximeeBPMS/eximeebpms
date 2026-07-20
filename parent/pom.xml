@@ -88,7 +88,6 @@
     <version.eirslett.frontend.maven.plugin>1.12.1</version.eirslett.frontend.maven.plugin>
     <version.nodejs>20.14.0</version.nodejs>
     <version.npm>10.7.0</version.npm>
-    <version.lombok>1.18.46</version.lombok>
     <version.commons-lang3>3.19.0</version.commons-lang3>
 
     <version.eximeebpms-monitor>1.6.0</version.eximeebpms-monitor>

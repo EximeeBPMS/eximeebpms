@@ -43,7 +43,7 @@
     <version.xml.jaxb-impl4>4.0.5</version.xml.jaxb-impl4>
     <version.jakarta.xml.bind-api>4.0.2</version.jakarta.xml.bind-api>
     <version.jakarta-persistence-api>3.2.0</version.jakarta-persistence-api>
-    <version.httpclient5>5.5</version.httpclient5>
+    <version.httpclient5>5.6.2</version.httpclient5>
     <version.httpcore5>5.3.4</version.httpcore5>
     <version.cronutils>9.2.1</version.cronutils>
 

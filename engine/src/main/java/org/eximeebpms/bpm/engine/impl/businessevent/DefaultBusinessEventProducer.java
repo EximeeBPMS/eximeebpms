@@ -63,6 +63,11 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   }
 
   @Override
+  public BusinessEvent createProcessInstanceMigrateEvt(DelegateExecution execution) {
+    return processEvtFactory.createMigrateEvent(execution);
+  }
+
+  @Override
   public BusinessEvent createIdentityLinkAddEvt(IdentityLinkEntity identityLinkEntity) {
     return identityLinkEvtFactory.createAddEvent(identityLinkEntity);
   }

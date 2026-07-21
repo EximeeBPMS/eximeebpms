@@ -24,6 +24,9 @@ import java.util.Set;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
@@ -380,6 +383,21 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
     });
   }
 
+  protected void migrateBusinessEvent(final DelegateExecution execution) {
+    if (activityInstance.getId().equals(activityInstance.getProcessInstanceId())) {
+      migrateProcessInstanceBusinessEvent(execution);
+    }
+  }
+
+  protected void migrateProcessInstanceBusinessEvent(final DelegateExecution execution) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createProcessInstanceMigrateEvt(execution);
+      }
+    });
+  }
+
   public ExecutionEntity createAttachableExecution() {
     return instanceBehavior.createAttachableExecution();
   }
@@ -463,6 +481,7 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
       }
 
       migrateHistory(currentExecution);
+      migrateBusinessEvent(currentExecution);
     }
 
     protected void becomeScope() {
@@ -577,6 +596,7 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
       }
 
       migrateHistory(currentScopeExecution);
+      migrateBusinessEvent(currentScopeExecution);
     }
 
     protected void becomeNonScope() {

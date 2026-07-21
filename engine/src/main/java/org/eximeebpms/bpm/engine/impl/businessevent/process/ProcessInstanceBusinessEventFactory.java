@@ -86,6 +86,26 @@ public class ProcessInstanceBusinessEventFactory extends BusinessEventFactorySup
     return event;
   }
 
+  public BusinessEvent createMigrateEvent(final DelegateExecution execution) {
+    if (!(execution instanceof ExecutionEntity executionEntity)) {
+      return null;
+    }
+
+    final Date now = ClockUtil.getCurrentTime();
+    final BusinessProcessInstanceEventEntity event = baseProcessInstanceBuilder(
+        executionEntity,
+        BusinessEventTypes.PROCESS_INSTANCE_MIGRATE,
+        now)
+        .state(resolveUpdateState(executionEntity))
+        .build();
+
+    fillProcessDefinitionData(event, executionEntity);
+    initSequenceCounter(executionEntity, event);
+    fillHistoricProcessInstanceData(event);
+
+    return event;
+  }
+
   private BusinessProcessInstanceEventEntity.BusinessProcessInstanceEventEntityBuilder<?, ?> baseProcessInstanceBuilder(
       final ExecutionEntity executionEntity,
       final BusinessEventTypes eventType,

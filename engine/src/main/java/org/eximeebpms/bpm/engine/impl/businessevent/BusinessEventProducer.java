@@ -74,6 +74,14 @@ public interface BusinessEventProducer {
   BusinessEvent createProcessInstanceUpdateEvt(DelegateExecution execution);
 
   /**
+   * Creates the business event fired when a process instance is <strong>migrated</strong>.
+   *
+   * @param execution
+   * @return the business event
+   */
+  BusinessEvent createProcessInstanceMigrateEvt(DelegateExecution execution);
+
+  /**
    * Creates the business event fired when an identity-link is <strong>added</strong>.
    *
    * @param identityLinkEntity the identity-link entity that was added

@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.batch.Batch;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.HasDbReferences;
@@ -379,6 +382,7 @@ public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, 
     commandContext.getBatchManager().delete(this);
     configuration.deleteByteArrayValue();
 
+    fireBatchEndBusinessEvent();
     fireHistoricEndEvent();
 
     if (cascadeToHistory) {
@@ -403,6 +407,33 @@ public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, 
         variableInstanceManager.findVariableInstancesByBatchId(id);
 
     variableInstances.forEach(VariableInstanceEntity::delete);
+  }
+
+  public void fireBatchStartBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createBatchStartBusinessEvent(BatchEntity.this);
+      }
+    });
+  }
+
+  public void fireBatchEndBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createBatchEndBusinessEvent(BatchEntity.this);
+      }
+    });
+  }
+
+  public void fireBatchUpdateBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createBatchUpdateBusinessEvent(BatchEntity.this);
+      }
+    });
   }
 
   public void fireHistoricStartEvent() {

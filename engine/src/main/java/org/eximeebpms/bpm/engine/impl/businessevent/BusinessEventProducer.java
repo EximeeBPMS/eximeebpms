@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.impl.businessevent;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
+import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
@@ -185,4 +186,27 @@ public interface BusinessEventProducer {
    */
   BusinessEvent createBusinessIncidentUpdateEvt(Incident incident);
 
+    /**
+     * Creates the business event fired when a batch is <strong>started</strong>.
+     *
+     * @param batchEntity the batch entity
+     * @return the business event
+     */
+    BusinessEvent createBatchStartBusinessEvent(BatchEntity batchEntity);
+
+    /**
+     * Creates the business event fired when a batch is <strong>ended</strong>.
+     *
+     * @param batchEntity the batch entity
+     * @return the business event
+     */
+    BusinessEvent createBatchEndBusinessEvent(BatchEntity batchEntity);
+
+    /**
+     * Creates the business event fired when a batch is <strong>updated</strong>.
+     *
+     * @param batchEntity the batch entity
+     * @return the business event
+     */
+    BusinessEvent createBatchUpdateBusinessEvent(BatchEntity batchEntity);
 }

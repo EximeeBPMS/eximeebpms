@@ -112,6 +112,7 @@ public abstract class AbstractBatchJobHandler<T extends BatchConfiguration> impl
 
       final Date executionStartTime = ClockUtil.now();
       batch.setExecutionStartTime(executionStartTime);
+      batch.fireBatchUpdateBusinessEvent();
       batch.fireHistoricUpdateEvent();
     }
 

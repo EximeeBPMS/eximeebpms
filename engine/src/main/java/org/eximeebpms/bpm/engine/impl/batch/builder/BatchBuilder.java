@@ -172,6 +172,7 @@ public class BatchBuilder {
     batch.createMonitorJobDefinition();
     batch.createBatchJobDefinition();
 
+    batch.fireBatchStartBusinessEvent();
     batch.fireHistoricStartEvent();
 
     batch.createSeedJob();

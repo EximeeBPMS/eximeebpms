@@ -4,6 +4,8 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
+import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.ProcessInstanceBusinessEventFactory;
@@ -24,6 +26,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected TaskInstanceBusinessEventFactory taskInstanceEvtFactory = new TaskInstanceBusinessEventFactory();
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
   protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
+  protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
 
   protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
@@ -130,5 +133,20 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createBusinessIncidentUpdateEvt(Incident incident) {
     return incidentBusinessEventFactory.createBusinessIncidentEvt(incident, BusinessEventTypes.INCIDENT_UPDATE);
+  }
+
+  @Override
+  public BusinessEvent createBatchStartBusinessEvent(BatchEntity batchEntity) {
+    return batchEvtFactory.createStartEvent(batchEntity);
+  }
+
+  @Override
+  public BusinessEvent createBatchEndBusinessEvent(BatchEntity batchEntity) {
+    return batchEvtFactory.createEndEvent(batchEntity);
+  }
+
+  @Override
+  public BusinessEvent createBatchUpdateBusinessEvent(BatchEntity batchEntity) {
+    return batchEvtFactory.createUpdateEvent(batchEntity);
   }
 }

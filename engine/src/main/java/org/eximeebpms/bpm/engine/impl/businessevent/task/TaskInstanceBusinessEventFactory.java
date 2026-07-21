@@ -35,6 +35,16 @@ public class TaskInstanceBusinessEventFactory extends BusinessEventFactorySuppor
     return event;
   }
 
+  public BusinessEvent createMigrateEvent(final DelegateTask task) {
+    if (!(task instanceof TaskEntity taskEntity)) {
+      return null;
+    }
+
+    final BusinessTaskInstanceEventEntity event = createTaskInstanceEvent(taskEntity, BusinessEventTypes.TASK_INSTANCE_MIGRATE);
+    event.setStartTime(resolveHistoricTaskStartTime(taskEntity.getId()));
+    return event;
+  }
+
   public BusinessEvent createCompleteEvent(final DelegateTask task) {
     if (!(task instanceof TaskEntity taskEntity)) {
       return null;

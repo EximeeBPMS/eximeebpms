@@ -1,13 +1,10 @@
 package org.eximeebpms.bpm.engine.impl.businessevent.identitylink;
 
 import java.util.Optional;
-import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventFactorySupport;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
-import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
-import org.eximeebpms.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
@@ -71,10 +68,6 @@ public class IdentityLinkBusinessEventFactory extends BusinessEventFactorySuppor
           final ExecutionEntity execution = task.getExecution();
           if (execution != null) {
             event.setRootProcessInstanceId(execution.getRootProcessInstanceId());
-
-            if (isHistoryRemovalTimeStrategyStart()) {
-              provideRemovalTime(event);
-            }
           }
         });
   }
@@ -97,25 +90,5 @@ public class IdentityLinkBusinessEventFactory extends BusinessEventFactorySuppor
     } else {
       event.setProcessDefinitionId(identityLink.getProcessDefId());
     }
-  }
-
-  private boolean isHistoryRemovalTimeStrategyStart() {
-    return Optional.ofNullable(Context.getProcessEngineConfiguration())
-        .map(ProcessEngineConfigurationImpl::getHistoryRemovalTimeStrategy)
-        .map(ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START::equals)
-        .orElse(false);
-  }
-
-  private void provideRemovalTime(BusinessEvent event) {
-    final String rootProcessInstanceId = event.getRootProcessInstanceId();
-
-    if (rootProcessInstanceId == null) {
-      return;
-    }
-
-    Optional.ofNullable(Context.getCommandContext())
-        .map(CommandContext::getDbEntityManager)
-        .map(dbEntityManager -> dbEntityManager.selectById(HistoricProcessInstanceEventEntity.class, rootProcessInstanceId))
-        .ifPresent(historicProcessInstance -> event.setRemovalTime(historicProcessInstance.getRemovalTime()));
   }
 }

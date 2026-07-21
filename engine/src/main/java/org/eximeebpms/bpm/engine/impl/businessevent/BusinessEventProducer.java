@@ -106,6 +106,14 @@ public interface BusinessEventProducer {
   BusinessEvent createTaskInstanceUpdateEvt(DelegateTask task);
 
   /**
+   * Creates the business event fired when a task-instance is <strong>migrated</strong>.
+   *
+   * @param task
+   * @return the business event
+   */
+  BusinessEvent createTaskInstanceMigrateEvt(DelegateTask task);
+
+  /**
    * Creates the business event fired when an task-instance is <strong>completed</strong>.
    *
    * @param task the task that was completed

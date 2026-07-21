@@ -1,7 +1,6 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import java.io.Serializable;
-import java.util.Date;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -50,8 +49,6 @@ public class BusinessEvent implements Serializable {
 
   protected long sequenceCounter;
 
-  /* the time when the business event will be deleted */
-  protected Date removalTime;
   // persistent object implementation ///////////////
 
   public Object getPersistentState() {
@@ -68,7 +65,6 @@ public class BusinessEvent implements Serializable {
            + ", processDefinitionId=" + processDefinitionId
            + ", processInstanceId=" + processInstanceId
            + ", rootProcessInstanceId=" + rootProcessInstanceId
-           + ", removalTime=" + removalTime
            + "]";
   }
 

@@ -138,7 +138,6 @@ public class ProcessInstanceBusinessEventFactory extends BusinessEventFactorySup
     if (!BusinessEventTypes.PROCESS_INSTANCE_START.getBusinessEventName().equals(event.getBusinessEventType())) {
       event.setStartTime(historicProcessInstance.getStartTime());
     }
-    event.setRemovalTime(historicProcessInstance.getRemovalTime());
   }
 
   private HistoricProcessInstanceEventEntity findHistoricProcessInstance(final String processInstanceId) {

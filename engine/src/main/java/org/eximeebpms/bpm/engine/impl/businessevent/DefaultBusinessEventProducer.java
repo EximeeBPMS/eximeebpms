@@ -83,6 +83,11 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   }
 
   @Override
+  public BusinessEvent createTaskInstanceMigrateEvt(DelegateTask task) {
+    return taskInstanceEvtFactory.createMigrateEvent(task);
+  }
+
+  @Override
   public BusinessEvent createTaskInstanceCompleteEvt(DelegateTask task) {
     return taskInstanceEvtFactory.createCompleteEvent(task);
   }

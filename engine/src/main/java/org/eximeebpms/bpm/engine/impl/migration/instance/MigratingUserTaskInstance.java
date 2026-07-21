@@ -17,6 +17,9 @@
 package org.eximeebpms.bpm.engine.impl.migration.instance;
 
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
@@ -82,6 +85,7 @@ public class MigratingUserTaskInstance implements MigratingInstance {
     userTask.setTaskDefinitionKey(migratingActivityInstance.getTargetScope().getId());
 
     migrateHistory();
+    migrateBusinessEvent();
   }
 
   protected void migrateHistory() {
@@ -95,5 +99,14 @@ public class MigratingUserTaskInstance implements MigratingInstance {
         }
       });
     }
+  }
+
+  protected void migrateBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createTaskInstanceMigrateEvt(userTask);
+      }
+    });
   }
 }

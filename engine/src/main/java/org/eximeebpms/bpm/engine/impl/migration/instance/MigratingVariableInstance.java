@@ -16,6 +16,9 @@
  */
 package org.eximeebpms.bpm.engine.impl.migration.instance;
 
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
@@ -74,16 +77,28 @@ public class MigratingVariableInstance implements MigratingInstance {
   @Override
   public void migrateState() {
     migrateHistory();
+    migrateBusinessEvent();
   }
 
   protected void migrateHistory() {
     HistoryLevel historyLevel = Context.getProcessEngineConfiguration().getHistoryLevel();
 
-    if (historyLevel.isHistoryEventProduced(HistoryEventTypes.VARIABLE_INSTANCE_MIGRATE, this)) {
+    if (historyLevel.isHistoryEventProduced(HistoryEventTypes.VARIABLE_INSTANCE_MIGRATE, this) && !variable.isTransient()) {
       HistoryEventProcessor.processHistoryEvents(new HistoryEventProcessor.HistoryEventCreator() {
         @Override
         public HistoryEvent createHistoryEvent(HistoryEventProducer producer) {
           return producer.createHistoricVariableMigrateEvt(variable);
+        }
+      });
+    }
+  }
+
+  protected void migrateBusinessEvent() {
+    if (!variable.isTransient()) {
+      BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+        @Override
+        public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+          return producer.createVariableMigrateEvt(variable);
         }
       });
     }

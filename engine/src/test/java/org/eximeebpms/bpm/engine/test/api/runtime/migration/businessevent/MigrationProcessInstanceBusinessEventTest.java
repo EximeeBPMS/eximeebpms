@@ -89,7 +89,9 @@ public class MigrationProcessInstanceBusinessEventTest {
         .execute();
 
     // then the history reflects the migrated state
-    HistoricProcessInstance migratedHistoricInstance = historyService.createHistoricProcessInstanceQuery().singleResult();
+    HistoricProcessInstance migratedHistoricInstance = historyService.createHistoricProcessInstanceQuery()
+        .processInstanceId(processInstance.getId())
+        .singleResult();
     assertThat(migratedHistoricInstance).isNotNull();
     assertThat(migratedHistoricInstance.getProcessDefinitionKey()).isEqualTo(targetDefinition.getKey());
     assertThat(migratedHistoricInstance.getProcessDefinitionId()).isEqualTo(targetDefinition.getId());
@@ -148,6 +150,9 @@ public class MigrationProcessInstanceBusinessEventTest {
   private BusinessEventOutboxEntity findSingleOutboxEntry(String processInstanceId) {
     List<BusinessEventOutboxEntity> results = commandExecutor.execute(ctx ->
         ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
-    return results.isEmpty() ? null : results.getLast();
+    return results.stream()
+        .filter(entry -> BusinessEventTypes.PROCESS_INSTANCE_MIGRATE.getBusinessEventName().equals(entry.getEventType()))
+        .findFirst()
+        .orElse(null);
   }
 }

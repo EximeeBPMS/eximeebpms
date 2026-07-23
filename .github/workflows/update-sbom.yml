@@ -93,7 +93,7 @@ jobs:
           cp webapps/frontend/cyclonedx-npm-bom.json sbom/eximeebpms-frontend-bom.json
 
       - name: Commit SBOMs
-        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: "chore(deps): update SBOM"
           file_pattern: "sbom/*.json"

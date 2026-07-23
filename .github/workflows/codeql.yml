@@ -75,7 +75,7 @@ jobs:
         run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: java, javascript
 
@@ -86,4 +86,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4

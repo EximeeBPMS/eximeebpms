@@ -58,6 +58,11 @@ jobs:
     runs-on: github-actions-runner-new
     strategy:
       fail-fast: false
+      # Never occupy the full self-hosted pool: with only 2 org-wide runner
+      # slots, keeping this at 1 guarantees a PR build (build.yml) always has
+      # somewhere to run, even while this matrix is still working through its
+      # queue.
+      max-parallel: 1
       matrix:
         java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}

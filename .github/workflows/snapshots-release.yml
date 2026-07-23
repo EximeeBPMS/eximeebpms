@@ -30,14 +30,14 @@ jobs:
           echo "MAVEN_REPO_LOCAL=${{ runner.temp }}/m2-repo-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: Check out the latest main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GH_TOKEN }}
           ref: main
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'

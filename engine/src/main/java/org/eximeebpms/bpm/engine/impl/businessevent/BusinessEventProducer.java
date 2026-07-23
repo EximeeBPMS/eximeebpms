@@ -75,6 +75,22 @@ public interface BusinessEventProducer {
   BusinessEvent createProcessInstanceUpdateEvt(DelegateExecution execution);
 
   /**
+   * Creates the business event fired when an activity instance is <strong>started</strong>.
+   *
+   * @param execution
+   * @return the business event
+   */
+  BusinessEvent createActivityInstanceStartEvt(DelegateExecution execution);
+
+  /**
+   * Creates the business event fired when an activity instance is <strong>ended</strong>.
+   *
+   * @param execution
+   * @return the business event
+   */
+  BusinessEvent createActivityInstanceEndEvt(DelegateExecution execution);
+
+  /**
    * Creates the business event fired when a process instance is <strong>migrated</strong>.
    *
    * @param execution

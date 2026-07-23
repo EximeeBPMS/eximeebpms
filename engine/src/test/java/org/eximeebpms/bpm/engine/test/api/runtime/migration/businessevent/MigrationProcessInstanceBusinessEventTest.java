@@ -150,9 +150,11 @@ public class MigrationProcessInstanceBusinessEventTest {
   private BusinessEventOutboxEntity findSingleOutboxEntry(String processInstanceId) {
     List<BusinessEventOutboxEntity> results = commandExecutor.execute(ctx ->
         ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
-    return results.stream()
+    List<BusinessEventOutboxEntity> matching = results.stream()
         .filter(entry -> BusinessEventTypes.PROCESS_INSTANCE_MIGRATE.getBusinessEventName().equals(entry.getEventType()))
-        .findFirst()
-        .orElse(null);
+        .toList();
+    assertThat(matching).as("process-instance:migrate outbox entries for process instance %s", processInstanceId)
+        .hasSizeLessThanOrEqualTo(1);
+    return matching.isEmpty() ? null : matching.getFirst();
   }
 }

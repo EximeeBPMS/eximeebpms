@@ -5,6 +5,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
+import org.eximeebpms.bpm.engine.impl.businessevent.activity.ActivityInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
@@ -22,6 +23,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
 
   protected VariableInstanceBusinessEventFactory variableEvtFactory = new VariableInstanceBusinessEventFactory();
   protected ProcessInstanceBusinessEventFactory processEvtFactory = new ProcessInstanceBusinessEventFactory();
+  protected ActivityInstanceBusinessEventFactory activityInstanceEvtFactory = new ActivityInstanceBusinessEventFactory();
   protected IdentityLinkBusinessEventFactory identityLinkEvtFactory = new IdentityLinkBusinessEventFactory();
   protected TaskInstanceBusinessEventFactory taskInstanceEvtFactory = new TaskInstanceBusinessEventFactory();
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
@@ -63,6 +65,16 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createProcessInstanceUpdateEvt(DelegateExecution execution) {
     return processEvtFactory.createUpdateEvent(execution);
+  }
+
+  @Override
+  public BusinessEvent createActivityInstanceStartEvt(DelegateExecution execution) {
+    return activityInstanceEvtFactory.createStartEvent(execution);
+  }
+
+  @Override
+  public BusinessEvent createActivityInstanceEndEvt(DelegateExecution execution) {
+    return activityInstanceEvtFactory.createEndEvent(execution);
   }
 
   @Override

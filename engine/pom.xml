@@ -381,6 +381,12 @@
 
 
   <properties>
+    <!-- engine.test.forkCount itself has no default here: a child POM's own <properties>
+         always wins over a parent's profile <properties>, so the default (2, for the
+         isolated per-JVM H2-in-memory case) and the override (1, for shared external DB
+         profiles) both live together in database/pom.xml's profiles instead - see the
+         h2-in-memory/db2/h2/mysql/oracle/postgresql/sqlserver profiles there. -->
+
     <test.includes />
     <!-- without a special test profile we don't want to exclude anything, this expressions should never match -->
     <test.excludes>$.</test.excludes>
@@ -463,6 +469,16 @@
           <failIfNoTests>false</failIfNoTests>
           <trimStackTrace>false</trimStackTrace>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <!-- This module alone accounts for over half of the CI build's wall-clock time,
+               and unlike the reactor-level -T parallelism (which mostly can't help a single
+               module), test classes within it were still running in a single forkCount=1
+               fork. Fixed count instead of a "C" multiplier: on the CI runner's small core
+               count, "0.5C" truncates via (int) cast to 1 - i.e. no parallelism at all - and
+               "1C" risks 3 forks x ~968m heap against the runner's memory limit. See
+               engine.test.forkCount above for why this is only safe to fix at 2 for the
+               default (H2 in-memory) profile. -->
+          <forkCount>${engine.test.forkCount}</forkCount>
+          <reuseForks>true</reuseForks>
           <includes>
            <include>%regex[.*(${test.includes}).*Test.*.class]</include>
           </includes>

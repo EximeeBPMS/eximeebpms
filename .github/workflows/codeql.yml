@@ -63,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Maven packages
-        uses: actions/cache@v6
+      - name: Restore Maven packages
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.m2/repository
           key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
@@ -80,10 +80,25 @@ jobs:
           languages: java, javascript
 
       - name: Build (compile only, tests not needed for analysis)
-        run: ./mvnw -B --settings ~/.m2-codeql/settings.xml verify -DskipTests
+        run: ./mvnw -B -T 1C --settings ~/.m2-codeql/settings.xml verify -DskipTests
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prune own artifacts before caching
+        # See identical comment in build.yml: actions/cache can't exclude via `!`,
+        # these groupIds are rebuilt from source every run so caching them is pure
+        # bloat, and gating on success() avoids poisoning the key with an
+        # incomplete .m2/repository from an early build failure.
+        if: success()
+        run: mkdir -p ${{ github.workspace }}/.m2/repository && rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
+
+      - name: Save Maven packages
+        if: success()
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

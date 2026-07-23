@@ -12,7 +12,10 @@ concurrency:
 jobs:
   check:
     name: Check
-    runs-on: github-actions-runner-new
+    # GitHub-hosted: this job only diffs changed files, no Nexus/internal
+    # access needed - keep it off the scarce self-hosted pool that the real
+    # `build` job below still requires.
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     outputs:
@@ -136,8 +139,34 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache Maven packages
+      - name: Ensure frontend cache directories exist
+        # frontend-maven-plugin creates these lazily - if the Maven build fails
+        # before reaching engine-rest/docs or webapps/frontend (or on the very
+        # first run), the paths below won't exist yet and the cache save step
+        # would fail on path validation, masking the real build failure.
+        run: |
+          mkdir -p ${{ github.workspace }}/engine-rest/docs/node
+          mkdir -p ${{ github.workspace }}/engine-rest/docs/node_modules
+          mkdir -p ${{ github.workspace }}/webapps/frontend/node
+          mkdir -p ${{ github.workspace }}/webapps/frontend/node_modules
+
+      - name: Cache Node/npm packages
         uses: actions/cache@v6
+        with:
+          # frontend-maven-plugin (engine-rest/docs, webapps/frontend) installs its own
+          # Node.js binary and runs npm ci - neither was cached, so both were repeated
+          # from scratch on every build.
+          path: |
+            ${{ github.workspace }}/engine-rest/docs/node
+            ${{ github.workspace }}/engine-rest/docs/node_modules
+            ${{ github.workspace }}/webapps/frontend/node
+            ${{ github.workspace }}/webapps/frontend/node_modules
+          key: ${{ runner.os }}-frontend-${{ hashFiles('engine-rest/docs/package-lock.json', 'webapps/frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-frontend-
+
+      - name: Restore Maven packages
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -151,13 +180,33 @@ jobs:
         id: maven-build
         shell: bash
         run: |
-          ./mvnw -B --settings ~/.m2-build/settings.xml verify
+          ./mvnw -B -T 1C --settings ~/.m2-build/settings.xml verify
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Prune own artifacts before caching
+        # actions/cache does not reliably support `!` exclusion patterns in `path:` -
+        # every module under these 5 groupIds gets reinstalled from source on every
+        # build anyway, so caching them buys nothing while bloating the archive.
+        # Scoped to just these subdirectories, NOT the whole org/eximeebpms tree: the
+        # bare org.eximeebpms groupId also hosts eximeebpms-release-parent, a real
+        # external Nexus/Central artifact that should stay cached. Gated on success():
+        # cache keys are immutable once saved, so saving an incomplete .m2/repository
+        # from a build that failed early would permanently poison this key until the
+        # next pom.xml change.
+        if: success()
+        run: mkdir -p ${{ github.workspace }}/.m2/repository && rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
+
+      - name: Save Maven packages
+        if: success()
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Publish Test Report
         if: always()

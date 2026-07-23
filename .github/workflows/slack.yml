@@ -28,7 +28,9 @@ on:
 
 jobs:
   notify_slack:
-    runs-on: github-actions-runner-new
+    # GitHub-hosted: this job only formats a message and calls the Slack API,
+    # no Nexus/internal-network access needed.
+    runs-on: ubuntu-latest
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'
     steps:
       - name: Set Event Message and Send Slack Notification
@@ -304,8 +306,10 @@ jobs:
             printf '%s' "$s"
           }
 
-          printf -v payload '{"channel":"%s","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"🔔 *New event* %s 🔔"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}},{"type":"section","text":{"type":"mrkdwn","text":"*Repository:* <%s|%s> _(OSS)_"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}}]}' \
-            "$SLACK_CHANNEL" "$(json_escape "$CREATED_AT")" "$(json_escape "$msg")" "$(json_escape "$REPO_URL")" "$(json_escape "$REPO_NAME")" "$(json_escape "$details")"
+          # "text" is the fallback shown in push notifications/screen readers, which
+          # don't render "blocks" - Slack recommends always sending both.
+          printf -v payload '{"channel":"%s","text":"%s","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"🔔 *New event* %s 🔔"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}},{"type":"section","text":{"type":"mrkdwn","text":"*Repository:* <%s|%s> _(OSS)_"}},{"type":"section","text":{"type":"mrkdwn","text":"%s"}}]}' \
+            "$SLACK_CHANNEL" "$(json_escape "$msg")" "$(json_escape "$CREATED_AT")" "$(json_escape "$msg")" "$(json_escape "$REPO_URL")" "$(json_escape "$REPO_NAME")" "$(json_escape "$details")"
 
           curl -sf -X POST https://slack.com/api/chat.postMessage \
             -H "Authorization: Bearer $SLACK_BOT_TOKEN" \

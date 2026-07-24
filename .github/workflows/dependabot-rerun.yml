@@ -1,0 +1,51 @@
+name: Rerun deferred Dependabot builds
+
+# build.yml's hours-gate defers Dependabot builds (no-op skip) during
+# business hours (Mon-Fri 07:00-18:00 Europe/Warsaw) to keep the scarce
+# github-actions-runner-new pool free for human PRs. This workflow finds any
+# Dependabot PR whose latest build run ended up skipped and reruns it once
+# business hours are over, so those builds/auto-merges resume automatically.
+on:
+  schedule:
+    # 18:00 Europe/Warsaw is 16:00 UTC (CEST) or 17:00 UTC (CET) depending on
+    # DST - fire at both times rather than hardcoding one offset. The gate
+    # step below re-checks the real time before doing anything, so whichever
+    # of the two fires "early" for the current season is a harmless no-op.
+    - cron: '5 16 * * 1-5'
+    - cron: '5 17 * * 1-5'
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  rerun:
+    name: Rerun skipped Dependabot builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip unless actually past business hours (Europe/Warsaw)
+        id: gate
+        run: |
+          DOW=$(TZ='Europe/Warsaw' date +%u)
+          HOUR=$((10#$(TZ='Europe/Warsaw' date +%H)))
+          if [[ "$DOW" -ge 1 && "$DOW" -le 5 && "$HOUR" -ge 7 && "$HOUR" -lt 18 ]]; then
+            echo "Still business hours in Europe/Warsaw - nothing to do yet."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Rerun any Dependabot build left skipped by the business-hours gate
+        if: steps.gate.outputs.proceed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for pr_branch in $(gh pr list --repo "${{ github.repository }}" --author "app/dependabot" --state open --json headRefName --jq '.[].headRefName'); do
+            run_id=$(gh run list --repo "${{ github.repository }}" --branch "$pr_branch" --workflow=build.yml --limit 1 --json databaseId,conclusion --jq '.[0] | select(.conclusion=="skipped") | .databaseId')
+            if [[ -n "$run_id" ]]; then
+              echo "Rerunning skipped build for $pr_branch (run $run_id)"
+              gh run rerun "$run_id" --repo "${{ github.repository }}"
+            fi
+          done

@@ -9,6 +9,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+      time: "20:00"
+      timezone: "Europe/Warsaw"
     open-pull-requests-limit: 2
     # Delay patch-level PRs by 5 days after release so a compromised/broken
     # patch has time to get pulled or flagged upstream before we auto-merge
@@ -50,6 +52,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      time: "20:00"
+      timezone: "Europe/Warsaw"
     open-pull-requests-limit: 2
     groups:
       github-actions:

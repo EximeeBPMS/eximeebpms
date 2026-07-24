@@ -3,18 +3,43 @@ name: build
 on:
   pull_request:
     branches: [ "main" ]
+  # PRs opened by Dependabot cannot be dispatched to self-hosted runners
+  # under plain pull_request - GitHub queues them forever regardless of
+  # runner availability. pull_request_target runs with the trusted base-repo
+  # context instead, so self-hosted runners are allowed there. The `if`
+  # conditions on each job below restrict this path to Dependabot only, so
+  # human-authored PRs keep building under plain pull_request without
+  # base-repo secrets exposed to their (untrusted-until-reviewed) code.
+  pull_request_target:
+    branches: [ "main" ]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # github.ref resolves to the base branch under pull_request_target, not a
+  # per-PR ref - grouping on it alone would put every Dependabot PR in the
+  # same concurrency group, cancelling each other's builds. Key on the PR
+  # number when there is one, and on event_name since pull_request and
+  # pull_request_target fire as two separate runs for the same PR.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 
 jobs:
   check:
     name: Check
-    runs-on: github-actions-runner-new
+    # GitHub-hosted: this job only diffs changed files, no build/network
+    # access needed - keep it off the scarce self-hosted pool that the real
+    # `build` job below still requires.
+    runs-on: ubuntu-latest
     permissions:
       contents: read
+    # Skip the pull_request run for Dependabot (its actual build below needs
+    # pull_request_target - self-hosted runners aren't dispatched for
+    # Dependabot-triggered pull_request workflows) and skip the
+    # pull_request_target run for everyone else (their plain pull_request run
+    # above already covers it - avoids building PRs twice).
+    if: >-
+      !(github.event_name == 'pull_request' && github.actor == 'dependabot[bot]') &&
+      !(github.event_name == 'pull_request_target' && github.actor != 'dependabot[bot]')
     outputs:
       skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
@@ -22,6 +47,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Get list of changed files
         id: verify
@@ -82,10 +108,39 @@ jobs:
           echo "Nothing to do. Exiting early."
           exit 0
 
+  hours-gate:
+    name: Business Hours Gate
+    # GitHub-hosted: only runs a `date` check, no build/network access needed.
+    # Always runs (unconditionally) so `build` below can depend on its output
+    # regardless of actor - a conditional job here would itself show as
+    # skipped for non-Dependabot runs, and a skipped `needs` job makes the
+    # dependent job skip too unless additionally guarded.
+    runs-on: ubuntu-latest
+    outputs:
+      business_hours: ${{ steps.gate.outputs.business_hours }}
+    steps:
+      - name: Determine if within business hours (Mon-Fri 07:00-18:00 Europe/Warsaw)
+        id: gate
+        run: |
+          DOW=$(TZ='Europe/Warsaw' date +%u)
+          HOUR=$((10#$(TZ='Europe/Warsaw' date +%H)))
+          if [[ "$DOW" -ge 1 && "$DOW" -le 5 && "$HOUR" -ge 7 && "$HOUR" -lt 18 ]]; then
+            echo "business_hours=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "business_hours=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
     name: Build
-    needs: check
-    if: needs.check.outputs.skip_build == 'false'
+    needs: [check, hours-gate]
+    # Dependabot builds are deferred (this job just no-ops) during business
+    # hours to keep the scarce github-actions-runner-new pool free for human
+    # PRs; a scheduled workflow (dependabot-rerun.yml) automatically reruns
+    # any build left in this state once business hours end - no manual
+    # intervention needed. Human-authored PRs are never gated by this check.
+    if: >-
+      needs.check.outputs.skip_build == 'false' &&
+      !(github.actor == 'dependabot[bot]' && needs.hours-gate.outputs.business_hours == 'true')
     runs-on: github-actions-runner-new
     permissions:
       contents: read
@@ -97,6 +152,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up JDK
         run: |
@@ -150,8 +206,14 @@ jobs:
       - name: Maven Build
         id: maven-build
         shell: bash
+        # -U on the first invocation only: the restore-keys fallback above can serve a
+        # cache blob saved before a just-bumped parent POM version was published to
+        # Nexus, and Maven's default 24h "don't recheck" policy then makes every build
+        # fail with a non-resolvable parent POM until the cache key changes again.
+        # -U forces the recheck without discarding the rest of the cache; later mvnw
+        # calls in this job reuse the now-correct local repo without needing it again.
         run: |
-          ./mvnw -B --settings ~/.m2-build/settings.xml verify
+          ./mvnw -B -U --settings ~/.m2-build/settings.xml verify
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:

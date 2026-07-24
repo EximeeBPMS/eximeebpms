@@ -20,7 +20,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze (Java, JavaScript)
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     permissions:
       security-events: write
       contents: read
@@ -80,7 +80,11 @@ jobs:
           languages: java, javascript
 
       - name: Build (compile only, tests not needed for analysis)
-        run: ./mvnw -B --settings ~/.m2-codeql/settings.xml verify -DskipTests
+        # -U: see build.yml's Maven Build step - the restore-keys fallback above can
+        # serve a cache blob predating a parent POM version bump, and Maven's default
+        # 24h "don't recheck" policy would otherwise fail every build with a
+        # non-resolvable parent POM until the cache key changes again.
+        run: ./mvnw -B -U --settings ~/.m2-codeql/settings.xml verify -DskipTests
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

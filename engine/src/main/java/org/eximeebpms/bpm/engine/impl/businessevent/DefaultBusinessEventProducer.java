@@ -1,5 +1,6 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
+import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
@@ -8,6 +9,7 @@ import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.businessevent.activity.ActivityInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.externaltask.ExternalTaskBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.dmn.DmnDecisionEvaluationBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.job.JobBusinessEventFactory;
@@ -17,6 +19,7 @@ import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEve
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -35,6 +38,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
   protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
   protected ExternalTaskBusinessEventFactory externalTaskEvtFactory = new ExternalTaskBusinessEventFactory();
+  protected DmnDecisionEvaluationBusinessEventFactory dmnDecisionEvaluationEvtFactory = new DmnDecisionEvaluationBusinessEventFactory();
 
   protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
@@ -206,5 +210,15 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createExternalTaskDeletedBusinessEvent(ExternalTaskEntity externalTaskEntity) {
     return externalTaskEvtFactory.createDeletedEvent(externalTaskEntity);
+  }
+
+  @Override
+  public BusinessEvent createDecisionEvaluationEvt(ExecutionEntity execution, DmnDecisionEvaluationEvent evaluationEvent) {
+    return dmnDecisionEvaluationEvtFactory.createEvent(execution, evaluationEvent);
+  }
+
+  @Override
+  public BusinessEvent createDecisionEvaluationEvt(DmnDecisionEvaluationEvent evaluationEvent) {
+    return dmnDecisionEvaluationEvtFactory.createEvent(evaluationEvent);
   }
 }

@@ -1,10 +1,12 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
+import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -292,4 +294,27 @@ public interface BusinessEventProducer {
      * @return the business event
      */
     BusinessEvent createExternalTaskDeletedBusinessEvent(ExternalTaskEntity externalTaskEntity);
+
+    /**
+     * Creates the business event fired when a decision is <strong>evaluated</strong>
+     * within a process instance. The event bundles the decision that was directly
+     * evaluated together with any required (sub-)decisions from the same decision
+     * requirements diagram.
+     *
+     * @param execution the execution in which the decision was evaluated
+     * @param evaluationEvent the DMN decision evaluation event
+     * @return the business event
+     */
+    BusinessEvent createDecisionEvaluationEvt(ExecutionEntity execution, DmnDecisionEvaluationEvent evaluationEvent);
+
+    /**
+     * Creates the business event fired when a decision is <strong>evaluated</strong>
+     * standalone (e.g. via the decision service). The event bundles the decision that
+     * was directly evaluated together with any required (sub-)decisions from the same
+     * decision requirements diagram.
+     *
+     * @param evaluationEvent the DMN decision evaluation event
+     * @return the business event
+     */
+    BusinessEvent createDecisionEvaluationEvt(DmnDecisionEvaluationEvent evaluationEvent);
 }

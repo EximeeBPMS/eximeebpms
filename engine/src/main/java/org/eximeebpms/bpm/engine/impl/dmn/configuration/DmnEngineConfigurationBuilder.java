@@ -26,6 +26,7 @@ import org.eximeebpms.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
 import org.eximeebpms.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.eximeebpms.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
 import org.eximeebpms.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import org.eximeebpms.bpm.engine.impl.businessevent.dmn.BusinessEventDecisionEvaluationListener;
 import org.eximeebpms.bpm.engine.impl.dmn.transformer.DecisionDefinitionHandler;
 import org.eximeebpms.bpm.engine.impl.dmn.transformer.DecisionRequirementsDefinitionTransformHandler;
 import org.eximeebpms.bpm.engine.impl.history.parser.HistoryDecisionEvaluationListener;
@@ -126,6 +127,7 @@ public class DmnEngineConfigurationBuilder {
         .getCustomPostDecisionEvaluationListeners();
     customPostDecisionEvaluationListeners.add(new MetricsDecisionEvaluationListener());
     customPostDecisionEvaluationListeners.add(historyDecisionEvaluationListener);
+    customPostDecisionEvaluationListeners.add(new BusinessEventDecisionEvaluationListener());
 
     return customPostDecisionEvaluationListeners;
   }

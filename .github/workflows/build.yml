@@ -150,8 +150,14 @@ jobs:
       - name: Maven Build
         id: maven-build
         shell: bash
+        # -U on the first invocation only: the restore-keys fallback above can serve a
+        # cache blob saved before a just-bumped parent POM version was published to
+        # Nexus, and Maven's default 24h "don't recheck" policy then makes every build
+        # fail with a non-resolvable parent POM until the cache key changes again.
+        # -U forces the recheck without discarding the rest of the cache; later mvnw
+        # calls in this job reuse the now-correct local repo without needing it again.
         run: |
-          ./mvnw -B --settings ~/.m2-build/settings.xml verify
+          ./mvnw -B -U --settings ~/.m2-build/settings.xml verify
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
           ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:

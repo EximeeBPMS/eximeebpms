@@ -32,6 +32,9 @@ import org.eximeebpms.bpm.engine.impl.JobQueryImpl;
 import org.eximeebpms.bpm.engine.impl.JobQueryProperty;
 import org.eximeebpms.bpm.engine.impl.Page;
 import org.eximeebpms.bpm.engine.impl.QueryOrderingProperty;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionListener;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionState;
@@ -77,7 +80,17 @@ public class JobManager extends AbstractManager {
     job.setCreateTime(ClockUtil.getCurrentTime());
 
     getDbEntityManager().insert(job);
+    fireJobCreatedBusinessEvent(job);
     getHistoricJobLogManager().fireJobCreatedEvent(job);
+  }
+
+  private void fireJobCreatedBusinessEvent(JobEntity job) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createJobCreatedEvt(job);
+      }
+    });
   }
 
   public void deleteJob(JobEntity job) {
@@ -88,9 +101,19 @@ public class JobManager extends AbstractManager {
     getDbEntityManager().delete(job);
 
     if (fireDeleteEvent) {
+      fireJobDeletedBusinessEvent(job);
       getHistoricJobLogManager().fireJobDeletedEvent(job);
     }
 
+  }
+
+  private void fireJobDeletedBusinessEvent(JobEntity job) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createJobDeletedEvt(job);
+      }
+    });
   }
 
   public void insertAndHintJobExecutor(JobEntity jobEntity) {

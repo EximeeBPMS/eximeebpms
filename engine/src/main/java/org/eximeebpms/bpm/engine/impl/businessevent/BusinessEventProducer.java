@@ -5,6 +5,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.runtime.Incident;
@@ -153,6 +154,39 @@ public interface BusinessEventProducer {
    * @return the business event
    */
   BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task);
+
+  /**
+   * Creates the business event fired when a job is <strong>created</strong>.
+   *
+   * @param job the job entity
+   * @return the business event
+   */
+  BusinessEvent createJobCreatedEvt(JobEntity job);
+
+  /**
+   * Creates the business event fired when a job is <strong>deleted</strong>.
+   *
+   * @param job the job entity
+   * @return the business event
+   */
+  BusinessEvent createJobDeletedEvt(JobEntity job);
+
+  /**
+   * Creates the business event fired when a job has <strong>failed</strong>.
+   *
+   * @param job     the job entity
+   * @param failure the exception that caused the job to fail
+   * @return the business event
+   */
+  BusinessEvent createJobFailedEvt(JobEntity job, Throwable failure);
+
+  /**
+   * Creates the business event fired when a job is <strong>successful</strong>.
+   *
+   * @param job the job entity
+   * @return the business event
+   */
+  BusinessEvent createJobSuccessfulEvt(JobEntity job);
 
   /**
    * Creates the business event fired when a script violation is <strong>detected</strong>.

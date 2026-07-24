@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
@@ -143,7 +146,17 @@ public abstract class JobEntity extends AcquirableJobEntity
   protected void postExecute(CommandContext commandContext) {
     LOG.debugJobExecuted(this);
     delete(true);
+    fireJobSuccessfulBusinessEvent(this);
     commandContext.getHistoricJobLogManager().fireJobSuccessfulEvent(this);
+  }
+
+  protected void fireJobSuccessfulBusinessEvent(JobEntity jobEntity) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createJobSuccessfulEvt(jobEntity);
+      }
+    });
   }
 
   public void init(CommandContext commandContext) {

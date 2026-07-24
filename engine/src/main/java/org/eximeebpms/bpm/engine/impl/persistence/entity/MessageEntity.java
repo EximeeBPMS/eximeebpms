@@ -57,6 +57,7 @@ public class MessageEntity extends JobEntity {
     } else {
       delete(true);
     }
+    fireJobSuccessfulBusinessEvent(this);
     commandContext.getHistoricJobLogManager().fireJobSuccessfulEvent(this);
   }
 

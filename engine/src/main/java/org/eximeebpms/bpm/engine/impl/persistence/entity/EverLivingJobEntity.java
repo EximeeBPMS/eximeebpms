@@ -42,6 +42,7 @@ public class EverLivingJobEntity extends JobEntity {
   protected void postExecute(CommandContext commandContext) {
     LOG.debugJobExecuted(this);
     init(commandContext);
+    fireJobSuccessfulBusinessEvent(this);
     commandContext.getHistoricJobLogManager().fireJobSuccessfulEvent(this);
   }
 

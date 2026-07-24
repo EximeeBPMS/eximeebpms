@@ -21,6 +21,7 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cmd.ExecuteJobsCmd;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
+import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 import org.eximeebpms.bpm.engine.impl.interceptor.ProcessDataContext;
 
@@ -71,7 +72,7 @@ public class ExecuteJobHelper {
         processDataContext.clearMdc();
       }
       // invoke job listener
-      invokeJobListener(commandExecutor, jobFailureCollector);
+      invokeJobListener(commandExecutor, jobFailureCollector, configuration);
       /*
        * reset MDC properties after successful listener invocation,
        * in case of an exception in the listener the logging context
@@ -83,12 +84,23 @@ public class ExecuteJobHelper {
     }
   }
 
-  protected static void invokeJobListener(CommandExecutor commandExecutor, JobFailureCollector jobFailureCollector) {
+  protected static void invokeJobListener(CommandExecutor commandExecutor, JobFailureCollector jobFailureCollector,
+      ProcessEngineConfigurationImpl configuration) {
     if(jobFailureCollector.getJobId() != null) {
       if (jobFailureCollector.getFailure() != null) {
         // the failed job listener is responsible for decrementing the retries and logging the exception to the DB.
-
-        FailedJobListener failedJobListener = createFailedJobListener(commandExecutor, jobFailureCollector);
+        // Context.getProcessEngineConfiguration() is not available here: we're running between two
+        // command executions (outside of any active CommandContextInterceptor), so the thread-local
+        // stack is empty at this point. Use the configuration passed in, falling back to fetching it
+        // via a short-lived command when the caller did not provide one (e.g. ManagementServiceImpl#executeJob).
+        ProcessEngineConfigurationImpl engineConfiguration = configuration != null
+            ? configuration
+            : commandExecutor.execute(CommandContext::getProcessEngineConfiguration);
+        CommandExecutor commandExecutorTxRequiresNew = engineConfiguration.getCommandExecutorTxRequiresNew();
+        // the retry-decrement / job handler command must keep running on the regular commandExecutor
+        // so it joins the ambient transaction; only the JOB_FAIL business event is fired via the
+        // dedicated commandExecutorTxRequiresNew, in its own independent transaction.
+        FailedJobListener failedJobListener = createFailedJobListener(commandExecutor, commandExecutorTxRequiresNew, jobFailureCollector);
 
         OptimisticLockingException exception = callFailedJobListenerWithRetries(commandExecutor, failedJobListener);
         if (exception != null) {
@@ -125,8 +137,9 @@ public class ExecuteJobHelper {
   }
 
 
-  protected static FailedJobListener createFailedJobListener(CommandExecutor commandExecutor, JobFailureCollector jobFailureCollector) {
-    return new FailedJobListener(commandExecutor, jobFailureCollector);
+  protected static FailedJobListener createFailedJobListener(CommandExecutor commandExecutor,
+      CommandExecutor commandExecutorTxRequiresNew, JobFailureCollector jobFailureCollector) {
+    return new FailedJobListener(commandExecutor, commandExecutorTxRequiresNew, jobFailureCollector);
   }
 
   protected static SuccessfulJobListener createSuccessfulJobListener(CommandExecutor commandExecutor) {

@@ -35,7 +35,7 @@ import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.history.ExternalTaskState;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
 import org.eximeebpms.bpm.engine.incident.IncidentState;
-import org.eximeebpms.bpm.engine.history.JobState;
+import org.eximeebpms.bpm.engine.job.JobState;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.batch.history.HistoricBatchEntity;

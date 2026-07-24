@@ -20,12 +20,21 @@ import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContextListener;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 
+import java.util.Date;
+
 public class JobFailureCollector implements CommandContextListener {
 
   protected Throwable failure;
   protected JobEntity job;
   protected String jobId;
   protected String failedActivityId;
+  // Immutable snapshot of the job's lock expiration time, taken before job.execute(...) runs.
+  // Job handlers may legitimately mutate the JobEntity's lockExpirationTime as a side effect
+  // (e.g. rescheduling an ever-living job resets the lock), and that in-memory mutation survives
+  // even if the surrounding transaction is rolled back afterwards. Comparing against this snapshot,
+  // instead of the live (mutable) entity field, keeps the "was this job re-acquired by another
+  // thread?" check in FailedJobListener#isJobReacquired accurate.
+  protected Date lockExpirationTime;
 
   public JobFailureCollector(String jobId) {
     this.jobId = jobId;
@@ -54,6 +63,7 @@ public class JobFailureCollector implements CommandContextListener {
 
   public void setJob(JobEntity job) {
     this.job = job;
+    this.lockExpirationTime = job != null ? job.getLockExpirationTime() : null;
   }
 
   public JobEntity getJob() {
@@ -70,6 +80,14 @@ public class JobFailureCollector implements CommandContextListener {
 
   public void setFailedActivityId(String activityId) {
     this.failedActivityId = activityId;
+  }
+
+  /**
+   * @return the lock expiration time of the job as it was right before {@code job.execute(...)} was
+   * invoked, i.e. before any handler-triggered side effects (like rescheduling) could mutate it.
+   */
+  public Date getLockExpirationTime() {
+    return lockExpirationTime;
   }
 
 }

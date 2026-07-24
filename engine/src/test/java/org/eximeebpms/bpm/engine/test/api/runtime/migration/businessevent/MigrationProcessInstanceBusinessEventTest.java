@@ -64,8 +64,8 @@ public class MigrationProcessInstanceBusinessEventTest {
 
   @After
   public void cleanUp() {
-    deleteBusinessEventOutboxEntities();
     deleteCleanupJob();
+    deleteBusinessEventOutboxEntities();
   }
 
   @Test

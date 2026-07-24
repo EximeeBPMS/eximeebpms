@@ -42,8 +42,8 @@ public abstract class AbstractBusinessEventIT {
 
     @After
     public void cleanUp() {
-        deleteBusinessEventOutboxEntities();
         deleteCleanupJob();
+        deleteBusinessEventOutboxEntities();
         ClockUtil.reset();
     }
 

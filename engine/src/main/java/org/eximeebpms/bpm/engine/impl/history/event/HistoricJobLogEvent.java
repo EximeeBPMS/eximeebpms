@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.engine.impl.history.event;
 import java.util.Date;
 
-import org.eximeebpms.bpm.engine.history.JobState;
+import org.eximeebpms.bpm.engine.job.JobState;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.eximeebpms.bpm.engine.impl.util.ExceptionUtil;

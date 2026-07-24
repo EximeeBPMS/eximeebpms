@@ -9,12 +9,14 @@ import org.eximeebpms.bpm.engine.impl.businessevent.activity.ActivityInstanceBus
 import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.job.JobBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.ProcessInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.script.ScriptViolationBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.runtime.Incident;
@@ -26,6 +28,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected ActivityInstanceBusinessEventFactory activityInstanceEvtFactory = new ActivityInstanceBusinessEventFactory();
   protected IdentityLinkBusinessEventFactory identityLinkEvtFactory = new IdentityLinkBusinessEventFactory();
   protected TaskInstanceBusinessEventFactory taskInstanceEvtFactory = new TaskInstanceBusinessEventFactory();
+  protected JobBusinessEventFactory jobEvtFactory = new JobBusinessEventFactory();
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
   protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
   protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
@@ -115,6 +118,26 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task) {
     return taskInstanceEvtFactory.createDeleteEvent(task);
+  }
+
+  @Override
+  public BusinessEvent createJobCreatedEvt(JobEntity job) {
+    return jobEvtFactory.createJobCreatedEvent(job);
+  }
+
+  @Override
+  public BusinessEvent createJobDeletedEvt(JobEntity job) {
+    return jobEvtFactory.createJobDeletedEvent(job);
+  }
+
+  @Override
+  public BusinessEvent createJobSuccessfulEvt(JobEntity job) {
+    return jobEvtFactory.createJobSuccessfulEvent(job);
+  }
+
+  @Override
+  public BusinessEvent createJobFailedEvt(JobEntity job, Throwable failure) {
+    return jobEvtFactory.createJobFailedEvent(job, failure);
   }
 
   @Override

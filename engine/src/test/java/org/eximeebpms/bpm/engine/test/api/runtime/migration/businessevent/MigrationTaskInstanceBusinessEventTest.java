@@ -68,8 +68,8 @@ public class MigrationTaskInstanceBusinessEventTest {
 
   @After
   public void cleanUp() {
-    deleteBusinessEventOutboxEntities();
     deleteCleanupJob();
+    deleteBusinessEventOutboxEntities();
   }
 
   @Test

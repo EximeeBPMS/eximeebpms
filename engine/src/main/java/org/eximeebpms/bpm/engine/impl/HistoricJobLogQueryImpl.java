@@ -26,7 +26,7 @@ import java.util.List;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
 import org.eximeebpms.bpm.engine.history.HistoricJobLog;
 import org.eximeebpms.bpm.engine.history.HistoricJobLogQuery;
-import org.eximeebpms.bpm.engine.history.JobState;
+import org.eximeebpms.bpm.engine.job.JobState;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 import org.eximeebpms.bpm.engine.impl.util.CollectionUtil;

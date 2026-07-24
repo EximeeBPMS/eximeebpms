@@ -20,7 +20,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze (Java, JavaScript)
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     permissions:
       security-events: write
       contents: read

@@ -18,7 +18,7 @@ permissions:
 jobs:
   update-sbom:
     name: Generate and commit SBOM
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     if: >-
       github.event_name == 'workflow_dispatch' ||
       contains(join(github.event.commits.*.message, ' '), 'deps')

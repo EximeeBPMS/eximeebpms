@@ -33,6 +33,9 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnProperties;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.EximeeBpmsErrorEventDefinition;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
@@ -347,6 +350,7 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
 
   public void delete() {
     deleteFromExecutionAndRuntimeTable(false);
+    produceExternalTaskDeletedBusinessEvent();
     produceHistoricExternalTaskDeletedEvent();
   }
 
@@ -385,6 +389,7 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
 
     deleteFromExecutionAndRuntimeTable(true);
 
+    produceExternalTaskSuccessfulBusinessEvent();
     produceHistoricExternalTaskSuccessfulEvent();
 
     associatedExecution.signal(null, null);
@@ -417,6 +422,7 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
     }
 
     this.lockExpirationTime = new Date(ClockUtil.getCurrentTime().getTime() + retryDuration);
+    produceExternalTaskFailedBusinessEvent();
     produceHistoricExternalTaskFailedEvent();
     setRetriesAndManageIncidents(retries);
   }
@@ -582,9 +588,46 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
     externalTask.setProcessDefinitionKey(processDefinition.getKey());
 
     externalTask.insert();
+    externalTask.produceExternalTaskCreatedBusinessEvent();
     externalTask.produceHistoricExternalTaskCreatedEvent();
 
     return externalTask;
+  }
+
+  protected void produceExternalTaskCreatedBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createExternalTaskCreatedBusinessEvent(ExternalTaskEntity.this);
+      }
+    });
+  }
+
+  protected void produceExternalTaskFailedBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createExternalTaskFailedBusinessEvent(ExternalTaskEntity.this);
+      }
+    });
+  }
+
+  protected void produceExternalTaskSuccessfulBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createExternalTaskSuccessfulBusinessEvent(ExternalTaskEntity.this);
+      }
+    });
+  }
+
+  protected void produceExternalTaskDeletedBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createExternalTaskDeletedBusinessEvent(ExternalTaskEntity.this);
+      }
+    });
   }
 
   protected void produceHistoricExternalTaskCreatedEvent() {

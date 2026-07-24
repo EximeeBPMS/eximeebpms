@@ -7,6 +7,7 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.businessevent.activity.ActivityInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.externaltask.ExternalTaskBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.job.JobBusinessEventFactory;
@@ -15,6 +16,7 @@ import org.eximeebpms.bpm.engine.impl.businessevent.script.ScriptViolationBusine
 import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -32,6 +34,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
   protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
   protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
+  protected ExternalTaskBusinessEventFactory externalTaskEvtFactory = new ExternalTaskBusinessEventFactory();
 
   protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
@@ -183,5 +186,25 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createBatchUpdateBusinessEvent(BatchEntity batchEntity) {
     return batchEvtFactory.createUpdateEvent(batchEntity);
+  }
+
+  @Override
+  public BusinessEvent createExternalTaskCreatedBusinessEvent(ExternalTaskEntity externalTaskEntity) {
+    return externalTaskEvtFactory.createCreatedEvent(externalTaskEntity);
+  }
+
+  @Override
+  public BusinessEvent createExternalTaskFailedBusinessEvent(ExternalTaskEntity externalTaskEntity) {
+    return externalTaskEvtFactory.createFailedEvent(externalTaskEntity);
+  }
+
+  @Override
+  public BusinessEvent createExternalTaskSuccessfulBusinessEvent(ExternalTaskEntity externalTaskEntity) {
+    return externalTaskEvtFactory.createSuccessfulEvent(externalTaskEntity);
+  }
+
+  @Override
+  public BusinessEvent createExternalTaskDeletedBusinessEvent(ExternalTaskEntity externalTaskEntity) {
+    return externalTaskEvtFactory.createDeletedEvent(externalTaskEntity);
   }
 }

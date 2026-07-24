@@ -4,6 +4,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -259,4 +260,36 @@ public interface BusinessEventProducer {
      * @return the business event
      */
     BusinessEvent createBatchUpdateBusinessEvent(BatchEntity batchEntity);
+
+    /**
+     * Creates the business event fired when an external task is <strong>created</strong>.
+     *
+     * @param externalTaskEntity the external task entity
+     * @return the business event
+     */
+    BusinessEvent createExternalTaskCreatedBusinessEvent(ExternalTaskEntity externalTaskEntity);
+
+    /**
+     * Creates the business event fired when an external task <strong>fails</strong>.
+     *
+     * @param externalTaskEntity the external task entity
+     * @return the business event
+     */
+    BusinessEvent createExternalTaskFailedBusinessEvent(ExternalTaskEntity externalTaskEntity);
+
+    /**
+     * Creates the business event fired when an external task completes <strong>successfully</strong>.
+     *
+     * @param externalTaskEntity the external task entity
+     * @return the business event
+     */
+    BusinessEvent createExternalTaskSuccessfulBusinessEvent(ExternalTaskEntity externalTaskEntity);
+
+    /**
+     * Creates the business event fired when an external task is <strong>deleted</strong>.
+     *
+     * @param externalTaskEntity the external task entity
+     * @return the business event
+     */
+    BusinessEvent createExternalTaskDeletedBusinessEvent(ExternalTaskEntity externalTaskEntity);
 }

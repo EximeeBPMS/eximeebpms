@@ -32,6 +32,9 @@ import org.eximeebpms.bpm.engine.exception.NullValueException;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
@@ -291,6 +294,7 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     }
 
     fireHistoricActivityInstanceUpdate();
+    fireBusinessActivityInstanceUpdate();
 
     return subProcessInstance;
   }
@@ -323,6 +327,15 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
         }
       });
     }
+  }
+
+  public void fireBusinessActivityInstanceUpdate() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createActivityInstanceUpdateEvt(ExecutionEntity.this);
+      }
+    });
   }
 
   // scopes ///////////////////////////////////////////////////////////////////

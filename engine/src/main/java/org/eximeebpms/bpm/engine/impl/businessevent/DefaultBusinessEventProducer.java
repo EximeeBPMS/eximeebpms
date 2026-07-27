@@ -22,6 +22,7 @@ import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEve
 import org.eximeebpms.bpm.engine.impl.businessevent.useroperationlog.UserOperationLogBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
+import org.eximeebpms.bpm.engine.impl.migration.instance.MigratingActivityInstance;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
@@ -92,6 +93,16 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createActivityInstanceEndEvt(DelegateExecution execution) {
     return activityInstanceEvtFactory.createEndEvent(execution);
+  }
+
+  @Override
+  public BusinessEvent createActivityInstanceUpdateEvt(DelegateExecution execution) {
+    return activityInstanceEvtFactory.createUpdateEvent(execution);
+  }
+
+  @Override
+  public BusinessEvent createActivityInstanceMigrateEvt(MigratingActivityInstance activityInstance) {
+    return activityInstanceEvtFactory.createMigrateEvent(activityInstance);
   }
 
   @Override

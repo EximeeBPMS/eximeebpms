@@ -386,6 +386,8 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
   protected void migrateBusinessEvent(final DelegateExecution execution) {
     if (activityInstance.getId().equals(activityInstance.getProcessInstanceId())) {
       migrateProcessInstanceBusinessEvent(execution);
+    } else {
+      migrateActivityInstanceBusinessEvent();
     }
   }
 
@@ -394,6 +396,15 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createProcessInstanceMigrateEvt(execution);
+      }
+    });
+  }
+
+  protected void migrateActivityInstanceBusinessEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createActivityInstanceMigrateEvt(MigratingActivityInstance.this);
       }
     });
   }

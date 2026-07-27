@@ -7,6 +7,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
+import org.eximeebpms.bpm.engine.impl.migration.instance.MigratingActivityInstance;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
@@ -96,6 +97,22 @@ public interface BusinessEventProducer {
    * @return the business event
    */
   BusinessEvent createActivityInstanceEndEvt(DelegateExecution execution);
+
+  /**
+   * Creates the business event fired when an activity instance is <strong>updated</strong>.
+   *
+   * @param execution
+   * @return the business event
+   */
+  BusinessEvent createActivityInstanceUpdateEvt(DelegateExecution execution);
+
+  /**
+   * Creates the business event fired when an activity instance is <strong>migrated</strong>.
+   *
+   * @param activityInstance the migrating activity instance
+   * @return the business event
+   */
+  BusinessEvent createActivityInstanceMigrateEvt(MigratingActivityInstance activityInstance);
 
   /**
    * Creates the business event fired when a process instance is <strong>migrated</strong>.

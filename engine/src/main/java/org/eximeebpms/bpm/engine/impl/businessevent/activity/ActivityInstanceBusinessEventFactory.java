@@ -8,6 +8,7 @@ import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
+import org.eximeebpms.bpm.engine.impl.migration.instance.MigratingActivityInstance;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmScope;
@@ -47,6 +48,35 @@ public class ActivityInstanceBusinessEventFactory extends BusinessEventFactorySu
     return event;
   }
 
+  public BusinessEvent createUpdateEvent(final DelegateExecution execution) {
+    if (!(execution instanceof ExecutionEntity executionEntity)) {
+      return null;
+    }
+
+    final BusinessActivityInstanceEventEntity event = new BusinessActivityInstanceEventEntity();
+    initActivityInstanceEvent(event, executionEntity, BusinessEventTypes.ACTIVITY_INSTANCE_UPDATE);
+    fillHistoricStartTime(event);
+
+    return event;
+  }
+
+  public BusinessEvent createMigrateEvent(final MigratingActivityInstance activityInstance) {
+    if (activityInstance == null) {
+      return null;
+    }
+
+    final ExecutionEntity executionEntity = activityInstance.resolveRepresentativeExecution();
+    if (executionEntity == null) {
+      return null;
+    }
+
+    final BusinessActivityInstanceEventEntity event = new BusinessActivityInstanceEventEntity();
+    initActivityInstanceEvent(event, activityInstance, executionEntity, BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE);
+    fillHistoricStartTime(event);
+
+    return event;
+  }
+
   private void initActivityInstanceEvent(
       final BusinessActivityInstanceEventEntity event,
       final ExecutionEntity execution,
@@ -57,13 +87,46 @@ public class ActivityInstanceBusinessEventFactory extends BusinessEventFactorySu
       eventSource = (PvmScope) execution.getEventSource();
     }
 
-    final String activityInstanceId = execution.getActivityInstanceId();
+    initActivityInstanceEvent(
+        event,
+        execution,
+        eventSource,
+        execution.getActivityInstanceId(),
+        resolveParentActivityInstanceId(execution),
+        eventType);
+  }
+
+  private void initActivityInstanceEvent(
+      final BusinessActivityInstanceEventEntity event,
+      final MigratingActivityInstance activityInstance,
+      final ExecutionEntity execution,
+      final BusinessEventTypes eventType) {
+
+    final MigratingActivityInstance parentInstance = activityInstance.getParent();
+    final String parentActivityInstanceId = parentInstance != null ? parentInstance.getActivityInstanceId() : null;
+
+    initActivityInstanceEvent(
+        event,
+        execution,
+        activityInstance.getTargetScope(),
+        activityInstance.getActivityInstanceId(),
+        parentActivityInstanceId,
+        eventType);
+  }
+
+  private void initActivityInstanceEvent(
+      final BusinessActivityInstanceEventEntity event,
+      final ExecutionEntity execution,
+      final PvmScope eventSource,
+      final String activityInstanceId,
+      final String parentActivityInstanceId,
+      final BusinessEventTypes eventType) {
 
     event.setId(activityInstanceId);
     event.setEventType(eventType.getEventName());
     event.setBusinessEventType(eventType.getBusinessEventName());
     event.setActivityInstanceId(activityInstanceId);
-    event.setParentActivityInstanceId(resolveParentActivityInstanceId(execution));
+    event.setParentActivityInstanceId(parentActivityInstanceId);
     event.setProcessInstanceId(execution.getProcessInstanceId());
     event.setExecutionId(execution.getId());
     event.setTenantId(execution.getTenantId());

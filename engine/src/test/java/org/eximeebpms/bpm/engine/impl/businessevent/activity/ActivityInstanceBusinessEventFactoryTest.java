@@ -1,6 +1,7 @@
 package org.eximeebpms.bpm.engine.impl.businessevent.activity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -14,6 +15,7 @@ import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
+import org.eximeebpms.bpm.engine.impl.migration.instance.MigratingActivityInstance;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -173,6 +175,144 @@ class ActivityInstanceBusinessEventFactoryTest {
       assertThat(event.getDurationInMillis()).isNull();
       verify(commandContext, never()).getDbEntityManager();
     }
+  }
+
+  @Test
+  void shouldBuildActivityInstanceUpdateEvent() {
+    // given
+    final Date startTime = new Date(1_000L);
+    mockExecutionBase();
+    when(historicActivityInstance.getStartTime()).thenReturn(startTime);
+    when(dbEntityManager.selectById(HistoricActivityInstanceEntity.class, "activity-instance-id")).thenReturn(historicActivityInstance);
+    when(commandContext.getDbEntityManager()).thenReturn(dbEntityManager);
+    when(processEngineConfiguration.getHistoryLevel()).thenReturn(HistoryLevel.HISTORY_LEVEL_FULL);
+
+    try (MockedStatic<Context> context = mockStatic(Context.class)) {
+      context.when(Context::getCommandContext).thenReturn(commandContext);
+      context.when(Context::getProcessEngineConfiguration).thenReturn(processEngineConfiguration);
+
+      // when
+      final BusinessEvent businessEvent = factory.createUpdateEvent(execution);
+
+      // then
+      assertThat(businessEvent).isInstanceOf(BusinessActivityInstanceEventEntity.class);
+
+      final BusinessActivityInstanceEventEntity event = (BusinessActivityInstanceEventEntity) businessEvent;
+
+      assertThat(event.getEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_UPDATE.getEventName());
+      assertThat(event.getBusinessEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_UPDATE.getBusinessEventName());
+      assertThat(event.getActivityInstanceId()).isEqualTo("activity-instance-id");
+      assertThat(event.getActivityId()).isEqualTo("activity-id");
+      assertThat(event.getActivityName()).isEqualTo("Activity Name");
+      assertThat(event.getActivityType()).isEqualTo("userTask");
+      assertThat(event.getParentActivityInstanceId()).isEqualTo("parent-activity-instance-id");
+      assertThat(event.getProcessInstanceId()).isEqualTo("process-instance-id");
+      assertThat(event.getExecutionId()).isEqualTo("execution-id");
+      assertThat(event.getTenantId()).isEqualTo("tenant-id");
+      assertThat(event.getRootProcessInstanceId()).isEqualTo("root-process-instance-id");
+      assertThat(event.getSequenceCounter()).isEqualTo(7L);
+      assertThat(event.getStartTime()).isEqualTo(startTime);
+    }
+  }
+
+  @Test
+  void shouldReturnNullForUpdateEventWhenExecutionIsNotAnExecutionEntity() {
+    assertThat(factory.createUpdateEvent(null)).isNull();
+  }
+
+  @Test
+  void shouldBuildActivityInstanceMigrateEventUsingTargetScope() {
+    // given
+    final MigratingActivityInstance migratingActivityInstance = mock(MigratingActivityInstance.class);
+    final ActivityImpl targetActivity = mock(ActivityImpl.class);
+
+    when(migratingActivityInstance.resolveRepresentativeExecution()).thenReturn(execution);
+    when(migratingActivityInstance.getActivityInstanceId()).thenReturn("activity-instance-id");
+    when(migratingActivityInstance.getParent()).thenReturn(null);
+    when(migratingActivityInstance.getTargetScope()).thenReturn(targetActivity);
+    when(targetActivity.getId()).thenReturn("target-activity-id");
+    when(targetActivity.getProperty("name")).thenReturn("Target Activity Name");
+    when(targetActivity.getProperty("type")).thenReturn("userTask");
+
+    when(execution.getProcessInstanceId()).thenReturn("process-instance-id");
+    when(execution.getId()).thenReturn("execution-id");
+    when(execution.getTenantId()).thenReturn("tenant-id");
+    when(execution.getRootProcessInstanceId()).thenReturn("root-process-instance-id");
+    when(execution.getSequenceCounter()).thenReturn(7L);
+
+    when(dbEntityManager.selectById(HistoricActivityInstanceEntity.class, "activity-instance-id")).thenReturn(null);
+    when(commandContext.getDbEntityManager()).thenReturn(dbEntityManager);
+    when(processEngineConfiguration.getHistoryLevel()).thenReturn(HistoryLevel.HISTORY_LEVEL_FULL);
+
+    try (MockedStatic<Context> context = mockStatic(Context.class)) {
+      context.when(Context::getCommandContext).thenReturn(commandContext);
+      context.when(Context::getProcessEngineConfiguration).thenReturn(processEngineConfiguration);
+
+      // when
+      final BusinessEvent businessEvent = factory.createMigrateEvent(migratingActivityInstance);
+
+      // then
+      assertThat(businessEvent).isInstanceOf(BusinessActivityInstanceEventEntity.class);
+
+      final BusinessActivityInstanceEventEntity event = (BusinessActivityInstanceEventEntity) businessEvent;
+
+      assertThat(event.getEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE.getEventName());
+      assertThat(event.getBusinessEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE.getBusinessEventName());
+      assertThat(event.getActivityInstanceId()).isEqualTo("activity-instance-id");
+      // the activity fields reflect the migration TARGET scope, not the execution's current activity
+      assertThat(event.getActivityId()).isEqualTo("target-activity-id");
+      assertThat(event.getActivityName()).isEqualTo("Target Activity Name");
+      assertThat(event.getActivityType()).isEqualTo("userTask");
+      assertThat(event.getParentActivityInstanceId()).isNull();
+      assertThat(event.getProcessInstanceId()).isEqualTo("process-instance-id");
+      assertThat(event.getExecutionId()).isEqualTo("execution-id");
+      assertThat(event.getTenantId()).isEqualTo("tenant-id");
+      assertThat(event.getRootProcessInstanceId()).isEqualTo("root-process-instance-id");
+      assertThat(event.getSequenceCounter()).isEqualTo(7L);
+    }
+  }
+
+  @Test
+  void shouldResolveParentActivityInstanceIdFromMigratingParentForMigrateEvent() {
+    // given
+    final MigratingActivityInstance migratingActivityInstance = mock(MigratingActivityInstance.class);
+    final MigratingActivityInstance parentInstance = mock(MigratingActivityInstance.class);
+    final ActivityImpl targetActivity = mock(ActivityImpl.class);
+
+    when(migratingActivityInstance.resolveRepresentativeExecution()).thenReturn(execution);
+    when(migratingActivityInstance.getActivityInstanceId()).thenReturn("activity-instance-id");
+    when(migratingActivityInstance.getParent()).thenReturn(parentInstance);
+    when(parentInstance.getActivityInstanceId()).thenReturn("parent-activity-instance-id");
+    when(migratingActivityInstance.getTargetScope()).thenReturn(targetActivity);
+
+    when(dbEntityManager.selectById(HistoricActivityInstanceEntity.class, "activity-instance-id")).thenReturn(null);
+    when(commandContext.getDbEntityManager()).thenReturn(dbEntityManager);
+    when(processEngineConfiguration.getHistoryLevel()).thenReturn(HistoryLevel.HISTORY_LEVEL_FULL);
+
+    try (MockedStatic<Context> context = mockStatic(Context.class)) {
+      context.when(Context::getCommandContext).thenReturn(commandContext);
+      context.when(Context::getProcessEngineConfiguration).thenReturn(processEngineConfiguration);
+
+      // when
+      final BusinessEvent businessEvent = factory.createMigrateEvent(migratingActivityInstance);
+
+      // then
+      final BusinessActivityInstanceEventEntity event = (BusinessActivityInstanceEventEntity) businessEvent;
+      assertThat(event.getParentActivityInstanceId()).isEqualTo("parent-activity-instance-id");
+    }
+  }
+
+  @Test
+  void shouldReturnNullForMigrateEventWhenRepresentativeExecutionIsNull() {
+    final MigratingActivityInstance migratingActivityInstance = mock(MigratingActivityInstance.class);
+    when(migratingActivityInstance.resolveRepresentativeExecution()).thenReturn(null);
+
+    assertThat(factory.createMigrateEvent(migratingActivityInstance)).isNull();
+  }
+
+  @Test
+  void shouldReturnNullForMigrateEventWhenActivityInstanceIsNull() {
+    assertThat(factory.createMigrateEvent(null)).isNull();
   }
 
   @Test

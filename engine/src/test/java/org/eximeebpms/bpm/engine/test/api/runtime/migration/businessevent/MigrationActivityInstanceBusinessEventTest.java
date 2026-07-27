@@ -1,0 +1,154 @@
+package org.eximeebpms.bpm.engine.test.api.runtime.migration.businessevent;
+
+import static org.eximeebpms.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.google.gson.Gson;
+import java.util.Collections;
+import java.util.List;
+import org.eximeebpms.bpm.engine.HistoryService;
+import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
+import org.eximeebpms.bpm.engine.RuntimeService;
+import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
+import org.eximeebpms.bpm.engine.history.HistoricActivityInstance;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
+import org.eximeebpms.bpm.engine.impl.businessevent.activity.BusinessActivityInstanceEventEntity;
+import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
+import org.eximeebpms.bpm.engine.migration.MigrationPlan;
+import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
+import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
+import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
+import org.eximeebpms.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import org.eximeebpms.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.RuleChain;
+
+public class MigrationActivityInstanceBusinessEventTest {
+
+  protected BusinessEventConfiguration businessEventConfiguration = BusinessEventConfiguration.builder()
+      .enabled(true)
+      .build();
+
+  protected ProcessEngineBootstrapRule bootstrapRule =
+      new ProcessEngineBootstrapRule(config -> config.setBusinessEventConfiguration(businessEventConfiguration));
+
+  protected ProvidedProcessEngineRule rule = new ProvidedProcessEngineRule(bootstrapRule);
+  protected MigrationTestRule testHelper = new MigrationTestRule(rule);
+
+  @Rule
+  public RuleChain ruleChain = RuleChain.outerRule(bootstrapRule)
+      .around(rule)
+      .around(testHelper);
+
+  protected RuntimeService runtimeService;
+  protected HistoryService historyService;
+  protected CommandExecutor commandExecutor;
+  protected Gson gson = new Gson();
+
+  @Before
+  public void initServices() {
+    runtimeService = rule.getRuntimeService();
+    historyService = rule.getHistoryService();
+    commandExecutor = rule.getProcessEngineConfiguration().getCommandExecutorTxRequired();
+    stopAutoDispatcher();
+  }
+
+  @After
+  public void cleanUp() {
+    deleteCleanupJob();
+    deleteBusinessEventOutboxEntities();
+  }
+
+  @Test
+  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
+  public void shouldPublishActivityInstanceMigrateBusinessEventMatchingHistory() {
+    // given
+    ProcessDefinition sourceDefinition = testHelper.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
+    ProcessDefinition targetDefinition = testHelper.deployAndGetDefinition(modify(ProcessModels.ONE_TASK_PROCESS)
+        .changeElementId(ProcessModels.PROCESS_KEY, "new" + ProcessModels.PROCESS_KEY));
+
+    ProcessInstance processInstance = runtimeService.startProcessInstanceById(sourceDefinition.getId());
+
+    MigrationPlan migrationPlan = runtimeService
+        .createMigrationPlan(sourceDefinition.getId(), targetDefinition.getId())
+        .mapActivities("userTask", "userTask")
+        .build();
+
+    // when
+    runtimeService.newMigration(migrationPlan)
+        .processInstanceIds(Collections.singletonList(processInstance.getId()))
+        .execute();
+
+    // then the history reflects the migrated activity instance
+    HistoricActivityInstance migratedHistoricActivityInstance = historyService.createHistoricActivityInstanceQuery()
+        .processInstanceId(processInstance.getId())
+        .activityId("userTask")
+        .singleResult();
+    assertThat(migratedHistoricActivityInstance).isNotNull();
+    assertThat(migratedHistoricActivityInstance.getProcessDefinitionId()).isEqualTo(targetDefinition.getId());
+
+    // and a matching business event was published to the outbox
+    BusinessActivityInstanceEventEntity businessEvent = findActivityInstanceMigrateEvent(processInstance.getId());
+    assertThat(businessEvent).isNotNull();
+    assertThat(businessEvent.getEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE.getEventName());
+    assertThat(businessEvent.getBusinessEventType()).isEqualTo(BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE.getBusinessEventName());
+
+    // the business event fields must be identical to the history event's fields
+    assertThat(businessEvent.getActivityInstanceId()).isEqualTo(migratedHistoricActivityInstance.getId());
+    assertThat(businessEvent.getActivityId()).isEqualTo(migratedHistoricActivityInstance.getActivityId());
+    assertThat(businessEvent.getActivityName()).isEqualTo(migratedHistoricActivityInstance.getActivityName());
+    assertThat(businessEvent.getActivityType()).isEqualTo(migratedHistoricActivityInstance.getActivityType());
+    assertThat(businessEvent.getProcessInstanceId()).isEqualTo(migratedHistoricActivityInstance.getProcessInstanceId());
+    assertThat(businessEvent.getExecutionId()).isEqualTo(migratedHistoricActivityInstance.getExecutionId());
+    assertThat(businessEvent.getProcessDefinitionId()).isEqualTo(migratedHistoricActivityInstance.getProcessDefinitionId());
+    assertThat(businessEvent.getTenantId()).isEqualTo(migratedHistoricActivityInstance.getTenantId());
+  }
+
+  private void stopAutoDispatcher() {
+    BusinessEventDispatcher dispatcher = rule.getProcessEngineConfiguration().getBusinessEventDispatcher();
+    if (dispatcher != null && dispatcher.isRunning()) {
+      dispatcher.stop();
+    }
+  }
+
+  private void deleteBusinessEventOutboxEntities() {
+    commandExecutor.execute(ctx -> {
+      ctx.getDbEntityManager().delete(BusinessEventOutboxEntity.class, "deleteAllBusinessEventOutbox", null);
+      return null;
+    });
+  }
+
+  private void deleteCleanupJob() {
+    commandExecutor.execute(ctx -> {
+      ctx.getJobManager()
+          .findJobsByHandlerType(BusinessEventOutboxCleanupJobHandler.TYPE)
+          .forEach(job -> {
+            ctx.getJobManager().deleteJob((JobEntity) job);
+            ctx.getHistoricJobLogManager().deleteHistoricJobLogByJobId(job.getId());
+          });
+      return null;
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  private BusinessActivityInstanceEventEntity findActivityInstanceMigrateEvent(String processInstanceId) {
+    List<BusinessEventOutboxEntity> results = commandExecutor.execute(ctx ->
+        ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
+    List<BusinessActivityInstanceEventEntity> matching = results.stream()
+        .filter(entry -> BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE.getBusinessEventName().equals(entry.getEventType()))
+        .map(entry -> gson.fromJson(entry.getBusinessEvent(), BusinessActivityInstanceEventEntity.class))
+        .toList();
+    assertThat(matching).as("activity-instance:migrate outbox entries for process instance %s", processInstanceId)
+        .hasSizeLessThanOrEqualTo(1);
+    return matching.isEmpty() ? null : matching.get(0);
+  }
+}

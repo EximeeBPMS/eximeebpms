@@ -20,6 +20,8 @@ import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
 import org.eximeebpms.bpm.engine.test.api.runtime.migration.models.ProcessModels;
 import org.eximeebpms.bpm.engine.test.businessevent.AbstractBusinessEventIT;
+import org.eximeebpms.bpm.model.bpmn.Bpmn;
+import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Test;
 
 public class ActivityInstanceBusinessEventTest extends AbstractBusinessEventIT {
@@ -80,6 +82,47 @@ public class ActivityInstanceBusinessEventTest extends AbstractBusinessEventIT {
     // the start time above, so they are only asserted to be present and consistent with each other
     assertThat(endEvent.getEndTime()).isNotNull();
     assertThat(endEvent.getDurationInMillis()).isEqualTo(endEvent.getEndTime().getTime() - endEvent.getStartTime().getTime());
+  }
+
+  @Test
+  @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
+  public void shouldPublishActivityInstanceUpdateBusinessEventMatchingHistoryOnCalledProcessInstanceLinking() {
+    // given
+    RuntimeService runtimeService = engineRule.getRuntimeService();
+    HistoryService historyService = engineRule.getHistoryService();
+
+    ProcessDefinition calledProcessDefinition = testRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
+    BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
+        .startEvent()
+        .callActivity("callActivity")
+          .calledElement(calledProcessDefinition.getKey())
+        .endEvent()
+        .done();
+    testRule.deployAndGetDefinition(callingProcess);
+
+    // when
+    ProcessInstance callingProcessInstance = runtimeService.startProcessInstanceByKey("callingProcess");
+
+    // then the history reflects the called process instance link
+    HistoricActivityInstance historicCallActivityInstance = historyService.createHistoricActivityInstanceQuery()
+        .processInstanceId(callingProcessInstance.getId())
+        .activityId("callActivity")
+        .singleResult();
+    assertThat(historicCallActivityInstance).isNotNull();
+    assertThat(historicCallActivityInstance.getCalledProcessInstanceId()).isNotNull();
+
+    // and a matching update business event was published to the outbox
+    BusinessActivityInstanceEventEntity updateEvent = findActivityInstanceEvent(
+        callingProcessInstance.getId(), "callActivity", BusinessEventTypes.ACTIVITY_INSTANCE_UPDATE);
+    assertThat(updateEvent).isNotNull();
+
+    // the business event fields must be identical to the history event's fields
+    assertThat(updateEvent.getActivityInstanceId()).isEqualTo(historicCallActivityInstance.getId());
+    assertThat(updateEvent.getActivityId()).isEqualTo(historicCallActivityInstance.getActivityId());
+    assertThat(updateEvent.getParentActivityInstanceId()).isEqualTo(historicCallActivityInstance.getParentActivityInstanceId());
+    assertThat(updateEvent.getProcessInstanceId()).isEqualTo(historicCallActivityInstance.getProcessInstanceId());
+    assertThat(updateEvent.getExecutionId()).isEqualTo(historicCallActivityInstance.getExecutionId());
+    assertThat(updateEvent.getCalledProcessInstanceId()).isEqualTo(historicCallActivityInstance.getCalledProcessInstanceId());
   }
 
   @SuppressWarnings("unchecked")

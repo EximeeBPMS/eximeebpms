@@ -59,8 +59,8 @@ run_build () {
   # Migration suites don't deploy to a server; only engine artifacts need to be installed
   if [[ "$TEST_SUITE" == "instance-migration" || "$TEST_SUITE" == "rolling-update" || "$TEST_SUITE" == "old-engine" ]]; then
     echo "ℹ️ Installing engine artifacts for $TEST_SUITE tests"
-    echo "./mvnw -DskipTests -Pcheck-engine clean install"
-    ./mvnw -DskipTests -Pcheck-engine clean install
+    echo "./mvnw -U -DskipTests -Pcheck-engine clean install"
+    ./mvnw -U -DskipTests -Pcheck-engine clean install
     if [[ $? -ne 0 ]]; then
       echo "❌ Error: Build failed"
       popd > /dev/null
@@ -122,8 +122,8 @@ run_tests () {
           )
           ;;
       esac
-      echo "./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
-      ./mvnw -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
+      echo "./mvnw -U -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
+      ./mvnw -U -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
       if [[ $? -ne 0 ]]; then
         echo "❌ Error: Tests failed"
         popd > /dev/null

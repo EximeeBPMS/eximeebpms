@@ -22,16 +22,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.form.FormField;
 import org.eximeebpms.bpm.engine.form.FormProperty;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParse;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.el.ExpressionManager;
 import org.eximeebpms.bpm.engine.impl.form.FormDataImpl;
-import org.eximeebpms.bpm.engine.impl.form.FormDefinition;
 import org.eximeebpms.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.eximeebpms.bpm.engine.impl.form.type.FormTypes;
 import org.eximeebpms.bpm.engine.impl.form.validator.FormFieldValidator;
@@ -66,9 +70,14 @@ public class DefaultFormHandler implements FormHandler {
   public static final String FORM_REF_BINDING_VERSION = "version";
   public static final List<String> ALLOWED_FORM_REF_BINDINGS = Arrays.asList(FORM_REF_BINDING_DEPLOYMENT, FORM_REF_BINDING_LATEST, FORM_REF_BINDING_VERSION);
 
+  @Setter
+  @Getter
   protected String deploymentId;
+  @Setter
+  @Getter
   protected String businessKeyFieldId;
-
+  @Setter
+  @Getter
   protected List<FormPropertyHandler> formPropertyHandlers = new ArrayList<>();
 
   protected List<FormFieldHandler> formFieldHandlers = new ArrayList<>();
@@ -313,8 +322,49 @@ public class DefaultFormHandler implements FormHandler {
     }
 
     fireFormPropertyHistoryEvents(properties, variableScope);
+    fireFormPropertyBusinessEvents(properties, variableScope);
 
     Context.getCommandContext().setLogUserOperationEnabled(userOperationLogEnabled);
+  }
+
+  protected void fireFormPropertyBusinessEvents(VariableMap properties, VariableScope variableScope) {
+    if (!Context.getProcessEngineConfiguration().isBusinessEventsEnabled()) {
+      return;
+    }
+
+    FormPropertySource source = resolveFormPropertySource(variableScope);
+    if (source == null) {
+      return;
+    }
+
+    properties.keySet().forEach(propertyName -> {
+      TypedValue value = properties.getValueTyped(propertyName);
+      if (value == null) {
+        return;
+      }
+
+      // NOTE: SerializableValues are never stored as form properties
+      if (!(value instanceof SerializableValue) && value.getValue() instanceof String propertyValue) {
+        fireFormPropertyUpdateEvent(source, propertyName, propertyValue);
+      }
+    });
+  }
+
+  private FormPropertySource resolveFormPropertySource(VariableScope variableScope) {
+    return switch (variableScope) {
+      case ExecutionEntity execution -> new FormPropertySource(execution, null);
+      case TaskEntity task when task.getExecution() != null -> new FormPropertySource(task.getExecution(), task.getId());
+      default -> null;
+    };
+  }
+
+  private void fireFormPropertyUpdateEvent(FormPropertySource source, String propertyName, String propertyValue) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createFormPropertyUpdateEvt(source.execution(), propertyName, propertyValue, source.taskId());
+      }
+    });
   }
 
   protected void fireFormPropertyHistoryEvents(VariableMap properties, VariableScope variableScope) {
@@ -360,31 +410,6 @@ public class DefaultFormHandler implements FormHandler {
     }
   }
 
-
-  // getters and setters //////////////////////////////////////////////////////
-
-  public String getDeploymentId() {
-    return deploymentId;
+  private record FormPropertySource(ExecutionEntity execution, String taskId) {
   }
-
-  public void setDeploymentId(String deploymentId) {
-    this.deploymentId = deploymentId;
-  }
-
-  public List<FormPropertyHandler> getFormPropertyHandlers() {
-    return formPropertyHandlers;
-  }
-
-  public void setFormPropertyHandlers(List<FormPropertyHandler> formPropertyHandlers) {
-    this.formPropertyHandlers = formPropertyHandlers;
-  }
-
-  public String getBusinessKeyFieldId() {
-    return businessKeyFieldId;
-  }
-
-  public void setBusinessKeyFieldId(String businessKeyFieldId) {
-    this.businessKeyFieldId = businessKeyFieldId;
-  }
-
 }

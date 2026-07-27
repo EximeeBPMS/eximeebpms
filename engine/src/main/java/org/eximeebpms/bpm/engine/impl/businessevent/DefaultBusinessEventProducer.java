@@ -1,8 +1,8 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
-import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import java.util.List;
 
+import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
@@ -10,8 +10,9 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.businessevent.activity.ActivityInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.batch.BatchBusinessEventFactory;
-import org.eximeebpms.bpm.engine.impl.businessevent.externaltask.ExternalTaskBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.dmn.DmnDecisionEvaluationBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.externaltask.ExternalTaskBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.form.FormPropertyBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.identitylink.IdentityLinkBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.incident.IncidentBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.job.JobBusinessEventFactory;
@@ -22,8 +23,8 @@ import org.eximeebpms.bpm.engine.impl.businessevent.useroperationlog.UserOperati
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -39,6 +40,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected TaskInstanceBusinessEventFactory taskInstanceEvtFactory = new TaskInstanceBusinessEventFactory();
   protected JobBusinessEventFactory jobEvtFactory = new JobBusinessEventFactory();
   protected ScriptViolationBusinessEventFactory scriptViolationEvtFactory = new ScriptViolationBusinessEventFactory();
+  protected FormPropertyBusinessEventFactory formPropertyEvtFactory = new FormPropertyBusinessEventFactory();
   protected IncidentBusinessEventFactory incidentBusinessEventFactory = new IncidentBusinessEventFactory();
   protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
   protected ExternalTaskBusinessEventFactory externalTaskEvtFactory = new ExternalTaskBusinessEventFactory();
@@ -130,6 +132,11 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task) {
     return taskInstanceEvtFactory.createDeleteEvent(task);
+  }
+
+  @Override
+  public BusinessEvent createFormPropertyUpdateEvt(ExecutionEntity execution, String propertyId, String propertyValue, String taskId) {
+    return formPropertyEvtFactory.createUpdateEvent(execution, propertyId, propertyValue, taskId);
   }
 
   @Override

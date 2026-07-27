@@ -2,6 +2,7 @@ package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.eximeebpms.bpm.engine.impl.businessevent.form.BusinessFormPropertyEventEntity;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.BusinessVariableUpdateEventEntity;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
@@ -29,6 +30,8 @@ public class DbBusinessEventHandler implements BusinessEventHandler {
                 .build();
         if (businessEvent instanceof BusinessVariableUpdateEventEntity businessVariableUpdateEventEntity) {
             businessEventOutbox.setTaskId(businessVariableUpdateEventEntity.getTaskId());
+        } else if (businessEvent instanceof BusinessFormPropertyEventEntity businessFormPropertyEventEntity) {
+            businessEventOutbox.setTaskId(businessFormPropertyEventEntity.getTaskId());
         }
         dbEntityManager.insertWithoutId(businessEventOutbox);
     }

@@ -8,8 +8,8 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -160,6 +160,17 @@ public interface BusinessEventProducer {
    * @return the business event
    */
   BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task);
+
+  /**
+   * Creates the business event fired when a form property is <strong>updated</strong>.
+   *
+   * @param execution
+   * @param propertyId
+   * @param propertyValue
+   * @param taskId
+   * @return the business event
+   */
+  BusinessEvent createFormPropertyUpdateEvt(ExecutionEntity execution, String propertyId, String propertyValue, String taskId);
 
   /**
    * Creates the business event fired when a job is <strong>created</strong>.

@@ -1,6 +1,8 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
+import java.util.List;
+
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
@@ -16,8 +18,10 @@ import org.eximeebpms.bpm.engine.impl.businessevent.job.JobBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.ProcessInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.script.ScriptViolationBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.task.TaskInstanceBusinessEventFactory;
+import org.eximeebpms.bpm.engine.impl.businessevent.useroperationlog.UserOperationLogBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventFactory;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
+import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
@@ -39,6 +43,7 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   protected BatchBusinessEventFactory batchEvtFactory = new BatchBusinessEventFactory();
   protected ExternalTaskBusinessEventFactory externalTaskEvtFactory = new ExternalTaskBusinessEventFactory();
   protected DmnDecisionEvaluationBusinessEventFactory dmnDecisionEvaluationEvtFactory = new DmnDecisionEvaluationBusinessEventFactory();
+  protected UserOperationLogBusinessEventFactory userOperationLogEvtFactory = new UserOperationLogBusinessEventFactory();
 
   protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
@@ -220,5 +225,10 @@ public class DefaultBusinessEventProducer implements BusinessEventProducer {
   @Override
   public BusinessEvent createDecisionEvaluationEvt(DmnDecisionEvaluationEvent evaluationEvent) {
     return dmnDecisionEvaluationEvtFactory.createEvent(evaluationEvent);
+  }
+
+  @Override
+  public List<BusinessEvent> createUserOperationLogEvents(UserOperationLogContext context) {
+    return userOperationLogEvtFactory.createEvents(context);
   }
 }

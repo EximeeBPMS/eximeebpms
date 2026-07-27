@@ -30,6 +30,9 @@ import org.eximeebpms.bpm.engine.history.HistoricTaskInstance;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
 import org.eximeebpms.bpm.engine.impl.Page;
 import org.eximeebpms.bpm.engine.impl.UserOperationLogQueryImpl;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperation;
@@ -780,6 +783,15 @@ public class UserOperationLogManager extends AbstractHistoricManager {
     HistoryEventProcessor.processHistoryEvents(new HistoryEventProcessor.HistoryEventCreator() {
       @Override
       public List<HistoryEvent> createHistoryEvents(HistoryEventProducer producer) {
+        return producer.createUserOperationLogEvents(context);
+      }
+    });
+
+    // relies on context.getOperationId() already being populated by the history event
+    // producer call above, which assigns it as a side effect on this shared context
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public List<BusinessEvent> createBusinessEvents(BusinessEventProducer producer) {
         return producer.createUserOperationLogEvents(context);
       }
     });

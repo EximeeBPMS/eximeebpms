@@ -1,10 +1,13 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
+import java.util.List;
+
 import org.eximeebpms.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.batch.BatchEntity;
+import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
@@ -317,4 +320,13 @@ public interface BusinessEventProducer {
      * @return the business event
      */
     BusinessEvent createDecisionEvaluationEvt(DmnDecisionEvaluationEvent evaluationEvent);
+
+    /**
+     * Creates the business events fired when user operation log entries are <strong>created</strong>.
+     * One event is created per property change.
+     *
+     * @param context the user operation log context
+     * @return the business events
+     */
+    List<BusinessEvent> createUserOperationLogEvents(UserOperationLogContext context);
 }

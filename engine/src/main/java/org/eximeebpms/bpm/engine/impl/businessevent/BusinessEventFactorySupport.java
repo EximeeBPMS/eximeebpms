@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.impl.businessevent;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContextEntry;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -60,6 +61,16 @@ public abstract class BusinessEventFactorySupport {
     } else {
       event.setProcessDefinitionId(externalTask.getProcessDefinitionId());
       event.setProcessDefinitionKey(externalTask.getProcessDefinitionKey());
+    }
+  }
+
+  protected void fillProcessDefinitionData(BusinessEvent event, UserOperationLogContextEntry entry) {
+    String processDefinitionId = entry.getProcessDefinitionId();
+    if (processDefinitionId != null) {
+      fillProcessDefinitionData(event, processDefinitionId);
+    } else {
+      event.setProcessDefinitionId(entry.getProcessDefinitionId());
+      event.setProcessDefinitionKey(entry.getProcessDefinitionKey());
     }
   }
 

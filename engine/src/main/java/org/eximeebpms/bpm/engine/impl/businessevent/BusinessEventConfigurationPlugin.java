@@ -18,6 +18,7 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
   private long outboxCleanupIntervalMs;
   private long dispatchIntervalMs;
   private int dispatcherBatchSize;
+  private String prefix;
   private String publisher;
   private String publisherProperties;
   private String enabledEventTypes;
@@ -43,6 +44,10 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
 
     if (dispatcherBatchSize > 0) {
       builder.dispatcherBatchSize(dispatcherBatchSize);
+    }
+
+    if (prefix != null && !prefix.isBlank()) {
+      builder.prefix(prefix.trim());
     }
 
     if (publisher != null && !publisher.isBlank()) {

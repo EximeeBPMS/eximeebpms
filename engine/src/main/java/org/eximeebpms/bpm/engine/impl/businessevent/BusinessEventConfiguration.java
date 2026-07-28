@@ -54,6 +54,14 @@ public class BusinessEventConfiguration {
   protected int dispatcherBatchSize = DEFAULT_BUSINESS_EVENT_DISPATCHER_BATCH_SIZE;
 
   /**
+   * Prefix prepended to every business event's full name (see {@link BusinessEventType#getBusinessEventName()}).
+   *
+   * <p>Default: {@code eximeebpms}.</p>
+   */
+  @Builder.Default
+  protected String prefix = BusinessEventType.BUSINESS_EVENT_PREFIX;
+
+  /**
    * Symbolic publisher name resolved through business event publisher SPI.
    *
    * <p>Examples: {@code noop}, {@code kafka}.</p>

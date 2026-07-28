@@ -1,6 +1,10 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import java.io.Serializable;
+import java.util.Optional;
+
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.eximeebpms.bpm.engine.impl.context.Context;
 
 /**
  * A business event type.
@@ -12,7 +16,7 @@ import java.io.Serializable;
  */
 public interface BusinessEventType extends Serializable {
 
-  String BUSINESS_EVENT_PREFIX = "camunda7";
+  String BUSINESS_EVENT_PREFIX = "bpms";
 
   /**
    * The type of the entity.
@@ -26,9 +30,16 @@ public interface BusinessEventType extends Serializable {
 
   /**
    * The full name of the event passed to the publisher.
-   * By default, this is a combination of the event type and the entity name, separated by a colon.
+   * By default, this is a combination of the configured business event prefix
+   * ({@link BusinessEventConfiguration#getPrefix()}, falling back to
+   * {@link #BUSINESS_EVENT_PREFIX} when no engine context is available), the
+   * event type and the entity name, separated by a colon.
    */
   default String getBusinessEventName() {
-    return BUSINESS_EVENT_PREFIX + ":" + getEntityType() + ":" + getEventName();
+    String prefix = Optional.ofNullable(Context.getProcessEngineConfiguration())
+        .map(ProcessEngineConfigurationImpl::getBusinessEventConfiguration)
+        .map(BusinessEventConfiguration::getPrefix)
+        .orElse(BUSINESS_EVENT_PREFIX);
+    return prefix + ":" + getEntityType() + ":" + getEventName();
   }
 }

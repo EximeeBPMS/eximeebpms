@@ -38,6 +38,27 @@ class BusinessEventConfigurationTest {
   }
 
   @Test
+  void shouldUseBpmsPrefixByDefault() {
+    // when
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();
+
+    // then
+    assertThat(configuration.getPrefix()).isEqualTo("bpms");
+    assertThat(configuration.getPrefix()).isEqualTo(BusinessEventType.BUSINESS_EVENT_PREFIX);
+  }
+
+  @Test
+  void shouldStoreCustomPrefix() {
+    // when
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder()
+        .prefix("custom")
+        .build();
+
+    // then
+    assertThat(configuration.getPrefix()).isEqualTo("custom");
+  }
+
+  @Test
   void shouldNeverReturnNullPublisherProperties() {
     // when
     BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();

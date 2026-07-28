@@ -16,10 +16,11 @@ public class DefaultBusinessEventConfiguration extends AbstractEximeeBpmsConfigu
   public void preInit(SpringProcessEngineConfiguration configuration) {
     configuration.setBusinessEventConfiguration(BusinessEventConfiguration.builder()
         .enabled(eximeeBpmsBpmProperties.getBusinessEvents().isEnabled())
-        .outboxRetentionMs(eximeeBpmsBpmProperties.getBusinessEvents().getBusinessEventOutboxRetentionMs())
-        .outboxCleanupIntervalMs(eximeeBpmsBpmProperties.getBusinessEvents().getBusinessEventOutboxCleanupIntervalMs())
-        .dispatchIntervalMs(eximeeBpmsBpmProperties.getBusinessEvents().getBusinessEventDispatchIntervalMs())
-        .dispatcherBatchSize(eximeeBpmsBpmProperties.getBusinessEvents().getBusinessEventDispatcherBatchSize())
+        .outboxRetentionMs(eximeeBpmsBpmProperties.getBusinessEvents().getOutboxRetentionMs())
+        .outboxCleanupIntervalMs(eximeeBpmsBpmProperties.getBusinessEvents().getOutboxCleanupIntervalMs())
+        .dispatchIntervalMs(eximeeBpmsBpmProperties.getBusinessEvents().getDispatchIntervalMs())
+        .dispatcherBatchSize(eximeeBpmsBpmProperties.getBusinessEvents().getDispatcherBatchSize())
+        .prefix(eximeeBpmsBpmProperties.getBusinessEvents().getPrefix())
         .publisher(eximeeBpmsBpmProperties.getBusinessEvents().getPublisher())
         .publisherProperties(BusinessEventPublisherPropertiesResolver.resolve(
             eximeeBpmsBpmProperties.getBusinessEvents().getPublisherProperties(),

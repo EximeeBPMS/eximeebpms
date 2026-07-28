@@ -239,10 +239,19 @@ jobs:
       - name: Maven Build
         id: maven-build
         shell: bash
+        # -U on every invocation: the restore-keys fallback above can serve a cache
+        # blob saved before a just-bumped parent POM version was published, and
+        # Maven's default 24h "don't recheck" policy then makes the build fail with a
+        # non-resolvable parent POM until the cache key changes again. -U forces the
+        # recheck without discarding the rest of the cache. Each mvnw call rechecks
+        # independently rather than trusting an earlier call in the same job to have
+        # already primed the cache for it - see the identical comment in
+        # eximeebpms-enterprise/build.yml for the run that showed that assumption
+        # doesn't reliably hold.
         run: |
-          ./mvnw -B -T 1C --settings ~/.m2-build/settings.xml verify
-          ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
-          ./mvnw --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
+          ./mvnw -B -T 1C -U --settings ~/.m2-build/settings.xml verify
+          ./mvnw -U --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
+          ./mvnw -U --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

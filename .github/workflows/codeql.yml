@@ -80,7 +80,11 @@ jobs:
           languages: java, javascript
 
       - name: Build (compile only, tests not needed for analysis)
-        run: ./mvnw -B -T 1C --settings ~/.m2-codeql/settings.xml verify -DskipTests
+        # -U: the restore-keys fallback above can serve a cache blob predating a
+        # parent POM version bump, and Maven's default 24h "don't recheck" policy
+        # would otherwise fail the build with a non-resolvable parent POM until the
+        # cache key changes again.
+        run: ./mvnw -B -T 1C -U --settings ~/.m2-codeql/settings.xml verify -DskipTests
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

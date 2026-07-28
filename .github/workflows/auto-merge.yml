@@ -15,7 +15,7 @@ permissions:
 jobs:
   dependabot:
     if: github.actor == 'dependabot[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Fetch Dependabot metadata
         id: metadata
@@ -76,5 +76,9 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # ubuntu-slim's minimal image doesn't guarantee gh is preinstalled
+          # the way ubuntu-latest's toolcache does.
+          command -v gh >/dev/null || { sudo apt-get update -q && sudo apt-get install -y gh; }
+
           gh pr review --approve "$PR_URL" -b "Auto-approved: patch/dev-minor update, not on the manual-review denylist."
           gh pr merge --auto --squash "$PR_URL"

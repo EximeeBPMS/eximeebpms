@@ -30,7 +30,8 @@ jobs:
   notify_slack:
     # GitHub-hosted: this job only formats a message and calls the Slack API,
     # no Nexus/internal-network access needed.
-    runs-on: ubuntu-latest
+    # ubuntu-slim: plain curl call, no Docker needed, runs for a few seconds.
+    runs-on: ubuntu-slim
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'
     steps:
       - name: Set Event Message and Send Slack Notification

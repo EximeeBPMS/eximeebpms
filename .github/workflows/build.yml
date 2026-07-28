@@ -251,7 +251,12 @@ jobs:
         run: |
           ./mvnw -B -T 1C -U --settings ~/.m2-build/settings.xml verify
           ./mvnw -U --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
-          ./mvnw -U --non-recursive --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
+          # No --non-recursive here (unlike jacoco above): sonar-maven-plugin needs to
+          # visit every module's own reactor project to index its sources - restricting
+          # it to just the root aggregator POM left it analyzing only the root pom.xml
+          # (1 file indexed, 0 Java sources), so the quality gate always passed trivially
+          # regardless of real changes.
+          ./mvnw -U --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.qualitygate.wait=true
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

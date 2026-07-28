@@ -225,6 +225,22 @@
                   <cargo.servlet.port>${tomcat.connector.http.port}</cargo.servlet.port>
                   <cargo.tomcat.ajp.port>${tomcat.connector.ajp.port}</cargo.tomcat.ajp.port>
                 </properties>
+                <!-- Enables FINEST logging for org.eximeebpms.bpm.webapp plus the engine's
+                     webappsAuthenticationLoggingEnabled flag, so a failed webapp login
+                     (e.g. a recurrence of the LoginIT flake) logs its actual reason
+                     ("bad credentials" / "not authorized" / etc.) instead of nothing. -->
+                <configfiles>
+                  <configfile>
+                    <file>${project.basedir}/src/test/resources/webapps-auth-logging/logging.properties</file>
+                    <todir>conf</todir>
+                    <overwrite>true</overwrite>
+                  </configfile>
+                  <configfile>
+                    <file>${project.basedir}/src/test/resources/webapps-auth-logging/bpm-platform.xml</file>
+                    <todir>conf</todir>
+                    <overwrite>true</overwrite>
+                  </configfile>
+                </configfiles>
               </configuration>
               <deployables>
                 <deployable>

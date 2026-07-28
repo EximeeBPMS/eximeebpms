@@ -19,8 +19,10 @@ package org.eximeebpms.bpm;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.eximeebpms.bpm.util.SeleniumScreenshotRule;
@@ -79,8 +81,21 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
         .addArguments("--disable-gpu")
         .addArguments("--no-sandbox")
         .addArguments("--disable-dev-shm-usage")
-        .addArguments("--remote-allow-origins=*");
+        .addArguments("--remote-allow-origins=*")
+        .addArguments("--disable-features=PasswordLeakDetection,AutofillServerCommunication");
     chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+
+    // Chrome's built-in "Save password?" prompt / autofill UI can otherwise pop up after
+    // the first successful password-field submission in a test run and steal focus on
+    // every subsequent page load for the rest of the (shared, class-scoped) browser
+    // session — causing later sendKeys() calls to silently miss the actual login form
+    // fields (observed server-side as login attempts reaching doLogin with an empty
+    // username, only ever starting from the second test method onward).
+    Map<String, Object> prefs = new HashMap<>();
+    prefs.put("credentials_enable_service", false);
+    prefs.put("profile.password_manager_enabled", false);
+    prefs.put("profile.password_manager_leak_detection", false);
+    chromeOptions.setExperimentalOption("prefs", prefs);
 
     // Without an explicit binary, chromedriver falls back to its own browser
     // auto-discovery (checking hardcoded install paths such as /opt/google/chrome/chrome

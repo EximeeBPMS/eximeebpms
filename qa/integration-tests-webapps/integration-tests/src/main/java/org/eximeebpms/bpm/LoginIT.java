@@ -51,6 +51,14 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
     WebElement passwordInput = wait.until(visibilityOfElementLocated(By.cssSelector("input[type=\"password\"]")));
     sendKeys(passwordInput, "demo");
 
+    // The login form can re-render between filling in the two fields (e.g. once an
+    // async page initialization completes), silently discarding an already-typed
+    // value (observed server-side as login attempts reaching doLogin with an empty
+    // username). Re-check both fields right before submitting and retype any that
+    // lost their value against a freshly located element.
+    ensureFieldValue(By.cssSelector("input[type=\"text\"]"), "demo");
+    ensureFieldValue(By.cssSelector("input[type=\"password\"]"), "demo");
+
     wait.until(visibilityOfElementLocated(By.cssSelector("button[type=\"submit\"]")))
         .submit();
 
@@ -60,6 +68,15 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
 
     // fix for CAM-13548
     Arrays.stream(keys.split("")).forEach(c -> element.sendKeys(c));
+  }
+
+  private void ensureFieldValue(By locator, String expected) {
+    WebElement element = driver.findElement(locator);
+    if (!expected.equals(element.getAttribute("value"))) {
+      System.out.println("[LoginIT] Field " + locator + " lost its value before submit "
+          + "(was '" + element.getAttribute("value") + "') - retyping '" + expected + "'");
+      sendKeys(element, expected);
+    }
   }
 
   @Test

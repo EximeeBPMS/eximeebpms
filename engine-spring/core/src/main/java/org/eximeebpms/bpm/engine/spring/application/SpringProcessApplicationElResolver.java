@@ -23,7 +23,7 @@ import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationElResolver;
 import org.eximeebpms.bpm.application.impl.EjbProcessApplication;
 import org.eximeebpms.bpm.engine.spring.ApplicationContextElResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.ELResolver;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;

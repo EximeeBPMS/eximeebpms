@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.RuntimeService;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.PropertyNotFoundException;
+import jakarta.el.PropertyNotFoundException;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;

@@ -10,7 +10,7 @@ import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpression;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ValueExpression;
 
 public class SecureJuelExpression extends JuelExpression {
 

@@ -18,11 +18,11 @@ package org.eximeebpms.bpm.dmn.feel.impl.juel.el;
 
 import java.lang.reflect.Method;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ExpressionFactory;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.FunctionMapper;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.VariableMapper;
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.FunctionMapper;
+import jakarta.el.VariableMapper;
 
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelEngineLogger;
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelLogger;

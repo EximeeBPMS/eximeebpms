@@ -88,6 +88,13 @@
       </exclusions>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${version.commons-lang3}</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Webapps -->
     <dependency>
       <groupId>org.eximeebpms.bpm.qa</groupId>

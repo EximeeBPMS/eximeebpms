@@ -20,8 +20,8 @@ import org.eximeebpms.bpm.dmn.engine.impl.spi.el.ElExpression;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpressionManager;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ValueExpression;
 import org.eximeebpms.bpm.engine.variable.context.VariableContext;
 
 /**

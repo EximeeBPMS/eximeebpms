@@ -16,14 +16,14 @@
  */
 package org.eximeebpms.bpm.dmn.engine.impl.el;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.MapELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ResourceBundleELResolver;
+import jakarta.el.ArrayELResolver;
+import jakarta.el.BeanELResolver;
+import jakarta.el.CompositeELResolver;
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
+import jakarta.el.ListELResolver;
+import jakarta.el.MapELResolver;
+import jakarta.el.ResourceBundleELResolver;
 
 import org.eximeebpms.bpm.dmn.engine.impl.spi.el.ElExpression;
 import org.eximeebpms.bpm.dmn.engine.impl.spi.el.ElProvider;

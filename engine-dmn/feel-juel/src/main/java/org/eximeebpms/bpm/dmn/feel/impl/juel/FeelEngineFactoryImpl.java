@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELException;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ExpressionFactory;
+import jakarta.el.ELException;
+import jakarta.el.ExpressionFactory;
 
 import org.eximeebpms.bpm.dmn.feel.impl.FeelEngine;
 import org.eximeebpms.bpm.dmn.feel.impl.FeelEngineFactory;

@@ -17,8 +17,8 @@
 package org.eximeebpms.bpm.engine.impl.delegate;
 
 import org.eximeebpms.bpm.engine.delegate.BaseDelegateExecution;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ValueExpression;
 
 /**
  * Class responsible for handling Expression.setValue() invocations.

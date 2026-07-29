@@ -328,8 +328,6 @@
         <module>javaee/ejb-client-jakarta</module>
         <module>distro/license-book</module>
         <module>distro/wildfly</module>
-        <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 - see distro/wildfly26/pom.xml -->
-        <module>distro/wildfly26</module>
       </modules>
     </profile>
 
@@ -508,6 +506,7 @@
         <module>distro/license-book</module>
         <module>distro/jboss</module>
         <module>distro/tomcat</module>
+        <module>distro/wildfly</module>
         <module>distro/sql-script</module>
         <module>distro/run</module>
         <module>distro/webjar</module>

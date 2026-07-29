@@ -23,7 +23,7 @@ import static org.eximeebpms.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.Condition;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.PropertyNotFoundException;
+import jakarta.el.PropertyNotFoundException;
 
 
 /**

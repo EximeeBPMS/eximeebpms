@@ -18,15 +18,7 @@ package org.eximeebpms.bpm.client.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.client.rule.ClientRule.LOCK_DURATION;
-import static org.eximeebpms.bpm.client.util.ProcessModels.BPMN_ERROR_EXTERNAL_TASK_PROCESS;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_ID;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_PRIORITY;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
-import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY;
-import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY_2;
-import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
-import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_ID;
-import static org.eximeebpms.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static org.eximeebpms.bpm.client.util.ProcessModels.*;
 
 import java.util.Collection;
 import java.util.HashMap;

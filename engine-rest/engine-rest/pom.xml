@@ -127,6 +127,38 @@
 
     <dependency>
       <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-only-bom</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.spin</groupId>
+      <artifactId>eximeebpms-spin-bom</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-bom</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.connect</groupId>
+      <artifactId>eximeebpms-connect-bom</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-core-internal-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>

@@ -16,9 +16,9 @@
  */
 package org.eximeebpms.bpm.dmn.feel.impl.juel.el;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ExpressionFactory;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.VariableMapper;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.ValueExpression;
+import jakarta.el.VariableMapper;
 
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelEngineLogger;
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelLogger;

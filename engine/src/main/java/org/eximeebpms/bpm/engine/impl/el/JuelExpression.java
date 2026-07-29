@@ -22,11 +22,11 @@ import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.delegate.ExpressionGetInvocation;
 import org.eximeebpms.bpm.engine.impl.delegate.ExpressionSetInvocation;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELException;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.MethodNotFoundException;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.PropertyNotFoundException;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ELException;
+import jakarta.el.MethodNotFoundException;
+import jakarta.el.PropertyNotFoundException;
+import jakarta.el.ValueExpression;
 
 
 /**

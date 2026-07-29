@@ -16,8 +16,8 @@
  */
 package org.eximeebpms.bpm.dmn.engine.impl.el;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
 
 import org.eximeebpms.bpm.engine.variable.context.VariableContext;
 

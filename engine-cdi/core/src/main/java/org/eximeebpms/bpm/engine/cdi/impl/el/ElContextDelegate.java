@@ -28,11 +28,11 @@ import javax.el.VariableMapper;
  */
 public class ElContextDelegate extends ELContext {
 
-  protected final org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext delegateContext;
+  protected final jakarta.el.ELContext delegateContext;
 
   protected final ELResolver elResolver;
 
-  public ElContextDelegate(org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext delegateContext, ELResolver elResolver) {
+  public ElContextDelegate(jakarta.el.ELContext delegateContext, ELResolver elResolver) {
     this.delegateContext = delegateContext;
     this.elResolver = elResolver;
   }

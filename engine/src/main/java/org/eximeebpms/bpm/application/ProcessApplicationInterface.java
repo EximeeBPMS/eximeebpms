@@ -25,8 +25,8 @@ import org.eximeebpms.bpm.application.impl.EmbeddedProcessApplication;
 import org.eximeebpms.bpm.application.impl.ServletProcessApplication;
 import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
 import org.eximeebpms.bpm.engine.delegate.TaskListener;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.BeanELResolver;
+import jakarta.el.ELResolver;
 import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 
 /**

@@ -20,9 +20,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
@@ -84,6 +89,7 @@ public class IdentityLinkEntity implements Serializable, IdentityLink, DbEntity,
       .getCommandContext()
       .getDbEntityManager()
       .insert(this);
+    fireBusinessIdentityLinkEvent(BusinessEventTypes.IDENTITY_LINK_ADD);
     fireHistoricIdentityLinkEvent(HistoryEventTypes.IDENTITY_LINK_ADD);
   }
 
@@ -96,6 +102,7 @@ public class IdentityLinkEntity implements Serializable, IdentityLink, DbEntity,
         .getCommandContext()
         .getDbEntityManager()
         .delete(this);
+    fireBusinessIdentityLinkEvent(BusinessEventTypes.IDENTITY_LINK_DELETE);
     if (withHistory) {
       fireHistoricIdentityLinkEvent(HistoryEventTypes.IDENTITY_LINK_DELETE);
     }
@@ -199,6 +206,19 @@ public class IdentityLinkEntity implements Serializable, IdentityLink, DbEntity,
   public void setProcessDef(ProcessDefinitionEntity processDef) {
     this.processDef = processDef;
     this.processDefId = processDef.getId();
+  }
+
+  private void fireBusinessIdentityLinkEvent(final BusinessEventTypes eventType) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return switch (eventType) {
+          case IDENTITY_LINK_ADD -> producer.createIdentityLinkAddEvt(IdentityLinkEntity.this);
+          case IDENTITY_LINK_DELETE -> producer.createIdentityLinkDeleteEvt(IdentityLinkEntity.this);
+          default -> null;
+        };
+      }
+    });
   }
 
   public void fireHistoricIdentityLinkEvent(final HistoryEventType eventType) {

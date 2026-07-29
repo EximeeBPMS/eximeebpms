@@ -62,6 +62,13 @@ public interface ProcessEngineServices {
   HistoryService getHistoryService();
 
   /**
+   * Returns the process engine's {@link BusinessEventService}.
+   *
+   * @return the {@link BusinessEventService} object.
+   */
+  BusinessEventService getBusinessEventService();
+
+  /**
    * Returns the process engine's {@link IdentityService}.
    *
    * @return the {@link IdentityService} object.

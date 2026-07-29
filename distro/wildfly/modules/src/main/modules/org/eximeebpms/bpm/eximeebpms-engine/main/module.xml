@@ -43,6 +43,8 @@
     <module name="org.eximeebpms.commons.eximeebpms-commons-typed-values" export="true" />
     <module name="org.eximeebpms.template-engines.eximeebpms-template-engines-freemarker" services="import" />
     <module name="org.eximeebpms.spin.eximeebpms-spin-core" services="import"/>
+    <module name="org.eximeebpms.commons.eximeebpms-commons-event-bus-api" services="import" />
+    <module name="org.eximeebpms.bpm.eximeebpms-engine-plugin-events-kafka" services="import" />
 
     <module name="org.eximeebpms.bpm.dmn.eximeebpms-engine-dmn" />
     <module name="org.eximeebpms.bpm.juel.eximeebpms-juel" services="import"/>

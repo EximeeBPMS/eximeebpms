@@ -93,6 +93,11 @@
 
     <dependency>
       <groupId>org.eximeebpms.commons</groupId>
+      <artifactId>eximeebpms-commons-event-bus-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.commons</groupId>
       <artifactId>eximeebpms-commons-typed-values</artifactId>
     </dependency>
 
@@ -214,6 +219,23 @@
     </dependency>
 
     <!-- test dependencies  -->
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
@@ -358,6 +380,13 @@
       <groupId>org.eximeebpms.bpm</groupId>
       <artifactId>eximeebpms-bpm-archunit</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${version.junit-jupiter}</version>
       <scope>test</scope>
     </dependency>
 

@@ -165,6 +165,9 @@ public class CamundaBpmProperties {
   private FilterProperty filter = new FilterProperty();
 
   @NestedConfigurationProperty
+  private BusinessEventsProperty businessEvents = new BusinessEventsProperty();
+
+  @NestedConfigurationProperty
   private ScriptSecurityProperty scriptSecurity = new ScriptSecurityProperty();
 
   public String getProcessEngineName() {
@@ -359,6 +362,14 @@ public class CamundaBpmProperties {
     this.generateUniqueProcessApplicationName = generateUniqueProcessApplicationName;
   }
 
+  public BusinessEventsProperty getBusinessEvents() {
+    return this.businessEvents;
+  }
+
+  public void setBusinessEvents(BusinessEventsProperty businessEvents) {
+    this.businessEvents = businessEvents;
+  }
+
   public ScriptSecurityProperty getScriptSecurity() {
     return scriptSecurity;
   }
@@ -393,6 +404,7 @@ public class CamundaBpmProperties {
       .add("idGenerator=" + idGenerator)
       .add("jobExecutorAcquireByPriority=" + jobExecutorAcquireByPriority)
       .add("defaultNumberOfRetries=" + defaultNumberOfRetries)
+      .add("businessEvents=" + businessEvents)
       .add("scriptSecurity=" + scriptSecurity)
       .toString();
   }

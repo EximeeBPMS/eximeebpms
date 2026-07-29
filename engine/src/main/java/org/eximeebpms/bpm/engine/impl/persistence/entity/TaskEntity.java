@@ -47,6 +47,7 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.ErrorPropagationException;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.EscalationHandler;
+import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
 import org.eximeebpms.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
@@ -96,10 +97,11 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
   protected static final List<VariableInstanceLifecycleListener<CoreVariableInstance>> DEFAULT_VARIABLE_LIFECYCLE_LISTENERS =
-      Arrays.<VariableInstanceLifecycleListener<CoreVariableInstance>>asList(
-          (VariableInstanceLifecycleListener) VariableInstanceEntityPersistenceListener.INSTANCE,
-          (VariableInstanceLifecycleListener) VariableInstanceSequenceCounterListener.INSTANCE,
-          (VariableInstanceLifecycleListener) VariableInstanceHistoryListener.INSTANCE
+          Arrays.<VariableInstanceLifecycleListener<CoreVariableInstance>>asList(
+                  (VariableInstanceLifecycleListener) VariableInstanceEntityPersistenceListener.INSTANCE,
+                  (VariableInstanceLifecycleListener) VariableInstanceSequenceCounterListener.INSTANCE,
+                  (VariableInstanceLifecycleListener) VariableInstanceHistoryListener.INSTANCE,
+                  (VariableInstanceLifecycleListener) VariableInstanceBusinessEventListener.INSTANCE
           );
 
   public static final String DELETE_REASON_COMPLETED = "completed";

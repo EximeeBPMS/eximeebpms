@@ -32,6 +32,7 @@ import java.util.Set;
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.history.DefaultHistoryRemovalTimeProvider;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
@@ -173,6 +174,9 @@ public abstract class AbstractHistoryCleanupSchedulerTest {
     configuration.setCustomHistoryLevels(setCustomHistoryLevel(historyEventTypes));
     configuration.setHistory(customHistoryLevel.getName());
     configuration.setDatabaseSchemaUpdate(DB_SCHEMA_UPDATE_CREATE_DROP);
+    configuration.setBusinessEventConfiguration(BusinessEventConfiguration.builder()
+        .enabled(false)
+        .build());
     return configuration;
   }
 

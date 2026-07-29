@@ -40,10 +40,9 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
   public void executeDbOperation(DbOperation operation) {
     switch(operation.getOperationType()) {
 
-      case INSERT:
+      case INSERT, INSERT_WITHOUT_ID:
         insertEntity((DbEntityOperation) operation);
         break;
-
       case DELETE:
         deleteEntity((DbEntityOperation) operation);
         break;
@@ -96,6 +95,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaCreateHistory();
     }
 
+    if (processEngineConfiguration.isBusinessEventsEnabled()) {
+      dbSchemaCreateBusinessEvent();
+    }
+
     if (processEngineConfiguration.isScriptSecurityEnabled()) {
       dbSchemaCreateScriptSecurity();
     }
@@ -124,6 +127,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
   protected abstract void dbSchemaCreateIdentity();
 
   protected abstract void dbSchemaCreateHistory();
+
+  protected abstract void dbSchemaCreateBusinessEvent();
 
   protected abstract void dbSchemaCreateScriptSecurity();
 
@@ -163,6 +168,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaDropHistory();
     }
 
+    if (processEngineConfiguration.isBusinessEventsEnabled()) {
+      dbSchemaDropBusinessEvent();
+    }
+
     if (processEngineConfiguration.isScriptSecurityEnabled()) {
       dbSchemaDropScriptSecurity();
     }
@@ -175,6 +184,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
   protected abstract void dbSchemaDropIdentity();
 
   protected abstract void dbSchemaDropHistory();
+
+  protected abstract void dbSchemaDropBusinessEvent();
 
   protected abstract void dbSchemaDropScriptSecurity();
 
@@ -214,6 +225,8 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
 
   public abstract boolean isHistoryTablePresent();
 
+  public abstract boolean isBusinessEventTablePresent();
+
   public abstract boolean isScriptViolationTablePresent();
 
   public abstract boolean isIdentityTablePresent();
@@ -235,6 +248,10 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
 
     if (!isHistoryTablePresent() && processEngineConfiguration.isDbHistoryUsed()) {
       dbSchemaCreateHistory();
+    }
+
+    if (!isBusinessEventTablePresent() && processEngineConfiguration.isBusinessEventsEnabled()) {
+      dbSchemaCreateBusinessEvent();
     }
 
     if (!isScriptViolationTablePresent() && processEngineConfiguration.isScriptSecurityEnabled()) {

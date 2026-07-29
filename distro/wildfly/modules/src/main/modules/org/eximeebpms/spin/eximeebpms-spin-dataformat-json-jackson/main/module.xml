@@ -11,8 +11,11 @@
     <module name="org.eximeebpms.commons.eximeebpms-commons-utils" />
     <module name="org.eximeebpms.commons.eximeebpms-commons-typed-values" />
 
-    <module name="com.fasterxml.jackson.core.jackson-databind" slot="@version.jackson@" />
+    <module name="com.fasterxml.jackson.core.jackson-annotations" />
+    <module name="com.fasterxml.jackson.core.jackson-core" />
+    <module name="com.fasterxml.jackson.core.jackson-databind" />
+    <module name="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" />
+
     <module name="com.jayway.jsonpath.json-path" />
   </dependencies>
-
 </module>

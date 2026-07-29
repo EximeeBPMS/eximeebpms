@@ -116,7 +116,6 @@ public class BulkHistoryDeleteTest {
     formService = engineRule.getFormService();
     externalTaskService = engineRule.getExternalTaskService();
     caseService = engineRule.getCaseService();
-
     identityService = engineRule.getIdentityService();
     identityService.setAuthenticatedUserId(USER_ID);
   }

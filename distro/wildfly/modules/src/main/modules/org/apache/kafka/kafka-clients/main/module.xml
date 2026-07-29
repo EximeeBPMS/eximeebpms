@@ -1,0 +1,17 @@
+<module xmlns="urn:jboss:module:1.0" name="org.apache.kafka.kafka-clients">
+  <resources>
+    <resource-root path="kafka-clients-@version.kafka.clients@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+    <module name="java.management" />
+    <module name="java.naming" />
+
+    <module name="org.slf4j" />
+
+    <module name="org.lz4.lz4-java" optional="true" />
+    <module name="org.xerial.snappy.snappy-java" optional="true" />
+    <module name="com.github.luben.zstd-jni" optional="true" />
+  </dependencies>
+</module>

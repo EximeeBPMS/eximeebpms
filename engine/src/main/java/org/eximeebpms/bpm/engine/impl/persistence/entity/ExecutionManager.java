@@ -92,6 +92,7 @@ public class ExecutionManager extends AbstractManager {
 
     if (cascade) {
       getHistoricProcessInstanceManager().deleteHistoricProcessInstanceByIds(Arrays.asList(processInstanceId));
+      getBusinessEventManager().deleteByProcessInstanceId(processInstanceId);
     }
   }
 

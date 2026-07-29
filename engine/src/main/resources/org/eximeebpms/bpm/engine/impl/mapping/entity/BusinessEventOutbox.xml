@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity">
+
+  <!-- BUSINESS EVENT OUTBOX INSERT -->
+
+  <!--
+    ID_ is omitted: the DB identity/auto-increment column assigns it automatically.
+  -->
+  <insert id="insertBusinessEventOutbox" parameterType="org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity">
+    insert into ${prefix}ACT_RU_BUS_EVT_OBX (
+      CREATED_DATE_,
+      BUSINESS_EVENT_,
+      EVENT_TYPE_,
+      PROC_INST_ID_,
+      ROOT_PROC_INST_ID_,
+      PROC_DEF_KEY_,
+      TASK_ID_,
+      PROCESSED_,
+      PROCESSED_DATE_
+    ) values (
+      #{createdDate, jdbcType=TIMESTAMP},
+      #{businessEvent, jdbcType=CLOB},
+      #{eventType, jdbcType=VARCHAR},
+      #{processInstanceId, jdbcType=VARCHAR},
+      #{rootProcessInstanceId, jdbcType=VARCHAR},
+      #{processDefinitionKey, jdbcType=VARCHAR},
+      #{taskId, jdbcType=VARCHAR},
+      #{processed, jdbcType=BOOLEAN},
+      #{processedDate, jdbcType=TIMESTAMP}
+    )
+  </insert>
+
+  <!-- BUSINESS EVENT OUTBOX DELETE -->
+
+  <delete id="deleteBusinessEventOutbox" parameterType="long">
+    delete from ${prefix}ACT_RU_BUS_EVT_OBX
+    where ID_ = #{parameter}
+  </delete>
+
+  <delete id="deleteBusinessEventsByProcessInstanceId" parameterType="string">
+    delete from ${prefix}ACT_RU_BUS_EVT_OBX
+    where PROC_INST_ID_ = #{parameter}
+  </delete>
+
+  <delete id="deleteBusinessEventsByTaskId" parameterType="string">
+    delete from ${prefix}ACT_RU_BUS_EVT_OBX
+    where TASK_ID_ = #{parameter}
+  </delete>
+
+  <delete id="deleteAllBusinessEventOutbox">
+    delete from ${prefix}ACT_RU_BUS_EVT_OBX
+  </delete>
+
+  <!--
+    Cleanup query: deletes processed outbox records whose processedDate is older than the given cutoff.
+    Called periodically by BusinessEventOutboxCleanupJobHandler.
+  -->
+  <delete id="deleteProcessedBusinessEventsOlderThan" parameterType="java.util.Date">
+    delete from ${prefix}ACT_RU_BUS_EVT_OBX
+    where PROCESSED_ = ${trueConstant}
+      and PROCESSED_DATE_ &lt; #{parameter, jdbcType=TIMESTAMP}
+  </delete>
+
+  <!-- BUSINESS EVENT OUTBOX UPDATE -->
+
+  <!--
+    Marks a single outbox record as processed.
+    Called by the dispatcher after a successful publish so that the next dispatch cycle skips it.
+  -->
+  <update id="updateMarkBusinessEventProcessed"
+          parameterType="map">
+    update ${prefix}ACT_RU_BUS_EVT_OBX
+    set
+      PROCESSED_      = #{processed, jdbcType=BOOLEAN},
+      PROCESSED_DATE_ = #{processedDate, jdbcType=TIMESTAMP}
+    where ID_ = #{idAsLong, jdbcType=BIGINT}
+  </update>
+
+  <resultMap id="businessEventOutboxResultMap" type="org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity">
+    <id property="id" column="ID_" jdbcType="BIGINT" />
+    <result property="createdDate"       column="CREATED_DATE_"   jdbcType="TIMESTAMP" />
+    <result property="businessEvent"     column="BUSINESS_EVENT_" />
+    <result property="eventType"         column="EVENT_TYPE_"     jdbcType="VARCHAR" />
+    <result property="processInstanceId" column="PROC_INST_ID_"    jdbcType="VARCHAR" />
+    <result property="rootProcessInstanceId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR" />
+    <result property="processDefinitionKey" column="PROC_DEF_KEY_"  jdbcType="VARCHAR" />
+    <result property="taskId"            column="TASK_ID_"        jdbcType="VARCHAR" />
+    <result property="processed"         column="PROCESSED_"      jdbcType="BOOLEAN" />
+    <result property="processedDate"     column="PROCESSED_DATE_" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="selectBusinessEventOutbox" parameterType="string" resultMap="businessEventOutboxResultMap">
+    select * from ${prefix}ACT_RU_BUS_EVT_OBX
+    where ID_ = #{parameter}
+  </select>
+
+  <select id="selectBusinessEventOutboxByProcInstId" resultMap="businessEventOutboxResultMap">
+    select * from ${prefix}ACT_RU_BUS_EVT_OBX
+    where PROC_INST_ID_ = #{parameter}
+    order by ID_ asc
+  </select>
+
+  <!--
+    Dispatcher query: fetches the next batch of unprocessed outbox records in strict ID order.
+    Ordering by ID_ (sequential bigint PK) is preferred over CREATED_DATE_ because:
+      - it leverages the clustered PK index with no extra index scan
+      - IDs are strictly monotonic and unique, so the order is deterministic
+      - it is semantically equivalent to creation-time ordering for this schema
+    Pagination (LIMIT / ROWNUM / TOP) is injected by the engine's DB-specific dialect.
+  -->
+  <select id="selectUnprocessedBusinessEventsForDispatch"
+          parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject"
+          resultMap="businessEventOutboxResultMap">
+    ${limitBefore}
+    select RES.*
+    ${limitBetween}
+    from ${prefix}ACT_RU_BUS_EVT_OBX RES
+    where RES.PROCESSED_ = #{parameter.processed, jdbcType=BOOLEAN}
+    order by RES.ID_ asc
+    ${limitAfter}
+    FOR UPDATE NOWAIT
+  </select>
+
+  <!--
+    MSSQL variant: SQL Server does not support FOR UPDATE, so row-level pessimistic locking
+    is achieved via table hints (UPDLOCK = update lock, ROWLOCK = row-level granularity,
+    NOWAIT = fail immediately if the lock cannot be acquired).
+
+    Differences from the generic query:
+      1. WITH (UPDLOCK, ROWLOCK, NOWAIT) replaces the trailing FOR UPDATE NOWAIT clause.
+      2. Commons.bindOrderBy must be included so that ${internalOrderBy} is resolved inside
+         the MSSQL ${limitBetween} token (row_number() over (ORDER BY ${internalOrderBy})).
+         Without it MyBatis throws a property-not-found error at runtime.
+         With no ordering properties configured, bindOrderBy defaults to "RES.ID_ asc".
+      3. The hardcoded "order by RES.ID_ asc" is OMITTED from the query body: ${limitBetween}
+         wraps everything that follows it in a derived table, and SQL Server rejects ORDER BY
+         inside a subquery without TOP/OFFSET. The correct final ordering is provided by the
+         "ORDER BY SUB.rnk" clause that ${limitAfter} appends to the outer query.
+  -->
+  <select id="selectUnprocessedBusinessEventsForDispatch_mssql"
+          parameterType="org.eximeebpms.bpm.engine.impl.db.ListQueryParameterObject"
+          resultMap="businessEventOutboxResultMap">
+    <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    ${limitBefore}
+    select RES.*
+    ${limitBetween}
+    from ${prefix}ACT_RU_BUS_EVT_OBX RES WITH (UPDLOCK, ROWLOCK, NOWAIT)
+    where RES.PROCESSED_ = #{parameter.processed, jdbcType=BOOLEAN}
+    ${limitAfter}
+  </select>
+
+  <select id="selectBusinessEventOutboxEntityByQueryCriteria"
+          parameterType="org.eximeebpms.bpm.engine.impl.BusinessEventQueryImpl"
+          resultMap="businessEventOutboxResultMap">
+    <include refid="org.eximeebpms.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    ${limitBefore}
+    select ${distinct} RES.*
+    ${limitBetween}
+    <include refid="selectBusinessEventOutboxByQueryCriteriaSql"/>
+    ${orderBy}
+    ${limitAfter}
+  </select>
+
+  <select id="selectBusinessEventOutboxCountByQueryCriteria"
+          parameterType="org.eximeebpms.bpm.engine.impl.BusinessEventQueryImpl"
+          resultType="long">
+    ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
+    <include refid="selectBusinessEventOutboxByQueryCriteriaSql"/>
+    ${countDistinctAfterEnd}
+  </select>
+
+  <sql id="selectBusinessEventOutboxByQueryCriteriaSql">
+    from ${prefix}ACT_RU_BUS_EVT_OBX RES
+    <where>
+      <if test="processInstanceId != null">
+        RES.PROC_INST_ID_ = #{processInstanceId, jdbcType=VARCHAR}
+      </if>
+      <if test="eventType != null">
+        and RES.EVENT_TYPE_ = #{eventType, jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+
+</mapper>
+

@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -52,6 +53,7 @@ import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
+import org.eximeebpms.bpm.commons.eventbus.BusinessEventPublisher;
 import org.eximeebpms.bpm.dmn.engine.DmnEngine;
 import org.eximeebpms.bpm.dmn.engine.DmnEngineConfiguration;
 import org.eximeebpms.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
@@ -59,6 +61,7 @@ import org.eximeebpms.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.eximeebpms.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
 import org.eximeebpms.bpm.engine.ArtifactFactory;
 import org.eximeebpms.bpm.engine.AuthorizationService;
+import org.eximeebpms.bpm.engine.BusinessEventService;
 import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
@@ -76,7 +79,9 @@ import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.authorization.Groups;
 import org.eximeebpms.bpm.engine.authorization.Permission;
 import org.eximeebpms.bpm.engine.authorization.Permissions;
+import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.AuthorizationServiceImpl;
+import org.eximeebpms.bpm.engine.impl.BusinessEventServiceImpl;
 import org.eximeebpms.bpm.engine.impl.DecisionServiceImpl;
 import org.eximeebpms.bpm.engine.impl.DefaultArtifactFactory;
 import org.eximeebpms.bpm.engine.impl.ExternalTaskServiceImpl;
@@ -114,6 +119,10 @@ import org.eximeebpms.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParser;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventParseListener;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventPublisherResolver;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
+import org.eximeebpms.bpm.engine.impl.businessevent.NoopBusinessEventPublisher;
 import org.eximeebpms.bpm.engine.impl.calendar.BusinessCalendarManager;
 import org.eximeebpms.bpm.engine.impl.calendar.CycleBusinessCalendar;
 import org.eximeebpms.bpm.engine.impl.calendar.DueDateBusinessCalendar;
@@ -247,6 +256,7 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupB
 import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsRegistry;
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsReporterIdProvider;
 import org.eximeebpms.bpm.engine.impl.metrics.parser.MetricsBpmnParseListener;
@@ -292,6 +302,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BatchManager;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.CommentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentManager;
@@ -433,6 +444,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected RepositoryService repositoryService = new RepositoryServiceImpl();
   protected RuntimeService runtimeService = new RuntimeServiceImpl();
   protected HistoryService historyService = new HistoryServiceImpl();
+  protected BusinessEventConfiguration businessEventConfiguration = BusinessEventConfiguration.builder().build();
+  protected BusinessEventService businessEventService = new BusinessEventServiceImpl();
+  protected BusinessEventPublisher businessEventPublisher = new NoopBusinessEventPublisher();
   protected IdentityService identityService = new IdentityServiceImpl();
   protected TaskService taskService = new TaskServiceImpl();
   protected FormService formService = new FormServiceImpl();
@@ -714,6 +728,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected Map<String, EventHandler> eventHandlers;
   protected List<EventHandler> customEventHandlers;
+
+  protected BusinessEventDispatcher businessEventDispatcher;
 
   protected FailedJobCommandFactory failedJobCommandFactory;
 
@@ -1187,6 +1203,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initSerialization();
     initDelegateInterceptor();
     initEventHandlers();
+    initBusinessEvents();
+    initBusinessEventDispatcher();
     initProcessApplicationManager();
     initCorrelationHandler();
     initConditionHandler();
@@ -1554,6 +1572,36 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
   }
 
+  protected void initBusinessEvents() {
+    if (businessEventConfiguration == null) {
+      businessEventConfiguration = BusinessEventConfiguration.builder().build();
+    }
+
+    if (!businessEventConfiguration.isEnabled()) {
+      businessEventPublisher = new NoopBusinessEventPublisher();
+      LOG.businessEventsDisabled();
+      return;
+    }
+
+    BusinessEventPublisherResolver resolver = new BusinessEventPublisherResolver();
+    businessEventPublisher = resolver.resolve(
+        businessEventConfiguration.getPublisher(),
+        businessEventConfiguration.getPublisherProperties()
+    );
+
+    LOG.businessEventsEnabled(businessEventPublisher.getName());
+  }
+
+  public void closeBusinessEvents() {
+    try {
+      if (businessEventPublisher != null) {
+        businessEventPublisher.close();
+      }
+    } catch (Exception e) {
+      LOG.failedToCloseBusinessEventPublisher(businessEventPublisher, e);
+    }
+  }
+
   // command executors ////////////////////////////////////////////////////////
 
   protected abstract Collection<? extends CommandInterceptor> getDefaultCommandInterceptorsTxRequired();
@@ -1640,6 +1688,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initService(repositoryService);
     initService(runtimeService);
     initService(historyService);
+    initService(businessEventService);
     initService(identityService);
     initService(taskService);
     initService(formService);
@@ -2007,6 +2056,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
       addSessionFactory(new GenericManagerFactory(OptimizeManager.class));
 
+      addSessionFactory(new GenericManagerFactory(BusinessEventManager.class));
+
       addSessionFactory(new GenericManagerFactory(ScriptViolationManager.class));
 
       sessionFactories.put(ReadOnlyIdentityProvider.class, identityProviderSessionFactory);
@@ -2033,6 +2084,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     dbSqlSessionFactory.setSqlSessionFactory(sqlSessionFactory);
     dbSqlSessionFactory.setDbIdentityUsed(isDbIdentityUsed);
     dbSqlSessionFactory.setDbHistoryUsed(isDbHistoryUsed);
+    dbSqlSessionFactory.setBusinessEventUsed(isBusinessEventsEnabled());
     dbSqlSessionFactory.setCmmnEnabled(cmmnEnabled);
     dbSqlSessionFactory.setDmnEnabled(dmnEnabled);
     dbSqlSessionFactory.setDatabaseTablePrefix(databaseTablePrefix);
@@ -2217,6 +2269,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
+    if (isBusinessEventsEnabled()) {
+      defaultListeners.add(new BusinessEventParseListener());
+    }
 
     if (isScriptSecurityEnabled()) {
       defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
@@ -2355,6 +2410,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
     HistoryCleanupJobHandler historyCleanupJobHandler = new HistoryCleanupJobHandler();
     jobHandlers.put(historyCleanupJobHandler.getType(), historyCleanupJobHandler);
+
+    BusinessEventOutboxCleanupJobHandler businessEventOutboxCleanupJobHandler = new BusinessEventOutboxCleanupJobHandler();
+    jobHandlers.put(businessEventOutboxCleanupJobHandler.getType(), businessEventOutboxCleanupJobHandler);
 
     for (JobHandler batchHandler : batchHandlers.values()) {
       jobHandlers.put(batchHandler.getType(), batchHandler);
@@ -2768,6 +2826,13 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
   }
 
+  protected void initBusinessEventDispatcher() {
+    if (isBusinessEventsEnabled() && businessEventDispatcher == null) {
+      businessEventDispatcher = new BusinessEventDispatcher(commandExecutorTxRequired, businessEventPublisher, businessEventConfiguration);
+    }
+
+  }
+
   protected void initCommandCheckers() {
     if (commandCheckers == null) {
       commandCheckers = new ArrayList<>();
@@ -3095,6 +3160,10 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return historyService;
   }
 
+  public BusinessEventService getBusinessEventService() {
+    return businessEventService;
+  }
+
   public ProcessEngineConfigurationImpl setHistoryService(HistoryService historyService) {
     this.historyService = historyService;
     return this;
@@ -3336,6 +3405,19 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   public ProcessEngineConfigurationImpl setBusinessCalendarManager(BusinessCalendarManager businessCalendarManager) {
     this.businessCalendarManager = businessCalendarManager;
     return this;
+  }
+
+  public BusinessEventConfiguration getBusinessEventConfiguration() {
+    return businessEventConfiguration;
+  }
+
+  public ProcessEngineConfigurationImpl setBusinessEventConfiguration(BusinessEventConfiguration businessEventConfiguration) {
+    this.businessEventConfiguration = businessEventConfiguration;
+    return this;
+  }
+
+  public BusinessEventPublisher getBusinessEventPublisher() {
+    return businessEventPublisher;
   }
 
   public CommandContextFactory getCommandContextFactory() {
@@ -3765,6 +3847,12 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public void setDbHistoryUsed(boolean isDbHistoryUsed) {
     this.isDbHistoryUsed = isDbHistoryUsed;
+  }
+
+  public boolean isBusinessEventsEnabled() {
+    return Optional.ofNullable(businessEventConfiguration)
+        .map(BusinessEventConfiguration::isEnabled)
+        .orElse(false);
   }
 
   public List<ResolverFactory> getResolverFactories() {
@@ -5420,5 +5508,17 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   public ProcessEngineConfiguration setLegacyJobRetryBehaviorEnabled(boolean legacyJobRetryBehaviorEnabled) {
     this.legacyJobRetryBehaviorEnabled = legacyJobRetryBehaviorEnabled;
     return this;
+  }
+
+  public void setBusinessEventPublisher(BusinessEventPublisher businessEventPublisher) {
+    this.businessEventPublisher = businessEventPublisher;
+  }
+
+  public BusinessEventDispatcher getBusinessEventDispatcher() {
+    return businessEventDispatcher;
+  }
+
+  public void setBusinessEventDispatcher(BusinessEventDispatcher businessEventDispatcher) {
+    this.businessEventDispatcher = businessEventDispatcher;
   }
 }

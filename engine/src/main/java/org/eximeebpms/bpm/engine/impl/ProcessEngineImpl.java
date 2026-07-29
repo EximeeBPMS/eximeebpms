@@ -18,7 +18,9 @@ package org.eximeebpms.bpm.engine.impl;
 
 import java.util.Map;
 
+import java.util.Objects;
 import org.eximeebpms.bpm.engine.AuthorizationService;
+import org.eximeebpms.bpm.engine.BusinessEventService;
 import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
@@ -33,6 +35,8 @@ import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
+import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionContextFactory;
 import org.eximeebpms.bpm.engine.impl.cmmn.cmd.CheckCmmnUsageCmd;
@@ -60,6 +64,8 @@ public class ProcessEngineImpl implements ProcessEngine {
   protected RepositoryService repositoryService;
   protected RuntimeService runtimeService;
   protected HistoryService historicDataService;
+  protected BusinessEventConfiguration businessEventConfiguration;
+  protected BusinessEventService businessEventService;
   protected IdentityService identityService;
   protected TaskService taskService;
   protected FormService formService;
@@ -72,6 +78,7 @@ public class ProcessEngineImpl implements ProcessEngine {
 
   protected String databaseSchemaUpdate;
   protected JobExecutor jobExecutor;
+  protected BusinessEventDispatcher businessEventDispatcher;
   protected CommandExecutor commandExecutor;
   protected CommandExecutor commandExecutorSchemaOperations;
   protected Map<Class<?>, SessionFactory> sessionFactories;
@@ -88,6 +95,8 @@ public class ProcessEngineImpl implements ProcessEngine {
     this.repositoryService = processEngineConfiguration.getRepositoryService();
     this.runtimeService = processEngineConfiguration.getRuntimeService();
     this.historicDataService = processEngineConfiguration.getHistoryService();
+    this.businessEventConfiguration = processEngineConfiguration.getBusinessEventConfiguration();
+    this.businessEventService = processEngineConfiguration.getBusinessEventService();
     this.identityService = processEngineConfiguration.getIdentityService();
     this.taskService = processEngineConfiguration.getTaskService();
     this.formService = processEngineConfiguration.getFormService();
@@ -105,20 +114,21 @@ public class ProcessEngineImpl implements ProcessEngine {
     this.sessionFactories = processEngineConfiguration.getSessionFactories();
     this.historyLevel = processEngineConfiguration.getHistoryLevel();
     this.transactionContextFactory = processEngineConfiguration.getTransactionContextFactory();
+    this.businessEventDispatcher = processEngineConfiguration.getBusinessEventDispatcher();
 
     executeSchemaOperations();
 
-    if (name == null) {
-      LOG.processEngineCreated(ProcessEngines.NAME_DEFAULT);
-    } else {
-      LOG.processEngineCreated(name);
-    }
+    LOG.processEngineCreated(Objects.requireNonNullElse(name, ProcessEngines.NAME_DEFAULT));
 
     ProcessEngines.registerProcessEngine(this);
 
     if ((jobExecutor != null)) {
       // register process engine with Job Executor
       jobExecutor.registerProcessEngine(this);
+    }
+
+    if (businessEventDispatcher != null) {
+      businessEventDispatcher.start();
     }
 
     if (processEngineConfiguration.isMetricsEnabled()) {
@@ -171,9 +181,16 @@ public class ProcessEngineImpl implements ProcessEngine {
       jobExecutor.unregisterProcessEngine(this);
     }
 
-    commandExecutorSchemaOperations.execute(new SchemaOperationProcessEngineClose());
+    if (businessEventDispatcher != null) {
+      businessEventDispatcher.stop();
+    }
 
-    processEngineConfiguration.close();
+    try {
+      commandExecutorSchemaOperations.execute(new SchemaOperationProcessEngineClose());
+    } finally {
+      processEngineConfiguration.closeBusinessEvents();
+      processEngineConfiguration.close();
+    }
 
     LOG.processEngineClosed(name);
   }
@@ -206,6 +223,11 @@ public class ProcessEngineImpl implements ProcessEngine {
   @Override
   public HistoryService getHistoryService() {
     return historicDataService;
+  }
+
+  @Override
+  public BusinessEventService getBusinessEventService() {
+    return businessEventService;
   }
 
   @Override

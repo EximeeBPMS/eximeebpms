@@ -38,6 +38,7 @@
     <module name="org.eximeebpms.bpm.identity.eximeebpms-identity-ldap" />
     <module name="org.eximeebpms.bpm.eximeebpms-engine-plugin-spin" services="import" />
     <module name="org.eximeebpms.bpm.eximeebpms-engine-plugin-connect" />
+    <module name="org.eximeebpms.bpm.eximeebpms-engine-plugin-events-kafka" services="import" />
 
     <module name="org.eximeebpms.bpm.eximeebpms-engine-plugins" optional="true" />
 

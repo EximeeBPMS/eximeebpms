@@ -433,6 +433,9 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
       if (dbSqlSessionFactory.isDbHistoryUsed() && !isHistoryTablePresent()) {
         missingComponents.add("history");
       }
+      if (dbSqlSessionFactory.isBusinessEventUsed() && !isBusinessEventTablePresent()) {
+        missingComponents.add("businessEvent");
+      }
       if (dbSqlSessionFactory.isDbIdentityUsed() && !isIdentityTablePresent()) {
         missingComponents.add("identity");
       }
@@ -477,6 +480,11 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   }
 
   @Override
+  protected void dbSchemaCreateBusinessEvent() {
+    executeMandatorySchemaResource("create", "business.event");
+  }
+
+  @Override
   protected void dbSchemaCreateScriptSecurity() {
     executeMandatorySchemaResource("create", "script.security");
   }
@@ -515,6 +523,11 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   @Override
   protected void dbSchemaDropHistory() {
     executeMandatorySchemaResource("drop", "history");
+  }
+
+  @Override
+  protected void dbSchemaDropBusinessEvent() {
+    executeMandatorySchemaResource("drop", "business.event");
   }
 
   @Override
@@ -558,6 +571,10 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   @Override
   public boolean isHistoryTablePresent(){
     return isTablePresent("ACT_HI_PROCINST");
+  }
+  @Override
+  public boolean isBusinessEventTablePresent(){
+    return isTablePresent("ACT_RU_BUS_EVT_OBX");
   }
   @Override
   public boolean isScriptViolationTablePresent(){

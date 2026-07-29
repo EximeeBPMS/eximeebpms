@@ -25,11 +25,14 @@
   <dependencies>
 
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>org.eximeebpms.bpm.springboot</groupId>
       <artifactId>eximeebpms-bpm-spring-boot-starter</artifactId>
@@ -53,6 +56,11 @@
     <dependency>
       <groupId>org.eximeebpms.bpm.identity</groupId>
       <artifactId>eximeebpms-identity-ldap</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eximeebpms.bpm</groupId>
+      <artifactId>eximeebpms-engine-plugin-events-kafka</artifactId>
     </dependency>
 
     <dependency>
@@ -83,10 +91,10 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
-    
+
 
     <!-- Graal.js -->
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
@@ -136,7 +144,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
+
     <!-- Required to Run JUnit4 tests -->
     <dependency>
       <groupId>org.junit.vintage</groupId>

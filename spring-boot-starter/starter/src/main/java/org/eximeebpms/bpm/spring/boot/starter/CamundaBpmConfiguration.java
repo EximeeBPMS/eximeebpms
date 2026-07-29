@@ -26,6 +26,7 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaAuthorizationConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaBusinessEventConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDatasourceConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaFailedJobConfiguration;
@@ -36,6 +37,7 @@ import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaMetricsConfig
 import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.condition.NeedsHistoryAutoConfigurationCondition;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultBusinessEventConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.custom.CreateAdminUserConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.custom.CreateFilterConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultAuthorizationConfiguration;
@@ -103,6 +105,12 @@ public class CamundaBpmConfiguration {
   @ConditionalOnMissingBean(CamundaHistoryConfiguration.class)
   public static CamundaHistoryConfiguration camundaHistoryConfiguration() {
     return new DefaultHistoryConfiguration();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(CamundaBusinessEventConfiguration.class)
+  public static CamundaBusinessEventConfiguration camundaBusinessEventConfiguration() {
+    return new DefaultBusinessEventConfiguration();
   }
 
   @Bean

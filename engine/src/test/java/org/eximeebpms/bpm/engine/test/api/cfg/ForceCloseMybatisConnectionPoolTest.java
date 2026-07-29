@@ -19,6 +19,7 @@ package org.eximeebpms.bpm.engine.test.api.cfg;
 import org.apache.ibatis.datasource.pooled.PoolState;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.eximeebpms.bpm.engine.ProcessEngine;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
 import org.junit.Assert;
@@ -65,6 +66,9 @@ public class ForceCloseMybatisConnectionPoolTest {
     ProcessEngineConfigurationImpl configurationImpl = new StandaloneInMemProcessEngineConfiguration()
      .setJdbcUrl("jdbc:h2:mem:eximeebpms-forceclose")
      .setProcessEngineName("engine-forceclose")
+     .setBusinessEventConfiguration(BusinessEventConfiguration.builder()
+         .enabled(false)
+         .build())
      .setForceCloseMybatisConnectionPool(false);
 
     ProcessEngine processEngine = configurationImpl

@@ -32,6 +32,7 @@ import org.eximeebpms.bpm.engine.exception.NullValueException;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
+import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
 import org.eximeebpms.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
@@ -1694,6 +1695,8 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     listeners.add((VariableInstanceLifecycleListener) VariableInstanceSequenceCounterListener.INSTANCE);
 
     listeners.add((VariableInstanceLifecycleListener) VariableInstanceHistoryListener.INSTANCE);
+
+    listeners.add((VariableInstanceLifecycleListener) VariableInstanceBusinessEventListener.INSTANCE);
 
     listeners.add((VariableInstanceLifecycleListener) new VariableListenerInvocationListener(this));
 

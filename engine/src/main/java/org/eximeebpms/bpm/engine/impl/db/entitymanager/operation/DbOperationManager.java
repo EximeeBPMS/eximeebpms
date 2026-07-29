@@ -16,9 +16,6 @@
  */
 package org.eximeebpms.bpm.engine.impl.db.entitymanager.operation;
 
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.DELETE;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.INSERT;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -37,6 +34,8 @@ import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.comparator.DbBu
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.comparator.DbEntityOperationComparator;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForInserts;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForModifications;
+
+import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.*;
 
 /**
  * Manages a set of {@link DbOperation database operations}.
@@ -59,6 +58,9 @@ public class DbOperationManager {
   /** INSERTs */
   public SortedMap<Class<?>, SortedSet<DbEntityOperation>> inserts = new TreeMap<Class<?>, SortedSet<DbEntityOperation>>(INSERT_TYPE_COMPARATOR);
 
+  /** INSERTs without ID */
+  public List<DbEntityOperation> insertsWithoutId = new ArrayList<>();
+
   /** UPDATEs of a single entity */
   public SortedMap<Class<?>, SortedSet<DbEntityOperation>> updates = new TreeMap<Class<?>, SortedSet<DbEntityOperation>>(MODIFICATION_TYPE_COMPARATOR);
 
@@ -75,6 +77,9 @@ public class DbOperationManager {
     if(newOperation.getOperationType() == INSERT) {
       return getInsertsForType(newOperation.getEntityType(), true)
           .add(newOperation);
+
+    } else if (newOperation.getOperationType() == INSERT_WITHOUT_ID) {
+      return insertsWithoutId.add(newOperation);
 
     } else if(newOperation.getOperationType() == DELETE) {
       return getDeletesByType(newOperation.getEntityType(), true)
@@ -132,9 +137,10 @@ public class DbOperationManager {
     List<DbOperation> flush = new ArrayList<DbOperation>();
     // first INSERTs
     addSortedInserts(flush);
+    addInsertsWithoutId(flush);
     // then UPDATEs + DELETEs
     addSortedModifications(flush);
-    
+
     determineDependencies(flush);
     return flush;
   }
@@ -151,6 +157,15 @@ public class DbOperationManager {
       } else {
         flush.addAll(operationsForType.getValue());
       }
+    }
+  }
+
+  /** Adds insert operations without ID to the flush (in correct order).
+   */
+  protected void addInsertsWithoutId(List<DbOperation> flush) {
+    for (DbEntityOperation insertWithoutId : insertsWithoutId) {
+      // add inserts to flush
+      flush.add(insertWithoutId);
     }
   }
 

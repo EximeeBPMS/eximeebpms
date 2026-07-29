@@ -39,6 +39,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BatchManager;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.EventSubscriptionManager;
@@ -161,6 +162,10 @@ public abstract class AbstractManager implements Session {
 
   protected HistoricProcessInstanceManager getHistoricProcessInstanceManager() {
     return getSession(HistoricProcessInstanceManager.class);
+  }
+
+  protected BusinessEventManager getBusinessEventManager() {
+    return getSession(BusinessEventManager.class);
   }
 
   protected HistoricCaseInstanceManager getHistoricCaseInstanceManager() {

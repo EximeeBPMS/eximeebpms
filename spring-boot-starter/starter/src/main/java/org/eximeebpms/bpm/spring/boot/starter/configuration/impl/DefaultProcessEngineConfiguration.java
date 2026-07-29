@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
       if (camundaBpmProperties.getGenerateUniqueProcessEngineName()) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
-              + "if a custom processEngineName is already set: %s", processEngineName));
+            + "if a custom processEngineName is already set: %s", processEngineName));
         }
         processEngineName = CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
       }

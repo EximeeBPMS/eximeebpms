@@ -25,6 +25,7 @@ import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.junit.rules.TestWatcher;
@@ -73,6 +74,7 @@ public class ProcessEngineBootstrapRule extends TestWatcher {
   @Override
   protected void finished(Description description) {
     deleteHistoryCleanupJob();
+    deleteBusinessEventOutboxCleanupJob();
     processEngine.close();
     ProcessEngines.unregister(processEngine);
     processEngine = null;
@@ -82,6 +84,23 @@ public class ProcessEngineBootstrapRule extends TestWatcher {
     final List<Job> jobs = processEngine.getHistoryService().findHistoryCleanupJobs();
     for (final Job job: jobs) {
       ((ProcessEngineConfigurationImpl)processEngine.getProcessEngineConfiguration()).getCommandExecutorTxRequired().execute(new Command<Void>() {
+        public Void execute(CommandContext commandContext) {
+          commandContext.getJobManager().deleteJob((JobEntity) job);
+          commandContext.getHistoricJobLogManager().deleteHistoricJobLogByJobId(job.getId());
+          return null;
+        }
+      });
+    }
+  }
+
+  private void deleteBusinessEventOutboxCleanupJob() {
+    ProcessEngineConfigurationImpl config =
+            (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
+    final List<Job> jobs = config.getCommandExecutorTxRequired().execute(ctx ->
+            ctx.getJobManager().findJobsByHandlerType(BusinessEventOutboxCleanupJobHandler.TYPE)
+    );
+    for (final Job job : jobs) {
+      config.getCommandExecutorTxRequired().execute(new Command<Void>() {
         public Void execute(CommandContext commandContext) {
           commandContext.getJobManager().deleteJob((JobEntity) job);
           commandContext.getHistoricJobLogManager().deleteHistoricJobLogByJobId(job.getId());

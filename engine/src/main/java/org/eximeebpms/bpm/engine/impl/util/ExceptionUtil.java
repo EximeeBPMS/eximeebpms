@@ -303,6 +303,99 @@ public class ExceptionUtil {
         H2.equals(errorCode, sqlState);
   }
 
+  /**
+   * Checks whether the given {@link ProcessEnginePersistenceException} (or any exception in its
+   * cause hierarchy) represents a {@code SELECT … FOR UPDATE NOWAIT} failure caused by a row-level
+   * lock that is already held by another session.
+   *
+   * <p>The check covers all database platforms supported by the engine:
+   * <ul>
+   *   <li><b>Oracle</b> – ORA-00054 (errorCode 54, sqlState {@code 72000}) or message containing
+   *       {@code "ora-00054"} / {@code "resource busy"}</li>
+   *   <li><b>PostgreSQL</b> – sqlState {@code 55P03} (lock_not_available)</li>
+   *   <li><b>SQL Server</b> – errorCode 1222 ("Lock request time out period exceeded") or message
+   *       containing {@code "lock request time out"}</li>
+   *   <li><b>MySQL / MariaDB</b> – errorCode 3572 or message containing {@code "nowait"}</li>
+   *   <li><b>H2</b> – errorCode 50200 (LOCK_TIMEOUT) or sqlState {@code HYT00}</li>
+   *   <li><b>DB2</b> – sqlState {@code 57033} (SQLCODE -913, unavailable resource)</li>
+   * </ul>
+   *
+   * @param e the persistence exception to inspect
+   * @return {@code true} if the root cause is a NOWAIT lock-acquisition failure
+   */
+  public static boolean checkNowaitLockException(ProcessEnginePersistenceException e) {
+    Throwable cause = e;
+    while (cause != null) {
+      if (cause instanceof SQLException && checkNowaitLockException((SQLException) cause)) {
+        return true;
+      }
+      cause = cause.getCause();
+    }
+    return false;
+  }
+
+  /**
+   * Low-level predicate that inspects a single {@link SQLException} (and its
+   * {@link SQLException#getNextException() chained exceptions}) for NOWAIT lock signals.
+   */
+  public static boolean checkNowaitLockException(SQLException sqlException) {
+    for (SQLException ex = sqlException; ex != null; ex = ex.getNextException()) {
+      if (isNowaitLockSqlException(ex)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isNowaitLockSqlException(SQLException ex) {
+    String sqlState = ex.getSQLState();
+    if (sqlState != null) {
+      sqlState = sqlState.toUpperCase();
+    }
+    int errorCode = ex.getErrorCode();
+    String message = ex.getMessage();
+    if (message != null) {
+      message = message.toLowerCase();
+    } else {
+      message = "";
+    }
+
+    // Oracle: ORA-00054 – resource busy and acquire with NOWAIT specified
+    if (errorCode == 54 || "72000".equals(sqlState) && errorCode == 54) {
+      return true;
+    }
+    if (message.contains("ora-00054") || message.contains("resource busy")) {
+      return true;
+    }
+
+    // PostgreSQL: 55P03 – lock_not_available
+    if ("55P03".equals(sqlState)) {
+      return true;
+    }
+
+    // SQL Server: error 1222 – Lock request time out period exceeded (raised for NOWAIT)
+    if (errorCode == 1222 || message.contains("lock request time out")) {
+      return true;
+    }
+
+    // MySQL / MariaDB: error 3572 – NOWAIT lock acquisition failure
+    if (errorCode == 3572 || message.contains("nowait is set")) {
+      return true;
+    }
+
+    // H2: errorCode 50200 (LOCK_TIMEOUT_1) / sqlState HYT00
+    if (errorCode == 50200 || "HYT00".equals(sqlState)) {
+      return true;
+    }
+
+    // DB2: SQLSTATE 57033 (SQLCODE -913, unavailable resource / timeout)
+    if ("57033".equals(sqlState)) {
+      return true;
+    }
+
+    return false;
+  }
+
   public static BatchExecutorException findBatchExecutorException(PersistenceException exception) {
     Throwable cause = exception;
     do {

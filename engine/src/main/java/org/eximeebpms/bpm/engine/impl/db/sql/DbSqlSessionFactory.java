@@ -805,6 +805,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(MSSQL, "updateDecisionInputByteArraysByDecisionInstanceId", "updateDecisionInputByteArraysByDecisionInstanceId_mssql");
     addDatabaseSpecificStatement(MSSQL, "updateDecisionOutputByteArraysByDecisionInstanceId", "updateDecisionOutputByteArraysByDecisionInstanceId_mssql");
     addDatabaseSpecificStatement(MSSQL, "updateByteArraysByBatchId", "updateByteArraysByBatchId_mssql");
+    addDatabaseSpecificStatement(MSSQL, "selectUnprocessedBusinessEventsForDispatch", "selectUnprocessedBusinessEventsForDispatch_mssql");
 
     constants = new HashMap<>();
     constants.put("constant.event", "'event'");
@@ -837,6 +838,7 @@ public class DbSqlSessionFactory implements SessionFactory {
   protected Map<Class<?>,String>  selectStatements = new ConcurrentHashMap<>();
   protected boolean isDbIdentityUsed = true;
   protected boolean isDbHistoryUsed = true;
+  protected boolean isBusinessEventUsed = false;
   protected boolean cmmnEnabled = true;
   protected boolean dmnEnabled = true;
 
@@ -1004,6 +1006,14 @@ public class DbSqlSessionFactory implements SessionFactory {
 
   public void setDbHistoryUsed(boolean isDbHistoryUsed) {
     this.isDbHistoryUsed = isDbHistoryUsed;
+  }
+
+  public boolean isBusinessEventUsed() {
+    return isBusinessEventUsed;
+  }
+
+  public void setBusinessEventUsed(boolean isBusinessEventUsed) {
+    this.isBusinessEventUsed = isBusinessEventUsed;
   }
 
   public boolean isCmmnEnabled() {

@@ -27,6 +27,7 @@ import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY_2;
 import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
 import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_ID;
 import static org.eximeebpms.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static org.eximeebpms.bpm.client.util.TestUtil.waitUntil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -634,7 +635,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    // variable was mapped
+    // variable was mapped - handleFailure() returns before the engine has finished
+    // processing the BPMN error and persisting the output-mapped variable, so poll
+    // for it instead of asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -669,7 +673,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    // variable was mapped
+    // variable was mapped - handleFailure() returns before the engine has finished
+    // processing the BPMN error and persisting the output-mapped variable, so poll
+    // for it instead of asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -710,6 +717,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
+    // handleFailure() returns before the engine has finished processing the BPMN error
+    // and persisting the passed-in/output-mapped variables, so poll for them instead of
+    // asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), variableName).isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), variableName);
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -717,6 +728,7 @@ public class ExternalTaskHandlerIT {
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
     // variable was mapped
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(localVariable).isNotNull();
     assertThat(localVariable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());

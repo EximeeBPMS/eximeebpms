@@ -18,15 +18,15 @@
   </description>
 
   <properties>
-    <version.quarkus>3.28.4</version.quarkus>
-    <version.spring.framework>7.0.5</version.spring.framework>
-    <version.spring-boot>4.0.3</version.spring-boot>
+    <version.quarkus>3.36.1</version.quarkus>
+    <version.spring.framework>7.0.7</version.spring.framework>
+    <version.spring-boot>4.0.6</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.rest-assured>6.0.0</version.rest-assured>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
     <version.jaxrs.api>2.0.1.Final</version.jaxrs.api>
-    <version.groovy>5.0.4</version.groovy>
+    <version.groovy>5.0.5</version.groovy>
     <version.graal.js>21.3.12</version.graal.js>
     <version.icu.icu4j>71.1</version.icu.icu4j>
     <!-- json-smart and accessors-smart are runtime dependencies of json-path -->
@@ -53,7 +53,7 @@
     <version.logback>1.2.13</version.logback>
     <version.junit-jupiter>6.0.3</version.junit-jupiter>
     <version.junit>4.13.1</version.junit>
-    <version.assertj>3.27.6</version.assertj>
+    <version.assertj>3.27.7</version.assertj>
     <version.awaitility>4.2.2</version.awaitility>
     <version.mockito>5.23.0</version.mockito>
     <version.wiremock>2.27.2</version.wiremock>

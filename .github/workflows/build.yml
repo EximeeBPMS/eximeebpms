@@ -261,7 +261,12 @@ jobs:
           # full-repo report, well past the scanner's fixed 300s qualitygate.wait poll -
           # waiting on the gate here just fails the build on a client-side timeout, not
           # a real quality problem.
-          ./mvnw -U --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
+          # dbd disabled: the javabugs [dbd] sensor has a known unbounded-memory-growth bug
+          # on large codebases (SonarSource community: "Sensor javabugs [dbd] takes 5 hours"),
+          # confirmed here by two runs both stalling at the identical 36553/47269-function
+          # checkpoint before OOMing ~25min later regardless of heap size (tried up to 6144m) -
+          # per SonarSource staff, more heap does not reliably fix this, only disabling does.
+          ./mvnw -U --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms -Dsonar.internal.analysis.dbd=false
         env:
           # sonar-maven-plugin runs in-process in this Maven JVM; the dbd/javabugs sensor over
           # the whole monorepo needs more than the default heap - fails with

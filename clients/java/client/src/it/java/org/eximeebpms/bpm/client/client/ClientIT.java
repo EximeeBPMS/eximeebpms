@@ -672,6 +672,13 @@ public class ClientIT {
       client = ExternalTaskClient.create()
         .baseUrl(BASE_URL)
         .defaultSerializationFormat("application/x-java-serialized-object")
+        // Without this, an empty fetch-and-lock cycle (e.g. under CI load, before the
+        // just-started process instance's task is fetchable) triggers the client's
+        // default exponential backoff (500ms, 1s, 2s, 4s, 8s, ...), which can exceed
+        // TestUtil's fixed ~10s waitForFetchAndLockUntil budget even though the handler
+        // would eventually fire - causing a flaky timeout unrelated to the actual
+        // assertion under test.
+        .disableBackoffStrategy()
         .build();
 
       RecordingExternalTaskHandler recordingExternalTaskHandler = new RecordingExternalTaskHandler((t, s) -> s.complete(t));

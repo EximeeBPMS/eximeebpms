@@ -56,6 +56,7 @@ import org.eximeebpms.bpm.client.dto.TaskDto;
 import org.eximeebpms.bpm.client.dto.VariableInstanceDto;
 import org.eximeebpms.bpm.client.task.ExternalTask;
 import org.eximeebpms.bpm.client.task.impl.ExternalTaskImpl;
+import org.eximeebpms.bpm.client.util.TestUtil;
 import org.eximeebpms.bpm.client.variable.impl.TypedValueField;
 import org.eximeebpms.bpm.engine.variable.impl.value.FileValueImpl;
 import org.eximeebpms.bpm.engine.variable.type.ValueType;
@@ -329,7 +330,14 @@ public class EngineRule extends ExternalResource {
   }
 
   public VariableInstanceDto getVariableByProcessInstanceId(String processInstanceId, String varName) {
-    List<VariableInstanceDto> variables = getVariablesByProcessInstanceIdAndVariableName(processInstanceId, varName);
+    // Retried defensively: this has been observed to occasionally return 0 results right
+    // after a call (e.g. handleFailure) that should have already committed the variable -
+    // engine-side, that path is fully synchronous (single command/transaction), so this
+    // looks like a REST/connection-timing artifact rather than a real engine race. Retrying
+    // the query is a pragmatic guard until/unless a real root cause is found.
+    List<VariableInstanceDto> variables = TestUtil.doRepeatedly(
+        () -> getVariablesByProcessInstanceIdAndVariableName(processInstanceId, varName))
+        .until(vars -> vars.size() == 1, (e) -> false);
     assertThat(variables).hasSize(1);
     return (VariableInstanceDto) variables.get(0);
   }

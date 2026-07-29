@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
@@ -115,6 +117,22 @@ public class ExecutorRunner implements Runnable {
      */
     private final ConcurrentHashMap<String, ExternalTask> pendingTasks = new ConcurrentHashMap<>();
 
+    /**
+     * Tracks the {@link CompletableFuture} of every task execution dispatched to
+     * {@link #taskExecutor} that hasn't completed yet. A dispatched execution is removed from
+     * {@link #pendingTasks} as soon as it starts (see {@link #acquire()}), so without this,
+     * {@link #stop()} would have no way to know a handler invocation (e.g. a {@code complete}/
+     * {@code handleFailure} REST call) is still running, and could return while it's still
+     * in flight - racing whatever cleanup the caller performs right after {@code stop()} returns.
+     */
+    private final Set<CompletableFuture<Void>> inFlightExecutions = ConcurrentHashMap.newKeySet();
+
+    /**
+     * How long {@link #stop()} waits for in-flight executions (see {@link #inFlightExecutions})
+     * to finish before giving up and returning anyway.
+     */
+    private static final long IN_FLIGHT_EXECUTION_AWAIT_SECONDS = 10;
+
     public ExecutorRunner(EngineClient engineClient, TypedValues typedValues, long clientLockDuration,
                           ThreadPoolExecutor taskExecutor, double maxFetchedTasksMultiplier,
                           ExternalTaskExecutionStats executionStats) {
@@ -160,13 +178,15 @@ public class ExecutorRunner implements Runnable {
 
                     if (taskHandler != null) {
                         pendingTasks.put(externalTask.getId(), externalTask);
-                        CompletableFuture.runAsync(() -> {
+                        CompletableFuture<Void> execution = CompletableFuture.runAsync(() -> {
                             if (isStopped.get()) {
                                 return;
                             }
                             pendingTasks.remove(externalTask.getId());
                             handleExternalTask(externalTask, taskHandler);
                         }, taskExecutor);
+                        inFlightExecutions.add(execution);
+                        execution.whenComplete((result, throwable) -> inFlightExecutions.remove(execution));
                     } else {
                         LOG.taskHandlerIsNull(topicName);
                     }
@@ -398,6 +418,10 @@ public class ExecutorRunner implements Runnable {
      * but are still waiting in the executor queue (not yet executing) are unlocked by sending
      * an unlock request to the engine. This prevents tasks from being "frozen" in the engine
      * database until their lock expires after an application restart.
+     *
+     * <p>Finally, this method waits (up to {@link #IN_FLIGHT_EXECUTION_AWAIT_SECONDS}) for any
+     * task executions that had already been dispatched to the task executor to finish, so that
+     * {@code stop()} does not return while a handler invocation is still running.
      */
     public synchronized void stop() {
         if (isRunning.compareAndSet(true, false)) {
@@ -413,6 +437,7 @@ public class ExecutorRunner implements Runnable {
                 LOG.exceptionWhileShuttingDown(e);
             }
             unlockPendingTasks();
+            awaitInFlightExecutions();
         }
     }
 
@@ -439,6 +464,33 @@ public class ExecutorRunner implements Runnable {
                 LOG.exceptionWhileUnlockingTaskOnShutdown(taskId, e);
             }
         });
+    }
+
+    /**
+     * Waits for task executions already dispatched to {@link #taskExecutor} (see
+     * {@link #inFlightExecutions}) to finish, up to {@link #IN_FLIGHT_EXECUTION_AWAIT_SECONDS}.
+     *
+     * <p>Called during {@link #stop()}. Does not touch {@link #taskExecutor}'s own lifecycle,
+     * since it may be a caller-supplied executor (see
+     * {@link org.eximeebpms.bpm.client.task.ExternalTaskHandlerWithSpecificExecutor}) that is
+     * expected to keep running after this runner stops.
+     */
+    private void awaitInFlightExecutions() {
+        List<CompletableFuture<Void>> executions = new ArrayList<>(inFlightExecutions);
+        if (executions.isEmpty()) {
+            return;
+        }
+        LOG.awaitingInFlightExecutionsOnShutdown(executions.size());
+        try {
+            CompletableFuture.allOf(executions.toArray(new CompletableFuture[0]))
+                .get(IN_FLIGHT_EXECUTION_AWAIT_SECONDS, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            LOG.timeoutWhileAwaitingInFlightExecutionsOnShutdown(inFlightExecutions.size(), IN_FLIGHT_EXECUTION_AWAIT_SECONDS);
+        } catch (ExecutionException e) {
+            // individual execution failures are already caught and logged inside handleExternalTask()
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**

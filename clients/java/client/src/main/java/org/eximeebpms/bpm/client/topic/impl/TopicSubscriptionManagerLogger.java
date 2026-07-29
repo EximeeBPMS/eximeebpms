@@ -100,4 +100,17 @@ public class TopicSubscriptionManagerLogger extends ExternalTaskClientLogger {
       "012",
       String.format("Unlocking %d pending task(s) on shutdown to prevent lock expiry delays.", count));
   }
+
+  public void awaitingInFlightExecutionsOnShutdown(int count) {
+    logInfo(
+      "013",
+      String.format("Waiting for %d in-flight task execution(s) to finish before shutdown completes.", count));
+  }
+
+  public void timeoutWhileAwaitingInFlightExecutionsOnShutdown(int count, long timeoutSeconds) {
+    logError(
+      "014",
+      String.format("Timed out after %ds waiting for %d in-flight task execution(s) to finish during shutdown; "
+          + "stop() is returning while they may still be running.", timeoutSeconds, count));
+  }
 }

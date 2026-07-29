@@ -18,15 +18,7 @@ package org.eximeebpms.bpm.client.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.client.rule.ClientRule.LOCK_DURATION;
-import static org.eximeebpms.bpm.client.util.ProcessModels.BPMN_ERROR_EXTERNAL_TASK_PROCESS;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_ID;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_PRIORITY;
-import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
-import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY;
-import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY_2;
-import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
-import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_ID;
-import static org.eximeebpms.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static org.eximeebpms.bpm.client.util.ProcessModels.*;
 import static org.eximeebpms.bpm.client.util.TestUtil.waitUntil;
 
 import java.util.Collection;
@@ -63,14 +55,14 @@ public class ExternalTaskHandlerIT {
   @Rule
   public RuleChain ruleChain = RuleChain.outerRule(engineRule).around(clientRule);
 
-  protected ExternalTaskClient externalTaskClient;
+  protected ExternalTaskClient client;
 
   protected ProcessDefinitionDto processDefinition;
   protected ProcessInstanceDto processInstance;
 
   @Before
-  public void setup() {
-    externalTaskClient = clientRule.client();
+  public void setup() throws Exception {
+    client = clientRule.client();
 
     adjustProcessToAddErrorMessageVariable();
 
@@ -93,7 +85,7 @@ public class ExternalTaskHandlerIT {
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler();
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -121,10 +113,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldCompleteTask() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.complete(task));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.complete(task);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -152,7 +146,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -183,7 +177,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -212,7 +206,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -231,7 +225,7 @@ public class ExternalTaskHandlerIT {
   public void shouldCompleteWithLocalVariables() {
     // given
     ProcessDefinitionDto definition = engineRule.deploy(ProcessModels.ONE_EXTERNAL_TASK_WITH_OUTPUT_PARAM_PROCESS).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "foo";
     String variableValue = "bar";
@@ -243,7 +237,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
@@ -251,9 +245,9 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId());
+    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(processInstance.getId());
     assertThat(variable).isNotNull();
-    assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(variable.getProcessInstanceId()).isEqualTo(processInstance.getId());
 
     assertThat(variable.getName()).isEqualTo("bar");
     assertThat(variable.getValue()).isEqualTo(variableValue);
@@ -263,7 +257,7 @@ public class ExternalTaskHandlerIT {
   public void shouldCompleteWithVariablesAndLocalVariables() {
     // given
     ProcessDefinitionDto definition = engineRule.deploy(ProcessModels.ONE_EXTERNAL_TASK_WITH_OUTPUT_PARAM_PROCESS).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "x";
     String variableValue = "y";
@@ -281,7 +275,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
@@ -289,15 +283,15 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), variableName);
+    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), variableName);
     assertThat(variable).isNotNull();
-    assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(variable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(variable.getName()).isEqualTo(variableName);
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
-    VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
+    VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), "bar");
     assertThat(localVariable).isNotNull();
-    assertThat(localVariable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(localVariable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(localVariable.getName()).isEqualTo("bar");
     assertThat(localVariable.getValue()).isEqualTo(localVariableValue);
   }
@@ -307,7 +301,7 @@ public class ExternalTaskHandlerIT {
     // given
     BpmnModelInstance process = createProcessWithExclusiveGateway(PROCESS_KEY_2, "${foo == 'bar'}");
     ProcessDefinitionDto definition = engineRule.deploy(process).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "foo";
     String variableValue = "bar";
@@ -319,7 +313,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .processDefinitionKey(PROCESS_KEY_2)
             .handler(handler)
             .open();
@@ -327,22 +321,24 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    TaskDto task = engineRule.getTaskByProcessInstanceId(localProcessInstance.getId());
+    TaskDto task = engineRule.getTaskByProcessInstanceId(processInstance.getId());
     assertThat(task).isNotNull();
-    assertThat(task.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(task.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(task.getTaskDefinitionKey()).isEqualTo(USER_TASK_ID);
 
-    List<VariableInstanceDto> variables = engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "foo");
+    List<VariableInstanceDto> variables = engineRule.getVariablesByProcessInstanceIdAndVariableName(processInstance.getId(), "foo");
     assertThat(variables).isEmpty();
   }
 
   @Test
   public void shouldCompleteById() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.complete(task.getId(), null, null));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.complete(task.getId(), null, null);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -358,11 +354,13 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldLock() {
     // given
-    // an external task may be locked again by the same worker
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.lock(task, LOCK_DURATION * 10));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      // an external task may be locked again by the same worker
+      client.lock(task, LOCK_DURATION * 10);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -376,11 +374,13 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldLockById() {
     // given
-    // an external task may be locked again by the same worker
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.lock(task.getId(), LOCK_DURATION * 10));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      // an external task may be locked again by the same worker
+      client.lock(task.getId(), LOCK_DURATION * 10);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -394,10 +394,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldExtendLock() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.extendLock(task, LOCK_DURATION * 10));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.extendLock(task, LOCK_DURATION * 10);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -413,10 +415,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldExtendLockById() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.extendLock(task.getId(), LOCK_DURATION * 10));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.extendLock(task.getId(), LOCK_DURATION * 10);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -442,7 +446,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -457,10 +461,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldInvokeHandleBpmnError() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.handleBpmnError(task, "500"));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.handleBpmnError(task, "500");
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -485,7 +491,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -508,10 +514,12 @@ public class ExternalTaskHandlerIT {
   public void shouldInvokeHandleBpmnErrorWithErrorMessage() {
     // given
     String anErrorMessage = "meaningful error message";
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.handleBpmnError(task, "500", anErrorMessage));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.handleBpmnError(task, "500", anErrorMessage);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -531,10 +539,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldInvokeHandleBpmnErrorById() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.handleBpmnError(task.getId(), "500", null, null));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.handleBpmnError(task.getId(), "500", null, null);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -550,10 +560,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldInvokeHandleFailure() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.handleFailure(task, "my-message", "my-details", 0, 0));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.handleFailure(task, "my-message", "my-details", 0, 0);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -578,7 +590,7 @@ public class ExternalTaskHandlerIT {
     );
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .lockDuration(1000)
             .handler(handler)
             .open();
@@ -596,10 +608,12 @@ public class ExternalTaskHandlerIT {
   @Test
   public void shouldInvokeHandleFailureById() {
     // given
-    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> client.handleFailure(task.getId(), "my-message", "my-details", 0, 0));
+    RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
+      client.handleFailure(task.getId(), "my-message", "my-details", 0, 0);
+    });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -616,7 +630,7 @@ public class ExternalTaskHandlerIT {
   public void shouldFailWithVariables() {
     // given
     ProcessDefinitionDto definition = engineRule.deploy(ProcessModels.BPMN_ERROR_EXTERNAL_TASK_WITH_OUTPUT_MAPPING_PROCESS).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "foo";
     String variableValue = "baz";
@@ -628,7 +642,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .processDefinitionId(definition.getId())
             .open();
@@ -639,15 +653,15 @@ public class ExternalTaskHandlerIT {
     // variable was mapped - handleFailure() returns before the engine has finished
     // processing the BPMN error and persisting the output-mapped variable, so poll
     // for it instead of asserting immediately
-    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
-    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(processInstance.getId(), "bar").isEmpty());
+    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), "bar");
     assertThat(variable).isNotNull();
-    assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(variable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(variable.getName()).isEqualTo("bar");
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
     // error was caught and flow continued to user task
-    TaskDto task = engineRule.getTaskByProcessInstanceId(localProcessInstance.getId());
+    TaskDto task = engineRule.getTaskByProcessInstanceId(processInstance.getId());
     assertThat(task.getTaskDefinitionKey()).isEqualTo(ProcessModels.USER_TASK_AFTER_BPMN_ERROR);
   }
 
@@ -655,7 +669,7 @@ public class ExternalTaskHandlerIT {
   public void shouldFailWithLocalVariables() {
     // given
     ProcessDefinitionDto definition = engineRule.deploy(ProcessModels.BPMN_ERROR_EXTERNAL_TASK_WITH_OUTPUT_MAPPING_PROCESS).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "foo";
     String variableValue = "baz";
@@ -667,7 +681,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .processDefinitionId(definition.getId())
             .open();
@@ -678,15 +692,15 @@ public class ExternalTaskHandlerIT {
     // variable was mapped - handleFailure() returns before the engine has finished
     // processing the BPMN error and persisting the output-mapped variable, so poll
     // for it instead of asserting immediately
-    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
-    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(processInstance.getId(), "bar").isEmpty());
+    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), "bar");
     assertThat(variable).isNotNull();
-    assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(variable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(variable.getName()).isEqualTo("bar");
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
     // error was caught and flow continued to user task
-    TaskDto task = engineRule.getTaskByProcessInstanceId(localProcessInstance.getId());
+    TaskDto task = engineRule.getTaskByProcessInstanceId(processInstance.getId());
     assertThat(task.getTaskDefinitionKey()).isEqualTo(ProcessModels.USER_TASK_AFTER_BPMN_ERROR);
   }
 
@@ -694,7 +708,7 @@ public class ExternalTaskHandlerIT {
   public void shouldFailWithVariablesAndLocalVariables() {
     // given
     ProcessDefinitionDto definition = engineRule.deploy(ProcessModels.BPMN_ERROR_EXTERNAL_TASK_WITH_OUTPUT_MAPPING_PROCESS).get(0);
-    ProcessInstanceDto localProcessInstance = engineRule.startProcessInstance(definition.getId());
+    ProcessInstanceDto processInstance = engineRule.startProcessInstance(definition.getId());
 
     String variableName = "x";
     String variableValue = "y";
@@ -712,7 +726,7 @@ public class ExternalTaskHandlerIT {
     });
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .processDefinitionId(definition.getId())
             .open();
@@ -723,23 +737,23 @@ public class ExternalTaskHandlerIT {
     // handleFailure() returns before the engine has finished processing the BPMN error
     // and persisting the passed-in/output-mapped variables, so poll for them instead of
     // asserting immediately
-    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), variableName).isEmpty());
-    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), variableName);
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(processInstance.getId(), variableName).isEmpty());
+    VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), variableName);
     assertThat(variable).isNotNull();
-    assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(variable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(variable.getName()).isEqualTo(variableName);
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
     // variable was mapped
-    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
-    VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(processInstance.getId(), "bar").isEmpty());
+    VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(processInstance.getId(), "bar");
     assertThat(localVariable).isNotNull();
-    assertThat(localVariable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
+    assertThat(localVariable.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(localVariable.getName()).isEqualTo("bar");
     assertThat(localVariable.getValue()).isEqualTo(localVariableValue);
 
     // error was caught and flow continued to user task
-    TaskDto task = engineRule.getTaskByProcessInstanceId(localProcessInstance.getId());
+    TaskDto task = engineRule.getTaskByProcessInstanceId(processInstance.getId());
     assertThat(task.getTaskDefinitionKey()).isEqualTo(ProcessModels.USER_TASK_AFTER_BPMN_ERROR);
   }
 
@@ -749,7 +763,7 @@ public class ExternalTaskHandlerIT {
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler();
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 
@@ -770,7 +784,7 @@ public class ExternalTaskHandlerIT {
     processInstance = engineRule.startProcessInstanceByKey(processDefinition.getKey(), "aTenantId");
 
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .processDefinitionId(processDefinition.getId())
             .open();
@@ -788,7 +802,7 @@ public class ExternalTaskHandlerIT {
     // given
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler();
     // when
-    externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
+    client.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
             .open();
 

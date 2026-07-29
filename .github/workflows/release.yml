@@ -23,18 +23,17 @@ jobs:
   release:
     runs-on: github-actions-runner-new
     steps:
-      - name: Determine user and set secret
-        run: |
-          echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
-          # github-actions-runner-new is shared with build.yml/snapshots-on-main.yml/etc.
-          # An isolated, per-run local repo avoids corrupting ~/.m2/repository metadata
-          # (e.g. maven-metadata-local.xml) via concurrent writes from other workflows.
-          echo "MAVEN_REPO_LOCAL=${{ runner.temp }}/m2-repo-${{ github.run_id }}" >> $GITHUB_ENV
+      - name: Generate eximeebpmsrunner app token
+              id: app-token
+              uses: actions/create-github-app-token@v2
+              with:
+                app-id: ${{ secrets.EXIMEEBPMSRUNNER_APP_ID }}
+                private-key: ${{ secrets.EXIMEEBPMSRUNNER_APP_PRIVATE_KEY }}
 
       - name: Check out the code
         uses: actions/checkout@v7.0.0
         with:
-          token: ${{ secrets[env.GITHUB_PAT_USER] }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up JDK
         uses: actions/setup-java@v5.4.0
@@ -64,7 +63,7 @@ jobs:
         env:
           CPP_USERNAME: ${{ secrets.CPP_USERNAME }}
           CPP_PASSWORD: ${{ secrets.CPP_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Import GPG key
         run: |
@@ -88,7 +87,7 @@ jobs:
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Release perform
         run: |
@@ -97,7 +96,7 @@ jobs:
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Deploy base libs (stage locally, no network)
         run: |
@@ -106,14 +105,14 @@ jobs:
             -DaltDeploymentRepository=local::file:$(pwd)/target/staging-deploy
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Generate aggregate SBOM
         run: |
           cd target/checkout
           ./mvnw package -Psbom -B --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -DskipTests
         env:
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Publish staged artifacts to Maven Central (JReleaser)
         # Pinned to a commit SHA, not @v2: this is a self-hosted runner, which caches actions

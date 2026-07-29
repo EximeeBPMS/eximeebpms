@@ -263,7 +263,10 @@ jobs:
           # a real quality problem.
           ./mvnw -U --settings ~/.m2-build/settings.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=EximeeBPMS_eximeebpms
         env:
-          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
+          # sonar-maven-plugin runs in-process in this Maven JVM; the dbd/javabugs sensor over
+          # the whole monorepo needs more than the default heap - fails with
+          # "OutOfMemoryError: Java heap space" without this.
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository -Xmx6144m
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 

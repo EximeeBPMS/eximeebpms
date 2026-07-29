@@ -12,13 +12,13 @@ concurrency:
 permissions:
   contents: write
 
-# Runs on self-hosted, matching build.yml/codeql.yml. Only runs when a push
+# Runs on github-actions-runner-new, matching build.yml/codeql.yml. Only runs when a push
 # looks dependency-related, to avoid generating pointless commits/noise on
 # every push to main.
 jobs:
   update-sbom:
     name: Generate and commit SBOM
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     if: >-
       github.event_name == 'workflow_dispatch' ||
       contains(join(github.event.commits.*.message, ' '), 'deps')

@@ -11,16 +11,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Runs on self-hosted, matching build.yml. Unlike the enterprise repo, this
+# Runs on github-actions-runner-new, matching build.yml. Unlike the enterprise repo, this
 # reactor resolves everything from public Maven Central (no internal Nexus),
 # so no CA-cert import or Nexus profile is needed here. Deliberately not
-# triggered on every PR - it would double self-hosted runner load on top of
+# triggered on every PR - it would double runner load on top of
 # build.yml; push-to-main + weekly is the same cadence CIB seven uses for
 # their CodeQL scan.
 jobs:
   analyze:
     name: Analyze (Java, JavaScript)
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     permissions:
       security-events: write
       contents: read

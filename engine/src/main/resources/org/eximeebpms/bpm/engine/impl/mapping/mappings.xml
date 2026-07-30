@@ -73,6 +73,7 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CamundaFormDefinition.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/BusinessEventOutbox.xml" />
+    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />
 
     <!-- DMN -->
 

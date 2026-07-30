@@ -382,7 +382,6 @@ import org.eximeebpms.bpm.engine.repository.DeploymentBuilder;
 import org.eximeebpms.bpm.engine.repository.DeploymentHandlerFactory;
 import org.eximeebpms.bpm.engine.runtime.Incident;
 import org.eximeebpms.bpm.engine.runtime.WhitelistingDeserializationTypeValidator;
-import org.eximeebpms.bpm.engine.task.TaskQuery;
 import org.eximeebpms.bpm.engine.test.mock.MocksResolverFactory;
 import org.eximeebpms.bpm.engine.variable.Variables;
 

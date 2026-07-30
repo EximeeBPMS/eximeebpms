@@ -16,13 +16,13 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
-import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
+import org.eximeebpms.bpm.engine.impl.businessevent.script.BusinessEventScriptViolationListener;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
@@ -112,6 +112,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     if (applicationContext != null) {
       listeners.addAll(applicationContext.getBeansOfType(ScriptViolationListener.class).values());
     }
+    listeners.add(new BusinessEventScriptViolationListener());
 
     DbAwareScriptSecurityPolicy.Config initialConfig = new DbAwareScriptSecurityPolicy.Config(
         scriptSecurity.isAuditMode(),

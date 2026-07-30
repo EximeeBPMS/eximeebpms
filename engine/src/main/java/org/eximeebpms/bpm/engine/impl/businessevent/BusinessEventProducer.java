@@ -5,6 +5,7 @@ import org.eximeebpms.bpm.engine.delegate.DelegateTask;
 import org.eximeebpms.bpm.engine.delegate.VariableScope;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 
 /**
  * <p>The producer for business events. The business event producer is
@@ -119,5 +120,13 @@ public interface BusinessEventProducer {
    * @return the business event
    */
   BusinessEvent createTaskInstanceDeleteEvt(DelegateTask task);
+
+  /**
+   * Creates the business event fired when a script violation is <strong>detected</strong>.
+   *
+   * @param violation the recorded script violation event
+   * @return the business event
+   */
+  BusinessEvent createScriptViolationEvt(ScriptViolationEvent violation);
 
 }

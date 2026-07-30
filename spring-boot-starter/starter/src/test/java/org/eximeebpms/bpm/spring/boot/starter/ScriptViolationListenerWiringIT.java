@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 import org.eximeebpms.bpm.engine.ProcessEngine;
+import org.eximeebpms.bpm.engine.impl.businessevent.script.BusinessEventScriptViolationListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
@@ -64,6 +65,21 @@ public class ScriptViolationListenerWiringIT {
 
     // then — the @Bean RecordingScriptViolationListener was collected from ApplicationContext
     assertThat(listeners).anyMatch(l -> l instanceof RecordingScriptViolationListener);
+  }
+
+  @Test
+  public void shouldAlwaysIncludeBusinessEventListenerRegardlessOfBeans() {
+    // given
+    ProcessEngineConfigurationImpl config =
+        (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
+    DbAwareScriptSecurityPolicy policy =
+        (DbAwareScriptSecurityPolicy) config.getScriptSecurityPolicy();
+
+    // when
+    List<ScriptViolationListener> listeners = policy.getListeners();
+
+    // then — BusinessEventScriptViolationListener is always added by DefaultProcessEngineConfiguration
+    assertThat(listeners).anyMatch(l -> l instanceof BusinessEventScriptViolationListener);
   }
 
   @Test

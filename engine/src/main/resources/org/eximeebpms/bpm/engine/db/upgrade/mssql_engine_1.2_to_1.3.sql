@@ -26,6 +26,10 @@ alter table ACT_RU_TASK drop constraint ACT_FK_TASK_CASE_EXE;
 alter table ACT_RU_TASK drop constraint ACT_FK_TASK_CASE_DEF;
 
 -- drop indexes on CMMN columns in non-CMMN tables --
+drop index ACT_IDX_TASK_CASE_EXEC on ACT_RU_TASK;
+drop index ACT_IDX_TASK_CASE_DEF_ID on ACT_RU_TASK;
+drop index ACT_IDX_VARIABLE_CASE_EXEC on ACT_RU_VARIABLE;
+drop index ACT_IDX_VARIABLE_CASE_INST on ACT_RU_VARIABLE;
 drop index ACT_IDX_HI_DETAIL_CASE_INST on ACT_HI_DETAIL;
 drop index ACT_IDX_HI_DETAIL_CASE_EXEC on ACT_HI_DETAIL;
 drop index ACT_IDX_HI_CASEVAR_CASE_INST on ACT_HI_VARINST;
@@ -91,14 +95,14 @@ alter table ACT_HI_DECINST drop column CASE_INST_ID_;
 
 -- script guard violation log --
 create table ACT_RU_SCRIPT_VIOLATION (
-                                         ID_               nvarchar(64) not null,
-                                         TIMESTAMP_        datetime2 not null,
-                                         PROC_DEF_KEY_     nvarchar(255),
-                                         ACTIVITY_ID_      nvarchar(255),
-                                         LANGUAGE_         nvarchar(64),
-                                         SOURCE_TYPE_      nvarchar(64),
-                                         ORIGIN_           nvarchar(64),
-                                         RULE_CODE_        nvarchar(255),
-                                         REASON_           nvarchar(1000),
-                                         primary key (ID_)
+    ID_               nvarchar(64) not null,
+    TIMESTAMP_        datetime2 not null,
+    PROC_DEF_KEY_     nvarchar(255),
+    ACTIVITY_ID_      nvarchar(255),
+    LANGUAGE_         nvarchar(64),
+    SOURCE_TYPE_      nvarchar(64),
+    ORIGIN_           nvarchar(64),
+    RULE_CODE_        nvarchar(255),
+    REASON_           nvarchar(1000),
+    primary key (ID_)
 );

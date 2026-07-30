@@ -35,11 +35,11 @@ public record CompositeScriptViolationStore(List<ScriptViolationStore> delegates
 
   @Override
   public List<ScriptViolationEvent> getRecent(int limit) {
-    return delegates.get(0).getRecent(limit);
+    return delegates.getFirst().getRecent(limit);
   }
 
   @Override
   public long getTotalCount() {
-    return delegates.get(0).getTotalCount();
+    return delegates.getFirst().getTotalCount();
   }
 }

@@ -33,6 +33,7 @@ import java.util.List;
 import org.eximeebpms.bpm.admin.impl.web.SetupResource;
 import org.eximeebpms.bpm.application.PostDeploy;
 import org.eximeebpms.bpm.application.ProcessApplication;
+import org.eximeebpms.bpm.application.impl.JakartaServletProcessApplication;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.externaltask.LockedExternalTask;

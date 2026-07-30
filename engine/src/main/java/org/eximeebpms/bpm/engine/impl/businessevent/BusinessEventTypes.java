@@ -167,7 +167,14 @@ public enum BusinessEventTypes implements BusinessEventType {
    *
    * @since 7.10, 7.9.1, 7.8.7
    */
-  USER_OPERATION_LOG("user-operation-log", "create");
+  USER_OPERATION_LOG("user-operation-log", "create"),
+
+  /**
+   * fired when a script violation is detected.
+   *
+   * @since 1.3.0
+   */
+  SCRIPT_VIOLATION_CREATE("script-violation", "create");
 
   private BusinessEventTypes(String entityType, String eventName) {
     this.entityType = entityType;

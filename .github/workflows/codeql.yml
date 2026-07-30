@@ -11,16 +11,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Runs on self-hosted, matching build.yml. Unlike the enterprise repo, this
+# Runs on github-actions-runner-new, matching build.yml. Unlike the enterprise repo, this
 # reactor resolves everything from public Maven Central (no internal Nexus),
 # so no CA-cert import or Nexus profile is needed here. Deliberately not
-# triggered on every PR - it would double self-hosted runner load on top of
+# triggered on every PR - it would double runner load on top of
 # build.yml; push-to-main + weekly is the same cadence CIB seven uses for
 # their CodeQL scan.
 jobs:
   analyze:
     name: Analyze (Java, JavaScript)
-    runs-on: self-hosted
+    runs-on: github-actions-runner-new
     permissions:
       security-events: write
       contents: read
@@ -63,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Maven packages
-        uses: actions/cache@v6
+      - name: Restore Maven packages
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.m2/repository
           key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
@@ -80,10 +80,29 @@ jobs:
           languages: java, javascript
 
       - name: Build (compile only, tests not needed for analysis)
-        run: ./mvnw -B --settings ~/.m2-codeql/settings.xml verify -DskipTests
+        # -U: the restore-keys fallback above can serve a cache blob predating a
+        # parent POM version bump, and Maven's default 24h "don't recheck" policy
+        # would otherwise fail the build with a non-resolvable parent POM until the
+        # cache key changes again.
+        run: ./mvnw -B -T 1C -U --settings ~/.m2-codeql/settings.xml verify -DskipTests
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prune own artifacts before caching
+        # See identical comment in build.yml: actions/cache can't exclude via `!`,
+        # these groupIds are rebuilt from source every run so caching them is pure
+        # bloat, and gating on success() avoids poisoning the key with an
+        # incomplete .m2/repository from an early build failure.
+        if: success()
+        run: mkdir -p ${{ github.workspace }}/.m2/repository && rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
+
+      - name: Save Maven packages
+        if: success()
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

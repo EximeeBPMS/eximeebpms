@@ -18,7 +18,16 @@ package org.eximeebpms.bpm.client.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.client.rule.ClientRule.LOCK_DURATION;
-import static org.eximeebpms.bpm.client.util.ProcessModels.*;
+import static org.eximeebpms.bpm.client.util.ProcessModels.BPMN_ERROR_EXTERNAL_TASK_PROCESS;
+import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_ID;
+import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_PRIORITY;
+import static org.eximeebpms.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
+import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY;
+import static org.eximeebpms.bpm.client.util.ProcessModels.PROCESS_KEY_2;
+import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
+import static org.eximeebpms.bpm.client.util.ProcessModels.USER_TASK_ID;
+import static org.eximeebpms.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static org.eximeebpms.bpm.client.util.TestUtil.waitUntil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -627,7 +636,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    // variable was mapped
+    // variable was mapped - handleFailure() returns before the engine has finished
+    // processing the BPMN error and persisting the output-mapped variable, so poll
+    // for it instead of asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -651,7 +663,6 @@ public class ExternalTaskHandlerIT {
     RecordingExternalTaskHandler handler = new RecordingExternalTaskHandler((task, client) -> {
       Map<String, Object> localVariables = new HashMap<>();
       localVariables.put(variableName, variableValue);
-      System.out.println("HANDLE!" + task);
       client.handleFailure(task.getId(), "my-message", "my-details", 0, 0, null, localVariables);
     });
 
@@ -664,7 +675,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    // variable was mapped
+    // variable was mapped - handleFailure() returns before the engine has finished
+    // processing the BPMN error and persisting the output-mapped variable, so poll
+    // for it instead of asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -706,6 +720,10 @@ public class ExternalTaskHandlerIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
+    // handleFailure() returns before the engine has finished processing the BPMN error
+    // and persisting the passed-in/output-mapped variables, so poll for them instead of
+    // asserting immediately
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), variableName).isEmpty());
     VariableInstanceDto variable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), variableName);
     assertThat(variable).isNotNull();
     assertThat(variable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());
@@ -713,6 +731,7 @@ public class ExternalTaskHandlerIT {
     assertThat(variable.getValue()).isEqualTo(variableValue);
 
     // variable was mapped
+    waitUntil(() -> !engineRule.getVariablesByProcessInstanceIdAndVariableName(localProcessInstance.getId(), "bar").isEmpty());
     VariableInstanceDto localVariable = engineRule.getVariableByProcessInstanceId(localProcessInstance.getId(), "bar");
     assertThat(localVariable).isNotNull();
     assertThat(localVariable.getProcessInstanceId()).isEqualTo(localProcessInstance.getId());

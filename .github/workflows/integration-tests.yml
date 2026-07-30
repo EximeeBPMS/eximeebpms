@@ -62,6 +62,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+
 jobs:
   build:
     name: Integration Tests
@@ -131,7 +132,7 @@ jobs:
               <profile>
                 <id>sqlserver</id>
                 <properties>
-                  <database.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine</database.url>
+                  <database.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine;trustServerCertificate=true</database.url>
                   <database.username>sa</database.username>
                   <database.password>EximeeBpms1!</database.password>
                 </properties>

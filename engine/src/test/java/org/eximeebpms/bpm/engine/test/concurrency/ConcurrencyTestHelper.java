@@ -94,6 +94,9 @@ public abstract class ConcurrencyTestHelper {
 
     protected volatile boolean syncAvailable = false;
 
+    // Set by makeContinue() and checked by sync()'s wait loop to guard against spurious wakeups.
+    protected boolean continueSignaled = false;
+
     protected Thread executingThread;
 
     protected volatile boolean reportFailure;
@@ -122,12 +125,27 @@ public abstract class ConcurrencyTestHelper {
           }
         }
         try {
-          if (!syncAvailable) {
-            try {
-              wait(timeout);
-            } catch (InterruptedException e) {
-              if (!reportFailure || exception == null) {
-                fail("unexpected interruption");
+          if (timeout == Long.MAX_VALUE) {
+            // Indefinite wait: loop to guard against spurious wakeups.
+            while (!syncAvailable) {
+              try {
+                wait();
+              } catch (InterruptedException e) {
+                if (!reportFailure || exception == null) {
+                  fail("unexpected interruption");
+                }
+                break;
+              }
+            }
+          } else {
+            // Finite timeout: preserve original semantics — wait at most once.
+            if (!syncAvailable) {
+              try {
+                wait(timeout);
+              } catch (InterruptedException e) {
+                if (!reportFailure || exception == null) {
+                  fail("unexpected interruption");
+                }
               }
             }
           }
@@ -173,9 +191,12 @@ public abstract class ConcurrencyTestHelper {
         }
 
         syncAvailable = true;
+        continueSignaled = false;
         try {
           notifyAll();
-          wait();
+          while (!continueSignaled) {
+            wait();
+          }
         } catch (InterruptedException e) {
           if (!reportFailure || exception == null) {
             fail("Unexpected interruption");
@@ -189,6 +210,7 @@ public abstract class ConcurrencyTestHelper {
         if (exception != null) {
           fail("Controlled thread has run into an exception already: " + exception.getClass().getName() + ". Stack trace:\n" + ExceptionUtil.getExceptionStacktrace(exception));
         }
+        continueSignaled = true;
         notifyAll();
       }
     }

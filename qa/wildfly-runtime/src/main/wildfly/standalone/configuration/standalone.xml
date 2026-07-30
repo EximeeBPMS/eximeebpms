@@ -140,6 +140,12 @@
                     <driver name="postgresql" module="org.postgresql.postgresql">
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
+                    <driver name="sqlserver" module="com.microsoft.sqlserver.mssql-jdbc">
+                        <xa-datasource-class>com.microsoft.sqlserver.jdbc.SQLServerXADataSource</xa-datasource-class>
+                    </driver>
+                    <driver name="mysql" module="com.mysql.mysql-connector-j">
+                        <xa-datasource-class>com.mysql.cj.jdbc.MysqlXADataSource</xa-datasource-class>
+                    </driver>
                 </drivers>
             </datasources>
         </subsystem>

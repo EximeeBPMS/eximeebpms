@@ -40,6 +40,18 @@
     </dependency>
 
     <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.python</groupId>
       <artifactId>jython-standalone</artifactId>
       <scope>runtime</scope>
@@ -294,6 +306,8 @@
                       <include name="**/module.xml" />
                       <replacefilter token="@project.version@" value="${project.version}" />
                       <replacefilter token="@version.postgresql@" value="${version.postgresql}" />
+                      <replacefilter token="@version.sqlserver@" value="${version.sqlserver}" />
+                      <replacefilter token="@version.mysql@" value="${version.mysql}" />
                     </replace>
 
                   </target>
@@ -423,6 +437,8 @@
                       <include name="**/module.xml" />
                       <replacefilter token="@project.version@" value="${project.version}" />
                       <replacefilter token="@version.postgresql@" value="${version.postgresql}" />
+                      <replacefilter token="@version.sqlserver@" value="${version.sqlserver}" />
+                      <replacefilter token="@version.mysql@" value="${version.mysql}" />
                     </replace>
 
                   </target>

@@ -72,6 +72,7 @@ public class ExclusiveJobAcquisitionTest {
     this.managementService = engineRule.getManagementService();
 
     this.jobExecutor = (AssertJobExecutor) engineConfig.getJobExecutor();
+    this.jobExecutor.setCorePoolSize(3);
   }
 
   @After
@@ -290,15 +291,17 @@ public class ExclusiveJobAcquisitionTest {
     }
 
     @Override
-    public void executeJobs(List<String> jobIds, ProcessEngineImpl processEngine) {
-      super.executeJobs(jobIds, processEngine);
-
+    public Runnable getExecuteJobsRunnable(List<String> jobIds, ProcessEngineImpl processEngine) {
       Set<String> batch = new HashSet<>(jobIds);
-      synchronized (jobBatches) {
-        if (!jobBatches.contains(batch)) {
-          jobBatches.add(batch);
+      Runnable original = super.getExecuteJobsRunnable(jobIds, processEngine);
+      return () -> {
+        synchronized (jobBatches) {
+          if (!jobBatches.contains(batch)) {
+            jobBatches.add(batch);
+          }
         }
-      }
+        original.run();
+      };
     }
 
     public void clear() {

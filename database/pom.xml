@@ -244,6 +244,7 @@
         <database.datasource.class>com.mysql.cj.jdbc.MysqlDataSource</database.datasource.class>
         <database.tc.url>cammysql:8.0</database.tc.url>
         <database.tc.params>/${database.name}?sendFractionalSeconds=false&amp;amp;user=${database.username}&amp;amp;password=${database.password}</database.tc.params>
+        <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
       </properties>
 
       <dependencies>
@@ -366,6 +367,7 @@
         <database.datasource.class>com.microsoft.sqlserver.jdbc.SQLServerDataSource</database.datasource.class>
         <database.tc.url>camsqlserver:2019</database.tc.url>
         <database.tc.params>;DatabaseName=${database.name};user=${database.username};password=${database.password};</database.tc.params>
+        <jboss.datasource.filename>sqlserver-ds.xml</jboss.datasource.filename>
       </properties>
 
       <dependencies>

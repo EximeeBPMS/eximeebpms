@@ -96,7 +96,7 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
     String appName = "tasklist";
     login(appName);
     wait.until(textToBePresentInElementLocated(
-        By.cssSelector(".start-process-action view a"),
+        By.cssSelector(".start-process-action a"),
         "Start process"));
 
     wait.until(containsCurrentUrl(appUrl + "app/"

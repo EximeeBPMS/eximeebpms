@@ -105,6 +105,17 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
           overwrite-settings: false
+        continue-on-error: true
+
+      - name: Set up Java (fallback to pre-installed)
+        if: steps.setup-java.outcome == 'failure'
+        run: |
+          echo "setup-java failed (likely DNS), falling back to pre-installed Java"
+          JAVA_BIN=$(readlink -f "$(which java)")
+          JAVA_HOME_VAL=$(dirname "$(dirname "$JAVA_BIN")")
+          echo "JAVA_HOME=$JAVA_HOME_VAL" >> $GITHUB_ENV
+          echo "$JAVA_HOME_VAL/bin" >> $GITHUB_PATH
+          java -version
 
       - name: Create custom settings.xml
         run: |

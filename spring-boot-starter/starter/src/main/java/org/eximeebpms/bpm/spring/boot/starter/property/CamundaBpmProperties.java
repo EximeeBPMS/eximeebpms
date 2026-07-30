@@ -100,11 +100,6 @@ public class CamundaBpmProperties {
   private String[] deploymentResourcePattern = initDeploymentResourcePattern();
 
   /**
-   * enables CMMN support. CMMN is deprecated and will be removed in 1.4.0
-   */
-  private boolean cmmnEnabled = true;
-
-  /**
    * default serialization format to use
    */
   private String defaultSerializationFormat = Defaults.INSTANCE.getDefaultSerializationFormat();
@@ -208,14 +203,6 @@ public class CamundaBpmProperties {
 
   public void setDeploymentResourcePattern(String[] deploymentResourcePattern) {
     this.deploymentResourcePattern = deploymentResourcePattern;
-  }
-
-  public boolean isCmmnEnabled() {
-    return cmmnEnabled;
-  }
-
-  public void setCmmnEnabled(boolean cmmnEnabled) {
-    this.cmmnEnabled = cmmnEnabled;
   }
 
   public String getDefaultSerializationFormat() {
@@ -389,7 +376,6 @@ public class CamundaBpmProperties {
       .add("historyLevelDefault=" + historyLevelDefault)
       .add("autoDeploymentEnabled=" + autoDeploymentEnabled)
       .add("deploymentResourcePattern=" + Arrays.toString(deploymentResourcePattern))
-      .add("cmmnEnabled=" + cmmnEnabled)
       .add("defaultSerializationFormat=" + defaultSerializationFormat)
       .add("licenseFile=" + licenseFile)
       .add("metrics=" + metrics)

@@ -38,7 +38,6 @@ import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionContextFactory;
-import org.eximeebpms.bpm.engine.impl.cmmn.cmd.CheckCmmnUsageCmd;
 import org.eximeebpms.bpm.engine.impl.el.ExpressionManager;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.event.SimpleIpBasedProvider;
@@ -160,8 +159,6 @@ public class ProcessEngineImpl implements ProcessEngine {
       // since all the data has already been persisted by a previous process engine bootstrap
       LOG.historyCleanupJobReconfigurationFailure(ole);
     }
-
-    commandExecutorSchemaOperations.execute(new CheckCmmnUsageCmd());
   }
 
   @Override

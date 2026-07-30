@@ -241,8 +241,14 @@ jobs:
         # already primed the cache for it - see the identical comment in
         # eximeebpms-enterprise/build.yml for the run that showed that assumption
         # doesn't reliably hold.
+        # -T 2 (not 1C): 1C spawns one reactor thread per host core, and each thread
+        # can fork its own Surefire JVM (Xmx968m, see parent/pom.xml) on top of this
+        # step's own Xmx6144m - on the github-actions-runner-new pool that oversubscribes
+        # the pod's memory limit and the pod gets killed with no Maven/JVM-level error,
+        # just a truncated log and the job reported failed minutes later. Fixed at 2
+        # to bound peak concurrent Surefire forks regardless of host core count.
         run: |
-          ./mvnw -B -T 1C -U --settings ~/.m2-build/settings.xml verify
+          ./mvnw -B -T 2 -U --settings ~/.m2-build/settings.xml verify
           ./mvnw -U --non-recursive --settings ~/.m2-build/settings.xml org.jacoco:jacoco-maven-plugin:report-aggregate
           # No --non-recursive here (unlike jacoco above): sonar-maven-plugin needs to
           # visit every module's own reactor project to index its sources - restricting

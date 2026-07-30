@@ -16,10 +16,10 @@
  */
 package org.eximeebpms.bpm.engine.impl.el;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.FunctionMapper;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.VariableMapper;
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
+import jakarta.el.FunctionMapper;
+import jakarta.el.VariableMapper;
 
 
 /**

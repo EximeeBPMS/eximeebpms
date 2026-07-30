@@ -88,6 +88,7 @@ public class DeleteTaskCmd implements Command<Void>, Serializable {
         .getCommandContext()
         .getHistoricTaskInstanceManager()
         .deleteHistoricTaskInstanceById(taskId);
+      Context.getCommandContext().getBusinessEventManager().deleteByTaskId(taskId);
     }
   }
 

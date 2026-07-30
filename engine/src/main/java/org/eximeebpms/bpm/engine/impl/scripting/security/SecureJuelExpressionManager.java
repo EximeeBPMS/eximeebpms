@@ -5,7 +5,7 @@ import java.util.Objects;
 import lombok.Getter;
 import org.eximeebpms.bpm.engine.impl.el.Expression;
 import org.eximeebpms.bpm.engine.impl.el.JuelExpressionManager;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ValueExpression;
 
 @Getter
 public class SecureJuelExpressionManager extends JuelExpressionManager implements ScriptSecurityAware {

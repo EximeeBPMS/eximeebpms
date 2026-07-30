@@ -22,15 +22,12 @@ import static org.eximeebpms.bpm.engine.impl.db.entitymanager.cache.DbEntityStat
 import static org.eximeebpms.bpm.engine.impl.db.entitymanager.cache.DbEntityState.MERGED;
 import static org.eximeebpms.bpm.engine.impl.db.entitymanager.cache.DbEntityState.PERSISTENT;
 import static org.eximeebpms.bpm.engine.impl.db.entitymanager.cache.DbEntityState.TRANSIENT;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.DELETE;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.DELETE_BULK;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.INSERT;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.UPDATE;
-import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.UPDATE_BULK;
+import static org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperationType.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.eximeebpms.bpm.engine.OptimisticLockingException;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.DeploymentQueryImpl;
@@ -525,7 +522,24 @@ public class DbEntityManager implements Session, EntityLoadListener {
 
     // put into cache
     dbEntityCache.putTransient(dbEntity);
+  }
 
+  /**
+   * Schedules an INSERT operation for an entity whose primary key is assigned by the database
+   * (identity / auto-increment column), bypassing the entity cache and application-side ID
+   * generation.
+   * <p>
+   * The operation is queued in the {@link DbOperationManager} and executed during the next flush,
+   * just like regular inserts, but the entity is never placed in {@link DbEntityCache} and its
+   * {@code id} field is not populated after the insert.
+   *
+   * @param dbEntity the entity to insert
+   */
+  public void insertWithoutId(DbEntity dbEntity) {
+    DbEntityOperation dbOperation = new DbEntityOperation();
+    dbOperation.setEntity(dbEntity);
+    dbOperation.setOperationType(INSERT_WITHOUT_ID);
+    dbOperationManager.addOperation(dbOperation);
   }
 
   public void merge(DbEntity dbEntity) {

@@ -32,7 +32,7 @@ import org.eximeebpms.bpm.engine.impl.core.variable.VariableUtil;
 import org.eximeebpms.bpm.engine.impl.core.variable.event.VariableEvent;
 import org.eximeebpms.bpm.engine.impl.core.variable.event.VariableEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
+import jakarta.el.ELContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.variable.Variables;
 import org.eximeebpms.bpm.engine.variable.impl.VariableMapImpl;

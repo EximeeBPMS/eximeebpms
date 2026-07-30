@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+
 import org.eximeebpms.bpm.engine.HistoryService;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.RuntimeService;
@@ -119,7 +120,6 @@ public class StandaloneTaskAuthorizationTest {
     taskService = engineRule.getTaskService();
     runtimeService = engineRule.getRuntimeService();
     historyService = engineRule.getHistoryService();
-
     authRule.createUserAndGroup("userId", "groupId");
   }
 

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
+import org.eximeebpms.bpm.engine.BusinessEventService;
 import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
@@ -117,6 +118,7 @@ public class ProcessEngineExtension implements TestWatcher,
   protected RuntimeService runtimeService;
   protected TaskService taskService;
   protected HistoryService historyService;
+  protected BusinessEventService businessEventService;
   protected IdentityService identityService;
   protected ManagementService managementService;
   protected FormService formService;
@@ -144,6 +146,7 @@ public class ProcessEngineExtension implements TestWatcher,
     runtimeService = processEngine.getRuntimeService();
     taskService = processEngine.getTaskService();
     historyService = processEngine.getHistoryService();
+    businessEventService = processEngine.getBusinessEventService();
     identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     formService = processEngine.getFormService();
@@ -161,6 +164,7 @@ public class ProcessEngineExtension implements TestWatcher,
     taskService = null;
     formService = null;
     historyService = null;
+    businessEventService = null;
     identityService = null;
     managementService = null;
     authorizationService = null;
@@ -343,6 +347,11 @@ public class ProcessEngineExtension implements TestWatcher,
   @Override
   public HistoryService getHistoryService() {
     return historyService;
+  }
+
+  @Override
+  public BusinessEventService getBusinessEventService() {
+    return businessEventService;
   }
 
   public void setHistoryService(HistoryService historyService) {

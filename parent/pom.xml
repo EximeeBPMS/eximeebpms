@@ -18,30 +18,35 @@
   </description>
 
   <properties>
-    <version.quarkus>3.28.4</version.quarkus>
-    <version.spring.framework>7.0.5</version.spring.framework>
-    <version.spring-boot>4.0.3</version.spring-boot>
+    <version.quarkus>3.36.1</version.quarkus>
+    <version.spring.framework>7.0.7</version.spring.framework>
+    <version.spring-boot>4.0.6</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.rest-assured>6.0.0</version.rest-assured>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
     <version.jaxrs.api>2.0.1.Final</version.jaxrs.api>
-    <version.groovy>5.0.4</version.groovy>
+    <version.groovy>5.0.5</version.groovy>
+    <version.groovy-bom>3.0.25</version.groovy-bom>
+    <version.commons-codec>1.22.0</version.commons-codec>
     <version.graal.js>21.3.12</version.graal.js>
     <version.icu.icu4j>71.1</version.icu.icu4j>
     <!-- json-smart and accessors-smart are runtime dependencies of json-path -->
     <version.json-path>2.9.0</version.json-path>
     <version.json-smart>2.5.2</version.json-smart>
     <version.accessors-smart>2.5.2</version.accessors-smart>
-    <version.gson>2.8.9</version.gson>
+    <version.gson>2.14.0</version.gson>
     <version.openjpa>2.4.3</version.openjpa>
     <version.hibernate>7.2.0.Final</version.hibernate>
     <version.hikaricp>4.0.3</version.hikaricp>
-    <version.jackson>2.15.2</version.jackson>
+    <version.jackson>2.21.3</version.jackson>
     <version.xml.bind-api>2.3.3</version.xml.bind-api>
     <version.xml.jaxb-impl>2.3.6</version.xml.jaxb-impl>
     <version.xml.jaxb-impl4>4.0.5</version.xml.jaxb-impl4>
+    <version.javax.activation>1.1.1</version.javax.activation>
+    <version.jakarta.ws.rs-api>4.0.0</version.jakarta.ws.rs-api>
     <version.jakarta.xml.bind-api>4.0.2</version.jakarta.xml.bind-api>
+    <version.jakarta-validation>3.1.1</version.jakarta-validation>
     <version.jakarta-persistence-api>3.2.0</version.jakarta-persistence-api>
     <version.httpclient5>5.5</version.httpclient5>
     <version.httpcore5>5.3.4</version.httpcore5>
@@ -51,14 +56,17 @@
     <version.logback>1.2.13</version.logback>
     <version.junit-jupiter>6.0.3</version.junit-jupiter>
     <version.junit>4.13.1</version.junit>
-    <version.assertj>3.27.6</version.assertj>
+    <version.assertj>3.27.7</version.assertj>
     <version.awaitility>4.2.2</version.awaitility>
-    <version.mockito>5.10.0</version.mockito>
+    <version.mockito>5.23.0</version.mockito>
     <version.wiremock>2.27.2</version.wiremock>
     <version.testcontainers>1.16.0</version.testcontainers>
+    <version.archunit-junit5>1.4.2</version.archunit-junit5>
     <version.unirest-java>2.3.10</version.unirest-java>
     <version.jakarta-servlet-api>6.1.0</version.jakarta-servlet-api>
     <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
+
+    <version.jython>2.7.4</version.jython>
 
     <version.commonj>1.1.0</version.commonj>
     <version.bouncycastle>1.70</version.bouncycastle>
@@ -67,13 +75,7 @@
     <version.wildfly>37.0.0.Final</version.wildfly>
     <version.wildfly.core>29.0.0.Final</version.wildfly.core>
 
-    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 (distro/wildfly26, qa/wildfly26-runtime) -->
-    <version.wildfly26>26.0.1.Final</version.wildfly26>
-    <version.wildfly26.core>18.0.4.Final</version.wildfly26.core>
-
-    <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 (qa/tomcat9-runtime) -->
-    <version.tomcat9>9.0.113</version.tomcat9>
-    <version.tomcat>10.1.50</version.tomcat>
+    <version.tomcat>10.1.55</version.tomcat>
 
     <version.arquillian>1.1.10.Final</version.arquillian>
     <version.shrinkwrap.resolvers>3.3.4</version.shrinkwrap.resolvers>
@@ -89,7 +91,7 @@
     <version.lombok>1.18.36</version.lombok>
     <version.commons-lang3>3.19.0</version.commons-lang3>
 
-    <version.eximeebpms-monitor>1.2.0</version.eximeebpms-monitor>
+    <version.eximeebpms-monitor>1.6.0</version.eximeebpms-monitor>
 
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />
@@ -187,7 +189,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.8</version>
+          <version>3.11.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -199,6 +201,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
+          <version>3.6.2</version>
           <configuration>
             <createSourcesJar>true</createSourcesJar>
           </configuration>

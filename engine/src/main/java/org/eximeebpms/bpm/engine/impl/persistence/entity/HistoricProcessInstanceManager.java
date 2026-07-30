@@ -74,6 +74,8 @@ public class HistoricProcessInstanceManager extends AbstractHistoricManager {
 
       if (!historicProcessInstanceIds.isEmpty()) {
         deleteHistoricProcessInstanceByIds(historicProcessInstanceIds);
+        historicProcessInstanceIds
+                .forEach(processInstanceId -> getBusinessEventManager().deleteByProcessInstanceId(processInstanceId));
       }
     }
   }

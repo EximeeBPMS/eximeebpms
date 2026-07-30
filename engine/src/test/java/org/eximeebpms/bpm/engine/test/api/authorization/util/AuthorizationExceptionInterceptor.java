@@ -36,22 +36,22 @@ private static Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
   protected int count = 0;
 
   public <T> T execute(Command<T> command) {
-    try {
-      count++; // only catch exception if we are at the top of the command stack
-               // (there may be multiple nested command invocations and we need
-               // to prevent that this intercepter swallows an exception)
-      T result = next.execute(command);
-      count--;
-      return result;
-    }
-    catch (AuthorizationException e) {
-      count--;
-      if (count == 0 && isActive) {
-        lastException = e;
-        LOG.info("Caught authorization exception; storing for assertion in test", e);
-      }
-      else {
-        throw e;
+    synchronized(this) {
+      try {
+        count++; // only catch exception if we are at the top of the command stack
+        // (there may be multiple nested command invocations and we need
+        // to prevent that this interceptor swallows an exception)
+        T result = next.execute(command);
+        count--;
+        return result;
+      } catch (AuthorizationException e) {
+        count--;
+        if (count == 0 && isActive) {
+          lastException = e;
+          LOG.info("Caught authorization exception; storing for assertion in test", e);
+        } else {
+          throw e;
+        }
       }
     }
     return null;

@@ -630,6 +630,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -668,6 +669,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -712,6 +714,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(definition.getId())
             .open();
 
     // then
@@ -769,6 +772,7 @@ public class ExternalTaskHandlerIT {
     // when
     externalTaskClient.subscribe(EXTERNAL_TASK_TOPIC_FOO)
             .handler(handler)
+            .processDefinitionId(processDefinition.getId())
             .open();
 
     // then

@@ -13,13 +13,6 @@
   <packaging>pom</packaging>
   <name>EximeeBPMS - engine - REST - Root</name>
 
-  <properties>
-    <!-- override groovy version with the one used by rest-assured -->
-    <version.groovy>3.0.9</version.groovy>
-    <version.apache.httpcore>4.4.5</version.apache.httpcore>
-    <version.commons-codec>1.15</version.commons-codec>
-  </properties>
-
   <dependencyManagement>
     <dependencies>
       <!-- explicitly declare groovy dependencies, so it prevents our groovy version
@@ -27,7 +20,7 @@
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-bom</artifactId>
-        <version>${version.groovy}</version>
+        <version>${version.groovy-bom}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -56,9 +49,9 @@
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpcore</artifactId>
-        <version>${version.apache.httpcore}</version>
+        <groupId>org.apache.httpcomponents.core5</groupId>
+        <artifactId>httpcore5</artifactId>
+        <version>${version.httpcore5}</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
@@ -76,6 +69,12 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${version.commons-lang3}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+        <version>${version.tomcat}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

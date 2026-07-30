@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.cdi.impl;
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationElResolver;
 import org.eximeebpms.bpm.engine.cdi.impl.el.CdiResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.ELResolver;
 
 /**
  * <p>Exposes the CdiResolver in a multiple-applications, shared process engine context.</p>

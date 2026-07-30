@@ -16,10 +16,10 @@
  */
 package org.eximeebpms.bpm.dmn.feel.impl.juel;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELException;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ExpressionFactory;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ELException;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.ValueExpression;
 
 import org.eximeebpms.bpm.dmn.feel.impl.FeelEngine;
 import org.eximeebpms.bpm.dmn.feel.impl.juel.el.ElContextFactory;

@@ -16,13 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.cdi.impl.el;
 
-import java.beans.FeatureDescriptor;
-import java.util.Iterator;
 import javax.enterprise.inject.spi.BeanManager;
 import org.eximeebpms.bpm.engine.cdi.impl.util.BeanManagerLookup;
 import org.eximeebpms.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELContext;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.ELContext;
+import jakarta.el.ELResolver;
 
 
 /**
@@ -46,11 +44,6 @@ public class CdiResolver extends ELResolver {
   @Override
   public Class< ? > getCommonPropertyType(ELContext context, Object base) {
     return getWrappedResolver().getCommonPropertyType(wrapContext(context), base);
-  }
-
-  @Override
-  public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-    return getWrappedResolver().getFeatureDescriptors(wrapContext(context), base);
   }
 
   @Override

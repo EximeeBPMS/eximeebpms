@@ -27,6 +27,8 @@ import org.eximeebpms.bpm.engine.impl.db.entitymanager.OptimisticLockingListener
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperation;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobDeclaration;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.EverLivingJobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.PropertyEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.PropertyManager;
@@ -52,6 +54,10 @@ public class BootstrapEngineCommand implements ProcessEngineBootstrapCommand {
     if (isHistoryCleanupEnabled(commandContext)) {
       checkHistoryCleanupLockExists(commandContext);
       createHistoryCleanupJob(commandContext);
+    }
+
+    if (isBusinessEventUsed(commandContext)) {
+      createBusinessEventOutboxCleanupJob(commandContext);
     }
 
     // installationId needs to be updated in the telemetry data
@@ -98,6 +104,39 @@ public class BootstrapEngineCommand implements ProcessEngineBootstrapCommand {
   protected boolean isHistoryCleanupEnabled(CommandContext commandContext) {
     return commandContext.getProcessEngineConfiguration()
         .isHistoryCleanupEnabled();
+  }
+
+  protected boolean isBusinessEventUsed(CommandContext commandContext) {
+    return commandContext.getProcessEngineConfiguration().isBusinessEventsEnabled();
+  }
+
+  /**
+   * Creates the business-event outbox cleanup job if it does not yet exist.
+   * The job is an ever-living periodic job that runs every hour.
+   */
+  @SuppressWarnings("unchecked")
+  protected void createBusinessEventOutboxCleanupJob(CommandContext commandContext) {
+    if (Context.getProcessEngineConfiguration().getManagementService().getTableMetaData("ACT_RU_JOB") != null) {
+      // Only create if no such job exists yet
+      if (commandContext.getJobManager().findJobsByHandlerType(BusinessEventOutboxCleanupJobHandler.TYPE).isEmpty()) {
+        commandContext.getDbEntityManager().registerOptimisticLockingListener(new OptimisticLockingListener() {
+
+          @Override
+          public Class<? extends DbEntity> getEntityType() {
+            return EverLivingJobEntity.class;
+          }
+
+          @Override
+          public OptimisticLockingResult failedOperation(DbOperation operation) {
+            return OptimisticLockingResult.IGNORE;
+          }
+        });
+
+        BusinessEventOutboxCleanupJobDeclaration declaration = new BusinessEventOutboxCleanupJobDeclaration();
+        EverLivingJobEntity job = declaration.createJobInstance(null);
+        commandContext.getJobManager().insertAndHintJobExecutor(job);
+      }
+    }
   }
 
   public void initializeInstallationId(CommandContext commandContext) {

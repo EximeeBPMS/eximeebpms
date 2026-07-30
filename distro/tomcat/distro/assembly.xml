@@ -56,6 +56,16 @@
         <unpack>true</unpack>
     </dependencySet>
 
+    <dependencySet>
+      <outputDirectory>server/apache-tomcat-${version.tomcat}/lib</outputDirectory>
+      <useProjectArtifact>false</useProjectArtifact>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <scope>runtime</scope>
+      <includes>
+        <include>org.eximeebpms.bpm:eximeebpms-engine-plugin-events-kafka</include>
+      </includes>
+    </dependencySet>
+
   </dependencySets>
 
   <fileSets>

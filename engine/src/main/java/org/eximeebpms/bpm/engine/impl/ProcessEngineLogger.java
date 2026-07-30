@@ -18,6 +18,7 @@ package org.eximeebpms.bpm.engine.impl;
 
 import java.net.URL;
 import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
+import org.eximeebpms.bpm.commons.eventbus.BusinessEventPublisher;
 import org.eximeebpms.bpm.container.impl.ContainerIntegrationLogger;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
@@ -186,6 +187,18 @@ public class ProcessEngineLogger extends BaseLogger {
   public void couldNotDetermineIp(Exception e) {
     logWarn(
         "009", "Could not determine local IP address for generating a host name", e);
+  }
+
+  public void businessEventsDisabled() {
+    logInfo("010", "Business events are disabled");
+  }
+
+  public void businessEventsEnabled(String publisherName) {
+    logInfo("011", "Business events are enabled. Using publisher '{}'", publisherName);
+  }
+
+  public void failedToCloseBusinessEventPublisher(BusinessEventPublisher businessEventPublisher, Exception e) {
+    logWarn("012", "Failed to close business event publisher '{}'", businessEventPublisher, e);
   }
 
 }

@@ -35,6 +35,11 @@
              relativeToChangelogFile="true"
              splitStatements="true"
              stripComments="true"/>
+    <sqlFile path="baseline/liquibase.${db.name}.create.business.event.sql"
+             encoding="UTF-8"
+             relativeToChangelogFile="true"
+             splitStatements="true"
+             stripComments="true"/>
     <sqlFile path="baseline/liquibase.${db.name}.create.history.sql"
              encoding="UTF-8"
              relativeToChangelogFile="true"
@@ -165,6 +170,18 @@
 
   <changeSet author="Camunda" id="7.24.0-tag">
     <tagDatabase tag="7.24.0"/>
+  </changeSet>
+
+  <changeSet author="EximeeBPMS" id="1.2-to-1.3">
+    <sqlFile path="upgrade/${db.name}_engine_1.2_to_1.3.sql"
+             encoding="UTF-8"
+             relativeToChangelogFile="true"
+             splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
+  <changeSet author="EximeeBPMS" id="1.3.0-tag">
+    <tagDatabase tag="1.3.0"/>
   </changeSet>
 
 </databaseChangeLog>

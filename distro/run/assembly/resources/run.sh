@@ -41,8 +41,17 @@ if [ "$1" = "start" ] ; then
   fi
 
   EXPECTED_JAVA_VERSION=17
-  JAVA_VERSION=$("$JAVA" -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^0\./s///' | cut -d'.' -f1)
-  echo Java version is $("$JAVA" -version 2>&1 | head -1 | cut -d'"' -f2)
+  JAVA_VERSION=$(JAVA_TOOL_OPTIONS= "$JAVA" -version 2>&1 \
+    | awk -F '"' '/version/ {print $2; exit}' \
+    | sed '/^0\./s///' \
+    | cut -d'.' -f1)
+
+  if ! [[ "$JAVA_VERSION" =~ ^[0-9]+$ ]]; then
+    echo "Could not determine Java version."
+    JAVA_TOOL_OPTIONS= "$JAVA" -version
+    exit 1
+  fi
+echo Java version is "$JAVA_VERSION"
   if [[ "$JAVA_VERSION" -lt "$EXPECTED_JAVA_VERSION" ]]; then
     echo You must use at least JDK 17 to start Camunda Platform Run.
     exit 1

@@ -24,8 +24,8 @@ import java.util.ServiceLoader;
 import org.eximeebpms.bpm.application.AbstractProcessApplication;
 import org.eximeebpms.bpm.application.ProcessApplicationElResolver;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.CompositeELResolver;
+import jakarta.el.ELResolver;
 
 /**
  * @author Daniel Meyer

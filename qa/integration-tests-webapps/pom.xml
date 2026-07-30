@@ -16,17 +16,15 @@
     <cargo.timeout>120000</cargo.timeout>
     <cargo.deploy.timeout>60000</cargo.deploy.timeout>
 
-    <!-- Fixed for WildFly 26 -->
-    <cargo.wildfly26.container.id>wildfly26x</cargo.wildfly26.container.id>
     <!-- Needs to be adjusted with every WildFly update -->
-    <cargo.wildfly.container.id>wildfly35x</cargo.wildfly.container.id>
+    <cargo.wildfly.container.id>wildfly37x</cargo.wildfly.container.id>
 
     <redirect.test.output>true</redirect.test.output>
 
     <http.ctx-path.webapp>eximeebpms/</http.ctx-path.webapp>
     <http.ctx-path.rest>engine-rest/</http.ctx-path.rest>
 
-    <version.chromedriver>135.0.7049.52</version.chromedriver>
+    <version.chromedriver>148.0.7778.178</version.chromedriver>
 
     <!-- default os -->
     <os.type>linux64</os.type>
@@ -59,7 +57,7 @@
         <artifactId>httpclient5</artifactId>
         <version>${version.httpclient5}</version>
       </dependency>
-	  
+
       <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
@@ -121,7 +119,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>

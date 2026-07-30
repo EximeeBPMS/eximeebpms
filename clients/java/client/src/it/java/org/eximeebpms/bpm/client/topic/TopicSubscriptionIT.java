@@ -180,8 +180,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks).hasSize(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
@@ -220,9 +219,9 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
-    ExternalTask task = handler.getHandledTasks().get(0);
+    ExternalTask task = handler.getHandledTasks().getFirst();
     assertThat(task.getProcessDefinitionKey()).isEqualTo(PROCESS_KEY_2);
-    assertThat(topicSubscription.getProcessDefinitionKeyIn().get(0)).isEqualTo(PROCESS_KEY_2);
+    assertThat(topicSubscription.getProcessDefinitionKeyIn().getFirst()).isEqualTo(PROCESS_KEY_2);
   }
 
   @Test
@@ -240,14 +239,13 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    List<ExternalTask> handledTasks = handler.getHandledTasks();
-    assertThat(handledTasks).hasSize(2);
+    assertThat(handler.getHandledTasks()).hasSize(2);
   }
 
   @Test
   public void shouldFilterByProcessDefinitionVersionTag() {
     // given
-    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).get(0);
+    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).getFirst();
     engineRule.startProcessInstance(processDefinitionWithVersionTag.getId());
     engineRule.startProcessInstance(processDefinition.getId());
 
@@ -262,14 +260,14 @@ public class TopicSubscriptionIT {
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
     assertThat(handledTasks).hasSize(1);
-    assertThat(handledTasks.get(0).getProcessDefinitionKey()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
-    assertThat(handledTasks.get(0).getProcessDefinitionVersionTag()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
+    assertThat(handledTasks.getFirst().getProcessDefinitionKey()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
+    assertThat(handledTasks.getFirst().getProcessDefinitionVersionTag()).isEqualTo(PROCESS_DEFINITION_VERSION_TAG);
   }
 
   @Test
   public void shouldSetProcessDefinitionVersionTag() {
     // given
-    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).get(0);
+    ProcessDefinitionDto processDefinitionWithVersionTag = engineRule.deploy(ONE_EXTERNAL_TASK_WITH_VERSION_TAG).getFirst();
     engineRule.startProcessInstance(processDefinitionWithVersionTag.getId());
     engineRule.startProcessInstance(processDefinition.getId());
 
@@ -309,7 +307,7 @@ public class TopicSubscriptionIT {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
 
-    processDefinition = engineRule.deploy("aTenantId", BPMN_ERROR_EXTERNAL_TASK_PROCESS).get(0);
+    processDefinition = engineRule.deploy("aTenantId", BPMN_ERROR_EXTERNAL_TASK_PROCESS).getFirst();
     engineRule.startProcessInstanceByKey(processDefinition.getKey(), "aTenantId");
 
     // when
@@ -328,7 +326,7 @@ public class TopicSubscriptionIT {
     // given
     ProcessInstanceDto processInstance = engineRule.startProcessInstance(processDefinition.getId());
     String tenantId = "aTenantId";
-    processDefinition = engineRule.deploy(tenantId, BPMN_ERROR_EXTERNAL_TASK_PROCESS).get(0);
+    processDefinition = engineRule.deploy(tenantId, BPMN_ERROR_EXTERNAL_TASK_PROCESS).getFirst();
     engineRule.startProcessInstanceByKey(processDefinition.getKey(), tenantId);
 
     // when
@@ -341,7 +339,7 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     assertThat(handler.getHandledTasks()).hasSize(1);
-    ExternalTask task = handler.getHandledTasks().get(0);
+    ExternalTask task = handler.getHandledTasks().getFirst();
     assertThat(task.getTenantId()).isNull();
     assertThat(task.getProcessInstanceId()).isEqualTo(processInstance.getId());
     assertThat(topicSubscription.isWithoutTenantId()).isTrue();
@@ -352,7 +350,7 @@ public class TopicSubscriptionIT {
     // given
     engineRule.startProcessInstance(processDefinition.getId());
     String tenantId = "aTenantId";
-    processDefinition = engineRule.deploy(tenantId, BPMN_ERROR_EXTERNAL_TASK_PROCESS).get(0);
+    processDefinition = engineRule.deploy(tenantId, BPMN_ERROR_EXTERNAL_TASK_PROCESS).getFirst();
     ProcessInstanceDto processInstance = engineRule.startProcessInstanceByKey(processDefinition.getKey(), tenantId);
 
     // when
@@ -365,10 +363,10 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> !handler.getHandledTasks().isEmpty());
 
     assertThat(handler.getHandledTasks()).hasSize(1);
-    ExternalTask task = handler.getHandledTasks().get(0);
+    ExternalTask task = handler.getHandledTasks().getFirst();
     assertThat(task.getTenantId()).isEqualTo(tenantId);
     assertThat(task.getProcessInstanceId()).isEqualTo(processInstance.getId());
-    assertThat(topicSubscription.getTenantIdIn().get(0)).isEqualTo(tenantId);
+    assertThat(topicSubscription.getTenantIdIn().getFirst()).isEqualTo(tenantId);
   }
 
   @Test
@@ -388,12 +386,12 @@ public class TopicSubscriptionIT {
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
     assertThat(topicSubscription.getVariableNames()).hasSize(1);
-    assertThat(topicSubscription.getVariableNames().get(0)).isEqualTo(VARIABLE_NAME);
+    assertThat(topicSubscription.getVariableNames().getFirst()).isEqualTo(VARIABLE_NAME);
 
     List<ExternalTask> handledTasks = handler.getHandledTasks();
     assertThat(handledTasks).hasSize(2);
 
-    ExternalTask task = handledTasks.get(0);
+    ExternalTask task = handledTasks.getFirst();
     assertThat(task.getBusinessKey()).isEqualTo(BUSINESS_KEY);
 
     if (task.getVariable(VARIABLE_NAME) != null) {
@@ -419,7 +417,7 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    ExternalTask taskOne = handler.getHandledTasks().get(0);
+    ExternalTask taskOne = handler.getHandledTasks().getFirst();
     assertThat(taskOne.getAllVariables()).isEmpty();
 
     ExternalTask taskTwo = handler.getHandledTasks().get(1);
@@ -441,10 +439,10 @@ public class TopicSubscriptionIT {
     // then
     clientRule.waitForFetchAndLockUntil(() -> handler.getHandledTasks().size() == 2);
 
-    ExternalTask taskOne = handler.getHandledTasks().get(0);
+    ExternalTask taskOne = handler.getHandledTasks().getFirst();
     assertThat(taskOne.getAllVariables()).isEmpty();
 
-    ExternalTask taskTwo = handler.getHandledTasks().get(0);
+    ExternalTask taskTwo = handler.getHandledTasks().get(1);
     assertThat(taskTwo.getAllVariables()).isEmpty();
   }
 
@@ -465,7 +463,7 @@ public class TopicSubscriptionIT {
     assertThat(topicSubscription.getLockDuration()).isEqualTo(1000 * 60 * 30);
 
     // not the most reliable way to test it
-    assertThat(handler.getHandledTasks().get(0).getLockExpirationTime())
+    assertThat(handler.getHandledTasks().getFirst().getLockExpirationTime())
       .isAfter(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
   }
 

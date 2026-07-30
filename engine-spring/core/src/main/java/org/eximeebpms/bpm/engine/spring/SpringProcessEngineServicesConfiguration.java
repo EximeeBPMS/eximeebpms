@@ -17,6 +17,7 @@
 package org.eximeebpms.bpm.engine.spring;
 
 import org.eximeebpms.bpm.engine.AuthorizationService;
+import org.eximeebpms.bpm.engine.BusinessEventService;
 import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
@@ -73,6 +74,12 @@ public class SpringProcessEngineServicesConfiguration implements ProcessEngineSe
   @Override
   public HistoryService getHistoryService() {
     return processEngine.getHistoryService();
+  }
+
+  @Bean(name = "businessEventService")
+  @Override
+  public BusinessEventService getBusinessEventService() {
+    return processEngine.getBusinessEventService();
   }
 
   @Bean(name = "identityService")

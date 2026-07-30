@@ -405,7 +405,6 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
     // this is a bug: all variables was deleted after delete a history processinstance
     count = historyService.createHistoricVariableInstanceQuery().count();
     assertEquals(2, count);
-
   }
 
   @Deployment(resources={"org/eximeebpms/bpm/engine/test/history/HistoricVariableInstanceTest.testParallel.bpmn20.xml"})

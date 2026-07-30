@@ -23,12 +23,12 @@ import org.eximeebpms.bpm.engine.impl.el.ReadOnlyMapELResolver;
 import org.eximeebpms.bpm.engine.impl.el.VariableContextElResolver;
 import org.eximeebpms.bpm.engine.impl.el.VariableScopeElResolver;
 import org.eximeebpms.bpm.engine.test.mock.MockElResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.MapELResolver;
+import jakarta.el.ArrayELResolver;
+import jakarta.el.BeanELResolver;
+import jakarta.el.CompositeELResolver;
+import jakarta.el.ELResolver;
+import jakarta.el.ListELResolver;
+import jakarta.el.MapELResolver;
 import org.springframework.context.ApplicationContext;
 
 

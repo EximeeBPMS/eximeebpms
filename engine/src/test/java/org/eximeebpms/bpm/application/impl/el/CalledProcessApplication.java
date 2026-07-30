@@ -22,7 +22,7 @@ import java.util.Map;
 import org.eximeebpms.bpm.application.ProcessApplication;
 import org.eximeebpms.bpm.application.impl.EmbeddedProcessApplication;
 import org.eximeebpms.bpm.engine.impl.el.ReadOnlyMapELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.ELResolver;
 
 /**
  * @author Thorben Lindhauer

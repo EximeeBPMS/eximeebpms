@@ -93,6 +93,7 @@ public class TaskManager extends AbstractManager {
         commandContext
           .getHistoricTaskInstanceManager()
           .deleteHistoricTaskInstanceById(taskId);
+        commandContext.getBusinessEventManager().deleteByTaskId(task.getId());
       } else {
         commandContext
           .getHistoricTaskInstanceManager()

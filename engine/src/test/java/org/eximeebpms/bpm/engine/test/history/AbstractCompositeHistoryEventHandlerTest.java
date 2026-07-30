@@ -61,7 +61,6 @@ public abstract class AbstractCompositeHistoryEventHandlerTest {
     runtimeService = engineRule.getRuntimeService();
     taskService = engineRule.getTaskService();
     historyService = engineRule.getHistoryService();
-
     // save current history event handler
     originalHistoryEventHandler = processEngineConfiguration.getHistoryEventHandler();
     // clear the event counter

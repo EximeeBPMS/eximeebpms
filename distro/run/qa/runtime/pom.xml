@@ -88,6 +88,13 @@
       </exclusions>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${version.commons-lang3}</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Webapps -->
     <dependency>
       <groupId>org.eximeebpms.bpm.qa</groupId>
@@ -183,12 +190,6 @@
                   <excludes>configuration/default.yml,configuration/production.yml</excludes>
                 </configuration>
               </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
               <execution>
                 <id>copy-plugin</id>
                 <goals>

@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.dmn.feel.impl.juel.el;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELException;
+import jakarta.el.ELException;
 
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelEngineLogger;
 import org.eximeebpms.bpm.dmn.feel.impl.juel.FeelLogger;

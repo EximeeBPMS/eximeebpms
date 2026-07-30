@@ -15,10 +15,8 @@
  */
 package org.eximeebpms.bpm.impl.juel;
 
-import java.beans.FeatureDescriptor;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import jakarta.el.ELContext;
@@ -32,7 +30,7 @@ import jakarta.el.PropertyNotWritableException;
  * properties can be accessed via the {@link #getProperty(String)},
  * {@link #setProperty(String, Object)}, {@link #isProperty(String)} and {@link #properties()}
  * methods.
- * 
+ *
  * @author Christoph Beck
  */
 public class RootPropertyResolver extends ELResolver {
@@ -48,7 +46,7 @@ public class RootPropertyResolver extends ELResolver {
 
 	/**
 	 * Create a root property resolver
-	 * 
+	 *
 	 * @param readOnly
 	 */
 	public RootPropertyResolver(boolean readOnly) {
@@ -67,11 +65,6 @@ public class RootPropertyResolver extends ELResolver {
 	@Override
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return isResolvable(context) ? String.class : null;
-	}
-
-	@Override
-	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-		return null;
 	}
 
 	@Override
@@ -116,7 +109,7 @@ public class RootPropertyResolver extends ELResolver {
 
 	/**
 	 * Get property value
-	 * 
+	 *
 	 * @param property
 	 *            property name
 	 * @return value associated with the given property
@@ -127,7 +120,7 @@ public class RootPropertyResolver extends ELResolver {
 
 	/**
 	 * Set property value
-	 * 
+	 *
 	 * @param property
 	 *            property name
 	 * @param value
@@ -139,7 +132,7 @@ public class RootPropertyResolver extends ELResolver {
 
 	/**
 	 * Test property
-	 * 
+	 *
 	 * @param property
 	 *            property name
 	 * @return <code>true</code> if the given property is associated with a value
@@ -150,7 +143,7 @@ public class RootPropertyResolver extends ELResolver {
 
 	/**
 	 * Get properties
-	 * 
+	 *
 	 * @return all property names (in no particular order)
 	 */
 	public Iterable<String> properties() {

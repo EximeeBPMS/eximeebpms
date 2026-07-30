@@ -16,20 +16,19 @@
  */
 package org.eximeebpms.bpm.engine.impl.el;
 
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ExpressionFactory;
+import jakarta.el.ExpressionFactory;
 import org.eximeebpms.bpm.impl.juel.ExpressionFactoryImpl;
 
 
 
 /**
  * Class used to get hold of a {@link ExpressionFactory}.
- * 
+ *
  * @author Frederik Heremans
  */
 public abstract class ExpressionFactoryResolver {
-  
+
   public static ExpressionFactory resolveExpressionFactory() {
-    // Return instance of custom JUEL implementation
-    return new ExpressionFactoryImpl();
+    return ExpressionFactoryImpl.create();
   }
 }

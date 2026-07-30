@@ -23,6 +23,7 @@ package org.eximeebpms.bpm.engine.impl.db.entitymanager.operation;
 public enum DbOperationType {
 
   INSERT,
+  INSERT_WITHOUT_ID,
 
   UPDATE,
   UPDATE_BULK,

@@ -125,6 +125,15 @@ public class ExpressionFactoryImpl extends jakarta.el.ExpressionFactory {
 	private final TypeConverter converter;
 
 	/**
+	 * Creates a new instance using the default JEE6 profile. This factory method exists to allow
+	 * callers in other classloader contexts (e.g. JBoss Modules) to obtain an ExpressionFactory
+	 * reference without triggering cross-module bytecode verification of the implementation class.
+	 */
+	public static jakarta.el.ExpressionFactory create() {
+		return new ExpressionFactoryImpl();
+	}
+
+	/**
 	 * Create a new expression factory using the default builder and cache implementations. The
 	 * builder and cache are configured from <code>el.properties</code> (see above). The maximum
 	 * cache size will be 1000 unless overridden in <code>el.properties</code>. The builder profile
@@ -411,7 +420,7 @@ public class ExpressionFactoryImpl extends jakarta.el.ExpressionFactory {
 	}
 
 	@Override
-	public Object coerceToType(Object obj, Class<?> targetType) {
+	public <T> T coerceToType(Object obj, Class<T> targetType) {
 		return converter.convert(obj, targetType);
 	}
 

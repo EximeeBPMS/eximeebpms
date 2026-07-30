@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.eximeebpms</groupId>
     <artifactId>eximeebpms-release-parent</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
   </parent>
 
   <groupId>org.eximeebpms.bpm</groupId>
@@ -94,6 +94,10 @@
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
 
+        <module>spin/bom</module>
+        <module>commons/bom</module>
+        <module>connect/bom</module>
+
         <module>model-api</module>
         <module>engine-dmn</module>
         <module>connect</module>
@@ -107,6 +111,11 @@
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
         <module>test-utils/archunit</module>
+
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
 
         <module>engine</module>
         <module>engine-cdi</module>
@@ -126,11 +135,6 @@
         <module>distro/run</module>
 
         <module>clients/java</module>
-
-        <module>internal-dependencies</module>
-        <module>database</module>
-        <module>parent</module>
-        <module>bom</module>
       </modules>
     </profile>
 
@@ -293,6 +297,16 @@
       <id>distro-serverless</id>
       <modules>
         <module>qa</module>
+
+        <module>spin/bom</module>
+        <module>commons/bom</module>
+        <module>connect/bom</module>
+
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
+
         <module>engine</module>
         <module>engine-cdi</module>
         <module>engine-spring</module>
@@ -305,11 +319,6 @@
         <module>engine-plugins</module>
 
         <module>distro/sql-script</module>
-
-        <module>internal-dependencies</module>
-        <module>database</module>
-        <module>parent</module>
-        <module>bom</module>
       </modules>
     </profile>
 
@@ -328,8 +337,6 @@
         <module>javaee/ejb-client-jakarta</module>
         <module>distro/license-book</module>
         <module>distro/wildfly</module>
-        <!-- DEPRECATED since 1.3.0, will be removed in 1.4.0 - see distro/wildfly26/pom.xml -->
-        <module>distro/wildfly26</module>
       </modules>
     </profile>
 
@@ -361,15 +368,19 @@
       <!-- profile for running process-engine unit tests in QA -->
       <id>check-engine</id>
       <modules>
-        <module>engine</module>
-        <module>engine-cdi</module>
-        <module>engine-spring</module>
-        <module>engine-rest</module>
+        <module>spin/bom</module>
+        <module>commons/bom</module>
+        <module>connect/bom</module>
 
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+
+        <module>engine</module>
+        <module>engine-cdi</module>
+        <module>engine-spring</module>
+        <module>engine-rest</module>
       </modules>
     </profile>
 
@@ -480,6 +491,10 @@
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
 
+        <module>spin/bom</module>
+        <module>commons/bom</module>
+        <module>connect/bom</module>
+
         <module>model-api</module>
         <module>engine-dmn</module>
         <module>connect</module>
@@ -493,6 +508,11 @@
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
         <module>test-utils/archunit</module>
+
+        <module>internal-dependencies</module>
+        <module>database</module>
+        <module>parent</module>
+        <module>bom</module>
 
         <module>engine</module>
         <module>engine-cdi</module>
@@ -508,16 +528,12 @@
         <module>distro/license-book</module>
         <module>distro/jboss</module>
         <module>distro/tomcat</module>
+        <module>distro/wildfly</module>
         <module>distro/sql-script</module>
         <module>distro/run</module>
         <module>distro/webjar</module>
 
         <module>clients/java</module>
-
-        <module>internal-dependencies</module>
-        <module>database</module>
-        <module>parent</module>
-        <module>bom</module>
       </modules>
     </profile>
 

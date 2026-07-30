@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.eximeebpms.bpm.engine.AuthorizationService;
+import org.eximeebpms.bpm.engine.BusinessEventService;
 import org.eximeebpms.bpm.engine.CaseService;
 import org.eximeebpms.bpm.engine.DecisionService;
 import org.eximeebpms.bpm.engine.ExternalTaskService;
@@ -115,6 +116,7 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
   protected RuntimeService runtimeService;
   protected TaskService taskService;
   protected HistoryService historyService;
+  protected BusinessEventService businessEventService;
   protected IdentityService identityService;
   protected ManagementService managementService;
   protected FormService formService;
@@ -211,6 +213,7 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
     runtimeService = processEngine.getRuntimeService();
     taskService = processEngine.getTaskService();
     historyService = processEngine.getHistoryService();
+    businessEventService = processEngine.getBusinessEventService();
     identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     formService = processEngine.getFormService();
@@ -228,6 +231,7 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
     taskService = null;
     formService = null;
     historyService = null;
+    businessEventService = null;
     identityService = null;
     managementService = null;
     authorizationService = null;
@@ -318,6 +322,11 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
   @Override
   public HistoryService getHistoryService() {
     return historyService;
+  }
+
+  @Override
+  public BusinessEventService getBusinessEventService() {
+    return businessEventService;
   }
 
   public void setHistoryService(HistoryService historyService) {

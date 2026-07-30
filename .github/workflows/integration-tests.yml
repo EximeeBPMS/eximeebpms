@@ -14,11 +14,9 @@ on:
         description: 'Java version to use'
         type: choice
         required: true
-        default: '["17"]'
+        default: '["21"]'
         options:
-          - '["17"]'
           - '["21"]'
-          - '["17", "21"]'
       testsuite:
         description: 'Integration test suite to run'
         type: choice
@@ -26,6 +24,8 @@ on:
         default: '["engine"]'
         options:
           - '["engine"]'
+          - '["webapps"]'
+          - '["engine", "webapps"]'
       container:
         description: 'Container to use for integration tests'
         type: choice
@@ -33,6 +33,8 @@ on:
         default: '["tomcat"]'
         options:
           - '["tomcat"]'
+          - '["wildfly"]'
+          - '["tomcat", "wildfly"]'
       database:
         description: 'Database to use for integration tests'
         type: choice
@@ -64,7 +66,7 @@ jobs:
       # queue.
       max-parallel: 1
       matrix:
-        java: ${{ fromJson(github.event.inputs.java_version || '["17"]') }}
+        java: ${{ fromJson(github.event.inputs.java_version || '["21"]') }}
         testsuite: ${{ fromJson(github.event.inputs.testsuite || '["engine", "webapps"]') }}
         distro: ${{ fromJson(github.event.inputs.container || '["tomcat", "wildfly"]') }}
         database: ${{ fromJson(github.event.inputs.database || '["h2", "postgresql"]') }}
@@ -86,20 +88,65 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
           overwrite-settings: false
+
+      - name: Remove corrupted Maven cache files
+        run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
+
+      - name: Start PostgreSQL
+        if: matrix.database == 'postgresql'
+        run: |
+          docker run -d --name postgres-test \
+            -e POSTGRES_DB=process-engine \
+            -e POSTGRES_USER=eximeebpms \
+            -e POSTGRES_PASSWORD=eximeebpms \
+            -p 5432:5432 \
+            postgres:13
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in $(seq 1 30); do
+            docker exec postgres-test pg_isready -U eximeebpms && break
+            sleep 2
+          done
+
       - name: Maven Build
         id: maven-build
         shell: bash
+        env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
         run: |
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-test
+      - name: Install Chrome for Testing
+        if: contains(matrix.testsuite, 'webapps')
+        run: |
+          # Install google-chrome-stable so apt resolves all shared library dependencies
+          curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/google-chrome.deb
+          sudo apt-get update -q
+          sudo apt-get install -y /tmp/google-chrome.deb
+          rm /tmp/google-chrome.deb
+          # Replace the Chrome binary with the version that matches the pinned ChromeDriver
+          CHROME_VERSION=$(grep -m1 'version.chromedriver' qa/integration-tests-webapps/pom.xml | sed 's/.*>\(.*\)<.*/\1/')
+          curl -sSL "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip" -o /tmp/chrome-linux64.zip
+          unzip -q /tmp/chrome-linux64.zip -d /tmp/
+          sudo mv /tmp/chrome-linux64 /opt/chrome-for-testing
+          sudo chmod +x /opt/chrome-for-testing/chrome
+          sudo ln -sf /opt/chrome-for-testing/chrome /usr/bin/google-chrome
+          rm /tmp/chrome-linux64.zip
+          google-chrome --version
+
       - name: Execute Integration Tests
         id: maven-integration-tests
         shell: bash
+        env:
+          MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
         run: |
           if [[ "${{ matrix.distro }}" == "wildfly" && "${{ matrix.database }}" == "postgresql" && "${{ github.event_name }}" == "schedule" ]]; then
             echo "Warning: Skipping build for distro 'wildfly' with database 'postgresql' due."
             exit 0
           fi
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-build
+      - name: Stop PostgreSQL
+        if: always() && matrix.database == 'postgresql'
+        run: docker stop postgres-test && docker rm postgres-test || true
+
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4

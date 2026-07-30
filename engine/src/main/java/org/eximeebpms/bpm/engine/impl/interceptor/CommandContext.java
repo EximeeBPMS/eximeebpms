@@ -58,6 +58,7 @@ import org.eximeebpms.bpm.engine.impl.optimize.OptimizeManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AttachmentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BatchManager;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.CommentManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentManager;
@@ -510,6 +511,10 @@ public class CommandContext {
 
   public ExternalTaskManager getExternalTaskManager() {
     return getSession(ExternalTaskManager.class);
+  }
+
+  public BusinessEventManager getBusinessEventManager() {
+    return getSession(BusinessEventManager.class);
   }
 
   // getters and setters //////////////////////////////////////////////////////

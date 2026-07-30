@@ -3058,6 +3058,7 @@ public class TaskServiceTest {
 
     assertEquals(variable.getName(), variableName);
     assertEquals(variable.getValue(), variableAnotherValue);
+    taskService.deleteTask(taskId, true);
   }
 
   @Deployment(resources={"org/eximeebpms/bpm/engine/test/api/twoTasksProcess.bpmn20.xml"})

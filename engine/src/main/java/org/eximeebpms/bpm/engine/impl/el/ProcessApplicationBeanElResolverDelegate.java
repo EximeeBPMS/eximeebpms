@@ -21,8 +21,8 @@ import org.eximeebpms.bpm.application.ProcessApplicationReference;
 import org.eximeebpms.bpm.application.ProcessApplicationUnavailableException;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.context.Context;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.eximeebpms.bpm.impl.juel.jakarta.el.ELResolver;
+import jakarta.el.BeanELResolver;
+import jakarta.el.ELResolver;
 
 /**
  * <p>Resolves a {@link BeanELResolver} from the current process application.

@@ -17,6 +17,81 @@ retroactively added CVE IDs.
 
 ---
 
+## [Unreleased]
+
+### Added
+- Native business events with transactional outbox
+- JDK 25 compatibility
+
+### Removed
+- Remove CMMN support (engine, migration, tests)
+- Drop javax (legacy) support; use only Jakarta namespace
+- Remove old Tomcat 9 and WildFly 26; fix integration tests; remove shaded JUEL; fix client tests
+- Remove unused Camunda 7.2.0 reference
+
+### Changed
+- Split SQL migration scripts between version 1.3 and 1.4; make SonarQube scan non-blocking
+- Add `engine-plugins` to `check-engine` profile
+- Bump versions:
+  - Gson: `2.8.9` → `2.14.0`
+  - Jackson: `2.15.2` → `2.21.3`
+  - Mockito: `5.10.0` → `5.23.0`
+  - AssertJ: `3.27.6` → `3.27.7`
+  - Groovy: `5.0.4` → `5.0.5`
+  - Jakarta EL API: `4.0.0` → `6.0.1`
+  - Quarkus: `3.28.4` → `3.36.1`
+  - Spring Boot: `4.0.3` → `4.0.6`
+  - Spring Framework: `7.0.5` → `7.0.7`
+  - Tomcat 10: `10.1.50` → `10.1.55`
+  - Maven Dependency Plugin: `2.8` → `3.11.0`
+  - eximeebpms-monitor `1.4.0` → `1.6.0`
+  - H2: `2.3.232` → `2.4.240`
+  - Liquibase: `5.0.1` → `5.0.3`
+  - MySQL Connector/J: `8.3.0` → `9.7.0`
+  - Oracle JDBC (ojdbc11): `23.5.0.24.07` → `23.26.2.0.0`
+  - PostgreSQL JDBC: `42.5.5` → `42.7.11`
+  - Microsoft SQL Server JDBC: `8.4.1.jre8` → `13.4.0.jre11`
+  - Kafka Clients: `3.9.1` → `3.9.2`
+  - RESTEasy (engine-rest-jakarta): `6.2.1.Final` → `6.2.3.Final`
+  - RESTEasy (assembly-jakarta / webapps): `6.2.8.Final` → `6.2.16.Final`
+  - Netty: `4.1.89.Final` → `4.1.135.Final`
+  - Arquillian BOM: `1.1.10.Final` → `1.10.2.Final`
+  - Groovy: `5.0.5` → `5.0.6`
+  - Jackson: `2.21.3` → `2.21.4`
+  - Jakarta XML Bind API: `4.0.2` → `4.0.5`
+  - ShrinkWrap Resolvers: `3.3.4` → `3.3.7`
+  - Spring Boot: `4.0.6` → `4.1.0`
+  - Spring Framework: `7.0.7` → `7.0.8`
+  - Tomcat 10: `10.1.55` → `10.1.56`
+  - WildFly: `37.0.0.Final` → `40.0.1.Final`
+  - WildFly Core test framework: `29.0.0.Final` → `32.0.2.Final`
+  - WildFly Arquillian container adapters: `5.0.1.Final` → `5.1.0.Final`
+  - Java UUID Generator: `5.1.0` → `5.2.0`
+  - Apache Ant: `1.7.1` → `1.10.17`
+  - Tomcat JDBC / Tomcat Juli: `7.0.33` → `11.0.22`
+
+### Fixed
+- Jython & BOM fixes; integration test fixes
+- Fix invalid `X-Authorized-User` header value for OAuth users with non-ASCII characters (#62)
+- Fix flaky `ExclusiveJobAcquisitionTest`; fix flaky integration tests; remove redundant `DROP INDEX` in business-event drop scripts; fix integration test failures in CI matrix (wildfly+webapps+alldb)
+- Fix remaining CI and integration test issues (engine startup, ShrinkWrap CI resolution, `HistoryCleanupTest` timezone, CMMN migration leftovers, LoginIT fixes)
+- Refactor instance-migration test fixtures to EximeeBPMS versioning
+- Wait for tasks to finish before stopping `ExecutorRunner`
+- Fix `LoginIT` timeout error; add extended logging
+- Integration test fixes after SLF4J bump
+- Fix integration test databases
+- Various CI/workflow stability fixes (self-hosted runner migration, Dependabot concurrency, Slack notifications, build speed-ups)
+
+### Security
+- Resolve CVE-2023-35116 via jackson-databind 2.21.3 upgrade (see Security Notice EXBPMS-7)
+- Fix Jython vulnerability (CVE-2016-4000, see Security Notice EXBPMS-8)
+- Resolve 9 CVEs via Spring Framework 7.0.7 and Tomcat 10.1.55 upgrade (see Security Notices EXBPMS-9, EXBPMS-10)
+
+### Documentation
+- Update documentation and branding for EximeeBPMS
+
+---
+
 ## [1.3.0] – 2026-07-17
 
 ### Added

@@ -32,7 +32,27 @@ jobs:
           UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
           DEP_TYPE: ${{ steps.metadata.outputs.dependency-type }}
           PACKAGE_ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          UPDATED_DEPENDENCIES_JSON: ${{ steps.metadata.outputs.updated-dependencies-json }}
         run: |
+          # update-type only counts semver digits - it doesn't understand
+          # Maven pre-release qualifiers (.Alpha1/.Beta/-rc1/-M1/-SNAPSHOT),
+          # so a "patch" bump can still land a pre-release version. Checked
+          # on every dependency in the group (not just the primary one from
+          # $DEP_NAMES, which a grouped update can under-represent), first
+          # and independent of update-type - see eximeebpms-factory's
+          # guidelines/common/dependency-stability-gate.md (PR #144).
+          command -v jq >/dev/null || { sudo apt-get update -q && sudo apt-get install -y jq; }
+
+          PRERELEASE_RE='alpha|beta|rc[0-9]*|milestone|m[0-9]+|snapshot|pre|dev'
+          while IFS= read -r new_version; do
+            new_version_lc="${new_version,,}"
+            if [[ "$new_version_lc" =~ $PRERELEASE_RE ]]; then
+              echo "::notice::pre-release version '$new_version' in this update - requires manual review"
+              echo "eligible=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done < <(jq -r '.[].newVersion // empty' <<<"$UPDATED_DEPENDENCIES_JSON")
+
           # GitHub Actions bumps always require manual review: a compromised
           # action version has full pipeline/secrets access (cf. the
           # tj-actions/changed-files supply-chain incident), so patch-level

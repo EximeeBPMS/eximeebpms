@@ -44,7 +44,7 @@ retroactively added CVE IDs.
   - Spring Framework: `7.0.5` → `7.0.7`
   - Tomcat 10: `10.1.50` → `10.1.55`
   - Maven Dependency Plugin: `2.8` → `3.11.0`
-  - eximeebpms-monitor `1.4.0` → `1.6.0`
+  - eximeebpms-monitor `1.4.0` → `1.7.0`
   - H2: `2.3.232` → `2.4.240`
   - Liquibase: `5.0.1` → `5.0.3`
   - MySQL Connector/J: `8.3.0` → `9.7.0`

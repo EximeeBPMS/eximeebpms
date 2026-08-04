@@ -91,7 +91,7 @@
     <version.npm>10.7.0</version.npm>
     <version.commons-lang3>3.19.0</version.commons-lang3>
 
-    <version.eximeebpms-monitor>1.6.0</version.eximeebpms-monitor>
+    <version.eximeebpms-monitor>1.7.0</version.eximeebpms-monitor>
 
     <!-- OSGi bundles properties -->
     <eximeebpms.artifact />

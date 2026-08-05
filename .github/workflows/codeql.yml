@@ -34,12 +34,12 @@ jobs:
 
       - name: Set up JDK
         run: |
-          if java -version 2>&1 | grep -qE '"17\.'; then
-            echo "Java 17 already installed"
+          if java -version 2>&1 | grep -qE '"21\.'; then
+            echo "Java 21 already installed"
           else
-            echo "Java 17 not found, installing via package manager..."
+            echo "Java 21 not found, installing via package manager..."
             sudo apt-get update -q
-            sudo apt-get install -y openjdk-17-jdk
+            sudo apt-get install -y openjdk-21-jdk
           fi
           JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
           echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV

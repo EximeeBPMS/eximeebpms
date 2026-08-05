@@ -483,6 +483,9 @@
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
+        <module>spin/bom</module>
+        <module>commons/bom</module>
+        <module>connect/bom</module>
         <module>bom</module>
       </modules>
     </profile>

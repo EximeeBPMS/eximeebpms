@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.CleanableHistoricProcessInstanceReport;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -55,27 +55,27 @@ public class CleanableHistoricProcessInstanceReportDto extends AbstractQueryDto<
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processDefinitionIdIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionIdIn(String[] processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "compact", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "compact", converter = BooleanConverter.class)
   public void setCompact(Boolean compact) {
     this.compact = compact;
   }

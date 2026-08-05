@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.spring.boot.starter.multitask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eximeebpms.bpm.spring.boot.starter.AbstractCamundaAutoConfigurationIT;
+import org.eximeebpms.bpm.spring.boot.starter.AbstractEximeeBpmsAutoConfigurationIT;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.DefaultJobConfiguration.JobConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,19 +40,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { MultipleTaskExecutorsIT.MultipleTaskExecutorsConfig.class })
-public class MultipleTaskExecutorsIT extends AbstractCamundaAutoConfigurationIT {
+public class MultipleTaskExecutorsIT extends AbstractEximeeBpmsAutoConfigurationIT {
 
   @Autowired
   private TaskExecutor[] taskExecutors;
 
   @Autowired
-  @Qualifier(JobConfiguration.CAMUNDA_TASK_EXECUTOR_QUALIFIER)
-  private TaskExecutor camundaTaskExecutor;
+  @Qualifier(JobConfiguration.EXIMEEBPMS_TASK_EXECUTOR_QUALIFIER)
+  private TaskExecutor eximeeBpmsTaskExecutor;
 
   @Test
   public void startWithMultipleTaskExecutorsTest() {
     assertThat(taskExecutors.length).isGreaterThan(1);
-    assertThat(taskExecutors).contains(camundaTaskExecutor);
+    assertThat(taskExecutors).contains(eximeeBpmsTaskExecutor);
   }
 
   @SpringBootApplication

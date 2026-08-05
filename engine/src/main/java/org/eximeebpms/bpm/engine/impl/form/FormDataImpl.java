@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.form.FormData;
 import org.eximeebpms.bpm.engine.form.FormField;
 import org.eximeebpms.bpm.engine.form.FormProperty;
@@ -34,7 +34,7 @@ public abstract class FormDataImpl implements FormData, Serializable {
   private static final long serialVersionUID = 1L;
 
   protected String formKey;
-  protected CamundaFormRef camundaFormRef;
+  protected EximeeBpmsFormRef camundaFormRef;
   protected String deploymentId;
   protected List<FormProperty> formProperties = new ArrayList<>();
 
@@ -50,11 +50,11 @@ public abstract class FormDataImpl implements FormData, Serializable {
     this.formKey = formKey;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
+  public EximeeBpmsFormRef getEximeeBpmsFormRef() {
     return camundaFormRef;
   }
 
-  public void setCamundaFormRef(CamundaFormRef camundaFormRef) {
+  public void setEximeeBpmsFormRef(EximeeBpmsFormRef camundaFormRef) {
     this.camundaFormRef = camundaFormRef;
   }
 

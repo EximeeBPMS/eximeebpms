@@ -29,7 +29,7 @@ import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.batch.Batch;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NullValueException;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.form.StartFormData;
 import org.eximeebpms.bpm.engine.impl.form.validator.FormFieldValidationException;
 import org.eximeebpms.bpm.engine.impl.util.IoUtil;
@@ -460,7 +460,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
 
   protected String getStartFormMediaType(String processDefinitionId) {
     String formKey = engine.getFormService().getStartFormKey(processDefinitionId);
-    CamundaFormRef camundaFormRef = engine.getFormService().getStartFormData(processDefinitionId).getCamundaFormRef();
+    EximeeBpmsFormRef camundaFormRef = engine.getFormService().getStartFormData(processDefinitionId).getEximeeBpmsFormRef();
     if(formKey != null) {
       return ContentTypeUtil.getFormContentType(formKey);
     } else if(camundaFormRef != null) {

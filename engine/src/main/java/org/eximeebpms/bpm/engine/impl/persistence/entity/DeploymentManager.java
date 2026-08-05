@@ -27,7 +27,7 @@ import org.eximeebpms.bpm.engine.impl.cmd.DeleteProcessDefinitionsByIdsCmd;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import org.eximeebpms.bpm.engine.impl.form.entity.EximeeBpmsFormDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.AbstractManager;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
@@ -118,7 +118,7 @@ public class DeploymentManager extends AbstractManager {
     deleteDecisionDeployment(deploymentId, cascade);
     deleteDecisionRequirementDeployment(deploymentId);
 
-    deleteCamundaFormDefinitionDeployment(deploymentId);
+    deleteEximeeBpmsFormDefinitionDeployment(deploymentId);
 
     getResourceManager().deleteResourcesByDeploymentId(deploymentId);
 
@@ -177,19 +177,19 @@ public class DeploymentManager extends AbstractManager {
     }
   }
 
-  protected void deleteCamundaFormDefinitionDeployment(String deploymentId) {
-    CamundaFormDefinitionManager manager = getCamundaFormDefinitionManager();
+  protected void deleteEximeeBpmsFormDefinitionDeployment(String deploymentId) {
+    EximeeBpmsFormDefinitionManager manager = getEximeeBpmsFormDefinitionManager();
 
-    List<CamundaFormDefinitionEntity> camundaFormDefinitions = manager.findDefinitionsByDeploymentId(deploymentId);
+    List<EximeeBpmsFormDefinitionEntity> camundaFormDefinitions = manager.findDefinitionsByDeploymentId(deploymentId);
 
     // delete definitions from db
-    manager.deleteCamundaFormDefinitionsByDeploymentId(deploymentId);
+    manager.deleteEximeeBpmsFormDefinitionsByDeploymentId(deploymentId);
 
     // delete definitions from deployment cache
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
     DeploymentCache deploymentCache = processEngineConfiguration.getDeploymentCache();
-    for (CamundaFormDefinitionEntity camundaFormDefinition : camundaFormDefinitions) {
-      deploymentCache.removeCamundaFormDefinition(camundaFormDefinition.getId());
+    for (EximeeBpmsFormDefinitionEntity camundaFormDefinition : camundaFormDefinitions) {
+      deploymentCache.removeEximeeBpmsFormDefinition(camundaFormDefinition.getId());
     }
   }
 

@@ -42,9 +42,9 @@ public interface MessageEventDefinition extends EventDefinition {
 
   void setCamundaDelegateExpression(String camundaExpression);
 
-  String getCamundaExpression();
+  String getEximeeBpmsExpression();
 
-  void setCamundaExpression(String camundaExpression);
+  void setEximeeBpmsExpression(String camundaExpression);
 
   String getCamundaResultVariable();
 

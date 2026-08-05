@@ -20,11 +20,11 @@ import java.io.InputStream;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.exception.DeploymentResourceNotFoundException;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.form.FormData;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
-import org.eximeebpms.bpm.engine.repository.CamundaFormDefinition;
+import org.eximeebpms.bpm.engine.repository.EximeeBpmsFormDefinition;
 
 /**
  *
@@ -49,12 +49,12 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
 
     final FormData formData = getFormData();
     String formKey = formData.getFormKey();
-    CamundaFormRef camundaFormRef = formData.getCamundaFormRef();
+    EximeeBpmsFormRef camundaFormRef = formData.getEximeeBpmsFormRef();
 
     if (formKey != null) {
       return getResourceForFormKey(formData, formKey);
     } else if(camundaFormRef != null && camundaFormRef.getKey() != null) {
-      return getResourceForCamundaFormRef(camundaFormRef, formData.getDeploymentId());
+      return getResourceForEximeeBpmsFormRef(camundaFormRef, formData.getDeploymentId());
     } else {
       throw new BadUserRequestException("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
     }
@@ -78,10 +78,10 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
     return getDeploymentResource(formData.getDeploymentId(), resourceName);
   }
 
-  protected InputStream getResourceForCamundaFormRef(CamundaFormRef camundaFormRef,
+  protected InputStream getResourceForEximeeBpmsFormRef(EximeeBpmsFormRef camundaFormRef,
       String deploymentId) {
-    CamundaFormDefinition definition = commandContext.runWithoutAuthorization(
-        new GetCamundaFormDefinitionCmd(camundaFormRef, deploymentId));
+    EximeeBpmsFormDefinition definition = commandContext.runWithoutAuthorization(
+        new GetEximeeBpmsFormDefinitionCmd(camundaFormRef, deploymentId));
 
     if (definition == null) {
       throw new NotFoundException("No Camunda Form Definition was found for Camunda Form Ref: " + camundaFormRef);

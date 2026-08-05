@@ -22,7 +22,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import org.eximeebpms.bpm.engine.identity.User;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import org.eximeebpms.commons.testing.ProcessEngineLoggingRule;
@@ -36,15 +36,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateAdminUserConfigurationTest {
 
-  private final CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private final EximeeBpmsBpmProperties eximeeBpmsBpmProperties = new EximeeBpmsBpmProperties();
   {
-    camundaBpmProperties.getAdminUser().setId("admin");
-    camundaBpmProperties.getAdminUser().setPassword("password");
+    eximeeBpmsBpmProperties.getAdminUser().setId("admin");
+    eximeeBpmsBpmProperties.getAdminUser().setPassword("password");
   }
 
   private final CreateAdminUserConfiguration createAdminUserConfiguration = new CreateAdminUserConfiguration();
   {
-    ReflectionTestUtils.setField(createAdminUserConfiguration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(createAdminUserConfiguration, "eximeeBpmsBpmProperties", eximeeBpmsBpmProperties);
     createAdminUserConfiguration.init();
   }
 

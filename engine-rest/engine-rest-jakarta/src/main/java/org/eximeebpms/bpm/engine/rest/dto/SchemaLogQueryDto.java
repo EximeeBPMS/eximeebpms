@@ -53,7 +53,7 @@ public class SchemaLogQueryDto extends AbstractQueryDto<SchemaLogQuery>{
     return version;
   }
 
-  @EximeeBPMSQueryParam("version")
+  @EximeeBpmsQueryParam("version")
   public void setVersion(String version) {
     this.version = version;
   }

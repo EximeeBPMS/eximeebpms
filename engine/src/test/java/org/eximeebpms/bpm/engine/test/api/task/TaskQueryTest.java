@@ -59,7 +59,7 @@ import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.exception.NullValueException;
 import org.eximeebpms.bpm.engine.filter.Filter;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.impl.TaskQueryImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
@@ -3267,7 +3267,7 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
 
   @Test
   @Deployment
-  public void testInitializeFormKeysCamundaFormRef() {
+  public void testInitializeFormKeysEximeeBpmsFormRef() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("formRefProcess");
 
     // if initializeFormKeys
@@ -3277,7 +3277,7 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
         .singleResult();
 
     // then the form key is present
-    CamundaFormRef camundaFormRef = task.getCamundaFormRef();
+    EximeeBpmsFormRef camundaFormRef = task.getEximeeBpmsFormRef();
     assertThat(camundaFormRef.getKey()).isEqualTo("myForm");
     assertThat(camundaFormRef.getBinding()).isEqualTo("latest");
     assertThat(camundaFormRef.getVersion()).isNull();
@@ -3288,7 +3288,7 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
         .singleResult();
 
     assertThatThrownBy(() -> {
-      task2.getCamundaFormRef();
+      task2.getEximeeBpmsFormRef();
     }).isInstanceOf(BadUserRequestException.class)
     .hasMessage("ENGINE-03052 The form key / form reference is not initialized. You must call initializeFormKeys() on the task query before you can retrieve the form key or the form reference.");
   }
@@ -3640,9 +3640,9 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
     assertThat(tasks.size()).isZero();
   }
 
-  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/task/TaskQueryTest.shouldContainCamundaFormRefIfInitialized.bpmn")
+  @Deployment(resources = "org/eximeebpms/bpm/engine/test/api/task/TaskQueryTest.shouldContainEximeeBpmsFormRefIfInitialized.bpmn")
   @Test
-  public void shouldContainCamundaFormRefIfInitialized() {
+  public void shouldContainEximeeBpmsFormRefIfInitialized() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskFormRefVersion").getId();
 
@@ -3656,12 +3656,12 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
 
     Task taskWithoutFormKey = withoutFormKeys.get(0);
     assertThatThrownBy(() -> {
-      taskWithoutFormKey.getCamundaFormRef();
+      taskWithoutFormKey.getEximeeBpmsFormRef();
     }).isInstanceOf(BadUserRequestException.class)
     .hasMessage("ENGINE-03052 The form key / form reference is not initialized. You must call initializeFormKeys() on the task query before you can retrieve the form key or the form reference.");
 
     Task taskWithFormKey = withFormKeys.get(0);
-    CamundaFormRef camundaFormRefWithFormKey = taskWithFormKey.getCamundaFormRef();
+    EximeeBpmsFormRef camundaFormRefWithFormKey = taskWithFormKey.getEximeeBpmsFormRef();
 
     assertThat(camundaFormRefWithFormKey).isNotNull();
     assertThat(camundaFormRefWithFormKey.getKey()).isEqualTo("key");

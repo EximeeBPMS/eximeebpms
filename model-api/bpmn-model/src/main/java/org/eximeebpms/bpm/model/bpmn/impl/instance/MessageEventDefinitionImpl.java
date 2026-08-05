@@ -141,11 +141,11 @@ public class MessageEventDefinitionImpl extends EventDefinitionImpl implements M
     camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 
-  public String getCamundaExpression() {
+  public String getEximeeBpmsExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaExpression(String camundaExpression) {
+  public void setEximeeBpmsExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 

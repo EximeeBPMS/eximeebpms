@@ -461,8 +461,8 @@ public class TaskResourceImpl implements TaskResource {
     String formKey = task.getFormKey();
     if(formKey != null) {
       return ContentTypeUtil.getFormContentType(formKey);
-    } else if(task.getCamundaFormRef() != null) {
-      return ContentTypeUtil.getFormContentType(task.getCamundaFormRef());
+    } else if(task.getEximeeBpmsFormRef() != null) {
+      return ContentTypeUtil.getFormContentType(task.getEximeeBpmsFormRef());
     }
     return MediaType.APPLICATION_XHTML_XML;
   }

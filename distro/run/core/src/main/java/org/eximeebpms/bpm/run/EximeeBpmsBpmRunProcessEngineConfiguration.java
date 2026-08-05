@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.run;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
+import org.eximeebpms.bpm.engine.impl.diagnostics.EximeeBpmsIntegration;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProcessEnginePluginProperty;
 import org.eximeebpms.bpm.run.utils.EximeeBpmsBpmRunProcessEnginePluginHelper;
@@ -59,8 +59,8 @@ public class EximeeBpmsBpmRunProcessEngineConfiguration extends SpringProcessEng
   @Override
   protected void initTelemetryData() {
     super.initTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
-    camundaIntegration.add(CamundaIntegration.CAMUNDA_BPM_RUN);
+    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    camundaIntegration.add(EximeeBpmsIntegration.CAMUNDA_BPM_RUN);
   }
 
   protected void configureProcessEnginePlugins(List<ProcessEnginePlugin> processEnginePluginsFromContext,

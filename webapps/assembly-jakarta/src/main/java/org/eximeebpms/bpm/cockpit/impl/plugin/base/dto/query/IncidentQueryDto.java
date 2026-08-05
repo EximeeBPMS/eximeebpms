@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 /**
@@ -78,7 +78,7 @@ public class IncidentQueryDto extends AbstractRestQueryParametersDto<IncidentDto
     return processDefinitionIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="processDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="processDefinitionIdIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionIdIn(String[] processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
@@ -87,7 +87,7 @@ public class IncidentQueryDto extends AbstractRestQueryParametersDto<IncidentDto
     return processInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
@@ -96,7 +96,7 @@ public class IncidentQueryDto extends AbstractRestQueryParametersDto<IncidentDto
     return activityIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }

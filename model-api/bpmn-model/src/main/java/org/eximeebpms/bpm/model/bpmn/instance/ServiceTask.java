@@ -45,9 +45,9 @@ public interface ServiceTask extends Task {
 
   void setCamundaDelegateExpression(String camundaExpression);
 
-  String getCamundaExpression();
+  String getEximeeBpmsExpression();
 
-  void setCamundaExpression(String camundaExpression);
+  void setEximeeBpmsExpression(String camundaExpression);
 
   String getCamundaResultVariable();
 

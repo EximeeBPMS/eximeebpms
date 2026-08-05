@@ -115,7 +115,7 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @return the builder object
    */
   public B camundaExpression(String camundaExpression) {
-    element.setCamundaExpression(camundaExpression);
+    element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
 

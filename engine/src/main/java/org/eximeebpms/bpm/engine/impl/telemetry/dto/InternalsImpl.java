@@ -65,7 +65,7 @@ public class InternalsImpl implements Internals {
 
   public InternalsImpl(InternalsImpl internals) {
     this(internals.database, internals.applicationServer, internals.licenseKey, internals.jdk);
-    this.camundaIntegration = internals.camundaIntegration == null ? null : new HashSet<>(internals.getCamundaIntegration());
+    this.camundaIntegration = internals.camundaIntegration == null ? null : new HashSet<>(internals.getEximeeBpmsIntegration());
     this.commands = new HashMap<>(internals.getCommands());
     this.metrics = internals.metrics == null ? null : new HashMap<>(internals.getMetrics());
     this.webapps = internals.webapps;
@@ -148,11 +148,11 @@ public class InternalsImpl implements Internals {
   }
 
   @Override
-  public Set<String> getCamundaIntegration() {
+  public Set<String> getEximeeBpmsIntegration() {
     return camundaIntegration;
   }
 
-  public void setCamundaIntegration(Set<String> camundaIntegration) {
+  public void setEximeeBpmsIntegration(Set<String> camundaIntegration) {
     this.camundaIntegration = camundaIntegration;
   }
 

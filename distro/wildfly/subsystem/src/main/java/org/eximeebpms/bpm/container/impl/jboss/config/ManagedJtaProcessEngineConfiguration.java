@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.container.impl.jboss.config;
 import java.util.Set;
 import org.eximeebpms.bpm.engine.impl.cfg.JakartaTransactionProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
+import org.eximeebpms.bpm.engine.impl.diagnostics.EximeeBpmsIntegration;
 
 /**
  *
@@ -44,8 +44,8 @@ public class ManagedJtaProcessEngineConfiguration extends JakartaTransactionProc
   @Override
   protected void initTelemetryData() {
     super.initTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
-    camundaIntegration.add(CamundaIntegration.WILDFLY_SUBSYSTEM);
+    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    camundaIntegration.add(EximeeBpmsIntegration.WILDFLY_SUBSYSTEM);
   }
 
 }

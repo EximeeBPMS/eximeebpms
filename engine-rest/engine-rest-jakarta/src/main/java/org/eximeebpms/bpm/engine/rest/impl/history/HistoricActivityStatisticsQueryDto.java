@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricActivityStatisticsQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -60,47 +60,47 @@ public class HistoricActivityStatisticsQueryDto extends AbstractQueryDto<Histori
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "canceled", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "canceled", converter = BooleanConverter.class)
   public void setIncludeCanceled(Boolean includeCanceled) {
     this.includeCanceled = includeCanceled;
   }
 
-  @EximeeBPMSQueryParam(value = "finished", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "finished", converter = BooleanConverter.class)
   public void setIncludeFinished(Boolean includeFinished) {
     this.includeFinished = includeFinished;
   }
 
-  @EximeeBPMSQueryParam(value = "completeScope", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "completeScope", converter = BooleanConverter.class)
   public void setIncludeCompleteScope(Boolean includeCompleteScope) {
     this.includeCompleteScope = includeCompleteScope;
   }
 
-  @EximeeBPMSQueryParam(value = "incidents", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "incidents", converter = BooleanConverter.class)
   public void setIncludeIncidents(Boolean includeClosedIncidents) {
     this.includeIncidents = includeClosedIncidents;
   }
 
-  @EximeeBPMSQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "finishedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "finishedAfter", converter = DateConverter.class)
   public void setFinishedAfter(Date finishedAfter) {
     this.finishedAfter = finishedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "finishedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "finishedBefore", converter = DateConverter.class)
   public void setFinishedBefore(Date finishedBefore) {
     this.finishedBefore = finishedBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }

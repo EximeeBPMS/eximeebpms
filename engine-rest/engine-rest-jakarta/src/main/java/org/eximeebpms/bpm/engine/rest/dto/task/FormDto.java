@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.rest.dto.task;
 
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.form.FormData;
 
 /**
@@ -26,7 +26,7 @@ import org.eximeebpms.bpm.engine.form.FormData;
 public class FormDto {
 
   private String key;
-  private CamundaFormRef camundaFormRef;
+  private EximeeBpmsFormRef camundaFormRef;
   private String contextPath;
 
   public void setKey(String form) {
@@ -37,11 +37,11 @@ public class FormDto {
     return key;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
+  public EximeeBpmsFormRef getCamundaFormRef() {
     return camundaFormRef;
   }
 
-  public void setCamundaFormRef(CamundaFormRef camundaFormRef) {
+  public void setCamundaFormRef(EximeeBpmsFormRef camundaFormRef) {
     this.camundaFormRef = camundaFormRef;
   }
 
@@ -58,7 +58,7 @@ public class FormDto {
 
     if (formData != null) {
       dto.key = formData.getFormKey();
-      dto.camundaFormRef = formData.getCamundaFormRef();
+      dto.camundaFormRef = formData.getEximeeBpmsFormRef();
     }
 
     return dto;

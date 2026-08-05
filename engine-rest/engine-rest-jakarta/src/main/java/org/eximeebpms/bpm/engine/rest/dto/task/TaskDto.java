@@ -21,7 +21,7 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DelegationStateConverter;
 import org.eximeebpms.bpm.engine.task.DelegationState;
 import org.eximeebpms.bpm.engine.task.Task;
@@ -58,7 +58,7 @@ public class TaskDto {
   private String taskDefinitionKey;
   private boolean suspended;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private EximeeBpmsFormRef camundaFormRef;
   @Setter
   private String tenantId;
   /**
@@ -96,7 +96,7 @@ public class TaskDto {
     this.taskState = task.getTaskState();
     try {
       this.formKey = task.getFormKey();
-      this.camundaFormRef = task.getCamundaFormRef();
+      this.camundaFormRef = task.getEximeeBpmsFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)
@@ -131,7 +131,7 @@ public class TaskDto {
 
     try {
       dto.formKey = task.getFormKey();
-      dto.camundaFormRef = task.getCamundaFormRef();
+      dto.camundaFormRef = task.getEximeeBpmsFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)

@@ -26,7 +26,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
 import org.eximeebpms.bpm.engine.runtime.EventSubscriptionQuery;
@@ -67,7 +67,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventSubscriptionId;
   }
 
-  @EximeeBPMSQueryParam("eventSubscriptionId")
+  @EximeeBpmsQueryParam("eventSubscriptionId")
   public void setEventSubscriptionId(String eventSubscriptionId) {
     this.eventSubscriptionId = eventSubscriptionId;
   }
@@ -76,7 +76,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventName;
   }
 
-  @EximeeBPMSQueryParam("eventName")
+  @EximeeBpmsQueryParam("eventName")
   public void setEventName(String eventName) {
     this.eventName = eventName;
   }
@@ -85,7 +85,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventType;
   }
 
-  @EximeeBPMSQueryParam("eventType")
+  @EximeeBpmsQueryParam("eventType")
   public void setEventType(String eventType) {
     this.eventType = eventType;
   }
@@ -94,7 +94,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return executionId;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
@@ -103,7 +103,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
@@ -112,7 +112,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return activityId;
   }
 
-  @EximeeBPMSQueryParam("activityId")
+  @EximeeBpmsQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
@@ -121,7 +121,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return tenantIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
@@ -130,7 +130,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
@@ -139,7 +139,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return includeEventSubscriptionsWithoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeEventSubscriptionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeEventSubscriptionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeEventSubscriptionsWithoutTenantId(Boolean includeEventSubscriptionsWithoutTenantId) {
     this.includeEventSubscriptionsWithoutTenantId = includeEventSubscriptionsWithoutTenantId;
   }

@@ -23,7 +23,7 @@ import org.eximeebpms.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAdministratorAuthorizationProperties;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunLdapProperties;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
-import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.EximeeBpmsBpmAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,7 +35,7 @@ import java.util.List;
 
 @EnableConfigurationProperties(EximeeBpmsBpmRunProperties.class)
 @Configuration
-@AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
+@AutoConfigureAfter({ EximeeBpmsBpmAutoConfiguration.class })
 public class EximeeBpmsBpmRunConfiguration {
 
   @Bean
@@ -63,7 +63,7 @@ public class EximeeBpmsBpmRunConfiguration {
   }
 
   @Bean
-  public EximeeBpmsBpmRunDeploymentConfiguration camundaDeploymentConfiguration(@Value("${eximeebpms.deploymentDir:#{null}}") String deploymentDir) {
+  public EximeeBpmsBpmRunDeploymentConfiguration eximeeBpmsDeploymentConfiguration(@Value("${eximeebpms.deploymentDir:#{null}}") String deploymentDir) {
     return new EximeeBpmsBpmRunDeploymentConfiguration(deploymentDir);
   }
 

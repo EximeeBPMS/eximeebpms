@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.Resource;
@@ -31,17 +31,17 @@ import org.springframework.core.io.Resource;
 public class DefaultDeploymentConfigurationTest {
 
   private final DefaultDeploymentConfiguration defaultDeploymentConfiguration = new DefaultDeploymentConfiguration();
-  private final CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private final EximeeBpmsBpmProperties eximeeBpmsBpmProperties = new EximeeBpmsBpmProperties();
   private final SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
 
   @Before
   public void before() {
-    defaultDeploymentConfiguration.camundaBpmProperties = camundaBpmProperties;
+    defaultDeploymentConfiguration.eximeeBpmsBpmProperties = eximeeBpmsBpmProperties;
   }
 
   @Test
   public void noDeploymentTest() {
-    camundaBpmProperties.setAutoDeploymentEnabled(false);
+    eximeeBpmsBpmProperties.setAutoDeploymentEnabled(false);
     defaultDeploymentConfiguration.preInit(configuration);
 
     assertThat(configuration.getDeploymentResources()).isEmpty();
@@ -49,7 +49,7 @@ public class DefaultDeploymentConfigurationTest {
 
   @Test
   public void deploymentTest() throws IOException {
-    camundaBpmProperties.setAutoDeploymentEnabled(true);
+    eximeeBpmsBpmProperties.setAutoDeploymentEnabled(true);
     defaultDeploymentConfiguration.preInit(configuration);
 
     final Resource[] resources = configuration.getDeploymentResources();

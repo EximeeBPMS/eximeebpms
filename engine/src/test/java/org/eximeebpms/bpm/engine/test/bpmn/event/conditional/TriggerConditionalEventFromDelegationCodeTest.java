@@ -31,7 +31,7 @@ import org.eximeebpms.bpm.engine.task.TaskQuery;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.SequenceFlow;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -178,7 +178,7 @@ public class TriggerConditionalEventFromDelegationCodeTest extends AbstractCondi
       .userTask(TASK_WITH_CONDITION_ID)
       .endEvent()
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(specifier.getDelegateClass().getName());
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
@@ -211,7 +211,7 @@ public class TriggerConditionalEventFromDelegationCodeTest extends AbstractCondi
       .userTask(TASK_WITH_CONDITION_ID)
       .endEvent()
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(specifier.getDelegateClass().getName());
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
@@ -245,7 +245,7 @@ public class TriggerConditionalEventFromDelegationCodeTest extends AbstractCondi
       .userTask(TASK_WITH_CONDITION_ID).camundaAsyncBefore()
       .endEvent()
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(specifier.getDelegateClass().getName());
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
@@ -278,7 +278,7 @@ public class TriggerConditionalEventFromDelegationCodeTest extends AbstractCondi
       .userTask(TASK_WITH_CONDITION_ID).camundaAsyncBefore()
       .endEvent()
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(specifier.getDelegateClass().getName());
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);

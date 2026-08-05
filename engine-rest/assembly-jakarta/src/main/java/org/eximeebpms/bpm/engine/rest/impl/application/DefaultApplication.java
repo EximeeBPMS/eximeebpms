@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.impl.application;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
-import org.eximeebpms.bpm.engine.rest.impl.CamundaRestResources;
+import org.eximeebpms.bpm.engine.rest.impl.EximeeBpmsRestResources;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,8 +41,8 @@ public class DefaultApplication extends Application {
   public Set<Class<?>> getClasses() {
     Set<Class<?>> classes = new HashSet<Class<?>>();
 
-    classes.addAll(CamundaRestResources.getResourceClasses());
-    classes.addAll(CamundaRestResources.getConfigurationClasses());
+    classes.addAll(EximeeBpmsRestResources.getResourceClasses());
+    classes.addAll(EximeeBpmsRestResources.getConfigurationClasses());
 
     return classes;
   }

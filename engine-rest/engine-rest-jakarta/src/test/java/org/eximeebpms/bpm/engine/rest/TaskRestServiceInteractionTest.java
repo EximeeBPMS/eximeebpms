@@ -104,7 +104,7 @@ import org.eximeebpms.bpm.engine.identity.UserQuery;
 import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.form.validator.FormFieldValidationException;
 import org.eximeebpms.bpm.engine.impl.util.IoUtil;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
@@ -701,7 +701,7 @@ public class TaskRestServiceInteractionTest extends
   }
 
   @Test
-  public void testGetTaskshouldContainCamundaFormRef() {
+  public void testGetTaskshouldContainEximeeBpmsFormRef() {
     given().pathParam("id", MockProvider.EXAMPLE_TASK_ID)
       .header("accept", MediaType.APPLICATION_JSON)
       .then().expect()
@@ -3512,7 +3512,7 @@ public class TaskRestServiceInteractionTest extends
     InputStream deployedFormMock = new ByteArrayInputStream("{\"id\":\"myForm\"}".getBytes());
     when(formServiceMock.getDeployedTaskForm(anyString())).thenReturn(deployedFormMock);
     when(mockTask.getFormKey()).thenReturn(null);
-    when(mockTask.getCamundaFormRef()).thenReturn(new CamundaFormRefImpl("myForm", "latest"));
+    when(mockTask.getEximeeBpmsFormRef()).thenReturn(new EximeeBpmsFormRefImpl("myForm", "latest"));
 
     given()
       .pathParam("id", MockProvider.EXAMPLE_TASK_ID)

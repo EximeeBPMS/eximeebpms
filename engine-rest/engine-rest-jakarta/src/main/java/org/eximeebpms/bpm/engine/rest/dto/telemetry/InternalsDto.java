@@ -98,11 +98,11 @@ public class InternalsDto {
     this.jdk = jdk;
   }
 
-  public Set<String> getCamundaIntegration() {
+  public Set<String> getEximeeBpmsIntegration() {
     return camundaIntegration;
   }
 
-  public void setCamundaIntegration(Set<String> camundaIntegration) {
+  public void setEximeeBpmsIntegration(Set<String> camundaIntegration) {
     this.camundaIntegration = camundaIntegration;
   }
 
@@ -148,7 +148,7 @@ public class InternalsDto {
     other.getMetrics().forEach((name, metric) -> dto.metrics.put(name, new MetricDto(metric.getCount())));
 
     dto.setWebapps(other.getWebapps());
-    dto.setCamundaIntegration(other.getCamundaIntegration());
+    dto.setEximeeBpmsIntegration(other.getEximeeBpmsIntegration());
 
     return dto;
   }

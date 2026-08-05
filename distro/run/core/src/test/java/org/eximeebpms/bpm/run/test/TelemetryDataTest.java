@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
+import org.eximeebpms.bpm.engine.impl.diagnostics.EximeeBpmsIntegration;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
 import org.eximeebpms.bpm.run.EximeeBpmsBpmRun;
 import org.junit.Test;
@@ -43,14 +43,14 @@ public class TelemetryDataTest {
   ProcessEngine engine;
 
   @Test
-  public void shouldAddCamundaIntegration() {
+  public void shouldAddEximeeBpmsIntegration() {
     // given
     ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) engine.getProcessEngineConfiguration();
 
     // then
     TelemetryDataImpl telemetryData = processEngineConfiguration.getTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
+    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
     assertThat(camundaIntegration)
-      .containsExactlyInAnyOrder(CamundaIntegration.CAMUNDA_BPM_RUN, CamundaIntegration.SPRING_BOOT_STARTER);
+      .containsExactlyInAnyOrder(EximeeBpmsIntegration.CAMUNDA_BPM_RUN, EximeeBpmsIntegration.SPRING_BOOT_STARTER);
   }
 }

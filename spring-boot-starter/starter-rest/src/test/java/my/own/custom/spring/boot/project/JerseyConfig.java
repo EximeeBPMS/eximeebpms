@@ -18,12 +18,12 @@ package my.own.custom.spring.boot.project;
 
 import jakarta.ws.rs.ApplicationPath;
 
-import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBPMSJerseyResourceConfig;
+import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBpmsJerseyResourceConfig;
 import org.springframework.stereotype.Component;
 
 @Component
 @ApplicationPath("/engine-rest")
-public class JerseyConfig extends EximeeBPMSJerseyResourceConfig {
+public class JerseyConfig extends EximeeBpmsJerseyResourceConfig {
 
   @Override
   protected void registerAdditionalResources() {

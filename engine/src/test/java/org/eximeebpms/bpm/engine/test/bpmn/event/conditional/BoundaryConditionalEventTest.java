@@ -37,7 +37,7 @@ import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.builder.AbstractActivityBuilder;
 import org.eximeebpms.bpm.model.bpmn.instance.SequenceFlow;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -1146,9 +1146,9 @@ public class BoundaryConditionalEventTest extends AbstractConditionalEventTestCa
                                                   .userTask(TASK_WITH_CONDITION_ID).name(TASK_WITH_CONDITION)
                                                   .endEvent()
                                                   .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     deployConditionalBoundaryEventProcess(modelInstance, TASK_WITH_CONDITION_ID, true);
 
@@ -1179,9 +1179,9 @@ public class BoundaryConditionalEventTest extends AbstractConditionalEventTestCa
                                                   .userTask(TASK_WITH_CONDITION_ID).name(TASK_WITH_CONDITION)
                                                   .endEvent()
                                                   .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     deployConditionalBoundaryEventProcess(modelInstance, TASK_WITH_CONDITION_ID, false);
 

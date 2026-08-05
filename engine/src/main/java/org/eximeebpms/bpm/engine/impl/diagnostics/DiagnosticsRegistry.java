@@ -46,11 +46,11 @@ public class DiagnosticsRegistry {
     return commands;
   }
 
-  public String getCamundaIntegration() {
+  public String getEximeeBpmsIntegration() {
     return camundaIntegration;
   }
 
-  public void setCamundaIntegration(String camundaIntegration) {
+  public void setEximeeBpmsIntegration(String camundaIntegration) {
     this.camundaIntegration = camundaIntegration;
   }
 

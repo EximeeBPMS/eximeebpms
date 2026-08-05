@@ -21,7 +21,7 @@ import java.util.Date;
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.delegate.TaskListener;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 
 
 
@@ -155,7 +155,7 @@ public interface Task {
    * @return the reference key, binding type and version (if type is {@code version})
    * @throws BadUserRequestException in case the form key is not initialized.
    */
-  CamundaFormRef getCamundaFormRef();
+  EximeeBpmsFormRef getEximeeBpmsFormRef();
 
   /**
    * Returns the task's tenant id or null in case this task does not belong to a tenant.

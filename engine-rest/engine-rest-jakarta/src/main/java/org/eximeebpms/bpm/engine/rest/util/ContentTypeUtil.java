@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.rest.util;
 
 import jakarta.ws.rs.core.MediaType;
 
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 
 public class ContentTypeUtil {
 
@@ -35,7 +35,7 @@ public class ContentTypeUtil {
     return MediaType.APPLICATION_XHTML_XML;
   }
 
-  public static String getFormContentType(CamundaFormRef formRef) {
+  public static String getFormContentType(EximeeBpmsFormRef formRef) {
     if(formRef != null && formRef.getKey() != null && formRef.getBinding() != null) {
       return MediaType.APPLICATION_JSON;
     }

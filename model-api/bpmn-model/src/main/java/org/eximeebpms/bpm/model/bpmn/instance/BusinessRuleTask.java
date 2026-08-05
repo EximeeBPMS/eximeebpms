@@ -41,9 +41,9 @@ public interface BusinessRuleTask extends Task {
 
   void setCamundaDelegateExpression(String camundaExpression);
 
-  String getCamundaExpression();
+  String getEximeeBpmsExpression();
 
-  void setCamundaExpression(String camundaExpression);
+  void setEximeeBpmsExpression(String camundaExpression);
 
   String getCamundaResultVariable();
 
@@ -77,9 +77,9 @@ public interface BusinessRuleTask extends Task {
 
   void setCamundaDecisionRefTenantId(String tenantId);
 
-  String getCamundaMapDecisionResult();
+  String getEximeeBpmsMapDecisionResult();
 
-  void setCamundaMapDecisionResult(String camundaMapDecisionResult);
+  void setEximeeBpmsMapDecisionResult(String camundaMapDecisionResult);
 
   String getCamundaTaskPriority();
 

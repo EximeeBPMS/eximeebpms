@@ -175,11 +175,11 @@ public class BusinessRuleTaskImpl extends TaskImpl implements BusinessRuleTask {
     camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 
-  public String getCamundaExpression() {
+  public String getEximeeBpmsExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaExpression(String camundaExpression) {
+  public void setEximeeBpmsExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
@@ -240,12 +240,12 @@ public class BusinessRuleTaskImpl extends TaskImpl implements BusinessRuleTask {
   }
 
   @Override
-  public String getCamundaMapDecisionResult() {
+  public String getEximeeBpmsMapDecisionResult() {
     return camundaMapDecisionResultAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaMapDecisionResult(String camundaMapDecisionResult) {
+  public void setEximeeBpmsMapDecisionResult(String camundaMapDecisionResult) {
     camundaMapDecisionResultAttribute.setValue(this, camundaMapDecisionResult);
   }
 

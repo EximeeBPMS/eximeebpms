@@ -21,8 +21,8 @@ import org.eximeebpms.bpm.model.bpmn.BpmnModelException;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.*;
 import org.eximeebpms.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFailedJobRetryTimeCycle;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFailedJobRetryTimeCycle;
 import org.eximeebpms.bpm.model.xml.instance.ModelElementInstance;
 
 /**
@@ -407,7 +407,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    * @return the builder object
    */
   public B camundaFailedJobRetryTimeCycle(String retryTimeCycle) {
-    CamundaFailedJobRetryTimeCycle failedJobRetryTimeCycle = createInstance(CamundaFailedJobRetryTimeCycle.class);
+    EximeeBpmsFailedJobRetryTimeCycle failedJobRetryTimeCycle = createInstance(EximeeBpmsFailedJobRetryTimeCycle.class);
     failedJobRetryTimeCycle.setTextContent(retryTimeCycle);
 
     addExtensionElement(failedJobRetryTimeCycle);
@@ -421,7 +421,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   public B camundaExecutionListenerClass(String eventName, String fullQualifiedClassName) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
     executionListener.setCamundaEvent(eventName);
     executionListener.setCamundaClass(fullQualifiedClassName);
 
@@ -431,9 +431,9 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   public B camundaExecutionListenerExpression(String eventName, String expression) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
     executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaExpression(expression);
+    executionListener.setEximeeBpmsExpression(expression);
 
     addExtensionElement(executionListener);
 
@@ -441,7 +441,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   public B camundaExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
     executionListener.setCamundaEvent(eventName);
     executionListener.setCamundaDelegateExpression(delegateExpression);
 

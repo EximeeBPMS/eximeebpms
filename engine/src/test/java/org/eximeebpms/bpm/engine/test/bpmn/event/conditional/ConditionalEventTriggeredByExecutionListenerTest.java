@@ -33,7 +33,7 @@ import org.eximeebpms.bpm.engine.task.TaskQuery;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.SequenceFlow;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -239,9 +239,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -274,9 +274,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -312,9 +312,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .camundaAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -348,9 +348,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .camundaAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -458,9 +458,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .subProcessDone()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE_ON_PARENT);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -498,9 +498,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .subProcessDone()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE_ON_PARENT);
+    listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());

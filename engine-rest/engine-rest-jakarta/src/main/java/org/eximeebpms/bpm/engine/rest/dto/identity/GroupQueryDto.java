@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.GroupQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,37 +64,37 @@ public class GroupQueryDto extends AbstractQueryDto<GroupQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("id")
+  @EximeeBpmsQueryParam("id")
   public void setId(String groupId) {
     this.id = groupId;
   }
 
-  @EximeeBPMSQueryParam(value = "idIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "idIn", converter = StringArrayConverter.class)
   public void setIdIn(String[] groupIds) {
     this.ids = groupIds;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String groupName) {
     this.name = groupName;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String groupNameLike) {
     this.nameLike = groupNameLike;
   }
 
-  @EximeeBPMSQueryParam("type")
+  @EximeeBpmsQueryParam("type")
   public void setType(String groupType) {
     this.type = groupType;
   }
 
-  @EximeeBPMSQueryParam("member")
+  @EximeeBpmsQueryParam("member")
   public void setMember(String member) {
     this.member = member;
   }
 
-  @EximeeBPMSQueryParam("memberOfTenant")
+  @EximeeBpmsQueryParam("memberOfTenant")
   public void setMemberOfTenant(String tenantId) {
     this.tenantId = tenantId;
   }

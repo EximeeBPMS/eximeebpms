@@ -22,7 +22,7 @@ import org.eximeebpms.bpm.engine.test.bpmn.common.AbstractProcessEngineServicesA
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.ManualTask;
 import org.eximeebpms.bpm.model.bpmn.instance.Task;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 
 /**
  * @author Daniel Meyer
@@ -49,7 +49,7 @@ public class ListenerProcessEngineServicesAccessTest extends AbstractProcessEngi
   protected Task createModelAccessTask(BpmnModelInstance modelInstance, Class<?> delegateClass) {
     ManualTask task = modelInstance.newInstance(ManualTask.class);
     task.setId("manualTask");
-    CamundaExecutionListener executionListener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener executionListener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     executionListener.setCamundaEvent(ExecutionListener.EVENTNAME_START);
     executionListener.setCamundaClass(delegateClass.getName());
     task.builder().addExtensionElement(executionListener);

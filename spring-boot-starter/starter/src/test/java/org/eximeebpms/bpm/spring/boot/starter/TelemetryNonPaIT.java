@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.diagnostics.CamundaIntegration;
+import org.eximeebpms.bpm.engine.impl.diagnostics.EximeeBpmsIntegration;
 import org.eximeebpms.bpm.engine.impl.diagnostics.DiagnosticsRegistry;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
@@ -37,7 +37,7 @@ import org.springframework.test.context.junit4.SpringRunner;
   classes = {TestApplication.class},
   webEnvironment = WebEnvironment.RANDOM_PORT
 )
-public class TelemetryNonPaIT extends AbstractCamundaAutoConfigurationIT {
+public class TelemetryNonPaIT extends AbstractEximeeBpmsAutoConfigurationIT {
 
   @Test
   public void shouldSubmitApplicationServerData() {
@@ -51,15 +51,15 @@ public class TelemetryNonPaIT extends AbstractCamundaAutoConfigurationIT {
   }
 
   @Test
-  public void shouldAddCamundaIntegration() {
+  public void shouldAddEximeeBpmsIntegration() {
     // given default configuration
     ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
 
     // then
     TelemetryDataImpl telemetryData = processEngineConfiguration.getTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
+    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
     assertThat(camundaIntegration.size()).isOne();
-    assertThat(camundaIntegration).containsExactly(CamundaIntegration.SPRING_BOOT_STARTER);
+    assertThat(camundaIntegration).containsExactly(EximeeBpmsIntegration.SPRING_BOOT_STARTER);
   }
 
 }

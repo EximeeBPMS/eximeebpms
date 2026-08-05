@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.task.DelegationState;
 import org.eximeebpms.bpm.engine.task.Task;
 
@@ -45,7 +45,7 @@ public class MockTaskBuilder {
   private String processInstanceId;
   private String taskDefinitionKey;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private EximeeBpmsFormRef camundaFormRef;
   private String tenantId;
   private boolean hasAttachment;
 
@@ -141,7 +141,7 @@ public class MockTaskBuilder {
   }
 
   public MockTaskBuilder camundaFormRef(String key, String binding, Integer version) {
-    CamundaFormRefImpl camundaFormRef = new CamundaFormRefImpl(key, binding);
+    EximeeBpmsFormRefImpl camundaFormRef = new EximeeBpmsFormRefImpl(key, binding);
     camundaFormRef.setVersion(version);
     this.camundaFormRef = camundaFormRef;
     return this;
@@ -186,7 +186,7 @@ public class MockTaskBuilder {
     when(mockTask.getProcessInstanceId()).thenReturn(processInstanceId);
     when(mockTask.getTaskDefinitionKey()).thenReturn(taskDefinitionKey);
     when(mockTask.getFormKey()).thenReturn(formKey);
-    when(mockTask.getCamundaFormRef()).thenReturn(camundaFormRef);
+    when(mockTask.getEximeeBpmsFormRef()).thenReturn(camundaFormRef);
     when(mockTask.getTenantId()).thenReturn(tenantId);
     when(mockTask.getTaskState()).thenReturn(taskState);
     when(mockTask.hasAttachment()).thenReturn(hasAttachment);

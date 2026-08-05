@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.webapp.rest.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eximeebpms.bpm.webapp.db.QueryParameters;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.JacksonAwareStringToTypeConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringToTypeConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -72,7 +72,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     }
   }
 
-  @EximeeBPMSQueryParam("sortBy")
+  @EximeeBpmsQueryParam("sortBy")
   public void setSortBy(String sortBy) {
     if (!isValidSortByValue(sortBy)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortBy parameter has invalid value: " + sortBy);
@@ -80,7 +80,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     this.sortBy = sortBy;
   }
 
-  @EximeeBPMSQueryParam("sortOrder")
+  @EximeeBpmsQueryParam("sortOrder")
   public void setSortOrder(String sortOrder) {
     if (!VALID_SORT_ORDER_VALUES.contains(sortOrder)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortOrder parameter has invalid value: " + sortOrder);
@@ -125,7 +125,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
   }
 
   /**
-   * Finds the methods that are annotated with a {@link EximeeBPMSQueryParam} with a value that matches the key parameter.
+   * Finds the methods that are annotated with a {@link EximeeBpmsQueryParam} with a value that matches the key parameter.
    * Before invoking these methods, the annotated {@link StringToTypeConverter} is used to convert the String value to the desired Java type.
    * @param key
    * @param value
@@ -164,8 +164,8 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
 
       for (int j = 0; j < methodAnnotations.length; j++) {
         Annotation annotation = methodAnnotations[j];
-        if (annotation instanceof EximeeBPMSQueryParam) {
-          EximeeBPMSQueryParam parameterAnnotation = (EximeeBPMSQueryParam) annotation;
+        if (annotation instanceof EximeeBpmsQueryParam) {
+          EximeeBpmsQueryParam parameterAnnotation = (EximeeBpmsQueryParam) annotation;
           if (parameterAnnotation.value().equals(parameterName)) {
             result.add(method);
           }
@@ -180,8 +180,8 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
 
     for (int j = 0; j < methodAnnotations.length; j++) {
       Annotation annotation = methodAnnotations[j];
-      if (annotation instanceof EximeeBPMSQueryParam) {
-        EximeeBPMSQueryParam parameterAnnotation = (EximeeBPMSQueryParam) annotation;
+      if (annotation instanceof EximeeBpmsQueryParam) {
+        EximeeBpmsQueryParam parameterAnnotation = (EximeeBpmsQueryParam) annotation;
         return parameterAnnotation.converter();
       }
     }

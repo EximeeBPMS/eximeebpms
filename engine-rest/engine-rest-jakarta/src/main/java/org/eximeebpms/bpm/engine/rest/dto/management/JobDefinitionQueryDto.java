@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.management.JobDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -79,62 +79,62 @@ public class JobDefinitionQueryDto extends AbstractQueryDto<JobDefinitionQuery> 
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("jobDefinitionId")
+  @EximeeBpmsQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("jobType")
+  @EximeeBpmsQueryParam("jobType")
   public void setJobType(String jobType) {
     this.jobType = jobType;
   }
 
-  @EximeeBPMSQueryParam("jobConfiguration")
+  @EximeeBpmsQueryParam("jobConfiguration")
   public void setJobConfiguration(String jobConfiguration) {
     this.jobConfiguration = jobConfiguration;
   }
 
-  @EximeeBPMSQueryParam(value="active", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @EximeeBPMSQueryParam(value="suspended", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @EximeeBPMSQueryParam(value="withOverridingJobPriority", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="withOverridingJobPriority", converter = BooleanConverter.class)
   public void setWithOverridingJobPriority(Boolean withOverridingJobPriority) {
     this.withOverridingJobPriority = withOverridingJobPriority;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeJobDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeJobDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeJobDefinitionsWithoutTenantId(Boolean includeJobDefinitionsWithoutTenantId) {
     this.includeJobDefinitionsWithoutTenantId = includeJobDefinitionsWithoutTenantId;
   }

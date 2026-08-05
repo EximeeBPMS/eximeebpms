@@ -28,7 +28,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
+import org.eximeebpms.bpm.quarkus.engine.extension.event.EximeeBpmsEngineStartupEvent;
 import org.eximeebpms.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -48,7 +48,7 @@ public class ProcessEngineSingleDeploymentTest {
     @Inject
     RepositoryService repositoryService;
 
-    public void createDeployment(@Observes CamundaEngineStartupEvent event) {
+    public void createDeployment(@Observes EximeeBpmsEngineStartupEvent event) {
       repositoryService.createDeployment()
           .addClasspathResource("org/eximeebpms/bpm/quarkus/engine/test/deployment/simpleServiceTaskProcess.bpmn")
           .deploy();

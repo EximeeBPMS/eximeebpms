@@ -1,6 +1,6 @@
 package org.eximeebpms.bpm.spring.boot.starter.property;
 
-import static org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties.joinOn;
 
 import java.util.HashSet;
 import java.util.Set;

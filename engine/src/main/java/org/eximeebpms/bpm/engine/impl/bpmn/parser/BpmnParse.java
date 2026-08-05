@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.impl.bpmn.parser;
 
 import static org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseUtil.findCamundaExtensionElement;
 import static org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseCamundaExtensionProperties;
-import static org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseCamundaScript;
+import static org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseEximeeBpmsScript;
 import static org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseInputOutput;
 import static org.eximeebpms.bpm.engine.impl.util.ClassDelegateUtil.instantiateDelegate;
 
@@ -2558,7 +2558,7 @@ public class BpmnParse extends Parse {
     ParameterValueProvider priorityProvider = parsePriority(serviceTaskElement, PROPERTYNAME_TASK_PRIORITY);
     Map<String, String> properties = parseCamundaExtensionProperties(camundaPropertiesElement);
     activity.getProperties().set(BpmnProperties.EXTENSION_PROPERTIES, properties);
-    List<CamundaErrorEventDefinition> camundaErrorEventDefinitions = parseCamundaErrorEventDefinitions(activity, serviceTaskElement);
+    List<EximeeBpmsErrorEventDefinition> camundaErrorEventDefinitions = parseEximeeBpmsErrorEventDefinitions(activity, serviceTaskElement);
     activity.getProperties().set(BpmnProperties.CAMUNDA_ERROR_EVENT_DEFINITION, camundaErrorEventDefinitions);
     activity.setActivityBehavior(new ExternalTaskActivityBehavior(topicNameProvider, priorityProvider));
   }
@@ -2858,7 +2858,7 @@ public class BpmnParse extends Parse {
     }
 
     if(formRefAttribute != null) {
-      formDefinition.setCamundaFormDefinitionKey(expressionManager.createExpression(formRefAttribute));
+      formDefinition.setEximeeBpmsFormDefinitionKey(expressionManager.createExpression(formRefAttribute));
 
       String formRefBindingAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRefBinding");
 
@@ -2869,7 +2869,7 @@ public class BpmnParse extends Parse {
 
 
       if(formRefBindingAttribute != null) {
-        formDefinition.setCamundaFormDefinitionBinding(formRefBindingAttribute);
+        formDefinition.setEximeeBpmsFormDefinitionBinding(formRefBindingAttribute);
       }
 
       if(DefaultTaskFormHandler.FORM_REF_BINDING_VERSION.equals(formRefBindingAttribute)) {
@@ -2878,7 +2878,7 @@ public class BpmnParse extends Parse {
         Expression camundaFormDefinitionVersion = expressionManager.createExpression(formRefVersionAttribute);
 
         if(formRefVersionAttribute != null) {
-          formDefinition.setCamundaFormDefinitionVersion(camundaFormDefinitionVersion);
+          formDefinition.setEximeeBpmsFormDefinitionVersion(camundaFormDefinitionVersion);
         }
       }
     }
@@ -3078,7 +3078,7 @@ public class BpmnParse extends Parse {
       taskListener = new DelegateExpressionTaskListener(expressionManager.createExpression(delegateExpression), parseFieldDeclarations(taskListenerElement));
     } else if (scriptElement != null) {
       try {
-        ExecutableScript executableScript = parseCamundaScript(scriptElement);
+        ExecutableScript executableScript = parseEximeeBpmsScript(scriptElement);
         if (executableScript != null) {
           taskListener = new ScriptTaskListener(executableScript);
         }
@@ -3361,8 +3361,8 @@ public class BpmnParse extends Parse {
 
   }
 
-  public List<CamundaErrorEventDefinition> parseCamundaErrorEventDefinitions(ActivityImpl activity, Element scopeElement) {
-    List<CamundaErrorEventDefinition> errorEventDefinitions = new ArrayList<>();
+  public List<EximeeBpmsErrorEventDefinition> parseEximeeBpmsErrorEventDefinitions(ActivityImpl activity, Element scopeElement) {
+    List<EximeeBpmsErrorEventDefinition> errorEventDefinitions = new ArrayList<>();
     Element extensionElements = scopeElement.element("extensionElements");
     if (extensionElements != null) {
       List<Element> errorEventDefinitionElements = extensionElements.elements("errorEventDefinition");
@@ -3372,7 +3372,7 @@ public class BpmnParse extends Parse {
         if (errorRef != null) {
           String camundaExpression = errorEventDefinitionElement.attribute("expression");
           error = errors.get(errorRef);
-          CamundaErrorEventDefinition definition = new CamundaErrorEventDefinition(activity.getId(), expressionManager.createExpression(camundaExpression));
+          EximeeBpmsErrorEventDefinition definition = new EximeeBpmsErrorEventDefinition(activity.getId(), expressionManager.createExpression(camundaExpression));
           definition.setErrorCode(error == null ? errorRef : error.getErrorCode());
           setErrorCodeVariableOnErrorEventDefinition(errorEventDefinitionElement, definition);
           setErrorMessageVariableOnErrorEventDefinition(errorEventDefinitionElement, definition);
@@ -4502,7 +4502,7 @@ public class BpmnParse extends Parse {
       }
     } else if (scriptElement != null) {
       try {
-        ExecutableScript executableScript = parseCamundaScript(scriptElement);
+        ExecutableScript executableScript = parseEximeeBpmsScript(scriptElement);
         if (executableScript != null) {
           executionListener = new ScriptExecutionListener(executableScript);
         }

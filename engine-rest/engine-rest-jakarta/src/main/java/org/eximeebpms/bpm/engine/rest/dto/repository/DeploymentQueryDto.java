@@ -29,7 +29,7 @@ import jakarta.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.DeploymentQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -71,52 +71,52 @@ public class DeploymentQueryDto extends AbstractQueryDto<DeploymentQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("id")
+  @EximeeBpmsQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @EximeeBPMSQueryParam("source")
+  @EximeeBpmsQueryParam("source")
   public void setSource(String source) {
     this.source = source;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutSource", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutSource", converter = BooleanConverter.class)
   public void setWithoutSource(Boolean withoutSource) {
     this.withoutSource = withoutSource;
   }
 
-  @EximeeBPMSQueryParam(value = "before", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "before", converter = DateConverter.class)
   public void setDeploymentBefore(Date deploymentBefore) {
     this.before = deploymentBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "after", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "after", converter = DateConverter.class)
   public void setDeploymentAfter(Date deploymentAfter) {
     this.after = deploymentAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeDeploymentsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeDeploymentsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeDeploymentsWithoutTenantId(Boolean includeDeploymentsWithoutTenantId) {
     this.includeDeploymentsWithoutTenantId = includeDeploymentsWithoutTenantId;
   }

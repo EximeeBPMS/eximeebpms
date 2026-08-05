@@ -770,7 +770,7 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
       taskId);
   }
 
-  public ProcessEngineException multipleTenantsForCamundaFormDefinitionKeyException(String camundaFormDefinitionKey) {
+  public ProcessEngineException multipleTenantsForEximeeBpmsFormDefinitionKeyException(String camundaFormDefinitionKey) {
     return new ProcessEngineException(exceptionMessage(
         "109",
         "Cannot resolve a unique Camunda Form definition for key '{}' because it exists for multiple tenants.",

@@ -21,7 +21,7 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.webapp.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.impl.metrics.util.MetricsUtil;
 import org.eximeebpms.bpm.engine.management.Metrics;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -67,7 +67,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     maxResultsLimitEnabled = false;
   }
 
-  @EximeeBPMSQueryParam("groupBy")
+  @EximeeBpmsQueryParam("groupBy")
   public void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
@@ -76,7 +76,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return groupBy;
   }
 
-  @EximeeBPMSQueryParam(value = "metrics", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "metrics", converter = StringListConverter.class)
   public void setMetrics(List<String> metrics) {
     boolean valid = new HashSet<>(VALID_METRIC_VALUES).containsAll(metrics);
     if (!valid) {
@@ -89,7 +89,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return metrics;
   }
 
-  @EximeeBPMSQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
   public void setSubscriptionStartDate(Date subscriptionStartDate) {
     this.subscriptionStartDate = subscriptionStartDate;
 
@@ -102,12 +102,12 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     }
   }
 
-  @EximeeBPMSQueryParam(value = "startDate", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "startDate", converter = DateConverter.class)
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
-  @EximeeBPMSQueryParam(value = "endDate", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "endDate", converter = DateConverter.class)
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }

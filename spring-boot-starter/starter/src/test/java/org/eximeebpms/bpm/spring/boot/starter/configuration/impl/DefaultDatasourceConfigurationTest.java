@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import javax.sql.DataSource;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class DefaultDatasourceConfigurationTest {
   @Mock
   private PlatformTransactionManager platformTransactionManager;
 
-  private CamundaBpmProperties camundaBpmProperties;
+  private EximeeBpmsBpmProperties eximeeBpmsBpmProperties;
 
   @InjectMocks
   private DefaultDatasourceConfiguration defaultDatasourceConfiguration;
@@ -48,8 +48,8 @@ public class DefaultDatasourceConfigurationTest {
   @Before
   public void before() {
     configuration = new SpringProcessEngineConfiguration();
-    camundaBpmProperties = new CamundaBpmProperties();
-    defaultDatasourceConfiguration.camundaBpmProperties = camundaBpmProperties;
+    eximeeBpmsBpmProperties = new EximeeBpmsBpmProperties();
+    defaultDatasourceConfiguration.eximeeBpmsBpmProperties = eximeeBpmsBpmProperties;
   }
 
   @Test
@@ -60,12 +60,12 @@ public class DefaultDatasourceConfigurationTest {
   }
 
   @Test
-  public void camundaTransactionManagerTest() {
+  public void eximeeBpmsTransactionManagerTest() {
     defaultDatasourceConfiguration.dataSource = mock(DataSource.class);
-    PlatformTransactionManager camundaTransactionManager = mock(PlatformTransactionManager.class);
-    defaultDatasourceConfiguration.camundaTransactionManager = camundaTransactionManager;
+    PlatformTransactionManager eximeeBpmsTransactionManager = mock(PlatformTransactionManager.class);
+    defaultDatasourceConfiguration.eximeeBpmsTransactionManager = eximeeBpmsTransactionManager;
     defaultDatasourceConfiguration.preInit(configuration);
-    assertSame(camundaTransactionManager, configuration.getTransactionManager());
+    assertSame(eximeeBpmsTransactionManager, configuration.getTransactionManager());
   }
 
   @Test
@@ -77,12 +77,12 @@ public class DefaultDatasourceConfigurationTest {
   }
 
   @Test
-  public void camundaDataSourceTest() {
-    DataSource camundaDatasourceMock = mock(DataSource.class);
-    defaultDatasourceConfiguration.camundaDataSource = camundaDatasourceMock;
+  public void eximeeBpmsDataSourceTest() {
+    DataSource eximeeBpmsDataSourceMock = mock(DataSource.class);
+    defaultDatasourceConfiguration.eximeeBpmsDataSource = eximeeBpmsDataSourceMock;
     defaultDatasourceConfiguration.dataSource = mock(DataSource.class);
     defaultDatasourceConfiguration.preInit(configuration);
-    assertSame(camundaDatasourceMock, getDataSourceFromConfiguration());
+    assertSame(eximeeBpmsDataSourceMock, getDataSourceFromConfiguration());
   }
 
   private DataSource getDataSourceFromConfiguration() {

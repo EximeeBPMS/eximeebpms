@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.filter.FilterQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -62,27 +62,27 @@ public class FilterQueryDto extends AbstractQueryDto<FilterQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("filterId")
+  @EximeeBpmsQueryParam("filterId")
   public void setFilterId(String filterId) {
     this.filterId = filterId;
   }
 
-  @EximeeBPMSQueryParam("resourceType")
+  @EximeeBpmsQueryParam("resourceType")
   public void setResourceType(String resourceType) {
     this.resourceType = resourceType;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @EximeeBPMSQueryParam("owner")
+  @EximeeBpmsQueryParam("owner")
   public void setOwner(String owner) {
     this.owner = owner;
   }

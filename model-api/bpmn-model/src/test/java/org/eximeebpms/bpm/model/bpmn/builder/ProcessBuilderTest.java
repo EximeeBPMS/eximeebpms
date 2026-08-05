@@ -110,17 +110,17 @@ import org.eximeebpms.bpm.model.bpmn.instance.TimeDuration;
 import org.eximeebpms.bpm.model.bpmn.instance.TimerEventDefinition;
 import org.eximeebpms.bpm.model.bpmn.instance.Transaction;
 import org.eximeebpms.bpm.model.bpmn.instance.UserTask;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaErrorEventDefinition;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFailedJobRetryTimeCycle;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFormData;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFormField;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaIn;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaInputOutput;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaInputParameter;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaOut;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaOutputParameter;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaTaskListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsErrorEventDefinition;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFailedJobRetryTimeCycle;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFormData;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFormField;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsIn;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsInputOutput;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsInputParameter;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsOut;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsOutputParameter;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsTaskListener;
 import org.eximeebpms.bpm.model.xml.Model;
 import org.eximeebpms.bpm.model.xml.instance.ModelElementInstance;
 import org.eximeebpms.bpm.model.xml.type.ModelElementType;
@@ -651,12 +651,12 @@ public class ProcessBuilderTest {
 
     ServiceTask externalTask = modelInstance.getModelElementById(EXTERNAL_TASK_ID);
     ExtensionElements extensionElements = externalTask.getExtensionElements();
-    Collection<CamundaErrorEventDefinition> errorEventDefinitions = extensionElements.getChildElementsByType(CamundaErrorEventDefinition.class);
+    Collection<EximeeBpmsErrorEventDefinition> errorEventDefinitions = extensionElements.getChildElementsByType(EximeeBpmsErrorEventDefinition.class);
     assertThat(errorEventDefinitions).hasSize(1);
-    CamundaErrorEventDefinition camundaErrorEventDefinition = errorEventDefinitions.iterator().next();
+    EximeeBpmsErrorEventDefinition camundaErrorEventDefinition = errorEventDefinitions.iterator().next();
     assertThat(camundaErrorEventDefinition).isNotNull();
     assertThat(camundaErrorEventDefinition.getId()).isEqualTo("id");
-    assertThat(camundaErrorEventDefinition.getCamundaExpression()).isEqualTo("expression");
+    assertThat(camundaErrorEventDefinition.getEximeeBpmsExpression()).isEqualTo("expression");
     assertErrorEventDefinition("boundary", "myErrorCode", "errorMessage");
   }
 
@@ -679,7 +679,7 @@ public class ProcessBuilderTest {
     assertThat(serviceTask.getCamundaJobPriority()).isEqualTo("${somePriority}");
     assertThat(serviceTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(serviceTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(serviceTask);
   }
 
   @Test
@@ -700,13 +700,13 @@ public class ProcessBuilderTest {
     ServiceTask serviceTask = modelInstance.getModelElementById(TASK_ID);
     assertThat(serviceTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
     assertThat(serviceTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(serviceTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(serviceTask.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
     assertThat(serviceTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
     assertThat(serviceTask.getCamundaTopic()).isEqualTo(TEST_STRING_API);
     assertThat(serviceTask.getCamundaType()).isEqualTo(TEST_STRING_API);
     assertThat(serviceTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(serviceTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(serviceTask);
   }
 
   @Test
@@ -741,13 +741,13 @@ public class ProcessBuilderTest {
     SendTask sendTask = modelInstance.getModelElementById(TASK_ID);
     assertThat(sendTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
     assertThat(sendTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(sendTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(sendTask.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
     assertThat(sendTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
     assertThat(sendTask.getCamundaTopic()).isEqualTo(TEST_STRING_API);
     assertThat(sendTask.getCamundaType()).isEqualTo(TEST_STRING_API);
     assertThat(sendTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(sendTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(sendTask);
   }
 
   @Test
@@ -793,12 +793,12 @@ public class ProcessBuilderTest {
     assertThat(userTask.getCamundaFollowUpDate()).isEqualTo(TEST_FOLLOW_UP_DATE_API);
     assertThat(userTask.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
     assertThat(userTask.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
-    assertThat(userTask.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(userTask.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(userTask.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(userTask.getEximeeBpmsFormRef()).isEqualTo(FORM_ID);
+    assertThat(userTask.getEximeeBpmsFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(userTask.getEximeeBpmsFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
     assertThat(userTask.getCamundaPriority()).isEqualTo(TEST_PRIORITY_API);
 
-    assertCamundaFailedJobRetryTimeCycle(userTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(userTask);
   }
 
   @Test
@@ -826,7 +826,7 @@ public class ProcessBuilderTest {
     BusinessRuleTask businessRuleTask = modelInstance.getModelElementById(TASK_ID);
     assertThat(businessRuleTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
     assertThat(businessRuleTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(businessRuleTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(businessRuleTask.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
     assertThat(businessRuleTask.getCamundaResultVariable()).isEqualTo("resultVar");
     assertThat(businessRuleTask.getCamundaTopic()).isEqualTo("topic");
     assertThat(businessRuleTask.getCamundaType()).isEqualTo("type");
@@ -835,10 +835,10 @@ public class ProcessBuilderTest {
     assertThat(businessRuleTask.getCamundaDecisionRefVersion()).isEqualTo("7");
     assertThat(businessRuleTask.getCamundaDecisionRefVersionTag()).isEqualTo("0.1.0");
     assertThat(businessRuleTask.getCamundaDecisionRefTenantId()).isEqualTo("tenantId");
-    assertThat(businessRuleTask.getCamundaMapDecisionResult()).isEqualTo("singleEntry");
+    assertThat(businessRuleTask.getEximeeBpmsMapDecisionResult()).isEqualTo("singleEntry");
     assertThat(businessRuleTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(businessRuleTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(businessRuleTask);
   }
 
   @Test
@@ -869,7 +869,7 @@ public class ProcessBuilderTest {
     assertThat(scriptTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
     assertThat(scriptTask.getCamundaResource()).isEqualTo(TEST_STRING_API);
 
-    assertCamundaFailedJobRetryTimeCycle(scriptTask);
+    assertEximeeBpmsFailedJobRetryTimeCycle(scriptTask);
   }
 
   @Test
@@ -892,12 +892,12 @@ public class ProcessBuilderTest {
     assertThat(startEvent.isCamundaExclusive()).isFalse();
     assertThat(startEvent.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
     assertThat(startEvent.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
-    assertThat(startEvent.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(startEvent.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(startEvent.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(startEvent.getEximeeBpmsFormRef()).isEqualTo(FORM_ID);
+    assertThat(startEvent.getEximeeBpmsFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(startEvent.getEximeeBpmsFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
     assertThat(startEvent.getCamundaInitiator()).isEqualTo(TEST_STRING_API);
 
-    assertCamundaFailedJobRetryTimeCycle(startEvent);
+    assertEximeeBpmsFailedJobRetryTimeCycle(startEvent);
   }
 
   @Test
@@ -967,17 +967,17 @@ public class ProcessBuilderTest {
     assertThat(callActivity.getCamundaCaseTenantId()).isEqualTo("t2");
     assertThat(callActivity.isCamundaExclusive()).isFalse();
 
-    CamundaIn camundaIn = (CamundaIn) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaIn.class);
+    EximeeBpmsIn camundaIn = (EximeeBpmsIn) callActivity.getExtensionElements().getUniqueChildElementByType(EximeeBpmsIn.class);
     assertThat(camundaIn.getCamundaSource()).isEqualTo("in-source");
     assertThat(camundaIn.getCamundaTarget()).isEqualTo("in-target");
 
-    CamundaOut camundaOut = (CamundaOut) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaOut.class);
+    EximeeBpmsOut camundaOut = (EximeeBpmsOut) callActivity.getExtensionElements().getUniqueChildElementByType(EximeeBpmsOut.class);
     assertThat(camundaOut.getCamundaSource()).isEqualTo("out-source");
     assertThat(camundaOut.getCamundaTarget()).isEqualTo("out-target");
 
     assertThat(callActivity.getCamundaVariableMappingClass()).isEqualTo(TEST_CLASS_API);
     assertThat(callActivity.getCamundaVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertCamundaFailedJobRetryTimeCycle(callActivity);
+    assertEximeeBpmsFailedJobRetryTimeCycle(callActivity);
   }
 
   @Test
@@ -990,7 +990,7 @@ public class ProcessBuilderTest {
       .done();
 
     CallActivity callActivity = modelInstance.getModelElementById(CALL_ACTIVITY_ID);
-    CamundaIn camundaIn = (CamundaIn) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaIn.class);
+    EximeeBpmsIn camundaIn = (EximeeBpmsIn) callActivity.getExtensionElements().getUniqueChildElementByType(EximeeBpmsIn.class);
     assertThat(camundaIn.getCamundaBusinessKey()).isEqualTo("business-key");
   }
 
@@ -1668,11 +1668,11 @@ public class ProcessBuilderTest {
 
     assertThat(signalEventDefinition.getSignal().getName()).isEqualTo("signal");
 
-    List<CamundaIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(CamundaIn.class).list();
+    List<EximeeBpmsIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsIn.class).list();
     assertThat(camundaInParams.size()).isEqualTo(4);
 
     int paramCounter = 0;
-    for (CamundaIn inParam : camundaInParams) {
+    for (EximeeBpmsIn inParam : camundaInParams) {
       if (inParam.getCamundaVariables() != null) {
         assertThat(inParam.getCamundaVariables()).isEqualTo("all");
         if (inParam.getCamundaLocal()) {
@@ -1707,7 +1707,7 @@ public class ProcessBuilderTest {
 
     SignalEventDefinition signalEventDefinition = assertAndGetSingleEventDefinition("throw", SignalEventDefinition.class);
 
-    List<CamundaIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(CamundaIn.class).list();
+    List<EximeeBpmsIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsIn.class).list();
     assertThat(camundaInParams.size()).isEqualTo(1);
 
     assertThat(camundaInParams.get(0).getCamundaVariables()).isEqualTo("all");
@@ -1780,7 +1780,7 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTaskListenerByClassName() {
+  public void testEximeeBpmsTaskListenerByClassName() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
@@ -1790,16 +1790,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByClass() {
+  public void testEximeeBpmsTaskListenerByClass() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
@@ -1809,16 +1809,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
     assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByExpression() {
+  public void testEximeeBpmsTaskListenerByExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
@@ -1828,16 +1828,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo("anExpression");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByDelegateExpression() {
+  public void testEximeeBpmsTaskListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
@@ -1847,10 +1847,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
   }
@@ -1866,10 +1866,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -1894,10 +1894,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -1922,10 +1922,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -1950,10 +1950,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -1978,10 +1978,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -2006,10 +2006,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -2034,11 +2034,11 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo("anExpression");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
@@ -2062,11 +2062,11 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo("anExpression");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
@@ -2090,11 +2090,11 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo("anExpression");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
@@ -2118,10 +2118,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -2146,10 +2146,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -2174,10 +2174,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<EximeeBpmsTaskListener> taskListeners = extensionElements.getChildElementsByType(EximeeBpmsTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
+    EximeeBpmsTaskListener taskListener = taskListeners.iterator().next();
     assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
     assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
 
@@ -2192,7 +2192,7 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaExecutionListenerByClassName() {
+  public void testEximeeBpmsExecutionListenerByClassName() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2202,16 +2202,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<EximeeBpmsExecutionListener> executionListeners = extensionElements.getChildElementsByType(EximeeBpmsExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
+    EximeeBpmsExecutionListener executionListener = executionListeners.iterator().next();
     assertThat(executionListener.getCamundaClass()).isEqualTo("aClass");
     assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByClass() {
+  public void testEximeeBpmsExecutionListenerByClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2221,16 +2221,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<EximeeBpmsExecutionListener> executionListeners = extensionElements.getChildElementsByType(EximeeBpmsExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
+    EximeeBpmsExecutionListener executionListener = executionListeners.iterator().next();
     assertThat(executionListener.getCamundaClass()).isEqualTo(this.getClass().getName());
     assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByExpression() {
+  public void testEximeeBpmsExecutionListenerByExpression() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2240,16 +2240,16 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<EximeeBpmsExecutionListener> executionListeners = extensionElements.getChildElementsByType(EximeeBpmsExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
-    assertThat(executionListener.getCamundaExpression()).isEqualTo("anExpression");
+    EximeeBpmsExecutionListener executionListener = executionListeners.iterator().next();
+    assertThat(executionListener.getEximeeBpmsExpression()).isEqualTo("anExpression");
     assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByDelegateExpression() {
+  public void testEximeeBpmsExecutionListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2259,10 +2259,10 @@ public class ProcessBuilderTest {
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<EximeeBpmsExecutionListener> executionListeners = extensionElements.getChildElementsByType(EximeeBpmsExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
+    EximeeBpmsExecutionListener executionListener = executionListeners.iterator().next();
     assertThat(executionListener.getCamundaDelegateExpression()).isEqualTo("aDelegateExpression");
     assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
   }
@@ -2319,7 +2319,7 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testTaskWithCamundaInputOutput() {
+  public void testTaskWithEximeeBpmsInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2331,7 +2331,7 @@ public class ProcessBuilderTest {
       .done();
 
     UserTask task = modelInstance.getModelElementById("task");
-    assertCamundaInputOutputParameter(task);
+    assertEximeeBpmsInputOutputParameter(task);
   }
 
   @Test
@@ -2383,7 +2383,7 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testTaskWithCamundaInputOutputWithExistingExtensionElements() {
+  public void testTaskWithEximeeBpmsInputOutputWithExistingExtensionElements() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2396,11 +2396,11 @@ public class ProcessBuilderTest {
       .done();
 
     UserTask task = modelInstance.getModelElementById("task");
-    assertCamundaInputOutputParameter(task);
+    assertEximeeBpmsInputOutputParameter(task);
   }
 
   @Test
-  public void testTaskWithCamundaInputOutputWithExistingCamundaInputOutput() {
+  public void testTaskWithEximeeBpmsInputOutputWithExistingEximeeBpmsInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
@@ -2415,11 +2415,11 @@ public class ProcessBuilderTest {
       .camundaInputParameter("yoo", "hoo")
       .camundaOutputParameter("three", "four");
 
-    assertCamundaInputOutputParameter(task);
+    assertEximeeBpmsInputOutputParameter(task);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutput() {
+  public void testSubProcessWithEximeeBpmsInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
@@ -2435,11 +2435,11 @@ public class ProcessBuilderTest {
       .done();
 
     SubProcess subProcess = modelInstance.getModelElementById("subProcess");
-    assertCamundaInputOutputParameter(subProcess);
+    assertEximeeBpmsInputOutputParameter(subProcess);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutputWithExistingExtensionElements() {
+  public void testSubProcessWithEximeeBpmsInputOutputWithExistingExtensionElements() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
@@ -2456,11 +2456,11 @@ public class ProcessBuilderTest {
       .done();
 
     SubProcess subProcess = modelInstance.getModelElementById("subProcess");
-    assertCamundaInputOutputParameter(subProcess);
+    assertEximeeBpmsInputOutputParameter(subProcess);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutputWithExistingCamundaInputOutput() {
+  public void testSubProcessWithEximeeBpmsInputOutputWithExistingEximeeBpmsInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
@@ -2479,7 +2479,7 @@ public class ProcessBuilderTest {
       .camundaInputParameter("yoo", "hoo")
       .camundaOutputParameter("three", "four");
 
-    assertCamundaInputOutputParameter(subProcess);
+    assertEximeeBpmsInputOutputParameter(subProcess);
   }
 
   @Test
@@ -3029,7 +3029,7 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testUserTaskCamundaFormField() {
+  public void testUserTaskEximeeBpmsFormField() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
@@ -3049,11 +3049,11 @@ public class ProcessBuilderTest {
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
-    assertCamundaFormField(userTask);
+    assertEximeeBpmsFormField(userTask);
   }
 
   @Test
-  public void testUserTaskCamundaFormFieldWithExistingCamundaFormData() {
+  public void testUserTaskEximeeBpmsFormFieldWithExistingEximeeBpmsFormData() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
@@ -3076,11 +3076,11 @@ public class ProcessBuilderTest {
         .camundaDefaultValue("myDefaultVal_2")
        .camundaFormFieldDone();
 
-    assertCamundaFormField(userTask);
+    assertEximeeBpmsFormField(userTask);
   }
 
   @Test
-  public void testStartEventCamundaFormField() {
+  public void testStartEventEximeeBpmsFormField() {
     modelInstance = Bpmn.createProcess()
       .startEvent(START_EVENT_ID)
         .camundaFormField()
@@ -3099,11 +3099,11 @@ public class ProcessBuilderTest {
       .done();
 
     StartEvent startEvent = modelInstance.getModelElementById(START_EVENT_ID);
-    assertCamundaFormField(startEvent);
+    assertEximeeBpmsFormField(startEvent);
   }
 
   @Test
-  public void testUserTaskCamundaFormRef() {
+  public void testUserTaskEximeeBpmsFormRef() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
@@ -3114,13 +3114,13 @@ public class ProcessBuilderTest {
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(userTask.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(userTask.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(userTask.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(userTask.getEximeeBpmsFormRef()).isEqualTo(FORM_ID);
+    assertThat(userTask.getEximeeBpmsFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(userTask.getEximeeBpmsFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
   }
 
   @Test
-  public void testStartEventCamundaFormRef() {
+  public void testStartEventEximeeBpmsFormRef() {
     modelInstance = Bpmn.createProcess()
         .startEvent(START_EVENT_ID)
           .camundaFormRef(FORM_ID)
@@ -3131,9 +3131,9 @@ public class ProcessBuilderTest {
         .done();
 
     StartEvent startEvent = modelInstance.getModelElementById(START_EVENT_ID);
-    assertThat(startEvent.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(startEvent.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(startEvent.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(startEvent.getEximeeBpmsFormRef()).isEqualTo(FORM_ID);
+    assertThat(startEvent.getEximeeBpmsFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(startEvent.getEximeeBpmsFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
   }
 
   @Test
@@ -3459,14 +3459,14 @@ public class ProcessBuilderTest {
     assertAndGetSingleEventDefinition(elementId, CompensateEventDefinition.class);
   }
 
-  protected void assertCamundaInputOutputParameter(BaseElement element) {
-    CamundaInputOutput camundaInputOutput = element.getExtensionElements().getElementsQuery().filterByType(CamundaInputOutput.class).singleResult();
+  protected void assertEximeeBpmsInputOutputParameter(BaseElement element) {
+    EximeeBpmsInputOutput camundaInputOutput = element.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsInputOutput.class).singleResult();
     assertThat(camundaInputOutput).isNotNull();
 
-    List<CamundaInputParameter> camundaInputParameters = new ArrayList<>(camundaInputOutput.getCamundaInputParameters());
+    List<EximeeBpmsInputParameter> camundaInputParameters = new ArrayList<>(camundaInputOutput.getEximeeBpmsInputParameters());
     assertThat(camundaInputParameters).hasSize(2);
 
-    CamundaInputParameter camundaInputParameter = camundaInputParameters.get(0);
+    EximeeBpmsInputParameter camundaInputParameter = camundaInputParameters.get(0);
     assertThat(camundaInputParameter.getCamundaName()).isEqualTo("foo");
     assertThat(camundaInputParameter.getTextContent()).isEqualTo("bar");
 
@@ -3474,10 +3474,10 @@ public class ProcessBuilderTest {
     assertThat(camundaInputParameter.getCamundaName()).isEqualTo("yoo");
     assertThat(camundaInputParameter.getTextContent()).isEqualTo("hoo");
 
-    List<CamundaOutputParameter> camundaOutputParameters = new ArrayList<>(camundaInputOutput.getCamundaOutputParameters());
+    List<EximeeBpmsOutputParameter> camundaOutputParameters = new ArrayList<>(camundaInputOutput.getEximeeBpmsOutputParameters());
     assertThat(camundaOutputParameters).hasSize(2);
 
-    CamundaOutputParameter camundaOutputParameter = camundaOutputParameters.get(0);
+    EximeeBpmsOutputParameter camundaOutputParameter = camundaOutputParameters.get(0);
     assertThat(camundaOutputParameter.getCamundaName()).isEqualTo("one");
     assertThat(camundaOutputParameter.getTextContent()).isEqualTo("two");
 
@@ -3521,16 +3521,16 @@ public class ProcessBuilderTest {
     return (T) eventDefinition;
   }
 
-  protected void assertCamundaFormField(BaseElement element) {
+  protected void assertEximeeBpmsFormField(BaseElement element) {
     assertThat(element.getExtensionElements()).isNotNull();
 
-    CamundaFormData camundaFormData = element.getExtensionElements().getElementsQuery().filterByType(CamundaFormData.class).singleResult();
+    EximeeBpmsFormData camundaFormData = element.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsFormData.class).singleResult();
     assertThat(camundaFormData).isNotNull();
 
-    List<CamundaFormField> camundaFormFields = new ArrayList<>(camundaFormData.getCamundaFormFields());
+    List<EximeeBpmsFormField> camundaFormFields = new ArrayList<>(camundaFormData.getEximeeBpmsFormFields());
     assertThat(camundaFormFields).hasSize(2);
 
-    CamundaFormField camundaFormField = camundaFormFields.get(0);
+    EximeeBpmsFormField camundaFormField = camundaFormFields.get(0);
     assertThat(camundaFormField.getCamundaId()).isEqualTo("myFormField_1");
     assertThat(camundaFormField.getCamundaLabel()).isEqualTo("Form Field One");
     assertThat(camundaFormField.getCamundaType()).isEqualTo("string");
@@ -3544,10 +3544,10 @@ public class ProcessBuilderTest {
 
   }
 
-  protected void assertCamundaFailedJobRetryTimeCycle(BaseElement element) {
+  protected void assertEximeeBpmsFailedJobRetryTimeCycle(BaseElement element) {
     assertThat(element.getExtensionElements()).isNotNull();
 
-    CamundaFailedJobRetryTimeCycle camundaFailedJobRetryTimeCycle = element.getExtensionElements().getElementsQuery().filterByType(CamundaFailedJobRetryTimeCycle.class).singleResult();
+    EximeeBpmsFailedJobRetryTimeCycle camundaFailedJobRetryTimeCycle = element.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsFailedJobRetryTimeCycle.class).singleResult();
     assertThat(camundaFailedJobRetryTimeCycle).isNotNull();
     assertThat(camundaFailedJobRetryTimeCycle.getTextContent()).isEqualTo(FAILED_JOB_RETRY_TIME_CYCLE);
   }

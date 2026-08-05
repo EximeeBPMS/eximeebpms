@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricActivityInstanceQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -94,97 +94,97 @@ public class HistoricActivityInstanceQueryDto extends AbstractQueryDto<HistoricA
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("activityInstanceId")
+  @EximeeBpmsQueryParam("activityInstanceId")
   public void setActivityInstanceId(String activityInstanceId) {
     this.activityInstanceId = activityInstanceId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam("activityId")
+  @EximeeBpmsQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @EximeeBPMSQueryParam("activityName")
+  @EximeeBpmsQueryParam("activityName")
   public void setActivityName(String activityName) {
     this.activityName = activityName;
   }
 
-  @EximeeBPMSQueryParam("activityNameLike")
+  @EximeeBpmsQueryParam("activityNameLike")
   public void setActivityNameLike(String activityNameLike) {
     this.activityNameLike = activityNameLike;
   }
 
-  @EximeeBPMSQueryParam("activityType")
+  @EximeeBpmsQueryParam("activityType")
   public void setActivityType(String activityType) {
     this.activityType = activityType;
   }
 
-  @EximeeBPMSQueryParam("taskAssignee")
+  @EximeeBpmsQueryParam("taskAssignee")
   public void setTaskAssignee(String taskAssignee) {
     this.taskAssignee = taskAssignee;
   }
 
-  @EximeeBPMSQueryParam(value = "finished", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "finished", converter = BooleanConverter.class)
   public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  @EximeeBPMSQueryParam(value = "unfinished", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "unfinished", converter = BooleanConverter.class)
   public void setUnfinished(Boolean unfinished) {
     this.unfinished = unfinished;
   }
 
-  @EximeeBPMSQueryParam(value = "completeScope", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "completeScope", converter = BooleanConverter.class)
   public void setCompleteScope(Boolean completeScope) {
     this.completeScope = completeScope;
   }
 
-  @EximeeBPMSQueryParam(value = "canceled", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "canceled", converter = BooleanConverter.class)
   public void setCanceled(Boolean canceled) {
     this.canceled = canceled;
   }
 
-  @EximeeBPMSQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "finishedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "finishedBefore", converter = DateConverter.class)
   public void setFinishedBefore(Date finishedBefore) {
     this.finishedBefore = finishedBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "finishedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "finishedAfter", converter = DateConverter.class)
   public void setFinishedAfter(Date finishedAfter) {
     this.finishedAfter = finishedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

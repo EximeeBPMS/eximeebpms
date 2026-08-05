@@ -29,7 +29,7 @@ import lombok.Getter;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.externaltask.ExternalTaskQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.*;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
@@ -89,142 +89,142 @@ public class ExternalTaskQueryDto extends AbstractQueryDto<ExternalTaskQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("externalTaskId")
+  @EximeeBpmsQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @EximeeBPMSQueryParam(value = "externalTaskIdIn", converter = StringSetConverter.class)
+  @EximeeBpmsQueryParam(value = "externalTaskIdIn", converter = StringSetConverter.class)
   public void setExternalTaskIdIn(Set<String> externalTaskIds) {
     this.externalTaskIds = externalTaskIds;
   }
 
-  @EximeeBPMSQueryParam("activityId")
+  @EximeeBpmsQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @EximeeBPMSQueryParam(value = "activityIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "activityIdIn", converter = StringListConverter.class)
   public void setActivityIdIn(List<String> activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "lockExpirationBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "lockExpirationBefore", converter = DateConverter.class)
   public void setLockExpirationBefore(Date lockExpirationBefore) {
     this.lockExpirationBefore = lockExpirationBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "lockExpirationAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "lockExpirationAfter", converter = DateConverter.class)
   public void setLockExpirationAfter(Date lockExpirationAfter) {
     this.lockExpirationAfter = lockExpirationAfter;
   }
 
-  @EximeeBPMSQueryParam("topicName")
+  @EximeeBpmsQueryParam("topicName")
   public void setTopicName(String topicName) {
     this.topicName = topicName;
   }
 
-  @EximeeBPMSQueryParam(value = "locked", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "locked", converter = BooleanConverter.class)
   public void setLocked(Boolean locked) {
     this.locked = locked;
   }
 
-  @EximeeBPMSQueryParam(value = "notLocked", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "notLocked", converter = BooleanConverter.class)
   public void setNotLocked(Boolean notLocked) {
     this.notLocked = notLocked;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value="processInstanceIdIn", converter = StringListConverter.class)
   public void setProcessInstanceIdIn(List<String> processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionName")
+  @EximeeBpmsQueryParam("processDefinitionName")
   public void setProcessDefinitionName(String processDefinitionName) {
     this.processDefinitionName = processDefinitionName;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionNameLike")
+  @EximeeBpmsQueryParam("processDefinitionNameLike")
   public void setProcessDefinitionNameLike(String processDefinitionNameLike) {
     this.processDefinitionNameLike = processDefinitionNameLike;
   }
 
-  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @EximeeBPMSQueryParam(value = "withRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withRetriesLeft", converter = BooleanConverter.class)
   public void setWithRetriesLeft(Boolean withRetriesLeft) {
     this.withRetriesLeft = withRetriesLeft;
   }
 
-  @EximeeBPMSQueryParam(value = "noRetriesLeft", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "noRetriesLeft", converter = BooleanConverter.class)
   public void setNoRetriesLeft(Boolean noRetriesLeft) {
     this.noRetriesLeft = noRetriesLeft;
   }
 
-  @EximeeBPMSQueryParam("workerId")
+  @EximeeBpmsQueryParam("workerId")
   public void setWorkerId(String workerId) {
     this.workerId = workerId;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
+  @EximeeBpmsQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
   public void setPriorityHigherThanOrEquals(Long priorityHigherThanOrEquals) {
     this.priorityHigherThanOrEquals = priorityHigherThanOrEquals;
   }
 
-  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesCaseInsensitive) {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
   }
 
-  @EximeeBPMSQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesCaseInsensitive) {
     this.variableValuesIgnoreCase = variableValuesCaseInsensitive;
   }
 
-  @EximeeBPMSQueryParam(value = "processVariables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value = "processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @EximeeBPMSQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
+  @EximeeBpmsQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
   public void setPriorityLowerThanOrEquals(Long priorityLowerThanOrEquals) {
     this.priorityLowerThanOrEquals = priorityLowerThanOrEquals;
   }

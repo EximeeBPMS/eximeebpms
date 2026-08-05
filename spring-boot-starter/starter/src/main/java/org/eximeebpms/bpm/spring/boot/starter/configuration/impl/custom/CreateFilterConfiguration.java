@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl.custom;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.filter.Filter;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.AbstractEximeeBpmsConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.FilterProperty;
 
 import jakarta.annotation.PostConstruct;
@@ -26,13 +26,13 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CreateFilterConfiguration extends AbstractCamundaConfiguration {
+public class CreateFilterConfiguration extends AbstractEximeeBpmsConfiguration {
 
   protected String filterName;
 
   @PostConstruct
   public void init() {
-    filterName = Optional.ofNullable(camundaBpmProperties.getFilter())
+    filterName = Optional.ofNullable(eximeeBpmsBpmProperties.getFilter())
         .map(FilterProperty::getCreate)
         .orElseThrow(fail("filter.create not configured!"));
   }

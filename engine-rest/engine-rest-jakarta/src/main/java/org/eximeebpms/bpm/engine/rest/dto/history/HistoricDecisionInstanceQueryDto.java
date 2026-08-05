@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionInstanceQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -86,132 +86,132 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("decisionInstanceId")
+  @EximeeBpmsQueryParam("decisionInstanceId")
   public void setDecisionInstanceId(String decisionInstanceId) {
     this.decisionInstanceId = decisionInstanceId;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
   public void setDecisionInstanceIdIn(String[] decisionInstanceIdIn) {
     this.decisionInstanceIdIn = decisionInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam("decisionDefinitionId")
+  @EximeeBpmsQueryParam("decisionDefinitionId")
   public void setDecisionDefinitionId(String decisionDefinitionId) {
     this.decisionDefinitionId = decisionDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionIdIn(String[] decisionDefinitionIdIn) {
     this.decisionDefinitionIdIn = decisionDefinitionIdIn;
   }
 
-  @EximeeBPMSQueryParam("decisionDefinitionKey")
+  @EximeeBpmsQueryParam("decisionDefinitionKey")
   public void setDecisionDefinitionKey(String decisionDefinitionKey) {
     this.decisionDefinitionKey = decisionDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionKeyIn(String[] decisionDefinitionKeyIn) {
     this.decisionDefinitionKeyIn = decisionDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam("decisionDefinitionName")
+  @EximeeBpmsQueryParam("decisionDefinitionName")
   public void setDecisionDefinitionName(String decisionDefinitionName) {
     this.decisionDefinitionName = decisionDefinitionName;
   }
 
-  @EximeeBPMSQueryParam("decisionDefinitionNameLike")
+  @EximeeBpmsQueryParam("decisionDefinitionNameLike")
   public void setDecisionDefinitionNameLike(String decisionDefinitionNameLike) {
     this.decisionDefinitionNameLike = decisionDefinitionNameLike;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
   public void setEvaluatedBefore(Date evaluatedBefore) {
     this.evaluatedBefore = evaluatedBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
   public void setEvaluatedAfter(Date evaluatedAfter) {
     this.evaluatedAfter = evaluatedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "userId")
+  @EximeeBpmsQueryParam(value = "userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeInputs", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeInputs", converter = BooleanConverter.class)
   public void setIncludeInputs(Boolean includeInputs) {
     this.includeInputs = includeInputs;
   }
 
-  @EximeeBPMSQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
   public void setIncludeOutputs(Boolean includeOutputs) {
     this.includeOutputs = includeOutputs;
   }
 
-  @EximeeBPMSQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
   public void setDisableBinaryFetching(Boolean disableBinaryFetching) {
     this.disableBinaryFetching = disableBinaryFetching;
   }
 
-  @EximeeBPMSQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
   public void setDisableCustomObjectDeserialization(Boolean disableCustomObjectDeserialization) {
     this.disableCustomObjectDeserialization = disableCustomObjectDeserialization;
   }
 
-  @EximeeBPMSQueryParam(value = "rootDecisionInstanceId")
+  @EximeeBpmsQueryParam(value = "rootDecisionInstanceId")
   public void setRootDecisionInstanceId(String rootDecisionInstanceId) {
     this.rootDecisionInstanceId = rootDecisionInstanceId;
   }
 
-  @EximeeBPMSQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
   public void setRootDecisionInstancesOnly(Boolean rootDecisionInstancesOnly) {
     this.rootDecisionInstancesOnly = rootDecisionInstancesOnly;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionId")
+  @EximeeBpmsQueryParam(value = "decisionRequirementsDefinitionId")
   public void setDecisionRequirementsDefinitionId(String decisionRequirementsDefinitionId) {
     this.decisionRequirementsDefinitionId = decisionRequirementsDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionKey")
+  @EximeeBpmsQueryParam(value = "decisionRequirementsDefinitionKey")
   public void setDecisionRequirementsDefinitionKey(String decisionRequirementsDefinitionKey) {
     this.decisionRequirementsDefinitionKey = decisionRequirementsDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

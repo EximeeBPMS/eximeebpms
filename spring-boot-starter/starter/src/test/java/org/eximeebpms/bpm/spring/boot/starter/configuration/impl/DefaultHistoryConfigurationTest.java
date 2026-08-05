@@ -26,7 +26,7 @@ import java.util.List;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
 import org.eximeebpms.bpm.engine.impl.history.handler.HistoryEventHandler;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,15 +40,15 @@ public class DefaultHistoryConfigurationTest {
   @Mock
   private SpringProcessEngineConfiguration springProcessEngineConfiguration;
 
-  private CamundaBpmProperties camundaBpmProperties;
+  private EximeeBpmsBpmProperties eximeeBpmsBpmProperties;
 
   private DefaultHistoryConfiguration defaultHistoryConfiguration;
 
   @Before
   public void before() {
-    camundaBpmProperties = new CamundaBpmProperties();
+    eximeeBpmsBpmProperties = new EximeeBpmsBpmProperties();
     defaultHistoryConfiguration = new DefaultHistoryConfiguration();
-    defaultHistoryConfiguration.camundaBpmProperties = camundaBpmProperties;
+    defaultHistoryConfiguration.eximeeBpmsBpmProperties = eximeeBpmsBpmProperties;
   }
 
   @Test
@@ -59,7 +59,7 @@ public class DefaultHistoryConfigurationTest {
 
   @Test
   public void historyLevelTest() {
-    camundaBpmProperties.setHistoryLevel(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
+    eximeeBpmsBpmProperties.setHistoryLevel(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
     defaultHistoryConfiguration.preInit(springProcessEngineConfiguration);
     verify(springProcessEngineConfiguration).setHistory(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
   }

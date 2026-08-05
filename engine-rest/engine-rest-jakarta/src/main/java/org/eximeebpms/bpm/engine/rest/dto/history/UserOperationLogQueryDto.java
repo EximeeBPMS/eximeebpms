@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.UserOperationLogQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -144,102 +144,102 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
     }
   }
 
-  @EximeeBPMSQueryParam("deploymentId")
+  @EximeeBpmsQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam("taskId")
+  @EximeeBpmsQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @EximeeBPMSQueryParam("jobId")
+  @EximeeBpmsQueryParam("jobId")
   public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  @EximeeBPMSQueryParam("jobDefinitionId")
+  @EximeeBpmsQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("batchId")
+  @EximeeBpmsQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @EximeeBPMSQueryParam("userId")
+  @EximeeBpmsQueryParam("userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @EximeeBPMSQueryParam("operationId")
+  @EximeeBpmsQueryParam("operationId")
   public void setOperationId(String operationId) {
     this.operationId = operationId;
   }
 
-  @EximeeBPMSQueryParam("externalTaskId")
+  @EximeeBpmsQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @EximeeBPMSQueryParam("operationType")
+  @EximeeBpmsQueryParam("operationType")
   public void setOperationType(String operationType) {
     this.operationType = operationType;
   }
 
-  @EximeeBPMSQueryParam("entityType")
+  @EximeeBpmsQueryParam("entityType")
   public void setEntityType(String entityType) {
     this.entityType = entityType;
   }
 
-  @EximeeBPMSQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
   public void setEntityTypeIn(String[] entityTypes) {
     this.entityTypes = entityTypes;
   }
 
-  @EximeeBPMSQueryParam("category")
+  @EximeeBpmsQueryParam("category")
   public void setcategory(String category) {
     this.category = category;
   }
 
-  @EximeeBPMSQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
   public void setCategoryIn(String[] categories) {
     this.categories = categories;
   }
 
-  @EximeeBPMSQueryParam("property")
+  @EximeeBpmsQueryParam("property")
   public void setProperty(String property) {
     this.property = property;
   }
 
-  @EximeeBPMSQueryParam(value = "afterTimestamp", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "afterTimestamp", converter = DateConverter.class)
   public void setAfterTimestamp(Date after) {
     this.afterTimestamp = after;
   }
 
-  @EximeeBPMSQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
   public void setBeforeTimestamp(Date before) {
     this.beforeTimestamp = before;
   }

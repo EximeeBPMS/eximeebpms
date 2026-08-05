@@ -21,7 +21,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceReport;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceReportResult;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractReportDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.exception.InvalidRequestException;
 
@@ -61,17 +61,17 @@ public class HistoricTaskInstanceReportQueryDto extends AbstractReportDto<Histor
     return groupby;
   }
 
-  @EximeeBPMSQueryParam(value = "completedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "completedAfter", converter = DateConverter.class)
   public void setCompletedAfter(Date completedAfter) {
     this.completedAfter = completedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "completedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "completedBefore", converter = DateConverter.class)
   public void setCompletedBefore(Date completedBefore) {
     this.completedBefore = completedBefore;
   }
 
-  @EximeeBPMSQueryParam("groupBy")
+  @EximeeBpmsQueryParam("groupBy")
   public void setGroupBy(String groupby) {
     this.groupby = groupby;
   }

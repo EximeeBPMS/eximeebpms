@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -80,92 +80,92 @@ public class ExecutionQueryDto extends AbstractQueryDto<ExecutionQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("businessKey")
+  @EximeeBpmsQueryParam("businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("activityId")
+  @EximeeBpmsQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @EximeeBPMSQueryParam("signalEventSubscriptionName")
+  @EximeeBpmsQueryParam("signalEventSubscriptionName")
   public void setSignalEventSubscriptionName(String signalEventSubscriptionName) {
     this.signalEventSubscriptionName = signalEventSubscriptionName;
   }
 
-  @EximeeBPMSQueryParam("messageEventSubscriptionName")
+  @EximeeBpmsQueryParam("messageEventSubscriptionName")
   public void setMessageEventSubscriptionName(String messageEventSubscriptionName) {
     this.messageEventSubscriptionName = messageEventSubscriptionName;
   }
 
-  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
 
-  @EximeeBPMSQueryParam(value = "processVariables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value = "processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @EximeeBPMSQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }
   
-  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentId")
+  @EximeeBpmsQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentType")
+  @EximeeBpmsQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentMessage")
+  @EximeeBpmsQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentMessageLike")
+  @EximeeBpmsQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }

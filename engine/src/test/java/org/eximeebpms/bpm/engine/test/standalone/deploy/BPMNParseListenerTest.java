@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eximeebpms.bpm.engine.FormService;
 import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.form.TaskFormData;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
@@ -196,12 +196,12 @@ public class BPMNParseListenerTest {
         ExpressionManager expressionManager = new JuelExpressionManager();
 
         Expression formRefExpression = expressionManager.createExpression(modifiedFormRef);
-        formDefinition.setCamundaFormDefinitionKey(formRefExpression);
+        formDefinition.setEximeeBpmsFormDefinitionKey(formRefExpression);
 
-        formDefinition.setCamundaFormDefinitionBinding(modifiedFormRefBinding);
+        formDefinition.setEximeeBpmsFormDefinitionBinding(modifiedFormRefBinding);
 
         Expression formVersionExpression = expressionManager.createExpression(modifiedFormRefVersion.toString());
-        formDefinition.setCamundaFormDefinitionVersion(formVersionExpression);
+        formDefinition.setEximeeBpmsFormDefinitionVersion(formVersionExpression);
       }
     };
 
@@ -214,7 +214,7 @@ public class BPMNParseListenerTest {
 
     FormService formService = engineRule.getFormService();
     TaskFormData formData = formService.getTaskFormData(task.getId());
-    CamundaFormRef formRef = formData.getCamundaFormRef();
+    EximeeBpmsFormRef formRef = formData.getEximeeBpmsFormRef();
     assertThat(formRef.getKey()).isEqualTo(modifiedFormRef);
     assertThat(formRef.getBinding()).isEqualTo(modifiedFormRefBinding);
     assertThat(formRef.getVersion()).isEqualTo(modifiedFormRefVersion);

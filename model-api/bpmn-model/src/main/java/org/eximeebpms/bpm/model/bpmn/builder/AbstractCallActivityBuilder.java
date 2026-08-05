@@ -18,8 +18,8 @@ package org.eximeebpms.bpm.model.bpmn.builder;
 
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.CallActivity;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaIn;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaOut;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsIn;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsOut;
 
 /**
  * @author Sebastian Menski
@@ -162,7 +162,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @return the builder object
    */
   public B camundaInBusinessKey(String businessKey) {
-    CamundaIn param = modelInstance.newInstance(CamundaIn.class);
+    EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
     param.setCamundaBusinessKey(businessKey);
     addExtensionElement(param);
     return myself;
@@ -176,7 +176,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @return the builder object
    */
   public B camundaIn(String source, String target) {
-    CamundaIn param = modelInstance.newInstance(CamundaIn.class);
+    EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
     param.setCamundaSource(source);
     param.setCamundaTarget(target);
     addExtensionElement(param);
@@ -191,7 +191,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @return the builder object
    */
   public B camundaOut(String source, String target) {
-    CamundaOut param = modelInstance.newInstance(CamundaOut.class);
+    EximeeBpmsOut param = modelInstance.newInstance(EximeeBpmsOut.class);
     param.setCamundaSource(source);
     param.setCamundaTarget(target);
     addExtensionElement(param);

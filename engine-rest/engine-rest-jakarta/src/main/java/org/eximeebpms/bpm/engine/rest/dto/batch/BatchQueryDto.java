@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.batch.BatchQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
 
@@ -56,27 +56,27 @@ public class BatchQueryDto extends AbstractQueryDto<BatchQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("batchId")
+  @EximeeBpmsQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @EximeeBPMSQueryParam("type")
+  @EximeeBpmsQueryParam("type")
   public void setType(String type) {
     this.type = type;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value="suspended", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }

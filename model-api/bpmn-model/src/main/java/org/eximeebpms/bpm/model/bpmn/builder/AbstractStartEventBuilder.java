@@ -21,8 +21,8 @@ import org.eximeebpms.bpm.model.bpmn.instance.CompensateEventDefinition;
 import org.eximeebpms.bpm.model.bpmn.instance.ErrorEventDefinition;
 import org.eximeebpms.bpm.model.bpmn.instance.EscalationEventDefinition;
 import org.eximeebpms.bpm.model.bpmn.instance.StartEvent;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFormData;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaFormField;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFormData;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsFormField;
 
 /**
  * @author Sebastian Menski
@@ -91,7 +91,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @return the builder object
    */
   public B camundaFormRef(String camundaFormRef) {
-    element.setCamundaFormRef(camundaFormRef);
+    element.setEximeeBpmsFormRef(camundaFormRef);
     return myself;
   }
 
@@ -102,7 +102,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @return the builder object
    */
   public B camundaFormRefBinding(String camundaFormRefBinding) {
-    element.setCamundaFormRefBinding(camundaFormRefBinding);
+    element.setEximeeBpmsFormRefBinding(camundaFormRefBinding);
     return myself;
   }
 
@@ -113,7 +113,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @return the builder object
    */
   public B camundaFormRefVersion(String camundaFormRefVersion) {
-    element.setCamundaFormRefVersion(camundaFormRefVersion);
+    element.setEximeeBpmsFormRefVersion(camundaFormRefVersion);
     return myself;
   }
 
@@ -133,10 +133,10 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    *
    * @return the builder object
    */
-  public CamundaStartEventFormFieldBuilder camundaFormField() {
-    CamundaFormData camundaFormData = getCreateSingleExtensionElement(CamundaFormData.class);
-    CamundaFormField camundaFormField = createChild(camundaFormData, CamundaFormField.class);
-    return new CamundaStartEventFormFieldBuilder(modelInstance, element, camundaFormField);
+  public EximeeBpmsStartEventFormFieldBuilder camundaFormField() {
+    EximeeBpmsFormData camundaFormData = getCreateSingleExtensionElement(EximeeBpmsFormData.class);
+    EximeeBpmsFormField camundaFormField = createChild(camundaFormData, EximeeBpmsFormField.class);
+    return new EximeeBpmsStartEventFormFieldBuilder(modelInstance, element, camundaFormField);
   }
 
   /**

@@ -57,7 +57,7 @@ import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.builder.ProcessBuilder;
 import org.eximeebpms.bpm.model.bpmn.instance.SequenceFlow;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -728,7 +728,7 @@ public class ExecutionListenerTest {
         .endEvent()
         .done();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = model.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
     model.<SequenceFlow>getModelElementById("flow1").builder().addExtensionElement(listener);
@@ -1256,7 +1256,7 @@ public class ExecutionListenerTest {
         .userTask("afterCatch")
         .endEvent();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = model.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_START);
     listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
     model.<org.eximeebpms.bpm.model.bpmn.instance.Process>getModelElementById(PROCESS_KEY).builder().addExtensionElement(listener);
@@ -1288,7 +1288,7 @@ public class ExecutionListenerTest {
         .userTask("afterCatch")
         .endEvent();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = model.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_END);
     listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
     model.<org.eximeebpms.bpm.model.bpmn.instance.Process>getModelElementById(PROCESS_KEY).builder().addExtensionElement(listener);

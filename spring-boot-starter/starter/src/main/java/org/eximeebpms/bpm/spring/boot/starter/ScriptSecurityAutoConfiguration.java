@@ -26,7 +26,7 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPo
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.bind.Binder;
@@ -54,10 +54,10 @@ public class ScriptSecurityAutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = CamundaBpmProperties.PREFIX + ".script-security", name = "retention-days")
+  @ConditionalOnProperty(prefix = EximeeBpmsBpmProperties.PREFIX + ".script-security", name = "retention-days")
   public ScriptViolationCleanupJob scriptViolationCleanupJob(ProcessEngine processEngine, Environment environment) {
     ScriptSecurityProperty props = Binder.get(environment)
-        .bind(CamundaBpmProperties.PREFIX + ".script-security", ScriptSecurityProperty.class)
+        .bind(EximeeBpmsBpmProperties.PREFIX + ".script-security", ScriptSecurityProperty.class)
         .orElseGet(ScriptSecurityProperty::new);
     if (props.getRetentionDays() <= 0) {
       return null;
@@ -102,7 +102,7 @@ public class ScriptSecurityAutoConfiguration {
       final Map<String, String> existingProps = management.getProperties();
       if (!existingProps.containsKey(DbAwareScriptSecurityPolicy.PROP_MODE)) {
         final ScriptSecurityProperty scriptSecurity = Binder.get(environment)
-            .bind(CamundaBpmProperties.PREFIX + ".script-security", ScriptSecurityProperty.class)
+            .bind(EximeeBpmsBpmProperties.PREFIX + ".script-security", ScriptSecurityProperty.class)
             .orElseGet(ScriptSecurityProperty::new);
         management.setProperty(DbAwareScriptSecurityPolicy.PROP_MODE, scriptSecurity.getMode().name());
         management.setProperty(DbAwareScriptSecurityPolicy.PROP_ALLOWLIST,

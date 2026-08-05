@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.engine.test.api.form;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.entry;
-import static org.eximeebpms.bpm.engine.test.util.CamundaFormUtils.findAllCamundaFormDefinitionEntities;
+import static org.eximeebpms.bpm.engine.test.util.EximeeBpmsFormUtils.findAllEximeeBpmsFormDefinitionEntities;
 import static org.eximeebpms.bpm.engine.variable.Variables.booleanValue;
 import static org.eximeebpms.bpm.engine.variable.Variables.createVariables;
 import static org.eximeebpms.bpm.engine.variable.Variables.objectValue;
@@ -77,7 +77,7 @@ import org.eximeebpms.bpm.engine.task.Task;
 import org.eximeebpms.bpm.engine.test.Deployment;
 import org.eximeebpms.bpm.engine.test.RequiredHistoryLevel;
 import org.eximeebpms.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.eximeebpms.bpm.engine.test.form.deployment.FindCamundaFormDefinitionsCmd;
+import org.eximeebpms.bpm.engine.test.form.deployment.FindEximeeBpmsFormDefinitionsCmd;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineTestRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
@@ -1507,7 +1507,7 @@ public class FormServiceTest {
       "org/eximeebpms/bpm/engine/test/api/form/start.html",
       "org/eximeebpms/bpm/engine/test/api/form/task.html" })
   @Test
-  public void testGetDeployedCamundaTaskForm() {
+  public void testGetDeployedEximeeBpmsTaskForm() {
     // given
     runtimeService.startProcessInstanceByKey("FormsProcess");
     String taskId = taskService.createTaskQuery().singleResult().getId();
@@ -1618,13 +1618,13 @@ public class FormServiceTest {
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitStartFormUsingFormKeyAndCamundaFormDefinition.bpmn",
+      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitStartFormUsingFormKeyAndEximeeBpmsFormDefinition.bpmn",
       "org/eximeebpms/bpm/engine/test/api/form/start.form" })
   @Test
-  public void shouldSubmitStartFormUsingFormKeyAndCamundaFormDefinition() {
+  public void shouldSubmitStartFormUsingFormKeyAndEximeeBpmsFormDefinition() {
     // given
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-        .processDefinitionKey("CamundaStartFormProcess").singleResult();
+        .processDefinitionKey("EximeeBpmsStartFormProcess").singleResult();
 
     // when
     ProcessInstance processInstance = formService.submitStartForm(processDefinition.getId(),
@@ -1632,18 +1632,18 @@ public class FormServiceTest {
 
     // then
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(1);
-    assertThat(findAllCamundaFormDefinitionEntities(processEngineConfiguration)).hasSize(1);
+    assertThat(findAllEximeeBpmsFormDefinitionEntities(processEngineConfiguration)).hasSize(1);
     assertThat(runtimeService.createProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(0);
     assertThat(historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(1);
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitTaskFormUsingFormKeyAndCamundaFormDefinition.bpmn",
+      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitTaskFormUsingFormKeyAndEximeeBpmsFormDefinition.bpmn",
   "org/eximeebpms/bpm/engine/test/api/form/task.form" })
   @Test
-  public void shouldSubmitTaskFormUsingFormKeyAndCamundaFormDefinition() {
+  public void shouldSubmitTaskFormUsingFormKeyAndEximeeBpmsFormDefinition() {
     // given
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("CamundaTaskFormProcess");
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("EximeeBpmsTaskFormProcess");
 
     // when
     Task task = taskService.createTaskQuery().singleResult();
@@ -1651,20 +1651,20 @@ public class FormServiceTest {
 
     // then
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(1);
-    assertThat(findAllCamundaFormDefinitionEntities(processEngineConfiguration)).hasSize(1);
+    assertThat(findAllEximeeBpmsFormDefinitionEntities(processEngineConfiguration)).hasSize(1);
     assertThat(runtimeService.createProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(0);
     assertThat(historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(1);
     assertThat(taskService.createTaskQuery().list()).hasSize(0);
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitStartFormUsingFormRefAndCamundaFormDefinition.bpmn",
+      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitStartFormUsingFormRefAndEximeeBpmsFormDefinition.bpmn",
   "org/eximeebpms/bpm/engine/test/api/form/start.form" })
   @Test
-  public void shouldSubmitStartFormUsingFormRefAndCamundaFormDefinition() {
+  public void shouldSubmitStartFormUsingFormRefAndEximeeBpmsFormDefinition() {
     // given
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-        .processDefinitionKey("CamundaStartFormProcess").singleResult();
+        .processDefinitionKey("EximeeBpmsStartFormProcess").singleResult();
 
     // when
     ProcessInstance processInstance = formService.submitStartForm(processDefinition.getId(),
@@ -1673,18 +1673,18 @@ public class FormServiceTest {
     // then
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(1);
     assertThat(engineRule.getProcessEngineConfiguration().getCommandExecutorTxRequired()
-        .execute(new FindCamundaFormDefinitionsCmd())).hasSize(1);
+        .execute(new FindEximeeBpmsFormDefinitionsCmd())).hasSize(1);
     assertThat(runtimeService.createProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(0);
     assertThat(historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(1);
   }
 
   @Deployment(resources = {
-      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitTaskFormUsingFormRefAndCamundaFormDefinition.bpmn",
+      "org/eximeebpms/bpm/engine/test/api/form/FormServiceTest.shouldSubmitTaskFormUsingFormRefAndEximeeBpmsFormDefinition.bpmn",
   "org/eximeebpms/bpm/engine/test/api/form/task.form" })
   @Test
-  public void shouldSubmitTaskFormUsingFormRefAndCamundaFormDefinition() {
+  public void shouldSubmitTaskFormUsingFormRefAndEximeeBpmsFormDefinition() {
     // given
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("CamundaTaskFormProcess");
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("EximeeBpmsTaskFormProcess");
 
     // when
     Task task = taskService.createTaskQuery().singleResult();
@@ -1693,7 +1693,7 @@ public class FormServiceTest {
     // then
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(1);
     assertThat(engineRule.getProcessEngineConfiguration().getCommandExecutorTxRequired()
-        .execute(new FindCamundaFormDefinitionsCmd())).hasSize(1);
+        .execute(new FindEximeeBpmsFormDefinitionsCmd())).hasSize(1);
     assertThat(runtimeService.createProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(0);
     assertThat(historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).list()).hasSize(1);
     assertThat(taskService.createTaskQuery().list()).hasSize(0);

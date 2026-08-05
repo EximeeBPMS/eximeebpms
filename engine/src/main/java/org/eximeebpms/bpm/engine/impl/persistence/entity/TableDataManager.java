@@ -97,7 +97,7 @@ public class TableDataManager extends AbstractManager {
     persistentObjectToTableNameMap.put(MeterLogEntity.class, "ACT_RU_METER_LOG");
     persistentObjectToTableNameMap.put(TaskMeterLogEntity.class, "ACT_RU_TASK_METER_LOG");
 
-    persistentObjectToTableNameMap.put(CamundaFormDefinitionEntity.class, "ACT_RE_CAMFORMDEF");
+    persistentObjectToTableNameMap.put(EximeeBpmsFormDefinitionEntity.class, "ACT_RE_CAMFORMDEF");
     // repository
     persistentObjectToTableNameMap.put(DeploymentEntity.class, "ACT_RE_DEPLOYMENT");
     persistentObjectToTableNameMap.put(ProcessDefinitionEntity.class, "ACT_RE_PROCDEF");

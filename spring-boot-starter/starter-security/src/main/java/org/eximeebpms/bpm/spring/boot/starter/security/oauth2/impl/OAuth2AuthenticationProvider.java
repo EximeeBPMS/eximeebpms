@@ -44,13 +44,13 @@ public class OAuth2AuthenticationProvider extends ContainerBasedAuthenticationPr
       return AuthenticationResult.unsuccessful();
     }
     var oauth2 = (OAuth2AuthenticationToken) authentication;
-    String camundaUserId = oauth2.getName();
-    if (camundaUserId == null || camundaUserId.isEmpty()) {
+    String eximeeBpmsUserId = oauth2.getName();
+    if (eximeeBpmsUserId == null || eximeeBpmsUserId.isEmpty()) {
       logger.debug("UserId is empty");
       return AuthenticationResult.unsuccessful();
     }
 
-    logger.debug("Authenticated user '{}'", camundaUserId);
-    return AuthenticationResult.successful(camundaUserId);
+    logger.debug("Authenticated user '{}'", eximeeBpmsUserId);
+    return AuthenticationResult.successful(eximeeBpmsUserId);
   }
 }

@@ -22,9 +22,9 @@ import org.eximeebpms.bpm.engine.rest.security.auth.ProcessEngineAuthenticationF
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunAuthenticationProperties;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunCorsProperty;
 import org.eximeebpms.bpm.run.property.EximeeBpmsBpmRunProperties;
-import org.eximeebpms.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
-import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBPMSJerseyResourceConfig;
+import org.eximeebpms.bpm.spring.boot.starter.EximeeBpmsBpmAutoConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBpmsBpmRestInitializer;
+import org.eximeebpms.bpm.spring.boot.starter.rest.EximeeBpmsJerseyResourceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -39,8 +39,8 @@ import java.util.Collections;
 
 @EnableConfigurationProperties(EximeeBpmsBpmRunProperties.class)
 @Configuration
-@AutoConfigureAfter({ CamundaBpmAutoConfiguration.class })
-@ConditionalOnClass(CamundaBpmRestInitializer.class)
+@AutoConfigureAfter({ EximeeBpmsBpmAutoConfiguration.class })
+@ConditionalOnClass(EximeeBpmsBpmRestInitializer.class)
 public class EximeeBpmsBpmRunRestConfiguration {
 
   @Autowired
@@ -110,10 +110,10 @@ public class EximeeBpmsBpmRunRestConfiguration {
   }
 
   @Bean
-  public EximeeBPMSJerseyResourceConfig camundaRunJerseyResourceConfig() {
-    EximeeBPMSJerseyResourceConfig eximeeBPMSJerseyResourceConfig = new EximeeBPMSJerseyResourceConfig();
-    eximeeBPMSJerseyResourceConfig.setProperties(Collections.singletonMap("jersey.config.server.wadl.disableWadl", eximeeBpmsBpmRunProperties.getRest().isDisableWadl()));
-    return eximeeBPMSJerseyResourceConfig;
+  public EximeeBpmsJerseyResourceConfig eximeeBpmsRunJerseyResourceConfig() {
+    EximeeBpmsJerseyResourceConfig eximeeBpmsJerseyResourceConfig = new EximeeBpmsJerseyResourceConfig();
+    eximeeBpmsJerseyResourceConfig.setProperties(Collections.singletonMap("jersey.config.server.wadl.disableWadl", eximeeBpmsBpmRunProperties.getRest().isDisableWadl()));
+    return eximeeBpmsJerseyResourceConfig;
   }
 
 }

@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.Response.Status;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -75,77 +75,77 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("variableName")
+  @EximeeBpmsQueryParam("variableName")
   public void setVariableName(String variableName) {
     this.variableName = variableName;
   }
 
-  @EximeeBPMSQueryParam("variableNameLike")
+  @EximeeBpmsQueryParam("variableNameLike")
   public void setVariableNameLike(String variableNameLike) {
     this.variableNameLike = variableNameLike;
   }
 
-  @EximeeBPMSQueryParam("variableValue")
+  @EximeeBpmsQueryParam("variableValue")
   public void setVariableValue(Object variableValue) {
     this.variableValue = variableValue;
   }
 
-  @EximeeBPMSQueryParam(value="variableTypeIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="variableTypeIn", converter = StringArrayConverter.class)
   public void setVariableTypeIn(String[] variableTypeIn) {
     this.variableTypeIn = variableTypeIn;
   }
 
-  @EximeeBPMSQueryParam(value="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value="variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
   public void setExecutionIdIn(String[] executionIdIn) {
     this.executionIdIn = executionIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="taskIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="taskIdIn", converter = StringArrayConverter.class)
   public void setTaskIdIn(String[] taskIdIn) {
     this.taskIdIn = taskIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
@@ -154,12 +154,12 @@ public class HistoricVariableInstanceQueryDto extends AbstractQueryDto<HistoricV
     return includeDeleted;
   }
 
-  @EximeeBPMSQueryParam(value = "includeDeleted", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeDeleted", converter = BooleanConverter.class)
   public void setIncludeDeleted(boolean includeDeleted) {
     this.includeDeleted = includeDeleted;
   }
 
-  @EximeeBPMSQueryParam(value = "variableNameIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "variableNameIn", converter = StringArrayConverter.class)
   public void setVariableNameIn(String[] variableNameIn) {
     this.variableNameIn = variableNameIn;
   }

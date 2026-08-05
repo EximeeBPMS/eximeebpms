@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.model.bpmn.builder;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.ErrorEventDefinition;
 import org.eximeebpms.bpm.model.bpmn.instance.ServiceTask;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaErrorEventDefinition;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsErrorEventDefinition;
 
 /**
  * @author Sebastian Menski
@@ -83,7 +83,7 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @return the builder object
    */
   public B camundaExpression(String camundaExpression) {
-    element.setCamundaExpression(camundaExpression);
+    element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
 
@@ -153,9 +153,9 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    *
    * @return the error event definition builder object
    */
-  public CamundaErrorEventDefinitionBuilder camundaErrorEventDefinition() {
-    ErrorEventDefinition camundaErrorEventDefinition = createInstance(CamundaErrorEventDefinition.class);
+  public EximeeBpmsErrorEventDefinitionBuilder camundaErrorEventDefinition() {
+    ErrorEventDefinition camundaErrorEventDefinition = createInstance(EximeeBpmsErrorEventDefinition.class);
     addExtensionElement(camundaErrorEventDefinition);
-    return new CamundaErrorEventDefinitionBuilder(modelInstance, camundaErrorEventDefinition);
+    return new EximeeBpmsErrorEventDefinitionBuilder(modelInstance, camundaErrorEventDefinition);
   }
 }

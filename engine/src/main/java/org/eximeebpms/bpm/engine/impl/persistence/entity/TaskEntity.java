@@ -41,7 +41,7 @@ import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.delegate.TaskListener;
 import org.eximeebpms.bpm.engine.exception.NotFoundException;
 import org.eximeebpms.bpm.engine.exception.NullValueException;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.history.UserOperationLogEntry;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
@@ -64,7 +64,7 @@ import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.eximeebpms.bpm.engine.impl.db.HasDbReferences;
 import org.eximeebpms.bpm.engine.impl.db.HasDbRevision;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContextListener;
@@ -154,7 +154,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected String eventName;
   protected boolean isFormKeyInitialized = false;
   protected String formKey;
-  protected CamundaFormRef camundaFormRef;
+  protected EximeeBpmsFormRef camundaFormRef;
   protected boolean attachmentExists;
   protected boolean commentExists;
 
@@ -1296,13 +1296,13 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
           this.formKey = (String) formKey.getValue(this);
         } else {
           // initialize form reference
-          Expression formRef = taskDefinition.getCamundaFormDefinitionKey();
-          String formRefBinding = taskDefinition.getCamundaFormDefinitionBinding();
-          Expression formRefVersion = taskDefinition.getCamundaFormDefinitionVersion();
+          Expression formRef = taskDefinition.getEximeeBpmsFormDefinitionKey();
+          String formRefBinding = taskDefinition.getEximeeBpmsFormDefinitionBinding();
+          Expression formRefVersion = taskDefinition.getEximeeBpmsFormDefinitionVersion();
           if (formRef != null && formRefBinding != null) {
             String formRefValue = (String) formRef.getValue(this);
             if (formRefValue != null) {
-              CamundaFormRefImpl camFormRef = new CamundaFormRefImpl(formRefValue, formRefBinding);
+              EximeeBpmsFormRefImpl camFormRef = new EximeeBpmsFormRefImpl(formRefValue, formRefBinding);
               if (formRefBinding.equals(FORM_REF_BINDING_VERSION) && formRefVersion != null) {
                 String formRefVersionValue = (String) formRefVersion.getValue(this);
                 camFormRef.setVersion(Integer.parseInt(formRefVersionValue));
@@ -1328,7 +1328,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   @Override
-  public CamundaFormRef getCamundaFormRef() {
+  public EximeeBpmsFormRef getEximeeBpmsFormRef() {
     if(!isFormKeyInitialized) {
       throw LOG.uninitializedFormKeyException();
     }

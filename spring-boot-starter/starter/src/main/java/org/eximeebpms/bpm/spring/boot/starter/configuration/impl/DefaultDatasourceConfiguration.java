@@ -19,18 +19,23 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 import javax.sql.DataSource;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDatasourceConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsDatasourceConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.DatabaseProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
 
-public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration implements CamundaDatasourceConfiguration {
+public class DefaultDatasourceConfiguration extends AbstractEximeeBpmsConfiguration implements EximeeBpmsDatasourceConfiguration {
 
   @Autowired
   protected PlatformTransactionManager transactionManager;
 
+  @Autowired(required = false)
+  @Qualifier("eximeeBpmsBpmTransactionManager")
+  protected PlatformTransactionManager eximeeBpmsTransactionManager;
+
+  @Deprecated
   @Autowired(required = false)
   @Qualifier("camundaBpmTransactionManager")
   protected PlatformTransactionManager camundaTransactionManager;
@@ -39,23 +44,30 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
   protected DataSource dataSource;
 
   @Autowired(required = false)
+  @Qualifier("eximeeBpmsBpmDataSource")
+  protected DataSource eximeeBpmsDataSource;
+
+  @Deprecated
+  @Autowired(required = false)
   @Qualifier("camundaBpmDataSource")
   protected DataSource camundaDataSource;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    final DatabaseProperty database = camundaBpmProperties.getDatabase();
+    final DatabaseProperty database = eximeeBpmsBpmProperties.getDatabase();
 
-    if (camundaTransactionManager == null) {
+    PlatformTransactionManager resolvedTm = eximeeBpmsTransactionManager != null ? eximeeBpmsTransactionManager : camundaTransactionManager;
+    if (resolvedTm == null) {
       configuration.setTransactionManager(transactionManager);
     } else {
-      configuration.setTransactionManager(camundaTransactionManager);
+      configuration.setTransactionManager(resolvedTm);
     }
 
-    if (camundaDataSource == null) {
+    DataSource resolvedDs = eximeeBpmsDataSource != null ? eximeeBpmsDataSource : camundaDataSource;
+    if (resolvedDs == null) {
       configuration.setDataSource(dataSource);
     } else {
-      configuration.setDataSource(camundaDataSource);
+      configuration.setDataSource(resolvedDs);
     }
 
     configuration.setDatabaseType(database.getType());
@@ -80,12 +92,12 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
     this.transactionManager = transactionManager;
   }
 
-  public PlatformTransactionManager getCamundaTransactionManager() {
-    return camundaTransactionManager;
+  public PlatformTransactionManager getEximeeBpmsTransactionManager() {
+    return eximeeBpmsTransactionManager;
   }
 
-  public void setCamundaTransactionManager(PlatformTransactionManager camundaTransactionManager) {
-    this.camundaTransactionManager = camundaTransactionManager;
+  public void setEximeeBpmsTransactionManager(PlatformTransactionManager eximeeBpmsTransactionManager) {
+    this.eximeeBpmsTransactionManager = eximeeBpmsTransactionManager;
   }
 
   public DataSource getDataSource() {
@@ -96,12 +108,12 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
     this.dataSource = dataSource;
   }
 
-  public DataSource getCamundaDataSource() {
-    return camundaDataSource;
+  public DataSource getEximeeBpmsDataSource() {
+    return eximeeBpmsDataSource;
   }
 
-  public void setCamundaDataSource(DataSource camundaDataSource) {
-    this.camundaDataSource = camundaDataSource;
+  public void setEximeeBpmsDataSource(DataSource eximeeBpmsDataSource) {
+    this.eximeeBpmsDataSource = eximeeBpmsDataSource;
   }
 
 }

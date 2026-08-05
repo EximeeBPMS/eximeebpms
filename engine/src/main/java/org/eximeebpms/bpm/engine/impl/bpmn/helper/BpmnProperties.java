@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
-import org.eximeebpms.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import org.eximeebpms.bpm.engine.impl.bpmn.parser.EximeeBpmsErrorEventDefinition;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
 import org.eximeebpms.bpm.engine.impl.core.model.Properties;
@@ -78,5 +78,5 @@ public class BpmnProperties {
 
   public static final PropertyKey<Map<String, String>> EXTENSION_PROPERTIES = new PropertyKey<>("extensionProperties");
 
-  public static final PropertyListKey<CamundaErrorEventDefinition> CAMUNDA_ERROR_EVENT_DEFINITION = new PropertyListKey<>("camundaErrorEventDefinition");
+  public static final PropertyListKey<EximeeBpmsErrorEventDefinition> CAMUNDA_ERROR_EVENT_DEFINITION = new PropertyListKey<>("camundaErrorEventDefinition");
 }

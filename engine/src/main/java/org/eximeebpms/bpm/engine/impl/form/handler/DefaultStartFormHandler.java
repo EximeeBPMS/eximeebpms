@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.impl.form.handler;
 
 import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.form.StartFormData;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.form.FormDefinition;
 import org.eximeebpms.bpm.engine.impl.form.StartFormDataImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
@@ -36,18 +36,18 @@ public class DefaultStartFormHandler extends DefaultFormHandler implements Start
 
     FormDefinition startFormDefinition = processDefinition.getStartFormDefinition();
     Expression formKey = startFormDefinition.getFormKey();
-    Expression camundaFormDefinitionKey = startFormDefinition.getCamundaFormDefinitionKey();
-    String camundaFormDefinitionBinding = startFormDefinition.getCamundaFormDefinitionBinding();
-    Expression camundaFormDefinitionVersion = startFormDefinition.getCamundaFormDefinitionVersion();
+    Expression camundaFormDefinitionKey = startFormDefinition.getEximeeBpmsFormDefinitionKey();
+    String camundaFormDefinitionBinding = startFormDefinition.getEximeeBpmsFormDefinitionBinding();
+    Expression camundaFormDefinitionVersion = startFormDefinition.getEximeeBpmsFormDefinitionVersion();
 
     if (formKey != null) {
       startFormData.setFormKey(formKey.getExpressionText());
     } else if (camundaFormDefinitionKey != null && camundaFormDefinitionBinding != null) {
-      CamundaFormRefImpl ref = new CamundaFormRefImpl(camundaFormDefinitionKey.getExpressionText(), camundaFormDefinitionBinding);
+      EximeeBpmsFormRefImpl ref = new EximeeBpmsFormRefImpl(camundaFormDefinitionKey.getExpressionText(), camundaFormDefinitionBinding);
       if (camundaFormDefinitionBinding.equals(FORM_REF_BINDING_VERSION) && camundaFormDefinitionVersion != null) {
         ref.setVersion(Integer.parseInt(camundaFormDefinitionVersion.getExpressionText()));
       }
-      startFormData.setCamundaFormRef(ref);
+      startFormData.setEximeeBpmsFormRef(ref);
     }
 
     startFormData.setDeploymentId(deploymentId);

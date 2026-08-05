@@ -30,7 +30,7 @@ import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricTaskInstanceQuery;
 import org.eximeebpms.bpm.engine.impl.HistoricTaskInstanceQueryImpl;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
@@ -157,277 +157,277 @@ public class HistoricTaskInstanceQueryDto extends AbstractQueryDto<HistoricTaskI
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("orQueries")
+  @EximeeBpmsQueryParam("orQueries")
   public void setOrQueries(List<HistoricTaskInstanceQueryDto> orQueries) {
     this.orQueries = orQueries;
   }
 
-  @EximeeBPMSQueryParam("taskId")
+  @EximeeBpmsQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @EximeeBPMSQueryParam("taskParentTaskId")
+  @EximeeBpmsQueryParam("taskParentTaskId")
   public void setTaskParentTaskId(String taskParentTaskId) {
     this.taskParentTaskId = taskParentTaskId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("rootProcessInstanceId")
+  @EximeeBpmsQueryParam("rootProcessInstanceId")
   public void setRootProcessInstanceId(String rootProcessInstanceId) {
     this.rootProcessInstanceId = rootProcessInstanceId;
   }
 
-  @EximeeBPMSQueryParam("processInstanceBusinessKey")
+  @EximeeBpmsQueryParam("processInstanceBusinessKey")
   public void setProcessInstanceBusinessKey(String businessKey) {
     this.processInstanceBusinessKey = businessKey;
   }
 
-  @EximeeBPMSQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
   public void setProcessInstanceBusinessKeyIn(String[] processInstanceBusinessKeyIn) {
     this.processInstanceBusinessKeyIn = processInstanceBusinessKeyIn;
   }
 
-  @EximeeBPMSQueryParam("processInstanceBusinessKeyLike")
+  @EximeeBpmsQueryParam("processInstanceBusinessKeyLike")
   public void setProcessInstanceBusinessKeyLike(String businessKeyLike) {
     this.processInstanceBusinessKeyLike = businessKeyLike;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter=StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityInstanceIdIn", converter=StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionName")
+  @EximeeBpmsQueryParam("processDefinitionName")
   public void setProcessDefinitionName(String processDefinitionName) {
     this.processDefinitionName = processDefinitionName;
   }
 
-  @EximeeBPMSQueryParam("taskName")
+  @EximeeBpmsQueryParam("taskName")
   public void setTaskName(String taskName) {
     this.taskName = taskName;
   }
 
-  @EximeeBPMSQueryParam("taskNameLike")
+  @EximeeBpmsQueryParam("taskNameLike")
   public void setTaskNameLike(String taskNameLike) {
     this.taskNameLike = taskNameLike;
   }
 
-  @EximeeBPMSQueryParam("taskDescription")
+  @EximeeBpmsQueryParam("taskDescription")
   public void setTaskDescription(String taskDescription) {
     this.taskDescription = taskDescription;
   }
 
-  @EximeeBPMSQueryParam("taskDescriptionLike")
+  @EximeeBpmsQueryParam("taskDescriptionLike")
   public void setTaskDescriptionLike(String taskDescriptionLike) {
     this.taskDescriptionLike = taskDescriptionLike;
   }
 
-  @EximeeBPMSQueryParam("taskDefinitionKey")
+  @EximeeBpmsQueryParam("taskDefinitionKey")
   public void setTaskDefinitionKey(String taskDefinitionKey) {
     this.taskDefinitionKey = taskDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value="taskDefinitionKeyIn", converter=StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="taskDefinitionKeyIn", converter=StringArrayConverter.class)
   public void setTaskDefinitionKeyIn(String[] taskDefinitionKeyIn) {
     this.taskDefinitionKeyIn = taskDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam("taskDeleteReason")
+  @EximeeBpmsQueryParam("taskDeleteReason")
   public void setTaskDeleteReason(String taskDeleteReason) {
     this.taskDeleteReason = taskDeleteReason;
   }
 
-  @EximeeBPMSQueryParam("taskDeleteReasonLike")
+  @EximeeBpmsQueryParam("taskDeleteReasonLike")
   public void setTaskDeleteReasonLike(String taskDeleteReasonLike) {
     this.taskDeleteReasonLike = taskDeleteReasonLike;
   }
 
-  @EximeeBPMSQueryParam(value="assigned", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="assigned", converter=BooleanConverter.class)
   public void setAssigned(Boolean assigned) {
     this.assigned = assigned;
   }
 
-  @EximeeBPMSQueryParam(value="unassigned", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="unassigned", converter=BooleanConverter.class)
   public void setUnassigned(Boolean unassigned) {
     this.unassigned = unassigned;
   }
 
-  @EximeeBPMSQueryParam("taskAssignee")
+  @EximeeBpmsQueryParam("taskAssignee")
   public void setTaskAssignee(String taskAssignee) {
     this.taskAssignee = taskAssignee;
   }
 
-  @EximeeBPMSQueryParam("taskAssigneeLike")
+  @EximeeBpmsQueryParam("taskAssigneeLike")
   public void setTaskAssigneeLike(String taskAssigneeLike) {
     this.taskAssigneeLike = taskAssigneeLike;
   }
 
-  @EximeeBPMSQueryParam("taskOwner")
+  @EximeeBpmsQueryParam("taskOwner")
   public void setTaskOwner(String taskOwner) {
     this.taskOwner = taskOwner;
   }
 
-  @EximeeBPMSQueryParam("taskOwnerLike")
+  @EximeeBpmsQueryParam("taskOwnerLike")
   public void setTaskOwnerLike(String taskOwnerLike) {
     this.taskOwnerLike = taskOwnerLike;
   }
 
-  @EximeeBPMSQueryParam(value="taskPriority", converter=IntegerConverter.class)
+  @EximeeBpmsQueryParam(value="taskPriority", converter=IntegerConverter.class)
   public void setTaskPriority(Integer taskPriority) {
     this.taskPriority = taskPriority;
   }
 
-  @EximeeBPMSQueryParam(value="finished", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="finished", converter=BooleanConverter.class)
   public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  @EximeeBPMSQueryParam(value="unfinished", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="unfinished", converter=BooleanConverter.class)
   public void setUnfinished(Boolean unfinished) {
     this.unfinished = unfinished;
   }
 
-  @EximeeBPMSQueryParam(value="processFinished", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="processFinished", converter=BooleanConverter.class)
   public void setProcessFinished(Boolean processFinished) {
     this.processFinished = processFinished;
   }
 
-  @EximeeBPMSQueryParam(value="processUnfinished", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="processUnfinished", converter=BooleanConverter.class)
   public void setProcessUnfinished(Boolean processUnfinished) {
     this.processUnfinished = processUnfinished;
   }
 
-  @EximeeBPMSQueryParam(value="taskDueDate", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskDueDate", converter=DateConverter.class)
   public void setTaskDueDate(Date taskDueDate) {
     this.taskDueDate = taskDueDate;
   }
 
-  @EximeeBPMSQueryParam(value="taskDueDateBefore", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskDueDateBefore", converter=DateConverter.class)
   public void setTaskDueDateBefore(Date taskDueDateBefore) {
     this.taskDueDateBefore = taskDueDateBefore;
   }
 
-  @EximeeBPMSQueryParam(value="taskDueDateAfter", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskDueDateAfter", converter=DateConverter.class)
   public void setTaskDueDateAfter(Date taskDueDateAfter) {
     this.taskDueDateAfter = taskDueDateAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTaskDueDate", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTaskDueDate", converter = BooleanConverter.class)
   public void setWithoutTaskDueDate(Boolean withoutTaskDueDate) {
     this.withoutTaskDueDate = withoutTaskDueDate;
   }
 
-  @EximeeBPMSQueryParam(value="taskFollowUpDate", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskFollowUpDate", converter=DateConverter.class)
   public void setTaskFollowUpDate(Date taskFollowUpDate) {
     this.taskFollowUpDate = taskFollowUpDate;
   }
 
-  @EximeeBPMSQueryParam(value="taskFollowUpDateBefore", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskFollowUpDateBefore", converter=DateConverter.class)
   public void setTaskFollowUpDateBefore(Date taskFollowUpDateBefore) {
     this.taskFollowUpDateBefore = taskFollowUpDateBefore;
   }
 
-  @EximeeBPMSQueryParam(value="taskFollowUpDateAfter", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="taskFollowUpDateAfter", converter=DateConverter.class)
   public void setTaskFollowUpDateAfter(Date taskFollowUpDateAfter) {
     this.taskFollowUpDateAfter = taskFollowUpDateAfter;
   }
 
-  @EximeeBPMSQueryParam(value="taskVariables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value="taskVariables", converter = VariableListConverter.class)
   public void setTaskVariables(List<VariableQueryParameterDto> taskVariables) {
     this.taskVariables = taskVariables;
   }
 
-  @EximeeBPMSQueryParam(value="processVariables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value="processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @EximeeBPMSQueryParam(value="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value="variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam("taskInvolvedUser")
+  @EximeeBpmsQueryParam("taskInvolvedUser")
   public void setTaskInvolvedUser(String taskInvolvedUser) {
     this.taskInvolvedUser = taskInvolvedUser;
   }
 
-  @EximeeBPMSQueryParam("taskInvolvedGroup")
+  @EximeeBpmsQueryParam("taskInvolvedGroup")
   public void setTaskInvolvedGroup(String taskInvolvedGroup) {
     this.taskInvolvedGroup = taskInvolvedGroup;
   }
 
-  @EximeeBPMSQueryParam("taskHadCandidateUser")
+  @EximeeBpmsQueryParam("taskHadCandidateUser")
   public void setTaskHadCandidateUser(String taskHadCandidateUser) {
     this.taskHadCandidateUser = taskHadCandidateUser;
   }
 
-  @EximeeBPMSQueryParam("taskHadCandidateGroup")
+  @EximeeBpmsQueryParam("taskHadCandidateGroup")
   public void setTaskHadCandidateGroup(String taskHadCandidateGroup) {
     this.taskHadCandidateGroup = taskHadCandidateGroup;
   }
 
-  @EximeeBPMSQueryParam(value="withCandidateGroups", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="withCandidateGroups", converter=BooleanConverter.class)
   public void setWithCandidateGroups(Boolean withCandidateGroups) {
     this.withCandidateGroups = withCandidateGroups;
   }
 
-  @EximeeBPMSQueryParam(value="withoutCandidateGroups", converter=BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="withoutCandidateGroups", converter=BooleanConverter.class)
   public void setWithoutCandidateGroups(Boolean withoutCandidateGroups) {
     this.withoutCandidateGroups = withoutCandidateGroups;
   }
 
-  @EximeeBPMSQueryParam(value="startedBefore", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="startedBefore", converter=DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @EximeeBPMSQueryParam(value="startedAfter", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="startedAfter", converter=DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @EximeeBPMSQueryParam(value="finishedBefore", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="finishedBefore", converter=DateConverter.class)
   public void setFinishedBefore(Date finishedBefore) {
     this.finishedBefore = finishedBefore;
   }
 
-  @EximeeBPMSQueryParam(value="finishedAfter", converter=DateConverter.class)
+  @EximeeBpmsQueryParam(value="finishedAfter", converter=DateConverter.class)
   public void setFinishedAfter(Date finishedAfter) {
     this.finishedAfter = finishedAfter;
   }

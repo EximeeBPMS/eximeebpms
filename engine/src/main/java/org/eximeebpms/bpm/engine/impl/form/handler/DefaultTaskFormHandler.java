@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.engine.impl.form.handler;
 
 import org.eximeebpms.bpm.engine.delegate.Expression;
 import org.eximeebpms.bpm.engine.form.TaskFormData;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.form.FormDefinition;
 import org.eximeebpms.bpm.engine.impl.form.TaskFormDataImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
@@ -37,9 +37,9 @@ public class DefaultTaskFormHandler extends DefaultFormHandler implements TaskFo
 
     FormDefinition formDefinition = taskDefinition.getFormDefinition();
     Expression formKey = formDefinition.getFormKey();
-    Expression camundaFormDefinitionKey = formDefinition.getCamundaFormDefinitionKey();
-    String camundaFormDefinitionBinding = formDefinition.getCamundaFormDefinitionBinding();
-    Expression camundaFormDefinitionVersion = formDefinition.getCamundaFormDefinitionVersion();
+    Expression camundaFormDefinitionKey = formDefinition.getEximeeBpmsFormDefinitionKey();
+    String camundaFormDefinitionBinding = formDefinition.getEximeeBpmsFormDefinitionBinding();
+    Expression camundaFormDefinitionVersion = formDefinition.getEximeeBpmsFormDefinitionVersion();
 
     if (formKey != null) {
       Object formValue = formKey.getValue(task);
@@ -49,14 +49,14 @@ public class DefaultTaskFormHandler extends DefaultFormHandler implements TaskFo
     } else if (camundaFormDefinitionKey != null && camundaFormDefinitionBinding != null) {
       Object formRefKeyValue = camundaFormDefinitionKey.getValue(task);
       if(formRefKeyValue != null) {
-        CamundaFormRefImpl ref = new CamundaFormRefImpl(formRefKeyValue.toString(), camundaFormDefinitionBinding);
+        EximeeBpmsFormRefImpl ref = new EximeeBpmsFormRefImpl(formRefKeyValue.toString(), camundaFormDefinitionBinding);
         if(camundaFormDefinitionBinding.equals(FORM_REF_BINDING_VERSION) && camundaFormDefinitionVersion != null) {
           Object formRefVersionValue = camundaFormDefinitionVersion.getValue(task);
           if(formRefVersionValue != null) {
             ref.setVersion(Integer.parseInt((String)formRefVersionValue));
           }
         }
-        taskFormData.setCamundaFormRef(ref);
+        taskFormData.setEximeeBpmsFormRef(ref);
       }
     }
 

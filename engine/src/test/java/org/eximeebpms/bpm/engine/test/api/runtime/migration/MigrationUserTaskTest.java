@@ -47,7 +47,7 @@ import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.UserTask;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaTaskListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsTaskListener;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -937,7 +937,7 @@ public class MigrationUserTaskTest {
   }
 
   protected static void addTaskListener(BpmnModelInstance targetModel, String activityId, String event, String className) {
-    CamundaTaskListener taskListener = targetModel.newInstance(CamundaTaskListener.class);
+    EximeeBpmsTaskListener taskListener = targetModel.newInstance(EximeeBpmsTaskListener.class);
     taskListener.setCamundaClass(className);
     taskListener.setCamundaEvent(event);
 

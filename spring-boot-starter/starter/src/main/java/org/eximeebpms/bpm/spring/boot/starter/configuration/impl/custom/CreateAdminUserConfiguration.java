@@ -25,7 +25,7 @@ import org.eximeebpms.bpm.engine.authorization.Resources;
 import org.eximeebpms.bpm.engine.identity.Group;
 import org.eximeebpms.bpm.engine.identity.User;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.AbstractEximeeBpmsConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.AdminUserProperty;
 import org.springframework.beans.BeanUtils;
 
@@ -39,13 +39,13 @@ import static org.eximeebpms.bpm.engine.authorization.Authorization.AUTH_TYPE_GR
 import static org.eximeebpms.bpm.engine.authorization.Groups.CAMUNDA_ADMIN;
 import static org.eximeebpms.bpm.engine.authorization.Permissions.ALL;
 
-public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
+public class CreateAdminUserConfiguration extends AbstractEximeeBpmsConfiguration {
 
   private User adminUser;
 
   @PostConstruct
   void init() {
-    adminUser = Optional.ofNullable(camundaBpmProperties.getAdminUser())
+    adminUser = Optional.ofNullable(eximeeBpmsBpmProperties.getAdminUser())
       .map(AdminUserProperty::init)
       .orElseThrow(fail("adminUser not configured!"));
   }
@@ -65,10 +65,10 @@ public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
 
     // create group
     if (identityService.createGroupQuery().groupId(CAMUNDA_ADMIN).count() == 0) {
-      Group camundaAdminGroup = identityService.newGroup(CAMUNDA_ADMIN);
-      camundaAdminGroup.setName("camunda BPM Administrators");
-      camundaAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
-      identityService.saveGroup(camundaAdminGroup);
+      Group eximeeBpmsAdminGroup = identityService.newGroup(CAMUNDA_ADMIN);
+      eximeeBpmsAdminGroup.setName("camunda BPM Administrators");
+      eximeeBpmsAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(eximeeBpmsAdminGroup);
     }
 
     // create ADMIN authorizations on all built-in resources

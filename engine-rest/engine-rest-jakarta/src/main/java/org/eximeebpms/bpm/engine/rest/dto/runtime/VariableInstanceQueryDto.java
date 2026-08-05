@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -74,62 +74,62 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("variableName")
+  @EximeeBpmsQueryParam("variableName")
   public void setVariableName(String variableName) {
     this.variableName = variableName;
   }
 
-  @EximeeBPMSQueryParam("variableNameLike")
+  @EximeeBpmsQueryParam("variableNameLike")
   public void setVariableNameLike(String variableNameLike) {
     this.variableNameLike = variableNameLike;
   }
 
-  @EximeeBPMSQueryParam(value = "variableValues", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value = "variableValues", converter = VariableListConverter.class)
   public void setVariableValues(List<VariableQueryParameterDto> variableValues) {
     this.variableValues = variableValues;
   }
 
-  @EximeeBPMSQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesIgnoreCase) {
     this.variableNamesIgnoreCase = variableNamesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesIgnoreCase) {
     this.variableValuesIgnoreCase = variableValuesIgnoreCase;
   }
 
-  @EximeeBPMSQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="executionIdIn", converter = StringArrayConverter.class)
   public void setExecutionIdIn(String[] executionIdIn) {
     this.executionIdIn = executionIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="taskIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="taskIdIn", converter = StringArrayConverter.class)
   public void setTaskIdIn(String[] taskIdIn) {
     this.taskIdIn = taskIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="batchIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="batchIdIn", converter = StringArrayConverter.class)
   public void setBatchIdIn(String[] batchIdIn) {
     this.batchIdIn = batchIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="variableScopeIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="variableScopeIdIn", converter = StringArrayConverter.class)
   public void setVariableScopeIdIn(String[] variableScopeIdIn) {
     this.variableScopeIdIn = variableScopeIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }

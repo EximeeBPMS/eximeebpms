@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
@@ -103,63 +103,63 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
   public void setProcessDefinitionIdIn(List<String> processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @EximeeBPMSQueryParam("category")
+  @EximeeBpmsQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @EximeeBPMSQueryParam("categoryLike")
+  @EximeeBpmsQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @EximeeBPMSQueryParam("deploymentId")
+  @EximeeBpmsQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @EximeeBPMSQueryParam(value = "deployedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "deployedAfter", converter = DateConverter.class)
   public void setDeployedAfter(Date deployedAfter) {
     this.deployedAfter = deployedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "deployedAt", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "deployedAt", converter = DateConverter.class)
   public void setDeployedAt(Date deployedAt) {
     this.deployedAt = deployedAt;
   }
 
-  @EximeeBPMSQueryParam("key")
+  @EximeeBpmsQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
 
-  @EximeeBPMSQueryParam(value = "keysIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "keysIn", converter = StringListConverter.class)
   public void setKeysIn(List<String> keys) {
     this.keys = keys;
   }
 
-  @EximeeBPMSQueryParam("keyLike")
+  @EximeeBpmsQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
@@ -168,12 +168,12 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setVersion(Integer)}
    */
   @Deprecated
-  @EximeeBPMSQueryParam(value = "ver", converter = IntegerConverter.class)
+  @EximeeBpmsQueryParam(value = "ver", converter = IntegerConverter.class)
   public void setVer(Integer ver) {
     setVersion(ver);
   }
 
-  @EximeeBPMSQueryParam(value = "version", converter = IntegerConverter.class)
+  @EximeeBpmsQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
@@ -182,102 +182,102 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setLatestVersion(Boolean)}
    */
   @Deprecated
-  @EximeeBPMSQueryParam(value = "latest", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "latest", converter = BooleanConverter.class)
   public void setLatest(Boolean latest) {
     setLatestVersion(latest);
   }
 
-  @EximeeBPMSQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @EximeeBPMSQueryParam("resourceName")
+  @EximeeBpmsQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @EximeeBPMSQueryParam("resourceNameLike")
+  @EximeeBpmsQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @EximeeBPMSQueryParam("startableBy")
+  @EximeeBpmsQueryParam("startableBy")
   public void setStartableBy(String startableBy) {
     this.startableBy = startableBy;
   }
 
-  @EximeeBPMSQueryParam(value = "active", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @EximeeBPMSQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentId")
+  @EximeeBpmsQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentType")
+  @EximeeBpmsQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentMessage")
+  @EximeeBpmsQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @EximeeBPMSQueryParam(value = "incidentMessageLike")
+  @EximeeBpmsQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeProcessDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "versionTag")
+  @EximeeBpmsQueryParam(value = "versionTag")
   public void setVersionTag(String versionTag) {
     this.versionTag = versionTag;
   }
 
-  @EximeeBPMSQueryParam(value = "versionTagLike")
+  @EximeeBpmsQueryParam(value = "versionTagLike")
   public void setVersionTagLike(String versionTagLike) {
     this.versionTagLike = versionTagLike;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
   public void setWithoutVersionTag(Boolean withoutVersionTag) {
     this.withoutVersionTag = withoutVersionTag;
   }
 
-  @EximeeBPMSQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
   public void setStartableInTasklist(Boolean startableInTasklist) {
     this.startableInTasklist = startableInTasklist;
   }
 
-  @EximeeBPMSQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
   public void setNotStartableInTasklist(Boolean notStartableInTasklist) {
     this.notStartableInTasklist = notStartableInTasklist;
   }
 
-  @EximeeBPMSQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
   public void setStartablePermissionCheck(Boolean startablePermissionCheck) {
     this.startablePermissionCheck = startablePermissionCheck;
   }

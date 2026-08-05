@@ -21,7 +21,7 @@ import java.util.Set;
 
 import jakarta.ws.rs.core.Application;
 
-import org.eximeebpms.bpm.engine.rest.impl.CamundaRestResources;
+import org.eximeebpms.bpm.engine.rest.impl.EximeeBpmsRestResources;
 import org.eximeebpms.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
 
 /**
@@ -39,7 +39,7 @@ public class EngineRestApplication extends Application {
     classes.add(NamedProcessEngineRestServiceImpl.class);
 
     // mandatory
-    classes.addAll(CamundaRestResources.getConfigurationClasses());
+    classes.addAll(EximeeBpmsRestResources.getConfigurationClasses());
 
     return classes;
   }

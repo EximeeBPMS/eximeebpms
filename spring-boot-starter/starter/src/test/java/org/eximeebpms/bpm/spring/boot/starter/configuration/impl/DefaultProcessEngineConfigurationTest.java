@@ -25,7 +25,7 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPo
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,11 +35,11 @@ public class DefaultProcessEngineConfigurationTest {
 
   private final DefaultProcessEngineConfiguration instance = new DefaultProcessEngineConfiguration();
   private final SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
-  private final CamundaBpmProperties properties = new CamundaBpmProperties();
+  private final EximeeBpmsBpmProperties properties = new EximeeBpmsBpmProperties();
 
   @Before
   public void setUp() throws Exception {
-    ReflectionTestUtils.setField(instance, "camundaBpmProperties", properties);
+    ReflectionTestUtils.setField(instance, "eximeeBpmsBpmProperties", properties);
     initIdGenerator(null);
   }
 

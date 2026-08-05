@@ -202,16 +202,16 @@ public class TaskDefinition {
     this.formDefinition.setFormKey(formKey);
   }
 
-  public Expression getCamundaFormDefinitionKey() {
-    return formDefinition.getCamundaFormDefinitionKey();
+  public Expression getEximeeBpmsFormDefinitionKey() {
+    return formDefinition.getEximeeBpmsFormDefinitionKey();
   }
 
-  public String getCamundaFormDefinitionBinding() {
-    return formDefinition.getCamundaFormDefinitionBinding();
+  public String getEximeeBpmsFormDefinitionBinding() {
+    return formDefinition.getEximeeBpmsFormDefinitionBinding();
   }
 
-  public Expression getCamundaFormDefinitionVersion() {
-    return formDefinition.getCamundaFormDefinitionVersion();
+  public Expression getEximeeBpmsFormDefinitionVersion() {
+    return formDefinition.getEximeeBpmsFormDefinitionVersion();
   }
 
   // helper methods ///////////////////////////////////////////////////////////

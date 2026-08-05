@@ -42,7 +42,7 @@ import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.db.sql.DbSqlSession;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
-import org.eximeebpms.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import org.eximeebpms.bpm.engine.impl.form.entity.EximeeBpmsFormDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricDecisionInstanceManager;
 import org.eximeebpms.bpm.engine.impl.identity.Authentication;
 import org.eximeebpms.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
@@ -425,8 +425,8 @@ public class CommandContext {
     return getSession(SchemaLogManager.class);
   }
 
-  public CamundaFormDefinitionManager getCamundaFormDefinitionManager() {
-    return getSession(CamundaFormDefinitionManager.class);
+  public EximeeBpmsFormDefinitionManager getEximeeBpmsFormDefinitionManager() {
+    return getSession(EximeeBpmsFormDefinitionManager.class);
   }
 
   // DMN //////////////////////////////////////////////////////////////////////

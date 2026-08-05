@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricIdentityLinkLogQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringListConverter;
@@ -98,62 +98,62 @@ public class HistoricIdentityLinkLogQueryDto extends AbstractQueryDto<HistoricId
     return engine.getHistoryService().createHistoricIdentityLinkLogQuery();
   }
 
-  @EximeeBPMSQueryParam("type")
+  @EximeeBpmsQueryParam("type")
   public void setType(String type) {
     this.type = type;
   }
 
-  @EximeeBPMSQueryParam("userId")
+  @EximeeBpmsQueryParam("userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @EximeeBPMSQueryParam("groupId")
+  @EximeeBpmsQueryParam("groupId")
   public void setGroupId(String groupId) {
     this.groupId = groupId;
   }
 
-  @EximeeBPMSQueryParam(value = "dateBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "dateBefore", converter = DateConverter.class)
   public void setDateBefore(Date dateBefore) {
     this.dateBefore = dateBefore;
   }
 
-  @EximeeBPMSQueryParam(value = "dateAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "dateAfter", converter = DateConverter.class)
   public void setDateAfter(Date dateAfter) {
     this.dateAfter = dateAfter;
   }
 
-  @EximeeBPMSQueryParam("taskId")
+  @EximeeBpmsQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
   
-  @EximeeBPMSQueryParam("operationType")
+  @EximeeBpmsQueryParam("operationType")
   public void setOperationType(String operationType) {
     this.operationType = operationType;
   }
 
-  @EximeeBPMSQueryParam("assignerId")
+  @EximeeBpmsQueryParam("assignerId")
   public void setAssignerId(String assignerId) {
     this.assignerId = assignerId;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

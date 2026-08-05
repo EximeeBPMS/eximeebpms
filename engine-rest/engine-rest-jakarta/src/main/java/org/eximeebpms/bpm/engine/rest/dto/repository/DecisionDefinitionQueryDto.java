@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinitionQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.IntegerConverter;
@@ -96,117 +96,117 @@ public class DecisionDefinitionQueryDto extends AbstractQueryDto<DecisionDefinit
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("decisionDefinitionId")
+  @EximeeBpmsQueryParam("decisionDefinitionId")
   public void setDecisionDefinitionId(String decisionDefinitionId) {
     this.decisionDefinitionId = decisionDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "decisionDefinitionIdIn", converter = StringListConverter.class)
   public void setDecisionDefinitionIdIn(List<String> decisionDefinitionIdIn) {
     this.decisionDefinitionIdIn = decisionDefinitionIdIn;
   }
 
-  @EximeeBPMSQueryParam("category")
+  @EximeeBpmsQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @EximeeBPMSQueryParam("categoryLike")
+  @EximeeBpmsQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @EximeeBPMSQueryParam("deploymentId")
+  @EximeeBpmsQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @EximeeBPMSQueryParam(value = "deployedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "deployedAfter", converter = DateConverter.class)
   public void setDeployedAfter(Date deployedAfter) {
     this.deployedAfter = deployedAfter;
   }
 
-  @EximeeBPMSQueryParam(value = "deployedAt", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value = "deployedAt", converter = DateConverter.class)
   public void setDeployedAt(Date deployedAt) {
     this.deployedAt = deployedAt;
   }
 
-  @EximeeBPMSQueryParam("key")
+  @EximeeBpmsQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
-  @EximeeBPMSQueryParam("keyLike")
+  @EximeeBpmsQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
 
-  @EximeeBPMSQueryParam("resourceName")
+  @EximeeBpmsQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @EximeeBPMSQueryParam("resourceNameLike")
+  @EximeeBpmsQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @EximeeBPMSQueryParam(value = "version", converter = IntegerConverter.class)
+  @EximeeBpmsQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
 
-  @EximeeBPMSQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionId")
+  @EximeeBpmsQueryParam(value = "decisionRequirementsDefinitionId")
   public void setDecisionRequirementsDefinitionId(String decisionRequirementsDefinitionId) {
     this.decisionRequirementsDefinitionId = decisionRequirementsDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "decisionRequirementsDefinitionKey")
+  @EximeeBpmsQueryParam(value = "decisionRequirementsDefinitionKey")
   public void setDecisionRequirementsDefinitionKey(String decisionRequirementsDefinitionKey) {
     this.decisionRequirementsDefinitionKey = decisionRequirementsDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutDecisionRequirementsDefinition", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutDecisionRequirementsDefinition", converter = BooleanConverter.class)
   public void setWithoutDecisionRequirementsDefinition(Boolean withoutDecisionRequirementsDefinition) {
     this.withoutDecisionRequirementsDefinition = withoutDecisionRequirementsDefinition;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "includeDecisionDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "includeDecisionDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeDecisionDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "versionTag")
+  @EximeeBpmsQueryParam(value = "versionTag")
   public void setVersionTag(String versionTag) {
     this.versionTag = versionTag;
   }
 
-  @EximeeBPMSQueryParam(value = "versionTagLike")
+  @EximeeBpmsQueryParam(value = "versionTagLike")
   public void setVersionTagLike(String versionTagLike) {
     this.versionTagLike = versionTagLike;
   }

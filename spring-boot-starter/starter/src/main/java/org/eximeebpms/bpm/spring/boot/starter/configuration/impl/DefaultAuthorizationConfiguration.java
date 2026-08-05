@@ -18,13 +18,13 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.AuthorizationProperty;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaAuthorizationConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsAuthorizationConfiguration;
 
-public class DefaultAuthorizationConfiguration extends AbstractCamundaConfiguration implements CamundaAuthorizationConfiguration {
+public class DefaultAuthorizationConfiguration extends AbstractEximeeBpmsConfiguration implements EximeeBpmsAuthorizationConfiguration {
 
   @Override
   public void preInit(final SpringProcessEngineConfiguration configuration) {
-    final AuthorizationProperty authorization = camundaBpmProperties.getAuthorization();
+    final AuthorizationProperty authorization = eximeeBpmsBpmProperties.getAuthorization();
     configuration.setAuthorizationEnabled(authorization.isEnabled());
     configuration.setAuthorizationEnabledForCustomCode(authorization.isEnabledForCustomCode());
     configuration.setAuthorizationCheckRevokes(authorization.getAuthorizationCheckRevokes());

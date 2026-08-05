@@ -168,11 +168,11 @@ import org.eximeebpms.bpm.engine.impl.event.EventHandlerImpl;
 import org.eximeebpms.bpm.engine.impl.event.EventType;
 import org.eximeebpms.bpm.engine.impl.event.SignalEventHandler;
 import org.eximeebpms.bpm.engine.impl.externaltask.DefaultExternalTaskPriorityProvider;
-import org.eximeebpms.bpm.engine.impl.form.deployer.CamundaFormDefinitionDeployer;
+import org.eximeebpms.bpm.engine.impl.form.deployer.EximeeBpmsFormDefinitionDeployer;
 import org.eximeebpms.bpm.engine.impl.form.engine.FormEngine;
 import org.eximeebpms.bpm.engine.impl.form.engine.HtmlFormEngine;
 import org.eximeebpms.bpm.engine.impl.form.engine.JuelFormEngine;
-import org.eximeebpms.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import org.eximeebpms.bpm.engine.impl.form.entity.EximeeBpmsFormDefinitionManager;
 import org.eximeebpms.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.eximeebpms.bpm.engine.impl.form.type.BooleanFormType;
 import org.eximeebpms.bpm.engine.impl.form.type.DateFormType;
@@ -333,7 +333,7 @@ import org.eximeebpms.bpm.engine.impl.runtime.DefaultCorrelationHandler;
 import org.eximeebpms.bpm.engine.impl.runtime.DefaultDeserializationTypeValidator;
 import org.eximeebpms.bpm.engine.impl.scripting.ScriptFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.BeansResolverFactory;
-import org.eximeebpms.bpm.engine.impl.scripting.engine.CamundaScriptEngineManager;
+import org.eximeebpms.bpm.engine.impl.scripting.engine.EximeeBpmsScriptEngineManager;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ResolverFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
@@ -2004,7 +2004,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       addSessionFactory(new GenericManagerFactory(DecisionRequirementsDefinitionManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricDecisionInstanceManager.class));
 
-      addSessionFactory(new GenericManagerFactory(CamundaFormDefinitionManager.class));
+      addSessionFactory(new GenericManagerFactory(EximeeBpmsFormDefinitionManager.class));
 
       addSessionFactory(new GenericManagerFactory(OptimizeManager.class));
 
@@ -2232,8 +2232,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return defaultListeners;
   }
 
-  protected CamundaFormDefinitionDeployer getCamundaFormDeployer() {
-    CamundaFormDefinitionDeployer deployer = new CamundaFormDefinitionDeployer();
+  protected EximeeBpmsFormDefinitionDeployer getCamundaFormDeployer() {
+    EximeeBpmsFormDefinitionDeployer deployer = new EximeeBpmsFormDefinitionDeployer();
     deployer.setIdGenerator(idGenerator);
     return deployer;
   }
@@ -2612,7 +2612,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       resolverFactories.add(new BeansResolverFactory());
     }
     if (scriptEngineResolver == null) {
-      scriptEngineResolver = new DefaultScriptEngineResolver(new CamundaScriptEngineManager());
+      scriptEngineResolver = new DefaultScriptEngineResolver(new EximeeBpmsScriptEngineManager());
     }
     if (scriptingEngines == null) {
       scriptingEngines = new ScriptingEngines(new ScriptBindingsFactory(resolverFactories), scriptEngineResolver);
@@ -2920,9 +2920,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     InternalsImpl internals = new InternalsImpl(database, diagnosticsRegistry.getApplicationServer(), diagnosticsRegistry.getLicenseKey(), jdk);
     internals.setDataCollectionStartDate(ClockUtil.getCurrentTime());
 
-    String camundaIntegration = diagnosticsRegistry.getCamundaIntegration();
+    String camundaIntegration = diagnosticsRegistry.getEximeeBpmsIntegration();
     if (camundaIntegration != null && !camundaIntegration.isEmpty()) {
-      internals.getCamundaIntegration().add(camundaIntegration);
+      internals.getEximeeBpmsIntegration().add(camundaIntegration);
     }
 
     ProcessEngineDetails engineInfo = ParseUtil

@@ -28,8 +28,8 @@ import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.builder.CallActivityBuilder;
 import org.eximeebpms.bpm.model.bpmn.instance.CallActivity;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaIn;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaOut;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsIn;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsOut;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -72,13 +72,13 @@ public class MultiInstanceVariablesTest {
   }
 
   protected void addAllOut(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
-    CamundaOut camundaOut = modelInstance.newInstance(CamundaOut.class);
+    EximeeBpmsOut camundaOut = modelInstance.newInstance(EximeeBpmsOut.class);
     camundaOut.setCamundaVariables(ALL);
     callActivityBuilder.addExtensionElement(camundaOut);
   }
 
   protected void addAllIn(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
-    CamundaIn camundaIn = modelInstance.newInstance(CamundaIn.class);
+    EximeeBpmsIn camundaIn = modelInstance.newInstance(EximeeBpmsIn.class);
     camundaIn.setCamundaVariables(ALL);
     callActivityBuilder.addExtensionElement(camundaIn);
   }

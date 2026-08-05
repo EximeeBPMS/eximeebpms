@@ -23,7 +23,7 @@ import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEn
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl;
 import org.eximeebpms.bpm.engine.impl.persistence.deploy.Deployer;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.EximeeBpmsFormDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
@@ -44,7 +44,7 @@ public class DeploymentCache {
   protected ProcessDefinitionCache processDefinitionEntityCache;
   protected DecisionDefinitionCache decisionDefinitionCache;
   protected DecisionRequirementsDefinitionCache decisionRequirementsDefinitionCache;
-  protected CamundaFormDefinitionCache camundaFormDefinitionCache;
+  protected EximeeBpmsFormDefinitionCache camundaFormDefinitionCache;
 
 
   protected BpmnModelInstanceCache bpmnModelInstanceCache;
@@ -55,7 +55,7 @@ public class DeploymentCache {
     processDefinitionEntityCache = new ProcessDefinitionCache(factory, cacheCapacity, cacheDeployer);
     decisionDefinitionCache = new DecisionDefinitionCache(factory, cacheCapacity, cacheDeployer);
     decisionRequirementsDefinitionCache = new DecisionRequirementsDefinitionCache(factory, cacheCapacity, cacheDeployer);
-    camundaFormDefinitionCache = new CamundaFormDefinitionCache(factory, cacheCapacity, cacheDeployer);
+    camundaFormDefinitionCache = new EximeeBpmsFormDefinitionCache(factory, cacheCapacity, cacheDeployer);
 
     bpmnModelInstanceCache = new BpmnModelInstanceCache(factory, cacheCapacity, processDefinitionEntityCache);
     dmnModelInstanceCache = new DmnModelInstanceCache(factory, cacheCapacity, decisionDefinitionCache);
@@ -131,15 +131,15 @@ public class DeploymentCache {
 
   // CAMUNDA FORM DEFINITION ////////////////////////////////////////////////////////////////////////
 
-  public void addCamundaFormDefinition(CamundaFormDefinitionEntity camundaFormDefinition) {
+  public void addEximeeBpmsFormDefinition(EximeeBpmsFormDefinitionEntity camundaFormDefinition) {
     camundaFormDefinitionCache.addDefinition(camundaFormDefinition);
   }
 
-  public void removeCamundaFormDefinition(String camundaFormDefinitionId) {
+  public void removeEximeeBpmsFormDefinition(String camundaFormDefinitionId) {
     camundaFormDefinitionCache.removeDefinitionFromCache(camundaFormDefinitionId);
   }
 
-  public void discardCamundaFormDefinitionCache() {
+  public void discardEximeeBpmsFormDefinitionCache() {
     camundaFormDefinitionCache.clear();
   }
 

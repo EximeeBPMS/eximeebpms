@@ -165,13 +165,13 @@ public class LdapTestEnvironment {
     service.getChangeLog().setEnabled(false);
     service.setDenormalizeOpAttrsEnabled(true);
 
-    Partition camundaPartition = addPartition("eximeebpms", BASE_DN, service.getDnFactory());
-    addIndex(camundaPartition, "objectClass", "ou", "uid");
+    Partition eximeeBpmsPartition = addPartition("eximeebpms", BASE_DN, service.getDnFactory());
+    addIndex(eximeeBpmsPartition, "objectClass", "ou", "uid");
 
     service.startup();
 
     // Create the root entry
-    if (!service.getAdminSession().exists(camundaPartition.getSuffixDn())) {
+    if (!service.getAdminSession().exists(eximeeBpmsPartition.getSuffixDn())) {
       Dn dn = new Dn(BASE_DN);
       Entry entry = service.newEntry(dn);
       entry.add("objectClass", "top", "domain", "extensibleObject");

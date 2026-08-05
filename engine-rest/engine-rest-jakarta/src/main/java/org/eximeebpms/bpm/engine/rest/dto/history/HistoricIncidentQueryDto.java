@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.history.HistoricIncidentQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.DateConverter;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -113,127 +113,127 @@ public class HistoricIncidentQueryDto extends AbstractQueryDto<HistoricIncidentQ
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("incidentId")
+  @EximeeBpmsQueryParam("incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @EximeeBPMSQueryParam("incidentType")
+  @EximeeBpmsQueryParam("incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @EximeeBPMSQueryParam("incidentMessage")
+  @EximeeBpmsQueryParam("incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @EximeeBPMSQueryParam("incidentMessageLike")
+  @EximeeBpmsQueryParam("incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionId")
+  @EximeeBpmsQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam("processDefinitionKey")
+  @EximeeBpmsQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @EximeeBPMSQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @EximeeBPMSQueryParam("processInstanceId")
+  @EximeeBpmsQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @EximeeBPMSQueryParam("executionId")
+  @EximeeBpmsQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @EximeeBPMSQueryParam(value="createTimeBefore", converter= DateConverter.class)
+  @EximeeBpmsQueryParam(value="createTimeBefore", converter= DateConverter.class)
   public void setCreateTimeBefore(Date createTimeBefore) {
     this.createTimeBefore = createTimeBefore;
   }
 
-  @EximeeBPMSQueryParam(value="createTimeAfter", converter= DateConverter.class)
+  @EximeeBpmsQueryParam(value="createTimeAfter", converter= DateConverter.class)
   public void setCreateTimeAfter(Date createTimeAfter) {
     this.createTimeAfter = createTimeAfter;
   }
 
-  @EximeeBPMSQueryParam(value="endTimeBefore", converter= DateConverter.class)
+  @EximeeBpmsQueryParam(value="endTimeBefore", converter= DateConverter.class)
   public void setEndTimeBefore(Date endTimeBefore) {
     this.endTimeBefore = endTimeBefore;
   }
 
-  @EximeeBPMSQueryParam(value="endTimeAfter", converter= DateConverter.class)
+  @EximeeBpmsQueryParam(value="endTimeAfter", converter= DateConverter.class)
   public void setEndTimeAfter(Date endTimeAfter) {
     this.endTimeAfter = endTimeAfter;
   }
 
-  @EximeeBPMSQueryParam("activityId")
+  @EximeeBpmsQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @EximeeBPMSQueryParam("failedActivityId")
+  @EximeeBpmsQueryParam("failedActivityId")
   public void setFailedActivityId(String activityId) {
     this.failedActivityId = activityId;
   }
 
-  @EximeeBPMSQueryParam("causeIncidentId")
+  @EximeeBpmsQueryParam("causeIncidentId")
   public void setCauseIncidentId(String causeIncidentId) {
     this.causeIncidentId = causeIncidentId;
   }
 
-  @EximeeBPMSQueryParam("rootCauseIncidentId")
+  @EximeeBpmsQueryParam("rootCauseIncidentId")
   public void setRootCauseIncidentId(String rootCauseIncidentId) {
     this.rootCauseIncidentId = rootCauseIncidentId;
   }
 
-  @EximeeBPMSQueryParam("configuration")
+  @EximeeBpmsQueryParam("configuration")
   public void setConfiguration(String configuration) {
     this.configuration = configuration;
   }
 
-  @EximeeBPMSQueryParam("historyConfiguration")
+  @EximeeBpmsQueryParam("historyConfiguration")
   public void setHistoryConfiguration(String historyConfiguration) {
     this.historyConfiguration = historyConfiguration;
   }
 
-  @EximeeBPMSQueryParam(value = "open", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "open", converter = BooleanConverter.class)
   public void setOpen(Boolean open) {
     this.open = open;
   }
 
-  @EximeeBPMSQueryParam(value = "resolved", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "resolved", converter = BooleanConverter.class)
   public void setResolved(Boolean resolved) {
     this.resolved = resolved;
   }
 
-  @EximeeBPMSQueryParam(value = "deleted", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "deleted", converter = BooleanConverter.class)
   public void setDeleted(Boolean deleted) {
     this.deleted = deleted;
   }
 
-  @EximeeBPMSQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @EximeeBPMSQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @EximeeBPMSQueryParam(value = "jobDefinitionIdIn", converter = StringListConverter.class)
+  @EximeeBpmsQueryParam(value = "jobDefinitionIdIn", converter = StringListConverter.class)
   public void setJobDefinitionIdIn(List<String> jobDefinitionIds) {
     this.jobDefinitionIds = jobDefinitionIds;
   }

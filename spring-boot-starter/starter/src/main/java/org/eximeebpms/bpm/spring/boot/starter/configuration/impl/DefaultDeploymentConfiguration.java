@@ -17,7 +17,7 @@
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsDeploymentConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_SET;
 
-public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
+public class DefaultDeploymentConfiguration extends AbstractEximeeBpmsConfiguration implements EximeeBpmsDeploymentConfiguration {
   private final Logger logger = LoggerFactory.getLogger(DefaultDeploymentConfiguration.class);
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    if (camundaBpmProperties.isAutoDeploymentEnabled()) {
+    if (eximeeBpmsBpmProperties.isAutoDeploymentEnabled()) {
       final Set<Resource> resources = getDeploymentResources();
       configuration.setDeploymentResources(resources.toArray(new Resource[resources.size()]));
       LOG.autoDeployResources(resources);
@@ -51,7 +51,7 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
     final ResourceArrayPropertyEditor resolver = new ResourceArrayPropertyEditor();
 
     try {
-      final String[] resourcePattern = camundaBpmProperties.getDeploymentResourcePattern();
+      final String[] resourcePattern = eximeeBpmsBpmProperties.getDeploymentResourcePattern();
       logger.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
       resolver.setValue(resourcePattern);
 

@@ -70,7 +70,7 @@
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/Batch.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/HistoricBatch.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/TenantMembership.xml" />
-    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/CamundaFormDefinition.xml" />
+    <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/EximeeBpmsFormDefinition.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/BusinessEventOutbox.xml" />
     <mapper resource="org/eximeebpms/bpm/engine/impl/mapping/entity/ScriptViolation.xml" />

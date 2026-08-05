@@ -16,7 +16,7 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
-import static org.eximeebpms.bpm.spring.boot.starter.util.CamundaSpringBootUtil.join;
+import static org.eximeebpms.bpm.spring.boot.starter.util.EximeeBpmsSpringBootUtil.join;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +26,9 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.JobHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.NotifyAcquisitionRejectedJobsHandler;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.spring.components.jobexecutor.SpringJobExecutor;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaJobConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsJobConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.event.JobExecutorStartingEventListener;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.JobExecutionProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +42,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 /**
  * Prepares JobExecutor and registers all known custom JobHandlers.
  */
-public class DefaultJobConfiguration extends AbstractCamundaConfiguration implements CamundaJobConfiguration {
+public class DefaultJobConfiguration extends AbstractEximeeBpmsConfiguration implements EximeeBpmsJobConfiguration {
 
   @Autowired
   protected JobExecutor jobExecutor;
@@ -67,19 +67,22 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
     // note: the job executor will be activated in
     // org.eximeebpms.bpm.spring.boot.starter.runlistener.JobExecutorRunListener
     configuration.setJobExecutorActivate(false);
-    configuration.setJobExecutorDeploymentAware(camundaBpmProperties.getJobExecution().isDeploymentAware());
+    configuration.setJobExecutorDeploymentAware(eximeeBpmsBpmProperties.getJobExecution().isDeploymentAware());
     configuration.setJobExecutor(jobExecutor);
 
   }
 
   public static class JobConfiguration {
 
+    public static final String EXIMEEBPMS_TASK_EXECUTOR_QUALIFIER = "eximeeBpmsTaskExecutor";
+
+    @Deprecated
     public static final String CAMUNDA_TASK_EXECUTOR_QUALIFIER = "camundaTaskExecutor";
 
-    @Bean(name = CAMUNDA_TASK_EXECUTOR_QUALIFIER)
-    @ConditionalOnMissingBean(name = CAMUNDA_TASK_EXECUTOR_QUALIFIER)
+    @Bean(name = {EXIMEEBPMS_TASK_EXECUTOR_QUALIFIER, "camundaTaskExecutor"})
+    @ConditionalOnMissingBean(name = {EXIMEEBPMS_TASK_EXECUTOR_QUALIFIER, "camundaTaskExecutor"})
     @ConditionalOnProperty(prefix = "eximeebpms.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static TaskExecutor camundaTaskExecutor(CamundaBpmProperties properties) {
+    public static TaskExecutor eximeeBpmsTaskExecutor(EximeeBpmsBpmProperties properties) {
       int corePoolSize = properties.getJobExecution().getCorePoolSize();
       int maxPoolSize = properties.getJobExecution().getMaxPoolSize();
       int queueCapacity = properties.getJobExecution().getQueueCapacity();
@@ -100,7 +103,7 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
     @Bean
     @ConditionalOnMissingBean(JobExecutor.class)
     @ConditionalOnProperty(prefix = "eximeebpms.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static JobExecutor jobExecutor(@Qualifier(CAMUNDA_TASK_EXECUTOR_QUALIFIER) final TaskExecutor taskExecutor, CamundaBpmProperties properties) {
+    public static JobExecutor jobExecutor(@Qualifier(EXIMEEBPMS_TASK_EXECUTOR_QUALIFIER) final TaskExecutor taskExecutor, EximeeBpmsBpmProperties properties) {
       final SpringJobExecutor springJobExecutor = new SpringJobExecutor();
       springJobExecutor.setTaskExecutor(taskExecutor);
       springJobExecutor.setRejectedJobsHandler(new NotifyAcquisitionRejectedJobsHandler());

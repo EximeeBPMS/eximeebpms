@@ -25,9 +25,9 @@ import org.eximeebpms.bpm.model.bpmn.instance.Activity;
 import org.eximeebpms.bpm.model.bpmn.instance.BoundaryEvent;
 import org.eximeebpms.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
 import org.eximeebpms.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaInputOutput;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaInputParameter;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaOutputParameter;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsInputOutput;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsInputParameter;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsOutputParameter;
 import org.eximeebpms.bpm.model.bpmn.instance.dc.Bounds;
 
 /**
@@ -69,9 +69,9 @@ public abstract class AbstractActivityBuilder<B extends AbstractActivityBuilder<
    * @return the builder object
    */
   public B camundaInputParameter(String name, String value) {
-    CamundaInputOutput camundaInputOutput = getCreateSingleExtensionElement(CamundaInputOutput.class);
+    EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
-    CamundaInputParameter camundaInputParameter = createChild(camundaInputOutput, CamundaInputParameter.class);
+    EximeeBpmsInputParameter camundaInputParameter = createChild(camundaInputOutput, EximeeBpmsInputParameter.class);
     camundaInputParameter.setCamundaName(name);
     camundaInputParameter.setTextContent(value);
 
@@ -87,9 +87,9 @@ public abstract class AbstractActivityBuilder<B extends AbstractActivityBuilder<
    * @return the builder object
    */
   public B camundaOutputParameter(String name, String value) {
-    CamundaInputOutput camundaInputOutput = getCreateSingleExtensionElement(CamundaInputOutput.class);
+    EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
-    CamundaOutputParameter camundaOutputParameter = createChild(camundaInputOutput, CamundaOutputParameter.class);
+    EximeeBpmsOutputParameter camundaOutputParameter = createChild(camundaInputOutput, EximeeBpmsOutputParameter.class);
     camundaOutputParameter.setCamundaName(name);
     camundaOutputParameter.setTextContent(value);
 

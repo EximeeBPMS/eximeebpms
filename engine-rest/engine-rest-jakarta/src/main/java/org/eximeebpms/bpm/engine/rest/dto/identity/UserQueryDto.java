@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.identity.UserQuery;
 import org.eximeebpms.bpm.engine.rest.dto.AbstractQueryDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,57 +70,57 @@ public class UserQueryDto extends AbstractQueryDto<UserQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @EximeeBPMSQueryParam("id")
+  @EximeeBpmsQueryParam("id")
   public void setId(String userId) {
     this.id = userId;
   }
 
-  @EximeeBPMSQueryParam(value = "idIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value = "idIn", converter = StringArrayConverter.class)
   public void setIdIn(String[] ids) {
     this.idIn = ids;
   }
 
-  @EximeeBPMSQueryParam("firstName")
+  @EximeeBpmsQueryParam("firstName")
   public void setFirstName(String userFirstName) {
     this.firstName = userFirstName;
   }
 
-  @EximeeBPMSQueryParam("firstNameLike")
+  @EximeeBpmsQueryParam("firstNameLike")
   public void setFirstNameLike(String userFirstNameLike) {
     this.firstNameLike = userFirstNameLike;
   }
 
-  @EximeeBPMSQueryParam("lastName")
+  @EximeeBpmsQueryParam("lastName")
   public void setLastName(String userLastName) {
     this.lastName = userLastName;
   }
 
-  @EximeeBPMSQueryParam("lastNameLike")
+  @EximeeBpmsQueryParam("lastNameLike")
   public void setLastNameLike(String userLastNameLike) {
     this.lastNameLike = userLastNameLike;
   }
 
-  @EximeeBPMSQueryParam("email")
+  @EximeeBpmsQueryParam("email")
   public void setEmail(String userEmail) {
     this.email = userEmail;
   }
 
-  @EximeeBPMSQueryParam("emailLike")
+  @EximeeBpmsQueryParam("emailLike")
   public void setEmailLike(String userEmailLike) {
     this.emailLike = userEmailLike;
   }
 
-  @EximeeBPMSQueryParam("memberOfGroup")
+  @EximeeBpmsQueryParam("memberOfGroup")
   public void setMemberOfGroup(String memberOfGroup) {
     this.memberOfGroup = memberOfGroup;
   }
 
-  @EximeeBPMSQueryParam("potentialStarter")
+  @EximeeBpmsQueryParam("potentialStarter")
   public void setPotentialStarter(String potentialStarter) {
     this.potentialStarter = potentialStarter;
   }
 
-  @EximeeBPMSQueryParam("memberOfTenant")
+  @EximeeBpmsQueryParam("memberOfTenant")
   public void setMemberOfTenant(String tenantId) {
     this.tenantId = tenantId;
   }

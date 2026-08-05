@@ -27,7 +27,7 @@ import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.eximeebpms.bpm.engine.runtime.VariableInstance;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class SampleCamundaRestApplicationIT {
   private RuntimeService runtimeService;
 
   @Autowired
-  private CamundaBpmProperties camundaBpmProperties;
+  private EximeeBpmsBpmProperties eximeeBpmsBpmProperties;
 
   @Test
   public void restApiIsAvailable() {
@@ -89,7 +89,7 @@ public class SampleCamundaRestApplicationIT {
 
     HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
     ResponseEntity<String> exchange = testRestTemplate.exchange("/engine-rest/engine/{enginename}/process-instance/{id}/variables/{variableName}/data",
-        HttpMethod.POST, requestEntity, String.class, camundaBpmProperties.getProcessEngineName(), processInstance.getId(), variableName);
+        HttpMethod.POST, requestEntity, String.class, eximeeBpmsBpmProperties.getProcessEngineName(), processInstance.getId(), variableName);
 
     assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode());
 
@@ -114,7 +114,7 @@ public class SampleCamundaRestApplicationIT {
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
     ResponseEntity<String> entity = testRestTemplate.postForEntity("/engine-rest/engine/{enginename}/external-task/fetchAndLock", requestEntity, String.class,
-      camundaBpmProperties.getProcessEngineName());
+      eximeeBpmsBpmProperties.getProcessEngineName());
     assertEquals(HttpStatus.OK, entity.getStatusCode());
     assertEquals("[]", entity.getBody());
   }

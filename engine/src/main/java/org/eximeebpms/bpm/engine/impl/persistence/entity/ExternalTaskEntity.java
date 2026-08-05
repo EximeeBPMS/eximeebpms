@@ -32,7 +32,7 @@ import org.eximeebpms.bpm.engine.externaltask.ExternalTask;
 import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.eximeebpms.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import org.eximeebpms.bpm.engine.impl.bpmn.parser.EximeeBpmsErrorEventDefinition;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
 import org.eximeebpms.bpm.engine.impl.db.EnginePersistenceLogger;
@@ -517,9 +517,9 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
   }
 
   protected boolean evaluateThrowBpmnError(ExecutionEntity execution, boolean continueOnException) {
-    List<CamundaErrorEventDefinition> camundaErrorEventDefinitions = (List<CamundaErrorEventDefinition>) execution.getActivity().getProperty(BpmnProperties.CAMUNDA_ERROR_EVENT_DEFINITION.getName());
+    List<EximeeBpmsErrorEventDefinition> camundaErrorEventDefinitions = (List<EximeeBpmsErrorEventDefinition>) execution.getActivity().getProperty(BpmnProperties.CAMUNDA_ERROR_EVENT_DEFINITION.getName());
     if (camundaErrorEventDefinitions != null && !camundaErrorEventDefinitions.isEmpty()) {
-      for (CamundaErrorEventDefinition camundaErrorEventDefinition : camundaErrorEventDefinitions) {
+      for (EximeeBpmsErrorEventDefinition camundaErrorEventDefinition : camundaErrorEventDefinitions) {
         if (errorEventDefinitionMatches(camundaErrorEventDefinition, continueOnException)) {
           bpmnError(camundaErrorEventDefinition.getErrorCode(), errorMessage, null);
           return true;
@@ -529,7 +529,7 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
     return false;
   }
 
-  protected boolean errorEventDefinitionMatches(CamundaErrorEventDefinition camundaErrorEventDefinition, boolean continueOnException) {
+  protected boolean errorEventDefinitionMatches(EximeeBpmsErrorEventDefinition camundaErrorEventDefinition, boolean continueOnException) {
     try {
       return camundaErrorEventDefinition.getExpression() != null && Boolean.TRUE.equals(camundaErrorEventDefinition.getExpression().getValue(getExecution()));
     } catch (Exception exception) {

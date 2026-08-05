@@ -38,7 +38,7 @@ import org.eximeebpms.bpm.engine.variable.Variables;
 import org.eximeebpms.bpm.model.bpmn.Bpmn;
 import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.SequenceFlow;
-import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.CamundaExecutionListener;
+import org.eximeebpms.bpm.model.bpmn.instance.eximeebpms.EximeeBpmsExecutionListener;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -238,7 +238,7 @@ public class TargetVariableScopeTest {
       .endEvent()
       .done();
 
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
+    EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
     listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setCamundaClass(ExecutionListener.class.getName());
     modelInstance.<SequenceFlow>getModelElementById("sequenceFlow").builder().addExtensionElement(listener);

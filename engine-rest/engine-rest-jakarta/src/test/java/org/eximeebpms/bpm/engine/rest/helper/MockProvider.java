@@ -80,7 +80,7 @@ import org.eximeebpms.bpm.engine.identity.Tenant;
 import org.eximeebpms.bpm.engine.identity.User;
 import org.eximeebpms.bpm.engine.impl.TaskQueryImpl;
 import org.eximeebpms.bpm.engine.impl.calendar.DateTimeUtil;
-import org.eximeebpms.bpm.engine.impl.form.CamundaFormRefImpl;
+import org.eximeebpms.bpm.engine.impl.form.EximeeBpmsFormRefImpl;
 import org.eximeebpms.bpm.engine.impl.identity.Authentication;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.MetricIntervalEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ResourceEntity;
@@ -902,7 +902,7 @@ public abstract class MockProvider {
   public static final InternalsImpl EXAMPLE_TELEMETRY_INTERNALS = new InternalsImpl(EXAMPLE_TELEMETRY_DATABASE,
       EXAMPLE_TELEMETRY_SERVER, EXAMPLE_TELEMETRY_LICENSE, EXAMPLE_TELEMETRY_JDK);
   static {
-    EXAMPLE_TELEMETRY_INTERNALS.setCamundaIntegration(
+    EXAMPLE_TELEMETRY_INTERNALS.setEximeeBpmsIntegration(
         Stream.of("spring-boot-starter", "eximeebpms-bpm-run").collect(Collectors.toCollection(HashSet::new)));
     EXAMPLE_TELEMETRY_INTERNALS
         .setWebapps(Stream.of("cockpit", "admin").collect(Collectors.toCollection(HashSet::new)));
@@ -913,7 +913,7 @@ public abstract class MockProvider {
         .of(new Object[][] { { "process-instances", 936L }, { "flow-node-instances", 6125L },
             { "decision-instances", 140L }, { "executed-decision-elements", 732L } })
         .collect(Collectors.toMap(data -> (String) data[0], data -> new MetricImpl((Long) data[1]))));
-    EXAMPLE_TELEMETRY_INTERNALS.setCamundaIntegration(Collections.singleton("spring-boot"));
+    EXAMPLE_TELEMETRY_INTERNALS.setEximeeBpmsIntegration(Collections.singleton("spring-boot"));
     EXAMPLE_TELEMETRY_INTERNALS.setWebapps(Collections.singleton("cockpit"));
     EXAMPLE_TELEMETRY_INTERNALS.setDataCollectionStartDate(DateTimeUtil.parseDate(EXAMPLE_TELEMETRY_DATA_COLLECTION_START_DATE));
   }
@@ -1003,9 +1003,9 @@ public abstract class MockProvider {
     TaskFormData mockFormData = mock(TaskFormData.class);
     when(mockFormData.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
 
-    CamundaFormRefImpl formRef = new CamundaFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
+    EximeeBpmsFormRefImpl formRef = new EximeeBpmsFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
     formRef.setVersion(EXAMPLE_FORM_REF_VERSION);
-    when(mockFormData.getCamundaFormRef()).thenReturn(formRef);
+    when(mockFormData.getEximeeBpmsFormRef()).thenReturn(formRef);
 
     return mockFormData;
   }
@@ -1154,9 +1154,9 @@ public abstract class MockProvider {
     StartFormData mockFormData = mock(StartFormData.class);
     when(mockFormData.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
 
-    CamundaFormRefImpl formRef = new CamundaFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
+    EximeeBpmsFormRefImpl formRef = new EximeeBpmsFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
     formRef.setVersion(EXAMPLE_FORM_REF_VERSION);
-    when(mockFormData.getCamundaFormRef()).thenReturn(formRef);
+    when(mockFormData.getEximeeBpmsFormRef()).thenReturn(formRef);
 
     return mockFormData;
   }

@@ -20,7 +20,7 @@ import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import org.eximeebpms.bpm.engine.impl.QueryVariableValue;
 import org.eximeebpms.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 import org.eximeebpms.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.eximeebpms.bpm.engine.rest.dto.converter.BooleanConverter;
@@ -79,7 +79,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return processDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value="processDefinitionId")
+  @EximeeBpmsQueryParam(value="processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
@@ -88,12 +88,12 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return parentProcessDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value="parentProcessDefinitionId")
+  @EximeeBpmsQueryParam(value="parentProcessDefinitionId")
   public void setParentProcessDefinitionId(String parentProcessDefinitionId) {
     this.parentProcessDefinitionId = parentProcessDefinitionId;
   }
 
-  @EximeeBPMSQueryParam(value = "variables", converter = VariableListConverter.class)
+  @EximeeBpmsQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
@@ -110,7 +110,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return parentProcessInstanceId;
   }
 
-  @EximeeBPMSQueryParam(value="parentProcessInstanceId")
+  @EximeeBpmsQueryParam(value="parentProcessInstanceId")
   public void setParentProcessInstanceId(String parentProcessInstanceId) {
     this.parentProcessInstanceId = parentProcessInstanceId;
   }
@@ -119,7 +119,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return activityIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
@@ -128,7 +128,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return activityInstanceIdIn;
   }
 
-  @EximeeBPMSQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @EximeeBpmsQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
@@ -137,7 +137,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return businessKey;
   }
 
-  @EximeeBPMSQueryParam(value="businessKey")
+  @EximeeBpmsQueryParam(value="businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
@@ -146,7 +146,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return startedBefore;
   }
 
-  @EximeeBPMSQueryParam(value="startedBefore", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value="startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
@@ -155,7 +155,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return startedAfter;
   }
 
-  @EximeeBPMSQueryParam(value="startedAfter", converter = DateConverter.class)
+  @EximeeBpmsQueryParam(value="startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
@@ -164,7 +164,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return withIncident;
   }
 
-  @EximeeBPMSQueryParam(value="withIncident", converter = BooleanConverter.class)
+  @EximeeBpmsQueryParam(value="withIncident", converter = BooleanConverter.class)
   public void setWithIncident(Boolean withIncident) {
     this.withIncident = withIncident;
   }

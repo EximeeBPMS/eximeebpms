@@ -81,7 +81,7 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @return the builder object
    */
   public B camundaExpression(String camundaExpression) {
-    element.setCamundaExpression(camundaExpression);
+    element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
 
@@ -181,7 +181,7 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @return the builder object
    */
   public B camundaMapDecisionResult(String camundaMapDecisionResult) {
-    element.setCamundaMapDecisionResult(camundaMapDecisionResult);
+    element.setEximeeBpmsMapDecisionResult(camundaMapDecisionResult);
     return myself;
   }
 

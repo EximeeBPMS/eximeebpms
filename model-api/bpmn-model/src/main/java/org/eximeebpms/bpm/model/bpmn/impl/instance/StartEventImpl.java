@@ -147,27 +147,27 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
   }
 
 
-  public String getCamundaFormRef() {
+  public String getEximeeBpmsFormRef() {
     return camundaFormRefAttribute.getValue(this);
   }
 
-  public void setCamundaFormRef(String camundaFormRef) {
+  public void setEximeeBpmsFormRef(String camundaFormRef) {
     camundaFormRefAttribute.setValue(this, camundaFormRef);
   }
 
-  public String getCamundaFormRefBinding() {
+  public String getEximeeBpmsFormRefBinding() {
     return camundaFormRefBindingAttribute.getValue(this);
   }
 
-  public void setCamundaFormRefBinding(String camundaFormRefBinding) {
+  public void setEximeeBpmsFormRefBinding(String camundaFormRefBinding) {
     camundaFormRefBindingAttribute.setValue(this, camundaFormRefBinding);
   }
 
-  public String getCamundaFormRefVersion() {
+  public String getEximeeBpmsFormRefVersion() {
     return camundaFormRefVersionAttribute.getValue(this);
   }
 
-  public void setCamundaFormRefVersion(String camundaFormRefVersion) {
+  public void setEximeeBpmsFormRefVersion(String camundaFormRefVersion) {
     camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
   }
 

@@ -33,13 +33,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.util.CollectionUtils;
 
 @Order(Ordering.DEFAULT_ORDER - 1)
-public class GenericPropertiesConfiguration extends AbstractCamundaConfiguration {
+public class GenericPropertiesConfiguration extends AbstractEximeeBpmsConfiguration {
 
   protected static final SpringBootProcessEngineLogger LOG = SpringBootProcessEngineLogger.LOG;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
-    GenericProperties genericProperties = camundaBpmProperties.getGenericProperties();
+    GenericProperties genericProperties = eximeeBpmsBpmProperties.getGenericProperties();
     final Map<String, Object> properties = genericProperties.getProperties();
 
     if (!CollectionUtils.isEmpty(properties)) {

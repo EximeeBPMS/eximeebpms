@@ -27,15 +27,15 @@ import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPo
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
-import org.eximeebpms.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsProcessEngineConfiguration;
+import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
 @Slf4j
-public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
+public class DefaultProcessEngineConfiguration extends AbstractEximeeBpmsConfiguration implements EximeeBpmsProcessEngineConfiguration {
 
   @Autowired
   private IdGenerator idGenerator;
@@ -58,7 +58,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   }
 
   private void setDefaultSerializationFormat(SpringProcessEngineConfiguration configuration) {
-    String defaultSerializationFormat = camundaBpmProperties.getDefaultSerializationFormat();
+    String defaultSerializationFormat = eximeeBpmsBpmProperties.getDefaultSerializationFormat();
     if (StringUtils.hasText(defaultSerializationFormat)) {
       configuration.setDefaultSerializationFormat(defaultSerializationFormat);
     } else {
@@ -67,35 +67,35 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   }
 
   private void setProcessEngineName(SpringProcessEngineConfiguration configuration) {
-    String processEngineName = StringUtils.trimAllWhitespace(camundaBpmProperties.getProcessEngineName());
+    String processEngineName = StringUtils.trimAllWhitespace(eximeeBpmsBpmProperties.getProcessEngineName());
     if (!StringUtils.isEmpty(processEngineName) && !processEngineName.contains("-")) {
 
-      if (camundaBpmProperties.getGenerateUniqueProcessEngineName()) {
+      if (eximeeBpmsBpmProperties.getGenerateUniqueProcessEngineName()) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
             + "if a custom processEngineName is already set: %s", processEngineName));
         }
-        processEngineName = CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
+        processEngineName = EximeeBpmsBpmProperties.getUniqueName(EximeeBpmsBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
       }
 
       configuration.setProcessEngineName(processEngineName);
     } else {
-      log.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
+      log.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", eximeeBpmsBpmProperties.getProcessEngineName());
     }
   }
 
   private void setJobExecutorAcquireByPriority(SpringProcessEngineConfiguration configuration) {
-    Optional.ofNullable(camundaBpmProperties.getJobExecutorAcquireByPriority())
+    Optional.ofNullable(eximeeBpmsBpmProperties.getJobExecutorAcquireByPriority())
         .ifPresent(configuration::setJobExecutorAcquireByPriority);
   }
 
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
-    Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
+    Optional.ofNullable(eximeeBpmsBpmProperties.getDefaultNumberOfRetries())
         .ifPresent(configuration::setDefaultNumberOfRetries);
   }
 
   private void setScriptSecurity(SpringProcessEngineConfiguration configuration) {
-    Optional.ofNullable(camundaBpmProperties.getScriptSecurity())
+    Optional.ofNullable(eximeeBpmsBpmProperties.getScriptSecurity())
         .ifPresent(scriptSecurity -> configureScriptSecurity(configuration, scriptSecurity));
   }
 

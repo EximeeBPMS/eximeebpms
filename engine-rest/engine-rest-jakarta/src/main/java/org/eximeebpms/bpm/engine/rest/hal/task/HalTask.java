@@ -22,7 +22,7 @@ import jakarta.ws.rs.core.UriBuilder;
 
 import org.eximeebpms.bpm.engine.BadUserRequestException;
 import org.eximeebpms.bpm.engine.ProcessEngine;
-import org.eximeebpms.bpm.engine.form.CamundaFormRef;
+import org.eximeebpms.bpm.engine.form.EximeeBpmsFormRef;
 import org.eximeebpms.bpm.engine.rest.ExecutionRestService;
 import org.eximeebpms.bpm.engine.rest.IdentityRestService;
 import org.eximeebpms.bpm.engine.rest.ProcessDefinitionRestService;
@@ -75,7 +75,7 @@ public class HalTask extends HalResource<HalTask> {
   private String taskDefinitionKey;
   private boolean suspended;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private EximeeBpmsFormRef camundaFormRef;
   private String tenantId;
 
   public static HalTask generate(Task task, ProcessEngine engine) {
@@ -109,7 +109,7 @@ public class HalTask extends HalResource<HalTask> {
     dto.tenantId = task.getTenantId();
     try {
       dto.formKey = task.getFormKey();
-      dto.camundaFormRef = task.getCamundaFormRef();
+      dto.camundaFormRef = task.getEximeeBpmsFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)
@@ -197,7 +197,7 @@ public class HalTask extends HalResource<HalTask> {
     return formKey;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
+  public EximeeBpmsFormRef getCamundaFormRef() {
     return camundaFormRef;
   }
 

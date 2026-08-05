@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.query;
 
 import org.eximeebpms.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
 import org.eximeebpms.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import org.eximeebpms.bpm.engine.rest.dto.EximeeBPMSQueryParam;
+import org.eximeebpms.bpm.engine.rest.dto.EximeeBpmsQueryParam;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
@@ -45,22 +45,22 @@ public class ProcessDefinitionStatisticsQueryDto extends AbstractRestQueryParame
     super(queryParameters);
   }
 
-  @EximeeBPMSQueryParam("key")
+  @EximeeBpmsQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
-  @EximeeBPMSQueryParam("keyLike")
+  @EximeeBpmsQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
 
-  @EximeeBPMSQueryParam("name")
+  @EximeeBpmsQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @EximeeBPMSQueryParam("nameLike")
+  @EximeeBpmsQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }

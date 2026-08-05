@@ -134,6 +134,7 @@ run_tests () {
   esac
 
   PROFILES=()
+  EXTRA_ARGS=()
 
   case "$TEST_SUITE" in
     engine)
@@ -141,6 +142,10 @@ run_tests () {
       ;;
     webapps)
       PROFILES+=(webapps-integration)
+      # Pin the exact Chrome-for-Testing binary matching the chromedriver version in
+      # qa/integration-tests-webapps/pom.xml, so chromedriver's own browser auto-discovery
+      # can't silently fall back to whatever google-chrome-stable apt happens to install.
+      EXTRA_ARGS+=(-Dchrome.binary=/opt/chrome-for-testing/chrome)
       ;;
   esac
 
@@ -201,8 +206,8 @@ run_tests () {
   esac
 
   echo "ℹ️ Running $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR ${DB_ARGS[*]}"
-  ./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR "${DB_ARGS[@]}"
+  echo "./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR ${DB_ARGS[*]} ${EXTRA_ARGS[*]}"
+  ./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR "${DB_ARGS[@]}" "${EXTRA_ARGS[@]}"
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null

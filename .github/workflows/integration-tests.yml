@@ -233,7 +233,12 @@ jobs:
           sudo chmod +x /opt/chrome-for-testing/chrome
           sudo ln -sf /opt/chrome-for-testing/chrome /usr/bin/google-chrome
           rm /tmp/chrome-linux64.zip
+          echo "Pinned Chrome-for-Testing version: ${CHROME_VERSION}"
+          echo "/usr/bin/google-chrome -> $(readlink -f /usr/bin/google-chrome)"
           google-chrome --version
+          if [ -x /opt/google/chrome/chrome ]; then
+            echo "apt-installed Chrome (not used by tests, kept only for shared libs): $(/opt/google/chrome/chrome --version)"
+          fi
 
       - name: Execute Integration Tests
         id: maven-integration-tests

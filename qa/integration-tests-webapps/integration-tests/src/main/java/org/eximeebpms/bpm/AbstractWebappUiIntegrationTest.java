@@ -82,6 +82,15 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
         .addArguments("--remote-allow-origins=*");
     chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
 
+    // Without an explicit binary, chromedriver falls back to its own browser
+    // auto-discovery (checking hardcoded install paths such as /opt/google/chrome/chrome
+    // ahead of the PATH-resolved /usr/bin/google-chrome), which can silently pick up a
+    // different Chrome version than the one pinned to match this chromedriver build.
+    String chromeBinary = System.getProperty("chrome.binary");
+    if (chromeBinary != null && !chromeBinary.isEmpty()) {
+      chromeOptions.setBinary(chromeBinary);
+    }
+
     driver = new ChromeDriver(chromeDriverService, chromeOptions);
   }
 

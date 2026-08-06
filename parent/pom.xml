@@ -51,8 +51,8 @@
     <version.httpcore5>5.3.4</version.httpcore5>
     <version.cronutils>9.2.1</version.cronutils>
 
-    <version.slf4j>1.7.26</version.slf4j>
-    <version.logback>1.2.13</version.logback>
+    <version.slf4j>2.0.18</version.slf4j>
+    <version.logback>1.6.1</version.logback>
     <version.junit-jupiter>6.0.3</version.junit-jupiter>
     <version.junit>4.13.1</version.junit>
     <version.assertj>3.27.7</version.assertj>

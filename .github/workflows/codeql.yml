@@ -3,6 +3,8 @@ name: CodeQL
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   schedule:
     - cron: '30 3 * * 1' # weekly, Monday 03:30 UTC
   workflow_dispatch:
@@ -11,15 +13,48 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Runs on github-actions-runner-new, matching build.yml. Unlike the enterprise repo, this
-# reactor resolves everything from public Maven Central (no internal Nexus),
-# so no CA-cert import or Nexus profile is needed here. Deliberately not
-# triggered on every PR - it would double runner load on top of
-# build.yml; push-to-main + weekly is the same cadence CIB seven uses for
-# their CodeQL scan.
 jobs:
-  analyze:
-    name: Analyze (Java, JavaScript)
+  # Buildless languages: no Maven build needed, so these run on ubuntu-slim instead of
+  # the self-hosted pool, and can afford to run on every pull_request too.
+  analyze-buildless:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-slim
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript, python, ruby, actions]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  # java-kotlin needs github-actions-runner-new (self-hosted) for a real Maven build
+  # (build-mode: manual gives more accurate Java analysis than buildless extraction,
+  # matching build.yml). Skipped on pull_request - running its self-hosted mvnw build
+  # on every PR would double runner load on top of build.yml; push-to-main + weekly is
+  # the same cadence CIB seven uses for their CodeQL scan. A plain job-level `if` (no
+  # matrix here) is enough to skip it, unlike the buildless job above.
+  analyze-java-kotlin:
+    name: Analyze (java-kotlin)
+    if: github.event_name != 'pull_request'
     runs-on: github-actions-runner-new
     permissions:
       security-events: write
@@ -34,12 +69,12 @@ jobs:
 
       - name: Set up JDK
         run: |
-          if java -version 2>&1 | grep -qE '"17\.'; then
-            echo "Java 17 already installed"
+          if java -version 2>&1 | grep -qE '"21\.'; then
+            echo "Java 21 already installed"
           else
-            echo "Java 17 not found, installing via package manager..."
+            echo "Java 21 not found, installing via package manager..."
             sudo apt-get update -q
-            sudo apt-get install -y openjdk-17-jdk
+            sudo apt-get install -y openjdk-21-jdk
           fi
           JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
           echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -75,9 +110,10 @@ jobs:
         run: find ${{ github.workspace }}/.m2/repository -name "*.xml" -empty -delete 2>/dev/null || true
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
-          languages: java, javascript
+          languages: java-kotlin
+          build-mode: manual
 
       - name: Build (compile only, tests not needed for analysis)
         # -U: the restore-keys fallback above can serve a cache blob predating a
@@ -90,10 +126,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prune own artifacts before caching
-        # See identical comment in build.yml: actions/cache can't exclude via `!`,
-        # these groupIds are rebuilt from source every run so caching them is pure
-        # bloat, and gating on success() avoids poisoning the key with an
-        # incomplete .m2/repository from an early build failure.
         if: success()
         run: mkdir -p ${{ github.workspace }}/.m2/repository && rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
 
@@ -105,4 +137,6 @@ jobs:
           key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:java-kotlin"

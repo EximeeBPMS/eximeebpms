@@ -80,6 +80,12 @@ jobs:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 'lts/*'
+          check-latest: true
+
       - name: Generate npm SBOM (CycloneDX)
         working-directory: webapps/frontend
         run: |

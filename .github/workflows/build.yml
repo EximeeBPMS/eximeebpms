@@ -308,3 +308,37 @@ jobs:
           name: surefire-reports
           path: ${{ github.workspace }}/**/target/surefire-reports/**
           retention-days: 30
+
+  # Required status check for branch protection - use THIS job's name, not "Build".
+  # GitHub treats a "skipped" conclusion as satisfying a required status check just
+  # like "success", and `build` is legitimately skipped in two very different cases:
+  # nothing relevant changed (fine to pass) vs. a Dependabot PR deferred to
+  # dependabot-rerun.yml during business hours (must NOT pass yet - the real build
+  # hasn't run). Pointing branch protection at "Build" directly let PRs merge (even
+  # via auto-merge.yml's `gh pr merge --auto`) before the deferred build ever ran.
+  build-required:
+    name: Build Required
+    needs: [check, hours-gate, build]
+    if: always()
+    # ubuntu-slim: a handful of string comparisons, no build/network access needed.
+    runs-on: ubuntu-slim
+    steps:
+      - name: Evaluate whether Build actually ran and passed
+        run: |
+          if [[ "${{ needs.check.result }}" == "skipped" ]]; then
+            echo "check didn't run under this trigger (pull_request vs pull_request_target) for this actor - the real evaluation happens on the other one."
+            exit 0
+          fi
+          if [[ "${{ needs.check.outputs.skip_build }}" == "true" ]]; then
+            echo "No relevant files changed - nothing to verify."
+            exit 0
+          fi
+          if [[ "${{ github.actor }}" == "dependabot[bot]" && "${{ needs.hours-gate.outputs.business_hours }}" == "true" ]]; then
+            echo "::error::Build deferred to off-hours rerun (dependabot-rerun.yml) - not yet verified, do not merge."
+            exit 1
+          fi
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "::error::Build did not succeed (result: ${{ needs.build.result }})."
+            exit 1
+          fi
+          echo "Build succeeded."

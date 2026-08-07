@@ -20,6 +20,7 @@
     <module>testing</module>
     <module>typed-values</module>
     <module>event-bus-api</module>
+    <module>script-guard-rules</module>
   </modules>
 
   <properties>

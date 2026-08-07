@@ -22,6 +22,7 @@ retroactively added CVE IDs.
 ### Added
 - Native business events with transactional outbox
 - JDK 25 compatibility
+- Extract Script Guard's rule set into a standalone module (`commons/script-guard-rules`, `org.eximeebpms.commons:eximeebpms-commons-script-guard-rules`) with no process-engine runtime dependency, so external applications can validate BPMN scripts/expressions against the same rules before deploying a process definition
 
 ### Removed
 - Remove CMMN support (engine, migration, tests)

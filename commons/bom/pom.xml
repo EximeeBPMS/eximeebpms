@@ -48,6 +48,12 @@
         <version>${project.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.eximeebpms.commons</groupId>
+        <artifactId>eximeebpms-commons-script-guard-rules</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 

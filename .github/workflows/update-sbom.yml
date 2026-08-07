@@ -23,10 +23,18 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       contains(join(github.event.commits.*.message, ' '), 'deps')
     steps:
+      - name: Generate eximeebpmsrunner app token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.EXIMEEBPMSRUNNER_APP_ID }}
+          private-key: ${{ secrets.EXIMEEBPMSRUNNER_APP_PRIVATE_KEY }}
+
       - name: Checkout Code
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up JDK
         run: |

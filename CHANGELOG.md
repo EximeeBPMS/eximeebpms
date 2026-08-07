@@ -83,6 +83,7 @@ retroactively added CVE IDs.
 - Fix integration test databases
 - Various CI/workflow stability fixes (self-hosted runner migration, Dependabot concurrency, Slack notifications, build speed-ups)
 - Fix `update-sbom.yml` retriggering itself in an infinite loop — its own commit message (`chore(deps): update SBOM`) matched the workflow's own push trigger, so every successful run re-triggered another, hammering the self-hosted runner pool non-stop for days
+- The `1.3-to-1.4` migration (CMMN removal) now halts before making any schema changes if active CMMN case instances exist in `ACT_RU_CASE_EXECUTION`, via a Liquibase `<preConditions onFail="HALT">` guard on the changeSet. CMMN history and deployed definitions are still dropped unconditionally whenever the migration proceeds — this guard protects active runtime instances only, not history.
 
 ### Security
 - Resolve CVE-2023-35116 via jackson-databind 2.21.3 upgrade (see Security Notice EXBPMS-7)

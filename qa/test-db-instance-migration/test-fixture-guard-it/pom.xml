@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.eximeebpms.bpm.qa.upgrade</groupId>
+  <artifactId>eximeebpms-qa-upgrade-guard-it</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>EximeeBPMS BPM - QA - upgrade - CMMN migration guard - invoker IT</name>
+
+  <!--
+    Standalone module, deliberately NOT part of the qa/test-db-instance-migration reactor
+    (not listed in that module's <modules>) and not inherited from any repository parent pom.
+    It verifies the Liquibase <preConditions onFail="HALT"> guard on the "1.3-to-1.4"
+    changeSet (engine/src/main/resources/org/eximeebpms/bpm/engine/db/liquibase/eximeebpms-changelog.xml)
+    actually halts the migration when ACT_RU_CASE_EXECUTION is non-empty, and does not
+    interfere when it's empty.
+
+    Run explicitly (never runs as part of a normal reactor build):
+      mvn -f qa/test-db-instance-migration/test-fixture-guard-it/pom.xml verify
+
+    Each src/it/<project> is a fully standalone Maven build (maven-invoker-plugin convention),
+    invoked in its own process against a throwaway H2 file database under its own target/.
+  -->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.liquibase>5.0.3</version.liquibase>
+    <version.h2>2.4.240</version.h2>
+    <version.maven-invoker-plugin>3.10.1</version.maven-invoker-plugin>
+    <!-- Real engine db/ source, computed once here (where ${project.basedir} is well-defined). -->
+    <eximeebpms.db.dir>${project.basedir}/../../../engine/src/main/resources/org/eximeebpms/bpm/engine/db</eximeebpms.db.dir>
+    <!-- Staged copy consumed by each IT build (system property, since IT projects run from a
+         cloned copy under target/it/). Liquibase's <sqlFile relativeToChangelogFile="true">
+         resolves "upgrade/..." relative to wherever the changelog file itself is - which in the
+         real source tree is a SIBLING of upgrade/, not a parent. engine/pom.xml's own build
+         (see "copy-upgrade-scripts-liquibase", compile phase) works around exactly this by
+         copying db/upgrade/*.sql (excluding everything before 7.16, i.e. pre-Liquibase-era
+         scripts) into a nested db/liquibase/upgrade/ during its own build; we replicate that
+         same copy here rather than depend on engine/target/classes possibly being stale. -->
+    <eximeebpms.changelog.dir>${project.build.directory}/db-scripts/liquibase</eximeebpms.changelog.dir>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>stage-changelog-with-nested-upgrade</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="${eximeebpms.changelog.dir}" />
+                <copy todir="${eximeebpms.changelog.dir}">
+                  <fileset dir="${eximeebpms.db.dir}/liquibase" />
+                </copy>
+                <mkdir dir="${eximeebpms.changelog.dir}/upgrade" />
+                <copy todir="${eximeebpms.changelog.dir}/upgrade">
+                  <fileset dir="${eximeebpms.db.dir}/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*,*_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>${version.maven-invoker-plugin}</version>
+        <!-- h2 on the plugin's own classpath, so postBuildHookScript (verify.groovy) can
+             open a JDBC connection to each IT project's database directly. -->
+        <dependencies>
+          <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${version.h2}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <projectsDirectory>src/it</projectsDirectory>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+          <localRepositoryPath>${settings.localRepository}</localRepositoryPath>
+          <postBuildHookScript>verify</postBuildHookScript>
+          <streamLogsOnFailures>true</streamLogsOnFailures>
+          <writeJunitReport>true</writeJunitReport>
+          <junitPackageName>org.eximeebpms.bpm.qa.upgrade.guardit</junitPackageName>
+          <properties>
+            <eximeebpms.changelog.dir>${eximeebpms.changelog.dir}</eximeebpms.changelog.dir>
+            <version.liquibase>${version.liquibase}</version.liquibase>
+            <version.h2>${version.h2}</version.h2>
+          </properties>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-guard-its</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.eximeebpms.bpm.qa.upgrade.guardit</groupId>
+  <artifactId>cmmn-no-active-case-migration-succeeds</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>Guard IT - migration succeeds and drops CMMN tables when no active case instance exists</name>
+
+  <!--
+    Expected result: SUCCESS (default, no invoker.properties override needed). Builds a
+    schema up to 1.4.0 with ACT_RU_CASE_EXECUTION left empty the whole time - the guard's
+    <preConditions> must not fire, and the 1.3-to-1.4 script's CMMN table drops must still
+    run as before. Companion negative case: cmmn-active-case-halts-migration.
+  -->
+
+  <properties>
+    <db.url>jdbc:h2:file:${project.build.directory}/db/process-engine</db.url>
+    <db.driver>org.h2.Driver</db.driver>
+    <db.username>sa</db.username>
+    <db.password></db.password>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>${version.liquibase}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${version.h2}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <driver>${db.driver}</driver>
+          <url>${db.url}</url>
+          <username>${db.username}</username>
+          <password>${db.password}</password>
+          <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+        </configuration>
+        <executions>
+          <execution>
+            <id>1-update-to-1.4.0</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+            <configuration>
+              <changeLogDirectory>${eximeebpms.changelog.dir}</changeLogDirectory>
+              <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
+              <toTag>1.4.0</toTag>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.eximeebpms.bpm.qa.upgrade.guardit</groupId>
+  <artifactId>cmmn-active-case-halts-migration</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>Guard IT - active CMMN case instance halts the 1.3-to-1.4 migration</name>
+
+  <!--
+    Expected result: FAILURE (see invoker.properties). Builds a schema up to the 1.3.0 tag,
+    seeds one row in ACT_RU_CASE_EXECUTION (simulating an active CMMN case instance - the
+    engine has no CMMN Java API left to create one for real, CMMN was removed in BPMS-325),
+    then continues the same changelog to 1.4.0. The "1.3-to-1.4" changeSet's
+    <preConditions onFail="HALT"> must stop this last step before any DROP runs.
+  -->
+
+  <properties>
+    <db.url>jdbc:h2:file:${project.build.directory}/db/process-engine</db.url>
+    <db.driver>org.h2.Driver</db.driver>
+    <db.username>sa</db.username>
+    <db.password></db.password>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>${version.liquibase}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${version.h2}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <driver>${db.driver}</driver>
+          <url>${db.url}</url>
+          <username>${db.username}</username>
+          <password>${db.password}</password>
+          <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+        </configuration>
+        <executions>
+          <execution>
+            <id>1-create-schema-up-to-1.3.0</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+            <configuration>
+              <changeLogDirectory>${eximeebpms.changelog.dir}</changeLogDirectory>
+              <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
+              <toTag>1.3.0</toTag>
+            </configuration>
+          </execution>
+          <execution>
+            <id>2-seed-active-case-instance</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+            <configuration>
+              <changeLogDirectory>${project.basedir}</changeLogDirectory>
+              <changeLogFile>seed-active-case.xml</changeLogFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>3-continue-to-1.4.0-expect-halt</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+            <configuration>
+              <changeLogDirectory>${eximeebpms.changelog.dir}</changeLogDirectory>
+              <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
+              <toTag>1.4.0</toTag>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

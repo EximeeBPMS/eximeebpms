@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:256ea625-b157-4c58-818a-0bc78a7eb544",
+  "serialNumber": "urn:uuid:b43aa662-bbde-4d12-98d2-0caf6abcabbb",
   "metadata": {
-    "timestamp": "2026-08-10T05:14:25.427Z",
+    "timestamp": "2026-08-10T06:00:29.446Z",
     "tools": {
       "components": [
         {
@@ -7247,8 +7247,8 @@
     {
       "type": "library",
       "name": "ip-address",
-      "version": "10.4.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.4.0",
+      "version": "10.5.0",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.5.0",
       "author": "Beau Gunderson",
       "description": "A library for parsing IPv4 and IPv6 IP addresses in node and the browser.",
       "scope": "optional",
@@ -7260,7 +7260,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/ip-address@10.4.0",
+      "purl": "pkg:npm/ip-address@10.5.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/beaugunderson/ip-address.git",
@@ -7278,12 +7278,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/ip-address/-/ip-address-10.4.0.tgz",
+          "url": "https://registry.npmjs.org/ip-address/-/ip-address-10.5.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a122bde86ae6dda3fa3ab4b6eb7c55c5b3431952fbaf306d61da46aa50c6f2241da1e9c3a13b3f9e4922f837e561b00413c5e5ea8e58c61c65acabc8de7a8a5d"
+              "content": "4794a754b26681862f7f6176660c120677a5cf91b8ab9031202dbbec60df51a35bad928d00d7010bb447a9861e3e5b337f8901a2556425ab86d198c71c5879e6"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -59108,7 +59108,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|https-proxy-agent@7.0.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ieee754@1.2.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ini@1.3.8",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.4.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|jackspeak@3.4.3",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|jquery-ui@1.13.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|jquery@3.7.1",
@@ -60131,7 +60131,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ini@1.3.8"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.4.0"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.5.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|jackspeak@3.4.3",
@@ -60643,7 +60643,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|socks@2.8.9",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.4.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ip-address@10.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|smart-buffer@4.2.0"
       ]
     },

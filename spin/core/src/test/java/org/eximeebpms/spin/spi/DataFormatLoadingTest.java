@@ -30,7 +30,7 @@ import org.eximeebpms.spin.DataFormats;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -58,11 +58,11 @@ public class DataFormatLoadingTest {
     mockStatic(ServiceLoader.class);
 
     mockServiceLoader = mock(ServiceLoader.class);
-    when(ServiceLoader.load(Matchers.eq(DataFormatProvider.class), Matchers.any(ClassLoader.class)))
+    when(ServiceLoader.load(ArgumentMatchers.eq(DataFormatProvider.class), ArgumentMatchers.any(ClassLoader.class)))
       .thenReturn(mockServiceLoader);
 
     mockConfiguratorLoader = mock(ServiceLoader.class);
-    when(ServiceLoader.load(Matchers.eq(DataFormatConfigurator.class), Matchers.any(ClassLoader.class)))
+    when(ServiceLoader.load(ArgumentMatchers.eq(DataFormatConfigurator.class), ArgumentMatchers.any(ClassLoader.class)))
       .thenReturn(mockConfiguratorLoader);
   }
 

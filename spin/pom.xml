@@ -24,7 +24,6 @@
   <properties>
     <json-junit-fluent.version>1.1.6</json-junit-fluent.version>
     <powermock.version>2.0.9</powermock.version>
-    <mockito.version>3.3.3</mockito.version>
     <spin.version.old>7.23.0</spin.version.old>
     <plugin.version.javadoc>3.11.2</plugin.version.javadoc>
 
@@ -59,7 +58,7 @@
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
+        <version>${version.mockito}</version>
       </dependency>
 
       <dependency>

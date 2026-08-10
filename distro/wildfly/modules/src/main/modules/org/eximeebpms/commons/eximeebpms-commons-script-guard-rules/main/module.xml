@@ -1,0 +1,9 @@
+<module xmlns="urn:jboss:module:1.0" name="org.eximeebpms.commons.eximeebpms-commons-script-guard-rules">
+  <resources>
+    <resource-root path="eximeebpms-commons-script-guard-rules-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+  </dependencies>
+</module>

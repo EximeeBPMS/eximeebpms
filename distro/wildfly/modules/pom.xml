@@ -216,6 +216,7 @@
                         <regexpmapper from="^(org.eximeebpms.commons.*)\/((eximeebpms-commons-(utils|logging)-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         <regexpmapper from="^(org.eximeebpms.commons.*)\/((eximeebpms-commons-typed-values-)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         <regexpmapper from="^(org.eximeebpms.commons.*)\/((eximeebpms-commons-event-bus-api-)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
+                        <regexpmapper from="^(org.eximeebpms.commons.*)\/((eximeebpms-commons-script-guard-rules-)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                       </mapper>
                     </chainedmapper>
                   </mapper>

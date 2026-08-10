@@ -24,11 +24,11 @@ jobs:
     runs-on: github-actions-runner-new
     steps:
       - name: Generate eximeebpmsrunner app token
-              id: app-token
+        id: app-token
         uses: actions/create-github-app-token@v3
-              with:
-                app-id: ${{ secrets.EXIMEEBPMSRUNNER_APP_ID }}
-                private-key: ${{ secrets.EXIMEEBPMSRUNNER_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ secrets.EXIMEEBPMSRUNNER_APP_ID }}
+          private-key: ${{ secrets.EXIMEEBPMSRUNNER_APP_PRIVATE_KEY }}
 
       - name: Check out the code
         uses: actions/checkout@v7.0.0

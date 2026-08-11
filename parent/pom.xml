@@ -47,8 +47,8 @@
     <version.jakarta-validation>3.1.1</version.jakarta-validation>
     <version.jakarta-persistence-api>3.2.0</version.jakarta-persistence-api>
     <version.jaxb-runtime>4.0.9</version.jaxb-runtime>
-    <version.httpclient5>5.5</version.httpclient5>
-    <version.httpcore5>5.3.4</version.httpcore5>
+    <version.httpclient5>5.6.4</version.httpclient5>
+    <version.httpcore5>5.4.3</version.httpcore5>
     <version.cronutils>9.2.1</version.cronutils>
 
     <version.slf4j>2.0.18</version.slf4j>

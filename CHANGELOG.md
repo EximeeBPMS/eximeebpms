@@ -81,6 +81,7 @@ retroactively added CVE IDs.
 - Integration test fixes after SLF4J bump
 - Fix integration test databases
 - Various CI/workflow stability fixes (self-hosted runner migration, Dependabot concurrency, Slack notifications, build speed-ups)
+- Fix `update-sbom.yml` retriggering itself in an infinite loop — its own commit message (`chore(deps): update SBOM`) matched the workflow's own push trigger, so every successful run re-triggered another, hammering the self-hosted runner pool non-stop for days
 
 ### Security
 - Resolve CVE-2023-35116 via jackson-databind 2.21.3 upgrade (see Security Notice EXBPMS-7)

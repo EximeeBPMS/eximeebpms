@@ -72,6 +72,7 @@ retroactively added CVE IDs.
   - Tomcat JDBC / Tomcat Juli: `7.0.33` → `11.0.22`
 
 ### Fixed
+- Fix Variable business event names
 - Add a daily schedule fallback (with a delay-tolerant gate) to `dependency-submission.yml`, so manifests untouched by a recent push still get their dependency graph refreshed, matching the fix applied to the same workflow in `eximeebpms-enterprise`
 - Jython & BOM fixes; integration test fixes
 - Fix invalid `X-Authorized-User` header value for OAuth users with non-ASCII characters (#62)

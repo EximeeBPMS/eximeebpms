@@ -39,15 +39,15 @@ public enum BusinessEventTypes implements BusinessEventType {
   TASK_INSTANCE_DELETE("task-instance", "delete"),
 
   /** fired when a variable instance is created. */
-  VARIABLE_INSTANCE_CREATE("variable-instance", "created"),
+  VARIABLE_INSTANCE_CREATE("variable-instance", "create"),
   /** fired when a variable instance is updated. */
-  VARIABLE_INSTANCE_UPDATE("variable-instance", "updated"),
+  VARIABLE_INSTANCE_UPDATE("variable-instance", "update"),
   /** fired when a variable instance is migrated. */
   VARIABLE_INSTANCE_MIGRATE("variable-instance", "migrate"),
   /** fired when a variable instance is updated. */
   VARIABLE_INSTANCE_UPDATE_DETAIL("variable-instance", "update-detail"),
   /** fired when a variable instance is deleted. */
-  VARIABLE_INSTANCE_DELETE("variable-instance", "deleted"),
+  VARIABLE_INSTANCE_DELETE("variable-instance", "delete"),
 
   /** fired when a form property is updated. */
   FORM_PROPERTY_UPDATE("form-property", "form-property-update"),

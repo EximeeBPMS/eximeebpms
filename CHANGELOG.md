@@ -23,6 +23,7 @@ retroactively added CVE IDs.
 - Native business events with transactional outbox
 - JDK 25 compatibility
 - Extract Script Guard's rule set into a standalone module (`commons/script-guard-rules`, `org.eximeebpms.commons:eximeebpms-commons-script-guard-rules`) with no process-engine runtime dependency, so external applications can validate BPMN scripts/expressions against the same rules before deploying a process definition
+- New `historyExcludedProcessDefinitionKeys` configuration (Spring Boot: `eximeebpms.bpm.history-excluded-process-definition-keys`; `ProcessEngineConfiguration.setHistoryExcludedProcessDefinitionKeys(Set<String>)`) lets operators list process definition keys for which no history is recorded, regardless of the configured history level. Filters at persistence time; `HistoricBatchEntity` history is never covered, since a batch is never scoped to a single process definition.
 
 ### Removed
 - Remove CMMN support (engine, migration, tests)
@@ -33,6 +34,7 @@ retroactively added CVE IDs.
 ### Changed
 - Split SQL migration scripts between version 1.3 and 1.4; make SonarQube scan non-blocking
 - Add `engine-plugins` to `check-engine` profile
+- `PropertyHelper` (used to apply `bpm-platform.xml` `<property>` values via reflection) now supports comma-separated `Set<String>`/`List<String>` setter targets, not just `int`/`long`/`float`/`boolean`/`String`. As a side effect, `adminGroups`, `adminUsers`, and `registeredDeployments` — previously unset-able via plain XML property syntax — are now configurable that way too.
 - Bump versions:
   - Gson: `2.8.9` → `2.14.0`
   - Jackson: `2.15.2` → `2.21.3`

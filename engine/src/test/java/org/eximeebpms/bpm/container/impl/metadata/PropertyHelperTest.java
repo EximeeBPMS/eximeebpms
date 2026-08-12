@@ -17,8 +17,10 @@
 package org.eximeebpms.bpm.container.impl.metadata;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -226,5 +228,72 @@ public class PropertyHelperTest {
     Assert.assertEquals(Float.MAX_VALUE, jobExecutor.getWaitIncreaseFactor(), 0.0001d);
     Assert.assertEquals(true, engineConfiguration.isDbIdentityUsed());
     Assert.assertEquals("someUrl", engineConfiguration.getJdbcUrl());
+  }
+
+  /**
+   * {@code Set<String>}-typed properties (e.g. {@code historyExcludedProcessDefinitionKeys})
+   * can be set via a comma-separated {@code bpm-platform.xml}-style property value.
+   */
+  @Test
+  public void shouldSplitCommaSeparatedValueIntoSetProperty() {
+    // given
+    ProcessEngineConfigurationImpl engineConfiguration = new StandaloneProcessEngineConfiguration();
+    Map<String, String> propertiesToSet = new HashMap<>();
+    propertiesToSet.put("historyExcludedProcessDefinitionKeys", "invoice, credit-check ,payment");
+
+    // when
+    PropertyHelper.applyProperties(engineConfiguration, propertiesToSet);
+
+    // then
+    Assert.assertEquals(Set.of("invoice", "credit-check", "payment"),
+        engineConfiguration.getHistoryExcludedProcessDefinitionKeys());
+  }
+
+  @Test
+  public void shouldSplitSingleValueIntoSetProperty() {
+    // given
+    ProcessEngineConfigurationImpl engineConfiguration = new StandaloneProcessEngineConfiguration();
+    Map<String, String> propertiesToSet = new HashMap<>();
+    propertiesToSet.put("historyExcludedProcessDefinitionKeys", "invoice");
+
+    // when
+    PropertyHelper.applyProperties(engineConfiguration, propertiesToSet);
+
+    // then
+    Assert.assertEquals(Set.of("invoice"), engineConfiguration.getHistoryExcludedProcessDefinitionKeys());
+  }
+
+  @Test
+  public void shouldTreatBlankValueAsEmptySetProperty() {
+    // given
+    ProcessEngineConfigurationImpl engineConfiguration = new StandaloneProcessEngineConfiguration();
+    Map<String, String> propertiesToSet = new HashMap<>();
+    propertiesToSet.put("historyExcludedProcessDefinitionKeys", "");
+
+    // when
+    PropertyHelper.applyProperties(engineConfiguration, propertiesToSet);
+
+    // then
+    Assert.assertEquals(Set.of(), engineConfiguration.getHistoryExcludedProcessDefinitionKeys());
+  }
+
+  /**
+   * {@code List<String>}-typed properties (e.g. {@code adminGroups}/{@code adminUsers}) can be
+   * set the same way — previously unset-able via {@code bpm-platform.xml} at all.
+   */
+  @Test
+  public void shouldSplitCommaSeparatedValueIntoListProperty() {
+    // given
+    ProcessEngineConfigurationImpl engineConfiguration = new StandaloneProcessEngineConfiguration();
+    Map<String, String> propertiesToSet = new HashMap<>();
+    propertiesToSet.put("adminGroups", "camunda-admin, ops");
+    propertiesToSet.put("adminUsers", "demo");
+
+    // when
+    PropertyHelper.applyProperties(engineConfiguration, propertiesToSet);
+
+    // then
+    Assert.assertEquals(List.of("camunda-admin", "ops"), engineConfiguration.getAdminGroups());
+    Assert.assertEquals(List.of("demo"), engineConfiguration.getAdminUsers());
   }
 }

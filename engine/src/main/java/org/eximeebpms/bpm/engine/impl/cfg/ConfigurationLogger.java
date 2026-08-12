@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.engine.impl.cfg;
 
+import java.util.Set;
 import javax.naming.NamingException;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.exception.NotValidException;
@@ -158,6 +159,14 @@ public class ConfigurationLogger extends ProcessEngineLogger {
     logWarn(
         "021",
         "Script security is disabled. Script deployment and runtime validation are turned off."
+    );
+  }
+
+  public void historyExclusionActive(Set<String> excludedProcessDefinitionKeys) {
+    logInfo(
+        "022",
+        "History recording is disabled for process definition key(s) {}, regardless of the configured history level.",
+        excludedProcessDefinitionKeys
     );
   }
 }

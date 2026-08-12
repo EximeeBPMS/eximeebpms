@@ -197,6 +197,7 @@ import org.eximeebpms.bpm.engine.impl.history.handler.CompositeDbHistoryEventHan
 import org.eximeebpms.bpm.engine.impl.history.handler.CompositeHistoryEventHandler;
 import org.eximeebpms.bpm.engine.impl.history.handler.DbHistoryEventHandler;
 import org.eximeebpms.bpm.engine.impl.history.handler.HistoryEventHandler;
+import org.eximeebpms.bpm.engine.impl.history.handler.ProcessDefinitionKeyFilteringHistoryEventHandler;
 import org.eximeebpms.bpm.engine.impl.history.parser.HistoryParseListener;
 import org.eximeebpms.bpm.engine.impl.history.producer.CacheAwareHistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.history.producer.DefaultDmnHistoryEventProducer;
@@ -754,6 +755,13 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
    * of history event handlers.
    */
   protected boolean enableDefaultDbHistoryEventHandler = true;
+
+  /**
+   * Process definition keys for which no history is persisted, regardless of the
+   * configured {@link #historyLevel} — see {@link org.eximeebpms.bpm.engine.impl.history.handler.ProcessDefinitionKeyFilteringHistoryEventHandler}.
+   * Empty by default (no exclusion).
+   */
+  protected Set<String> historyExcludedProcessDefinitionKeys = Set.of();
 
   protected PermissionProvider permissionProvider;
 
@@ -2812,6 +2820,12 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         historyEventHandler = new CompositeHistoryEventHandler(customHistoryEventHandlers);
       }
     }
+
+    if (!historyExcludedProcessDefinitionKeys.isEmpty()) {
+      LOG.historyExclusionActive(historyExcludedProcessDefinitionKeys);
+      historyEventHandler = new ProcessDefinitionKeyFilteringHistoryEventHandler(
+          historyEventHandler, historyExcludedProcessDefinitionKeys);
+    }
   }
 
   // password digest //////////////////////////////////////////////////////////
@@ -3914,6 +3928,20 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public void setCustomHistoryEventHandlers(List<HistoryEventHandler> customHistoryEventHandlers) {
     this.customHistoryEventHandlers = customHistoryEventHandlers;
+  }
+
+  public Set<String> getHistoryExcludedProcessDefinitionKeys() {
+    return historyExcludedProcessDefinitionKeys;
+  }
+
+  public ProcessEngineConfigurationImpl setHistoryExcludedProcessDefinitionKeys(
+      Set<String> historyExcludedProcessDefinitionKeys) {
+    this.historyExcludedProcessDefinitionKeys =
+        historyExcludedProcessDefinitionKeys != null
+            ? Set.copyOf(historyExcludedProcessDefinitionKeys)
+            : Set.of();
+
+    return this;
   }
 
   public IncidentHandler getIncidentHandler(String incidentType) {

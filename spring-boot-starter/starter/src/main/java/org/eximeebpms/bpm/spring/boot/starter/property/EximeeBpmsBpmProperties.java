@@ -88,6 +88,11 @@ public class EximeeBpmsBpmProperties {
   private String historyLevelDefault = ProcessEngineConfiguration.HISTORY_FULL;
 
   /**
+   * process definition keys for which no history is persisted, regardless of 'historyLevel'
+   */
+  private Set<String> historyExcludedProcessDefinitionKeys = new HashSet<>();
+
+  /**
    * enables auto deployment of processes
    */
   private boolean autoDeploymentEnabled = true;
@@ -185,6 +190,14 @@ public class EximeeBpmsBpmProperties {
 
   public void setHistoryLevelDefault(String historyLevelDefault) {
     this.historyLevelDefault = historyLevelDefault;
+  }
+
+  public Set<String> getHistoryExcludedProcessDefinitionKeys() {
+    return historyExcludedProcessDefinitionKeys;
+  }
+
+  public void setHistoryExcludedProcessDefinitionKeys(Set<String> historyExcludedProcessDefinitionKeys) {
+    this.historyExcludedProcessDefinitionKeys = historyExcludedProcessDefinitionKeys;
   }
 
   public boolean isAutoDeploymentEnabled() {
@@ -372,6 +385,7 @@ public class EximeeBpmsBpmProperties {
       .add("generateUniqueProcessApplicationName=" + generateUniqueProcessApplicationName)
       .add("historyLevel=" + historyLevel)
       .add("historyLevelDefault=" + historyLevelDefault)
+      .add("historyExcludedProcessDefinitionKeys=" + historyExcludedProcessDefinitionKeys)
       .add("autoDeploymentEnabled=" + autoDeploymentEnabled)
       .add("deploymentResourcePattern=" + Arrays.toString(deploymentResourcePattern))
       .add("defaultSerializationFormat=" + defaultSerializationFormat)

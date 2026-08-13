@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+import javax.sql.DataSource;
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.assertj.core.api.Assertions;
 import org.eximeebpms.bpm.engine.authorization.Authorization;
 import org.eximeebpms.bpm.engine.authorization.AuthorizationQuery;
@@ -358,12 +360,30 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
     ClockUtil.setCurrentTime(START_DATE);
 
-    // when
+    // the default MyBatis connection pool (10 max active connections) is smaller
+    // than the degree of parallelism used below. Under load, threads waiting for a
+    // connection longer than the pool's checkout timeout cause MyBatis to reclaim
+    // "overdue" connections that are, in fact, still in use, which surfaces as a
+    // random "Error accessing PooledConnection. Connection is invalid" failure.
+    // Temporarily size the pool to fit the parallelism to remove that contention.
+    DataSource dataSource = processEngineConfiguration.getDataSource();
+    Integer previousPoolMaximumActiveConnections = null;
+    if (dataSource instanceof PooledDataSource) {
+      PooledDataSource pooledDataSource = (PooledDataSource) dataSource;
+      previousPoolMaximumActiveConnections = pooledDataSource.getPoolMaximumActiveConnections();
+      pooledDataSource.setPoolMaximumActiveConnections(Math.max(previousPoolMaximumActiveConnections, degreeOfParallelism));
+    }
+
     try {
+      // when
       IntStream.range(0, degreeOfParallelism).parallel().forEach(i -> runtimeService.startProcessInstanceByKey("process"));
     } catch (Exception e) {
       e.printStackTrace();
       fail("No exception should occur");
+    } finally {
+      if (dataSource instanceof PooledDataSource && previousPoolMaximumActiveConnections != null) {
+        ((PooledDataSource) dataSource).setPoolMaximumActiveConnections(previousPoolMaximumActiveConnections);
+      }
     }
   }
 

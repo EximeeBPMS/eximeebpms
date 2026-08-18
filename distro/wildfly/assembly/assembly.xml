@@ -23,19 +23,26 @@
       <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>server</outputDirectory>
       <includes>
-        <include>org.wildfly:wildfly-dist:tar.gz:${version.wildfly}</include>
+        <include>org.wildfly:wildfly-dist:zip:${version.wildfly}</include>
       </includes>
-      <unpack>true</unpack>      
+      <unpack>true</unpack>
+      <!-- zip archives don't preserve POSIX permissions the way wildfly-dist's
+        former tar.gz classifier did (dropped from Maven Central as of
+        41.0.0.Final, .zip is now the only classifier published there) -
+        without this, bin/*.sh loses its executable bit and the server can't
+        start. -->
+      <fileMode>0755</fileMode>
+      <directoryMode>0755</directoryMode>
       <unpackOptions>
         <excludes>
-          <exclude>**/standalone/configuration/standalone.xml</exclude>        
-          <exclude>**/standalone/configuration/standalone-full.xml</exclude> 
+          <exclude>**/standalone/configuration/standalone.xml</exclude>
+          <exclude>**/standalone/configuration/standalone-full.xml</exclude>
           <exclude>**/bin/standalone.conf</exclude>
           <exclude>**/bin/standalone.conf.bat</exclude>
           <!-- exclude wildfly's shipped version of h2database -->
           <exclude>**/h2database/**</exclude>
-        </excludes>        
-      </unpackOptions>      
+        </excludes>
+      </unpackOptions>
     </dependencySet>
     <dependencySet>
       <useProjectArtifact>false</useProjectArtifact>

@@ -37,7 +37,6 @@ See [plugin development guide](http://docs.eximeebpms.org/real-life/how-to/#cock
 #### Translations
 
 English and german translations are located in the `ui/<app>/client/locales` folders.  
-Translations for other languages are available in the [eximeebpms-webapp-translations](https://github.com/camunda-community-hub/camunda-7-webapp-translations) repository.
 
 ### Libraries
 

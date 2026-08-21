@@ -885,7 +885,7 @@ public abstract class MockProvider {
   public static final String EXAMPLE_TELEMETRY_LICENSE_TYPE = "UNIFIED";
   public static final String EXAMPLE_TELEMETRY_LICENSE_VALID_UNTIL = "2022-09-30";
   public static final boolean EXAMPLE_TELEMETRY_LICENSE_UNLIMITED = false;
-  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("camundaBPM", "true");
+  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("eximeebpmsBPM", "true");
   public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;eximeebpmsBPM=true;optimize=false;cawemo=false";
   public static final String EXAMPLE_TELEMETRY_JDK_VERSION = "14.0.2";
   public static final String EXAMPLE_TELEMETRY_JDK_VENDOR = "Oracle Corporation";

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class InternalsDto {
 
   public static final String SERIALIZED_APPLICATION_SERVER = "application-server";
-  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "camunda-integration";
+  public static final String SERIALIZED_EXIMEEBPMS_INTEGRATION = "eximeebpms-integration";
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_TELEMETRY_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 
@@ -39,8 +39,8 @@ public class InternalsDto {
   protected ApplicationServerDto applicationServer;
   @JsonProperty(value = SERIALIZED_LICENSE_KEY)
   protected LicenseKeyDataDto licenseKey;
-  @JsonProperty(value = SERIALIZED_CAMUNDA_INTEGRATION)
-  protected Set<String> camundaIntegration;
+  @JsonProperty(value = SERIALIZED_EXIMEEBPMS_INTEGRATION)
+  protected Set<String> eximeebpmsIntegration;
   @JsonProperty(value = SERIALIZED_TELEMETRY_DATA_COLLECTION_START_DATE)
   protected Date dataCollectionStartDate;
   protected Map<String, CommandDto> commands;
@@ -55,7 +55,7 @@ public class InternalsDto {
     this.licenseKey = licenseKey;
     this.commands = new HashMap<>();
     this.jdk = jdk;
-    this.camundaIntegration = new HashSet<>();
+    this.eximeebpmsIntegration = new HashSet<>();
   }
 
   public DatabaseDto getDatabase() {
@@ -99,11 +99,11 @@ public class InternalsDto {
   }
 
   public Set<String> getEximeeBpmsIntegration() {
-    return camundaIntegration;
+    return eximeebpmsIntegration;
   }
 
-  public void setEximeeBpmsIntegration(Set<String> camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setEximeeBpmsIntegration(Set<String> eximeebpmsIntegration) {
+    this.eximeebpmsIntegration = eximeebpmsIntegration;
   }
 
   public LicenseKeyDataDto getLicenseKey() {

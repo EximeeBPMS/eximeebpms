@@ -31,7 +31,7 @@ import com.google.gson.annotations.SerializedName;
 public class InternalsImpl implements Internals {
 
   public static final String SERIALIZED_APPLICATION_SERVER = "application-server";
-  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "camunda-integration";
+  public static final String SERIALIZED_EXIMEEBPMS_INTEGRATION = "eximeebpms-integration";
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 
@@ -40,8 +40,8 @@ public class InternalsImpl implements Internals {
   protected ApplicationServerImpl applicationServer;
   @SerializedName(value = SERIALIZED_LICENSE_KEY)
   protected LicenseKeyDataImpl licenseKey;
-  @SerializedName(value = SERIALIZED_CAMUNDA_INTEGRATION)
-  protected Set<String> camundaIntegration;
+  @SerializedName(value = SERIALIZED_EXIMEEBPMS_INTEGRATION)
+  protected Set<String> eximeebpmsIntegration;
   @SerializedName(value = SERIALIZED_DATA_COLLECTION_START_DATE)
   protected Date dataCollectionStartDate;
   protected Map<String, Command> commands;
@@ -60,12 +60,12 @@ public class InternalsImpl implements Internals {
     this.licenseKey = licenseKey;
     this.commands = new HashMap<>();
     this.jdk = jdk;
-    this.camundaIntegration = new HashSet<>();
+    this.eximeebpmsIntegration = new HashSet<>();
   }
 
   public InternalsImpl(InternalsImpl internals) {
     this(internals.database, internals.applicationServer, internals.licenseKey, internals.jdk);
-    this.camundaIntegration = internals.camundaIntegration == null ? null : new HashSet<>(internals.getEximeeBpmsIntegration());
+    this.eximeebpmsIntegration = internals.eximeebpmsIntegration == null ? null : new HashSet<>(internals.getEximeeBpmsIntegration());
     this.commands = new HashMap<>(internals.getCommands());
     this.metrics = internals.metrics == null ? null : new HashMap<>(internals.getMetrics());
     this.webapps = internals.webapps;
@@ -149,11 +149,11 @@ public class InternalsImpl implements Internals {
 
   @Override
   public Set<String> getEximeeBpmsIntegration() {
-    return camundaIntegration;
+    return eximeebpmsIntegration;
   }
 
-  public void setEximeeBpmsIntegration(Set<String> camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setEximeeBpmsIntegration(Set<String> eximeebpmsIntegration) {
+    this.eximeebpmsIntegration = eximeebpmsIntegration;
   }
 
   @Override

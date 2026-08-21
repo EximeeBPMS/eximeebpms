@@ -411,7 +411,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected static final Map<Object, Object> DEFAULT_BEANS_MAP = new HashMap<>();
 
-  protected static final String PRODUCT_NAME = "Camunda BPM Runtime";
+  protected static final String PRODUCT_NAME = "EximeeBPMS BPM Runtime";
 
   public static SqlSessionFactory cachedSqlSessionFactory;
 

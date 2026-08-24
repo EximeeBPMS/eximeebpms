@@ -55,6 +55,22 @@ module.exports = [
           });
         }
       ],
+      access: [
+        'AuthorizationResource',
+        function (AuthorizationResource) {
+          return function (cb) {
+            AuthorizationResource.check({
+              permissionName: 'READ',
+              resourceName: 'system',
+              resourceType: 21,
+            })
+              .$promise.then(function (response) {
+                cb(null, response.authorized);
+              })
+              .catch(cb);
+          };
+        },
+      ],
 
       priority: 0
     });

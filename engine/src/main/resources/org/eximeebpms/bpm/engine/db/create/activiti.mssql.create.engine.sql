@@ -48,7 +48,7 @@ create table ACT_GE_BYTEARRAY (
     REV_ int,
     NAME_ nvarchar(255),
     DEPLOYMENT_ID_ nvarchar(64),
-    BYTES_ image,
+    BYTES_ varbinary(max),
     GENERATED_ tinyint,
     TENANT_ID_ nvarchar(64),
     TYPE_ integer,

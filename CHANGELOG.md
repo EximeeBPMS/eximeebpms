@@ -35,6 +35,7 @@ retroactively added CVE IDs.
 - Split SQL migration scripts between version 1.3 and 1.4; make SonarQube scan non-blocking
 - Add `engine-plugins` to `check-engine` profile
 - `PropertyHelper` (used to apply `bpm-platform.xml` `<property>` values via reflection) now supports comma-separated `Set<String>`/`List<String>` setter targets, not just `int`/`long`/`float`/`boolean`/`String`. As a side effect, `adminGroups`, `adminUsers`, and `registeredDeployments` — previously unset-able via plain XML property syntax — are now configurable that way too.
+- Replaced the deprecated MSSQL `image` data type with `varbinary(max)` for `ACT_ID_INFO.PASSWORD_`, `ACT_GE_BYTEARRAY.BYTES_`, and `ACT_HI_COMMENT.FULL_MSG_` (carried in the `1.3-to-1.4` upgrade script) — Microsoft has deprecated `image`/`text`/`ntext` and plans to remove them in a future SQL Server version. New installs get `varbinary(max)` directly via the updated create/Liquibase-baseline scripts. Operational note: the upgrade's `ALTER COLUMN` on `ACT_GE_BYTEARRAY.BYTES_` rewrites the whole column and can take a while / hold a table-level lock on installations with a large deployment/variable-byte-array table — plan this upgrade during a maintenance window if that table is large.
 - Bump versions:
   - Gson: `2.8.9` → `2.14.0`
   - Jackson: `2.15.2` → `2.21.3`

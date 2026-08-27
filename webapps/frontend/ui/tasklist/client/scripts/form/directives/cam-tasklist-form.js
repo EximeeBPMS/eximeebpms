@@ -23,7 +23,7 @@ var EMBEDDED_KEY = 'embedded:',
   APP_KEY = 'app:',
   ENGINE_KEY = 'engine:',
   DEPLOYMENT_KEY = 'deployment:',
-  CAMUNDA_FORMS_KEY = 'eximeebpms-forms:';
+  EXIMEEBPMS_FORMS_KEY = 'eximeebpms-forms:';
 
 function compact(arr) {
   var a = [];
@@ -151,7 +151,7 @@ module.exports = function() {
           }
 
           if (camundaFormRef) {
-            form.type = 'camunda-forms';
+            form.type = 'eximeebpms-forms';
 
             if ($scope.params.taskId) {
               key = Uri.appUri(
@@ -176,9 +176,9 @@ module.exports = function() {
           if (key.indexOf(EMBEDDED_KEY) === 0) {
             key = key.substring(EMBEDDED_KEY.length);
             form.type = 'embedded';
-          } else if (key.indexOf(CAMUNDA_FORMS_KEY) === 0) {
-            key = key.substring(CAMUNDA_FORMS_KEY.length);
-            form.type = 'camunda-forms';
+          } else if (key.indexOf(EXIMEEBPMS_FORMS_KEY) === 0) {
+            key = key.substring(EXIMEEBPMS_FORMS_KEY.length);
+            form.type = 'eximeebpms-forms';
           } else {
             form.type = 'external';
           }

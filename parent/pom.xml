@@ -20,7 +20,7 @@
   <properties>
     <version.quarkus>3.36.1</version.quarkus>
     <version.spring.framework>7.0.8</version.spring.framework>
-    <version.spring-boot>4.1.0</version.spring-boot>
+    <version.spring-boot>4.1.1</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.rest-assured>6.0.0</version.rest-assured>
     <version.jersey>3.1.12</version.jersey>

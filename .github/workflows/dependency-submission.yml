@@ -1,0 +1,63 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    name: Submit Maven dependency graph
+    runs-on: github-actions-runner-new
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        run: |
+          if java -version 2>&1 | grep -qE '"17\.'; then
+            echo "Java 17 already installed"
+          else
+            echo "Java 17 not found, installing via package manager..."
+            sudo apt-get update -q
+            sudo apt-get install -y openjdk-17-jdk
+          fi
+          JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 | grep 'java.home' | awk '{print $3}')
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
+
+      - name: Restore Maven packages
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-depsubmit-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Submit dependency graph
+        uses: advanced-security/maven-dependency-submission-action@v5
+        with:
+          maven-args: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
+          detector-name: eximeebpms-dependency-submission
+          detector-url: https://github.com/EximeeBPMS/eximeebpms/blob/main/.github/workflows/dependency-submission.yml
+
+      - name: Prune own artifacts before caching
+        # actions/cache does not reliably support `!` exclusion in `path:` - see the
+        # identical comment in update-sbom.yml.
+        if: success()
+        run: rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
+
+      - name: Save Maven packages
+        if: success()
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.m2/repository
+          key: ${{ runner.os }}-maven-depsubmit-${{ hashFiles('**/pom.xml') }}

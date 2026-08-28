@@ -3935,10 +3935,10 @@ public class BpmnParse extends Parse {
     String className = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_CLASS);
     String delegateExpression = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_DELEGATE_EXPRESSION);
 
-    if (calledElement == null && caseRef == null) {
-      addError("Missing attribute 'calledElement' or 'caseRef'", callActivityElement);
-    } else if (calledElement != null && caseRef != null) {
-      addError("The attributes 'calledElement' or 'caseRef' cannot be used together: Use either 'calledElement' or 'caseRef'", callActivityElement);
+    if (caseRef != null) {
+      addError("The attribute 'caseRef' is no longer supported: calling a CMMN case from a call activity was removed together with CMMN support. Use 'calledElement' to call a BPMN process instead.", callActivityElement);
+    } else if (calledElement == null) {
+      addError("Missing attribute 'calledElement'", callActivityElement);
     }
 
     String bindingAttributeName = "calledElementBinding";

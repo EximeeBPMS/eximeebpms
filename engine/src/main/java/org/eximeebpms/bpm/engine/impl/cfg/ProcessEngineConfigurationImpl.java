@@ -2934,9 +2934,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     InternalsImpl internals = new InternalsImpl(database, diagnosticsRegistry.getApplicationServer(), diagnosticsRegistry.getLicenseKey(), jdk);
     internals.setDataCollectionStartDate(ClockUtil.getCurrentTime());
 
-    String camundaIntegration = diagnosticsRegistry.getEximeeBpmsIntegration();
-    if (camundaIntegration != null && !camundaIntegration.isEmpty()) {
-      internals.getEximeeBpmsIntegration().add(camundaIntegration);
+    String eximeebpmsIntegration = diagnosticsRegistry.getEximeeBpmsIntegration();
+    if (eximeebpmsIntegration != null && !eximeebpmsIntegration.isEmpty()) {
+      internals.getEximeeBpmsIntegration().add(eximeebpmsIntegration);
     }
 
     ProcessEngineDetails engineInfo = ParseUtil

@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.telemetry.Command;
 import org.eximeebpms.bpm.engine.telemetry.Internals;
 import org.eximeebpms.bpm.engine.telemetry.Metric;
@@ -35,19 +36,27 @@ public class InternalsImpl implements Internals {
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 
+  @Setter
   protected DatabaseImpl database;
+  @Setter
   @SerializedName(value = SERIALIZED_APPLICATION_SERVER)
   protected ApplicationServerImpl applicationServer;
+  @Setter
   @SerializedName(value = SERIALIZED_LICENSE_KEY)
   protected LicenseKeyDataImpl licenseKey;
   @SerializedName(value = SERIALIZED_EXIMEEBPMS_INTEGRATION)
   protected Set<String> eximeebpmsIntegration;
+  @Setter
   @SerializedName(value = SERIALIZED_DATA_COLLECTION_START_DATE)
   protected Date dataCollectionStartDate;
+  @Setter
   protected Map<String, Command> commands;
+  @Setter
   protected Map<String, Metric> metrics;
+  @Setter
   protected Set<String> webapps;
 
+  @Setter
   protected JdkImpl jdk;
 
   public InternalsImpl() {
@@ -77,17 +86,9 @@ public class InternalsImpl implements Internals {
     return database;
   }
 
-  public void setDatabase(DatabaseImpl database) {
-    this.database = database;
-  }
-
   @Override
   public ApplicationServerImpl getApplicationServer() {
     return applicationServer;
-  }
-
-  public void setApplicationServer(ApplicationServerImpl applicationServer) {
-    this.applicationServer = applicationServer;
   }
 
   @Override
@@ -95,17 +96,9 @@ public class InternalsImpl implements Internals {
     return dataCollectionStartDate;
   }
 
-  public void setDataCollectionStartDate(Date dataCollectionStartDate) {
-    this.dataCollectionStartDate = dataCollectionStartDate;
-  }
-
   @Override
   public Map<String, Command> getCommands() {
     return commands;
-  }
-
-  public void setCommands(Map<String, Command> commands) {
-    this.commands = commands;
   }
 
   public void putCommand(String commandName, int count) {
@@ -119,10 +112,6 @@ public class InternalsImpl implements Internals {
   @Override
   public Map<String, Metric> getMetrics() {
     return metrics;
-  }
-
-  public void setMetrics(Map<String, Metric> metrics) {
-    this.metrics = metrics;
   }
 
   public void putMetric(String metricName, int count) {
@@ -143,10 +132,6 @@ public class InternalsImpl implements Internals {
     return jdk;
   }
 
-  public void setJdk(JdkImpl jdk) {
-    this.jdk = jdk;
-  }
-
   @Override
   public Set<String> getEximeeBpmsIntegration() {
     return eximeebpmsIntegration;
@@ -161,16 +146,8 @@ public class InternalsImpl implements Internals {
     return licenseKey;
   }
 
-  public void setLicenseKey(LicenseKeyDataImpl licenseKey) {
-    this.licenseKey = licenseKey;
-  }
-
   @Override
   public Set<String> getWebapps() {
     return webapps;
-  }
-
-  public void setWebapps(Set<String> webapps) {
-    this.webapps = webapps;
   }
 }

@@ -22,9 +22,9 @@ public class EximeeBpmsIntegration {
   }
 
   public static final String SPRING_BOOT_STARTER = "spring-boot-starter";
-  public static final String CAMUNDA_BPM_RUN = "eximeebpms-bpm-run";
+  public static final String EXIMEEBPMS_BPM_RUN = "eximeebpms-bpm-run";
   public static final String WILDFLY_SUBSYSTEM = "wildfly-subsystem";
   public static final String JBOSS_SUBSYSTEM = "jboss-subsystem";
-  public static final String CAMUNDA_EJB_SERVICE = "eximeebpms-ejb-service";
+  public static final String EXIMEEBPMS_EJB_SERVICE = "eximeebpms-ejb-service";
 
 }

@@ -44,8 +44,8 @@ public class ManagedJtaProcessEngineConfiguration extends JakartaTransactionProc
   @Override
   protected void initTelemetryData() {
     super.initTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
-    camundaIntegration.add(EximeeBpmsIntegration.WILDFLY_SUBSYSTEM);
+    Set<String> eximeebpmsIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    eximeebpmsIntegration.add(EximeeBpmsIntegration.WILDFLY_SUBSYSTEM);
   }
 
 }

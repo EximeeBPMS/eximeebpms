@@ -35,8 +35,8 @@ public class EximeeBpmsIntegrationDeterminator implements InitializingBean {
   public void afterPropertiesSet() throws Exception {
     ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
 
-    Set<String> camundaIntegration = configuration.getTelemetryData().getProduct().getInternals().getEximeeBpmsIntegration();
-    camundaIntegration.add(EximeeBpmsIntegration.SPRING_BOOT_STARTER);
+    Set<String> eximeebpmsIntegration = configuration.getTelemetryData().getProduct().getInternals().getEximeeBpmsIntegration();
+    eximeebpmsIntegration.add(EximeeBpmsIntegration.SPRING_BOOT_STARTER);
   }
 
 }

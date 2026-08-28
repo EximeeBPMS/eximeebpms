@@ -18,7 +18,6 @@ package org.eximeebpms.bpm.engine.impl.history.producer;
 
 import static org.eximeebpms.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
 import static org.eximeebpms.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
-import static org.eximeebpms.bpm.engine.impl.util.ExceptionUtil.createJobExceptionByteArray;
 import static org.eximeebpms.bpm.engine.impl.util.ExceptionUtil.getExceptionStacktrace;
 import static org.eximeebpms.bpm.engine.impl.util.StringUtil.toByteArray;
 
@@ -60,7 +59,6 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJ
 import org.eximeebpms.bpm.engine.impl.migration.instance.MigratingActivityInstance;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContext;
 import org.eximeebpms.bpm.engine.impl.oplog.UserOperationLogContextEntry;
-import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricJobLogEventEntity;
@@ -76,7 +74,6 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.ParseUtil;
 import org.eximeebpms.bpm.engine.management.JobDefinition;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
-import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 import org.eximeebpms.bpm.engine.runtime.Incident;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.task.IdentityLink;
@@ -995,16 +992,12 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
       // exception message
       event.setJobExceptionMessage(exception.getMessage());
 
-      // stacktrace
+      // stacktrace — carried on the event; the byte array is created by whichever
+      // component persists it (DbHistoryEventHandler). Inserting here would leave an
+      // unreferenced row behind whenever a HistoryEventHandler declines to persist
+      // the event (BPMS-662).
       String exceptionStacktrace = getExceptionStacktrace(exception);
-      byte[] exceptionBytes = toByteArray(exceptionStacktrace);
-
-      ByteArrayEntity byteArray = createJobExceptionByteArray(exceptionBytes, ResourceTypes.HISTORY);
-
-      byteArray.setRootProcessInstanceId(event.getRootProcessInstanceId());
-      byteArray.setRemovalTime(event.getRemovalTime());
-
-      event.setExceptionByteArrayId(byteArray.getId());
+      event.setExceptionStacktraceBytes(toByteArray(exceptionStacktrace));
     }
 
     return event;

@@ -16,8 +16,11 @@
  */
 package org.eximeebpms.bpm.engine.impl.history.event;
 
+import java.io.Serial;
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.history.HistoricDecisionOutputInstance;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.util.ByteArrayField;
@@ -31,16 +34,23 @@ import org.eximeebpms.bpm.engine.variable.value.TypedValue;
  */
 public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implements HistoricDecisionOutputInstance, ValueFields {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
+  @Setter
   protected String decisionInstanceId;
 
+  @Setter
   protected String clauseId;
+  @Setter
   protected String clauseName;
 
+  @Setter
   protected String ruleId;
+  @Setter
   protected Integer ruleOrder;
 
+  @Setter
   protected String variableName;
 
   protected Long longValue;
@@ -48,11 +58,23 @@ public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implement
   protected String textValue;
   protected String textValue2;
 
+  @Setter
+  @Getter
   protected String tenantId;
 
   protected ByteArrayField byteArrayField;
   protected TypedValueField typedValueField = new TypedValueField(this, false);
 
+  /**
+   * Not persisted. Holds the value recorded by {@link #setValue(TypedValue)} until
+   * {@link #materializeValue()} applies it. Applying it in the producer would insert a
+   * byte array for an object-typed value before anything had decided the row it belongs
+   * to would exist (BPMS-662).
+   */
+  protected TypedValue pendingValue;
+
+
+  @Setter
   protected Date createTime;
 
   public HistoricDecisionOutputInstanceEntity() {
@@ -90,33 +112,14 @@ public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implement
     return ruleOrder;
   }
 
-  public void setDecisionInstanceId(String decisionInstanceId) {
-    this.decisionInstanceId = decisionInstanceId;
-  }
-
-  public void setClauseId(String clauseId) {
-    this.clauseId = clauseId;
-  }
-
-  public void setClauseName(String clauseName) {
-    this.clauseName = clauseName;
-  }
-
-  public void setRuleId(String ruleId) {
-    this.ruleId = ruleId;
-  }
-
-  public void setRuleOrder(Integer ruleOrder) {
-    this.ruleOrder = ruleOrder;
-  }
-
   @Override
   public String getVariableName() {
     return variableName;
   }
 
-  public void setVariableName(String variableName) {
-    this.variableName = variableName;
+  @Override
+  public Date getCreateTime() {
+    return createTime;
   }
 
   @Override
@@ -130,16 +133,16 @@ public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implement
 
   @Override
   public Object getValue() {
-    return typedValueField.getValue();
+    return pendingValue != null ? pendingValue.getValue() : typedValueField.getValue();
   }
 
   @Override
   public TypedValue getTypedValue() {
-    return typedValueField.getTypedValue(false);
+    return pendingValue != null ? pendingValue : typedValueField.getTypedValue(false);
   }
 
   public TypedValue getTypedValue(boolean deserializeValue) {
-    return typedValueField.getTypedValue(deserializeValue, false);
+    return pendingValue != null ? pendingValue : typedValueField.getTypedValue(deserializeValue, false);
   }
 
   @Override
@@ -211,7 +214,18 @@ public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implement
   }
 
   public void setValue(TypedValue typedValue) {
-    typedValueField.setValue(typedValue);
+    this.pendingValue = typedValue;
+  }
+
+  /**
+   * Applies the value recorded by {@link #setValue(TypedValue)}, creating the byte array
+   * for an object-typed value. Called immediately before this entity is inserted.
+   */
+  public void materializeValue() {
+    if (pendingValue != null) {
+      typedValueField.setValue(pendingValue);
+      pendingValue = null;
+    }
   }
 
   public String getSerializerName() {
@@ -222,28 +236,8 @@ public class HistoricDecisionOutputInstanceEntity extends HistoryEvent implement
     typedValueField.setSerializerName(serializerName);
   }
 
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
   public String getRootProcessInstanceId() {
     return rootProcessInstanceId;
-  }
-
-  public void setRootProcessInstanceId(String rootProcessInstanceId) {
-    this.rootProcessInstanceId = rootProcessInstanceId;
   }
 
   public void delete() {

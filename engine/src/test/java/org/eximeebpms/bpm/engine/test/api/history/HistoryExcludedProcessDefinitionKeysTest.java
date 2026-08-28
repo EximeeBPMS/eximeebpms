@@ -1,13 +1,19 @@
 package org.eximeebpms.bpm.engine.test.api.history;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.eximeebpms.bpm.engine.HistoryService;
+import org.eximeebpms.bpm.engine.ExternalTaskService;
+import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.TaskService;
+import org.eximeebpms.bpm.engine.externaltask.LockedExternalTask;
 import org.eximeebpms.bpm.engine.task.Task;
+import org.eximeebpms.bpm.engine.test.api.runtime.FailingDelegate;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.eximeebpms.bpm.engine.test.util.ProcessEngineTestRule;
 import org.eximeebpms.bpm.engine.test.util.ProvidedProcessEngineRule;
@@ -49,12 +55,16 @@ public class HistoryExcludedProcessDefinitionKeysTest {
   protected RuntimeService runtimeService;
   protected TaskService taskService;
   protected HistoryService historyService;
+  protected ManagementService managementService;
+  protected ExternalTaskService externalTaskService;
 
   @Before
   public void init() {
     runtimeService = engineRule.getRuntimeService();
     taskService = engineRule.getTaskService();
     historyService = engineRule.getHistoryService();
+    managementService = engineRule.getManagementService();
+    externalTaskService = engineRule.getExternalTaskService();
 
     testRule.deploy(oneTaskProcess(EXCLUDED_PROCESS_KEY));
     testRule.deploy(oneTaskProcess(INCLUDED_PROCESS_KEY));
@@ -66,6 +76,33 @@ public class HistoryExcludedProcessDefinitionKeysTest {
         .userTask("userTask")
         .endEvent()
         .done();
+  }
+
+  protected static BpmnModelInstance failingAsyncServiceTaskProcess(String processDefinitionKey) {
+    return Bpmn.createExecutableProcess(processDefinitionKey)
+        .startEvent()
+        .serviceTask("failingTask")
+          .camundaAsyncBefore()
+          .camundaClass(FailingDelegate.class.getName())
+        .endEvent()
+        .done();
+  }
+
+  protected static BpmnModelInstance externalTaskProcess(String processDefinitionKey) {
+    return Bpmn.createExecutableProcess(processDefinitionKey)
+        .startEvent()
+        .serviceTask("externalTask").camundaExternalTask("topic")
+        .endEvent()
+        .done();
+  }
+
+  /** Robust against a configured table prefix. */
+  protected long byteArrayCount() {
+    return managementService.getTableCount().entrySet().stream()
+        .filter(entry -> entry.getKey().endsWith("ACT_GE_BYTEARRAY"))
+        .map(Map.Entry::getValue)
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("ACT_GE_BYTEARRAY not reported by getTableCount()"));
   }
 
   protected String runToCompletion(String processDefinitionKey) {
@@ -101,6 +138,50 @@ public class HistoryExcludedProcessDefinitionKeysTest {
         .processDefinitionKey(INCLUDED_PROCESS_KEY).finished().count());
     assertEquals(1, historyService.createHistoricActivityInstanceQuery()
         .processInstanceId(processInstanceId).activityId("userTask").count());
+  }
+
+  /**
+   * Regression guard for BPMS-662: a job failure on an excluded process definition used to
+   * leave an unreferenced {@code job.exceptionByteArray} row behind, because the producer
+   * inserted it before this handler chain decided not to persist the event. Only the runtime
+   * job's own stacktrace byte array — the one referenced from {@code ACT_RU_JOB} — may appear.
+   */
+  @Test
+  public void shouldNotLeaveOrphanedExceptionByteArrayWhenJobLogIsExcluded() {
+    // given
+    testRule.deploy(failingAsyncServiceTaskProcess(EXCLUDED_PROCESS_KEY));
+    long byteArraysBefore = byteArrayCount();
+    runtimeService.startProcessInstanceByKey(EXCLUDED_PROCESS_KEY);
+    String jobId = managementService.createJobQuery().singleResult().getId();
+
+    // when
+    assertThrows(RuntimeException.class, () -> managementService.executeJob(jobId));
+
+    // then — exactly one new byte array, the runtime one; no history byte array, no job log
+    assertEquals(byteArraysBefore + 1, byteArrayCount());
+    assertEquals(0, historyService.createHistoricJobLogQuery().count());
+  }
+
+  /**
+   * Same defect as {@link #shouldNotLeaveOrphanedExceptionByteArrayWhenJobLogIsExcluded},
+   * for the other producer-side insert: external-task error details (BPMS-662). Only the
+   * runtime external task's own byte array may appear.
+   */
+  @Test
+  public void shouldNotLeaveOrphanedErrorDetailsByteArrayWhenExternalTaskLogIsExcluded() {
+    // given
+    testRule.deploy(externalTaskProcess(EXCLUDED_PROCESS_KEY));
+    runtimeService.startProcessInstanceByKey(EXCLUDED_PROCESS_KEY);
+    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, "worker")
+        .topic("topic", 10000L).execute().get(0);
+    long byteArraysBefore = byteArrayCount();
+
+    // when
+    externalTaskService.handleFailure(externalTask.getId(), "worker", "errorMessage", "errorDetails", 0, 0L);
+
+    // then
+    assertEquals(byteArraysBefore + 1, byteArrayCount());
+    assertEquals(0, historyService.createHistoricExternalTaskLogQuery().count());
   }
 
   @Test

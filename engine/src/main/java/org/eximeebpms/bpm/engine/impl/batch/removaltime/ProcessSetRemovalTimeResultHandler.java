@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.eximeebpms.bpm.engine.impl.batch.AbstractBatchJobHandler;
 import org.eximeebpms.bpm.engine.impl.batch.BatchJobContext;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionListener;
 import org.eximeebpms.bpm.engine.impl.db.DbEntity;
@@ -31,6 +32,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.MessageEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
+import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 
 public class ProcessSetRemovalTimeResultHandler implements TransactionListener {
 
@@ -82,9 +84,10 @@ public class ProcessSetRemovalTimeResultHandler implements TransactionListener {
   }
 
   protected ByteArrayEntity saveConfiguration(SetRemovalTimeBatchConfiguration configuration, CommandContext context) {
-    ByteArrayEntity configurationEntity = new ByteArrayEntity();
-    configurationEntity.setBytes(jobHandler.writeConfiguration(configuration));
-    context.getByteArrayManager().insert(configurationEntity);
+    ByteArrayEntity configurationEntity = new ByteArrayEntity(
+        AbstractBatchJobHandler.BATCH_JOB_CONFIGURATION_BYTE_ARRAY_NAME,
+        jobHandler.writeConfiguration(configuration), ResourceTypes.RUNTIME);
+    context.getByteArrayManager().insertByteArray(configurationEntity);
     return configurationEntity;
   }
 

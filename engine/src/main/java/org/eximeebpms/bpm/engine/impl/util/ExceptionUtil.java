@@ -61,8 +61,14 @@ public class ExceptionUtil {
     return result;
   }
 
+  /**
+   * Name carried by every job-exception byte array. Operational queries that
+   * identify these rows key on it, so it lives in one place.
+   */
+  public static final String JOB_EXCEPTION_BYTE_ARRAY_NAME = "job.exceptionByteArray";
+
   public static ByteArrayEntity createJobExceptionByteArray(byte[] byteArray, ResourceType type) {
-    return createExceptionByteArray("job.exceptionByteArray", byteArray, type);
+    return createExceptionByteArray(JOB_EXCEPTION_BYTE_ARRAY_NAME, byteArray, type);
   }
 
   /**

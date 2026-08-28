@@ -3,6 +3,17 @@ name: Dependency Submission
 on:
   push:
     branches: [main]
+  schedule:
+    # Daily at 19:00 Europe/Warsaw, which is 18:00 UTC (CET) or 17:00 UTC
+    # (CEST) depending on DST - fire at both times rather than hardcoding
+    # one offset (same pattern as dependabot-rerun.yml). The gate step below
+    # re-checks the real time, so whichever of the two fires "early" for the
+    # current season is a harmless no-op. This exists so manifests untouched
+    # by a recent push still get their dependency graph (and Dependabot
+    # alerts) refreshed - see the identical schedule in eximeebpms-enterprise's
+    # dependency-submission.yml.
+    - cron: '0 17 * * *'
+    - cron: '0 18 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -17,10 +28,33 @@ jobs:
     name: Submit Maven dependency graph
     runs-on: github-actions-runner-new
     steps:
+      - name: Skip unless not a schedule trigger, or 19:00 Europe/Warsaw has passed
+        id: gate
+        run: |
+          if [[ "${{ github.event_name }}" != "schedule" ]]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          else
+            # `-ge`, not `-eq`: github-actions-runner-new only has 2 org-wide
+            # runner slots, so a scheduled run routinely doesn't actually start
+            # for 1-3+ hours after its cron fires. An exact-hour check would
+            # miss the 19:00 window on essentially every run. A "has it passed
+            # 19:00 yet" threshold is delay-tolerant, same pattern as the
+            # business-hours gate in dependabot-rerun.yml.
+            HOUR=$((10#$(TZ='Europe/Warsaw' date +%H)))
+            if [[ "$HOUR" -ge 19 ]]; then
+              echo "proceed=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "Not yet 19:00 in Europe/Warsaw (it's $HOUR:00) - skipping this trigger."
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
       - name: Checkout Code
+        if: steps.gate.outputs.proceed == 'true'
         uses: actions/checkout@v7
 
       - name: Set up JDK
+        if: steps.gate.outputs.proceed == 'true'
         run: |
           if java -version 2>&1 | grep -qE '"17\.'; then
             echo "Java 17 already installed"
@@ -35,6 +69,7 @@ jobs:
           java -version
 
       - name: Restore Maven packages
+        if: steps.gate.outputs.proceed == 'true'
         uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.m2/repository
@@ -43,20 +78,22 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Submit dependency graph
+        if: steps.gate.outputs.proceed == 'true'
         uses: advanced-security/maven-dependency-submission-action@v5
         with:
           maven-args: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
           detector-name: eximeebpms-dependency-submission
+          detector-version: 1.0.0
           detector-url: https://github.com/EximeeBPMS/eximeebpms/blob/main/.github/workflows/dependency-submission.yml
 
       - name: Prune own artifacts before caching
         # actions/cache does not reliably support `!` exclusion in `path:` - see the
         # identical comment in update-sbom.yml.
-        if: success()
+        if: success() && steps.gate.outputs.proceed == 'true'
         run: rm -rf ${{ github.workspace }}/.m2/repository/org/eximeebpms/{bpm,commons,connect,spin,template-engines}
 
       - name: Save Maven packages
-        if: success()
+        if: success() && steps.gate.outputs.proceed == 'true'
         uses: actions/cache/save@v6
         with:
           path: ${{ github.workspace }}/.m2/repository

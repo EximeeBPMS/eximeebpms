@@ -59,7 +59,7 @@
     <version.awaitility>4.2.2</version.awaitility>
     <version.mockito>5.23.0</version.mockito>
     <version.wiremock>3.13.2</version.wiremock>
-    <version.testcontainers>1.21.3</version.testcontainers>
+    <version.testcontainers>2.0.5</version.testcontainers>
     <version.archunit-junit5>1.4.2</version.archunit-junit5>
     <version.unirest-java>3.14.5</version.unirest-java>
     <version.plexus-utils>3.6.1</version.plexus-utils>

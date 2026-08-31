@@ -19,7 +19,6 @@
 
   <properties>
     <version.kafka.clients>3.9.2</version.kafka.clients>
-    <version.testcontainers>2.0.5</version.testcontainers>
   </properties>
 
   <dependencyManagement>

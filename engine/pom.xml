@@ -39,6 +39,24 @@
         <scope>import</scope>
       </dependency>
 
+      <!-- wiremock (test scope, below) still bundles the vulnerable 5.5.1/5.3.6;
+           force the patched versions, same as connect/pom.xml and distro/run/pom.xml. -->
+      <dependency>
+        <groupId>org.apache.httpcomponents.client5</groupId>
+        <artifactId>httpclient5</artifactId>
+        <version>${version.httpclient5}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents.core5</groupId>
+        <artifactId>httpcore5</artifactId>
+        <version>${version.httpcore5}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents.core5</groupId>
+        <artifactId>httpcore5-h2</artifactId>
+        <version>${version.httpcore5}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 

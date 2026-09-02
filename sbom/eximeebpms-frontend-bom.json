@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:cbf9cd42-93af-41d5-b86d-ca23d29cfef5",
+  "serialNumber": "urn:uuid:f513908c-a642-45b5-9369-dd59380c3a1f",
   "metadata": {
-    "timestamp": "2026-09-02T09:57:55.387Z",
+    "timestamp": "2026-09-02T14:38:58.584Z",
     "tools": {
       "components": [
         {
@@ -5020,17 +5020,17 @@
     {
       "type": "library",
       "name": "dompurify",
-      "version": "3.2.4",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.2.4",
+      "version": "3.4.13",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.4.13",
       "author": "Dr.-Ing. Mario Heiderich, Cure53",
-      "description": "DOMPurify is a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG. It's written in JavaScript and works in all modern browsers (Safari, Opera (15+), Internet Explorer (10+), Firefox and Chrome - as well as almost anything else using Blink or WebKit). DOMPurify is written by security people who have vast background in web attacks and XSS. Fear not.",
+      "description": "DOMPurify is a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG. It runs as JavaScript and works in all modern browsers, as well as in Node.js (via jsdom). DOMPurify is written by security people who have vast background in web attacks and XSS. Fear not.",
       "licenses": [
         {
           "expression": "(MPL-2.0 OR Apache-2.0)",
           "acknowledgement": "declared"
         }
       ],
-      "purl": "pkg:npm/dompurify@3.2.4",
+      "purl": "pkg:npm/dompurify@3.4.13",
       "externalReferences": [
         {
           "url": "git://github.com/cure53/DOMPurify.git",
@@ -5048,12 +5048,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.2.4.tgz",
+          "url": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.13.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "cac1521440d576e429ca1cc0a1bfe492e2637f9cd69190fcfc0f72c12a756f2b9ecae09f1da9ab0816b5e3f39cda2881d1ee7507e369c52979826ce7f8cb3f9a"
+              "content": "daf998228aa3cded9dfa46a43fc4bf9d2e6c85fb25e7cee4cf012370695376292c5158051e7142b0b603563fc936a2553906464980539aec9cbf43e87709a731"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -61666,7 +61666,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dmn-js-shared@15.1.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dmn-js@15.1.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dom4@2.1.6",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.2.4",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.4.13",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|eastasianwidth@0.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|encoding@0.1.13",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|end-of-stream@1.4.5",
@@ -62419,7 +62419,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dom4@2.1.6"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.2.4",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.4.13",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/trusted-types@2.0.7"
       ]
@@ -64247,7 +64247,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|big.js@6.2.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|classnames@2.5.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|didi@10.2.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.2.4",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|dompurify@3.4.13",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|feelers@1.4.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|feelin@4.3.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|flatpickr@4.6.13",

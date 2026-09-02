@@ -25,8 +25,8 @@ import java.text.SimpleDateFormat;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import kong.unirest.json.JSONArray;
+import kong.unirest.json.JSONObject;
 
 import org.eximeebpms.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.junit.Before;

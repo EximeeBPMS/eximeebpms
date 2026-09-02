@@ -15,7 +15,7 @@
   <properties>
     <rest.http.port>38081</rest.http.port>
     <version.resteasy>6.2.3.Final</version.resteasy>
-    <version.netty>4.1.135.Final</version.netty>
+    <version.netty>4.1.137.Final</version.netty>
     <version.undertow-servlet>2.0.0.Final</version.undertow-servlet>
   </properties>
 
@@ -27,6 +27,18 @@
         <version>${version.jakarta-ee-spec}</version>
         <scope>import</scope>
         <type>pom</type>
+      </dependency>
+      <!-- Declared before resteasy-bom below: Maven resolves competing
+           dependencyManagement entries by first-declared-wins, and this
+           forces every io.netty:* artifact (including the ones
+           resteasy-netty4 bundles transitively at its own, much older
+           pinned version) up to the patched line below. -->
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-bom</artifactId>
+        <version>${version.netty}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.resteasy</groupId>

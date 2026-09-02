@@ -42,7 +42,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
+      <groupId>org.wiremock</groupId>
       <artifactId>wiremock</artifactId>
       <scope>test</scope>
       <exclusions>
@@ -59,6 +59,16 @@
           <artifactId>commons-fileupload</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- wiremock's own json-path is excluded above (kept at the project's
+         pinned version instead); wiremock 3.x's WireMockServer constructor
+         loads it eagerly, so it must be supplied explicitly here. -->
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>${version.json-path}</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>

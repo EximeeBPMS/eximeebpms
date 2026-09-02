@@ -47,8 +47,8 @@
     <version.jakarta-validation>3.1.1</version.jakarta-validation>
     <version.jakarta-persistence-api>3.2.0</version.jakarta-persistence-api>
     <version.jaxb-runtime>4.0.9</version.jaxb-runtime>
-    <version.httpclient5>5.5</version.httpclient5>
-    <version.httpcore5>5.3.4</version.httpcore5>
+    <version.httpclient5>5.6.4</version.httpclient5>
+    <version.httpcore5>5.4.3</version.httpcore5>
     <version.cronutils>9.2.1</version.cronutils>
 
     <version.slf4j>2.0.18</version.slf4j>
@@ -58,10 +58,14 @@
     <version.assertj>3.27.7</version.assertj>
     <version.awaitility>4.2.2</version.awaitility>
     <version.mockito>5.23.0</version.mockito>
-    <version.wiremock>2.27.2</version.wiremock>
-    <version.testcontainers>1.16.0</version.testcontainers>
+    <version.wiremock>3.13.2</version.wiremock>
+    <version.testcontainers>1.21.3</version.testcontainers>
     <version.archunit-junit5>1.4.2</version.archunit-junit5>
-    <version.unirest-java>2.3.10</version.unirest-java>
+    <version.unirest-java>3.14.5</version.unirest-java>
+    <version.plexus-utils>3.6.1</version.plexus-utils>
+    <version.xalan>2.7.3</version.xalan>
+    <!-- wiremock 3.13.2 still bundles the vulnerable 4.3.1; force the patched version. -->
+    <version.handlebars>4.5.4</version.handlebars>
     <version.jakarta-servlet-api>6.1.0</version.jakarta-servlet-api>
     <version.org.jboss.ironjacamar>1.0.10.Final</version.org.jboss.ironjacamar>
     <version.hamcrest>3.0</version.hamcrest>
@@ -72,8 +76,8 @@
     <version.bouncycastle>1.70</version.bouncycastle>
 
     <!-- application servers -->
-    <version.wildfly>41.0.0.Final</version.wildfly>
-    <version.wildfly.core>33.0.0.Final</version.wildfly.core>
+    <version.wildfly>41.0.1.Final</version.wildfly>
+    <version.wildfly.core>33.0.1.Final</version.wildfly.core>
 
     <version.tomcat>11.0.25</version.tomcat>
 
@@ -134,6 +138,14 @@
 
   <dependencyManagement>
     <dependencies>
+
+      <!-- wiremock (below, and wherever else it's declared) still bundles the
+           vulnerable handlebars 4.3.1; force the patched version. -->
+      <dependency>
+        <groupId>com.github.jknack</groupId>
+        <artifactId>handlebars</artifactId>
+        <version>${version.handlebars}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.eximeebpms.bpm</groupId>

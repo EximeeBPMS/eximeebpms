@@ -77,6 +77,7 @@ retroactively added CVE IDs.
   - Tomcat JDBC / Tomcat Juli: `7.0.33` → `11.0.22` → `11.0.25` (currently matches the Tomcat row below, but is a hardcoded literal in `qa/performance-tests-engine/pom.xml`, not a `${version.tomcat}` property reference — it happens to stay in sync only because Dependabot's grouped "tomcat" bump touches this file too; a manual `version.tomcat` change would not).
   - Bumped `wildfly` to 41.0.1.Final and `wildfly.core` to 33.0.1.Final (patch releases).
   - Tomcat: `10.1.56` → **11.0.25** — a container/Servlet-generation change (Servlet 6.1 / Jakarta EE 11, up from Servlet 6.0 / Jakarta EE 10), not a routine patch bump. Landed via a grouped Dependabot "tomcat group" bump (#168) with no changelog entry at the time; documented retroactively. Affects the standalone `eximeebpms-bpm-tomcat` distribution — web application archives deployed to your own, separately managed Tomcat instance are not forced onto Tomcat 11 by this change.
+  - `tomcat-embed-core`/`tomcat-embed-el`/`tomcat-embed-websocket`: `11.0.24` → `11.0.25`, matching the standalone Tomcat distribution. Spring Boot's own dependency management pins them at 11.0.24 and pulls them in transitively through `spring-boot-starter-web`, so the Spring Boot starter and the `run` distribution now override them explicitly — otherwise a Spring Boot deployment ran a different Tomcat patch release than the standalone one.
   - Spring Boot: `4.1.0` → `4.1.1`
   - Jackson: `2.21.4` → `2.22.2`
   - Spring Framework: `7.0.8` → `7.0.9`

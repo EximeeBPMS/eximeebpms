@@ -17,6 +17,25 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- spring-boot-dependencies ${version.spring-boot} pins the tomcat-embed-* artifacts to
+           11.0.24; force the same ${version.tomcat} used for the standalone Tomcat distro so
+           all Tomcat jars on the classpath come from the same patch release. -->
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>${version.tomcat}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <version>${version.tomcat}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-websocket</artifactId>
+        <version>${version.tomcat}</version>
+      </dependency>
+
       <dependency>
         <!-- Import dependency management from Spring Boot -->
         <groupId>org.springframework.boot</groupId>

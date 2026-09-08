@@ -73,8 +73,16 @@ retroactively added CVE IDs.
   - WildFly Arquillian container adapters: `5.0.1.Final` → `5.1.0.Final`
   - Java UUID Generator: `5.1.0` → `5.2.0`
   - Apache Ant: `1.7.1` → `1.10.17`
-  - Tomcat JDBC / Tomcat Juli: `7.0.33` → `11.0.22`
+  - Tomcat JDBC / Tomcat Juli: `7.0.33` → `11.0.22` → `11.0.25` (currently matches the Tomcat row below, but is a hardcoded literal in `qa/performance-tests-engine/pom.xml`, not a `${version.tomcat}` property reference — it happens to stay in sync only because Dependabot's grouped "tomcat" bump touches this file too; a manual `version.tomcat` change would not).
   - Bumped `wildfly` to 41.0.1.Final and `wildfly.core` to 33.0.1.Final (patch releases).
+  - Tomcat: `10.1.56` → **11.0.25** — a container/Servlet-generation change (Servlet 6.1 / Jakarta EE 11, up from Servlet 6.0 / Jakarta EE 10), not a routine patch bump. Landed via a grouped Dependabot "tomcat group" bump (#168) with no changelog entry at the time; documented retroactively. Affects the standalone `eximeebpms-bpm-tomcat` distribution — web application archives deployed to your own, separately managed Tomcat instance are not forced onto Tomcat 11 by this change.
+  - Spring Boot: `4.1.0` → `4.1.1`
+  - Jackson: `2.21.4` → `2.22.2`
+  - Spring Framework: `7.0.8` → `7.0.9`
+  - Groovy: `5.0.6` → `5.0.8`
+  - Netty: `4.1.135.Final` → `4.1.137.Final`
+  - PostgreSQL JDBC: `42.7.11` → `42.7.12`
+  - testcontainers: `1.16.0` → `2.0.5` (test scope; not previously listed)
 
 ### Fixed
 - Fix Variable business event names
@@ -96,7 +104,7 @@ retroactively added CVE IDs.
 ### Security
 - Resolve CVE-2023-35116 via jackson-databind 2.21.3 upgrade (see Security Notice EXBPMS-7)
 - Fix Jython vulnerability (CVE-2016-4000, see Security Notice EXBPMS-8)
-- Resolve 9 CVEs via Spring Framework 7.0.7 and Tomcat 10.1.55 upgrade (see Security Notices EXBPMS-9, EXBPMS-10)
+- Resolve 9 CVEs via Spring Framework and Tomcat upgrades (see Security Notices EXBPMS-9, EXBPMS-10). Both components fixed the CVEs at Spring Framework 7.0.7 / Tomcat 10.1.55, but have since moved further — see the Spring Framework and Tomcat rows above for the versions actually shipped in this release.
 - Bumped `httpclient5`/`httpcore5` to 5.6.4/5.4.3, `testcontainers` to 2.0.5, `unirest-java` to 3.14.5 (`RestIT`/`DateSerializationIT` updated for its 3.x `kong.unirest.json.*` response types, replacing `org.json.*`), the QA Spring Boot runtime module's `h2` to 2.4.240, and `netty` to 4.1.137.Final (forced via an explicit `netty-bom` import in `engine-rest-jakarta`, ahead of the older version `resteasy-netty4` bundles transitively) — closing the Critical/High-severity Dependabot alerts against these dependencies. `webapps` module excluded from this pass.
 - Closed the remaining non-`webapps` Critical/High Dependabot alerts: `httpcore5`/`httpcore5-h2` still resolved to the older 5.2.4 in `distro/run/qa/*` (the `spring-boot-dependencies` BOM imported in `distro/run/pom.xml` was nearer than `parent/pom.xml`'s own pin, so it won); `plexus-utils` (pulled in by `wildfly-subsystem-test-framework` via `maven-resolver-provider`) bumped to 3.6.1; `xalan` (pulled in by `jboss-jstl-api_1.2_spec` via `jboss-javaee-6.0`) bumped to 2.7.3 — the existing exclusion for it in `qa/integration-tests-webapps/pom.xml` never worked (wrong groupId: `org.apache.xalan` instead of `xalan`).
 - Migrated `wiremock` (test-only, `connect/http-client`, `connect/soap-http-client`, `engine`, `engine-rest/engine-rest-openapi`, `qa/test-old-engine`) from 2.27.2 (`com.github.tomakehurst:wiremock`) to 3.13.2 (`org.wiremock:wiremock`), closing the Critical/High `jackson-core`/`jackson-databind`/`jetty-server`/`jetty-webapp` alerts it bundled transitively. No test source changes needed — the `com.github.tomakehurst.wiremock.*` Java package is unchanged in 3.x, only the Maven coordinates moved. Two follow-on fixes were needed: `handlebars`, still bundled at the vulnerable 4.3.1 even in 3.13.2, is now forced to 4.5.4 via an explicit `dependencyManagement` override in `parent/pom.xml`; and `json-path`, excluded from wiremock's own transitive tree everywhere it's used (kept at the project's pinned 2.9.0 instead) but not replaced by anything, is now added back explicitly — wiremock 3.x's `WireMockServer` constructor loads it eagerly (2.x didn't), so its prior absence only surfaced now as `NoClassDefFoundError`.

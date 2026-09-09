@@ -89,15 +89,6 @@ public class BusinessEventConfiguration {
   @Singular("publisherProperty")
   protected Map<String, String> publisherProperties;
 
-  /**
-   * Comma-separated allowlist of enabled event types.
-   *
-   * <p>Default: {@code *}, meaning all supported event types are enabled when
-   * {@link #enabled} is {@code true}.</p>
-   */
-  @Builder.Default
-  protected String enabledEventTypes = "*";
-
   public Map<String, String> getPublisherProperties() {
     return publisherProperties == null ? Map.of() : Map.copyOf(publisherProperties);
   }

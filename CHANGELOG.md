@@ -32,6 +32,7 @@ retroactively added CVE IDs.
 - Drop javax (legacy) support; use only Jakarta namespace
 - Remove old Tomcat 9 and WildFly 26; fix integration tests; remove shaded JUEL; fix client tests
 - Remove unused Camunda 7.2.0 reference
+- The `enabledEventTypes` property of the business events engine plugin (`<property name="enabledEventTypes">` in `bpm-platform.xml`, standalone deployments only — it was never exposed through the Spring Boot starter or the Quarkus extension) is removed. It was parsed and stored, but nothing in the produce → outbox-write → dispatch pipeline ever read it, so setting it had no effect; no other filtering mechanism replaces it.
 
 ### Changed
 - Split SQL migration scripts between version 1.3 and 1.4; make SonarQube scan non-blocking

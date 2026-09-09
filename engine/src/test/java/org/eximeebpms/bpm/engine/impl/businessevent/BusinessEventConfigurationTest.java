@@ -29,15 +29,6 @@ class BusinessEventConfigurationTest {
   }
 
   @Test
-  void shouldEnableAllEventTypesByDefault() {
-    // when
-    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();
-
-    // then
-    assertThat(configuration.getEnabledEventTypes()).isEqualTo("*");
-  }
-
-  @Test
   void shouldUseBpmsPrefixByDefault() {
     // when
     BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();

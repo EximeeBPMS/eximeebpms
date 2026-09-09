@@ -21,7 +21,6 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
   private String prefix;
   private String publisher;
   private String publisherProperties;
-  private String enabledEventTypes;
 
   @Override
   public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
@@ -52,10 +51,6 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
 
     if (publisher != null && !publisher.isBlank()) {
       builder.publisher(publisher.trim());
-    }
-
-    if (enabledEventTypes != null && !enabledEventTypes.isBlank()) {
-      builder.enabledEventTypes(enabledEventTypes.trim());
     }
 
     processEngineConfiguration.setBusinessEventConfiguration(builder.build());

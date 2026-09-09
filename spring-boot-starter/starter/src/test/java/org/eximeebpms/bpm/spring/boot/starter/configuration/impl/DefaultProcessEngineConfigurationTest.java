@@ -17,13 +17,16 @@
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.util.Set;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
 import org.eximeebpms.bpm.spring.boot.starter.property.ScriptSecurityProperty;
@@ -115,16 +118,18 @@ public class DefaultProcessEngineConfigurationTest {
   }
 
   @Test
-  public void setScriptSecurityEnabled_default_true() {
+  public void setScriptSecurityMode_default_enforce() {
     instance.preInit(configuration);
-    assertThat(configuration.isScriptSecurityEnabled()).isTrue();
+    assertThat(configuration.getScriptSecurityMode()).isEqualTo(ScriptSecurityMode.ENFORCE.name());
+    assertThat(configuration.isScriptSecurityDisabled()).isFalse();
   }
 
   @Test
-  public void setScriptSecurityEnabled_false() {
-    properties.getScriptSecurity().setMode(ScriptSecurityProperty.Mode.DISABLED);
+  public void setScriptSecurityMode_disabled() {
+    properties.getScriptSecurity().setMode(ScriptSecurityMode.DISABLED);
     instance.preInit(configuration);
-    assertThat(configuration.isScriptSecurityEnabled()).isFalse();
+    assertThat(configuration.getScriptSecurityMode()).isEqualTo(ScriptSecurityMode.DISABLED.name());
+    assertThat(configuration.isScriptSecurityDisabled()).isTrue();
   }
 
   @Test
@@ -137,9 +142,13 @@ public class DefaultProcessEngineConfigurationTest {
 
     // when
     instance.preInit(configuration);
+    // preInit() only sets the fields (mode/allowlist/store/listeners) — the shared
+    // ProcessEngineConfigurationImpl.initScriptSecurityPolicy() fallback (also used by a
+    // Tomcat/plain-XML deployment) is what actually builds the policy from them.
+    configuration.initScriptSecurityPolicy();
 
     // then
-    assertThat(configuration.isScriptSecurityEnabled()).isTrue();
+    assertThat(configuration.isScriptSecurityDisabled()).isFalse();
     assertThat(configuration.getScriptSecurityPolicy()).isInstanceOf(DbAwareScriptSecurityPolicy.class);
 
     // Before ManagementService is wired, DbAwareScriptSecurityPolicy uses initial config from env.
@@ -152,6 +161,20 @@ public class DefaultProcessEngineConfigurationTest {
     assertThat(configuration.getScriptSecurityPolicy()
         .evaluate(allowlistedContext)
         .isAllowed()).isTrue();
+  }
+
+  @Test
+  public void shouldNotOverwriteAnAlreadyCustomizedViolationStore() {
+    // given — e.g. a ProcessEnginePlugin (or another preInit()) already installed its own store,
+    // matching StartProcessEngineStep.preConfigureScriptSecurity()'s behavior on Tomcat
+    ScriptViolationStore custom = mock(ScriptViolationStore.class);
+    configuration.setScriptViolationStore(custom);
+
+    // when
+    instance.preInit(configuration);
+
+    // then
+    assertThat(configuration.getScriptViolationStore()).isSameAs(custom);
   }
 
   private void initIdGenerator(IdGenerator idGenerator) {

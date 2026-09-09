@@ -32,6 +32,7 @@ import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.ScriptCompilationException;
 import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.exception.NullValueException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.util.CollectionUtil;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
@@ -51,7 +52,7 @@ import org.junit.Test;
  */
 public class ScriptTaskTest extends AbstractScriptTaskTest {
 
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   private static final String JAVASCRIPT = "javascript";
   private static final String PYTHON = "python";
@@ -62,13 +63,13 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
   @Before
   public void setUp() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
   }
 
   @After
   public void tearDown() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
     super.tearDown();
   }
 

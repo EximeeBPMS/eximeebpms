@@ -85,6 +85,26 @@ public class DbAwareScriptSecurityPolicy implements ScriptSecurityPolicy {
   }
 
   /**
+   * Wires the {@link ManagementService} and, if {@code ACT_GE_PROPERTY} has no
+   * {@link #PROP_MODE} row yet, seeds it from this policy's {@code initialConfig} — first-start
+   * bootstrap shared by every deployment model that installs this policy (Spring Boot's
+   * {@code ScriptSecurityAutoConfiguration}, the plain container/Tomcat bootstrap via
+   * {@code StartProcessEngineStep}). After this call, {@code ACT_GE_PROPERTY} is authoritative:
+   * a later change to the deployment's own configuration (YAML property, {@code bpm-platform.xml})
+   * has no further effect — only {@code PUT /script-security/config} (or a direct
+   * {@code ManagementService.setProperty} call) can change the mode from then on.
+   */
+  public void wireAndSeed(ManagementService managementService) {
+    setManagementService(managementService);
+
+    Map<String, String> existingProps = managementService.getProperties();
+    if (!existingProps.containsKey(PROP_MODE)) {
+      managementService.setProperty(PROP_MODE, initialConfig.mode().name());
+      managementService.setProperty(PROP_ALLOWLIST, String.join(",", initialConfig.allowlistedKeys()));
+    }
+  }
+
+  /**
    * Forces the next {@link #evaluate} call to re-read config from the DB. Called by
    * {@code ScriptSecurityPolicyRefresher} after writing new config on {@code /actuator/refresh}.
    */
@@ -112,8 +132,9 @@ public class DbAwareScriptSecurityPolicy implements ScriptSecurityPolicy {
     }
 
     Config config = loadConfig();
-    DefaultScriptSecurityPolicy policy = new DefaultScriptSecurityPolicy(
-        config.allowlistedKeys(), config.auditMode(), violationStore, listeners);
+    ScriptSecurityPolicy policy = config.disabled()
+        ? AlwaysAllowScriptSecurityPolicy.INSTANCE
+        : new DefaultScriptSecurityPolicy(config.allowlistedKeys(), config.auditMode(), violationStore, listeners);
     cachedPolicyRef.set(new CachedPolicy(policy, System.currentTimeMillis() + ttlMs));
     return policy;
   }
@@ -129,13 +150,41 @@ public class DbAwareScriptSecurityPolicy implements ScriptSecurityPolicy {
       if (mode == null) {
         return initialConfig;
       }
-      boolean auditMode = "AUDIT".equalsIgnoreCase(mode);
       String allowlistRaw = props.getOrDefault(PROP_ALLOWLIST, "");
       Set<String> keys = parseAllowlist(allowlistRaw);
-      return new Config(auditMode, keys);
+      return new Config(resolveMode(mode), keys);
     } catch (Exception e) {
       log.warn("Failed to load script security config from DB, using cached/initial config: {}", e.getMessage());
       return initialConfig;
+    }
+  }
+
+  /**
+   * Case-insensitive {@link ScriptSecurityMode#valueOf}, falling back to {@code ENFORCE} for a
+   * value that doesn't match any mode (e.g. a legacy row predating stricter validation, or a
+   * direct {@code ManagementService.setProperty} bypassing the REST API's own check).
+   */
+  private static ScriptSecurityMode resolveMode(String mode) {
+    try {
+      return ScriptSecurityMode.valueOf(mode.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      return ScriptSecurityMode.ENFORCE;
+    }
+  }
+
+  /**
+   * The runtime counterpart of a startup-time {@code DISABLED}
+   * (see {@code ProcessEngineConfigurationImpl.initScriptSecurityPolicy()}, which skips
+   * installing any policy at all). Reached only via {@code PUT /script-security/config} with
+   * {@code mode: DISABLED} switching an already-running {@link DbAwareScriptSecurityPolicy} —
+   * there is no other way to reach {@code DISABLED} after engine startup.
+   */
+  private static final class AlwaysAllowScriptSecurityPolicy implements ScriptSecurityPolicy {
+    static final AlwaysAllowScriptSecurityPolicy INSTANCE = new AlwaysAllowScriptSecurityPolicy();
+
+    @Override
+    public ScriptSecurityDecision evaluate(ScriptSecurityContext context) {
+      return ScriptSecurityDecision.allow();
     }
   }
 
@@ -155,17 +204,30 @@ public class DbAwareScriptSecurityPolicy implements ScriptSecurityPolicy {
     }
   }
 
-  public record Config(boolean auditMode, Set<String> allowlistedKeys) {
+  public record Config(ScriptSecurityMode mode, Set<String> allowlistedKeys) {
     public Config {
       allowlistedKeys = allowlistedKeys != null ? Set.copyOf(allowlistedKeys) : Set.of();
+      mode = mode != null ? mode : ScriptSecurityMode.ENFORCE;
+    }
+
+    public boolean auditMode() {
+      return mode == ScriptSecurityMode.AUDIT;
+    }
+
+    public boolean disabled() {
+      return mode == ScriptSecurityMode.DISABLED;
     }
 
     public static Config enforce(Set<String> allowlistedKeys) {
-      return new Config(false, allowlistedKeys);
+      return new Config(ScriptSecurityMode.ENFORCE, allowlistedKeys);
     }
 
     public static Config audit(Set<String> allowlistedKeys) {
-      return new Config(true, allowlistedKeys);
+      return new Config(ScriptSecurityMode.AUDIT, allowlistedKeys);
+    }
+
+    public static Config disabled(Set<String> allowlistedKeys) {
+      return new Config(ScriptSecurityMode.DISABLED, allowlistedKeys);
     }
   }
 }

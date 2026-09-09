@@ -193,7 +193,7 @@ public class ScriptingEnvironment {
           : defaultScriptSecurityPolicy;
     }
 
-    if (!configuration.isScriptSecurityEnabled()) {
+    if (configuration.isScriptSecurityDisabled()) {
       return null;
     }
 

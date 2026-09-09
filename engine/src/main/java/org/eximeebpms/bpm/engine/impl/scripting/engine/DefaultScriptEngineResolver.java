@@ -96,7 +96,7 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
     return String.join(
         ":",
         language,
-        String.valueOf(config.isScriptSecurityEnabled()),
+        String.valueOf(!config.isScriptSecurityDisabled()),
         String.valueOf(config.isConfigureScriptEngineHostAccess()),
         String.valueOf(config.isEnableScriptEngineLoadExternalResources()),
         String.valueOf(config.isEnableScriptEngineNashornCompatibility())
@@ -167,7 +167,7 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
       return;
     }
 
-    if (config.isScriptSecurityEnabled()) {
+    if (!config.isScriptSecurityDisabled()) {
       applyGraalJsSecureDefaults(scriptEngine);
       applyGraalJsSecureCompatibilityFlags(scriptEngine, config);
       return;
@@ -230,7 +230,7 @@ public class DefaultScriptEngineResolver implements ScriptEngineResolver {
     final ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
     return ScriptingEngines.GROOVY_SCRIPTING_LANGUAGE.equalsIgnoreCase(language)
         && config != null
-        && config.isScriptSecurityEnabled();
+        && !config.isScriptSecurityDisabled();
   }
 
   protected void configureNashornCompatibility(ScriptEngine scriptEngine) {

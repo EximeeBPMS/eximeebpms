@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import org.eximeebpms.bpm.engine.ManagementService;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
@@ -72,8 +73,10 @@ public class ScriptSecurityRestServiceImpl extends AbstractAuthorizedRestResourc
       throw new InvalidRequestException(Status.FORBIDDEN, "Not authorized to access script security configuration");
     }
     Map<String, String> props = getProcessEngine().getManagementService().getProperties();
+    ProcessEngineConfigurationImpl config =
+        (ProcessEngineConfigurationImpl) getProcessEngine().getProcessEngineConfiguration();
     return toDto(
-        props.getOrDefault(DbAwareScriptSecurityPolicy.PROP_MODE, "ENFORCE"),
+        props.getOrDefault(DbAwareScriptSecurityPolicy.PROP_MODE, config.getScriptSecurityMode()),
         props.getOrDefault(DbAwareScriptSecurityPolicy.PROP_ALLOWLIST, ""));
   }
 
@@ -86,9 +89,9 @@ public class ScriptSecurityRestServiceImpl extends AbstractAuthorizedRestResourc
       throw new InvalidRequestException(Status.BAD_REQUEST, "mode is required");
     }
     String mode = dto.getMode().toUpperCase();
-    if (!Set.of("ENFORCE", "AUDIT", "DISABLED").contains(mode)) {
+    if (Arrays.stream(ScriptSecurityMode.values()).noneMatch(m -> m.name().equals(mode))) {
       throw new InvalidRequestException(Status.BAD_REQUEST,
-          "Invalid mode '" + dto.getMode() + "'. Allowed values: ENFORCE, AUDIT, DISABLED");
+          "Invalid mode '" + dto.getMode() + "'. Allowed values: " + Arrays.toString(ScriptSecurityMode.values()));
     }
     Set<String> keys = dto.getAllowlistedKeys() != null ? dto.getAllowlistedKeys() : Set.of();
 

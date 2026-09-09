@@ -30,6 +30,7 @@ import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.repository.ProcessApplicationDeployment;
 import org.eximeebpms.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
@@ -45,17 +46,17 @@ public class ScriptEngineCachingTest extends PluggableProcessEngineTest {
   protected static final String PROCESS_PATH = "org/eximeebpms/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
   protected static final String SCRIPT_LANGUAGE = "groovy";
 
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   @Before
   public void saveScriptSecurityConfiguration() {
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
   }
 
   @After
   public void restoreScriptSecurityConfiguration() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   @Test
@@ -114,7 +115,7 @@ public class ScriptEngineCachingTest extends PluggableProcessEngineTest {
   @Test
   public void testFetchScriptEngineFromPaEnableCaching() {
     // given
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
 

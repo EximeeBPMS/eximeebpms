@@ -346,7 +346,7 @@ public class ScriptSecurityBpmnParseListener extends AbstractBpmnParseListener {
       return scriptSecurityPolicy;
     }
 
-    if (!configuration.isScriptSecurityEnabled()) {
+    if (configuration.isScriptSecurityDisabled()) {
       return null;
     }
 

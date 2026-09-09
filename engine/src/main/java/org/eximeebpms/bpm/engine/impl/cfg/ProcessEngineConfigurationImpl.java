@@ -29,6 +29,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -244,6 +245,7 @@ import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupH
 import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.scriptviolationcleanup.ScriptViolationCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsRegistry;
 import org.eximeebpms.bpm.engine.impl.metrics.MetricsReporterIdProvider;
 import org.eximeebpms.bpm.engine.impl.metrics.parser.MetricsBpmnParseListener;
@@ -343,11 +345,13 @@ import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
-import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.NoOpScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAware;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityBpmnParseListener;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.SecureJuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.telemetry.dto.DatabaseImpl;
@@ -602,9 +606,11 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<ScriptEnvResolver> scriptEnvResolvers;
   protected ScriptFactory scriptFactory;
   protected ScriptEngineResolver scriptEngineResolver;
-  protected boolean scriptSecurityEnabled = true;
+  protected String scriptSecurityMode = ScriptSecurityMode.ENFORCE.name();
   protected ScriptSecurityPolicy scriptSecurityPolicy;
   protected ScriptViolationStore scriptViolationStore = NoOpScriptViolationStore.INSTANCE;
+  protected List<ScriptViolationListener> scriptViolationListeners = new ArrayList<>();
+  protected int scriptViolationRetentionDays = 0;
   protected String scriptEngineNameJavaScript;
   protected boolean autoStoreScriptVariables = false;
   protected boolean enableScriptCompilation = true;
@@ -2227,7 +2233,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       defaultListeners.add(new BusinessEventParseListener());
     }
 
-    if (isScriptSecurityEnabled()) {
+    if (!isScriptSecurityDisabled()) {
       defaultListeners.add(new ScriptSecurityBpmnParseListener(scriptSecurityPolicy));
     }
 
@@ -2328,6 +2334,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
     BusinessEventOutboxCleanupJobHandler businessEventOutboxCleanupJobHandler = new BusinessEventOutboxCleanupJobHandler();
     jobHandlers.put(businessEventOutboxCleanupJobHandler.getType(), businessEventOutboxCleanupJobHandler);
+
+    ScriptViolationCleanupJobHandler scriptViolationCleanupJobHandler = new ScriptViolationCleanupJobHandler();
+    jobHandlers.put(scriptViolationCleanupJobHandler.getType(), scriptViolationCleanupJobHandler);
 
     for (JobHandler batchHandler : batchHandlers.values()) {
       jobHandlers.put(batchHandler.getType(), batchHandler);
@@ -2597,18 +2606,39 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   }
 
-  protected void initScriptSecurityPolicy() {
-    if (!isScriptSecurityEnabled()) {
+  public void initScriptSecurityPolicy() {
+    validateScriptSecurityMode();
+
+    if (isScriptSecurityDisabled()) {
       LOG.logScriptValidationDisabled();
       scriptSecurityPolicy = null;
       return;
     }
 
     if (scriptSecurityPolicy == null) {
-      scriptSecurityPolicy = new DefaultScriptSecurityPolicy(
-          scriptSecurityAllowlistedProcessDefinitionKeys,
-          false,
-          scriptViolationStore);
+      DbAwareScriptSecurityPolicy.Config initialConfig = isScriptSecurityAuditMode()
+          ? DbAwareScriptSecurityPolicy.Config.audit(scriptSecurityAllowlistedProcessDefinitionKeys)
+          : DbAwareScriptSecurityPolicy.Config.enforce(scriptSecurityAllowlistedProcessDefinitionKeys);
+      scriptSecurityPolicy = new DbAwareScriptSecurityPolicy(initialConfig, scriptViolationStore, scriptViolationListeners);
+    }
+  }
+
+  /**
+   * Fails fast on an unrecognized {@code scriptSecurityMode} value (from
+   * {@code bpm-platform.xml}, a YAML property, or a direct
+   * {@link #setScriptSecurityMode(String)} call) instead of silently
+   * falling back to {@code ENFORCE}-like behavior. Thrown from
+   * {@link #initScriptSecurityPolicy()}, i.e. during {@link #buildProcessEngine()},
+   * so a misconfigured mode aborts engine startup on every deployment
+   * model (Tomcat/container, Spring Boot, or plain embedded).
+   */
+  protected void validateScriptSecurityMode() {
+    boolean isValid = Arrays.stream(ScriptSecurityMode.values())
+        .anyMatch(mode -> mode.name().equalsIgnoreCase(scriptSecurityMode));
+
+    if (!isValid) {
+      throw LOG.invalidPropertyValue("scriptSecurityMode", scriptSecurityMode,
+          "valid values are " + Arrays.toString(ScriptSecurityMode.values()));
     }
   }
 
@@ -2687,7 +2717,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   protected ExpressionManager createDefaultExpressionManager() {
-    if (isScriptSecurityEnabled()) {
+    if (!isScriptSecurityDisabled()) {
       return new SecureJuelExpressionManager(beans, scriptSecurityPolicy);
     }
 
@@ -2695,7 +2725,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   protected void configureExpressionManagerScriptSecurity(ExpressionManager expressionManager) {
-    if (isScriptSecurityEnabled() && expressionManager instanceof ScriptSecurityAware scriptSecurityAware) {
+    if (!isScriptSecurityDisabled() && expressionManager instanceof ScriptSecurityAware scriptSecurityAware) {
       scriptSecurityAware.setScriptSecurityPolicy(scriptSecurityPolicy);
     }
   }
@@ -4306,13 +4336,21 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public boolean isScriptSecurityEnabled() {
-    return scriptSecurityEnabled;
+  public String getScriptSecurityMode() {
+    return scriptSecurityMode;
   }
 
-  public ProcessEngineConfigurationImpl setScriptSecurityEnabled(boolean scriptSecurityEnabled) {
-    this.scriptSecurityEnabled = scriptSecurityEnabled;
+  public ProcessEngineConfigurationImpl setScriptSecurityMode(String scriptSecurityMode) {
+    this.scriptSecurityMode = scriptSecurityMode;
     return this;
+  }
+
+  public boolean isScriptSecurityDisabled() {
+    return ScriptSecurityMode.DISABLED.name().equalsIgnoreCase(scriptSecurityMode);
+  }
+
+  public boolean isScriptSecurityAuditMode() {
+    return ScriptSecurityMode.AUDIT.name().equalsIgnoreCase(scriptSecurityMode);
   }
 
   public ScriptSecurityPolicy getScriptSecurityPolicy() {
@@ -4337,6 +4375,24 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public ProcessEngineConfigurationImpl setScriptViolationStore(ScriptViolationStore scriptViolationStore) {
     this.scriptViolationStore = scriptViolationStore != null ? scriptViolationStore : NoOpScriptViolationStore.INSTANCE;
+    return this;
+  }
+
+  public List<ScriptViolationListener> getScriptViolationListeners() {
+    return scriptViolationListeners;
+  }
+
+  public ProcessEngineConfigurationImpl addScriptViolationListener(ScriptViolationListener listener) {
+    scriptViolationListeners.add(listener);
+    return this;
+  }
+
+  public int getScriptViolationRetentionDays() {
+    return scriptViolationRetentionDays;
+  }
+
+  public ProcessEngineConfigurationImpl setScriptViolationRetentionDays(int scriptViolationRetentionDays) {
+    this.scriptViolationRetentionDays = scriptViolationRetentionDays;
     return this;
   }
 

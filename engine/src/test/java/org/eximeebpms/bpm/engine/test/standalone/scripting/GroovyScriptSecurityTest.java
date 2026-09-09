@@ -6,6 +6,7 @@ import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.ExecutableScript;
 import org.eximeebpms.bpm.engine.impl.scripting.SourceExecutableScript;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
@@ -18,20 +19,20 @@ public class GroovyScriptSecurityTest {
   public ProcessEngineRule processEngineRule = new ProcessEngineRule();
 
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   @Before
   public void setUp() {
     processEngineConfiguration =
         (ProcessEngineConfigurationImpl) processEngineRule.getProcessEngine().getProcessEngineConfiguration();
 
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
-    processEngineConfiguration.setScriptSecurityEnabled(true);
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
   }
 
   @After
   public void tearDown() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   @Test
@@ -59,7 +60,7 @@ public class GroovyScriptSecurityTest {
 
   @Test
   public void shouldNotUseGroovySandboxWhenSecurityDisabled() {
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
 
     assertThatThrownBy(() -> executeGroovyScript("new File('/path/that/does/not/exist').text"))
         .isInstanceOf(ProcessEngineException.class)

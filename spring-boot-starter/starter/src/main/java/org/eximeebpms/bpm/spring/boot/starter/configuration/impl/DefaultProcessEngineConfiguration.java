@@ -16,15 +16,13 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.eximeebpms.bpm.engine.ProcessEngines;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.businessevent.script.BusinessEventScriptViolationListener;
-import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
+import org.eximeebpms.bpm.engine.impl.scripting.security.NoOpScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
 import org.eximeebpms.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.EximeeBpmsProcessEngineConfiguration;
@@ -100,23 +98,27 @@ public class DefaultProcessEngineConfiguration extends AbstractEximeeBpmsConfigu
   }
 
   private void configureScriptSecurity(SpringProcessEngineConfiguration configuration, ScriptSecurityProperty scriptSecurity) {
+    configuration.setScriptSecurityMode(scriptSecurity.getMode().name());
+    configuration.setScriptSecurityAllowlistedProcessDefinitionKeys(scriptSecurity.getAllowlistedProcessDefinitionKeys());
+    configuration.setScriptViolationRetentionDays(scriptSecurity.getRetentionDays());
+
     if (scriptSecurity.isDisabled()) {
-      configuration.setScriptSecurityEnabled(false);
       return;
     }
 
-    DbScriptViolationStore violationStore = new DbScriptViolationStore(configuration);
-    configuration.setScriptViolationStore(violationStore);
-
-    List<ScriptViolationListener> listeners = new ArrayList<>();
-    if (applicationContext != null) {
-      listeners.addAll(applicationContext.getBeansOfType(ScriptViolationListener.class).values());
+    // Leave scriptSecurityPolicy unset — ProcessEngineConfigurationImpl.initScriptSecurityPolicy()
+    // builds the shared DbAwareScriptSecurityPolicy itself (mode/allowlist/store/listeners set
+    // here flow into that construction), the same fallback a Tomcat/plain-XML deployment uses.
+    // Only replace the default NoOpScriptViolationStore — respects a ProcessEnginePlugin's own
+    // preInit() choice, matching StartProcessEngineStep.preConfigureScriptSecurity() on Tomcat.
+    if (configuration.getScriptViolationStore() instanceof NoOpScriptViolationStore) {
+      configuration.setScriptViolationStore(new DbScriptViolationStore(configuration));
     }
-    listeners.add(new BusinessEventScriptViolationListener());
 
-    DbAwareScriptSecurityPolicy.Config initialConfig = new DbAwareScriptSecurityPolicy.Config(
-        scriptSecurity.isAuditMode(),
-        scriptSecurity.getAllowlistedProcessDefinitionKeys());
-    configuration.setScriptSecurityPolicy(new DbAwareScriptSecurityPolicy(initialConfig, violationStore, listeners));
+    if (applicationContext != null) {
+      applicationContext.getBeansOfType(ScriptViolationListener.class).values()
+          .forEach(configuration::addScriptViolationListener);
+    }
+    configuration.addScriptViolationListener(new BusinessEventScriptViolationListener());
   }
 }

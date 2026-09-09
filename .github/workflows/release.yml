@@ -77,6 +77,48 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
 
+      - name: Cut CHANGELOG.md's [Unreleased] section into this release
+        # Mirrors the same step in eximeebpms-enterprise's release.yml
+        # (BPMS-688) - release.yml never touched CHANGELOG.md, so cutting
+        # [Unreleased] into the released version's own header
+        # (guidelines/common/release-checklist.md) was a fully manual step
+        # that could be forgotten. OSS's CHANGELOG entries are authored
+        # ticket-free (no BPMS-XXX prefixes) at curation time, unlike
+        # enterprise's - this step doesn't change that, it only cuts
+        # whatever is already sitting under [Unreleased] at release time.
+        # Idempotent/no-op if [Unreleased] has no content.
+        run: |
+          VERSION="${{ github.event.inputs.release_version }}"
+          DATE=$(date -u +%Y-%m-%d)
+          python3 - "$VERSION" "$DATE" <<'PYEOF_CUT'
+          import re, sys
+          version, date = sys.argv[1], sys.argv[2]
+          path = "CHANGELOG.md"
+          with open(path) as f:
+              content = f.read()
+          pattern = re.compile(r"## \[Unreleased\]\n\n(?P<content>.*?)\n\n---\n\n(?=## \[)", re.S)
+          m = pattern.search(content)
+          if not m:
+              print("Could not find an [Unreleased] section followed by another version header - leaving CHANGELOG.md untouched.")
+              sys.exit(0)
+          body = m.group("content").strip("\n")
+          if not body:
+              print("No content under [Unreleased] - nothing to cut, leaving CHANGELOG.md untouched.")
+              sys.exit(0)
+          replacement = f"## [Unreleased]\n\n---\n\n## [{version}] – {date}\n\n{body}\n\n---\n\n"
+          content = content[:m.start()] + replacement + content[m.end():]
+          with open(path, "w") as f:
+              f.write(content)
+          print(f"Cut [Unreleased] into [{version}] - {date}")
+          PYEOF_CUT
+          if ! git diff --quiet -- CHANGELOG.md; then
+            git add CHANGELOG.md
+            git commit -m "Cut CHANGELOG.md [Unreleased] into this release"
+            git push origin HEAD:main
+          else
+            echo "CHANGELOG.md unchanged - skipping commit."
+          fi
+
       - name: Release prepare
         run: |
           ./mvnw release:prepare -B --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -Darguments="-DskipTests -Dmaven.repo.local=${MAVEN_REPO_LOCAL}" \

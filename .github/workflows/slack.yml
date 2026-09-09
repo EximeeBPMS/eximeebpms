@@ -34,7 +34,40 @@ jobs:
     runs-on: ubuntu-slim
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'
     steps:
+      - name: Check for dependabot-rerun.yml flapping (only alert from the 2nd consecutive failure)
+        # BPMS-688: this workflow failed on every scheduled run for days (a single
+        # stale Dependabot PR aborted the whole rerun loop every time - now fixed
+        # in dependabot-rerun.yml itself), and every one of those runs posted its
+        # own Slack alert. Per owner request: suppress the first failure in a new
+        # streak (could be a one-off blip - a transient GitHub API error, etc.)
+        # and only alert starting from the 2nd consecutive failure, so an isolated
+        # failure doesn't page anyone but a real, ongoing problem still does.
+        id: rerun-flap-check
+        if: >-
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion == 'failure' &&
+          github.event.workflow_run.name == 'Rerun deferred Dependabot builds'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          command -v jq >/dev/null || { sudo apt-get update -q && sudo apt-get install -y jq; }
+
+          runs_json=$(gh api "repos/${{ github.repository }}/actions/workflows/dependabot-rerun.yml/runs?per_page=10&status=completed")
+          prev_conclusion=$(jq -r --argjson current "$RUN_ID" '
+            [.workflow_runs[] | select(.id != $current)] | sort_by(.id) | reverse | .[0].conclusion // "none"
+          ' <<<"$runs_json")
+
+          if [[ "$prev_conclusion" == "failure" ]]; then
+            echo "Previous run also failed - this is (at least) the 2nd consecutive failure, alerting."
+            echo "suppress=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Previous run's conclusion was '$prev_conclusion' - first failure in a new streak, suppressing."
+            echo "suppress=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set Event Message and Send Slack Notification
+        if: steps.rerun-flap-check.outputs.suppress != 'true'
         env:
           CREATED_AT: ${{ github.event.created_at }}
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}

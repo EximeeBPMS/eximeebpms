@@ -28,9 +28,12 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.AuthorizationEntity;
 import org.eximeebpms.bpm.spring.boot.starter.configuration.impl.AbstractEximeeBpmsConfiguration;
 import org.eximeebpms.bpm.spring.boot.starter.property.AdminUserProperty;
 import org.springframework.beans.BeanUtils;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.core.env.Environment;
 
 import jakarta.annotation.PostConstruct;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -41,7 +44,15 @@ import static org.eximeebpms.bpm.engine.authorization.Permissions.ALL;
 
 public class CreateAdminUserConfiguration extends AbstractEximeeBpmsConfiguration {
 
+  private static final String OAUTH2_CLIENT_REGISTRATION_PROPERTY_PREFIX = "spring.security.oauth2.client.registration";
+
+  private final Environment environment;
+
   private User adminUser;
+
+  public CreateAdminUserConfiguration(final Environment environment) {
+    this.environment = requireNonNull(environment);
+  }
 
   @PostConstruct
   void init() {
@@ -58,6 +69,20 @@ public class CreateAdminUserConfiguration extends AbstractEximeeBpmsConfiguratio
     final AuthorizationService authorizationService = processEngine.getAuthorizationService();
 
     if (userAlreadyExists(identityService, adminUser)) {
+      return;
+    }
+
+    final AdminUserProperty adminUserProperty = eximeeBpmsBpmProperties.getAdminUser();
+    final boolean readOnly = identityService.isReadOnly();
+    final boolean oauth2Configured = isOAuth2Configured();
+
+    if ((readOnly || oauth2Configured) && !adminUserProperty.isAllowWithExternalIdentityProvider()) {
+      throw readOnly ? LOG.exceptionAdminUserReadOnlyIdentityProviderConflict() : LOG.exceptionAdminUserOAuth2Conflict();
+    }
+
+    if (readOnly) {
+      // opted in, but writing to a read-only identity provider (e.g. LDAP) is structurally impossible
+      LOG.skipAdminUserCreationReadOnlyIdentityProvider(adminUser);
       return;
     }
 
@@ -85,6 +110,13 @@ public class CreateAdminUserConfiguration extends AbstractEximeeBpmsConfiguratio
 
     identityService.createMembership(adminUser.getId(), CAMUNDA_ADMIN);
     LOG.creatingInitialAdminUser(adminUser);
+  }
+
+  private boolean isOAuth2Configured() {
+    return !Binder.get(environment)
+            .bind(OAUTH2_CLIENT_REGISTRATION_PROPERTY_PREFIX, Map.class)
+            .orElseGet(Collections::emptyMap)
+            .isEmpty();
   }
 
   static boolean userAlreadyExists(IdentityService identityService, User adminUser) {

@@ -280,7 +280,7 @@ public class BusinessEventDispatcherIT extends AbstractBusinessEventIT {
         assertThat(h.version()).isEqualTo("1.0");
         assertThat(h.origin()).isEqualTo("bpms");
         assertThat(h.correlationId()).isNull();
-        assertThat(h.timestamp()).isEqualTo(createdDate);
+        assertThat(h.timestamp()).isEqualTo(createdDate.toInstant());
         assertThat(h.noProcessContext()).isFalse();
         // rootProcessInstanceId takes precedence as processKey
         assertThat(h.processInstanceId()).isEqualTo("root-pi-1");

@@ -90,4 +90,25 @@ public class SpringBootProcessEngineLogger extends BaseLogger {
     logDebug("051", "Properties bound to configuration: {}", genericProperties);
   }
 
+  public SpringBootStarterException exceptionAdminUserOAuth2Conflict() {
+    return new SpringBootStarterException(exceptionMessage("060",
+        "Startup aborted: 'eximeebpms.bpm.admin-user.id' is set while an OAuth2/OIDC client is configured "
+            + "(spring.security.oauth2.client.registration.*). Remove 'admin-user.*', or set "
+            + "'eximeebpms.bpm.admin-user.allow-with-external-identity-provider=true' to create it anyway."));
+  }
+
+  public SpringBootStarterException exceptionAdminUserReadOnlyIdentityProviderConflict() {
+    return new SpringBootStarterException(exceptionMessage("061",
+        "Startup aborted: 'eximeebpms.bpm.admin-user.id' is set while the configured identity provider is "
+            + "read-only (e.g. LDAP) - the account cannot be created. Remove 'admin-user.*', or set "
+            + "'eximeebpms.bpm.admin-user.allow-with-external-identity-provider=true' to skip creation and continue."));
+  }
+
+  public void skipAdminUserCreationReadOnlyIdentityProvider(User adminUser) {
+    logWarn("062",
+        "Skip creating initial Admin User {} because the configured identity provider is read-only (e.g. LDAP); "
+            + "'eximeebpms.bpm.admin-user.allow-with-external-identity-provider' is set, continuing startup without creating the account.",
+        adminUser);
+  }
+
 }

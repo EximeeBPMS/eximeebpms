@@ -63,6 +63,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Import({
@@ -161,8 +162,8 @@ public class EximeeBpmsBpmConfiguration {
 
   @Bean
   @ConditionalOnProperty(prefix = "eximeebpms.bpm.admin-user", name = "id")
-  public CreateAdminUserConfiguration createAdminUserConfiguration() {
-    return new CreateAdminUserConfiguration();
+  public CreateAdminUserConfiguration createAdminUserConfiguration(Environment environment) {
+    return new CreateAdminUserConfiguration(environment);
   }
 
   @Bean

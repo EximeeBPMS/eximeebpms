@@ -49,7 +49,7 @@ public interface EximeeBpmsEngineConfig {
    * Select the ID generator strategy. Supported values:
    * <ul>
    *   <li>{@code strong} (default) — UUID v7, time-ordered and cryptographically random (RFC 9562).</li>
-   *   <li>{@code uuid-v1} — <b>Deprecated.</b> UUID v1, time-based with MAC address. Will be removed in 1.4.0.</li>
+   *   <li>{@code uuid-v1} — <b>Removed in 1.4.0.</b> Falls back to {@code strong} (UUID v7) with a startup warning.</li>
    * </ul>
    */
   Optional<String> idGenerator();

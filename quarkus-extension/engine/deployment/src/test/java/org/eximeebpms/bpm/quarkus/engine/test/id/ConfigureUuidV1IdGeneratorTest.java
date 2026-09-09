@@ -34,11 +34,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Verifies that setting {@code quarkus.camunda.id-generator=uuid-v1} configures UuidV1Generator.
- *
- * @deprecated This test will be removed when UuidV1Generator is removed in EximeeBPMS 1.4.0.
+ * UuidV1Generator was removed in 1.4.0. Verifies that leftover {@code quarkus.camunda.id-generator=uuid-v1}
+ * configuration still starts the engine — it silently falls back to StrongUuidGenerator (UUID v7)
+ * instead of activating a legacy generator that no longer exists.
  */
-@SuppressWarnings("removal")
 class ConfigureUuidV1IdGeneratorTest {
 
   @RegisterExtension
@@ -53,19 +52,19 @@ class ConfigureUuidV1IdGeneratorTest {
   protected ProcessEngine processEngine;
 
   @Test
-  void shouldConfigureUuidV1IdGenerator() {
+  void shouldFallBackToStrongUuidGenerator() {
     Task task = taskService.newTask();
     taskService.saveTask(task);
 
     String id = taskService.createTaskQuery().singleResult().getId();
 
-    // UUID v1 has version bit = 1
-    assertThat(UUID.fromString(id).version()).isEqualTo(1);
+    // UUID v7 has version bit = 7
+    assertThat(UUID.fromString(id).version()).isEqualTo(7);
 
     ProcessEngineConfigurationImpl engineConfig =
         (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
     assertThat(engineConfig.getIdGenerator())
-        .isInstanceOf(org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator.class);
+        .isInstanceOf(org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator.class);
 
     taskService.deleteTask(id, true);
   }

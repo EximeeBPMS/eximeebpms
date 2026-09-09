@@ -33,6 +33,7 @@ retroactively added CVE IDs.
 - Remove old Tomcat 9 and WildFly 26; fix integration tests; remove shaded JUEL; fix client tests
 - Remove unused Camunda 7.2.0 reference
 - The `enabledEventTypes` property of the business events engine plugin (`<property name="enabledEventTypes">` in `bpm-platform.xml`, standalone deployments only — it was never exposed through the Spring Boot starter or the Quarkus extension) is removed. It was parsed and stored, but nothing in the produce → outbox-write → dispatch pipeline ever read it, so setting it had no effect; no other filtering mechanism replaces it.
+- `UuidV1Generator`, the legacy UUID v1 id generator kept as a deprecated fallback since 1.3.0, is removed. Configuring `uuid-v1` — `id-generator` in `bpm-platform.xml`, `eximeebpms.bpm.id-generator` in the Spring Boot starter, `quarkus.camunda.id-generator` in the Quarkus extension, or the WildFly subsystem's equivalent — no longer fails: the engine falls back to the default `StrongUuidGenerator` (UUID v7) and logs a warning (`EnginePersistenceLogger`, code `111`). Leftover `uuid-v1` configuration therefore keeps the engine starting, but new ids are UUID v7; existing UUID v1 ids stay valid and untouched.
 
 ### Changed
 - Split SQL migration scripts between version 1.3 and 1.4; make SonarQube scan non-blocking

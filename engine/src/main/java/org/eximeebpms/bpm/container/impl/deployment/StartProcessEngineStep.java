@@ -38,7 +38,6 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.eximeebpms.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.NoOpScriptViolationStore;
@@ -91,7 +90,7 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
     Class<? extends ProcessEngineConfigurationImpl> configurationClass = loadClass(configurationClassName, classLoader, ProcessEngineConfigurationImpl.class);
     ProcessEngineConfigurationImpl configuration = ReflectUtil.createInstance(configurationClass);
 
-    // set UUID generator — defaults to UUID v7 (StrongUuidGenerator); use property id-generator=uuid-v1 for legacy UUID v1
+    // set UUID generator — always UUID v7 (StrongUuidGenerator); id-generator=uuid-v1 is a removed legacy value, warned about and ignored
     Map<String, String> properties = new HashMap<>(processEngineXml.getProperties());
     configuration.setIdGenerator(createIdGenerator(properties));
     // remove id-generator before applyProperties — it is kebab-case and has no matching setter
@@ -175,10 +174,9 @@ public class StartProcessEngineStep extends DeploymentOperationStep {
     configuration.setJobExecutorActivate(true);
   }
 
-  @SuppressWarnings({"deprecation", "removal"})
   protected org.eximeebpms.bpm.engine.impl.cfg.IdGenerator createIdGenerator(Map<String, String> properties) {
     if ("uuid-v1".equals(properties.get("id-generator"))) {
-      return new UuidV1Generator();
+      ProcessEngineLogger.PERSISTENCE_LOGGER.uuidV1GeneratorRemoved();
     }
     return new StrongUuidGenerator();
   }

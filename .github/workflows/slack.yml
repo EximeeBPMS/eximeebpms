@@ -66,8 +66,43 @@ jobs:
             echo "suppress=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check for the business-hours deferral false alarm
+        # build.yml's "Build Required" job intentionally exits 1 (not skipped) when a
+        # Dependabot build is deferred to off-hours by the business-hours gate, so that
+        # a "skipped" conclusion can't satisfy the required status check and let the PR
+        # merge before the real build runs (see build.yml's "Build Required" step and
+        # dependabot-rerun.yml, which reruns it once business hours end). That's an
+        # expected, self-resolving state, not a real failure - detect its exact job
+        # signature and suppress the Slack alert for it, same as eximeebpms-enterprise's
+        # slack.yml already does (BPMS-688: this repo's differently-structured,
+        # single-step slack.yml never got the equivalent suppression, so every new
+        # Dependabot PR whose first build landed outside business hours posted an
+        # unnecessary "build failed" alert here, even though the rerun a few hours
+        # later succeeded).
+        id: deferral-check
+        if: >-
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion == 'failure' &&
+          github.event.workflow_run.name == 'build' &&
+          github.event.workflow_run.actor.login == 'dependabot[bot]'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          command -v jq >/dev/null || { sudo apt-get update -q && sudo apt-get install -y jq; }
+
+          jobs_json=$(gh api "repos/${{ github.repository }}/actions/runs/$RUN_ID/jobs")
+          build_conclusion=$(jq -r '.jobs[] | select(.name=="Build") | .conclusion' <<<"$jobs_json")
+          required_conclusion=$(jq -r '.jobs[] | select(.name=="Build Required") | .conclusion' <<<"$jobs_json")
+
+          if [[ "$build_conclusion" == "skipped" && "$required_conclusion" == "failure" ]]; then
+            echo "deferred=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deferred=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set Event Message and Send Slack Notification
-        if: steps.rerun-flap-check.outputs.suppress != 'true'
+        if: steps.rerun-flap-check.outputs.suppress != 'true' && steps.deferral-check.outputs.deferred != 'true'
         env:
           CREATED_AT: ${{ github.event.created_at }}
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}

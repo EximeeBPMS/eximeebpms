@@ -18,7 +18,6 @@
     <jakarta.runtime>${project.basedir}/src/main/runtime</jakarta.runtime>
 
     <version.resteasy>6.2.16.Final</version.resteasy>
-    <version.jetty>11.0.26</version.jetty>
 
     <web.resources.override>${jakarta.runtime}/default/webapp</web.resources.override>
     <java.resources.override>${jakarta.runtime}/default/resources</java.resources.override>
@@ -262,6 +261,33 @@
           <groupId>jakarta.ws.rs</groupId>
           <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
+        <!-- Re-promoted from the base "provided" declaration above: Jetty's embedded jetty:run
+             classpath excludes provided-scope dependencies unless redeclared here, same as
+             jakarta.ws.rs-api above. Without these, mvn jetty:run -Pdevelop fails with
+             NoClassDefFoundError: jakarta/xml/bind/JAXBException, then (once bind-api is added)
+             ClassNotFoundException: jakarta.activation.DataSource from jaxb-impl's own
+             transitive dependency. jakarta.servlet-api is intentionally left provided - Jetty
+             supplies its own servlet API on the container classpath. -->
+        <dependency>
+          <groupId>jakarta.xml.bind</groupId>
+          <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.activation</groupId>
+          <artifactId>jakarta.activation-api</artifactId>
+        </dependency>
+        <!-- Same re-promotion as above: engine's own gson dependency is "provided" scope
+             (dependencyManagement-pinned), so it's excluded from the embedded jetty:run
+             classpath too - surfaced as NoClassDefFoundError: com/google/gson/JsonElement from
+             ProcessEngineConfigurationImpl.initBatchHandlers on webapp startup. Pre-existing gap,
+             unrelated to the Jetty 12/EE10 migration - jetty-maven-plugin has always excluded
+             provided-scope dependencies this way; this is only the first time -Pdevelop has
+             actually been run end-to-end since webapps/README.md's "jetty:run" shorthand was
+             fixed (see the goal-resolution note in webapps/README.md). -->
+        <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </dependency>
         <dependency>
           <groupId>org.eximeebpms.bpm</groupId>
           <artifactId>eximeebpms-engine</artifactId>
@@ -331,8 +357,9 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-maven-plugin</artifactId>
+            <version>${version.jetty-ee10}</version>
             <configuration>
               <webApp>
                 <contextPath>/eximeebpms</contextPath>
@@ -423,24 +450,24 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>${version.jetty}</version>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-maven-plugin</artifactId>
+            <version>${version.jetty-ee10}</version>
             <configuration>
-              <webAppConfig>
+              <webApp>
                 <contextPath>/eximeebpms</contextPath>
                 <defaultsDescriptor>${project.basedir}/src/main/runtime/test/jetty/webdefault.xml</defaultsDescriptor>
                 <resourceBases>
                   <resourceBase>${project.basedir}/target/webapp</resourceBase>
                   <resourceBase>${project.basedir}/src/main/webapp</resourceBase>
                 </resourceBases>
-              </webAppConfig>
+              </webApp>
               <contextHandlers>
-                <contextHandler implementation="org.eclipse.jetty.maven.plugin.MavenWebAppContext">
+                <contextHandler implementation="org.eclipse.jetty.ee10.maven.plugin.MavenWebAppContext">
                   <war>${basedir}/target/engine-rest.war</war>
                   <contextPath>/engine-rest</contextPath>
                 </contextHandler>
-                <contextHandler implementation="org.eclipse.jetty.maven.plugin.MavenWebAppContext">
+                <contextHandler implementation="org.eclipse.jetty.ee10.maven.plugin.MavenWebAppContext">
                   <war>${project.basedir}/target/eximeebpms-welcome/</war>
                   <contextPath>/eximeebpms-welcome</contextPath>
                 </contextHandler>

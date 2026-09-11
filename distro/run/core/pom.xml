@@ -22,6 +22,18 @@
     <third-party-bom-scopes>compile|runtime</third-party-bom-scopes>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- org.apache.kafka:kafka-clients (via eximeebpms-engine-plugin-events-kafka, runtime)
+           pins lz4-java 1.10.1; force the patched version. -->
+      <dependency>
+        <groupId>at.yawk.lz4</groupId>
+        <artifactId>lz4-java</artifactId>
+        <version>${version.lz4-java}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
 
     <dependency>

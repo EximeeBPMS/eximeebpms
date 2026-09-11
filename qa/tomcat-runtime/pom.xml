@@ -12,6 +12,18 @@
     <version>1.4.0-SNAPSHOT</version>
   </parent>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- org.apache.kafka:kafka-clients (via eximeebpms-engine-plugin-events-kafka, test)
+           pins lz4-java 1.10.1; force the patched version. -->
+      <dependency>
+        <groupId>at.yawk.lz4</groupId>
+        <artifactId>lz4-java</artifactId>
+        <version>${version.lz4-java}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <!--

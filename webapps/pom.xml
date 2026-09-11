@@ -16,8 +16,6 @@
   <name>EximeeBPMS - Webapp - Root</name>
 
   <properties>
-    <version.jetty>11.0.26</version.jetty>
-
     <web.resources.override>src/main/runtime/default/webapp</web.resources.override>
 
     <history.level>full</history.level>
@@ -106,9 +104,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-webapp</artifactId>
-      <version>${version.jetty}</version>
+      <groupId>org.eclipse.jetty.ee10</groupId>
+      <artifactId>jetty-ee10-webapp</artifactId>
+      <version>${version.jetty-ee10}</version>
       <scope>test</scope>
     </dependency>
 
@@ -226,9 +224,9 @@
         </plugin>
 
         <plugin>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <version>${version.jetty}</version>
+          <groupId>org.eclipse.jetty.ee10</groupId>
+          <artifactId>jetty-ee10-maven-plugin</artifactId>
+          <version>${version.jetty-ee10}</version>
         </plugin>
 
         <plugin>

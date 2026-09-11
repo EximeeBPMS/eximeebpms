@@ -369,9 +369,16 @@
         <version>${version.freemarker}</version>
       </dependency>
 
+      <!-- No module declares the plain "wiremock" artifact directly any more (all consumers
+           moved to wiremock-jetty12 below, to close the Jetty CVEs affecting the 7.0.0-12.0.11
+           range) - the plain artifact hard-pins Jetty 11 via its own jetty-bom import, so a
+           dependencyManagement version override alone can't move it past Jetty 11 without a
+           classpath mismatch. wiremock-jetty12 is WireMock's own officially published,
+           same-version drop-in (excludes the bundled Jetty 11/http2 artifacts and re-adds
+           jetty-ee10-*). -->
       <dependency>
         <groupId>org.wiremock</groupId>
-        <artifactId>wiremock</artifactId>
+        <artifactId>wiremock-jetty12</artifactId>
         <version>${version.wiremock}</version>
         <scope>test</scope>
         <exclusions>

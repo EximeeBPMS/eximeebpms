@@ -88,6 +88,7 @@ module.exports = (_env, argv = {}) => {
       path: path.resolve(__dirname, 'target/webapp'),
     },
     resolve: {
+      tsconfig: false,
       fallback: {
         fs: false,
       },

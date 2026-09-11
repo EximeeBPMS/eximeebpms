@@ -16,10 +16,14 @@
  */
 package org.eximeebpms.bpm.pa.demo;
 
+import static org.eximeebpms.bpm.engine.authorization.Authorization.ANY;
 import static org.eximeebpms.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
 import static org.eximeebpms.bpm.engine.authorization.Permissions.ACCESS;
 import static org.eximeebpms.bpm.engine.authorization.Permissions.READ;
 import static org.eximeebpms.bpm.engine.authorization.Resources.APPLICATION;
+import static org.eximeebpms.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static org.eximeebpms.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static org.eximeebpms.bpm.engine.authorization.Resources.TASK;
 import static org.eximeebpms.bpm.engine.authorization.Resources.USER;
 
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ import org.eximeebpms.bpm.engine.FilterService;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.TaskService;
 import org.eximeebpms.bpm.engine.authorization.Authorization;
+import org.eximeebpms.bpm.engine.authorization.Resource;
 import org.eximeebpms.bpm.engine.filter.Filter;
 import org.eximeebpms.bpm.engine.identity.Group;
 import org.eximeebpms.bpm.engine.identity.User;
@@ -120,6 +125,18 @@ public class InvoiceDemoDataGenerator {
           auth.setResourceId(appName);
           auth.setResource(APPLICATION);
           authorizationService.saveAuthorization(auth);
+        }
+
+        // Cockpit's dashboard and "Human Tasks" view query across all processes (resourceId
+        // '*'), unlike Tasklist's own task lists which rely on implicit assignee/candidate
+        // visibility.
+        for (Resource resource : new Resource[]{TASK, PROCESS_DEFINITION, PROCESS_INSTANCE}) {
+          Authorization resourceAuth = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);
+          resourceAuth.setGroupId(groupId);
+          resourceAuth.setResource(resource);
+          resourceAuth.setResourceId(ANY);
+          resourceAuth.addPermission(READ);
+          authorizationService.saveAuthorization(resourceAuth);
         }
       }
 

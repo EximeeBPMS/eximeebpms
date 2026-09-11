@@ -60,7 +60,11 @@ Start the backend and frontend dev servers in separate terminals:
 
 ```sh
 # Terminal 1 — backend (REST API + engine) on http://localhost:8080, run from the repo root
-mvn -pl webapps/assembly-jakarta -am jetty:run -Pdevelop
+# (the fully-qualified goal is required here: Maven's "jetty:run" shorthand only resolves
+# against plugins declared in the project at the invocation directory — i.e. the repo root,
+# not the -pl-selected module — so it can't find this plugin without a personal, machine-local
+# <pluginGroups> entry in settings.xml, which we don't want every developer to have to add)
+mvn -pl webapps/assembly-jakarta -am org.eclipse.jetty.ee10:jetty-ee10-maven-plugin:run -Pdevelop
 
 # Terminal 2 — frontend dev server on http://localhost:8081
 cd webapps/frontend

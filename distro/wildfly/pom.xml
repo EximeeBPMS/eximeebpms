@@ -23,6 +23,35 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+
+      <!-- Test/provided-scope transitives with no local override:
+           org.infinispan:infinispan-commons pins jackson-core 2.21.3 (subsystem, provided);
+           org.apache.maven:maven-model-builder pins guava 20.0 and
+           org.apache.maven.resolver:maven-resolver-transport-http pins httpclient 4.5.4,
+           both via wildfly-subsystem-test-framework/wildfly-model-test (subsystem, test). -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${version.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${version.guava}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${version.httpclient}</version>
+      </dependency>
+
+      <!-- org.apache.kafka:kafka-clients (via eximeebpms-engine-plugin-events-kafka, runtime)
+           pins lz4-java 1.10.1; force the patched version. -->
+      <dependency>
+        <groupId>at.yawk.lz4</groupId>
+        <artifactId>lz4-java</artifactId>
+        <version>${version.lz4-java}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

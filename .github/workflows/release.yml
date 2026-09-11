@@ -77,6 +77,27 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
 
+      - name: Configure Git HTTPS credentials for github.com
+        # release:perform's checkout-project-from-scm phase does its own,
+        # independent `git clone` into target/checkout - a fresh .git
+        # directory that does NOT inherit the credential actions/checkout
+        # persisted for the original working-copy checkout above (that one is
+        # scoped locally to this job's already-checked-out repo). settings.xml's
+        # <server id="github"> entry is not a reliable substitute here -
+        # maven-scm's git-exe provider doesn't consistently pick up Maven
+        # settings.xml server credentials for git operations the way Wagon
+        # does for artifact deployment. eximeebpms-enterprise's identical
+        # release.yml pattern hit "fatal: could not read Username ... terminal
+        # prompts disabled" on a real release's "Release perform" step
+        # (BPMS-688, 2026-09-10) - configure it explicitly here too with a
+        # git credential store instead of depending on incidental/ambient
+        # credential state.
+        run: |
+          git config --global credential.helper store
+          echo "https://x-access-token:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - name: Cut CHANGELOG.md's [Unreleased] section into this release
         # Mirrors the same step in eximeebpms-enterprise's release.yml
         # (BPMS-688) - release.yml never touched CHANGELOG.md, so cutting

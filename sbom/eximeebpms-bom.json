@@ -4,7 +4,7 @@
   "serialNumber" : "urn:uuid:0ea468e7-0255-38ab-8901-2b067a1137dd",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2026-09-14T11:54:01Z",
+    "timestamp" : "2026-09-14T14:56:01Z",
     "lifecycles" : [
       {
         "phase" : "build"
@@ -43690,44 +43690,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-api",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry API",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "3ab40b0b330e094f7d4fa9ae1671a796"
+          "content" : "e148f6cd16813beb9010a1aa47437717"
         },
         {
           "alg" : "SHA-1",
-          "content" : "8b5df7f216b8b75da02f4f70daef71e70c91ff5e"
+          "content" : "d0c14f89ea577929ca3b27138c1cd66e908d3a47"
         },
         {
           "alg" : "SHA-256",
-          "content" : "ffaad9334ac41c02b6820b19da589d13dca72d7c6663cc9621c3ca64901f7995"
+          "content" : "b93c5e4b5d504e77670e85fdd8c258ab08bad808473c403a91ae65f1a393f0b7"
         },
         {
           "alg" : "SHA-512",
-          "content" : "6faee21e4c095a53acc7487cf3af18fb944c880e89fee4b52b4b4603dfcf3070cdfc041d94824c41fb1250ba38fa8cb7b469f78ace3df62076cbfadbebcfcce8"
+          "content" : "d00c833dc6fec3a703c0952a0b7285ed86ae6d6b8e0b800762d8e3b56f4f2249eae644396a6f651db3c8f9471df2eac92523dea1793a5bcdf93ac9c2aeafcf61"
         },
         {
           "alg" : "SHA-384",
-          "content" : "1512a034a9fa6c5c7851748eac3bf9fe6bfd9cfd3ed98957885633497ec47ffb75d6edb094c429fbfadf78c7eea8f9d0"
+          "content" : "2076e9ba474c40a5b3c8ca58a377e0b9c4822787762651ac0978c8cc84e4a72e4ebfd1aa36f8b9d6827e87d3c9109f5c"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "57a5ddd2be2e60fe35e97db3e069f3cbf7a48aa0902f6f0bc3de1a791ba2856713381dc20d0e5e139e1d6ca77400188c"
+          "content" : "08aed51887d98e95e78fb365d1e105d86d39bee8181de8b8b1d56ad705146981642cbce58137defd6f8a6aad4a5528f9"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "af60759217e36351641e233492a507dedeb677657f77d6eb0bffa08a61e801c1"
+          "content" : "b779800cb5e7ed2a79fde14acf491c8ddb27bb3356b10f37803c6af7b40420e3"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "06f0e25141256470f895bf4fe344b7af9f8aa41edf5b29d0aeef1d01104858a7d12bb16cb3054e6284affa9bc34a387caf64c6e89e8cac5d1d6c666db7138411"
+          "content" : "7970c1162e3009b9117ad33c392b523ea533f6b2ad29b1a55f9e9bc93fa26b6380cfbd32ad310a6405a369b23c2845039c1b021b591a12e348df8f00bfd1b751"
         }
       ],
       "licenses" : [
@@ -43737,7 +43737,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -43747,44 +43747,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-context",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry Context (Incubator)",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "db758a644b5c8459f32d2010e22ed34c"
+          "content" : "9981868039bb9781d7f04cdc66a3805f"
         },
         {
           "alg" : "SHA-1",
-          "content" : "d62950109b08e183ee6e397394a2443bc6bdbe84"
+          "content" : "386d796b267cc4f396d7cc4f5c8350b36699a7a5"
         },
         {
           "alg" : "SHA-256",
-          "content" : "7d763d701412dc10d5c70de8217a25d08bce1b7fe8fe3e3c6818568e14c1aabf"
+          "content" : "d83bd8e93d5e1df017a88c6702ff77d0887a4b4862b50e0009d01e57295dc87e"
         },
         {
           "alg" : "SHA-512",
-          "content" : "f7f551f8f95bba7b0683e4781fc884bade9c8ad32fa1633c34f08863dd0e5ad6519ad6fcd8baf00945a779199ca5f4347160ffab2a6642b5a7d554a70f56fcaa"
+          "content" : "9e6fb540157b70b04a6bd96bc9ef3b666d04665ffea201c46954a0c5f4ed79fe0653adb6b9140b41f445f03c46d7106b6d882b50cb09d4b7e880f18b377fcae2"
         },
         {
           "alg" : "SHA-384",
-          "content" : "a45c3a1d31d62c1c088f818e297ed154b75ef9e1d41dbc57eeba1a2db921402ad6f6ef9c06c4e64cf21aa7744d477726"
+          "content" : "6f7bf7d16dce1fa23ccfaba1f63975397af8e98dd91f9ba62c102e52d5e2441c2c6fc82202f9a928077daf59c212b7e9"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "a357057797c90ddeded8f538911a249ae203cd227c2b016df864da52097893f61f01e988f4706102f51152d340ae881d"
+          "content" : "1d90029aa2977eac77131522071c91f8de11713feed90b8c54589d0a367c4b37ba3bbc479aa9c92cd0d28370a727d04b"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "3be6b957a2748e1f1dc6f2ec3ed4a3141be8ebff935da6c67e00ee22f36461e5"
+          "content" : "4bc65b6f3cfffa9cfcfe9b6c0760e6bd4d8f7306d026289216add7125e577494"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "c15ce6450aa9e9eac484e03cd8f83ed2bbe9cadf4884ae611abbaacdee29e25b08991705316d4e43b5576e3578e8260ab09b2ffbc979d80ec7321d1eaae0a6c0"
+          "content" : "456804128b73a5da4a0f02ce8c343d8c3b214622f7957b0f9a57d605174025153b8906a19e3d44532156b3a6e94bf6b39bc97f44fe54715d4852118e107111d5"
         }
       ],
       "licenses" : [
@@ -43794,7 +43794,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -43804,44 +43804,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-common",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry API Common",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "381319cc02c307b553218d48a41e4398"
+          "content" : "2333871fcc19131e61554c254cdb8078"
         },
         {
           "alg" : "SHA-1",
-          "content" : "843f221202a008c893e18dafed0a024ef9d25ac1"
+          "content" : "863330e836d2fed14d68727b6b4306a200b83c7d"
         },
         {
           "alg" : "SHA-256",
-          "content" : "be2a8c3e458a3b3b8de0670c9f6649624b4b6f10f3bde64d3d340a029e86454e"
+          "content" : "d582be8b5d7a5e31e01801373a9c48a1b28c5a3c880438982eba6daa823f128e"
         },
         {
           "alg" : "SHA-512",
-          "content" : "45ef9dd8301b78a96fa4903bb09bb3581b07fab07da9f2d9e75cf6b33fa3b8a9a32333621d2c3ff0e3a8ec65b6a41ddabbc006fb5b1c5fb9db9e621bbd355588"
+          "content" : "ae27b03673de208b7db8791de577417364e5dca7a174e441193b860ca457d849e5ee837f11f83b91af50a1269598aef847cf999a8c10936e0e5ba02127e30368"
         },
         {
           "alg" : "SHA-384",
-          "content" : "e042e217e8f17863258bb65a3e55bbb157c9baca4b648c648ee7fcb33867b8f3a029dd02b7616c8978fa5ff34bc3406b"
+          "content" : "1f63cbdb7ec7164aafb453772983041c20e1a27d5496722b86f72f6ebb840ca1e66e0978a6ee1f040f2d816583907913"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "d3a0290be4069546c4a979b5df8167ce6008ad1f2e28a7b0d0dec9b262e059401b0cbe244aedb043eb7042d98034df74"
+          "content" : "7841349f20c433e37019723151c6fe9ab86fb1a34e75141f92175e75914ea73c13b6ea5ffd7b99ecc133c4ff3a9a867e"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "828869982851e631579d17741847ed9df6f869890ad080bc4aead58e06b7d345"
+          "content" : "6dfa3f23027e0dd2d7559971d27474faa98c30f628b983999e4dba74c7b46e5a"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "fca66a9b3c7b14c8692778530406a246248ee52e3d7c22e2ff5b128f787107871f8b097f40071be4afcc0d2b6facca3d02aab5c3af941bf230b960a51a38f270"
+          "content" : "2617eb401cd917567558157abab84206d7360c87961fd6dd50558fe1139cdda4bd5e68fa891b4458ce3e6cd13c0190c93c2cd887a376131fb8318f39cc1d43de"
         }
       ],
       "licenses" : [
@@ -43851,7 +43851,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -43861,44 +43861,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-exporter-logging",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry - Logging Exporter",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "f6eb6ebbb2cba0e60dcb3ea257605a5e"
+          "content" : "d9c3b14f0e15c5ac0e214f49f4742e1f"
         },
         {
           "alg" : "SHA-1",
-          "content" : "f15158bde45aab36263dd000d7401e9ca1a97455"
+          "content" : "83783f2961798b8dbf86e2ba0533b1bb7ef670c0"
         },
         {
           "alg" : "SHA-256",
-          "content" : "caf84d6cfad110fb7c61c9a98478d045c6ed3f618e17feb05e97739f74def401"
+          "content" : "8cd061b3b36fa5946de0216c424663a3c84444069e943a0f42c18099d0baa19b"
         },
         {
           "alg" : "SHA-512",
-          "content" : "270f0a3ae9f24ab2c921e3b94c8180b1b3f7fcf94b8fe058db39e3f7f9fe14d9e5a8125bd1304eaa965c03748a3e2dc1ec819c5647d644a6560e3554b9f17cec"
+          "content" : "6ad06a2a332d88e3d2573f1edb3303e44a8c031f723a90ffbb8779faa8b61888e7be79474072c8b64418d29be96e054fd1349e38f5d09e4111c039e38d72bf73"
         },
         {
           "alg" : "SHA-384",
-          "content" : "949e782d3f9f538cd5d91c3502da8baec7c7d7f107595bad3677ce936070e0a7a1f8f95ac8107175d3084ff0970aed43"
+          "content" : "a070f4ee6a4f608161dc7ee216bc8ee96dfd8a6f3bc6b9a20c53ae8caa849926f3751df2da447753218f35cb69a9cb2c"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "2fe2b71d74279bf9495e87a7578891e8c49079280c230325e31ca6c491fb299e55947726c31f0fa5f10487978aed88af"
+          "content" : "86779b286177d669216907828f672b80d6c53d24fb5355d6a316bd6149fa811e9c8fa9dc825d3e126e30b0f528a702e2"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "8109a5270b6e61de98083cdb92ed320ee55cd32da1d10094b7757d074a3425b3"
+          "content" : "ba413e209be756796412d72678ea75f933645111bfe18709ca689beeecf9499e"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "38326b301fe39ce0c1226d713766eefb5155fe8eb43005bef6a4b35e074c3e75a922d4c860265f31076325500dc45701ffffe93b7d6992f2162a8694e6418514"
+          "content" : "42435147b527f02c2a2efc64d46f41edc81b13d153d744bb4521a522ff1119dbd302e91242ed298706f73427d83cd4ed89bb21b865057d06eda3175005e7314c"
         }
       ],
       "licenses" : [
@@ -43908,7 +43908,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -43918,44 +43918,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-common",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK Common",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "53a3fd0ffb5702c7607ba072fc5b1d67"
+          "content" : "2bac422642c5979ca8374a3b5d5f7702"
         },
         {
           "alg" : "SHA-1",
-          "content" : "7dbe712d9b9f51a48022f1cd358c0ed7e80f6a06"
+          "content" : "8727304ac06134be56c9a06f75478942845588dc"
         },
         {
           "alg" : "SHA-256",
-          "content" : "b7756881df140002c4cf523931ac6cb77a98f2d4386a7a59f4d3c64dac9f051a"
+          "content" : "305f3a15118c39a45b0d5b9b61fc61b6cb2fad2bdf8f3da2e1419627fabe2079"
         },
         {
           "alg" : "SHA-512",
-          "content" : "09aeb43451305f6c4f44091ee9768b41fdea53f98884d4fa428c7d861394bfefe3865d8d122f6f295f1a5ded693e4272923e3b99557c988b9dd3b67db3bbfb7c"
+          "content" : "b86f42fea8829fbe8ac217739e14c673bb53aaad862359b32b562b1bc417599a5279b5d1cf6ea656f9e5ce7bd0a99fae7275cfa9d6c39f7790d6dd858bb4e0f1"
         },
         {
           "alg" : "SHA-384",
-          "content" : "673ef86d4b4c58dcd3ccd57e1bc6bf96acace530e64098d503842183bc35bed2ade20b24be33ed76b877bf88c9374381"
+          "content" : "9275bc96327613ad6a61371829f8f20255ef873aef5990d8cc8dc065d7f74fa4333853c209aa5e3bfe4dc1fa32d9d551"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "20b741ef3e15f8099cb13be8ac8ba4238432cd3198f92e04ecf740f609468d7f296eb76364320bd72654814e84181b65"
+          "content" : "0691aecfd0f1014c4f74f678af41140f3f53c1fe530210d51e67ae91ed955157f6a958a9faf11c32edbc59c373051176"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "d42a81a6cf05ade5c9b8f3783fbb58218f95dfc8b6ae3a9815faacf1caaee5c3"
+          "content" : "1fdfdd11c5e0ecf00e1edd5aee7117ec5541759b1a5316e5796ffd7745c0cbfd"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "ea8e2d787fba8b9e48d10b85410f37a6a96d2308742447030a23c4fbb0574868984e0e320c36d7edfd1af3bdb70aa206cb1a1d669922d847cff1370bff2a24ad"
+          "content" : "1dd0ca533be249859ac30da97cc0499dd753c4afa870c43298f01abe7ecccd703d4d0714fbcc0b3fc00a49604ac3d67c3a24bab2a60e6dd9cfe1c1af76fe95fb"
         }
       ],
       "licenses" : [
@@ -43965,7 +43965,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -43975,44 +43975,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-extension-autoconfigure-spi",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK Auto-configuration SPI",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "85060f9d131a3939f625db4cadfb7dc5"
+          "content" : "06d79733ffa1599ac68295fda9bd3c18"
         },
         {
           "alg" : "SHA-1",
-          "content" : "635051e4ba91ea38350e61ed58a39d16d573e977"
+          "content" : "531d52d1a76264799d92eb3daa7820a8e960c6d3"
         },
         {
           "alg" : "SHA-256",
-          "content" : "b043fbb9c6130dac1d1ac0d8dc1902c559250c0c7cb89341a988f325bab79592"
+          "content" : "531cdbd3f64ad882c9a7344b7f842f1841b6e6e4a97f6142f431249a96970403"
         },
         {
           "alg" : "SHA-512",
-          "content" : "69503ff1a19ebe97eb8c365afb3f88793ae5daab67364864aca0fc42cec12a0f70c9beea048cf935ce58cb81e45f3df76c4bc40fc8536a16b9b6942a9ec955e6"
+          "content" : "92c4ba00bc36f8d82cb93c8be0d343be60a24b915e179049d22febe7d5e13e4f127ba66c0d561c83ae97f3c9b414530d79f01b0f846bc9a442ccc857b41a52a7"
         },
         {
           "alg" : "SHA-384",
-          "content" : "5136815ec82048303811b28a416759b795c836d16d28cf16fdb4ecf69bbc89a2d64f618c860db4c7fa63c07b25c2d209"
+          "content" : "981aaff05ad573e688fd8282d004d5d26cfbbb1c7b5741d16cbbb3c68481eb8605f43619c4bfee2d32b8e502c62e3734"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "faacfcdc6be93087185f4f546f1b0c0e0b0990727f5e1656cc85862d135fc294c6b529d90a69bd13e6b7f6bb6d7ca909"
+          "content" : "67526698cf11e36fda9155937da30537b70c8201b942a93698bf09f8a66d32456c7e4928ecab51da84b769db27b8e977"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "656cbab3bbd0e72c515b217c5274d67017626d944f065693d380503eba805867"
+          "content" : "d0e3affba9ddf82fb9b8f3d506d665fb706ecbd8dfacee04f28ae77de6f76fe2"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "0af524c414ea3964b3e209ed91f7b504261c7cba0b7210f2d83903f1a5e031eb1641464cfd9cfbc24fe5b6c9d323ec3cd54532e87eafff3d1daa086a19a0d7c7"
+          "content" : "f4eebc060c6f76c7723894494047678cff84d195d5250854710270156f7e0b3490203fc4473dec82166bcdd3418184db68bc9a4c94dd688ee6ea996f805f7e49"
         }
       ],
       "licenses" : [
@@ -44022,7 +44022,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -44032,44 +44032,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-extension-autoconfigure",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK Auto-configuration",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "239b9e60ec9e35f5e3b3a99a68ca3f7b"
+          "content" : "62e5ae123c2af95d119ab50d22075f14"
         },
         {
           "alg" : "SHA-1",
-          "content" : "28ae444a769d8cade194ca5bbdd6924a56b1d513"
+          "content" : "34a92acc4945a6fbd0d4cb7b3490bfa09ba630d5"
         },
         {
           "alg" : "SHA-256",
-          "content" : "17a03d1b5dc0b1cff0258b7551eeecee9f9baff5134b6b411d40dc0c487285f6"
+          "content" : "9f8c11cca3863524d2ebeafaf96f26916bf2a3cf887233ac7c1da00eba8563d0"
         },
         {
           "alg" : "SHA-512",
-          "content" : "f964b5f045f47e8346ae6943f6fa0975bfa1c3f9f0d05ac35f32f344dc75969c08f78927277e5c2230b1b8a17df48515ff0fe5243eb8055e428f16e7b2364475"
+          "content" : "a25222e8ad7c7c35a9ffe98f4f880136f698bed16c9039786fb9bace0810820f82ae16d4744f939d1e0b927af609c761808ae6df82a49650029634c31bbf4389"
         },
         {
           "alg" : "SHA-384",
-          "content" : "30f4e0fb3e5149583a20e338779d4b296c30a8b69af3c0a84a40e4a9d6494c69f82298af02fc219f6a7b347558e39250"
+          "content" : "f174f77f4dcd7579c5f453ec2d57fb36e370ed5644dec8abbea4a61267802fd70a9d55a54cf9f20da473fc316c8e58e1"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "82a86de66b90fcfe316c7f6d8dec277635952057e8f4342deadec2f7166f71515de1012140cecfa6bd37c5ece95903f3"
+          "content" : "66f72eb3fc10fa3a9da82e602eb0e539cf0f567074a378760c30427cb8b9e4edc2086339ee73b56f12776375cc3abbba"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "d0224e8b429f1b3715ceb357466762829b997614f9211be53f6d10ed127a344c"
+          "content" : "eca6a917c379cc5f7df71efbd8936347171bac8356786a77122bc56b61cf402e"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "d32061f3b1fa7f395d1deacaa4715c5d8bd8da6e25a348c1f54c203591b8f6b058a1d57ec9bc3e09efd046107359bef87972eb3ed6ae7493f71d5852f46917d2"
+          "content" : "0e5e4007be0bd626d083674bf2da256830996bc9a5e3295c6c20c801df045a3a0d024b33d3ed2c45781f97db23e84df2f591861322a55ad3b8e50120fa068874"
         }
       ],
       "licenses" : [
@@ -44079,7 +44079,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -44089,44 +44089,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-trace",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK For Tracing",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "df54eb5b5ff08438fafaf8078adb0393"
+          "content" : "a08e94334651108dfbc0b634810cf467"
         },
         {
           "alg" : "SHA-1",
-          "content" : "581326fd733b17cdd37e005575073e44a0a9b8ba"
+          "content" : "f433a47f4c9402e14c3fb2e71683a0b8998e426f"
         },
         {
           "alg" : "SHA-256",
-          "content" : "fe479a975bbe1a5989c37866ea065204230ab835025c7da992cf906536504055"
+          "content" : "579c96897d9112b626fbf325efc116c2d4f046aec1bd72e9909ec0f5431a2040"
         },
         {
           "alg" : "SHA-512",
-          "content" : "051210ff94498b5619292d0b86c93f9da94cf85213d3c3ce21df8a81abfa6d9d15f57202de22079106cd797673326d41164cd6d6f3c8b61d4d97f360df21fb28"
+          "content" : "4474fb2727e3d2e9cf00bc37c69f7236ae2b25194da47c1180af0a42c892d8f18419b31760ec94c284fea349a146f4e1ee2d70e3dfcb81180e7dfe87ea9cebed"
         },
         {
           "alg" : "SHA-384",
-          "content" : "79e268ea085331cc33bbd36959ce9532642d22e3449df2a4f7b06e0939cd1f2e721f593bf9e05b24bdbd0afd21877468"
+          "content" : "21d3e45678c9be0bf7c9e8a3f94cc832509a321da7b984201ad18c4f5a802698b536249b4d3e7f12274384d1a3bc5c53"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "bc41faaaaa1b9c2c9d89e7e18bdb37d3e90ddb87c7d847c996f7bfdbb0311eda36f2b5385d141fb593bced1bc11d9e1a"
+          "content" : "39a30a341f645e7326e1f98754e816ff2248423be980172f5e3014108e21302a74a43ebd39b0c8a5abb45b31e4ccf0ea"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "800fdb231478d1c34247f942a98426ab7557a24e59849c1c16d1cd40043ec62d"
+          "content" : "ddcd54ce8cfcef3a6f1cc3debc3c0c8daca1132b12546b2f557a4cd7b3c35f0c"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "889ae273b12e787881e5300dcc50a6b41cb4e5481f493bef619238402a972bb8dc9844887ee7cab482c3c24ef790d83de70ffa048be2d521380a3e3c72c53555"
+          "content" : "3362d5a69b19183d1c57b930e9f5c5281ca5bfac47f389018a1ae52bfccc0e7855bc384cbf6b8f97fe0a336f883213ef708c7d0504395be60b759af26cec6cea"
         }
       ],
       "licenses" : [
@@ -44136,7 +44136,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -44146,44 +44146,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "a1ab35f9f6cbb7a35156014825c72d46"
+          "content" : "67059db201de95acd66ef42a89831ec8"
         },
         {
           "alg" : "SHA-1",
-          "content" : "0ec81a4855a64cd088f3aa0de5bf581717565838"
+          "content" : "ee3a8a72adde8f764c58adf393cec5aa6ecea1a2"
         },
         {
           "alg" : "SHA-256",
-          "content" : "870f39762211792e902a981ca98d811839987b0586f84d7bb26660a751810553"
+          "content" : "5fbc8edd83b0650e12398f66ef504e9be2a9e1f935b0e8b8b2b45a47f14cb282"
         },
         {
           "alg" : "SHA-512",
-          "content" : "d7df56d6aa900a93c6314c6fe8e0f82cb8203769081f49a99e410eda68b526fd80cb495c3d421618d6ef3308e2cdabc59bccaee2caca42df926f00f8dfdbea9e"
+          "content" : "eddd9364012e181f606cf7ed6886c3e511c8ad9e29a5f44d819801fcb38d0d34eb66d6c4ea42670ee95bcaa7e6682dbc5a510b10fcb0e0f427e2ff74fb5cc1b4"
         },
         {
           "alg" : "SHA-384",
-          "content" : "6dee203e6071a2c08f81596c6b95bd3f07f6bea0b13b70d82ddc0d3b34b002f228f5f2fd240f10c10ffc7039a4a8fe95"
+          "content" : "d05f16651fa097e44bd5eeb3dbe4619b676f799dd5a6fcdc1966d5b732966884111527c5fc85ae9d43b51b4652fd83bb"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "8e163bca7cabe3ed64c6d5a6a602bf7b78033934979b4da83eb37597994301281de100c4d8b29f994a6b59d9b9380563"
+          "content" : "2f28c9ec486b4b1051ea953f28bee2b7addb825b6323e08a89326c591c1f31279ba5cbcf98c94cfe8be446f855e9051e"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "314895089dc8f942268275d4bf0373bb93a008f37ebf6ede5edd1db8a39db3d9"
+          "content" : "2f04920adfc196dc7f9b63c352a6cd79e47002971b52d34ef3ec2caf9a18da32"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "850f6da94e934484aae87bff9b466a8898de67aa646d4c43db2e12576f3c88a619d9f34d60590618a2f75a75872fb6f636ef3f8f1cfc91f7b2137c503d9b713d"
+          "content" : "a93dce300bfee0758cf5f3c5e223d081e8eb58d142daeadcc7469f6b07a7e31135559d0cb6e53e4051dc8506a6952f0ad817665740b7af06ea080e7a720c5e57"
         }
       ],
       "licenses" : [
@@ -44193,7 +44193,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -44203,44 +44203,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-metrics",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry SDK Metrics",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "111655ee55e0333da8a41ce9f345e0bd"
+          "content" : "90f8d614aa760e2671832943412b7751"
         },
         {
           "alg" : "SHA-1",
-          "content" : "75298219ef305b42193cb40ff1e72e0cf8df8f4f"
+          "content" : "a91adf2f0fa1d1bf1ba52da0a3899d2b91599df9"
         },
         {
           "alg" : "SHA-256",
-          "content" : "6ee721f1bb0a2cffc9bb1c002df58d6d4d0d9916e5f9968c3088fbb3aa7d82a8"
+          "content" : "536ff92f2c5a711c55775311f9530e425060fda8c70638140b6c4996b9e40285"
         },
         {
           "alg" : "SHA-512",
-          "content" : "ebb8212f1cc07ad6dc7ebe964971da933f46a7d1a1ae8cd6b702f3ddc79e0fc3685f653cbb1335750f2375c42a088839d596ce807354ffb941c1260e973246c8"
+          "content" : "388db80dddc007cac1aae43b3fdf2d6c4aade620c0a51240fe04367b7ad27609c0cf47e27bb7f3e463871a6432540bb691ee43d96529de6d5821341cb8ebbef6"
         },
         {
           "alg" : "SHA-384",
-          "content" : "e96a9f191463f1d7f20397b82eac6b205f7953bb26aa2ea9eb6a4e85903e034c927dd4b2a82bc6e85ad1525772ed68da"
+          "content" : "379cf64b75298d45638ab42f5953f8ef4929dd2a5c36707bd5a2de011c8a807fe2a5d6ebeca25e3e39844039392156cb"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "766e685ef42f86ada9449d29e8d85e6ea3c595ea7ad7a781c9a2d4cc902ae6b952598a97f61c2d420a1f9ea1006783b6"
+          "content" : "50a0b61bfdd5d60fb4efbd3ef0ebba32cc70b1a967b2bf65fb9c088a7e100f8cf6bd59ad5e7f0c3928cd2b5c0756698e"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "a914c9c8c556080e5156ed3ff96798b3575c762b5a976a69a474148f81025177"
+          "content" : "ad4fb491e2964b9cb09db8b6ab717e67e63da3d4fba27796d35f6918ffc8a79c"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "41dff7c39fd824455bdd3b39aa8d3b39055a1f71bf47b3a683341a5a920b87b8e902bea97b9ec619827534492a8ff1debed03874f2c4b453ea005a6f68cca2a8"
+          "content" : "9ecf89b044c845b5bf2b761998d89ae99209addcd0b6ffae2138efbf562fc8f926a107acba17bbc13c0c0d61351ff6cf59b98fd8afeb8069ed83000e6a5702b3"
         }
       ],
       "licenses" : [
@@ -44250,7 +44250,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -44260,44 +44260,44 @@
     },
     {
       "type" : "library",
-      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.65.0?type=jar",
+      "bom-ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.66.0?type=jar",
       "group" : "io.opentelemetry",
       "name" : "opentelemetry-sdk-logs",
-      "version" : "1.65.0",
+      "version" : "1.66.0",
       "description" : "OpenTelemetry Log SDK",
       "scope" : "required",
       "hashes" : [
         {
           "alg" : "MD5",
-          "content" : "f48538bb7f9f79c58a8f81112e743594"
+          "content" : "77d5aa53c3a59fb9471fa61ff5c6cb20"
         },
         {
           "alg" : "SHA-1",
-          "content" : "9982196f3ef9531cb985ae951eb5eba952959793"
+          "content" : "85c4cba1840ee682019859308390deca0a973361"
         },
         {
           "alg" : "SHA-256",
-          "content" : "7a22fb31101842705a57256ffbd7ee60f5ade75a51944a3b43169c2eb7158358"
+          "content" : "1e49df0057a76b25180d74ad461f22706268eb0d7aee9234550224a1d062be22"
         },
         {
           "alg" : "SHA-512",
-          "content" : "f6b9302f2113f33fa6064be51bb3bb3d9c67ace8623ee3ecfb51a00b705cb8d6e229639e8ee443d64a312467aa0f1b719d736f01ce10caa788aed897ed6d55bb"
+          "content" : "b187efc62c5042f9aad5c734a099012adda5dfa0c36049217f13b4f254af9e55ea027134dfcca0ca622347bd967b42e6abbdc7cb2d0f90be081c7a3dc19b2b35"
         },
         {
           "alg" : "SHA-384",
-          "content" : "8a3d792190366ae43cd1dd64c8f6aa0d646dd756dd307870f6c7f3e8a3467410b832e3867e337e317fa6778d178c9d6d"
+          "content" : "f391f440321cdc8db1dcc6dfb6af4daff5bb3ebff8e16d150f7f6b4539e344bda65bf2b096e6479f5663ca175d5daf46"
         },
         {
           "alg" : "SHA3-384",
-          "content" : "513c06a2cf3559bc9ced094a3af6aae79bac2db011d29cf08291a21c560c1958cab1302e18a57e8a53f5b8dab7430a79"
+          "content" : "e51ee72ab61e87fc29087f75d5794de5b0b454ff26de61943351a17e41cdaef3d49203bdff581e913063dc5f61fb4aa2"
         },
         {
           "alg" : "SHA3-256",
-          "content" : "9dd06982e57b21c33e003bfb3e1d77a23c71bc37e03b62dd795ab1a5fb744ffb"
+          "content" : "e2fcbc0d58cbdf84a5c416ff21efff86a8f798ef2bbe38c97b4be2b039616d5f"
         },
         {
           "alg" : "SHA3-512",
-          "content" : "52a2e57b083d5c61f766a961efa2ba13cbd78233ad382b8070daa27b44e134d5e1155b913cfaa4fc5dd315d1d3e075557dcd890bbc549ad6bfaa9a9cef7b8bae"
+          "content" : "be7f4199197a1cec495238192cfb5f7a6eb72058cc05699118634974cd0633cec190e73918998d442f413c6c317554475820088b473fccd00ff480e32d335ae3"
         }
       ],
       "licenses" : [
@@ -44307,7 +44307,7 @@
           }
         }
       ],
-      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.65.0?type=jar",
+      "purl" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.66.0?type=jar",
       "externalReferences" : [
         {
           "type" : "website",
@@ -63648,14 +63648,14 @@
       "dependsOn" : [
         "pkg:maven/com.google.auto.service/auto-service-annotations@1.1.1?type=jar",
         "pkg:maven/com.google.guava/guava@33.5.0-jre?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-context@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-context@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar",
         "pkg:maven/net.bytebuddy/byte-buddy@1.18.2?type=jar",
         "pkg:maven/org.jspecify/jspecify@1.0.0?type=jar",
         "pkg:maven/org.seleniumhq.selenium/selenium-api@4.39.0?type=jar",
@@ -63684,75 +63684,75 @@
       "dependsOn" : [ ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-context@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-context@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-context@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-common@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-common@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-common@1.66.0?type=jar",
       "dependsOn" : [ ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-exporter-logging@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-trace@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-metrics@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-logs@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-api@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-api@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-common@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar"
       ]
     },
     {
-      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.65.0?type=jar",
+      "ref" : "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure@1.66.0?type=jar",
       "dependsOn" : [
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.65.0?type=jar",
-        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.65.0?type=jar"
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk@1.66.0?type=jar",
+        "pkg:maven/io.opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi@1.66.0?type=jar"
       ]
     },
     {

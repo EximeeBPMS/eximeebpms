@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
   "version": 1,
-  "serialNumber": "urn:uuid:6deb6e33-8ccc-4c39-8ac3-bb429b24ad18",
+  "serialNumber": "urn:uuid:06ece99a-1dfb-409c-af07-196dceb4335c",
   "metadata": {
-    "timestamp": "2026-09-03T08:33:12.705Z",
+    "timestamp": "2026-09-14T11:55:37.397Z",
     "tools": {
       "components": [
         {
@@ -118,8 +118,8 @@
       "type": "library",
       "name": "core",
       "group": "@babel",
-      "version": "7.29.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+      "version": "7.29.6",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
       "author": "The Babel Team",
       "description": "Babel compiler core.",
       "licenses": [
@@ -130,7 +130,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/core@7.29.0",
+      "purl": "pkg:npm/%40babel/core@7.29.6",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-core",
@@ -148,12 +148,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/core/-/core-7.29.0.tgz",
+          "url": "https://registry.npmjs.org/@babel/core/-/core-7.29.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "08639f389a968e0daa5bf31beb336c0e6faee6f150f03c577db334f73ebda7967afa61358a43f68d45f0fa3e363dfd574d8103d919e2e5ff799e961ebb030340"
+              "content": "41dc66028fe2919aaa44603cb38df0c3c95caa5ea769646f133d0516b97a30895cec68ba4eba179d27566b953f92ae9fcdca6aa477ac89c4311592227996f220"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -641,62 +641,6 @@
             {
               "name": "cdx:npm:package:path",
               "value": "node_modules/@cyclonedx/cyclonedx-npm/node_modules/@cyclonedx/cyclonedx-library"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "ajv-formats",
-          "version": "3.0.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv-formats@3.0.1",
-          "author": "Evgeny Poberezkin",
-          "description": "Format validation for Ajv v7+",
-          "scope": "optional",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/ajv-formats@3.0.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/ajv-validator/ajv-formats.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/ajv-validator/ajv-formats#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/ajv-validator/ajv-formats/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "f2252a979d04511fae51c7514371c3a9ae84572a3776870bf20e5627714d7169aeeb621b90652e7bfa44c8b056f1518a2ae7133e0a9e92ce1f214d43038ca8c1"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:extraneous",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/@cyclonedx/cyclonedx-npm/node_modules/ajv-formats"
             }
           ]
         },
@@ -11035,8 +10979,8 @@
     {
       "type": "library",
       "name": "p-map",
-      "version": "7.0.7",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.7",
+      "version": "7.0.8",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.8",
       "author": "Sindre Sorhus",
       "description": "Map over promises concurrently",
       "scope": "optional",
@@ -11048,7 +10992,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/p-map@7.0.7",
+      "purl": "pkg:npm/p-map@7.0.8",
       "externalReferences": [
         {
           "url": "git+https://github.com/sindresorhus/p-map.git",
@@ -11066,12 +11010,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/p-map/-/p-map-7.0.7.tgz",
+          "url": "https://registry.npmjs.org/p-map/-/p-map-7.0.8.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "55a591bb68b8149351b624560aeb904607d0d41edaebe80c4ab3bede3d04422fe4d142df4bd928b11c46a22ab0cc88d94c3234dad19f9399975e5b4b83a42d7d"
+              "content": "322b5a56c0ae08522f38b2cf214ecd9dfad9bd2f47f61ee4c0c5240e8f93da910849a243e3c215f52f2221d5c1ecfb2fbddc7261cb124d3aebf745cab1bba537"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -13500,10 +13444,10 @@
     {
       "type": "library",
       "name": "terser-webpack-plugin",
-      "version": "5.3.10",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10",
+      "version": "5.6.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1",
       "author": "webpack Contrib Team",
-      "description": "Terser plugin for webpack",
+      "description": "Minimizer plugin for webpack",
       "licenses": [
         {
           "license": {
@@ -13512,30 +13456,30 @@
           }
         }
       ],
-      "purl": "pkg:npm/terser-webpack-plugin@5.3.10",
+      "purl": "pkg:npm/terser-webpack-plugin@5.6.1",
       "externalReferences": [
         {
-          "url": "git+https://github.com/webpack-contrib/terser-webpack-plugin.git",
+          "url": "git+https://github.com/webpack/minimizer-webpack-plugin.git",
           "type": "vcs",
           "comment": "as detected from PackageJson property \"repository.url\""
         },
         {
-          "url": "https://github.com/webpack-contrib/terser-webpack-plugin",
+          "url": "https://github.com/webpack/minimizer-webpack-plugin",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
         {
-          "url": "https://github.com/webpack-contrib/terser-webpack-plugin/issues",
+          "url": "https://github.com/webpack/minimizer-webpack-plugin/issues",
           "type": "issue-tracker",
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/terser-webpack-plugin/-/terser-webpack-plugin-5.3.10.tgz",
+          "url": "https://registry.npmjs.org/terser-webpack-plugin/-/terser-webpack-plugin-5.6.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "04a14f5a53c39dd3ecf8d1860abd54e7db745d270be77d7b63451178dac76b0f7f17084f10d96ae9b7e0b3ee323dfc8fe75bea0b56d0e2ba7511f5d6e59487f7"
+              "content": "db4d51e63fac2692bc9c55b0295c8d7d9a2df056896cb643ab97afae25736d5d700ed4970e34540d17c9cc7a406b114330486c64bd5091ea8ceb5c20b12dca69"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -13560,7 +13504,7 @@
           "type": "library",
           "name": "jest-worker",
           "version": "27.5.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|jest-worker@27.5.1",
           "licenses": [
             {
               "license": {
@@ -13615,68 +13559,9 @@
         },
         {
           "type": "library",
-          "name": "schema-utils",
-          "version": "3.3.0",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
-          "author": "webpack Contrib",
-          "description": "webpack Validation Utils",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/schema-utils@3.3.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/webpack/schema-utils.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/webpack/schema-utils",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/webpack/schema-utils/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/schema-utils/-/schema-utils-3.3.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "a4dff2380bdc0bee6b4399c4446bb0ae32e562f2d36c289b9d9d48ec1d4b6a2033f41441944f4632013f7aa577d0feda25051fec37629b2fd1b1b60efc6ad51a"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">= 10.13.0"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/terser-webpack-plugin/node_modules/schema-utils"
-            }
-          ]
-        },
-        {
-          "type": "library",
           "name": "supports-color",
           "version": "8.1.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|supports-color@8.1.1",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|supports-color@8.1.1",
           "author": "Sindre Sorhus",
           "description": "Detect whether a terminal supports color",
           "licenses": [
@@ -14512,8 +14397,8 @@
     {
       "type": "library",
       "name": "webpack",
-      "version": "5.99.7",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7",
+      "version": "5.109.0",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0",
       "author": "Tobias Koppers @sokra",
       "description": "Packs ECMAScript/CommonJs/AMD modules for the browser. Allows you to split your codebase into multiple bundles, which can be loaded on demand. Supports loaders to preprocess files, i.e. json, jsx, es7, css, less, ... and your custom stuff.",
       "licenses": [
@@ -14524,7 +14409,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/webpack@5.99.7",
+      "purl": "pkg:npm/webpack@5.109.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/webpack/webpack.git",
@@ -14542,12 +14427,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/webpack/-/webpack-5.99.7.tgz",
+          "url": "https://registry.npmjs.org/webpack/-/webpack-5.109.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "08da8a0513108f0726291d227480f9bdad6a961aea5542a9a2f8be11cefd92c5bcbb1ee24b5f80e95ab37d95e055808544a97b5cbe5aa77668329c01271720d3"
+              "content": "be89ab9e0b245555c4645f6c3197d801de295d95277da59d246945f814cd17e80904229809006739e54f96b877f44c25ee7942b22ac3a65332ea8e60f7124706"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14572,7 +14457,7 @@
           "type": "library",
           "name": "eslint-scope",
           "version": "5.1.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|eslint-scope@5.1.1",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|eslint-scope@5.1.1",
           "description": "ECMAScript scope analyzer for ESLint",
           "licenses": [
             {
@@ -14628,11 +14513,10 @@
         },
         {
           "type": "library",
-          "name": "terser-webpack-plugin",
-          "version": "5.3.14",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|terser-webpack-plugin@5.3.14",
-          "author": "webpack Contrib Team",
-          "description": "Terser plugin for webpack",
+          "name": "mime-db",
+          "version": "1.54.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|mime-db@1.54.0",
+          "description": "Media Type Database",
           "licenses": [
             {
               "license": {
@@ -14641,30 +14525,30 @@
               }
             }
           ],
-          "purl": "pkg:npm/terser-webpack-plugin@5.3.14",
+          "purl": "pkg:npm/mime-db@1.54.0",
           "externalReferences": [
             {
-              "url": "git+https://github.com/webpack-contrib/terser-webpack-plugin.git",
+              "url": "git+https://github.com/jshttp/mime-db.git",
               "type": "vcs",
               "comment": "as detected from PackageJson property \"repository.url\""
             },
             {
-              "url": "https://github.com/webpack-contrib/terser-webpack-plugin",
+              "url": "https://github.com/jshttp/mime-db#readme",
               "type": "website",
               "comment": "as detected from PackageJson property \"homepage\""
             },
             {
-              "url": "https://github.com/webpack-contrib/terser-webpack-plugin/issues",
+              "url": "https://github.com/jshttp/mime-db/issues",
               "type": "issue-tracker",
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/terser-webpack-plugin/-/terser-webpack-plugin-5.3.14.tgz",
+              "url": "https://registry.npmjs.org/mime-db/-/mime-db-1.54.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "be4663a548dbe8e312edd855fad20b516e818690d1ecfd8bfda41202ff94c24fa6f0a0135fd11c7158874c9476a83b4008a3c862774b182ca5dc5328fabd8b33"
+                  "content": "694e4426e20dd960de982700a76bc505fa7f9b810085626750d492c348b1b3bfe45db77a3e0eb8126c0990d745841f1a5add6c1f60935eb2f1a3f880195de83d"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14673,7 +14557,7 @@
           "properties": [
             {
               "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">= 10.13.0"
+              "value": ">= 0.6"
             },
             {
               "name": "cdx:npm:package:development",
@@ -14681,7 +14565,7 @@
             },
             {
               "name": "cdx:npm:package:path",
-              "value": "node_modules/webpack/node_modules/terser-webpack-plugin"
+              "value": "node_modules/webpack/node_modules/mime-db"
             }
           ]
         },
@@ -14689,7 +14573,7 @@
           "type": "library",
           "name": "estraverse",
           "version": "4.3.0",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|estraverse@4.3.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|estraverse@4.3.0",
           "description": "ECMAScript JS AST traversal functions",
           "licenses": [
             {
@@ -14740,122 +14624,6 @@
             {
               "name": "cdx:npm:package:path",
               "value": "node_modules/webpack/node_modules/estraverse"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "jest-worker",
-          "version": "27.5.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|jest-worker@27.5.1",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/jest-worker@27.5.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/facebook/jest.git#packages/jest-worker",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
-            },
-            {
-              "url": "https://github.com/facebook/jest#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/facebook/jest/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/jest-worker/-/jest-worker-27.5.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "eefba1f3957971d0e87cfcb19f9f27acf8c192d668d2ef71d60f16b6342897e8d90da13e7e137e708bd38f5d469dd067327c9fad4386d6c650c427632a1f832a"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">= 10.13.0"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/webpack/node_modules/jest-worker"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "supports-color",
-          "version": "8.1.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|supports-color@8.1.1",
-          "author": "Sindre Sorhus",
-          "description": "Detect whether a terminal supports color",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/supports-color@8.1.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/chalk/supports-color.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/chalk/supports-color#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/chalk/supports-color/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/supports-color/-/supports-color-8.1.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "3295043763a876d533c6f29097bd9c505ed14391221ec1af4ac546d226bd73945b5862f6088e02ec4a4f4bc513048a659e5cd988db95e7ac3e16e371cb7b72d9"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:constraint:engine:node",
-              "value": ">=10"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/webpack/node_modules/supports-color"
             }
           ]
         }
@@ -20369,6 +20137,173 @@
     },
     {
       "type": "library",
+      "name": "ajv-formats",
+      "version": "3.0.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1",
+      "author": "Evgeny Poberezkin",
+      "description": "Format validation for Ajv v7+",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/ajv-formats@3.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/ajv-validator/ajv-formats.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/ajv-validator/ajv-formats#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/ajv-validator/ajv-formats/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "f2252a979d04511fae51c7514371c3a9ae84572a3776870bf20e5627714d7169aeeb621b90652e7bfa44c8b056f1518a2ae7133e0a9e92ce1f214d43038ca8c1"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/ajv-formats"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "ajv",
+          "version": "8.20.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|ajv@8.20.0",
+          "author": "Evgeny Poberezkin",
+          "description": "Another JSON Schema Validator",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/ajv@8.20.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/ajv-validator/ajv.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://ajv.js.org",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/ajv-validator/ajv/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "4e16e58be3a53a3fa230f60505505f2773a60809da4b2367e0cd6fcfd4fa1a46b926df5b6bf1c8479ea3a32eb9b58ea4c7f142179557341f35f58eff194ac118"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/ajv-formats/node_modules/ajv"
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "json-schema-traverse",
+          "version": "1.0.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|json-schema-traverse@1.0.0",
+          "author": "Evgeny Poberezkin",
+          "description": "Traverse JSON Schema passing each schema object to callback",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/json-schema-traverse@1.0.0",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/epoberezkin/json-schema-traverse.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/epoberezkin/json-schema-traverse#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/epoberezkin/json-schema-traverse/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "34cf3f3fd9f75e35e12199f594b86415a0024ce5114178d6855e0103f4673aff31be0aadaa9017f483b89914314b1d51968e2dab37aa6f4b0e96bb9a3b2dddba"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/ajv-formats/node_modules/json-schema-traverse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "spdx-expression-parse",
       "version": "3.0.1",
       "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|spdx-expression-parse@3.0.1",
@@ -21711,8 +21646,8 @@
     {
       "type": "library",
       "name": "schema-utils",
-      "version": "4.3.2",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
+      "version": "4.5.0",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
       "author": "webpack Contrib",
       "description": "webpack Validation Utils",
       "licenses": [
@@ -21723,7 +21658,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/schema-utils@4.3.2",
+      "purl": "pkg:npm/schema-utils@4.5.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/webpack/schema-utils.git",
@@ -21741,12 +21676,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/schema-utils/-/schema-utils-4.3.2.tgz",
+          "url": "https://registry.npmjs.org/schema-utils/-/schema-utils-4.5.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "1a7fc969293f32df6062e6f14ed4a7fd0095e1e9bd9a900f891d6bab2fce72ed7dbbf1bd27959674da144f84a257a9850b7cba731c85705c1dccf337160c4601"
+              "content": "cc994c099d1c011e69fd8e28569468aa2a03309706c5a5d1ad0ff8acfe16c91f38bdce73fc3a255dd6ef5de0e94f06eda1c0c5af6ae13ea1cf12b0c252dcf690"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -21771,7 +21706,7 @@
           "type": "library",
           "name": "ajv-keywords",
           "version": "5.1.0",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv-keywords@5.1.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv-keywords@5.1.0",
           "author": "Evgeny Poberezkin",
           "description": "Additional JSON-Schema keywords for Ajv JSON validator",
           "licenses": [
@@ -21825,8 +21760,8 @@
         {
           "type": "library",
           "name": "ajv",
-          "version": "8.17.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv@8.17.1",
+          "version": "8.20.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv@8.20.0",
           "author": "Evgeny Poberezkin",
           "description": "Another JSON Schema Validator",
           "licenses": [
@@ -21837,7 +21772,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/ajv@8.17.1",
+          "purl": "pkg:npm/ajv@8.20.0",
           "externalReferences": [
             {
               "url": "git+https://github.com/ajv-validator/ajv.git",
@@ -21855,12 +21790,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/ajv/-/ajv-8.17.1.tgz",
+              "url": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "07f801b8d8394a2313acf902f80dbe716d11b33c316269fa558c41fe29e5052b52e67c7ac4722dfde84a46120c86abac97b6bc2e34286678c2b39be1c31390d6"
+                  "content": "4e16e58be3a53a3fa230f60505505f2773a60809da4b2367e0cd6fcfd4fa1a46b926df5b6bf1c8479ea3a32eb9b58ea4c7f142179557341f35f58eff194ac118"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -21881,7 +21816,7 @@
           "type": "library",
           "name": "json-schema-traverse",
           "version": "1.0.0",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|json-schema-traverse@1.0.0",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|json-schema-traverse@1.0.0",
           "author": "Evgeny Poberezkin",
           "description": "Traverse JSON Schema passing each schema object to callback",
           "licenses": [
@@ -27789,8 +27724,8 @@
     {
       "type": "library",
       "name": "tapable",
-      "version": "2.2.2",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2",
+      "version": "2.3.3",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3",
       "author": "Tobias Koppers @sokra",
       "description": "Just a little module for plugins.",
       "licenses": [
@@ -27801,7 +27736,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/tapable@2.2.2",
+      "purl": "pkg:npm/tapable@2.3.3",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/webpack/tapable.git",
@@ -27819,12 +27754,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/tapable/-/tapable-2.2.2.tgz",
+          "url": "https://registry.npmjs.org/tapable/-/tapable-2.3.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "45ed74f8d6ae2d3302b9d73b4f958b14b0300e143425676b30afbd07633ccd1e61444c4a9ac44308103bfda57fa4d24596d98114ee4100c950162fefab79ca3a"
+              "content": "bb173fce9a8583ac7b0bcbce13b961e8b6dd6bc7842fdce6566fcf2de4cf051861d710a0756690f89d42522786a487e6d8776db14a51bfe1ec8626ac04c71ce8"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -31204,64 +31139,9 @@
     },
     {
       "type": "library",
-      "name": "serialize-javascript",
-      "version": "6.0.2",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|serialize-javascript@6.0.2",
-      "author": "Eric Ferraiuolo",
-      "description": "Serialize JavaScript to a superset of JSON that includes regular expressions and functions.",
-      "licenses": [
-        {
-          "license": {
-            "id": "BSD-3-Clause",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/serialize-javascript@6.0.2",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/yahoo/serialize-javascript.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/yahoo/serialize-javascript",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/yahoo/serialize-javascript/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-6.0.2.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "49a6b5c4f0724d3ab681d7856582cba3e445137e4d1d99006ea65e58d777069ce9a5e562b00aa90e3729f1dc9feae22f12a251778ea37a69b203888521e564f2"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/serialize-javascript"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "terser",
-      "version": "5.40.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0",
+      "version": "5.51.2",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2",
       "author": "Mihai Bazon",
       "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
       "licenses": [
@@ -31272,7 +31152,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/terser@5.40.0",
+      "purl": "pkg:npm/terser@5.51.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/terser/terser.git",
@@ -31290,12 +31170,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/terser/-/terser-5.40.0.tgz",
+          "url": "https://registry.npmjs.org/terser/-/terser-5.51.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "71f78a97f8e3c124796abeddd051a66af7bd8451894fca1bca8d33f82ad03b294b0db93b5fcd673d4eafabd54e45ae63537d129039d3d855e32db47c1cb3fec4"
+              "content": "6d69e348db1c9ae23e189cdee99ba99c73fc1bf71372c245f9b5c279092793648742c81b3499cbaea887f636765b84933d55c7da60ca2915f78b03e173d0a7fd"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -31320,7 +31200,7 @@
           "type": "library",
           "name": "commander",
           "version": "2.20.3",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|commander@2.20.3",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|commander@2.20.3",
           "author": "TJ Holowaychuk",
           "description": "the complete solution for node.js command-line programs",
           "licenses": [
@@ -31375,7 +31255,7 @@
           "type": "library",
           "name": "source-map-support",
           "version": "0.5.21",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|source-map-support@0.5.21",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|source-map-support@0.5.21",
           "description": "Fixes stack traces for files with source maps",
           "licenses": [
             {
@@ -31603,8 +31483,8 @@
     {
       "type": "library",
       "name": "acorn",
-      "version": "8.14.1",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1",
+      "version": "8.18.0",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0",
       "description": "ECMAScript parser",
       "licenses": [
         {
@@ -31614,7 +31494,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/acorn@8.14.1",
+      "purl": "pkg:npm/acorn@8.18.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/acornjs/acorn.git",
@@ -31632,12 +31512,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/acorn/-/acorn-8.14.1.tgz",
+          "url": "https://registry.npmjs.org/acorn/-/acorn-8.18.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3af43fda95032a681f0a0fbec6c4d7d701b17d36accdc1d571372d5b85090788626c9c761d7c713b9526560ca331af990ec89a7f9c162d7629456326048d101e"
+              "content": "946abef72af5fc6b8059a558207463befc921b9ff855f288bc2f045b14ad3dd70387f29aec51b7b703fabf8779064adabd48a584802c1b8423f37b74d8b5943d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -34911,65 +34791,10 @@
     },
     {
       "type": "library",
-      "name": "eslint-scope",
-      "group": "@types",
-      "version": "3.7.7",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/eslint-scope@3.7.7",
-      "description": "TypeScript definitions for eslint-scope",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/%40types/eslint-scope@3.7.7",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/eslint-scope",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
-        },
-        {
-          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/eslint-scope",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/@types/eslint-scope/-/eslint-scope-3.7.7.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "3333059522c1a8d17681c1d63b41b5bcffd84327efaf16746c5faeee6cd4759d7fc4ae00e2caeefa7ada673e62de2108935975bb289c68355307841b6c490062"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/@types/eslint-scope"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "estree",
       "group": "@types",
-      "version": "1.0.7",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.7",
+      "version": "1.0.9",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.9",
       "description": "TypeScript definitions for estree",
       "licenses": [
         {
@@ -34979,7 +34804,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/estree@1.0.7",
+      "purl": "pkg:npm/%40types/estree@1.0.9",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/estree",
@@ -34997,12 +34822,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/estree/-/estree-1.0.7.tgz",
+          "url": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c36f08a1250226989d0ff4c6be2670c0c25c90d1122595c5bbb341679609e261149cdada527f4f9bc1d2666fe30c5d690d660ab29584ee85698628143d16a421"
+              "content": "1a174f832d5e978fc898fd395f4e54c38730dbf33ddc10949a712f599352b650b310a304e05924f98a680393a21cd426a12ec269f6fc5dadcfc9af26d50af37a"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35362,8 +35187,8 @@
     {
       "type": "library",
       "name": "enhanced-resolve",
-      "version": "5.18.1",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.18.1",
+      "version": "5.25.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.25.1",
       "author": "Tobias Koppers @sokra",
       "description": "Offers a async require.resolve function. It's highly configurable.",
       "licenses": [
@@ -35374,15 +35199,15 @@
           }
         }
       ],
-      "purl": "pkg:npm/enhanced-resolve@5.18.1",
+      "purl": "pkg:npm/enhanced-resolve@5.25.1",
       "externalReferences": [
         {
-          "url": "git://github.com/webpack/enhanced-resolve.git",
+          "url": "git+https://github.com/webpack/enhanced-resolve.git",
           "type": "vcs",
           "comment": "as detected from PackageJson property \"repository.url\""
         },
         {
-          "url": "http://github.com/webpack/enhanced-resolve",
+          "url": "https://github.com/webpack/enhanced-resolve#readme",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
@@ -35392,12 +35217,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.18.1.tgz",
+          "url": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.25.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6525b799ae4691c401229c194d244023c37bd54bb082cf7721ecc1ee67fb47ad2d0bc65b26275ea0334a8c79f63bd288971eab9064d3124d715022b613563662"
+              "content": "9c65edb39ce72739963eefa6204f62cc23b3760eb7a0971ada60f3196593b61eecaf86824e829ca32155050c0def9223e4f7faa79d74130913a958934730d5fb"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35421,8 +35246,8 @@
     {
       "type": "library",
       "name": "es-module-lexer",
-      "version": "1.7.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@1.7.0",
+      "version": "2.3.2",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@2.3.2",
       "author": "Guy Bedford",
       "description": "Lexes ES modules returning their import/export metadata",
       "licenses": [
@@ -35433,7 +35258,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/es-module-lexer@1.7.0",
+      "purl": "pkg:npm/es-module-lexer@2.3.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/guybedford/es-module-lexer.git",
@@ -35451,12 +35276,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.7.0.tgz",
+          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-2.3.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8c44280b093c8726f6019ce220e2e10eaa66e7edb0c39b8813a9643bfea370e0aeb1f93a2e1307a575df04b5d367b61dcadd23e15a1442feae18d61b756fa404"
+              "content": "a681c6a4e4400688c926e72757d29b39abc44d6f250559e98645bbec4479fc1439173ee85d2a0235e93b207def4799d18ddb04cfddba89b1585fc2ad2d099dcb"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35475,66 +35300,11 @@
     },
     {
       "type": "library",
-      "name": "glob-to-regexp",
-      "version": "0.4.1",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob-to-regexp@0.4.1",
-      "author": "Nick Fitzgerald",
-      "description": "Convert globs to regular expressions",
-      "licenses": [
-        {
-          "license": {
-            "id": "BSD-2-Clause",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/glob-to-regexp@0.4.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/fitzgen/glob-to-regexp.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/fitzgen/glob-to-regexp#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/fitzgen/glob-to-regexp/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/glob-to-regexp/-/glob-to-regexp-0.4.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "9645f51c95f0c8c729af0ff961465cdacec3ae90221c1db5fd5f84d6b1d4ad5368924bc1e9ba8ccd3d157d5ebff3a64d69bb75935e18388693ee70ef397dc88b"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/glob-to-regexp"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "json-parse-even-better-errors",
-      "version": "2.3.1",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|json-parse-even-better-errors@2.3.1",
-      "author": "Kat Marchán",
-      "description": "JSON.parse with context information on error",
+      "name": "minimizer-webpack-plugin",
+      "version": "5.10.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1",
+      "author": "webpack Contrib Team",
+      "description": "Minimizer plugin for webpack",
       "licenses": [
         {
           "license": {
@@ -35543,85 +35313,30 @@
           }
         }
       ],
-      "purl": "pkg:npm/json-parse-even-better-errors@2.3.1",
+      "purl": "pkg:npm/minimizer-webpack-plugin@5.10.1",
       "externalReferences": [
         {
-          "url": "git+https://github.com/npm/json-parse-even-better-errors.git",
+          "url": "git+https://github.com/webpack/minimizer-webpack-plugin.git",
           "type": "vcs",
           "comment": "as detected from PackageJson property \"repository.url\""
         },
         {
-          "url": "https://github.com/npm/json-parse-even-better-errors#readme",
+          "url": "https://github.com/webpack/minimizer-webpack-plugin",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
         {
-          "url": "https://github.com/npm/json-parse-even-better-errors/issues",
+          "url": "https://github.com/webpack/minimizer-webpack-plugin/issues",
           "type": "issue-tracker",
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz",
+          "url": "https://registry.npmjs.org/minimizer-webpack-plugin/-/minimizer-webpack-plugin-5.10.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c72170ca1ae8fc91287fa1a17b68b3d8d717a23dac96836c5abfd7b044432bfa223c27da36197938d7e9fa341d01945043420958dcc7f7321917b962f75921db"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/json-parse-even-better-errors"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "loader-runner",
-      "version": "4.3.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|loader-runner@4.3.0",
-      "author": "Tobias Koppers @sokra",
-      "description": "Runs (webpack) loaders",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/loader-runner@4.3.0",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/webpack/loader-runner.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/webpack/loader-runner#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/webpack/loader-runner/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/loader-runner/-/loader-runner-4.3.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "dd1ff533ec92de3e68bbcd0c7b9f63ec5f4832ce0f5ecdd5a91ae6d1353701b28fc659a9a18d5336c70957fa06257a3ca826ad1464df0db63a5ba8a918e6177e"
+              "content": "f9db191324dccb5964ab8d65c5d88eaaf6f6ea05db60683063edf4c37edff4fa94564b8405e8c12c3a2db073938ee81af7127218b5b60eacca0d4c89e16fcf31"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35630,7 +35345,7 @@
       "properties": [
         {
           "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">=6.11.5"
+          "value": ">= 10.13.0"
         },
         {
           "name": "cdx:npm:package:development",
@@ -35638,61 +35353,125 @@
         },
         {
           "name": "cdx:npm:package:path",
-          "value": "node_modules/loader-runner"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "mime-types",
-      "version": "2.1.35",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
-      "description": "The ultimate javascript content-type utility.",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
+          "value": "node_modules/minimizer-webpack-plugin"
         }
       ],
-      "purl": "pkg:npm/mime-types@2.1.35",
-      "externalReferences": [
+      "components": [
         {
-          "url": "git+https://github.com/jshttp/mime-types.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jshttp/mime-types#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jshttp/mime-types/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz",
-          "type": "distribution",
-          "hashes": [
+          "type": "library",
+          "name": "jest-worker",
+          "version": "27.5.1",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|jest-worker@27.5.1",
+          "licenses": [
             {
-              "alg": "SHA-512",
-              "content": "64363e6cf9b9cd34c5f98a42ac053d9cad148080983d3d10b53d4d65616fe2cfbe4cd91c815693d20ebee11dae238323423cf2b07075cf1b962f9d21cda7978b"
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
             }
           ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">= 0.6"
+          "purl": "pkg:npm/jest-worker@27.5.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/facebook/jest.git#packages/jest-worker",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+            },
+            {
+              "url": "https://github.com/facebook/jest#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/facebook/jest/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/jest-worker/-/jest-worker-27.5.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "eefba1f3957971d0e87cfcb19f9f27acf8c192d668d2ef71d60f16b6342897e8d90da13e7e137e708bd38f5d469dd067327c9fad4386d6c650c427632a1f832a"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">= 10.13.0"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/minimizer-webpack-plugin/node_modules/jest-worker"
+            }
+          ]
         },
         {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/mime-types"
+          "type": "library",
+          "name": "supports-color",
+          "version": "8.1.1",
+          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|supports-color@8.1.1",
+          "author": "Sindre Sorhus",
+          "description": "Detect whether a terminal supports color",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT",
+                "acknowledgement": "declared"
+              }
+            }
+          ],
+          "purl": "pkg:npm/supports-color@8.1.1",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/chalk/supports-color.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/chalk/supports-color#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/chalk/supports-color/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/supports-color/-/supports-color-8.1.1.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "3295043763a876d533c6f29097bd9c505ed14391221ec1af4ac546d226bd73945b5862f6088e02ec4a4f4bc513048a659e5cd988db95e7ac3e16e371cb7b72d9"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:constraint:engine:node",
+              "value": ">=10"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            },
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/minimizer-webpack-plugin/node_modules/supports-color"
+            }
+          ]
         }
       ]
     },
@@ -35753,8 +35532,8 @@
     {
       "type": "library",
       "name": "watchpack",
-      "version": "2.4.4",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.4.4",
+      "version": "2.5.2",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.5.2",
       "author": "Tobias Koppers @sokra",
       "licenses": [
         {
@@ -35764,7 +35543,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/watchpack@2.4.4",
+      "purl": "pkg:npm/watchpack@2.5.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/webpack/watchpack.git",
@@ -35782,12 +35561,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.4.tgz",
+          "url": "https://registry.npmjs.org/watchpack/-/watchpack-2.5.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "73910634e8b2c71579aa64ed001eeb6e25f18b5a285f5a5028c2d7fcc21a6c98d10344890503a3285f8a4957c792bf54d5c0033e89f49918957bfae2c9a88350"
+              "content": "ea2ff4d0d0633f8c863ecf9c68a4b245fa5317ff13a2bb2ed0c396de633321b86021215d7abf22ef16ea80794b33026b76237c9dd055dd4035fc07f33d2afe8e"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35811,8 +35590,8 @@
     {
       "type": "library",
       "name": "webpack-sources",
-      "version": "3.3.2",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.3.2",
+      "version": "3.5.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.5.1",
       "author": "Tobias Koppers @sokra",
       "description": "Source code handling classes for webpack",
       "licenses": [
@@ -35823,7 +35602,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/webpack-sources@3.3.2",
+      "purl": "pkg:npm/webpack-sources@3.5.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/webpack/webpack-sources.git",
@@ -35841,12 +35620,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/webpack-sources/-/webpack-sources-3.3.2.tgz",
+          "url": "https://registry.npmjs.org/webpack-sources/-/webpack-sources-3.5.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ca428abacf25aa58175ffd568ee7692048eab1a7e339370e26ac6701b30b02efca0ac0c227a181b6fb1c7b0bd392b9f6e07b27bc5c2b4826de9c5ae1b5c0ac00"
+              "content": "8f2ba218976dbd8e37e33e5b519ae3cfaeefefafde3cdbc5653a7d31dcf6f48947e3e18fb20c868e2bf47ca23e33b05d914e800e3ba551c280777b542b75a513"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -38212,8 +37991,8 @@
     {
       "type": "library",
       "name": "fast-uri",
-      "version": "3.0.6",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.0.6",
+      "version": "3.1.7",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.1.7",
       "author": "Vincent Le Goff",
       "description": "Dependency-free RFC 3986 URI toolbox",
       "licenses": [
@@ -38224,7 +38003,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/fast-uri@3.0.6",
+      "purl": "pkg:npm/fast-uri@3.1.7",
       "externalReferences": [
         {
           "url": "git+https://github.com/fastify/fast-uri.git",
@@ -38242,12 +38021,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.0.6.tgz",
+          "url": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.7.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "02d7e8d783a26d2bf9c00a7855636c15813501c850453bfd701196113e296561f362c845492f4d408e88e7badd2a7f5cae859531b6056cb849fb226f9992081f"
+              "content": "74ebd95738dd65dcfba6177dbfa8c26f0c6b056ddf2ba9fc45cd02b5d98ce1bba6ccc9f1cb005886ea61e89f35f51470fe4bbeacb6de9707ccba792dbb35551e"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -39492,173 +39271,6 @@
     },
     {
       "type": "library",
-      "name": "ajv-formats",
-      "version": "2.1.1",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1",
-      "author": "Evgeny Poberezkin",
-      "description": "Format validation for Ajv v7+",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/ajv-formats@2.1.1",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/ajv-validator/ajv-formats.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/ajv-validator/ajv-formats#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/ajv-validator/ajv-formats/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-2.1.1.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "5b1d0ac79da1c44ec2d7c8643048206251227ea599b58691828b89a2bf9631d3e743210ad77be0116c9536ea7b4a879ea0b32caf891fe61e9d396d75235e4c50"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/ajv-formats"
-        }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "ajv",
-          "version": "8.17.1",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|ajv@8.17.1",
-          "author": "Evgeny Poberezkin",
-          "description": "Another JSON Schema Validator",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/ajv@8.17.1",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/ajv-validator/ajv.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://ajv.js.org",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/ajv-validator/ajv/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/ajv/-/ajv-8.17.1.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "07f801b8d8394a2313acf902f80dbe716d11b33c316269fa558c41fe29e5052b52e67c7ac4722dfde84a46120c86abac97b6bc2e34286678c2b39be1c31390d6"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/ajv-formats/node_modules/ajv"
-            }
-          ]
-        },
-        {
-          "type": "library",
-          "name": "json-schema-traverse",
-          "version": "1.0.0",
-          "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|json-schema-traverse@1.0.0",
-          "author": "Evgeny Poberezkin",
-          "description": "Traverse JSON Schema passing each schema object to callback",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT",
-                "acknowledgement": "declared"
-              }
-            }
-          ],
-          "purl": "pkg:npm/json-schema-traverse@1.0.0",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/epoberezkin/json-schema-traverse.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/epoberezkin/json-schema-traverse#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/epoberezkin/json-schema-traverse/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "34cf3f3fd9f75e35e12199f594b86415a0024ce5114178d6855e0103f4673aff31be0aadaa9017f483b89914314b1d51968e2dab37aa6f4b0e96bb9a3b2dddba"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            },
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/ajv-formats/node_modules/json-schema-traverse"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "postcss-selector-parser",
       "version": "7.1.0",
       "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|postcss-selector-parser@7.1.0",
@@ -40586,6 +40198,61 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/error-ex"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "json-parse-even-better-errors",
+      "version": "2.3.1",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|json-parse-even-better-errors@2.3.1",
+      "author": "Kat Marchán",
+      "description": "JSON.parse with context information on error",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/json-parse-even-better-errors@2.3.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/npm/json-parse-even-better-errors.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/npm/json-parse-even-better-errors#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/npm/json-parse-even-better-errors/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "c72170ca1ae8fc91287fa1a17b68b3d8d717a23dac96836c5abfd7b044432bfa223c27da36197938d7e9fa341d01945043420958dcc7f7321917b962f75921db"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/json-parse-even-better-errors"
         }
       ]
     },
@@ -46788,6 +46455,60 @@
     },
     {
       "type": "library",
+      "name": "mime-types",
+      "version": "2.1.35",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
+      "description": "The ultimate javascript content-type utility.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mime-types@2.1.35",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jshttp/mime-types.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jshttp/mime-types#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jshttp/mime-types/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "64363e6cf9b9cd34c5f98a42ac053d9cad148080983d3d10b53d4d65616fe2cfbe4cd91c815693d20ebee11dae238323423cf2b07075cf1b962f9d21cda7978b"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:constraint:engine:node",
+          "value": ">= 0.6"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mime-types"
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "cuid2",
       "group": "@paralleldrive",
       "version": "2.2.2",
@@ -47111,60 +46832,6 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/@jridgewell/sourcemap-codec"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "randombytes",
-      "version": "2.1.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|randombytes@2.1.0",
-      "description": "random bytes from browserify stand alone",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/randombytes@2.1.0",
-      "externalReferences": [
-        {
-          "url": "git+ssh://git@github.com/crypto-browserify/randombytes.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/crypto-browserify/randombytes",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/crypto-browserify/randombytes/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "bd897788e5fee022945aec468bd5248627ba7eca97a92f4513665a89ce2d3450f637641069738c15bb8a2b84260c70b424ee81d59a78d49d0ba53d2847af1a99"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/randombytes"
         }
       ]
     },
@@ -51813,60 +51480,6 @@
     },
     {
       "type": "library",
-      "name": "mime-db",
-      "version": "1.52.0",
-      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0",
-      "description": "Media Type Database",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT",
-            "acknowledgement": "declared"
-          }
-        }
-      ],
-      "purl": "pkg:npm/mime-db@1.52.0",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/jshttp/mime-db.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jshttp/mime-db#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jshttp/mime-db/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "b0f538b95edd625bed589c70c311c3d0fba285536213b4f201b439496c43081f66518bce82ba103b061040e28f27c0886c4fb51135653a82b5502da7537818be"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:constraint:engine:node",
-          "value": ">= 0.6"
-        },
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/mime-db"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "color-convert",
       "version": "2.0.1",
       "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|color-convert@2.0.1",
@@ -56242,6 +55855,60 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/function-bind"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "mime-db",
+      "version": "1.52.0",
+      "bom-ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0",
+      "description": "Media Type Database",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "purl": "pkg:npm/mime-db@1.52.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jshttp/mime-db.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jshttp/mime-db#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jshttp/mime-db/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "b0f538b95edd625bed589c70c311c3d0fba285536213b4f201b439496c43081f66518bce82ba103b061040e28f27c0886c4fb51135653a82b5502da7537818be"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:constraint:engine:node",
+          "value": ">= 0.6"
+        },
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/mime-db"
         }
       ]
     },
@@ -62331,7 +61998,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-object-assign@7.25.9",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-object-rest-spread@7.25.9",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/preset-env@7.29.2",
@@ -62451,7 +62118,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|nearley@2.20.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|node-abi@3.96.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|node-gyp@11.5.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.8",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|package-json-from-dist@1.0.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|packageurl-js@2.0.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|path-scurry@1.11.1",
@@ -62484,7 +62151,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tar-fs@2.1.5",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tar-stream@2.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tar@7.5.22",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tunnel-agent@0.6.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|unique-filename@4.0.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|unique-slug@5.0.0",
@@ -62492,13 +62159,13 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-cli@6.0.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-dev-server@5.2.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-merge@5.10.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|wrap-ansi@7.0.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|xmlbuilder2@4.0.3"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/code-frame@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/generator@7.29.7",
@@ -62520,14 +62187,14 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-object-assign@7.25.9",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-object-rest-spread@7.25.9",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-parameters@7.29.7"
@@ -62537,7 +62204,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/preset-env@7.29.2",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/compat-data@7.29.7",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-validator-option@7.29.7",
@@ -62612,7 +62279,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/preset-env@7.29.2|@babel/plugin-transform-object-rest-spread@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-destructuring@7.29.7",
@@ -62642,7 +62309,7 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|@cyclonedx/cyclonedx-library@10.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats-draft2019@1.6.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv-formats@3.0.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv@8.20.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|commander@14.0.3",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|hosted-git-info@9.0.3",
@@ -62660,7 +62327,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|@cyclonedx/cyclonedx-library@10.2.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats-draft2019@1.6.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv-formats@3.0.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv@8.20.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|libxmljs2@0.37.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|packageurl-js@2.0.1",
@@ -62669,16 +62336,10 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv-formats@3.0.1",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv@8.20.0"
-      ]
-    },
-    {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|ajv@8.20.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-deep-equal@3.1.3",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.0.6",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.1.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@cyclonedx/cyclonedx-npm@6.0.0|json-schema-traverse@1.0.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|require-from-string@2.0.2"
       ]
@@ -62876,9 +62537,9 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|babel-loader@10.0.0",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|find-up@5.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -62937,7 +62598,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minipass-flush@1.0.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minipass-pipeline@1.2.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minipass@7.1.3",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.8",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ssri@12.0.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tar@7.5.22",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|unique-filename@4.0.0"
@@ -63006,10 +62667,10 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob-parent@6.0.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|normalize-path@3.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|copy-webpack-plugin@14.0.0|serialize-javascript@7.0.5",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tinyglobby@0.2.16",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63029,7 +62690,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|postcss-value-parser@4.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|postcss@8.5.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|css-loader@6.10.0|semver@7.7.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63274,8 +62935,8 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|jest-worker@29.7.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|micromatch@4.0.8",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|normalize-path@3.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63340,7 +63001,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|exports-loader@5.0.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|source-map@0.6.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63358,7 +63019,7 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|file-loader@6.2.0|loader-utils@2.0.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|file-loader@6.2.0|schema-utils@3.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63407,7 +63068,7 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|html-minifier-terser@7.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|parse5@7.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63417,8 +63078,8 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|html-webpack-plugin@5.6.0|html-minifier-terser@6.1.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|lodash@4.17.21",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|pretty-error@4.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63430,7 +63091,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|he@1.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|param-case@3.0.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|relateurl@0.2.7",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2"
       ]
     },
     {
@@ -63484,7 +63145,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob@7.2.3",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|karma-webpack@5.0.1|minimatch@9.0.5",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|karma-webpack@5.0.1|webpack-merge@4.2.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63538,7 +63199,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|less-loader@12.2.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|less@4.2.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63662,9 +63323,9 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mini-css-extract-plugin@2.8.0",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -63817,7 +63478,7 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.7"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-map@7.0.8"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|package-json-from-dist@1.0.1"
@@ -63893,7 +63554,7 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|raw-loader@4.0.2|loader-utils@2.0.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|raw-loader@4.0.2|schema-utils@3.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -64064,34 +63725,25 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tar@7.5.22|yallist@5.0.0"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/trace-mapping@0.3.31",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|serialize-javascript@6.0.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|jest-worker@27.5.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|jest-worker@27.5.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/node@22.15.29",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|merge-stream@2.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|supports-color@8.1.1"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|supports-color@8.1.1"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|schema-utils@3.3.0",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/json-schema@7.0.15",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-keywords@3.5.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv@6.12.6"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.3.10|supports-color@8.1.1",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser-webpack-plugin@5.6.1|supports-color@8.1.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|has-flag@4.0.0"
       ]
@@ -64119,7 +63771,7 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@discoveryjs/json-ext@0.5.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn-walk@8.3.4",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-bundle-analyzer@4.10.1|commander@7.2.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|debounce@1.2.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|escape-string-regexp@4.0.0",
@@ -64154,7 +63806,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|interpret@3.1.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|rechoir@0.8.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-cli@6.0.1|webpack-merge@6.0.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -64195,13 +63847,13 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|launch-editor@2.14.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|open@10.1.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|p-retry@6.2.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|selfsigned@5.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|serve-index@1.9.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|sockjs@0.3.24",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|spdy@4.0.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-dev-middleware@7.4.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-dev-server@5.2.6|ws@8.18.2"
       ]
     },
@@ -64217,68 +63869,42 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/eslint-scope@3.7.7",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.9",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/json-schema@7.0.15",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webassemblyjs/ast@1.14.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webassemblyjs/wasm-edit@1.14.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webassemblyjs/wasm-parser@1.14.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|browserslist@4.28.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|chrome-trace-event@1.0.4",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.18.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@1.7.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|eslint-scope@5.1.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.25.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@2.3.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|eslint-scope@5.1.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|events@3.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob-to-regexp@0.4.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|graceful-fs@4.2.11",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|json-parse-even-better-errors@2.3.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|loader-runner@4.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|mime-db@1.54.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|neo-async@2.6.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|terser-webpack-plugin@5.3.14",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.4.4",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.3.2"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.5.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.5.1"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|eslint-scope@5.1.1",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|eslint-scope@5.1.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|esrecurse@4.3.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|estraverse@4.3.0"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|estraverse@4.3.0"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|terser-webpack-plugin@5.3.14",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/trace-mapping@0.3.31",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|jest-worker@27.5.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|serialize-javascript@6.0.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
-      ]
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|mime-db@1.54.0"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|estraverse@4.3.0"
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|jest-worker@27.5.1",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/node@22.15.29",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|merge-stream@2.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|supports-color@8.1.1"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7|supports-color@8.1.1",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|has-flag@4.0.0"
-      ]
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0|estraverse@4.3.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|wrap-ansi@7.0.0",
@@ -64328,7 +63954,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-transforms@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-imports@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-validator-identifier@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
@@ -64405,7 +64031,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-parameters@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
@@ -64418,7 +64044,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-bugfix-firefox-class-in-computed-class-key@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
       ]
@@ -64426,21 +64052,21 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-bugfix-safari-class-field-initializer-scope@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-skip-transparent-expression-wrappers@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-optional-chaining@7.29.7"
@@ -64449,7 +64075,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
       ]
@@ -64457,27 +64083,27 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-syntax-import-assertions@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-syntax-import-attributes@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-syntax-unicode-sets-regex@7.18.6",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64485,14 +64111,14 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-arrow-functions@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-async-generator-functions@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-remap-async-to-generator@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
@@ -64501,7 +64127,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-async-to-generator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-imports@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-remap-async-to-generator@7.29.7"
@@ -64510,21 +64136,21 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-block-scoped-functions@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-block-scoping@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-class-properties@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-class-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64532,7 +64158,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-class-static-block@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-class-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64540,7 +64166,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-classes@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-annotate-as-pure@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-globals@7.29.7",
@@ -64552,7 +64178,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-computed-properties@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/template@7.29.7"
       ]
@@ -64560,7 +64186,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-destructuring@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
       ]
@@ -64568,7 +64194,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-dotall-regex@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64576,14 +64202,14 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-duplicate-keys@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-duplicate-named-capturing-groups-regex@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64591,14 +64217,14 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-dynamic-import@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-explicit-resource-management@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-destructuring@7.29.7"
       ]
@@ -64606,21 +64232,21 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-exponentiation-operator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-export-namespace-from@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-for-of@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-skip-transparent-expression-wrappers@7.29.7"
       ]
@@ -64628,7 +64254,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-function-name@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
@@ -64637,35 +64263,35 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-json-strings@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-literals@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-logical-assignment-operators@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-member-expression-literals@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-modules-amd@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-transforms@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64673,7 +64299,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-modules-commonjs@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-transforms@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64681,7 +64307,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-modules-systemjs@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-transforms@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-validator-identifier@7.29.7",
@@ -64691,7 +64317,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-modules-umd@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-module-transforms@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64699,7 +64325,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-named-capturing-groups-regex@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64707,28 +64333,28 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-new-target@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-nullish-coalescing-operator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-numeric-separator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-object-super@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-replace-supers@7.29.7"
       ]
@@ -64736,14 +64362,14 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-optional-catch-binding@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-optional-chaining@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-skip-transparent-expression-wrappers@7.29.7"
       ]
@@ -64751,7 +64377,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-private-methods@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-class-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64759,7 +64385,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-private-property-in-object@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-annotate-as-pure@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-class-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
@@ -64768,21 +64394,21 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-property-literals@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-regenerator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-regexp-modifiers@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64790,21 +64416,21 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-reserved-words@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-shorthand-properties@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-spread@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-skip-transparent-expression-wrappers@7.29.7"
       ]
@@ -64812,35 +64438,35 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-sticky-regex@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-template-literals@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-typeof-symbol@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-unicode-escapes@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-unicode-property-regex@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64848,7 +64474,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-unicode-regex@7.27.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64856,7 +64482,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/plugin-transform-unicode-sets-regex@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7"
       ]
@@ -64864,7 +64490,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/preset-modules@0.1.6-no-external-plugins",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/types@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|esutils@2.0.3"
@@ -64874,7 +64500,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|babel-plugin-polyfill-corejs2@0.4.17",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/compat-data@7.29.7",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-define-polyfill-provider@0.6.8",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|semver@6.3.1"
       ]
@@ -64882,7 +64508,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|babel-plugin-polyfill-corejs3@0.14.2",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-define-polyfill-provider@0.6.8",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|core-js-compat@3.49.0"
       ]
@@ -64890,7 +64516,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|babel-plugin-polyfill-regenerator@0.6.8",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-define-polyfill-provider@0.6.8"
       ]
     },
@@ -64986,6 +64612,24 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|min-dash@4.2.3",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|preact@10.26.8"
       ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1",
+      "dependsOn": [
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|ajv@8.20.0"
+      ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|ajv@8.20.0",
+      "dependsOn": [
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-deep-equal@3.1.3",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.1.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|json-schema-traverse@1.0.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|require-from-string@2.0.2"
+      ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1|json-schema-traverse@1.0.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|spdx-expression-parse@3.0.1",
@@ -65134,32 +64778,32 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|normalize-path@3.0.0"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/json-schema@7.0.15",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv-keywords@5.1.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv@8.17.1"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@3.0.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv-keywords@5.1.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv@8.20.0"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv-keywords@5.1.0",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv-keywords@5.1.0",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv@8.17.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv@8.20.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-deep-equal@3.1.3"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|ajv@8.17.1",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|ajv@8.20.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-deep-equal@3.1.3",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.0.6",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|json-schema-traverse@1.0.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.1.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|json-schema-traverse@1.0.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|require-from-string@2.0.2"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2|json-schema-traverse@1.0.0"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0|json-schema-traverse@1.0.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tinyglobby@0.2.16",
@@ -65452,7 +65096,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/eslint@8.56.12",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.7",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.9",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/json-schema@7.0.15"
       ]
     },
@@ -65582,7 +65226,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|espree@9.6.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn-jsx@5.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|eslint-visitor-keys@3.4.3"
       ]
     },
@@ -65707,7 +65351,7 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|entities@4.5.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|param-case@3.0.4",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|relateurl@0.2.7",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2"
       ]
     },
     {
@@ -65730,7 +65374,7 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob@7.2.3",
@@ -66071,25 +65715,19 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|serialize-javascript@6.0.2",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|randombytes@2.1.0"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/source-map@0.3.6",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|commander@2.20.3",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|source-map-support@0.5.21"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|commander@2.20.3",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|source-map-support@0.5.21"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|commander@2.20.3"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|commander@2.20.3"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.40.0|source-map-support@0.5.21",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2|source-map-support@0.5.21",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|buffer-from@1.1.2",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|source-map@0.6.1"
@@ -66104,11 +65742,11 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn-walk@8.3.4",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|debounce@1.2.1"
@@ -66143,21 +65781,21 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webpack-cli/configtest@3.0.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-cli@6.0.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webpack-cli/info@3.0.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-cli@6.0.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@webpack-cli/serve@3.0.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-cli@6.0.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -66452,8 +66090,8 @@
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|on-finished@2.4.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|range-parser@1.2.1",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.3.2",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.99.7"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
       ]
     },
     {
@@ -66477,14 +66115,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|wildcard@2.0.1"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/eslint-scope@3.7.7",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/eslint@8.56.12",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.7"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.7"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/estree@1.0.9"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/json-schema@7.0.15"
@@ -66534,42 +66165,50 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|chrome-trace-event@1.0.4"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.18.1",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|enhanced-resolve@5.25.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|graceful-fs@4.2.11",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.2.2"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|tapable@2.3.3"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@1.7.0"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|es-module-lexer@2.3.2"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob-to-regexp@0.4.1"
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|json-parse-even-better-errors@2.3.1"
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|loader-runner@4.3.0"
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/trace-mapping@0.3.31",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|jest-worker@27.5.1",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|schema-utils@4.5.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|terser@5.51.2",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack@5.109.0"
+      ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|jest-worker@27.5.1",
+      "dependsOn": [
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@types/node@22.15.29",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|merge-stream@2.0.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|supports-color@8.1.1"
+      ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|minimizer-webpack-plugin@5.10.1|supports-color@8.1.1",
+      "dependsOn": [
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|has-flag@4.0.0"
       ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|neo-async@2.6.2"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.4.4",
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|watchpack@2.5.2",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|glob-to-regexp@0.4.1",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|graceful-fs@4.2.11"
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.3.2"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|webpack-sources@3.5.1"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ansi-styles@4.3.0",
@@ -66633,7 +66272,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-regexp-features-plugin@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-annotate-as-pure@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|regexpu-core@6.4.0",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|semver@6.3.1"
@@ -66642,7 +66281,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-remap-async-to-generator@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-annotate-as-pure@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-wrap-function@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
@@ -66651,7 +66290,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-create-class-features-plugin@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-annotate-as-pure@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-member-expression-to-functions@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-optimise-call-expression@7.29.7",
@@ -66670,7 +66309,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-replace-supers@7.29.7",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-member-expression-to-functions@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-optimise-call-expression@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/traverse@7.29.7"
@@ -66679,7 +66318,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-define-polyfill-provider@0.6.8",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.0",
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/core@7.29.6",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-compilation-targets@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@babel/helper-plugin-utils@7.29.7",
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|debug@4.4.3",
@@ -66851,7 +66490,7 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|marked@15.0.12"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.0.6"
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.1.7"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|require-from-string@2.0.2"
@@ -66945,24 +66584,6 @@
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|delegate@3.2.0"
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|ajv@8.17.1"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|ajv@8.17.1",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-deep-equal@3.1.3",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|fast-uri@3.0.6",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|json-schema-traverse@1.0.0",
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|require-from-string@2.0.2"
-      ]
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|ajv-formats@2.1.1|json-schema-traverse@1.0.0"
-    },
-    {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|postcss-selector-parser@7.1.0",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|cssesc@3.0.0",
@@ -67049,6 +66670,9 @@
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|is-arrayish@0.2.1"
       ]
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|json-parse-even-better-errors@2.3.1"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|lines-and-columns@1.2.4"
@@ -67147,7 +66771,7 @@
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn-jsx@5.3.2",
       "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.14.1"
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|acorn@8.18.0"
       ]
     },
     {
@@ -67583,6 +67207,12 @@
       ]
     },
     {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-types@2.1.35",
+      "dependsOn": [
+        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0"
+      ]
+    },
+    {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@paralleldrive/cuid2@2.2.2",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@noble/hashes@1.8.0"
@@ -67613,12 +67243,6 @@
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/sourcemap-codec@1.5.0"
-    },
-    {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|randombytes@2.1.0",
-      "dependsOn": [
-        "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|safe-buffer@5.2.1"
-      ]
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@jridgewell/source-map@0.3.6",
@@ -68037,9 +67661,6 @@
       ]
     },
     {
-      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0"
-    },
-    {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|color-convert@2.0.1",
       "dependsOn": [
         "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|color-name@1.1.4"
@@ -68428,6 +68049,9 @@
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|function-bind@1.1.2"
+    },
+    {
+      "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|mime-db@1.52.0"
     },
     {
       "ref": "eximeebpms-bpm-webapp@1.1.0-SNAPSHOT|@noble/hashes@1.8.0"

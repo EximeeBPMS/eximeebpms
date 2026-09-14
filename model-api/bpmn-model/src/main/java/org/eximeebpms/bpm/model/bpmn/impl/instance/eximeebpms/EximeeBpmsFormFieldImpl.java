@@ -93,43 +93,43 @@ public class EximeeBpmsFormFieldImpl extends BpmnModelElementInstanceImpl implem
     super(instanceContext);
   }
 
-  public String getCamundaId() {
+  public String getEximeeBpmsId() {
     return camundaIdAttribute.getValue(this);
   }
 
-  public void setCamundaId(String camundaId) {
+  public void setEximeeBpmsId(String camundaId) {
     camundaIdAttribute.setValue(this, camundaId);
   }
 
-  public String getCamundaLabel() {
+  public String getEximeeBpmsLabel() {
     return camundaLabelAttribute.getValue(this);
   }
 
-  public void setCamundaLabel(String camundaLabel) {
+  public void setEximeeBpmsLabel(String camundaLabel) {
     camundaLabelAttribute.setValue(this, camundaLabel);
   }
 
-  public String getCamundaType() {
+  public String getEximeeBpmsType() {
     return camundaTypeAttribute.getValue(this);
   }
 
-  public void setCamundaType(String camundaType) {
+  public void setEximeeBpmsType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }
 
-  public String getCamundaDatePattern() {
+  public String getEximeeBpmsDatePattern() {
     return camundaDatePatternAttribute.getValue(this);
   }
 
-  public void setCamundaDatePattern(String camundaDatePattern) {
+  public void setEximeeBpmsDatePattern(String camundaDatePattern) {
     camundaDatePatternAttribute.setValue(this, camundaDatePattern);
   }
 
-  public String getCamundaDefaultValue() {
+  public String getEximeeBpmsDefaultValue() {
     return camundaDefaultValueAttribute.getValue(this);
   }
 
-  public void setCamundaDefaultValue(String camundaDefaultValue) {
+  public void setEximeeBpmsDefaultValue(String camundaDefaultValue) {
     camundaDefaultValueAttribute.setValue(this, camundaDefaultValue);
   }
 

@@ -38,7 +38,7 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
   protected static ChildElement<InputExpression> inputExpressionChild;
   protected static ChildElement<InputValues> inputValuesChild;
 
-  // camunda extensions
+  // eximeebpms extensions
   protected static Attribute<String> camundaInputVariableAttribute;
 
   public InputClauseImpl(ModelTypeInstanceContext instanceContext) {
@@ -61,14 +61,14 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     inputValuesChild.setChild(this, inputValues);
   }
 
-  // camunda extensions
+  // eximeebpms extensions
 
-  public String getCamundaInputVariable() {
+  public String getEximeeBpmsInputVariable() {
     return camundaInputVariableAttribute.getValue(this);
   }
 
 
-  public void setCamundaInputVariable(String inputVariable) {
+  public void setEximeeBpmsInputVariable(String inputVariable) {
     camundaInputVariableAttribute.setValue(this, inputVariable);
   }
 
@@ -91,7 +91,7 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     inputValuesChild = sequenceBuilder.element(InputValues.class)
       .build();
 
-    // camunda extensions
+    // eximeebpms extensions
 
     camundaInputVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INPUT_VARIABLE)
       .namespace(CAMUNDA_NS)

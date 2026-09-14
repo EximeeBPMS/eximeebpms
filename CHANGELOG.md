@@ -27,6 +27,15 @@ retroactively added CVE IDs.
 - Retention cleanup of recorded script violations is now an engine-native, self-rescheduling job: it is bootstrapped whenever `scriptViolationRetentionDays` (Spring Boot: `eximeebpms.bpm.script-security.retention-days`) is positive, deletes violations older than that, and reschedules itself 24 hours ahead. It runs on every deployment model, not just Spring Boot.
 - New `historyExcludedProcessDefinitionKeys` configuration (Spring Boot: `eximeebpms.bpm.history-excluded-process-definition-keys`; `ProcessEngineConfiguration.setHistoryExcludedProcessDefinitionKeys(Set<String>)`) lets operators list process definition keys for which no history is recorded, regardless of the configured history level. Filters at persistence time; `HistoricBatchEntity` history is never covered, since a batch is never scoped to a single process definition.
 
+### Deprecated
+- Every `camunda`-named public identifier on the BPMN and DMN Model APIs now has an `EximeeBpms`-named counterpart, and the `camunda`-named one is deprecated for removal in **1.5.0**. Affected: 80 fluent-builder methods across 19 `Abstract*Builder` classes (`camundaAsyncBefore()` → `eximeeBpmsAsyncBefore()`, `camundaClass()` → `eximeeBpmsClass()`, …), 147 accessors on the 34 interfaces under `org.eximeebpms.bpm.model.bpmn.instance` (`getCamundaFormKey()` → `getEximeeBpmsFormKey()`, …), and 6 accessors on `org.eximeebpms.bpm.model.dmn.instance.Decision`/`InputClause` — 405 declarations in all once overloads are counted, every one of them annotated `@Deprecated(forRemoval = true)`. The deprecated name is a delegating alias; on the model interfaces it is a `default` method, so no external implementer of a model interface is broken. This completes a rebrand that had previously renamed the extension-element *types* (`CamundaExecutionListener` → `EximeeBpmsExecutionListener`) but not their accessors, which is why `UserTask` until now shipped `getEximeeBpmsFormRef()` alongside `getCamundaFormKey()`.
+
+  Purely additive: no member is removed or changed in this release, no signature moves, and existing code keeps compiling and behaving identically for the whole of 1.4.x.
+
+  **The XML wire format is unchanged.** The extension namespace URI stays `http://camunda.org/schema/1.0/bpmn` (and `…/1.0/dmn`), attribute local names stay (`formKey`, `async`, `class`, …), and no `.bpmn` or `.dmn` file needs editing — the parser resolves extension attributes by namespace URI, never by Java identifier or XML prefix. Only Java names change.
+
+  Migration is a mechanical rename: `camundaX` → `eximeeBpmsX`, `getCamundaX` → `getEximeeBpmsX`. Two members that were already deprecated get counterparts that are themselves born deprecated, so a bulk rename still compiles rather than silently shedding the warning: `camundaAsync()`/`camundaAsync(boolean)` (use `eximeeBpmsAsyncBefore()`/`eximeeBpmsAsyncAfter()`) and `Decision.getCamundaHistoryTimeToLive(Integer)` with its setter (use the `String` variant).
+
 ### Removed
 - Remove CMMN support (engine, migration, tests)
 - Drop javax (legacy) support; use only Jakarta namespace

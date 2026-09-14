@@ -65,8 +65,8 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
    * @param camundaResultVariable  the result variable to set
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
@@ -76,9 +76,26 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
    * @param camundaResource  the resource to set
    * @return the builder object
    */
-  public B camundaResource(String camundaResource) {
-    element.setCamundaResource(camundaResource);
+  public B eximeeBpmsResource(String camundaResource) {
+    element.setEximeeBpmsResource(camundaResource);
     return myself;
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsResultVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaResultVariable(String eximeeBpmsResultVariable) {
+    return eximeeBpmsResultVariable(eximeeBpmsResultVariable);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsResource(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaResource(String eximeeBpmsResource) {
+    return eximeeBpmsResource(eximeeBpmsResource);
+  }
 }

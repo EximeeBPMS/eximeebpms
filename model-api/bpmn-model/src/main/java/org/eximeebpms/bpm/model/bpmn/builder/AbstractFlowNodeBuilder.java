@@ -335,8 +335,8 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaAsyncBefore(boolean asyncBefore) {
-    element.setCamundaAsyncBefore(asyncBefore);
+  public B eximeeBpmsAsyncBefore(boolean asyncBefore) {
+    element.setEximeeBpmsAsyncBefore(asyncBefore);
     return myself;
   }
 
@@ -345,8 +345,8 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *
    * @return the builder object
    */
-  public B camundaAsyncBefore() {
-    element.setCamundaAsyncBefore(true);
+  public B eximeeBpmsAsyncBefore() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 
@@ -357,8 +357,8 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaAsyncAfter(boolean asyncAfter) {
-    element.setCamundaAsyncAfter(asyncAfter);
+  public B eximeeBpmsAsyncAfter(boolean asyncAfter) {
+    element.setEximeeBpmsAsyncAfter(asyncAfter);
     return myself;
   }
 
@@ -367,8 +367,8 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *
    * @return the builder object
    */
-  public B camundaAsyncAfter() {
-    element.setCamundaAsyncAfter(true);
+  public B eximeeBpmsAsyncAfter() {
+    element.setEximeeBpmsAsyncAfter(true);
     return myself;
   }
 
@@ -377,8 +377,8 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *
    * @return the builder object
    */
-  public B notCamundaExclusive() {
-    element.setCamundaExclusive(false);
+  public B notEximeeBpmsExclusive() {
+    element.setEximeeBpmsExclusive(false);
     return myself;
   }
 
@@ -389,13 +389,13 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaExclusive(boolean exclusive) {
-    element.setCamundaExclusive(exclusive);
+  public B eximeeBpmsExclusive(boolean exclusive) {
+    element.setEximeeBpmsExclusive(exclusive);
     return myself;
   }
 
-  public B camundaJobPriority(String jobPriority) {
-    element.setCamundaJobPriority(jobPriority);
+  public B eximeeBpmsJobPriority(String jobPriority) {
+    element.setEximeeBpmsJobPriority(jobPriority);
     return myself;
   }
 
@@ -406,7 +406,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
    *          the retry time cycle value to set
    * @return the builder object
    */
-  public B camundaFailedJobRetryTimeCycle(String retryTimeCycle) {
+  public B eximeeBpmsFailedJobRetryTimeCycle(String retryTimeCycle) {
     EximeeBpmsFailedJobRetryTimeCycle failedJobRetryTimeCycle = createInstance(EximeeBpmsFailedJobRetryTimeCycle.class);
     failedJobRetryTimeCycle.setTextContent(retryTimeCycle);
 
@@ -416,23 +416,23 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaExecutionListenerClass(String eventName, Class listenerClass) {
-    return camundaExecutionListenerClass(eventName, listenerClass.getName());
+  public B eximeeBpmsExecutionListenerClass(String eventName, Class listenerClass) {
+    return eximeeBpmsExecutionListenerClass(eventName, listenerClass.getName());
   }
 
-  public B camundaExecutionListenerClass(String eventName, String fullQualifiedClassName) {
+  public B eximeeBpmsExecutionListenerClass(String eventName, String fullQualifiedClassName) {
     EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+    executionListener.setEximeeBpmsEvent(eventName);
+    executionListener.setEximeeBpmsClass(fullQualifiedClassName);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaExecutionListenerExpression(String eventName, String expression) {
+  public B eximeeBpmsExecutionListenerExpression(String eventName, String expression) {
     EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
+    executionListener.setEximeeBpmsEvent(eventName);
     executionListener.setEximeeBpmsExpression(expression);
 
     addExtensionElement(executionListener);
@@ -440,10 +440,10 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
     return myself;
   }
 
-  public B camundaExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
+  public B eximeeBpmsExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
     EximeeBpmsExecutionListener executionListener = createInstance(EximeeBpmsExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+    executionListener.setEximeeBpmsEvent(eventName);
+    executionListener.setEximeeBpmsDelegateExpression(delegateExpression);
 
     addExtensionElement(executionListener);
 
@@ -477,4 +477,101 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
     return !compensationStarted && compensateBoundaryEvent != null;
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncBefore(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncBefore(boolean asyncBefore) {
+    return eximeeBpmsAsyncBefore(asyncBefore);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncBefore()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncBefore() {
+    return eximeeBpmsAsyncBefore();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncAfter(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncAfter(boolean asyncAfter) {
+    return eximeeBpmsAsyncAfter(asyncAfter);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncAfter()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncAfter() {
+    return eximeeBpmsAsyncAfter();
+  }
+
+  /**
+   * @deprecated use {@link #notEximeeBpmsExclusive()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B notCamundaExclusive() {
+    return notEximeeBpmsExclusive();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExclusive(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExclusive(boolean exclusive) {
+    return eximeeBpmsExclusive(exclusive);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsJobPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaJobPriority(String jobPriority) {
+    return eximeeBpmsJobPriority(jobPriority);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFailedJobRetryTimeCycle(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFailedJobRetryTimeCycle(String retryTimeCycle) {
+    return eximeeBpmsFailedJobRetryTimeCycle(retryTimeCycle);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExecutionListenerClass(String, Class)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExecutionListenerClass(String eventName, Class listenerClass) {
+    return eximeeBpmsExecutionListenerClass(eventName, listenerClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExecutionListenerClass(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExecutionListenerClass(String eventName, String fullQualifiedClassName) {
+    return eximeeBpmsExecutionListenerClass(eventName, fullQualifiedClassName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExecutionListenerExpression(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExecutionListenerExpression(String eventName, String expression) {
+    return eximeeBpmsExecutionListenerExpression(eventName, expression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExecutionListenerDelegateExpression(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
+    return eximeeBpmsExecutionListenerDelegateExpression(eventName, delegateExpression);
+  }
 }

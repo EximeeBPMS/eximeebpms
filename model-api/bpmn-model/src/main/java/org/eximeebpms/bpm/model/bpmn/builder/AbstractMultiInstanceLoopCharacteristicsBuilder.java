@@ -85,8 +85,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    * @param expression the collection expression
    * @return the builder object
    */
-  public B camundaCollection(String expression) {
-    element.setCamundaCollection(expression);
+  public B eximeeBpmsCollection(String expression) {
+    element.setEximeeBpmsCollection(expression);
 
     return myself;
   }
@@ -97,8 +97,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    * @param variableName the name of the element variable
    * @return the builder object
    */
-  public B camundaElementVariable(String variableName) {
-    element.setCamundaElementVariable(variableName);
+  public B eximeeBpmsElementVariable(String variableName) {
+    element.setEximeeBpmsElementVariable(variableName);
 
     return myself;
   }
@@ -108,8 +108,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    *
    * @return  the builder object
    */
-  public B camundaAsyncBefore() {
-    element.setCamundaAsyncBefore(true);
+  public B eximeeBpmsAsyncBefore() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 
@@ -118,8 +118,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    *
    * @return  the builder object
    */
-  public B camundaAsyncAfter() {
-    element.setCamundaAsyncAfter(true);
+  public B eximeeBpmsAsyncAfter() {
+    element.setEximeeBpmsAsyncAfter(true);
     return myself;
   }
 
@@ -133,4 +133,37 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
     return (T) ((Activity) element.getParentElement()).builder();
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsCollection(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaCollection(String expression) {
+    return eximeeBpmsCollection(expression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsElementVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaElementVariable(String variableName) {
+    return eximeeBpmsElementVariable(variableName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncBefore()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncBefore() {
+    return eximeeBpmsAsyncBefore();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsyncAfter()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsyncAfter() {
+    return eximeeBpmsAsyncAfter();
+  }
 }

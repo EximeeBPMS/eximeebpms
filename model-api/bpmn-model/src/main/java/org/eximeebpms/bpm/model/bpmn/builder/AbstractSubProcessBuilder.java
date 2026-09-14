@@ -45,20 +45,20 @@ public class AbstractSubProcessBuilder<B extends AbstractSubProcessBuilder<B>> e
   /** camunda extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use eximeeBpmsAsyncBefore() instead.
    *
    * Sets the camunda async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
+  public B eximeeBpmsAsync() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 
   /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use eximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
    *
    * Sets the camunda async attribute.
    *
@@ -66,9 +66,26 @@ public class AbstractSubProcessBuilder<B extends AbstractSubProcessBuilder<B>> e
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B eximeeBpmsAsync(boolean isCamundaAsync) {
+    element.setEximeeBpmsAsyncBefore(isCamundaAsync);
     return myself;
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsync()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsync() {
+    return eximeeBpmsAsync();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsync(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsync(boolean isEximeeBpmsAsync) {
+    return eximeeBpmsAsync(isEximeeBpmsAsync);
+  }
 }

@@ -104,19 +104,19 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
 
   /** camunda extensions */
 
-  public String getCamundaResultVariable() {
+  public String getEximeeBpmsResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
-  public void setCamundaResultVariable(String camundaResultVariable) {
+  public void setEximeeBpmsResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
-  public String getCamundaResource() {
+  public String getEximeeBpmsResource() {
     return camundaResourceAttribute.getValue(this);
   }
 
-  public void setCamundaResource(String camundaResource) {
+  public void setEximeeBpmsResource(String camundaResource) {
     camundaResourceAttribute.setValue(this, camundaResource);
   }
 

@@ -38,41 +38,41 @@ public interface UserTask extends Task {
 
   /** camunda extensions */
 
-  String getCamundaAssignee();
+  String getEximeeBpmsAssignee();
 
-  void setCamundaAssignee(String camundaAssignee);
+  void setEximeeBpmsAssignee(String camundaAssignee);
 
-  String getCamundaCandidateGroups();
+  String getEximeeBpmsCandidateGroups();
 
-  void setCamundaCandidateGroups(String camundaCandidateGroups);
+  void setEximeeBpmsCandidateGroups(String camundaCandidateGroups);
 
-  List<String> getCamundaCandidateGroupsList();
+  List<String> getEximeeBpmsCandidateGroupsList();
 
-  void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList);
+  void setEximeeBpmsCandidateGroupsList(List<String> camundaCandidateGroupsList);
 
-  String getCamundaCandidateUsers();
+  String getEximeeBpmsCandidateUsers();
 
-  void setCamundaCandidateUsers(String camundaCandidateUsers);
+  void setEximeeBpmsCandidateUsers(String camundaCandidateUsers);
 
-  List<String> getCamundaCandidateUsersList();
+  List<String> getEximeeBpmsCandidateUsersList();
 
-  void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList);
+  void setEximeeBpmsCandidateUsersList(List<String> camundaCandidateUsersList);
 
-  String getCamundaDueDate();
+  String getEximeeBpmsDueDate();
 
-  void setCamundaDueDate(String camundaDueDate);
+  void setEximeeBpmsDueDate(String camundaDueDate);
 
-  String getCamundaFollowUpDate();
+  String getEximeeBpmsFollowUpDate();
 
-  void setCamundaFollowUpDate(String camundaFollowUpDate);
+  void setEximeeBpmsFollowUpDate(String camundaFollowUpDate);
 
-  String getCamundaFormHandlerClass();
+  String getEximeeBpmsFormHandlerClass();
 
-  void setCamundaFormHandlerClass(String camundaFormHandlerClass);
+  void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass);
 
-  String getCamundaFormKey();
+  String getEximeeBpmsFormKey();
 
-  void setCamundaFormKey(String camundaFormKey);
+  void setEximeeBpmsFormKey(String camundaFormKey);
 
   String getEximeeBpmsFormRef();
 
@@ -86,7 +86,169 @@ public interface UserTask extends Task {
 
   void setEximeeBpmsFormRefVersion(String camundaFormRefVersion);
 
-  String getCamundaPriority();
+  String getEximeeBpmsPriority();
 
-  void setCamundaPriority(String camundaPriority);
+  void setEximeeBpmsPriority(String camundaPriority);
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsAssignee()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaAssignee() {
+    return getEximeeBpmsAssignee();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAssignee(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAssignee(String eximeeBpmsAssignee) {
+    setEximeeBpmsAssignee(eximeeBpmsAssignee);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCandidateGroups()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCandidateGroups() {
+    return getEximeeBpmsCandidateGroups();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCandidateGroups(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCandidateGroups(String eximeeBpmsCandidateGroups) {
+    setEximeeBpmsCandidateGroups(eximeeBpmsCandidateGroups);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCandidateGroupsList()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default List<String> getCamundaCandidateGroupsList() {
+    return getEximeeBpmsCandidateGroupsList();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCandidateGroupsList(List<String>)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCandidateGroupsList(List<String> eximeeBpmsCandidateGroupsList) {
+    setEximeeBpmsCandidateGroupsList(eximeeBpmsCandidateGroupsList);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCandidateUsers()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCandidateUsers() {
+    return getEximeeBpmsCandidateUsers();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCandidateUsers(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCandidateUsers(String eximeeBpmsCandidateUsers) {
+    setEximeeBpmsCandidateUsers(eximeeBpmsCandidateUsers);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCandidateUsersList()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default List<String> getCamundaCandidateUsersList() {
+    return getEximeeBpmsCandidateUsersList();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCandidateUsersList(List<String>)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCandidateUsersList(List<String> eximeeBpmsCandidateUsersList) {
+    setEximeeBpmsCandidateUsersList(eximeeBpmsCandidateUsersList);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsDueDate()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaDueDate() {
+    return getEximeeBpmsDueDate();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsDueDate(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaDueDate(String eximeeBpmsDueDate) {
+    setEximeeBpmsDueDate(eximeeBpmsDueDate);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsFollowUpDate()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaFollowUpDate() {
+    return getEximeeBpmsFollowUpDate();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsFollowUpDate(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaFollowUpDate(String eximeeBpmsFollowUpDate) {
+    setEximeeBpmsFollowUpDate(eximeeBpmsFollowUpDate);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsFormHandlerClass()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaFormHandlerClass() {
+    return getEximeeBpmsFormHandlerClass();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsFormHandlerClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaFormHandlerClass(String eximeeBpmsFormHandlerClass) {
+    setEximeeBpmsFormHandlerClass(eximeeBpmsFormHandlerClass);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsFormKey()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaFormKey() {
+    return getEximeeBpmsFormKey();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsFormKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaFormKey(String eximeeBpmsFormKey) {
+    setEximeeBpmsFormKey(eximeeBpmsFormKey);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsPriority()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaPriority() {
+    return getEximeeBpmsPriority();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaPriority(String eximeeBpmsPriority) {
+    setEximeeBpmsPriority(eximeeBpmsPriority);
+  }
 }

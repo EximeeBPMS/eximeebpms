@@ -54,8 +54,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaAssignee  the assignee to set
    * @return the builder object
    */
-  public B camundaAssignee(String camundaAssignee) {
-    element.setCamundaAssignee(camundaAssignee);
+  public B eximeeBpmsAssignee(String camundaAssignee) {
+    element.setEximeeBpmsAssignee(camundaAssignee);
     return myself;
   }
 
@@ -65,8 +65,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaCandidateGroups  the candidate groups to set
    * @return the builder object
    */
-  public B camundaCandidateGroups(String camundaCandidateGroups) {
-    element.setCamundaCandidateGroups(camundaCandidateGroups);
+  public B eximeeBpmsCandidateGroups(String camundaCandidateGroups) {
+    element.setEximeeBpmsCandidateGroups(camundaCandidateGroups);
     return myself;
   }
 
@@ -76,8 +76,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaCandidateGroups  the candidate groups to set
    * @return the builder object
    */
-  public B camundaCandidateGroups(List<String> camundaCandidateGroups) {
-    element.setCamundaCandidateGroupsList(camundaCandidateGroups);
+  public B eximeeBpmsCandidateGroups(List<String> camundaCandidateGroups) {
+    element.setEximeeBpmsCandidateGroupsList(camundaCandidateGroups);
     return myself;
   }
 
@@ -87,8 +87,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaCandidateUsers  the candidate users to set
    * @return the builder object
    */
-  public B camundaCandidateUsers(String camundaCandidateUsers) {
-    element.setCamundaCandidateUsers(camundaCandidateUsers);
+  public B eximeeBpmsCandidateUsers(String camundaCandidateUsers) {
+    element.setEximeeBpmsCandidateUsers(camundaCandidateUsers);
     return myself;
   }
 
@@ -98,8 +98,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaCandidateUsers  the candidate users to set
    * @return the builder object
    */
-  public B camundaCandidateUsers(List<String> camundaCandidateUsers) {
-    element.setCamundaCandidateUsersList(camundaCandidateUsers);
+  public B eximeeBpmsCandidateUsers(List<String> camundaCandidateUsers) {
+    element.setEximeeBpmsCandidateUsersList(camundaCandidateUsers);
     return myself;
   }
 
@@ -109,8 +109,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaDueDate  the due date of the user task
    * @return the builder object
    */
-  public B camundaDueDate(String camundaDueDate) {
-    element.setCamundaDueDate(camundaDueDate);
+  public B eximeeBpmsDueDate(String camundaDueDate) {
+    element.setEximeeBpmsDueDate(camundaDueDate);
     return myself;
   }
 
@@ -120,8 +120,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFollowUpDate  the follow up date of the user task
    * @return the builder object
    */
-  public B camundaFollowUpDate(String camundaFollowUpDate) {
-    element.setCamundaFollowUpDate(camundaFollowUpDate);
+  public B eximeeBpmsFollowUpDate(String camundaFollowUpDate) {
+    element.setEximeeBpmsFollowUpDate(camundaFollowUpDate);
     return myself;
   }
 
@@ -132,8 +132,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaFormHandlerClass(Class camundaFormHandlerClass) {
-    return camundaFormHandlerClass(camundaFormHandlerClass.getName());
+  public B eximeeBpmsFormHandlerClass(Class camundaFormHandlerClass) {
+    return eximeeBpmsFormHandlerClass(camundaFormHandlerClass.getName());
   }
 
   /**
@@ -142,8 +142,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFormHandlerClass  the class name of the form handler
    * @return the builder object
    */
-  public B camundaFormHandlerClass(String fullQualifiedClassName) {
-    element.setCamundaFormHandlerClass(fullQualifiedClassName);
+  public B eximeeBpmsFormHandlerClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsFormHandlerClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -153,8 +153,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFormKey  the form key to set
    * @return the builder object
    */
-  public B camundaFormKey(String camundaFormKey) {
-    element.setCamundaFormKey(camundaFormKey);
+  public B eximeeBpmsFormKey(String camundaFormKey) {
+    element.setEximeeBpmsFormKey(camundaFormKey);
     return myself;
   }
 
@@ -164,7 +164,7 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFormRef the form ref to set
    * @return the builder object
    */
-  public B camundaFormRef(String camundaFormRef) {
+  public B eximeeBpmsFormRef(String camundaFormRef) {
     element.setEximeeBpmsFormRef(camundaFormRef);
     return myself;
   }
@@ -175,7 +175,7 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFormRef the form ref binding to set
    * @return the builder object
    */
-  public B camundaFormRefBinding(String camundaFormRefBinding) {
+  public B eximeeBpmsFormRefBinding(String camundaFormRefBinding) {
     element.setEximeeBpmsFormRefBinding(camundaFormRefBinding);
     return myself;
   }
@@ -186,7 +186,7 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaFormRef the form ref version to set
    * @return the builder object
    */
-  public B camundaFormRefVersion(String camundaFormRefVersion) {
+  public B eximeeBpmsFormRefVersion(String camundaFormRefVersion) {
     element.setEximeeBpmsFormRefVersion(camundaFormRefVersion);
     return myself;
   }
@@ -197,8 +197,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param camundaPriority  the priority of the user task
    * @return the builder object
    */
-  public B camundaPriority(String camundaPriority) {
-    element.setCamundaPriority(camundaPriority);
+  public B eximeeBpmsPriority(String camundaPriority) {
+    element.setEximeeBpmsPriority(camundaPriority);
     return myself;
   }
 
@@ -207,7 +207,7 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    *
    * @return the builder object
    */
-  public EximeeBpmsUserTaskFormFieldBuilder camundaFormField() {
+  public EximeeBpmsUserTaskFormFieldBuilder eximeeBpmsFormField() {
     EximeeBpmsFormData camundaFormData = getCreateSingleExtensionElement(EximeeBpmsFormData.class);
     EximeeBpmsFormField camundaFormField = createChild(camundaFormData, EximeeBpmsFormField.class);
     return new EximeeBpmsUserTaskFormFieldBuilder(modelInstance, element, camundaFormField);
@@ -221,8 +221,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClass(String eventName, Class listenerClass) {
-    return camundaTaskListenerClass(eventName, listenerClass.getName());
+  public B eximeeBpmsTaskListenerClass(String eventName, Class listenerClass) {
+    return eximeeBpmsTaskListenerClass(eventName, listenerClass.getName());
   }
 
   /**
@@ -232,19 +232,19 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param fullQualifiedClassName - a string representing a class
    * @return the builder object
    */
-  public B camundaTaskListenerClass(String eventName, String fullQualifiedClassName) {
+  public B eximeeBpmsTaskListenerClass(String eventName, String fullQualifiedClassName) {
     EximeeBpmsTaskListener executionListener = createInstance(EximeeBpmsTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+    executionListener.setEximeeBpmsEvent(eventName);
+    executionListener.setEximeeBpmsClass(fullQualifiedClassName);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaTaskListenerExpression(String eventName, String expression) {
+  public B eximeeBpmsTaskListenerExpression(String eventName, String expression) {
     EximeeBpmsTaskListener executionListener = createInstance(EximeeBpmsTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
+    executionListener.setEximeeBpmsEvent(eventName);
     executionListener.setEximeeBpmsExpression(expression);
 
     addExtensionElement(executionListener);
@@ -252,10 +252,10 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
     return myself;
   }
 
-  public B camundaTaskListenerDelegateExpression(String eventName, String delegateExpression) {
+  public B eximeeBpmsTaskListenerDelegateExpression(String eventName, String delegateExpression) {
     EximeeBpmsTaskListener executionListener = createInstance(EximeeBpmsTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+    executionListener.setEximeeBpmsEvent(eventName);
+    executionListener.setEximeeBpmsDelegateExpression(delegateExpression);
 
     addExtensionElement(executionListener);
 
@@ -263,59 +263,59 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithCycle(String id, Class listenerClass, String timerCycle) {
-    return camundaTaskListenerClassTimeoutWithCycle(id, listenerClass.getName(), timerCycle);
+  public B eximeeBpmsTaskListenerClassTimeoutWithCycle(String id, Class listenerClass, String timerCycle) {
+    return eximeeBpmsTaskListenerClassTimeoutWithCycle(id, listenerClass.getName(), timerCycle);
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithDate(String id, Class listenerClass, String timerDate) {
-    return camundaTaskListenerClassTimeoutWithDate(id, listenerClass.getName(), timerDate);
+  public B eximeeBpmsTaskListenerClassTimeoutWithDate(String id, Class listenerClass, String timerDate) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDate(id, listenerClass.getName(), timerDate);
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithDuration(String id, Class listenerClass, String timerDuration) {
-    return camundaTaskListenerClassTimeoutWithDuration(id, listenerClass.getName(), timerDuration);
+  public B eximeeBpmsTaskListenerClassTimeoutWithDuration(String id, Class listenerClass, String timerDuration) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDuration(id, listenerClass.getName(), timerDuration);
   }
 
-  public B camundaTaskListenerClassTimeoutWithCycle(String id, String fullQualifiedClassName, String timerCycle) {
+  public B eximeeBpmsTaskListenerClassTimeoutWithCycle(String id, String fullQualifiedClassName, String timerCycle) {
     return createEximeeBpmsTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerClassTimeoutWithDate(String id, String fullQualifiedClassName, String timerDate) {
+  public B eximeeBpmsTaskListenerClassTimeoutWithDate(String id, String fullQualifiedClassName, String timerDate) {
     return createEximeeBpmsTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerClassTimeoutWithDuration(String id, String fullQualifiedClassName, String timerDuration) {
+  public B eximeeBpmsTaskListenerClassTimeoutWithDuration(String id, String fullQualifiedClassName, String timerDuration) {
     return createEximeeBpmsTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDuration(timerDuration));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithCycle(String id, String expression, String timerCycle) {
+  public B eximeeBpmsTaskListenerExpressionTimeoutWithCycle(String id, String expression, String timerCycle) {
     return createEximeeBpmsTaskListenerExpressionTimeout(id, expression, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithDate(String id, String expression, String timerDate) {
+  public B eximeeBpmsTaskListenerExpressionTimeoutWithDate(String id, String expression, String timerDate) {
     return createEximeeBpmsTaskListenerExpressionTimeout(id, expression, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithDuration(String id, String expression, String timerDuration) {
+  public B eximeeBpmsTaskListenerExpressionTimeoutWithDuration(String id, String expression, String timerDuration) {
     return createEximeeBpmsTaskListenerExpressionTimeout(id, expression, createTimeDuration(timerDuration));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithCycle(String id, String delegateExpression, String timerCycle) {
+  public B eximeeBpmsTaskListenerDelegateExpressionTimeoutWithCycle(String id, String delegateExpression, String timerCycle) {
     return createEximeeBpmsTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithDate(String id, String delegateExpression, String timerDate) {
+  public B eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDate(String id, String delegateExpression, String timerDate) {
     return createEximeeBpmsTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithDuration(String id, String delegateExpression, String timerDuration) {
+  public B eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDuration(String id, String delegateExpression, String timerDuration) {
     return createEximeeBpmsTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDuration(timerDuration));
   }
 
   protected B createEximeeBpmsTaskListenerClassTimeout(String id, String fullQualifiedClassName, TimerEventDefinition timerDefinition) {
     EximeeBpmsTaskListener executionListener = createEximeeBpmsTaskListenerTimeout(id, timerDefinition);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+    executionListener.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -327,16 +327,266 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
 
   protected B createEximeeBpmsTaskListenerDelegateExpressionTimeout(String id, String delegateExpression, TimerEventDefinition timerDefinition) {
     EximeeBpmsTaskListener executionListener = createEximeeBpmsTaskListenerTimeout(id, timerDefinition);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+    executionListener.setEximeeBpmsDelegateExpression(delegateExpression);
     return myself;
   }
 
   protected EximeeBpmsTaskListener createEximeeBpmsTaskListenerTimeout(String id, TimerEventDefinition timerDefinition) {
     EximeeBpmsTaskListener executionListener = createInstance(EximeeBpmsTaskListener.class);
     executionListener.setAttributeValue(BpmnModelConstants.BPMN_ATTRIBUTE_ID, id, true);
-    executionListener.setCamundaEvent("timeout");
+    executionListener.setEximeeBpmsEvent("timeout");
     executionListener.addChildElement(timerDefinition);
     addExtensionElement(executionListener);
     return executionListener;
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAssignee(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAssignee(String eximeeBpmsAssignee) {
+    return eximeeBpmsAssignee(eximeeBpmsAssignee);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsCandidateGroups(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaCandidateGroups(String eximeeBpmsCandidateGroups) {
+    return eximeeBpmsCandidateGroups(eximeeBpmsCandidateGroups);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsCandidateGroups(List<String>)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaCandidateGroups(List<String> eximeeBpmsCandidateGroups) {
+    return eximeeBpmsCandidateGroups(eximeeBpmsCandidateGroups);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsCandidateUsers(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaCandidateUsers(String eximeeBpmsCandidateUsers) {
+    return eximeeBpmsCandidateUsers(eximeeBpmsCandidateUsers);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsCandidateUsers(List<String>)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaCandidateUsers(List<String> eximeeBpmsCandidateUsers) {
+    return eximeeBpmsCandidateUsers(eximeeBpmsCandidateUsers);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDueDate(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDueDate(String eximeeBpmsDueDate) {
+    return eximeeBpmsDueDate(eximeeBpmsDueDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFollowUpDate(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFollowUpDate(String eximeeBpmsFollowUpDate) {
+    return eximeeBpmsFollowUpDate(eximeeBpmsFollowUpDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormHandlerClass(Class)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormHandlerClass(Class eximeeBpmsFormHandlerClass) {
+    return eximeeBpmsFormHandlerClass(eximeeBpmsFormHandlerClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormHandlerClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormHandlerClass(String fullQualifiedClassName) {
+    return eximeeBpmsFormHandlerClass(fullQualifiedClassName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormKey(String eximeeBpmsFormKey) {
+    return eximeeBpmsFormKey(eximeeBpmsFormKey);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRef(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRef(String eximeeBpmsFormRef) {
+    return eximeeBpmsFormRef(eximeeBpmsFormRef);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRefBinding(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRefBinding(String eximeeBpmsFormRefBinding) {
+    return eximeeBpmsFormRefBinding(eximeeBpmsFormRefBinding);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRefVersion(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRefVersion(String eximeeBpmsFormRefVersion) {
+    return eximeeBpmsFormRefVersion(eximeeBpmsFormRefVersion);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaPriority(String eximeeBpmsPriority) {
+    return eximeeBpmsPriority(eximeeBpmsPriority);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormField()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public EximeeBpmsUserTaskFormFieldBuilder camundaFormField() {
+    return eximeeBpmsFormField();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClass(String, Class)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClass(String eventName, Class listenerClass) {
+    return eximeeBpmsTaskListenerClass(eventName, listenerClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClass(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClass(String eventName, String fullQualifiedClassName) {
+    return eximeeBpmsTaskListenerClass(eventName, fullQualifiedClassName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerExpression(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerExpression(String eventName, String expression) {
+    return eximeeBpmsTaskListenerExpression(eventName, expression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerDelegateExpression(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerDelegateExpression(String eventName, String delegateExpression) {
+    return eximeeBpmsTaskListenerDelegateExpression(eventName, delegateExpression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithCycle(String, Class, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithCycle(String id, Class listenerClass, String timerCycle) {
+    return eximeeBpmsTaskListenerClassTimeoutWithCycle(id, listenerClass, timerCycle);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithDate(String, Class, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithDate(String id, Class listenerClass, String timerDate) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDate(id, listenerClass, timerDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithDuration(String, Class, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithDuration(String id, Class listenerClass, String timerDuration) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDuration(id, listenerClass, timerDuration);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithCycle(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithCycle(String id, String fullQualifiedClassName, String timerCycle) {
+    return eximeeBpmsTaskListenerClassTimeoutWithCycle(id, fullQualifiedClassName, timerCycle);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithDate(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithDate(String id, String fullQualifiedClassName, String timerDate) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDate(id, fullQualifiedClassName, timerDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerClassTimeoutWithDuration(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerClassTimeoutWithDuration(String id, String fullQualifiedClassName, String timerDuration) {
+    return eximeeBpmsTaskListenerClassTimeoutWithDuration(id, fullQualifiedClassName, timerDuration);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerExpressionTimeoutWithCycle(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerExpressionTimeoutWithCycle(String id, String expression, String timerCycle) {
+    return eximeeBpmsTaskListenerExpressionTimeoutWithCycle(id, expression, timerCycle);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerExpressionTimeoutWithDate(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerExpressionTimeoutWithDate(String id, String expression, String timerDate) {
+    return eximeeBpmsTaskListenerExpressionTimeoutWithDate(id, expression, timerDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerExpressionTimeoutWithDuration(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerExpressionTimeoutWithDuration(String id, String expression, String timerDuration) {
+    return eximeeBpmsTaskListenerExpressionTimeoutWithDuration(id, expression, timerDuration);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerDelegateExpressionTimeoutWithCycle(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerDelegateExpressionTimeoutWithCycle(String id, String delegateExpression, String timerCycle) {
+    return eximeeBpmsTaskListenerDelegateExpressionTimeoutWithCycle(id, delegateExpression, timerCycle);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDate(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerDelegateExpressionTimeoutWithDate(String id, String delegateExpression, String timerDate) {
+    return eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDate(id, delegateExpression, timerDate);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDuration(String, String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskListenerDelegateExpressionTimeoutWithDuration(String id, String delegateExpression, String timerDuration) {
+    return eximeeBpmsTaskListenerDelegateExpressionTimeoutWithDuration(id, delegateExpression, timerDuration);
   }
 }

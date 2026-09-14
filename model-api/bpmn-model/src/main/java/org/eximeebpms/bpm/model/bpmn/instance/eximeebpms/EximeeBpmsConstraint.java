@@ -25,12 +25,45 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsConstraint extends BpmnModelElementInstance {
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
 
-  String getCamundaConfig();
+  String getEximeeBpmsConfig();
 
-  void setCamundaConfig(String camundaConfig);
+  void setEximeeBpmsConfig(String camundaConfig);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsName()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaName() {
+    return getEximeeBpmsName();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsName(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaName(String eximeeBpmsName) {
+    setEximeeBpmsName(eximeeBpmsName);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsConfig()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaConfig() {
+    return getEximeeBpmsConfig();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsConfig(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaConfig(String eximeeBpmsConfig) {
+    setEximeeBpmsConfig(eximeeBpmsConfig);
+  }
 }

@@ -27,8 +27,25 @@ public interface SignalEventDefinition extends EventDefinition {
 
   void setSignal(Signal signal);
 
-  boolean isCamundaAsync();
+  boolean isEximeeBpmsAsync();
 
-  void setCamundaAsync(boolean camundaAsync);
+  void setEximeeBpmsAsync(boolean camundaAsync);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsync()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsync() {
+    return isEximeeBpmsAsync();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsync(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsync(boolean eximeeBpmsAsync) {
+    setEximeeBpmsAsync(eximeeBpmsAsync);
+  }
 }

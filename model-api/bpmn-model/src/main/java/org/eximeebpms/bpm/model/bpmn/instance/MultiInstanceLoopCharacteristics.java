@@ -71,26 +71,107 @@ public interface MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
   void setNoneBehaviorEventRef(EventDefinition noneBehaviorEventRef);
 
-  String getCamundaCollection();
+  String getEximeeBpmsCollection();
 
-  void setCamundaCollection(String expression);
+  void setEximeeBpmsCollection(String expression);
 
-  String getCamundaElementVariable();
+  String getEximeeBpmsElementVariable();
 
-  void setCamundaElementVariable(String variableName);
+  void setEximeeBpmsElementVariable(String variableName);
 
-  boolean isCamundaAsyncBefore();
+  boolean isEximeeBpmsAsyncBefore();
 
-  void setCamundaAsyncBefore(boolean isCamundaAsyncBefore);
+  void setEximeeBpmsAsyncBefore(boolean isCamundaAsyncBefore);
 
-  boolean isCamundaAsyncAfter();
+  boolean isEximeeBpmsAsyncAfter();
 
-  void setCamundaAsyncAfter(boolean isCamundaAsyncAfter);
+  void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter);
 
-  boolean isCamundaExclusive();
+  boolean isEximeeBpmsExclusive();
 
-  void setCamundaExclusive(boolean isCamundaExclusive);
+  void setEximeeBpmsExclusive(boolean isCamundaExclusive);
 
   MultiInstanceLoopCharacteristicsBuilder builder();
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCollection()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCollection() {
+    return getEximeeBpmsCollection();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCollection(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCollection(String expression) {
+    setEximeeBpmsCollection(expression);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsElementVariable()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaElementVariable() {
+    return getEximeeBpmsElementVariable();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsElementVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaElementVariable(String variableName) {
+    setEximeeBpmsElementVariable(variableName);
+  }
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsyncBefore()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsyncBefore() {
+    return isEximeeBpmsAsyncBefore();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsyncBefore(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsyncBefore(boolean isEximeeBpmsAsyncBefore) {
+    setEximeeBpmsAsyncBefore(isEximeeBpmsAsyncBefore);
+  }
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsyncAfter()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsyncAfter() {
+    return isEximeeBpmsAsyncAfter();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsyncAfter(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsyncAfter(boolean isEximeeBpmsAsyncAfter) {
+    setEximeeBpmsAsyncAfter(isEximeeBpmsAsyncAfter);
+  }
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsExclusive()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaExclusive() {
+    return isEximeeBpmsExclusive();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsExclusive(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaExclusive(boolean isEximeeBpmsExclusive) {
+    setEximeeBpmsExclusive(isEximeeBpmsExclusive);
+  }
 }

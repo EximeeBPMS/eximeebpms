@@ -41,8 +41,8 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
    * @param id the form field id
    * @return  the builder object
    */
-  public B camundaId(String id) {
-    element.setCamundaId(id);
+  public B eximeeBpmsId(String id) {
+    element.setEximeeBpmsId(id);
     return myself;
   }
 
@@ -52,8 +52,8 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
    * @param label the form field label
    * @return  the builder object
    */
-  public B camundaLabel(String label) {
-    element.setCamundaLabel(label);;
+  public B eximeeBpmsLabel(String label) {
+    element.setEximeeBpmsLabel(label);;
     return myself;
   }
 
@@ -63,8 +63,8 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
    * @param type the form field type
    * @return the builder object
    */
-  public B camundaType(String type) {
-    element.setCamundaType(type);
+  public B eximeeBpmsType(String type) {
+    element.setEximeeBpmsType(type);
     return myself;
   }
 
@@ -74,8 +74,8 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
    * @param defaultValue the form field default value
    * @return the builder object
    */
-  public B camundaDefaultValue(String defaultValue) {
-    element.setCamundaDefaultValue(defaultValue);
+  public B eximeeBpmsDefaultValue(String defaultValue) {
+    element.setEximeeBpmsDefaultValue(defaultValue);
     return myself;
   }
 
@@ -85,7 +85,49 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
    * @return the parent activity builder
    */
   @SuppressWarnings({ "unchecked" })
-  public P camundaFormFieldDone() {
+  public P eximeeBpmsFormFieldDone() {
     return (P) parent.builder();
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsId(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaId(String id) {
+    return eximeeBpmsId(id);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsLabel(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaLabel(String label) {
+    return eximeeBpmsLabel(label);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsType(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaType(String type) {
+    return eximeeBpmsType(type);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDefaultValue(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDefaultValue(String defaultValue) {
+    return eximeeBpmsDefaultValue(defaultValue);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormFieldDone()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public P camundaFormFieldDone() {
+    return eximeeBpmsFormFieldDone();
   }
 }

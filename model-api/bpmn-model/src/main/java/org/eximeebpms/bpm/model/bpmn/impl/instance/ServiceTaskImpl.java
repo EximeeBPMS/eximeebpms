@@ -128,19 +128,19 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
 
   /** camunda extensions */
 
-  public String getCamundaClass() {
+  public String getEximeeBpmsClass() {
     return camundaClassAttribute.getValue(this);
   }
 
-  public void setCamundaClass(String camundaClass) {
+  public void setEximeeBpmsClass(String camundaClass) {
     camundaClassAttribute.setValue(this, camundaClass);
   }
 
-  public String getCamundaDelegateExpression() {
+  public String getEximeeBpmsDelegateExpression() {
     return camundaDelegateExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaDelegateExpression(String camundaExpression) {
+  public void setEximeeBpmsDelegateExpression(String camundaExpression) {
     camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 
@@ -152,37 +152,37 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
-  public String getCamundaResultVariable() {
+  public String getEximeeBpmsResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
-  public void setCamundaResultVariable(String camundaResultVariable) {
+  public void setEximeeBpmsResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
-  public String getCamundaTopic() {
+  public String getEximeeBpmsTopic() {
     return camundaTopicAttribute.getValue(this);
   }
 
-  public void setCamundaTopic(String camundaTopic) {
+  public void setEximeeBpmsTopic(String camundaTopic) {
     camundaTopicAttribute.setValue(this, camundaTopic);
   }
 
-  public String getCamundaType() {
+  public String getEximeeBpmsType() {
     return camundaTypeAttribute.getValue(this);
   }
 
-  public void setCamundaType(String camundaType) {
+  public void setEximeeBpmsType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }
 
   @Override
-  public String getCamundaTaskPriority() {
+  public String getEximeeBpmsTaskPriority() {
     return camundaTaskPriorityAttribute.getValue(this);    
   }
 
   @Override
-  public void setCamundaTaskPriority(String taskPriority) {
+  public void setEximeeBpmsTaskPriority(String taskPriority) {
     camundaTaskPriorityAttribute.setValue(this, taskPriority);
   }
 }

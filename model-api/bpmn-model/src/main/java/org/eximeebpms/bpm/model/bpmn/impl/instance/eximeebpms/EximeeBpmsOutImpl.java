@@ -71,43 +71,43 @@ public class EximeeBpmsOutImpl extends BpmnModelElementInstanceImpl implements E
     super(instanceContext);
   }
 
-  public String getCamundaSource() {
+  public String getEximeeBpmsSource() {
     return camundaSourceAttribute.getValue(this);
   }
 
-  public void setCamundaSource(String camundaSource) {
+  public void setEximeeBpmsSource(String camundaSource) {
     camundaSourceAttribute.setValue(this, camundaSource);
   }
 
-  public String getCamundaSourceExpression() {
+  public String getEximeeBpmsSourceExpression() {
     return camundaSourceExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaSourceExpression(String camundaSourceExpression) {
+  public void setEximeeBpmsSourceExpression(String camundaSourceExpression) {
     camundaSourceExpressionAttribute.setValue(this, camundaSourceExpression);
   }
 
-  public String getCamundaVariables() {
+  public String getEximeeBpmsVariables() {
     return camundaVariablesAttribute.getValue(this);
   }
 
-  public void setCamundaVariables(String camundaVariables) {
+  public void setEximeeBpmsVariables(String camundaVariables) {
     camundaVariablesAttribute.setValue(this, camundaVariables);
   }
 
-  public String getCamundaTarget() {
+  public String getEximeeBpmsTarget() {
     return camundaTargetAttribute.getValue(this);
   }
 
-  public void setCamundaTarget(String camundaTarget) {
+  public void setEximeeBpmsTarget(String camundaTarget) {
     camundaTargetAttribute.setValue(this, camundaTarget);
   }
 
-  public boolean getCamundaLocal() {
+  public boolean getEximeeBpmsLocal() {
     return camundaLocalAttribute.getValue(this);
   }
 
-  public void setCamundaLocal(boolean camundaLocal) {
+  public void setEximeeBpmsLocal(boolean camundaLocal) {
     camundaLocalAttribute.setValue(this, camundaLocal);
   }
 

@@ -115,34 +115,34 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
   /** camunda extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isEximeeBpmsAsyncBefore() instead.
    */
   @Deprecated
-  public boolean isCamundaAsync() {
+  public boolean isEximeeBpmsAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setEximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
+  public void setEximeeBpmsAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }
 
-  public String getCamundaFormHandlerClass() {
+  public String getEximeeBpmsFormHandlerClass() {
     return camundaFormHandlerClassAttribute.getValue(this);
   }
 
-  public void setCamundaFormHandlerClass(String camundaFormHandlerClass) {
+  public void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass) {
     camundaFormHandlerClassAttribute.setValue(this, camundaFormHandlerClass);
   }
 
-  public String getCamundaFormKey() {
+  public String getEximeeBpmsFormKey() {
     return camundaFormKeyAttribute.getValue(this);
   }
 
-  public void setCamundaFormKey(String camundaFormKey) {
+  public void setEximeeBpmsFormKey(String camundaFormKey) {
     camundaFormKeyAttribute.setValue(this, camundaFormKey);
   }
 
@@ -171,11 +171,11 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
     camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
   }
 
-  public String getCamundaInitiator() {
+  public String getEximeeBpmsInitiator() {
     return camundaInitiatorAttribute.getValue(this);
   }
 
-  public void setCamundaInitiator(String camundaInitiator) {
+  public void setEximeeBpmsInitiator(String camundaInitiator) {
     camundaInitiatorAttribute.setValue(this, camundaInitiator);
   }
 }

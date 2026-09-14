@@ -37,11 +37,11 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
    * @param target the name of the variable in the signal-catching process instance
    * @return the builder object
    */
-  public B camundaInSourceTarget(String source, String target) {
+  public B eximeeBpmsInSourceTarget(String source, String target) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
 
-    param.setCamundaSource(source);
-    param.setCamundaTarget(target);
+    param.setEximeeBpmsSource(source);
+    param.setEximeeBpmsTarget(target);
 
     addExtensionElement(param);
 
@@ -56,11 +56,11 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
    * @param target the name of the variable in the signal-catching process instance
    * @return the builder object
    */
-  public B camundaInSourceExpressionTarget(String sourceExpression, String target) {
+  public B eximeeBpmsInSourceExpressionTarget(String sourceExpression, String target) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
 
-    param.setCamundaSourceExpression(sourceExpression);
-    param.setCamundaTarget(target);
+    param.setEximeeBpmsSourceExpression(sourceExpression);
+    param.setEximeeBpmsTarget(target);
 
     addExtensionElement(param);
 
@@ -74,10 +74,10 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
    * @param businessKey the business key string or expression of the signal-throwing process instance
    * @return the builder object
    */
-  public B camundaInBusinessKey(String businessKey) {
+  public B eximeeBpmsInBusinessKey(String businessKey) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
 
-    param.setCamundaBusinessKey(businessKey);
+    param.setEximeeBpmsBusinessKey(businessKey);
 
     addExtensionElement(param);
 
@@ -92,13 +92,13 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
    * @param local a Boolean flag to declare that only the local variables should be passed
    * @return the builder object
    */
-  public B camundaInAllVariables(String variables, boolean local) {
+  public B eximeeBpmsInAllVariables(String variables, boolean local) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
 
-    param.setCamundaVariables(variables);
+    param.setEximeeBpmsVariables(variables);
 
     if (local) {
-      param.setCamundaLocal(local);
+      param.setEximeeBpmsLocal(local);
     }
 
     addExtensionElement(param);
@@ -113,7 +113,49 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
    * @param variables a String flag to declare that all of the signal-throwing process-instance variables should be passed
    * @return the builder object
    */
+  public B eximeeBpmsInAllVariables(String variables) {
+    return eximeeBpmsInAllVariables(variables, false);
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInSourceTarget(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInSourceTarget(String source, String target) {
+    return eximeeBpmsInSourceTarget(source, target);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInSourceExpressionTarget(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInSourceExpressionTarget(String sourceExpression, String target) {
+    return eximeeBpmsInSourceExpressionTarget(sourceExpression, target);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInBusinessKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInBusinessKey(String businessKey) {
+    return eximeeBpmsInBusinessKey(businessKey);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInAllVariables(String, boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInAllVariables(String variables, boolean local) {
+    return eximeeBpmsInAllVariables(variables, local);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInAllVariables(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
   public B camundaInAllVariables(String variables) {
-    return camundaInAllVariables(variables, false);
+    return eximeeBpmsInAllVariables(variables);
   }
 }

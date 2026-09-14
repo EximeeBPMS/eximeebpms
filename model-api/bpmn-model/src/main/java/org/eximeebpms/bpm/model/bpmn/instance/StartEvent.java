@@ -35,24 +35,24 @@ public interface StartEvent extends CatchEvent {
   /** camunda extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isEximeeBpmsAsyncBefore() instead.
    */
   @Deprecated
-  boolean isCamundaAsync();
+  boolean isEximeeBpmsAsync();
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setEximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
-  void setCamundaAsync(boolean isCamundaAsync);
+  void setEximeeBpmsAsync(boolean isCamundaAsync);
 
-  String getCamundaFormHandlerClass();
+  String getEximeeBpmsFormHandlerClass();
 
-  void setCamundaFormHandlerClass(String camundaFormHandlerClass);
+  void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass);
 
-  String getCamundaFormKey();
+  String getEximeeBpmsFormKey();
 
-  void setCamundaFormKey(String camundaFormKey);
+  void setEximeeBpmsFormKey(String camundaFormKey);
 
   String getEximeeBpmsFormRef();
 
@@ -66,7 +66,73 @@ public interface StartEvent extends CatchEvent {
 
   void setEximeeBpmsFormRefVersion(String camundaFormRefVersion);
 
-  String getCamundaInitiator();
+  String getEximeeBpmsInitiator();
 
-  void setCamundaInitiator(String camundaInitiator);
+  void setEximeeBpmsInitiator(String camundaInitiator);
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsync()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsync() {
+    return isEximeeBpmsAsync();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsync(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsync(boolean isEximeeBpmsAsync) {
+    setEximeeBpmsAsync(isEximeeBpmsAsync);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsFormHandlerClass()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaFormHandlerClass() {
+    return getEximeeBpmsFormHandlerClass();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsFormHandlerClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaFormHandlerClass(String eximeeBpmsFormHandlerClass) {
+    setEximeeBpmsFormHandlerClass(eximeeBpmsFormHandlerClass);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsFormKey()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaFormKey() {
+    return getEximeeBpmsFormKey();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsFormKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaFormKey(String eximeeBpmsFormKey) {
+    setEximeeBpmsFormKey(eximeeBpmsFormKey);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsInitiator()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaInitiator() {
+    return getEximeeBpmsInitiator();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsInitiator(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaInitiator(String eximeeBpmsInitiator) {
+    setEximeeBpmsInitiator(eximeeBpmsInitiator);
+  }
 }

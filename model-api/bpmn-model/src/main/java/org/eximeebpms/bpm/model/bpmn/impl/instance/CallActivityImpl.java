@@ -149,102 +149,102 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
   }
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isEximeeBpmsAsyncBefore() instead.
    */
   @Deprecated
-  public boolean isCamundaAsync() {
+  public boolean isEximeeBpmsAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
 
   /**
-   * @deprecated use setCamundaAsyncBefore() instead.
+   * @deprecated use setEximeeBpmsAsyncBefore() instead.
    */
   @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
+  public void setEximeeBpmsAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }
 
-  public String getCamundaCalledElementBinding() {
+  public String getEximeeBpmsCalledElementBinding() {
     return camundaCalledElementBindingAttribute.getValue(this);
   }
 
-  public void setCamundaCalledElementBinding(String camundaCalledElementBinding) {
+  public void setEximeeBpmsCalledElementBinding(String camundaCalledElementBinding) {
     camundaCalledElementBindingAttribute.setValue(this, camundaCalledElementBinding);
   }
 
-  public String getCamundaCalledElementVersion() {
+  public String getEximeeBpmsCalledElementVersion() {
     return camundaCalledElementVersionAttribute.getValue(this);
   }
 
-  public void setCamundaCalledElementVersion(String camundaCalledElementVersion) {
+  public void setEximeeBpmsCalledElementVersion(String camundaCalledElementVersion) {
     camundaCalledElementVersionAttribute.setValue(this, camundaCalledElementVersion);
   }
 
-  public String getCamundaCalledElementVersionTag() {
+  public String getEximeeBpmsCalledElementVersionTag() {
     return camundaCalledElementVersionTagAttribute.getValue(this);
   }
 
-  public void setCamundaCalledElementVersionTag(String camundaCalledElementVersionTag) {
+  public void setEximeeBpmsCalledElementVersionTag(String camundaCalledElementVersionTag) {
     camundaCalledElementVersionTagAttribute.setValue(this, camundaCalledElementVersionTag);
   }
 
-  public String getCamundaCaseRef() {
+  public String getEximeeBpmsCaseRef() {
     return camundaCaseRefAttribute.getValue(this);
   }
 
-  public void setCamundaCaseRef(String camundaCaseRef) {
+  public void setEximeeBpmsCaseRef(String camundaCaseRef) {
     camundaCaseRefAttribute.setValue(this, camundaCaseRef);
   }
 
-  public String getCamundaCaseBinding() {
+  public String getEximeeBpmsCaseBinding() {
     return camundaCaseBindingAttribute.getValue(this);
   }
 
-  public void setCamundaCaseBinding(String camundaCaseBinding) {
+  public void setEximeeBpmsCaseBinding(String camundaCaseBinding) {
     camundaCaseBindingAttribute.setValue(this, camundaCaseBinding);
   }
 
-  public String getCamundaCaseVersion() {
+  public String getEximeeBpmsCaseVersion() {
     return camundaCaseVersionAttribute.getValue(this);
   }
 
-  public void setCamundaCaseVersion(String camundaCaseVersion) {
+  public void setEximeeBpmsCaseVersion(String camundaCaseVersion) {
     camundaCaseVersionAttribute.setValue(this, camundaCaseVersion);
   }
 
-  public String getCamundaCalledElementTenantId() {
+  public String getEximeeBpmsCalledElementTenantId() {
     return camundaCalledElementTenantIdAttribute.getValue(this);
   }
 
-  public void setCamundaCalledElementTenantId(String tenantId) {
+  public void setEximeeBpmsCalledElementTenantId(String tenantId) {
     camundaCalledElementTenantIdAttribute.setValue(this, tenantId);
   }
 
-  public String getCamundaCaseTenantId() {
+  public String getEximeeBpmsCaseTenantId() {
     return camundaCaseTenantIdAttribute.getValue(this);
   }
 
-  public void setCamundaCaseTenantId(String tenantId) {
+  public void setEximeeBpmsCaseTenantId(String tenantId) {
     camundaCaseTenantIdAttribute.setValue(this, tenantId);
   }
 
   @Override
-  public String getCamundaVariableMappingClass() {
+  public String getEximeeBpmsVariableMappingClass() {
     return camundaVariableMappingClassAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaVariableMappingClass(String camundaClass) {
+  public void setEximeeBpmsVariableMappingClass(String camundaClass) {
     camundaVariableMappingClassAttribute.setValue(this, camundaClass);
   }
 
   @Override
-  public String getCamundaVariableMappingDelegateExpression() {
+  public String getEximeeBpmsVariableMappingDelegateExpression() {
     return camundaVariableMappingDelegateExpressionAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaVariableMappingDelegateExpression(String camundaExpression) {
+  public void setEximeeBpmsVariableMappingDelegateExpression(String camundaExpression) {
     camundaVariableMappingDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 }

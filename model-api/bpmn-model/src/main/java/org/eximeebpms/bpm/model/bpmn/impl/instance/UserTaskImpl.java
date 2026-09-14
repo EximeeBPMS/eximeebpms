@@ -164,79 +164,79 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
 
   /** camunda extensions */
 
-  public String getCamundaAssignee() {
+  public String getEximeeBpmsAssignee() {
     return camundaAssigneeAttribute.getValue(this);
   }
 
-  public void setCamundaAssignee(String camundaAssignee) {
+  public void setEximeeBpmsAssignee(String camundaAssignee) {
     camundaAssigneeAttribute.setValue(this, camundaAssignee);
   }
 
-  public String getCamundaCandidateGroups() {
+  public String getEximeeBpmsCandidateGroups() {
     return camundaCandidateGroupsAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateGroups(String camundaCandidateGroups) {
+  public void setEximeeBpmsCandidateGroups(String camundaCandidateGroups) {
     camundaCandidateGroupsAttribute.setValue(this, camundaCandidateGroups);
   }
 
-  public List<String> getCamundaCandidateGroupsList() {
+  public List<String> getEximeeBpmsCandidateGroupsList() {
     String candidateGroups = camundaCandidateGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateGroups);
   }
 
-  public void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList) {
+  public void setEximeeBpmsCandidateGroupsList(List<String> camundaCandidateGroupsList) {
     String candidateGroups = StringUtil.joinCommaSeparatedList(camundaCandidateGroupsList);
     camundaCandidateGroupsAttribute.setValue(this, candidateGroups);
   }
 
-  public String getCamundaCandidateUsers() {
+  public String getEximeeBpmsCandidateUsers() {
     return camundaCandidateUsersAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateUsers(String camundaCandidateUsers) {
+  public void setEximeeBpmsCandidateUsers(String camundaCandidateUsers) {
     camundaCandidateUsersAttribute.setValue(this, camundaCandidateUsers);
   }
 
-  public List<String> getCamundaCandidateUsersList() {
+  public List<String> getEximeeBpmsCandidateUsersList() {
     String candidateUsers = camundaCandidateUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateUsers);
   }
 
-  public void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList) {
+  public void setEximeeBpmsCandidateUsersList(List<String> camundaCandidateUsersList) {
     String candidateUsers = StringUtil.joinCommaSeparatedList(camundaCandidateUsersList);
     camundaCandidateUsersAttribute.setValue(this, candidateUsers);
   }
 
-  public String getCamundaDueDate() {
+  public String getEximeeBpmsDueDate() {
     return camundaDueDateAttribute.getValue(this);
   }
 
-  public void setCamundaDueDate(String camundaDueDate) {
+  public void setEximeeBpmsDueDate(String camundaDueDate) {
     camundaDueDateAttribute.setValue(this, camundaDueDate);
   }
 
-  public String getCamundaFollowUpDate() {
+  public String getEximeeBpmsFollowUpDate() {
     return camundaFollowUpDateAttribute.getValue(this);
   }
 
-  public void setCamundaFollowUpDate(String camundaFollowUpDate) {
+  public void setEximeeBpmsFollowUpDate(String camundaFollowUpDate) {
     camundaFollowUpDateAttribute.setValue(this, camundaFollowUpDate);
   }
 
-  public String getCamundaFormHandlerClass() {
+  public String getEximeeBpmsFormHandlerClass() {
     return camundaFormHandlerClassAttribute.getValue(this);
   }
 
-  public void setCamundaFormHandlerClass(String camundaFormHandlerClass) {
+  public void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass) {
     camundaFormHandlerClassAttribute.setValue(this, camundaFormHandlerClass);
   }
 
-  public String getCamundaFormKey() {
+  public String getEximeeBpmsFormKey() {
     return camundaFormKeyAttribute.getValue(this);
   }
 
-  public void setCamundaFormKey(String camundaFormKey) {
+  public void setEximeeBpmsFormKey(String camundaFormKey) {
     camundaFormKeyAttribute.setValue(this, camundaFormKey);
   }
 
@@ -264,11 +264,11 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
     camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
   }
 
-  public String getCamundaPriority() {
+  public String getEximeeBpmsPriority() {
     return camundaPriorityAttribute.getValue(this);
   }
 
-  public void setCamundaPriority(String camundaPriority) {
+  public void setEximeeBpmsPriority(String camundaPriority) {
     camundaPriorityAttribute.setValue(this, camundaPriority);
   }
 }

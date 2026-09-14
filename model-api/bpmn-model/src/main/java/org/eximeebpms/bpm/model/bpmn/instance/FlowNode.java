@@ -39,20 +39,85 @@ public interface FlowNode extends FlowElement {
 
   Query<FlowNode> getSucceedingNodes();
 
-  boolean isCamundaAsyncBefore();
+  boolean isEximeeBpmsAsyncBefore();
 
-  void setCamundaAsyncBefore(boolean isCamundaAsyncBefore);
+  void setEximeeBpmsAsyncBefore(boolean isCamundaAsyncBefore);
 
-  boolean isCamundaAsyncAfter();
+  boolean isEximeeBpmsAsyncAfter();
 
-  void setCamundaAsyncAfter(boolean isCamundaAsyncAfter);
+  void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter);
 
-  boolean isCamundaExclusive();
+  boolean isEximeeBpmsExclusive();
 
-  void setCamundaExclusive(boolean isCamundaExclusive);
+  void setEximeeBpmsExclusive(boolean isCamundaExclusive);
 
-  String getCamundaJobPriority();
+  String getEximeeBpmsJobPriority();
 
-  void setCamundaJobPriority(String jobPriority);
+  void setEximeeBpmsJobPriority(String jobPriority);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsyncBefore()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsyncBefore() {
+    return isEximeeBpmsAsyncBefore();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsyncBefore(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsyncBefore(boolean isEximeeBpmsAsyncBefore) {
+    setEximeeBpmsAsyncBefore(isEximeeBpmsAsyncBefore);
+  }
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsyncAfter()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsyncAfter() {
+    return isEximeeBpmsAsyncAfter();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsyncAfter(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsyncAfter(boolean isEximeeBpmsAsyncAfter) {
+    setEximeeBpmsAsyncAfter(isEximeeBpmsAsyncAfter);
+  }
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsExclusive()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaExclusive() {
+    return isEximeeBpmsExclusive();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsExclusive(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaExclusive(boolean isEximeeBpmsExclusive) {
+    setEximeeBpmsExclusive(isEximeeBpmsExclusive);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsJobPriority()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaJobPriority() {
+    return getEximeeBpmsJobPriority();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsJobPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaJobPriority(String jobPriority) {
+    setEximeeBpmsJobPriority(jobPriority);
+  }
 }

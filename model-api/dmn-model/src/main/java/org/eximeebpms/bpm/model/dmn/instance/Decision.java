@@ -54,18 +54,57 @@ public interface Decision extends DrgElement {
 
   void setExpression(Expression expression);
 
-  // camunda extensions
-  
-  @Deprecated
-  Integer getCamundaHistoryTimeToLive();
+  // eximeebpms extensions
 
-  @Deprecated
-  void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
+  /**
+   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  Integer getEximeeBpmsHistoryTimeToLive();
 
-  String getCamundaHistoryTimeToLiveString();
-  
-  void setCamundaHistoryTimeToLiveString(String historyTimeToLive);
-  
+  /**
+   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  void setEximeeBpmsHistoryTimeToLive(Integer historyTimeToLive);
+
+  String getEximeeBpmsHistoryTimeToLiveString();
+
+  void setEximeeBpmsHistoryTimeToLiveString(String historyTimeToLive);
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default Integer getCamundaHistoryTimeToLive() {
+    return getEximeeBpmsHistoryTimeToLive();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
+    setEximeeBpmsHistoryTimeToLive(historyTimeToLive);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaHistoryTimeToLiveString() {
+    return getEximeeBpmsHistoryTimeToLiveString();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
+    setEximeeBpmsHistoryTimeToLiveString(historyTimeToLive);
+  }
+
+
   String getVersionTag();
 
   void setVersionTag(String inputValue);

@@ -27,21 +27,21 @@ import java.util.Collection;
  */
 public interface EximeeBpmsTaskListener extends BpmnModelElementInstance {
 
-  String getCamundaEvent();
+  String getEximeeBpmsEvent();
 
-  void setCamundaEvent(String camundaEvent);
+  void setEximeeBpmsEvent(String camundaEvent);
 
-  String getCamundaClass();
+  String getEximeeBpmsClass();
 
-  void setCamundaClass(String camundaClass);
+  void setEximeeBpmsClass(String camundaClass);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaDelegateExpression();
+  String getEximeeBpmsDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaDelegateExpression);
+  void setEximeeBpmsDelegateExpression(String camundaDelegateExpression);
 
   Collection<EximeeBpmsField> getEximeeBpmsFields();
 
@@ -51,4 +51,53 @@ public interface EximeeBpmsTaskListener extends BpmnModelElementInstance {
 
   Collection<TimerEventDefinition> getTimeouts();
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsEvent()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaEvent() {
+    return getEximeeBpmsEvent();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsEvent(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaEvent(String eximeeBpmsEvent) {
+    setEximeeBpmsEvent(eximeeBpmsEvent);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsClass()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaClass() {
+    return getEximeeBpmsClass();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaClass(String eximeeBpmsClass) {
+    setEximeeBpmsClass(eximeeBpmsClass);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsDelegateExpression()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaDelegateExpression() {
+    return getEximeeBpmsDelegateExpression();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsDelegateExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaDelegateExpression(String eximeeBpmsDelegateExpression) {
+    setEximeeBpmsDelegateExpression(eximeeBpmsDelegateExpression);
+  }
 }

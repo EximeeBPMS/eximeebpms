@@ -48,8 +48,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaClass(Class camundaClass) {
-    return camundaClass(camundaClass.getName());
+  public B eximeeBpmsClass(Class camundaClass) {
+    return eximeeBpmsClass(camundaClass.getName());
   }
 
   /**
@@ -58,8 +58,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B eximeeBpmsClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -69,8 +69,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B eximeeBpmsDelegateExpression(String camundaExpression) {
+    element.setEximeeBpmsDelegateExpression(camundaExpression);
     return myself;
   }
 
@@ -80,7 +80,7 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
+  public B eximeeBpmsExpression(String camundaExpression) {
     element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
@@ -91,20 +91,20 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
   /**
    * Sets the camunda topic attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    * @param camundaTopic the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B eximeeBpmsTopic(String camundaTopic) {
+    element.setEximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
@@ -114,8 +114,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B eximeeBpmsType(String camundaType) {
+    element.setEximeeBpmsType(camundaType);
     return myself;
   }
 
@@ -125,8 +125,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRef the decisionRef to set
    * @return the builder object
    */
-  public B camundaDecisionRef(String camundaDecisionRef) {
-    element.setCamundaDecisionRef(camundaDecisionRef);
+  public B eximeeBpmsDecisionRef(String camundaDecisionRef) {
+    element.setEximeeBpmsDecisionRef(camundaDecisionRef);
     return myself;
   }
 
@@ -136,8 +136,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefBinding the decisionRefBinding to set
    * @return the builder object
    */
-  public B camundaDecisionRefBinding(String camundaDecisionRefBinding) {
-    element.setCamundaDecisionRefBinding(camundaDecisionRefBinding);
+  public B eximeeBpmsDecisionRefBinding(String camundaDecisionRefBinding) {
+    element.setEximeeBpmsDecisionRefBinding(camundaDecisionRefBinding);
     return myself;
   }
 
@@ -147,8 +147,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefVersion the decisionRefVersion to set
    * @return the builder object
    */
-  public B camundaDecisionRefVersion(String camundaDecisionRefVersion) {
-    element.setCamundaDecisionRefVersion(camundaDecisionRefVersion);
+  public B eximeeBpmsDecisionRefVersion(String camundaDecisionRefVersion) {
+    element.setEximeeBpmsDecisionRefVersion(camundaDecisionRefVersion);
     return myself;
   }
 
@@ -158,8 +158,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefVersionTag the decisionRefVersionTag to set
    * @return the builder object
    */
-  public B camundaDecisionRefVersionTag(String camundaDecisionRefVersionTag) {
-    element.setCamundaDecisionRefVersionTag(camundaDecisionRefVersionTag);
+  public B eximeeBpmsDecisionRefVersionTag(String camundaDecisionRefVersionTag) {
+    element.setEximeeBpmsDecisionRefVersionTag(camundaDecisionRefVersionTag);
     return myself;
   }
 
@@ -169,8 +169,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param decisionRefTenantId the decisionRefTenantId to set
    * @return the builder object
    */
-  public B camundaDecisionRefTenantId(String decisionRefTenantId) {
-    element.setCamundaDecisionRefTenantId(decisionRefTenantId);
+  public B eximeeBpmsDecisionRefTenantId(String decisionRefTenantId) {
+    element.setEximeeBpmsDecisionRefTenantId(decisionRefTenantId);
     return myself;
   }
 
@@ -180,21 +180,135 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaMapDecisionResult the mapper for the decision result to set
    * @return the builder object
    */
-  public B camundaMapDecisionResult(String camundaMapDecisionResult) {
+  public B eximeeBpmsMapDecisionResult(String camundaMapDecisionResult) {
     element.setEximeeBpmsMapDecisionResult(camundaMapDecisionResult);
     return myself;
   }
 
   /**
    * Sets the camunda task priority attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    *
    * @param taskPriority the priority for the external task
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsClass(Class)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaClass(Class eximeeBpmsClass) {
+    return eximeeBpmsClass(eximeeBpmsClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaClass(String fullQualifiedClassName) {
+    return eximeeBpmsClass(fullQualifiedClassName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDelegateExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDelegateExpression(String eximeeBpmsExpression) {
+    return eximeeBpmsDelegateExpression(eximeeBpmsExpression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExpression(String eximeeBpmsExpression) {
+    return eximeeBpmsExpression(eximeeBpmsExpression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsResultVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaResultVariable(String eximeeBpmsResultVariable) {
+    return eximeeBpmsResultVariable(eximeeBpmsResultVariable);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTopic(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTopic(String eximeeBpmsTopic) {
+    return eximeeBpmsTopic(eximeeBpmsTopic);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsType(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaType(String eximeeBpmsType) {
+    return eximeeBpmsType(eximeeBpmsType);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDecisionRef(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDecisionRef(String eximeeBpmsDecisionRef) {
+    return eximeeBpmsDecisionRef(eximeeBpmsDecisionRef);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDecisionRefBinding(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDecisionRefBinding(String eximeeBpmsDecisionRefBinding) {
+    return eximeeBpmsDecisionRefBinding(eximeeBpmsDecisionRefBinding);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDecisionRefVersion(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDecisionRefVersion(String eximeeBpmsDecisionRefVersion) {
+    return eximeeBpmsDecisionRefVersion(eximeeBpmsDecisionRefVersion);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDecisionRefVersionTag(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDecisionRefVersionTag(String eximeeBpmsDecisionRefVersionTag) {
+    return eximeeBpmsDecisionRefVersionTag(eximeeBpmsDecisionRefVersionTag);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDecisionRefTenantId(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDecisionRefTenantId(String decisionRefTenantId) {
+    return eximeeBpmsDecisionRefTenantId(decisionRefTenantId);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsMapDecisionResult(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaMapDecisionResult(String eximeeBpmsMapDecisionResult) {
+    return eximeeBpmsMapDecisionResult(eximeeBpmsMapDecisionResult);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskPriority(String taskPriority) {
+    return eximeeBpmsTaskPriority(taskPriority);
   }
 }

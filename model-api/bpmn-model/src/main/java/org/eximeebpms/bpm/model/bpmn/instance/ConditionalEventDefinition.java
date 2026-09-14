@@ -29,16 +29,65 @@ public interface ConditionalEventDefinition extends EventDefinition {
 
   void setCondition(Condition condition);
 
-  String getCamundaVariableName();
+  String getEximeeBpmsVariableName();
 
-  void setCamundaVariableName(String variableName);
+  void setEximeeBpmsVariableName(String variableName);
 
-  String getCamundaVariableEvents();
+  String getEximeeBpmsVariableEvents();
 
-  void setCamundaVariableEvents(String variableEvent);
+  void setEximeeBpmsVariableEvents(String variableEvent);
 
-  List<String> getCamundaVariableEventsList();
+  List<String> getEximeeBpmsVariableEventsList();
 
-  void setCamundaVariableEventsList(List<String> variableEventsList);
+  void setEximeeBpmsVariableEventsList(List<String> variableEventsList);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsVariableName()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaVariableName() {
+    return getEximeeBpmsVariableName();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsVariableName(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaVariableName(String variableName) {
+    setEximeeBpmsVariableName(variableName);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsVariableEvents()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaVariableEvents() {
+    return getEximeeBpmsVariableEvents();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsVariableEvents(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaVariableEvents(String variableEvent) {
+    setEximeeBpmsVariableEvents(variableEvent);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsVariableEventsList()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default List<String> getCamundaVariableEventsList() {
+    return getEximeeBpmsVariableEventsList();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsVariableEventsList(List<String>)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaVariableEventsList(List<String> variableEventsList) {
+    setEximeeBpmsVariableEventsList(variableEventsList);
+  }
 }

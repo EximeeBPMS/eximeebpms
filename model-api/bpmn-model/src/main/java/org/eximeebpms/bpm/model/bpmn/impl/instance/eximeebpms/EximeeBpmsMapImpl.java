@@ -56,7 +56,7 @@ public class EximeeBpmsMapImpl extends BpmnModelElementInstanceImpl implements E
     super(instanceContext);
   }
 
-  public Collection<EximeeBpmsEntry> getCamundaEntries() {
+  public Collection<EximeeBpmsEntry> getEximeeBpmsEntries() {
     return camundaEntryCollection.get(this);
   }
 

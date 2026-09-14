@@ -86,12 +86,12 @@ public class EventBasedGatewayImpl extends GatewayImpl implements EventBasedGate
   }
 
   @Override
-  public boolean isCamundaAsyncAfter() {
+  public boolean isEximeeBpmsAsyncAfter() {
     throw new UnsupportedOperationException("'asyncAfter' is not supported for 'Event Based Gateway'");
   }
 
   @Override
-  public void setCamundaAsyncAfter(boolean isCamundaAsyncAfter) {
+  public void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter) {
     throw new UnsupportedOperationException("'asyncAfter' is not supported for 'Event Based Gateway'");
   }
 

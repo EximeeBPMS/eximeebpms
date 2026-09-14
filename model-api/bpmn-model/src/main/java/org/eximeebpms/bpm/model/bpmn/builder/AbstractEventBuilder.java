@@ -39,11 +39,11 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
    * @param value the value of the input parameter
    * @return the builder object
    */
-  public B camundaInputParameter(String name, String value) {
+  public B eximeeBpmsInputParameter(String name, String value) {
     EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
     EximeeBpmsInputParameter camundaInputParameter = createChild(camundaInputOutput, EximeeBpmsInputParameter.class);
-    camundaInputParameter.setCamundaName(name);
+    camundaInputParameter.setEximeeBpmsName(name);
     camundaInputParameter.setTextContent(value);
 
     return myself;
@@ -57,14 +57,31 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
    * @param value the value of the output parameter
    * @return the builder object
    */
-  public B camundaOutputParameter(String name, String value) {
+  public B eximeeBpmsOutputParameter(String name, String value) {
     EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
     EximeeBpmsOutputParameter camundaOutputParameter = createChild(camundaInputOutput, EximeeBpmsOutputParameter.class);
-    camundaOutputParameter.setCamundaName(name);
+    camundaOutputParameter.setEximeeBpmsName(name);
     camundaOutputParameter.setTextContent(value);
 
     return myself;
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInputParameter(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInputParameter(String name, String value) {
+    return eximeeBpmsInputParameter(name, value);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsOutputParameter(String, String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaOutputParameter(String name, String value) {
+    return eximeeBpmsOutputParameter(name, value);
+  }
 }

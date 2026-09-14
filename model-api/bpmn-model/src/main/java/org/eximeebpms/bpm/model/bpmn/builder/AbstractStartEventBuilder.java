@@ -36,20 +36,20 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
   /** camunda extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use eximeeBpmsAsyncBefore() instead.
    *
    * Sets the camunda async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
+  public B eximeeBpmsAsync() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 
   /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use eximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
    *
    * Sets the camunda async attribute.
    *
@@ -57,8 +57,8 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B eximeeBpmsAsync(boolean isCamundaAsync) {
+    element.setEximeeBpmsAsyncBefore(isCamundaAsync);
     return myself;
   }
 
@@ -68,8 +68,8 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaFormHandlerClass  the class name of the form handler
    * @return the builder object
    */
-  public B camundaFormHandlerClass(String camundaFormHandlerClass) {
-    element.setCamundaFormHandlerClass(camundaFormHandlerClass);
+  public B eximeeBpmsFormHandlerClass(String camundaFormHandlerClass) {
+    element.setEximeeBpmsFormHandlerClass(camundaFormHandlerClass);
     return myself;
   }
 
@@ -79,8 +79,8 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaFormKey  the form key to set
    * @return the builder object
    */
-  public B camundaFormKey(String camundaFormKey) {
-    element.setCamundaFormKey(camundaFormKey);
+  public B eximeeBpmsFormKey(String camundaFormKey) {
+    element.setEximeeBpmsFormKey(camundaFormKey);
     return myself;
   }
 
@@ -90,7 +90,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaFormRef the form ref to set
    * @return the builder object
    */
-  public B camundaFormRef(String camundaFormRef) {
+  public B eximeeBpmsFormRef(String camundaFormRef) {
     element.setEximeeBpmsFormRef(camundaFormRef);
     return myself;
   }
@@ -101,7 +101,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaFormRef the form ref binding to set
    * @return the builder object
    */
-  public B camundaFormRefBinding(String camundaFormRefBinding) {
+  public B eximeeBpmsFormRefBinding(String camundaFormRefBinding) {
     element.setEximeeBpmsFormRefBinding(camundaFormRefBinding);
     return myself;
   }
@@ -112,7 +112,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaFormRef the form ref version to set
    * @return the builder object
    */
-  public B camundaFormRefVersion(String camundaFormRefVersion) {
+  public B eximeeBpmsFormRefVersion(String camundaFormRefVersion) {
     element.setEximeeBpmsFormRefVersion(camundaFormRefVersion);
     return myself;
   }
@@ -123,8 +123,8 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param camundaInitiator  the initiator to set
    * @return the builder object
    */
-  public B camundaInitiator(String camundaInitiator) {
-    element.setCamundaInitiator(camundaInitiator);
+  public B eximeeBpmsInitiator(String camundaInitiator) {
+    element.setEximeeBpmsInitiator(camundaInitiator);
     return myself;
   }
 
@@ -133,7 +133,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    *
    * @return the builder object
    */
-  public EximeeBpmsStartEventFormFieldBuilder camundaFormField() {
+  public EximeeBpmsStartEventFormFieldBuilder eximeeBpmsFormField() {
     EximeeBpmsFormData camundaFormData = getCreateSingleExtensionElement(EximeeBpmsFormData.class);
     EximeeBpmsFormField camundaFormField = createChild(camundaFormData, EximeeBpmsFormField.class);
     return new EximeeBpmsStartEventFormFieldBuilder(modelInstance, element, camundaFormField);
@@ -254,4 +254,77 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
     return myself;
   }
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsync()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsync() {
+    return eximeeBpmsAsync();
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsAsync(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaAsync(boolean isEximeeBpmsAsync) {
+    return eximeeBpmsAsync(isEximeeBpmsAsync);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormHandlerClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormHandlerClass(String eximeeBpmsFormHandlerClass) {
+    return eximeeBpmsFormHandlerClass(eximeeBpmsFormHandlerClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormKey(String eximeeBpmsFormKey) {
+    return eximeeBpmsFormKey(eximeeBpmsFormKey);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRef(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRef(String eximeeBpmsFormRef) {
+    return eximeeBpmsFormRef(eximeeBpmsFormRef);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRefBinding(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRefBinding(String eximeeBpmsFormRefBinding) {
+    return eximeeBpmsFormRefBinding(eximeeBpmsFormRefBinding);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormRefVersion(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaFormRefVersion(String eximeeBpmsFormRefVersion) {
+    return eximeeBpmsFormRefVersion(eximeeBpmsFormRefVersion);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsInitiator(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaInitiator(String eximeeBpmsInitiator) {
+    return eximeeBpmsInitiator(eximeeBpmsInitiator);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsFormField()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public EximeeBpmsStartEventFormFieldBuilder camundaFormField() {
+    return eximeeBpmsFormField();
+  }
 }

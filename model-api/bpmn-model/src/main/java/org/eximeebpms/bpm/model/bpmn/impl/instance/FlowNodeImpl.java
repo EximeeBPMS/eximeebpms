@@ -151,35 +151,35 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
 
   /** Camunda Attributes */
 
-  public boolean isCamundaAsyncBefore() {
+  public boolean isEximeeBpmsAsyncBefore() {
     return camundaAsyncBefore.getValue(this);
   }
 
-  public void setCamundaAsyncBefore(boolean isCamundaAsyncBefore) {
+  public void setEximeeBpmsAsyncBefore(boolean isCamundaAsyncBefore) {
     camundaAsyncBefore.setValue(this, isCamundaAsyncBefore);
   }
 
-  public boolean isCamundaAsyncAfter() {
+  public boolean isEximeeBpmsAsyncAfter() {
     return camundaAsyncAfter.getValue(this);
   }
 
-  public void setCamundaAsyncAfter(boolean isCamundaAsyncAfter) {
+  public void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter) {
     camundaAsyncAfter.setValue(this, isCamundaAsyncAfter);
   }
 
-  public boolean isCamundaExclusive() {
+  public boolean isEximeeBpmsExclusive() {
     return camundaExclusive.getValue(this);
   }
 
-  public void setCamundaExclusive(boolean isCamundaExclusive) {
+  public void setEximeeBpmsExclusive(boolean isCamundaExclusive) {
     camundaExclusive.setValue(this, isCamundaExclusive);
   }
 
-  public String getCamundaJobPriority() {
+  public String getEximeeBpmsJobPriority() {
     return camundaJobPriority.getValue(this);
   }
 
-  public void setCamundaJobPriority(String jobPriority) {
+  public void setEximeeBpmsJobPriority(String jobPriority) {
     camundaJobPriority.setValue(this, jobPriority);
   }
 }

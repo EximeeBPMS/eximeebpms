@@ -25,8 +25,25 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsEntry extends BpmnModelElementInstance, EximeeBpmsGenericValueElement {
 
-  String getCamundaKey();
+  String getEximeeBpmsKey();
 
-  void setCamundaKey(String camundaKey);
+  void setEximeeBpmsKey(String camundaKey);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsKey()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaKey() {
+    return getEximeeBpmsKey();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsKey(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaKey(String eximeeBpmsKey) {
+    setEximeeBpmsKey(eximeeBpmsKey);
+  }
 }

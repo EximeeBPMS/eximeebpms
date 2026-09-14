@@ -110,59 +110,59 @@ public class EximeeBpmsFormPropertyImpl extends BpmnModelElementInstanceImpl imp
     super(instanceContext);
   }
 
-  public String getCamundaId() {
+  public String getEximeeBpmsId() {
     return camundaIdAttribute.getValue(this);
   }
 
-  public void setCamundaId(String camundaId) {
+  public void setEximeeBpmsId(String camundaId) {
     camundaIdAttribute.setValue(this, camundaId);
   }
 
-  public String getCamundaName() {
+  public String getEximeeBpmsName() {
     return camundaNameAttribute.getValue(this);
   }
 
-  public void setCamundaName(String camundaName) {
+  public void setEximeeBpmsName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }
 
-  public String getCamundaType() {
+  public String getEximeeBpmsType() {
     return camundaTypeAttribute.getValue(this);
   }
 
-  public void setCamundaType(String camundaType) {
+  public void setEximeeBpmsType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }
 
-  public boolean isCamundaRequired() {
+  public boolean isEximeeBpmsRequired() {
     return camundaRequiredAttribute.getValue(this);
   }
 
-  public void setCamundaRequired(boolean isCamundaRequired) {
+  public void setEximeeBpmsRequired(boolean isCamundaRequired) {
     camundaRequiredAttribute.setValue(this, isCamundaRequired);
   }
 
-  public boolean isCamundaReadable() {
+  public boolean isEximeeBpmsReadable() {
     return camundaReadableAttribute.getValue(this);
   }
 
-  public void setCamundaReadable(boolean isCamundaReadable) {
+  public void setEximeeBpmsReadable(boolean isCamundaReadable) {
     camundaReadableAttribute.setValue(this, isCamundaReadable);
   }
 
-  public boolean isCamundaWriteable() {
+  public boolean isEximeeBpmsWriteable() {
     return camundaWriteableAttribute.getValue(this);
   }
 
-  public void setCamundaWriteable(boolean isCamundaWriteable) {
+  public void setEximeeBpmsWriteable(boolean isCamundaWriteable) {
     camundaWriteableAttribute.setValue(this, isCamundaWriteable);
   }
 
-  public String getCamundaVariable() {
+  public String getEximeeBpmsVariable() {
     return camundaVariableAttribute.getValue(this);
   }
 
-  public void setCamundaVariable(String camundaVariable) {
+  public void setEximeeBpmsVariable(String camundaVariable) {
     camundaVariableAttribute.setValue(this, camundaVariable);
   }
 
@@ -174,19 +174,19 @@ public class EximeeBpmsFormPropertyImpl extends BpmnModelElementInstanceImpl imp
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
-  public String getCamundaDatePattern() {
+  public String getEximeeBpmsDatePattern() {
     return camundaDatePatternAttribute.getValue(this);
   }
 
-  public void setCamundaDatePattern(String camundaDatePattern) {
+  public void setEximeeBpmsDatePattern(String camundaDatePattern) {
     camundaDatePatternAttribute.setValue(this, camundaDatePattern);
   }
 
-  public String getCamundaDefault() {
+  public String getEximeeBpmsDefault() {
     return camundaDefaultAttribute.getValue(this);
   }
 
-  public void setCamundaDefault(String camundaDefault) {
+  public void setEximeeBpmsDefault(String camundaDefault) {
     camundaDefaultAttribute.setValue(this, camundaDefault);
   }
 

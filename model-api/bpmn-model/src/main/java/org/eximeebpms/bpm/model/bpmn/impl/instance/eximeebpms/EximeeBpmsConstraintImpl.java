@@ -56,19 +56,19 @@ public class EximeeBpmsConstraintImpl extends BpmnModelElementInstanceImpl imple
     super(instanceContext);
   }
 
-  public String getCamundaName() {
+  public String getEximeeBpmsName() {
     return camundaNameAttribute.getValue(this);
   }
 
-  public void setCamundaName(String camundaName) {
+  public void setEximeeBpmsName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }
 
-  public String getCamundaConfig() {
+  public String getEximeeBpmsConfig() {
     return camundaConfigAttribute.getValue(this);
   }
 
-  public void setCamundaConfig(String camundaConfig) {
+  public void setEximeeBpmsConfig(String camundaConfig) {
     camundaConfigAttribute.setValue(this, camundaConfig);
   }
 }

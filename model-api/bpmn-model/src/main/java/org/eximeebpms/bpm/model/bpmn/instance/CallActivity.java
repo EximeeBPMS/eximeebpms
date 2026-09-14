@@ -34,55 +34,232 @@ public interface CallActivity extends Activity {
   /** camunda extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isEximeeBpmsAsyncBefore() instead.
    */
   @Deprecated
-  boolean isCamundaAsync();
+  boolean isEximeeBpmsAsync();
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setEximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
-  void setCamundaAsync(boolean isCamundaAsync);
+  void setEximeeBpmsAsync(boolean isCamundaAsync);
 
-  String getCamundaCalledElementBinding();
+  String getEximeeBpmsCalledElementBinding();
 
-  void setCamundaCalledElementBinding(String camundaCalledElementBinding);
+  void setEximeeBpmsCalledElementBinding(String camundaCalledElementBinding);
 
-  String getCamundaCalledElementVersion();
+  String getEximeeBpmsCalledElementVersion();
 
-  void setCamundaCalledElementVersion(String camundaCalledElementVersion);
+  void setEximeeBpmsCalledElementVersion(String camundaCalledElementVersion);
 
-  String getCamundaCalledElementVersionTag();
+  String getEximeeBpmsCalledElementVersionTag();
 
-  void setCamundaCalledElementVersionTag(String camundaCalledElementVersionTag);
+  void setEximeeBpmsCalledElementVersionTag(String camundaCalledElementVersionTag);
 
-  String getCamundaCaseRef();
+  String getEximeeBpmsCaseRef();
 
-  void setCamundaCaseRef(String camundaCaseRef);
+  void setEximeeBpmsCaseRef(String camundaCaseRef);
 
-  String getCamundaCaseBinding();
+  String getEximeeBpmsCaseBinding();
 
-  void setCamundaCaseBinding(String camundaCaseBinding);
+  void setEximeeBpmsCaseBinding(String camundaCaseBinding);
 
-  String getCamundaCaseVersion();
+  String getEximeeBpmsCaseVersion();
 
-  void setCamundaCaseVersion(String camundaCaseVersion);
+  void setEximeeBpmsCaseVersion(String camundaCaseVersion);
 
-  String getCamundaCalledElementTenantId();
+  String getEximeeBpmsCalledElementTenantId();
 
-  void setCamundaCalledElementTenantId(String tenantId);
+  void setEximeeBpmsCalledElementTenantId(String tenantId);
 
-  String getCamundaCaseTenantId();
+  String getEximeeBpmsCaseTenantId();
 
-  void setCamundaCaseTenantId(String tenantId);
+  void setEximeeBpmsCaseTenantId(String tenantId);
 
-  String getCamundaVariableMappingClass();
+  String getEximeeBpmsVariableMappingClass();
 
-  void setCamundaVariableMappingClass(String camundaClass);
+  void setEximeeBpmsVariableMappingClass(String camundaClass);
 
-  String getCamundaVariableMappingDelegateExpression();
+  String getEximeeBpmsVariableMappingDelegateExpression();
 
-  void setCamundaVariableMappingDelegateExpression(String camundaExpression);
+  void setEximeeBpmsVariableMappingDelegateExpression(String camundaExpression);
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #isEximeeBpmsAsync()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default boolean isCamundaAsync() {
+    return isEximeeBpmsAsync();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsAsync(boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaAsync(boolean isEximeeBpmsAsync) {
+    setEximeeBpmsAsync(isEximeeBpmsAsync);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCalledElementBinding()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCalledElementBinding() {
+    return getEximeeBpmsCalledElementBinding();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCalledElementBinding(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCalledElementBinding(String eximeeBpmsCalledElementBinding) {
+    setEximeeBpmsCalledElementBinding(eximeeBpmsCalledElementBinding);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCalledElementVersion()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCalledElementVersion() {
+    return getEximeeBpmsCalledElementVersion();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCalledElementVersion(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCalledElementVersion(String eximeeBpmsCalledElementVersion) {
+    setEximeeBpmsCalledElementVersion(eximeeBpmsCalledElementVersion);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCalledElementVersionTag()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCalledElementVersionTag() {
+    return getEximeeBpmsCalledElementVersionTag();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCalledElementVersionTag(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCalledElementVersionTag(String eximeeBpmsCalledElementVersionTag) {
+    setEximeeBpmsCalledElementVersionTag(eximeeBpmsCalledElementVersionTag);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCaseRef()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCaseRef() {
+    return getEximeeBpmsCaseRef();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCaseRef(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCaseRef(String eximeeBpmsCaseRef) {
+    setEximeeBpmsCaseRef(eximeeBpmsCaseRef);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCaseBinding()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCaseBinding() {
+    return getEximeeBpmsCaseBinding();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCaseBinding(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCaseBinding(String eximeeBpmsCaseBinding) {
+    setEximeeBpmsCaseBinding(eximeeBpmsCaseBinding);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCaseVersion()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCaseVersion() {
+    return getEximeeBpmsCaseVersion();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCaseVersion(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCaseVersion(String eximeeBpmsCaseVersion) {
+    setEximeeBpmsCaseVersion(eximeeBpmsCaseVersion);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCalledElementTenantId()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCalledElementTenantId() {
+    return getEximeeBpmsCalledElementTenantId();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCalledElementTenantId(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCalledElementTenantId(String tenantId) {
+    setEximeeBpmsCalledElementTenantId(tenantId);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsCaseTenantId()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaCaseTenantId() {
+    return getEximeeBpmsCaseTenantId();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsCaseTenantId(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaCaseTenantId(String tenantId) {
+    setEximeeBpmsCaseTenantId(tenantId);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsVariableMappingClass()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaVariableMappingClass() {
+    return getEximeeBpmsVariableMappingClass();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsVariableMappingClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaVariableMappingClass(String eximeeBpmsClass) {
+    setEximeeBpmsVariableMappingClass(eximeeBpmsClass);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsVariableMappingDelegateExpression()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaVariableMappingDelegateExpression() {
+    return getEximeeBpmsVariableMappingDelegateExpression();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsVariableMappingDelegateExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaVariableMappingDelegateExpression(String eximeeBpmsExpression) {
+    setEximeeBpmsVariableMappingDelegateExpression(eximeeBpmsExpression);
+  }
 }

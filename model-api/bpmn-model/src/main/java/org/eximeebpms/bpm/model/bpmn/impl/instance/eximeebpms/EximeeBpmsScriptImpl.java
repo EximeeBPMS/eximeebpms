@@ -65,11 +65,11 @@ public class EximeeBpmsScriptImpl extends BpmnModelElementInstanceImpl implement
     camundaScriptFormatAttribute.setValue(this, camundaScriptFormat);
   }
 
-  public String getCamundaResource() {
+  public String getEximeeBpmsResource() {
     return camundaResourceAttribute.getValue(this);
   }
 
-  public void setCamundaResource(String camundaResource) {
+  public void setEximeeBpmsResource(String camundaResource) {
     camundaResourceAttribute.setValue(this, camundaResource);
   }
 }

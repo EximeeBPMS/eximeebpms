@@ -60,8 +60,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
     return myself;
   }
 
-  public B camundaJobPriority(String jobPriority) {
-    element.setCamundaJobPriority(jobPriority);
+  public B eximeeBpmsJobPriority(String jobPriority) {
+    element.setEximeeBpmsJobPriority(jobPriority);
     return myself;
   }
 
@@ -73,8 +73,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param taskPriority the task priority which should used for the external tasks
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
   }
 
@@ -84,8 +84,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param historyTimeToLive value for history time to live, must be either null or non-negative integer.
    * @return the builder object
    */
-  public B camundaHistoryTimeToLive(Integer historyTimeToLive) {
-    element.setCamundaHistoryTimeToLive(historyTimeToLive);
+  public B eximeeBpmsHistoryTimeToLive(Integer historyTimeToLive) {
+    element.setEximeeBpmsHistoryTimeToLive(historyTimeToLive);
     return myself;
   }
 
@@ -95,8 +95,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param historyTimeToLive string value of history time to live, can be null or a valid ISO-8601 value.
    * @return the builder object
    */
-  public B camundaHistoryTimeToLiveString(String historyTimeToLive) {
-    element.setCamundaHistoryTimeToLiveString(historyTimeToLive);
+  public B eximeeBpmsHistoryTimeToLiveString(String historyTimeToLive) {
+    element.setEximeeBpmsHistoryTimeToLiveString(historyTimeToLive);
     return myself;
   }
 
@@ -106,8 +106,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param isStartableInTasklist default value is true
    * @return the builder object
    */
-  public B camundaStartableInTasklist(Boolean isStartableInTasklist) {
-    element.setCamundaIsStartableInTasklist(isStartableInTasklist);
+  public B eximeeBpmsStartableInTasklist(Boolean isStartableInTasklist) {
+    element.setEximeeBpmsIsStartableInTasklist(isStartableInTasklist);
     return myself;
   }
 
@@ -117,8 +117,58 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param versionTag the version of the process definition
    * @return the builder object
    */
-  public B camundaVersionTag(String versionTag) {
-    element.setCamundaVersionTag(versionTag);
+  public B eximeeBpmsVersionTag(String versionTag) {
+    element.setEximeeBpmsVersionTag(versionTag);
     return myself;
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsJobPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaJobPriority(String jobPriority) {
+    return eximeeBpmsJobPriority(jobPriority);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskPriority(String taskPriority) {
+    return eximeeBpmsTaskPriority(taskPriority);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsHistoryTimeToLive(Integer)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaHistoryTimeToLive(Integer historyTimeToLive) {
+    return eximeeBpmsHistoryTimeToLive(historyTimeToLive);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsHistoryTimeToLiveString(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaHistoryTimeToLiveString(String historyTimeToLive) {
+    return eximeeBpmsHistoryTimeToLiveString(historyTimeToLive);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsStartableInTasklist(Boolean)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaStartableInTasklist(Boolean isStartableInTasklist) {
+    return eximeeBpmsStartableInTasklist(isStartableInTasklist);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsVersionTag(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaVersionTag(String versionTag) {
+    return eximeeBpmsVersionTag(versionTag);
   }
 }

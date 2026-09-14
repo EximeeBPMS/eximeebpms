@@ -67,7 +67,7 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
   protected static ChildElementCollection<UsingTaskReference> usingTaskCollection;
   protected static ChildElement<Expression> expressionChild;
 
-  // camunda extensions
+  // eximeebpms extensions
   protected static Attribute<String> camundaHistoryTimeToLiveAttribute;
   protected static Attribute<String> camundaVersionTag;
 
@@ -143,10 +143,15 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     expressionChild.setChild(this, expression);
   }
 
-  // camunda extensions
+  // eximeebpms extensions
+  /**
+   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  @SuppressWarnings("removal")
   @Override
-  public Integer getCamundaHistoryTimeToLive() {
-    String ttl = getCamundaHistoryTimeToLiveString();
+  public Integer getEximeeBpmsHistoryTimeToLive() {
+    String ttl = getEximeeBpmsHistoryTimeToLiveString();
 
     if (ttl != null) {
       return Integer.valueOf(ttl);
@@ -154,18 +159,23 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     return null;
   }
 
+  /**
+   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  @SuppressWarnings("removal")
   @Override
-  public void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
-    setCamundaHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
+  public void setEximeeBpmsHistoryTimeToLive(Integer historyTimeToLive) {
+    setEximeeBpmsHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
   }
 
   @Override
-  public String getCamundaHistoryTimeToLiveString() {
+  public String getEximeeBpmsHistoryTimeToLiveString() {
     return camundaHistoryTimeToLiveAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
+  public void setEximeeBpmsHistoryTimeToLiveString(String historyTimeToLive) {
     camundaHistoryTimeToLiveAttribute.setValue(this, historyTimeToLive);
   }
 
@@ -233,7 +243,7 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     expressionChild = sequenceBuilder.element(Expression.class)
       .build();
 
-    // camunda extensions
+    // eximeebpms extensions
 
     camundaHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
         .namespace(CAMUNDA_NS)

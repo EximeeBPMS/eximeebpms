@@ -37,31 +37,129 @@ public interface ServiceTask extends Task {
 
   /** camunda extensions */
 
-  String getCamundaClass();
+  String getEximeeBpmsClass();
 
-  void setCamundaClass(String camundaClass);
+  void setEximeeBpmsClass(String camundaClass);
 
-  String getCamundaDelegateExpression();
+  String getEximeeBpmsDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaExpression);
+  void setEximeeBpmsDelegateExpression(String camundaExpression);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaResultVariable();
+  String getEximeeBpmsResultVariable();
 
-  void setCamundaResultVariable(String camundaResultVariable);
+  void setEximeeBpmsResultVariable(String camundaResultVariable);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
 
-  String getCamundaTopic();
+  String getEximeeBpmsTopic();
 
-  void setCamundaTopic(String camundaTopic);
+  void setEximeeBpmsTopic(String camundaTopic);
   
-  String getCamundaTaskPriority();
+  String getEximeeBpmsTaskPriority();
   
-  void setCamundaTaskPriority(String taskPriority);
+  void setEximeeBpmsTaskPriority(String taskPriority);
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsClass()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaClass() {
+    return getEximeeBpmsClass();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaClass(String eximeeBpmsClass) {
+    setEximeeBpmsClass(eximeeBpmsClass);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsDelegateExpression()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaDelegateExpression() {
+    return getEximeeBpmsDelegateExpression();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsDelegateExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaDelegateExpression(String eximeeBpmsExpression) {
+    setEximeeBpmsDelegateExpression(eximeeBpmsExpression);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsResultVariable()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaResultVariable() {
+    return getEximeeBpmsResultVariable();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsResultVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaResultVariable(String eximeeBpmsResultVariable) {
+    setEximeeBpmsResultVariable(eximeeBpmsResultVariable);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsType()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaType() {
+    return getEximeeBpmsType();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsType(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaType(String eximeeBpmsType) {
+    setEximeeBpmsType(eximeeBpmsType);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsTopic()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaTopic() {
+    return getEximeeBpmsTopic();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsTopic(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaTopic(String eximeeBpmsTopic) {
+    setEximeeBpmsTopic(eximeeBpmsTopic);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsTaskPriority()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaTaskPriority() {
+    return getEximeeBpmsTaskPriority();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsTaskPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaTaskPriority(String taskPriority) {
+    setEximeeBpmsTaskPriority(taskPriority);
+  }
 }

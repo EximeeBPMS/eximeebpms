@@ -27,25 +27,25 @@ import java.util.Collection;
  */
 public interface EximeeBpmsFormField extends BpmnModelElementInstance {
 
-  String getCamundaId();
+  String getEximeeBpmsId();
 
-  void setCamundaId(String camundaId);
+  void setEximeeBpmsId(String camundaId);
 
-  String getCamundaLabel();
+  String getEximeeBpmsLabel();
 
-  void setCamundaLabel(String camundaLabel);
+  void setEximeeBpmsLabel(String camundaLabel);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
 
-  String getCamundaDatePattern();
+  String getEximeeBpmsDatePattern();
 
-  void setCamundaDatePattern(String camundaDatePattern);
+  void setEximeeBpmsDatePattern(String camundaDatePattern);
 
-  String getCamundaDefaultValue();
+  String getEximeeBpmsDefaultValue();
 
-  void setCamundaDefaultValue(String camundaDefaultValue);
+  void setEximeeBpmsDefaultValue(String camundaDefaultValue);
 
   EximeeBpmsProperties getEximeeBpmsProperties();
 
@@ -57,4 +57,85 @@ public interface EximeeBpmsFormField extends BpmnModelElementInstance {
 
   Collection<EximeeBpmsValue> getEximeeBpmsValues();
 
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsId()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaId() {
+    return getEximeeBpmsId();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsId(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaId(String eximeeBpmsId) {
+    setEximeeBpmsId(eximeeBpmsId);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsLabel()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaLabel() {
+    return getEximeeBpmsLabel();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsLabel(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaLabel(String eximeeBpmsLabel) {
+    setEximeeBpmsLabel(eximeeBpmsLabel);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsType()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaType() {
+    return getEximeeBpmsType();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsType(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaType(String eximeeBpmsType) {
+    setEximeeBpmsType(eximeeBpmsType);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsDatePattern()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaDatePattern() {
+    return getEximeeBpmsDatePattern();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsDatePattern(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaDatePattern(String eximeeBpmsDatePattern) {
+    setEximeeBpmsDatePattern(eximeeBpmsDatePattern);
+  }
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsDefaultValue()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default String getCamundaDefaultValue() {
+    return getEximeeBpmsDefaultValue();
+  }
+
+  /**
+   * @deprecated use {@link #setEximeeBpmsDefaultValue(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default void setCamundaDefaultValue(String eximeeBpmsDefaultValue) {
+    setEximeeBpmsDefaultValue(eximeeBpmsDefaultValue);
+  }
 }

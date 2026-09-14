@@ -82,8 +82,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(Class delegateClass) {
-    return camundaClass(delegateClass.getName());
+  public B eximeeBpmsClass(Class delegateClass) {
+    return eximeeBpmsClass(delegateClass.getName());
   }
 
   /**
@@ -92,8 +92,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B eximeeBpmsClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -103,8 +103,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B eximeeBpmsDelegateExpression(String camundaExpression) {
+    element.setEximeeBpmsDelegateExpression(camundaExpression);
     return myself;
   }
 
@@ -114,7 +114,7 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
+  public B eximeeBpmsExpression(String camundaExpression) {
     element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
@@ -125,8 +125,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
@@ -136,8 +136,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaTopic  the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B eximeeBpmsTopic(String camundaTopic) {
+    element.setEximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
@@ -147,8 +147,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B eximeeBpmsType(String camundaType) {
+    element.setEximeeBpmsType(camundaType);
     return myself;
   }
 
@@ -160,8 +160,74 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param taskPriority the task priority which should used for the external tasks
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
+  }
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #eximeeBpmsClass(Class)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaClass(Class delegateClass) {
+    return eximeeBpmsClass(delegateClass);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsClass(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaClass(String fullQualifiedClassName) {
+    return eximeeBpmsClass(fullQualifiedClassName);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsDelegateExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaDelegateExpression(String eximeeBpmsExpression) {
+    return eximeeBpmsDelegateExpression(eximeeBpmsExpression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsExpression(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaExpression(String eximeeBpmsExpression) {
+    return eximeeBpmsExpression(eximeeBpmsExpression);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsResultVariable(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaResultVariable(String eximeeBpmsResultVariable) {
+    return eximeeBpmsResultVariable(eximeeBpmsResultVariable);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTopic(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTopic(String eximeeBpmsTopic) {
+    return eximeeBpmsTopic(eximeeBpmsTopic);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsType(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaType(String eximeeBpmsType) {
+    return eximeeBpmsType(eximeeBpmsType);
+  }
+
+  /**
+   * @deprecated use {@link #eximeeBpmsTaskPriority(String)} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  public B camundaTaskPriority(String taskPriority) {
+    return eximeeBpmsTaskPriority(taskPriority);
   }
 }

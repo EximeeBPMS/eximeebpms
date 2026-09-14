@@ -27,6 +27,16 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsMap extends BpmnModelElementInstance {
 
-  Collection<EximeeBpmsEntry> getCamundaEntries();
+  Collection<EximeeBpmsEntry> getEximeeBpmsEntries();
   
+
+  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
+
+  /**
+   * @deprecated use {@link #getEximeeBpmsEntries()} instead.
+   */
+  @Deprecated(since = "1.4.0", forRemoval = true)
+  default Collection<EximeeBpmsEntry> getCamundaEntries() {
+    return getEximeeBpmsEntries();
+  }
 }

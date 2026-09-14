@@ -45,7 +45,7 @@
     <version.guava>33.7.1-jre</version.guava>
     <version.httpclient>4.5.14</version.httpclient>
     <version.lz4-java>1.11.2</version.lz4-java>
-    <version.opentelemetry>1.65.0</version.opentelemetry>
+    <version.opentelemetry>1.66.0</version.opentelemetry>
     <version.jetty-ee10>12.1.12</version.jetty-ee10>
     <version.jetty-wiremock>12.0.39</version.jetty-wiremock>
     <version.xml.jaxb-impl4>4.0.5</version.xml.jaxb-impl4>

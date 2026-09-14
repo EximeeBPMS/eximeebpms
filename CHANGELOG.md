@@ -92,6 +92,7 @@ retroactively added CVE IDs.
   - Netty: `4.1.135.Final` → `4.1.137.Final`
   - PostgreSQL JDBC: `42.7.11` → `42.7.12`
   - testcontainers: `1.16.0` → `2.0.5` (test scope; not previously listed)
+  - OpenTelemetry: `1.65.0` → `1.66.0` (test scope; pulled in by `selenium-remote-driver`'s tracing instrumentation in `qa/integration-tests-webapps`)
 
 ### Fixed
 - Fix Variable business event names

@@ -102,6 +102,7 @@ retroactively added CVE IDs.
   - PostgreSQL JDBC: `42.7.11` → `42.7.12`
   - testcontainers: `1.16.0` → `2.0.5` (test scope; not previously listed)
   - OpenTelemetry: `1.65.0` → `1.66.0` (test scope; pulled in by `selenium-remote-driver`'s tracing instrumentation in `qa/integration-tests-webapps`)
+  - SLF4J: `1.7.26` → **`2.0.19`** — a generation change on the logging facade, not a patch bump. SLF4J 2.0 discovers its binding through the `ServiceLoader` mechanism instead of 1.7's `StaticLoggerBinder`, so an application that supplies its own logging backend must supply one built for 2.0 (Logback 1.3+, log4j-slf4j2-impl, and so on). A 1.7-era binding is not an error at startup — SLF4J reports that no providers were found and every log call becomes a no-op, which is easy to miss. Affects the artifacts that expose `slf4j-api` at compile scope: `eximeebpms-commons-logging`, the Run distribution's core module, and the business-events Kafka engine plugin. A Spring Boot application is unaffected in practice, since Spring Boot 4's own dependency management already puts it on the 2.x line.
 
 ### Fixed
 - Fix Variable business event names

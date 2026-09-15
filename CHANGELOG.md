@@ -19,6 +19,10 @@ retroactively added CVE IDs.
 
 ## [Unreleased]
 
+---
+
+## [1.4.0] – 2026-09-15
+
 ### Breaking changes
 - **CMMN support is removed** from the engine, the migration tooling and the test suite: case definitions no longer deploy, and the `1.3-to-1.4` schema migration drops the CMMN history and definition tables. **Migration:** complete or terminate every active case instance before upgrading — the migration refuses to make any schema change while rows remain in `ACT_RU_CASE_EXECUTION` (see Fixed). Once that guard passes, CMMN history and deployed case definitions are dropped unconditionally, so export anything worth keeping first.
 - **The javax (legacy) namespace is dropped** — only Jakarta artifacts are built and published. **Migration:** recompile against the `jakarta.*` APIs and replace every `javax`-targeted artifact with its Jakarta counterpart; there is no javax-compatible build of this release.

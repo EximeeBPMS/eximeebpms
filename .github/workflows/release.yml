@@ -134,7 +134,10 @@ jobs:
           PYEOF_CUT
           if ! git diff --quiet -- CHANGELOG.md; then
             git add CHANGELOG.md
-            git commit -m "Cut CHANGELOG.md [Unreleased] into this release"
+            # [skip ci]: this commit touches CHANGELOG.md only. paths-ignore in the
+            # push-triggered workflows already covers it; this is the belt to that
+            # pair of braces, and survives someone relaxing paths-ignore later.
+            git commit -m "Cut CHANGELOG.md [Unreleased] into this release [skip ci]"
             git push origin HEAD:main
           else
             echo "CHANGELOG.md unchanged - skipping commit."
@@ -164,7 +167,13 @@ jobs:
       - name: Deploy base libs (stage locally, no network)
         run: |
           cd target/checkout
+          # -Ddistro.deploy.skip=true keeps the Tomcat and Run distributions out of the
+          # staged bundle; they ship as GitHub Release assets instead (BPMS-760). The property
+          # defaults to false, so snapshots-release.yml - which activates the same profiles -
+          # still publishes them to Central's snapshot repository, where eximeebpms-docker
+          # resolves SNAPSHOT builds from and where no upload bundle exists.
           ./mvnw deploy -Prelease,sonatype-oss-release -B --settings ~/.m2-release/settings.xml -Dmaven.repo.local="${MAVEN_REPO_LOCAL}" -DskipTests \
+            -Ddistro.deploy.skip=true \
             -DaltDeploymentRepository=local::file:$(pwd)/target/staging-deploy
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -186,10 +195,19 @@ jobs:
         uses: jreleaser/release-action@97b5e2f0e845de2fe1dbbdf451ac6a21233fafff
         with:
           version: '1.25.0' # pinned: 'latest' (default) resolves via jreleaser.org, unreachable from this runner
-          # Default JVM heap is too small to multipart-encode a several-hundred-MB bundle (feign
-          # copies it into a second in-memory buffer while form-encoding, needing ~2-3x the file
-          # size in heap) - fails with "OutOfMemoryError: Java heap space" without this.
-          java-opts: '-Xmx6144m'
+          # Heap has to clear two bars at once. Too small and this fails with
+          # "OutOfMemoryError: Java heap space": feign copies the bundle into a second
+          # in-memory buffer while form-encoding, needing ~2-3x the file size in heap.
+          # Too large and the *container* is killed instead: the runner pod's limits.memory
+          # is 6Gi (devops-k8s-apps on master, services/common/github-actions-runner-new),
+          # and that ceiling covers the heap plus metaspace, thread stacks, native buffers
+          # and the runner agent itself. -Xmx6144m matched the pod limit to the byte and was
+          # SIGKILLed twice on 2026-09-15 (exitCode 137, runs 34943032057 and 34957953619),
+          # which GitHub surfaces only as "the self-hosted runner lost communication with
+          # the server". 4 GiB leaves roughly 2 GiB of non-heap headroom under the limit.
+          # If this ever fails with OutOfMemoryError instead of exitCode 137, the bundle has
+          # outgrown the pod: raise the pod limit or split the upload, do not raise -Xmx.
+          java-opts: '-Xmx4g'
           working-directory: target/checkout
           arguments: deploy
         env:
@@ -206,6 +224,39 @@ jobs:
           VERSION="${{ github.event.inputs.release_version }}"
           cp target/checkout/target/bom.json "sbom-${VERSION}.cdx.json"
           cp target/checkout/target/bom.xml  "sbom-${VERSION}.cdx.xml"
+
+      - name: Collect distribution archives
+        # All three distributions ship as GitHub Release assets, not on Maven Central - the same
+        # place operaton publishes its own (BPMS-760). Central keeps the consumable libraries;
+        # a 230MB application-server install is not something anyone resolves as a <dependency>,
+        # and staging all of them made the JReleaser bundle 1057MB, which cannot be
+        # multipart-encoded inside the runner pod's 6Gi memory limit. Without them the bundle is
+        # 173MB, the size that released successfully in 1.3.0.
+        #
+        # Read from the workspace root, not target/checkout: "Release prepare" already builds
+        # every distribution here at the release version, including WildFly, which is not in the
+        # sonatype-oss-release reactor and therefore never appears under target/checkout.
+        #
+        # Fails loudly if an archive is missing: action-gh-release silently ignores a pattern
+        # that matches nothing, so a broken path would drop the distributions from the release
+        # without failing the run.
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.event.inputs.release_version }}"
+          for f in \
+            "distro/tomcat/distro/target/eximeebpms-bpm-tomcat-${VERSION}.tar.gz" \
+            "distro/tomcat/distro/target/eximeebpms-bpm-tomcat-${VERSION}.zip" \
+            "distro/run/distro/target/eximeebpms-bpm-run-${VERSION}.tar.gz" \
+            "distro/run/distro/target/eximeebpms-bpm-run-${VERSION}.zip" \
+            "distro/wildfly/distro/target/eximeebpms-bpm-wildfly-${VERSION}.tar.gz" \
+            "distro/wildfly/distro/target/eximeebpms-bpm-wildfly-${VERSION}.zip"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Expected distribution archive not found: $f"
+              exit 1
+            fi
+            cp "$f" .
+            echo "collected $(basename "$f") ($(du -h "$f" | cut -f1))"
+          done
 
       - name: GPG-sign SBOM
         run: |
@@ -250,6 +301,12 @@ jobs:
             sbom-*.cdx.xml
             sbom-*.cdx.xml.asc
             sbom-*.cdx.xml.sigstore.bundle
+            eximeebpms-bpm-tomcat-*.tar.gz
+            eximeebpms-bpm-tomcat-*.zip
+            eximeebpms-bpm-run-*.tar.gz
+            eximeebpms-bpm-run-*.zip
+            eximeebpms-bpm-wildfly-*.tar.gz
+            eximeebpms-bpm-wildfly-*.zip
           body: |
             Release generated on ${{ steps.release_commit.outputs.timestamp }}
             with commit message: ${{ steps.release_commit.outputs.message }}

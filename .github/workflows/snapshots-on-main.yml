@@ -4,9 +4,45 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - '**/*.md'
+      - 'docs/**'
+      - 'LICENSE*'
+      - 'NOTICE*'
 
 jobs:
+  check-snapshot-version:
+    runs-on: github-actions-runner-new
+    outputs:
+      is-snapshot: ${{ steps.probe.outputs.is-snapshot }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7.0.0
+      - name: Set up JDK
+        uses: actions/setup-java@v5.4.0
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Read the project version
+        id: probe
+        run: |
+          # Asked of Maven, not grepped out of pom.xml: the first <version> in
+          # the root pom belongs to the <parent> (eximeebpms-release-parent,
+          # which carries a plain release version), so a naive grep reports the
+          # parent and would skip every legitimate snapshot.
+          version="$(./mvnw -q -N -DforceStdout help:evaluate -Dexpression=project.version)"
+          echo "project version: ${version}"
+          if [[ "${version}" == *-SNAPSHOT ]]; then
+            echo "is-snapshot=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-snapshot=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Version ${version} is not a SNAPSHOT - skipping the snapshot release."
+          fi
+
   prepare-snapshot-release:
+    needs: check-snapshot-version
+    if: needs.check-snapshot-version.outputs.is-snapshot == 'true'
     runs-on: github-actions-runner-new
     steps:
       - name: Determine user and set secret
@@ -17,6 +53,8 @@ jobs:
 
 
   call-snapshot-release:
+    needs: check-snapshot-version
+    if: needs.check-snapshot-version.outputs.is-snapshot == 'true'
     permissions:
       contents: write
       packages: write

@@ -3,6 +3,12 @@ name: Dependency Submission
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - '**/*.md'
+      - 'docs/**'
+      - 'LICENSE*'
+      - 'NOTICE*'
   schedule:
     # Daily at 19:00 Europe/Warsaw, which is 18:00 UTC (CET) or 17:00 UTC
     # (CEST) depending on DST - fire at both times rather than hardcoding
@@ -26,6 +32,13 @@ permissions:
 jobs:
   submit:
     name: Submit Maven dependency graph
+    # Skip the two commits maven-release-plugin pushes during a release. Their
+    # tree is byte-identical to the commit that was just analysed; only pom
+    # versions differ, so re-running this on them scans the same code twice more.
+    # Scoped to push: a pull_request or the weekly schedule is never affected.
+    if: >-
+      github.event_name != 'push' ||
+      !startsWith(github.event.head_commit.message, '[maven-release-plugin]')
     runs-on: github-actions-runner-new
     steps:
       - name: Skip unless not a schedule trigger, or 19:00 Europe/Warsaw has passed

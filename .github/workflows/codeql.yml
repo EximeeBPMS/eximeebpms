@@ -3,6 +3,12 @@ name: CodeQL
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - '**/*.md'
+      - 'docs/**'
+      - 'LICENSE*'
+      - 'NOTICE*'
   pull_request:
     branches: [main]
   schedule:
@@ -18,6 +24,13 @@ jobs:
   # the self-hosted pool, and can afford to run on every pull_request too.
   analyze-buildless:
     name: Analyze (${{ matrix.language }})
+    # Skip the two commits maven-release-plugin pushes during a release. Their
+    # tree is byte-identical to the commit that was just analysed; only pom
+    # versions differ, so re-running this on them scans the same code twice more.
+    # Scoped to push: a pull_request or the weekly schedule is never affected.
+    if: >-
+      github.event_name != 'push' ||
+      !startsWith(github.event.head_commit.message, '[maven-release-plugin]')
     runs-on: ubuntu-slim
     permissions:
       security-events: write
@@ -54,6 +67,13 @@ jobs:
   # matrix here) is enough to skip it, unlike the buildless job above.
   analyze-java-kotlin:
     name: Analyze (java-kotlin)
+    # Skip the two commits maven-release-plugin pushes during a release. Their
+    # tree is byte-identical to the commit that was just analysed; only pom
+    # versions differ, so re-running this on them scans the same code twice more.
+    # Scoped to push: a pull_request or the weekly schedule is never affected.
+    if: >-
+      github.event_name != 'push' ||
+      !startsWith(github.event.head_commit.message, '[maven-release-plugin]')
     if: github.event_name != 'pull_request'
     runs-on: github-actions-runner-new
     permissions:

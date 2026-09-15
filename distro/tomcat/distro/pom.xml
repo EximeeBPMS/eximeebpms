@@ -82,4 +82,29 @@
     </plugins>
   </build>
 
+  <properties>
+    <distro.deploy.skip>false</distro.deploy.skip>
+  </properties>
+
+  <profiles>
+    <profile>
+      <!-- Not staged for Maven Central: eximeebpms-bpm-tomcat's two archives are ~456MB of the
+        JReleaser upload bundle, which the release runner cannot multipart-encode within its pod
+        memory limit (BPMS-760). The archives ship as GitHub Release assets instead, the same way
+        operaton does it. They are still published to Central, but as a separate step after the
+        release - see guidelines/common/release-checklist.md. Placed on this child rather than on
+        distro/tomcat/pom.xml on purpose: that aggregator carries activeByDefault profiles, and
+        activating a profile explicitly defined in a POM deactivates every other activeByDefault
+        profile in that SAME POM, which is what silently dropped this module out of 1.3.0. This
+        POM has none, so scoping it here is safe. -->
+      <id>sonatype-oss-release</id>
+      <properties>
+        <!-- Not a constant: snapshots still go to Central's snapshot repository, where there is
+          no bundle and no size problem, and where eximeebpms-docker resolves SNAPSHOT builds
+          from. Only the release path sets this, in release.yml's staging step. -->
+        <maven.deploy.skip>${distro.deploy.skip}</maven.deploy.skip>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

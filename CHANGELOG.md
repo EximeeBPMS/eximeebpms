@@ -19,6 +19,9 @@ retroactively added CVE IDs.
 
 ## [Unreleased]
 
+### Changed
+- The supported-versions window in `SECURITY.md` moved with the 1.4.0 release: 1.4.x receives security fixes, 1.3.x receives security fixes only, and 1.2.x and earlier are out of support.
+
 ---
 
 ## [1.4.0] – 2026-09-15

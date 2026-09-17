@@ -19,6 +19,7 @@ package org.eximeebpms.spin.impl.xml.dom;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.eximeebpms.spin.DataFormats;
 import org.eximeebpms.spin.impl.xml.dom.format.DomXmlDataFormat;
 import org.eximeebpms.spin.spi.DataFormatMapper;
 import org.eximeebpms.spin.xml.SpinXmlAttribute;
@@ -121,12 +122,12 @@ public class DomXmlAttribute extends SpinXmlAttribute {
 
   public <C> C mapTo(Class<C> javaClass) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(this, javaClass);
+    return mapper.mapInternalToJava(this, javaClass, DataFormats.lookupDeserializationTypeValidator());
   }
 
   public <C> C mapTo(String javaClass) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(this, javaClass);
+    return mapper.mapInternalToJava(this, javaClass, DataFormats.lookupDeserializationTypeValidator());
   }
 
 }

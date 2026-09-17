@@ -76,8 +76,11 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
   @Override
   public <T> T mapInternalToJava(Object parameter, String typeIdentifier, DeserializationTypeValidator validator) {
     try {
-      //sometimes the class identifier is at once a fully qualified class name
-      final Class<?> aClass = Class.forName(typeIdentifier, true, Thread.currentThread().getContextClassLoader());
+      //sometimes the class identifier is at once a fully qualified class name.
+      //Load without initializing (initialize=false): when a validator is present it
+      //runs in mapInternalToJava(..., JavaType, validator) before the class is ever
+      //deserialized, so a rejected class must not have its static initializer run here.
+      final Class<?> aClass = Class.forName(typeIdentifier, false, Thread.currentThread().getContextClassLoader());
       return (T) mapInternalToJava(parameter, aClass, validator);
     } catch (ClassNotFoundException e) {
       JavaType javaType = format.constructJavaTypeFromCanonicalString(typeIdentifier);

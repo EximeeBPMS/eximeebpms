@@ -19,6 +19,9 @@ retroactively added CVE IDs.
 
 ## [Unreleased]
 
+### Added
+- New opt-in process-engine setting `spinMapToTypeValidationEnabled` (default `false`) extends the deserialization type whitelist (`deserializationTypeValidationEnabled`, `deserializationAllowedClasses`, `deserializationAllowedPackages`) to Spin's `mapTo(Class)`/`mapTo(String)` on JSON and XML nodes. Until now the whitelist guarded only `ObjectValue` variable deserialization. It takes effect only together with `deserializationTypeValidationEnabled` and reuses the same allowed classes and packages. Independently of the flag, Spin's JSON `mapTo(String)` now loads the named class without initializing it, so a rejected class can no longer run its static initializer before validation.
+
 ### Changed
 - The supported-versions window in `SECURITY.md` moved with the 1.4.0 release: 1.4.x receives security fixes, 1.3.x receives security fixes only, and 1.2.x and earlier are out of support.
 

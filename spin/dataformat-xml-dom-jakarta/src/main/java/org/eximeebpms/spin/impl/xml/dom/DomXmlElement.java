@@ -31,6 +31,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import org.eximeebpms.spin.DataFormats;
 import org.eximeebpms.spin.SpinList;
 import org.eximeebpms.spin.impl.SpinListImpl;
 import org.eximeebpms.spin.impl.xml.dom.format.DomXmlDataFormat;
@@ -399,12 +400,12 @@ public class DomXmlElement extends SpinXmlElement {
 
   public <C> C mapTo(Class<C> javaClass) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(this.domElement, javaClass);
+    return mapper.mapInternalToJava(this.domElement, javaClass, DataFormats.lookupDeserializationTypeValidator());
   }
 
   public <C> C mapTo(String javaClass) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(this.domElement, javaClass);
+    return mapper.mapInternalToJava(this.domElement, javaClass, DataFormats.lookupDeserializationTypeValidator());
   }
 
 }

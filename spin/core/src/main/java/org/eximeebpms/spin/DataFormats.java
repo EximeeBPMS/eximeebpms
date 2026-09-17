@@ -30,6 +30,7 @@ import org.eximeebpms.spin.json.SpinJsonNode;
 import org.eximeebpms.spin.spi.DataFormat;
 import org.eximeebpms.spin.spi.DataFormatConfigurator;
 import org.eximeebpms.spin.spi.DataFormatProvider;
+import org.eximeebpms.spin.spi.DeserializationTypeValidatorProvider;
 import org.eximeebpms.spin.xml.SpinXmlElement;
 
 /**
@@ -48,6 +49,14 @@ public class DataFormats {
 
   /** The global instance of the manager */
   static DataFormats INSTANCE = new DataFormats();
+
+  /**
+   * Resolves the validator applied to {@code mapTo} object mapping. Defaults to a
+   * provider that returns {@code null} (no validation), so standalone Spin behaves
+   * unchanged; a process engine registers an engine-aware provider (see the Spin
+   * process engine plugin) when it wants {@code mapTo} calls validated.
+   */
+  private static DeserializationTypeValidatorProvider deserializationTypeValidatorProvider = () -> null;
 
   /**
    * Provides the global instance of the DataFormats manager.
@@ -231,6 +240,23 @@ public class DataFormats {
 
   public static void loadDataFormats(ClassLoader classloader, Map configurationProperties) {
     INSTANCE.registerDataFormats(classloader, Collections.EMPTY_LIST, configurationProperties);
+  }
+
+  /**
+   * Registers the provider that resolves the validator applied to {@code mapTo} object
+   * mapping. Passing {@code null} restores the default no-op provider.
+   */
+  public static void setDeserializationTypeValidatorProvider(DeserializationTypeValidatorProvider provider) {
+    deserializationTypeValidatorProvider = provider != null ? provider : (() -> null);
+  }
+
+  /**
+   * @return the validator to apply to the current {@code mapTo} call, or {@code null}
+   *         when no validation should be performed.
+   */
+  public static org.eximeebpms.spin.DeserializationTypeValidator lookupDeserializationTypeValidator() {
+    DeserializationTypeValidatorProvider provider = deserializationTypeValidatorProvider;
+    return provider != null ? provider.getValidator() : null;
   }
 
 }

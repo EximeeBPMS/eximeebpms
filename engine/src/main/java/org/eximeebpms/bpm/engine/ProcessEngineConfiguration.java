@@ -408,6 +408,15 @@ public abstract class ProcessEngineConfiguration {
   /** Indicates whether type validation should be done before deserialization */
   protected boolean deserializationTypeValidationEnabled = false;
 
+  /**
+   * Indicates whether the deserialization type validator is additionally applied to
+   * Spin's {@code mapTo(Class)}/{@code mapTo(String)} object mapping. When {@code false}
+   * (default), the validator only guards {@code ObjectValue} process-variable
+   * deserialization; {@code mapTo} calls remain unvalidated. Only takes effect when
+   * {@link #deserializationTypeValidationEnabled} is also {@code true}.
+   */
+  protected boolean spinMapToTypeValidationEnabled = false;
+
   /** An unique installation identifier */
   protected String installationId;
 
@@ -1041,6 +1050,15 @@ public abstract class ProcessEngineConfiguration {
 
   public ProcessEngineConfiguration setDeserializationTypeValidationEnabled(boolean deserializationTypeValidationEnabled) {
     this.deserializationTypeValidationEnabled = deserializationTypeValidationEnabled;
+    return this;
+  }
+
+  public boolean isSpinMapToTypeValidationEnabled() {
+    return spinMapToTypeValidationEnabled;
+  }
+
+  public ProcessEngineConfiguration setSpinMapToTypeValidationEnabled(boolean spinMapToTypeValidationEnabled) {
+    this.spinMapToTypeValidationEnabled = spinMapToTypeValidationEnabled;
     return this;
   }
 

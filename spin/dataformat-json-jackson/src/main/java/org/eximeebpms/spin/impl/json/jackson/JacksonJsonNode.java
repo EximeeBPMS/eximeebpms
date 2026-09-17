@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eximeebpms.spin.DataFormats;
 import org.eximeebpms.spin.SpinList;
 import org.eximeebpms.spin.impl.SpinListImpl;
 import org.eximeebpms.spin.impl.json.jackson.format.JacksonJsonDataFormat;
@@ -465,37 +466,43 @@ public class JacksonJsonNode extends SpinJsonNode {
 
   /**
    * Maps the json represented by this object to a java object of the given type.<br>
-   * Note: the desired target type is not validated and needs to be trusted.
+   * Note: the target type is validated against the engine deserialization whitelist only when
+   * both deserializationTypeValidationEnabled and spinMapToTypeValidationEnabled are set;
+   * otherwise it needs to be trusted.
    *
    * @throws SpinJsonException if the json representation cannot be mapped to the specified type
    */
   public <C> C mapTo(Class<C> type) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(jsonNode, type);
+    return mapper.mapInternalToJava(jsonNode, type, DataFormats.lookupDeserializationTypeValidator());
   }
 
   /**
    * Maps the json represented by this object to a java object of the given type.
    * Argument is to be supplied in Jackson's canonical type string format
    * (see {@link JavaType#toCanonical()}).<br>
-   * Note: the desired target type is not validated and needs to be trusted.
+   * Note: the target type is validated against the engine deserialization whitelist only when
+   * both deserializationTypeValidationEnabled and spinMapToTypeValidationEnabled are set;
+   * otherwise it needs to be trusted.
    *
    * @throws SpinJsonException if the json representation cannot be mapped to the specified type
    * @throws SpinJsonDataFormatException if the parameter does not match a valid type
    */
   public <C> C mapTo(String type) {
     DataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(jsonNode, type);
+    return mapper.mapInternalToJava(jsonNode, type, DataFormats.lookupDeserializationTypeValidator());
   }
 
   /**
    * Maps the json represented by this object to a java object of the given type.<br>
-   * Note: the desired target type is not validated and needs to be trusted.
+   * Note: the target type is validated against the engine deserialization whitelist only when
+   * both deserializationTypeValidationEnabled and spinMapToTypeValidationEnabled are set;
+   * otherwise it needs to be trusted.
    *
    * @throws SpinJsonException if the json representation cannot be mapped to the specified type
    */
   public <C> C mapTo(JavaType type) {
     JacksonJsonDataFormatMapper mapper = dataFormat.getMapper();
-    return mapper.mapInternalToJava(jsonNode, type);
+    return mapper.mapInternalToJava(jsonNode, type, DataFormats.lookupDeserializationTypeValidator());
   }
 }

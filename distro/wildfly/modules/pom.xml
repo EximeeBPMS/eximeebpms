@@ -20,6 +20,11 @@
     <!-- json-smart and accessors-smart are runtime dependencies of json-path -->
     <third-party-bom-scopes>compile|runtime</third-party-bom-scopes>
     <version.kafka.clients>3.9.1</version.kafka.clients>
+    <!-- pins the Netty modules WildFly bundles internally (io/netty/netty-*)
+      to a version patched against CVE-2026-89044 (HTTP request smuggling,
+      fixed 4.1.138.Final) - the WildFly distro this repo currently pins
+      (41.0.1.Final) ships the vulnerable 4.1.137.Final -->
+    <version.netty>4.1.138.Final</version.netty>
   </properties>
 
   <dependencies>
@@ -140,6 +145,95 @@
       <artifactId>h2</artifactId>
     </dependency>
 
+    <!-- Netty (overrides WildFly's own bundled modules, see version.netty above) -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+      <version>${version.netty}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-haproxy</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-memcache</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-mqtt</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-redis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-smtp</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-stomp</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-xml</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-handler-ssl-ocsp</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-resolver-dns-classes-macos</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-resolver-dns-native-macos</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-transport-rxtx</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-transport-sctp</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-transport-udt</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-transport-native-unix-common</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-unix-common</artifactId>
+      <version>${version.netty}</version>
+      <classifier>linux-x86_64</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-unix-common</artifactId>
+      <version>${version.netty}</version>
+      <classifier>linux-aarch_64</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-unix-common</artifactId>
+      <version>${version.netty}</version>
+      <classifier>osx-x86_64</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-unix-common</artifactId>
+      <version>${version.netty}</version>
+      <classifier>osx-aarch_64</classifier>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -256,6 +350,84 @@
                   </mapper>
                 </copy>
 
+                <!-- move netty-transport-classes-epoll to netty-transport-native-epoll,
+                  matching WildFly's own module layout -->
+                <copy todir="target/modules" flatten="false">
+                  <fileset dir="target/modules">
+                    <include name="io/netty/netty-transport-classes-epoll/main/*.jar"/>
+                  </fileset>
+                  <chainedmapper>
+                    <regexpmapper
+                      from="^io/netty/netty-transport-classes-epoll/main/(.*)$$"
+                      to="io/netty/netty-transport-native-epoll/main/\1"
+                      handledirsep="yes" />
+                  </chainedmapper>
+                </copy>
+                <delete dir="target/modules/io/netty/netty-transport-classes-epoll" />
+                <!-- unpack native .so files from the classifier-specific epoll jars -->
+                <unzip dest="target/modules/io/netty/netty-transport-native-epoll/main/lib">
+                  <fileset dir="target/modules/io/netty/netty-transport-native-epoll/main">
+                    <include name="netty-transport-native-epoll-${version.netty}-linux-aarch_64.jar"/>
+                    <include name="netty-transport-native-epoll-${version.netty}-linux-x86_64.jar"/>
+                  </fileset>
+                  <patternset>
+                    <include name="META-INF/native/**/*.so"/>
+                  </patternset>
+                </unzip>
+                <!-- remove every jar except the classes-epoll one referenced by module.xml -->
+                <delete>
+                  <fileset dir="target/modules/io/netty/netty-transport-native-epoll/main">
+                    <include name="*.jar"/>
+                    <exclude name="netty-transport-classes-epoll-${version.netty}.jar"/>
+                  </fileset>
+                </delete>
+
+                <!-- move netty-transport-classes-kqueue to netty-transport-native-kqueue,
+                  matching WildFly's own module layout -->
+                <copy todir="target/modules" flatten="false">
+                  <fileset dir="target/modules">
+                    <include name="io/netty/netty-transport-classes-kqueue/main/*.jar"/>
+                  </fileset>
+                  <chainedmapper>
+                    <regexpmapper
+                      from="^io/netty/netty-transport-classes-kqueue/main/(.*)$$"
+                      to="io/netty/netty-transport-native-kqueue/main/\1"
+                      handledirsep="yes" />
+                  </chainedmapper>
+                </copy>
+                <delete dir="target/modules/io/netty/netty-transport-classes-kqueue" />
+                <!-- unpack native .jnilib files from the classifier-specific kqueue jars -->
+                <unzip dest="target/modules/io/netty/netty-transport-native-kqueue/main/lib">
+                  <fileset dir="target/modules/io/netty/netty-transport-native-kqueue/main">
+                    <include name="netty-transport-native-kqueue-${version.netty}-osx-aarch_64.jar"/>
+                    <include name="netty-transport-native-kqueue-${version.netty}-osx-x86_64.jar"/>
+                  </fileset>
+                  <patternset>
+                    <include name="META-INF/native/**/*.jnilib"/>
+                  </patternset>
+                </unzip>
+                <!-- remove every jar except the classes-kqueue one referenced by module.xml -->
+                <delete>
+                  <fileset dir="target/modules/io/netty/netty-transport-native-kqueue/main">
+                    <include name="*.jar"/>
+                    <exclude name="netty-transport-classes-kqueue-${version.netty}.jar"/>
+                  </fileset>
+                </delete>
+
+                <!-- merge the 4 netty-transport-native-unix-common classifier jars into
+                  the single "main" module slot module.xml expects -->
+                <copy todir="target/modules/io/netty/netty-transport-native-unix-common/main" flatten="true">
+                  <fileset dir="target/modules/io/netty">
+                    <include name="netty-transport-native-unix-common-*/main/*.jar"/>
+                  </fileset>
+                </copy>
+                <delete includeemptydirs="true">
+                  <fileset dir="target/modules/io/netty" includes="netty-transport-native-unix-common-*/**"/>
+                </delete>
+
+                <!-- netty-all itself is an empty aggregator jar, not a real module -->
+                <delete dir="target/modules/io/netty/netty-all" />
+
                 <!-- copy groovy dependencies to single dir -->
                 <delete dir="target/modules/org/apache/groovy" />
                 <copy todir="target/modules" flatten="false">
@@ -356,6 +528,10 @@
                 </replace>
 
                 <replace dir="target/modules" token="@version.kafka.clients@" value="${version.kafka.clients}">
+                  <include name="**/module.xml" />
+                </replace>
+
+                <replace dir="target/modules" token="@version.netty@" value="${version.netty}">
                   <include name="**/module.xml" />
                 </replace>
               </target>

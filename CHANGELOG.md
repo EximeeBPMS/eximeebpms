@@ -22,6 +22,9 @@ retroactively added CVE IDs.
 ### Changed
 - The supported-versions window in `SECURITY.md` moved with the 1.4.0 release: 1.4.x receives security fixes, 1.3.x receives security fixes only, and 1.2.x and earlier are out of support.
 
+### Security
+- Fix CVE-2026-89044 (HTTP request smuggling via a malformed `Transfer-Encoding`, CVSS 6.5) in the Netty modules the WildFly distribution bundles. WildFly 41.0.1.Final ships Netty 4.1.137.Final; the distribution now excludes WildFly's own `io/netty/**` modules and ships its own override modules pinned to Netty 4.1.138.Final. The test-scope Netty pin in `engine-rest-jakarta` moves to 4.1.138.Final as well; it never reached a shipped artifact. See Security Notice EXBPMS-14.
+
 ---
 
 ## [1.4.0] – 2026-09-15

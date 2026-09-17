@@ -15,7 +15,8 @@
   <properties>
     <rest.http.port>38081</rest.http.port>
     <version.resteasy>6.2.3.Final</version.resteasy>
-    <version.netty>4.1.137.Final</version.netty>
+    <!-- CVE-2026-89044 (HTTP request smuggling), fixed 4.1.138.Final -->
+    <version.netty>4.1.138.Final</version.netty>
     <version.undertow-servlet>2.0.0.Final</version.undertow-servlet>
   </properties>
 

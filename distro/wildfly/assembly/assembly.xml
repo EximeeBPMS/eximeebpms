@@ -41,6 +41,9 @@
           <exclude>**/bin/standalone.conf.bat</exclude>
           <!-- exclude wildfly's shipped version of h2database -->
           <exclude>**/h2database/**</exclude>
+          <!-- exclude wildfly's shipped Netty modules: CVE-2026-89044, fixed by
+            distro/wildfly/modules' pinned override (see its pom.xml) -->
+          <exclude>**/modules/system/layers/base/io/netty/**</exclude>
         </excludes>
       </unpackOptions>
     </dependencySet>

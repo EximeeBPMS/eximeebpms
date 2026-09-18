@@ -148,22 +148,6 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
     calledElementAttribute.setValue(this, calledElement);
   }
 
-  /**
-   * @deprecated use isEximeeBpmsAsyncBefore() instead.
-   */
-  @Deprecated
-  public boolean isEximeeBpmsAsync() {
-    return camundaAsyncAttribute.getValue(this);
-  }
-
-  /**
-   * @deprecated use setEximeeBpmsAsyncBefore() instead.
-   */
-  @Deprecated
-  public void setEximeeBpmsAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
-  }
-
   public String getEximeeBpmsCalledElementBinding() {
     return camundaCalledElementBindingAttribute.getValue(this);
   }

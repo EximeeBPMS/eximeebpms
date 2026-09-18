@@ -184,12 +184,12 @@ public class IncidentTest extends PluggableProcessEngineTest {
     // given
     String key = "process";
     BpmnModelInstance model = Bpmn.createExecutableProcess(key)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theServiceTask")
-        .camundaClass(AlwaysFailingDelegate.class)
-        .camundaAsyncBefore()
-        .camundaFailedJobRetryTimeCycle("R0/PT30S")
+        .eximeeBpmsClass(AlwaysFailingDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsFailedJobRetryTimeCycle("R0/PT30S")
         .endEvent()
         .done();
 
@@ -591,11 +591,11 @@ public class IncidentTest extends PluggableProcessEngineTest {
   public void shouldShowFailedActivityIdPropertyForFailingAsyncTask() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -619,15 +619,15 @@ public class IncidentTest extends PluggableProcessEngineTest {
   public void shouldShowFailedActivityIdPropertyForAsyncTaskWithFailingFollowUp() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -650,7 +650,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
   @Test
   public void shouldSetBoundaryEventIncidentActivityId() {
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask("userTask")
         .endEvent()
@@ -787,12 +787,12 @@ public class IncidentTest extends PluggableProcessEngineTest {
   protected Incident createIncident() {
     String key = "process";
     BpmnModelInstance model = Bpmn.createExecutableProcess(key)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theServiceTask")
-        .camundaClass(AlwaysFailingDelegate.class)
-        .camundaAsyncBefore()
-        .camundaFailedJobRetryTimeCycle("R0/PT30S")
+        .eximeeBpmsClass(AlwaysFailingDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsFailedJobRetryTimeCycle("R0/PT30S")
         .endEvent()
         .done();
 

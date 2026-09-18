@@ -34,7 +34,6 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
     this.parent = parent;
   }
   
-
   /**
    * Sets the form field id.
    *
@@ -89,45 +88,4 @@ public class AbstractEximeeBpmsFormFieldBuilder<P, B extends AbstractEximeeBpmsF
     return (P) parent.builder();
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsId(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaId(String id) {
-    return eximeeBpmsId(id);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsLabel(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaLabel(String label) {
-    return eximeeBpmsLabel(label);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsType(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaType(String type) {
-    return eximeeBpmsType(type);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsDefaultValue(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaDefaultValue(String defaultValue) {
-    return eximeeBpmsDefaultValue(defaultValue);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsFormFieldDone()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public P camundaFormFieldDone() {
-    return eximeeBpmsFormFieldDone();
-  }
 }

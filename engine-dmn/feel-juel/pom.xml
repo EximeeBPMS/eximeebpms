@@ -82,11 +82,31 @@
       </activation>
       <build>
         <plugins>
+          <!-- clirr silently "succeeds" when comparisonVersion can't be
+            resolved (a [WARNING] in the log, not a check failure) - fail
+            loudly here instead, before clirr gets a chance to pass by
+            accident (BACKLOG-0096/BPMS-766). -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>verify-clirr-baseline-resolves</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>get</goal>
+                </goals>
+                <configuration>
+                  <artifact>${project.groupId}:${project.artifactId}:${eximeebpms.api.baseline}</artifact>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.api.baseline}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
                 <exclude>org/eximeebpms/bpm/dmn/feel/impl/**</exclude>

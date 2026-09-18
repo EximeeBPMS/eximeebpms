@@ -139,7 +139,7 @@ public class ProcessDataLoggingContextMultipleEnginesTest {
     return Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
           .serviceTask()
-            .camundaClass(LogEngineNameDelegate.class.getName())
+            .eximeeBpmsClass(LogEngineNameDelegate.class.getName())
         .endEvent("end")
         .done();
   }

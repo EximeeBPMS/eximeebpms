@@ -81,21 +81,4 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
     return myself;
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsResultVariable(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaResultVariable(String eximeeBpmsResultVariable) {
-    return eximeeBpmsResultVariable(eximeeBpmsResultVariable);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsResource(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaResource(String eximeeBpmsResource) {
-    return eximeeBpmsResource(eximeeBpmsResource);
-  }
 }

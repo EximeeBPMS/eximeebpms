@@ -80,15 +80,15 @@ public class MultiTenancySharedDeploymentStatisticsQueryTest {
   protected static final BpmnModelInstance failingProcess = Bpmn.createExecutableProcess(FAILED_JOBS_PROCESS_DEFINITION_KEY)
     .startEvent()
     .serviceTask()
-      .camundaClass("org.eximeebpms.bpm.engine.test.api.multitenancy.FailingDelegate")
-      .camundaAsyncBefore()
+      .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.api.multitenancy.FailingDelegate")
+      .eximeeBpmsAsyncBefore()
     .done();
 
   protected static final BpmnModelInstance anotherFailingProcess = Bpmn.createExecutableProcess(ANOTHER_FAILED_JOBS_PROCESS_DEFINITION_KEY)
     .startEvent()
     .serviceTask()
-      .camundaClass("org.eximeebpms.bpm.engine.test.api.multitenancy.FailingDelegate")
-      .camundaAsyncBefore()
+      .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.api.multitenancy.FailingDelegate")
+      .eximeeBpmsAsyncBefore()
     .done();
 
 

@@ -64,14 +64,14 @@ public class ServiceTaskBpmnModelExecutionContextTest extends PluggableProcessEn
 
     ServiceTask serviceTask = ModelExecutionContextServiceTask.serviceTask;
     assertNotNull(serviceTask);
-    assertEquals(ModelExecutionContextServiceTask.class.getName(), serviceTask.getCamundaClass());
+    assertEquals(ModelExecutionContextServiceTask.class.getName(), serviceTask.getEximeeBpmsClass());
   }
 
   private void deploy() {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
       .startEvent()
       .serviceTask()
-        .camundaClass(ModelExecutionContextServiceTask.class.getName())
+        .eximeeBpmsClass(ModelExecutionContextServiceTask.class.getName())
       .endEvent()
       .done();
 

@@ -94,29 +94,4 @@ public class AbstractConditionalEventDefinitionBuilder<B extends AbstractConditi
     return (T) ((Event) element.getParentElement()).builder();
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsVariableName(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaVariableName(String variableName) {
-    return eximeeBpmsVariableName(variableName);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsVariableEvents(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaVariableEvents(String variableEvents) {
-    return eximeeBpmsVariableEvents(variableEvents);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsVariableEvents(List<String>)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaVariableEvents(List<String> variableEvents) {
-    return eximeeBpmsVariableEvents(variableEvents);
-  }
 }

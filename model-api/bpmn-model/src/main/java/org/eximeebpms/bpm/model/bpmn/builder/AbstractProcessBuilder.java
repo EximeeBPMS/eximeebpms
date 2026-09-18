@@ -85,7 +85,7 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @return the builder object
    */
   public B eximeeBpmsHistoryTimeToLive(Integer historyTimeToLive) {
-    element.setEximeeBpmsHistoryTimeToLive(historyTimeToLive);
+    element.setEximeeBpmsHistoryTimeToLiveString(historyTimeToLive == null ? null : String.valueOf(historyTimeToLive));
     return myself;
   }
 
@@ -122,53 +122,4 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
     return myself;
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsJobPriority(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaJobPriority(String jobPriority) {
-    return eximeeBpmsJobPriority(jobPriority);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsTaskPriority(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaTaskPriority(String taskPriority) {
-    return eximeeBpmsTaskPriority(taskPriority);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsHistoryTimeToLive(Integer)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaHistoryTimeToLive(Integer historyTimeToLive) {
-    return eximeeBpmsHistoryTimeToLive(historyTimeToLive);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsHistoryTimeToLiveString(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaHistoryTimeToLiveString(String historyTimeToLive) {
-    return eximeeBpmsHistoryTimeToLiveString(historyTimeToLive);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsStartableInTasklist(Boolean)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaStartableInTasklist(Boolean isStartableInTasklist) {
-    return eximeeBpmsStartableInTasklist(isStartableInTasklist);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsVersionTag(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaVersionTag(String versionTag) {
-    return eximeeBpmsVersionTag(versionTag);
-  }
 }

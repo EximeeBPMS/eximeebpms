@@ -56,53 +56,9 @@ public interface Decision extends DrgElement {
 
   // eximeebpms extensions
 
-  /**
-   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  Integer getEximeeBpmsHistoryTimeToLive();
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  void setEximeeBpmsHistoryTimeToLive(Integer historyTimeToLive);
-
   String getEximeeBpmsHistoryTimeToLiveString();
 
   void setEximeeBpmsHistoryTimeToLiveString(String historyTimeToLive);
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default Integer getCamundaHistoryTimeToLive() {
-    return getEximeeBpmsHistoryTimeToLive();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
-    setEximeeBpmsHistoryTimeToLive(historyTimeToLive);
-  }
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaHistoryTimeToLiveString() {
-    return getEximeeBpmsHistoryTimeToLiveString();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsHistoryTimeToLiveString(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
-    setEximeeBpmsHistoryTimeToLiveString(historyTimeToLive);
-  }
 
 
   String getVersionTag();

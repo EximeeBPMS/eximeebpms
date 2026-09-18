@@ -49,8 +49,8 @@ public class MultiTenancyHistoricIncidentQueryTest {
   protected static final BpmnModelInstance BPMN = Bpmn.createExecutableProcess("failingProcess")
       .startEvent()
       .serviceTask()
-        .camundaAsyncBefore()
-        .camundaExpression("${failing}")
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExpression("${failing}")
       .endEvent()
       .done();
 

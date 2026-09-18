@@ -569,7 +569,7 @@ public class ProcessInstanceQueryOrTest {
         .getProcessDefinitionId();
 
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("process")
-        .startEvent().camundaAsyncBefore()
+        .startEvent().eximeeBpmsAsyncBefore()
           .userTask("aUserTask")
         .endEvent()
         .done();

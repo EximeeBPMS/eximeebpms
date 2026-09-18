@@ -66,8 +66,8 @@ public class JobExecutorExceptionLoggingHandlerTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("failingDelegate")
         .startEvent()
         .serviceTask()
-          .camundaClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
-          .camundaAsyncBefore()
+          .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
+          .eximeeBpmsAsyncBefore()
         .done();
     testRule.deploy(modelInstance);
 

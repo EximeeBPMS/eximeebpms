@@ -32,20 +32,4 @@ public interface InputClause extends DmnElement {
 
   void setEximeeBpmsInputVariable(String inputVariable);
 
-  /**
-   * @deprecated use {@link #getEximeeBpmsInputVariable()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaInputVariable() {
-    return getEximeeBpmsInputVariable();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsInputVariable(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaInputVariable(String inputVariable) {
-    setEximeeBpmsInputVariable(inputVariable);
-  }
-
 }

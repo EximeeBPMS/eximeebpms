@@ -829,25 +829,88 @@
     <!-- check for api differences between latest minor release -->
     <profile>
       <id>check-api-compatibility</id>
+      <!-- activeByDefault alone does not work in this file: Maven suppresses
+        every activeByDefault profile in a POM once any OTHER profile in
+        that same POM activates through a real condition, and
+        exclude-post-jdk15-tests below does exactly that on JDK 15+ (this
+        reactor's JDK 21/25 CI matrix always satisfies it) - confirmed
+        empirically via `mvn help:active-profiles`, which listed
+        exclude-post-jdk15-tests as active and this profile as not, despite
+        activeByDefault. An explicit, always-true activation condition does
+        not fall under that suppression rule.
+
+        This profile used to also carry a surefire <skipTests>true</skipTests>
+        override - harmless while the profile never activated, but once
+        activation was fixed above, a plain `mvn install` (CI's actual
+        invocation, no -P flags) activates this profile on every build and
+        that override would silently skip the entire engine test suite.
+        Removed rather than kept "for a targeted clirr-only run", since
+        there is no such targeted run anymore now that the profile is
+        unconditionally active. -->
+      <activation>
+        <jdk>[1,)</jdk>
+      </activation>
       <build>
         <plugins>
+          <!-- clirr silently "succeeds" when comparisonVersion can't be
+            resolved (a [WARNING] in the log, not a check failure) - fail
+            loudly here instead, before clirr gets a chance to pass by
+            accident (BACKLOG-0096/BPMS-766). -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>verify-clirr-baseline-resolves</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>get</goal>
+                </goals>
+                <configuration>
+                  <artifact>${project.groupId}:${project.artifactId}:${eximeebpms.api.baseline}</artifact>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${eximeebpms.version.old}</comparisonVersion>
+              <comparisonVersion>${eximeebpms.api.baseline}</comparisonVersion>
               <logResults>true</logResults>
+              <!-- comparisonVersion resolves to the published, shaded
+                uber-jar (maven-shade-plugin bundles engine's third-party
+                dependencies into it), while the "new" side is the plain
+                target/classes - shading only happens later, at package time.
+                Without this, every shaded-in third-party class (Groovy,
+                Gson, java-uuid-generator's com.fasterxml.uuid.*, ...) reads
+                as "removed" on every run, regardless of any real change.
+                Restricting to this module's own namespace is what the other
+                clirr-checked modules already do via their exclude lists;
+                engine's shaded dependency set is large and changes over
+                time, so an include scoped to org/eximeebpms/** is the
+                version of that fix that does not need updating whenever a
+                shaded dependency is added or removed
+                (BACKLOG-0096/BPMS-766). -->
+              <includes>
+                <include>org/eximeebpms/**</include>
+              </includes>
               <excludes>
                 <exclude>org/eximeebpms/bpm/*/impl/**</exclude>
                 <exclude>org/eximeebpms/bpm/engine/test/ProcessEngineRule</exclude>
                 <exclude>eximeebpms/**/*</exclude>
+                <!-- clirr 2.8's BCEL-based parser predated the Java 9 module
+                  system and threw "Invalid byte tag in constant pool: 19"
+                  (CONSTANT_Module) on any module-info.class it tried to
+                  read - the comparisonVersion jar bundles a multi-release
+                  module-info.class from a shaded third-party dependency
+                  (jspecify/gson/error_prone_annotations all ship one at
+                  META-INF/versions/9/). Fixed by bumping to 2.9
+                  (parent/pom.xml), which bundles a module-aware BCEL; these
+                  excludes are now redundant with the include above but kept
+                  as a second line of defense in case that scope ever widens. -->
+                <exclude>module-info</exclude>
+                <exclude>META-INF/versions/**</exclude>
               </excludes>
             </configuration>
             <executions>

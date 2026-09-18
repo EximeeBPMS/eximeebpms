@@ -109,9 +109,9 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
     .startEvent()
     .serviceTask()
-      .camundaClass(FAILING_CLASS)
-      .camundaAsyncBefore()
-      .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+      .eximeeBpmsClass(FAILING_CLASS)
+      .eximeeBpmsAsyncBefore()
+      .eximeeBpmsExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
     .endEvent()
     .done();
     testRule.deploy(bpmnModelInstance);
@@ -308,12 +308,12 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask("Task1")
-          .camundaClass(ServiceTaskDelegate.class.getName())
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(ServiceTaskDelegate.class.getName())
+          .eximeeBpmsAsyncBefore()
         .serviceTask("Task2")
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("PT3M, PT10M,PT8M")
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("PT3M, PT10M,PT8M")
         .endEvent()
         .done();
     testRule.deploy(bpmnModelInstance);
@@ -355,9 +355,9 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .eximeeBpmsClass("foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -431,26 +431,24 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
   }
 
   private BpmnModelInstance prepareProcessFailingServiceTask() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   private BpmnModelInstance prepareProcessFailingServiceTaskWithRetryCycle(String retryTimeCycle) {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle(retryTimeCycle)
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle(retryTimeCycle)
         .endEvent()
         .done();
-    return modelInstance;
   }
 
 }

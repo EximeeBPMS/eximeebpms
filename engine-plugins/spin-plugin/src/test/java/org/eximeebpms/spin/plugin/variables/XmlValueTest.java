@@ -228,7 +228,7 @@ public class XmlValueTest extends PluggableProcessEngineTestCase {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("aProcess")
         .startEvent()
         .serviceTask()
-          .camundaClass(XmlDelegate.class)
+          .eximeeBpmsClass(XmlDelegate.class)
         .userTask()
         .endEvent()
         .done();

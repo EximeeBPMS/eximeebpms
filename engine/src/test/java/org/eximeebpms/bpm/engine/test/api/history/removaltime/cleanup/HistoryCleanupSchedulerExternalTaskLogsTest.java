@@ -59,7 +59,7 @@ public class HistoryCleanupSchedulerExternalTaskLogsTest extends AbstractHistory
 
   protected final String PROCESS_KEY = "process";
   protected final BpmnModelInstance PROCESS = Bpmn.createExecutableProcess(PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
+    .eximeeBpmsHistoryTimeToLive(5)
     .startEvent()
       .userTask("userTask").name("userTask")
     .endEvent().done();
@@ -80,9 +80,9 @@ public class HistoryCleanupSchedulerExternalTaskLogsTest extends AbstractHistory
   public void shouldScheduleToNow() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().eximeeBpmsExternalTask("anExternalTaskTopic")
         .multiInstance()
           .cardinality("5")
         .multiInstanceDone()
@@ -120,9 +120,9 @@ public class HistoryCleanupSchedulerExternalTaskLogsTest extends AbstractHistory
   public void shouldScheduleToLater() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().eximeeBpmsExternalTask("anExternalTaskTopic")
         .multiInstance()
           .cardinality("5")
         .multiInstanceDone()

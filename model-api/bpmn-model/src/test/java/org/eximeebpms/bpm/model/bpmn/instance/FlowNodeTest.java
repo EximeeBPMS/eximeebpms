@@ -81,62 +81,62 @@ public class FlowNodeTest extends BpmnModelElementInstanceTest {
   @Test
     public void testCamundaAsyncBefore() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncBefore()).isFalse();
 
-    task.setCamundaAsyncBefore(true);
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    task.setEximeeBpmsAsyncBefore(true);
+    assertThat(task.isEximeeBpmsAsyncBefore()).isTrue();
   }
 
   @Test
   public void testCamundaAsyncAfter() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncAfter()).isFalse();
 
-    task.setCamundaAsyncAfter(true);
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
+    task.setEximeeBpmsAsyncAfter(true);
+    assertThat(task.isEximeeBpmsAsyncAfter()).isTrue();
   }
 
   @Test
   public void testCamundaAsyncAfterAndBefore() {
     Task task = modelInstance.newInstance(Task.class);
 
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncAfter()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncBefore()).isFalse();
 
-    task.setCamundaAsyncBefore(true);
+    task.setEximeeBpmsAsyncBefore(true);
 
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    assertThat(task.isEximeeBpmsAsyncAfter()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncBefore()).isTrue();
 
-    task.setCamundaAsyncAfter(true);
+    task.setEximeeBpmsAsyncAfter(true);
 
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    assertThat(task.isEximeeBpmsAsyncAfter()).isTrue();
+    assertThat(task.isEximeeBpmsAsyncBefore()).isTrue();
 
-    task.setCamundaAsyncBefore(false);
+    task.setEximeeBpmsAsyncBefore(false);
 
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isEximeeBpmsAsyncAfter()).isTrue();
+    assertThat(task.isEximeeBpmsAsyncBefore()).isFalse();
   }
 
   @Test
   public void testCamundaExclusive() {
     Task task = modelInstance.newInstance(Task.class);
 
-    assertThat(task.isCamundaExclusive()).isTrue();
+    assertThat(task.isEximeeBpmsExclusive()).isTrue();
 
-    task.setCamundaExclusive(false);
+    task.setEximeeBpmsExclusive(false);
 
-    assertThat(task.isCamundaExclusive()).isFalse();
+    assertThat(task.isEximeeBpmsExclusive()).isFalse();
   }
 
   @Test
   public void testCamundaJobPriority() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.getCamundaJobPriority()).isNull();
+    assertThat(task.getEximeeBpmsJobPriority()).isNull();
 
-    task.setCamundaJobPriority("15");
+    task.setEximeeBpmsJobPriority("15");
 
-    assertThat(task.getCamundaJobPriority()).isEqualTo("15");
+    assertThat(task.getEximeeBpmsJobPriority()).isEqualTo("15");
   }
 }

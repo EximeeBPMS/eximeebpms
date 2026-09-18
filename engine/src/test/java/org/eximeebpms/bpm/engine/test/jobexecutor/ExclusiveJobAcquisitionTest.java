@@ -94,8 +94,8 @@ public class ExclusiveJobAcquisitionTest {
     var subModel = Bpmn.createExecutableProcess("subProcess")
         .startEvent()
         .scriptTask("scriptTask")
-        .camundaAsyncBefore()
-        .camundaExclusive(true) // with an exclusive script task
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExclusive(true) // with an exclusive script task
         .scriptFormat("javascript")
         .scriptText("console.log(execution.getJobs())")
         .endEvent()
@@ -153,8 +153,8 @@ public class ExclusiveJobAcquisitionTest {
     var subModel = Bpmn.createExecutableProcess("subProcess")
         .startEvent()
         .scriptTask("scriptTask")
-        .camundaAsyncBefore()
-        .camundaExclusive(true) // with an exclusive script task
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExclusive(true) // with an exclusive script task
         .scriptFormat("javascript")
         .scriptText("console.log(execution.getJobs())")
         .endEvent()
@@ -204,8 +204,8 @@ public class ExclusiveJobAcquisitionTest {
     var subSubModel = Bpmn.createExecutableProcess("subSubProcess")
         .startEvent()
         .scriptTask("scriptTask")
-        .camundaAsyncBefore()
-        .camundaExclusive(true)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExclusive(true)
         .scriptFormat("javascript")
         .scriptText("console.log(execution.getJobs())")
         .endEvent()

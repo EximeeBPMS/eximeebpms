@@ -40,28 +40,27 @@ public class RetryCmdDeployment {
   }
 
   public static BpmnModelInstance prepareSignalEventProcess() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .eximeeBpmsAsyncBefore(true)
+            .eximeeBpmsFailedJobRetryTimeCycle(SCHEDULE)
             .signal(MESSAGE)
           .serviceTask()
-            .camundaClass(FailingDelegate.class.getName())
+            .eximeeBpmsClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   public static BpmnModelInstance prepareMessageEventProcess() {
     return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-              .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .eximeeBpmsAsyncBefore(true)
+              .eximeeBpmsFailedJobRetryTimeCycle(SCHEDULE)
               .message(MESSAGE)
             .serviceTask()
-              .camundaClass(FailingDelegate.class.getName())
+              .eximeeBpmsClass(FailingDelegate.class.getName())
         .done();
   }
 
@@ -69,11 +68,11 @@ public class RetryCmdDeployment {
     return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .eximeeBpmsAsyncBefore(true)
+            .eximeeBpmsFailedJobRetryTimeCycle(SCHEDULE)
             .escalation(MESSAGE)
           .serviceTask()
-            .camundaClass(FailingDelegate.class.getName())
+            .eximeeBpmsClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }
@@ -88,12 +87,12 @@ public class RetryCmdDeployment {
               .endEvent()
           .subProcessDone()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .eximeeBpmsAsyncBefore(true)
+            .eximeeBpmsFailedJobRetryTimeCycle(SCHEDULE)
             .compensateEventDefinition()
             .compensateEventDefinitionDone()
           .serviceTask()
-          .camundaClass(FailingDelegate.class.getName())
+          .eximeeBpmsClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }

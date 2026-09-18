@@ -18,6 +18,21 @@
             <artifactId>archunit-junit5</artifactId>
             <version>${version.archunit-junit5}</version>
         </dependency>
+        <!-- archunit-junit5 puts JUnit Platform on every consuming module's test
+             classpath, without junit-vintage-engine. Surefire's provider
+             auto-detection then selects JUnitPlatformProvider, which can discover
+             this module's own JUnit5-native ArchRulesTest but has no engine that
+             can run any JUnit4 @Test class - not reported as skipped, silently
+             invisible to it. Confirmed: every module depending on
+             eximeebpms-bpm-archunit (engine, engine-dmn/engine, engine-spring/core-6,
+             model-api/bpmn-model, model-api/dmn-model, commons/typed-values) was
+             running 0 of its own JUnit4 tests via a plain `mvn test`/`install`
+             (CI's actual invocation), only ArchRulesTest. -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${version.junit-jupiter}</version>
+        </dependency>
     </dependencies>
 
 </project>

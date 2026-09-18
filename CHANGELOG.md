@@ -19,11 +19,20 @@ retroactively added CVE IDs.
 
 ## [Unreleased]
 
+### Breaking changes
+- **The `camunda`-named BPMN and DMN Model API aliases deprecated in 1.4.0 are removed** (405 declarations in `model-api/bpmn-model` and `model-api/dmn-model`). Their `EximeeBpms`-named counterparts remain. The XML wire format is unchanged: namespace URI and attribute names stay as they were, only the Java identifiers are gone. **Migration:** replace each `camunda`-named call with its `EximeeBpms` equivalent, for example `isCamundaAsyncBefore()` → `isEximeeBpmsAsyncBefore()`. The deprecated Integer-typed `Decision.getCamundaHistoryTimeToLive()`/setter goes too; use `getEximeeBpmsHistoryTimeToLiveString()`/`setEximeeBpmsHistoryTimeToLiveString(String)`.
+- **Two long-deprecated BPMN Model API method families are removed:** `isEximeeBpmsAsync()`/`setEximeeBpmsAsync(boolean)` on `StartEvent`, `Task`, `CallActivity`, `ParallelGateway` and `SubProcess`, plus the fluent builder `eximeeBpmsAsync(boolean)` (deprecated upstream since 2014 in favour of `asyncBefore()`/`asyncAfter()`), and `Process.getEximeeBpmsHistoryTimeToLive()`/`setEximeeBpmsHistoryTimeToLive(Integer)` (deprecated since 2017 in favour of the `String` variant). `SignalEventDefinition`'s async pair, never deprecated, is unaffected. **Migration:** use `asyncBefore()`/`asyncAfter()` and the `String` history-time-to-live accessors.
+
 ### Added
 - New opt-in process-engine setting `spinMapToTypeValidationEnabled` (default `false`) extends the deserialization type whitelist (`deserializationTypeValidationEnabled`, `deserializationAllowedClasses`, `deserializationAllowedPackages`) to Spin's `mapTo(Class)`/`mapTo(String)` on JSON and XML nodes. Until now the whitelist guarded only `ObjectValue` variable deserialization. It takes effect only together with `deserializationTypeValidationEnabled` and reuses the same allowed classes and packages. Independently of the flag, Spin's JSON `mapTo(String)` now loads the named class without initializing it, so a rejected class can no longer run its static initializer before validation.
 
 ### Changed
 - The supported-versions window in `SECURITY.md` moved with the 1.4.0 release: 1.4.x receives security fixes, 1.3.x receives security fixes only, and 1.2.x and earlier are out of support.
+
+### Fixed
+- The API-compatibility check (clirr) on `engine`, `engine-dmn`, `commons/typed-values` and `model-api` was not actually running: its baseline pointed at a version nothing resolves, its profile was deactivated by a sibling profile, and the plugin's bundled BCEL failed on Java 9+ jars. It now compares against the released 1.4.0 artifacts and fails the build when the baseline cannot be resolved. Fixing it also removed a stale `skipTests` override that would have skipped the whole `engine` unit test suite.
+- Modules using `eximeebpms-bpm-archunit` (`engine`, `engine-dmn/engine`, `engine-spring/core-6`, `model-api/bpmn-model`, `model-api/dmn-model`, `commons/typed-values`) ran none of their own JUnit 4 tests on a plain `mvn install`, only `ArchRulesTest`, and still reported success. `junit-vintage-engine` is now on their test classpath. Also fixes a timing race in the concurrency test harness that the re-enabled tests exposed.
+- The database instance-migration suite never migrated a process instance through the `1.2-to-1.3` or `1.3-to-1.4` upgrade scripts. `test-fixture-120` is now pinned to its own schema state, and `test-fixture-130` and `test-fixture-140` cover the two newer steps.
 
 ### Security
 - Fix CVE-2026-89044 (HTTP request smuggling via a malformed `Transfer-Encoding`, CVSS 6.5) in the Netty modules the WildFly distribution bundles. WildFly 41.0.1.Final ships Netty 4.1.137.Final; the distribution now excludes WildFly's own `io/netty/**` modules and ships its own override modules pinned to Netty 4.1.138.Final. The test-scope Netty pin in `engine-rest-jakarta` moves to 4.1.138.Final as well; it never reached a shipped artifact. See Security Notice EXBPMS-14.

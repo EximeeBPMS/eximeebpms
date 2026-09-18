@@ -144,30 +144,7 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
   }
 
   // eximeebpms extensions
-  /**
-   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  @SuppressWarnings("removal")
-  @Override
-  public Integer getEximeeBpmsHistoryTimeToLive() {
-    String ttl = getEximeeBpmsHistoryTimeToLiveString();
 
-    if (ttl != null) {
-      return Integer.valueOf(ttl);
-    }
-    return null;
-  }
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsHistoryTimeToLiveString()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  @SuppressWarnings("removal")
-  @Override
-  public void setEximeeBpmsHistoryTimeToLive(Integer historyTimeToLive) {
-    setEximeeBpmsHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
-  }
 
   @Override
   public String getEximeeBpmsHistoryTimeToLiveString() {

@@ -68,22 +68,6 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
 
   /** camunda extensions */
 
-  /**
-   * @deprecated use isEximeeBpmsAsyncBefore() instead.
-   */
-  @Deprecated
-  public boolean isEximeeBpmsAsync() {
-    return camundaAsyncAttribute.getValue(this);
-  }
-
-  /**
-   * @deprecated use setEximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
-   */
-  @Deprecated
-  public void setEximeeBpmsAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
-  }
-
   public ParallelGatewayImpl(ModelTypeInstanceContext context) {
     super(context);
   }

@@ -82,8 +82,8 @@ public class HistoryExcludedProcessDefinitionKeysTest {
     return Bpmn.createExecutableProcess(processDefinitionKey)
         .startEvent()
         .serviceTask("failingTask")
-          .camundaAsyncBefore()
-          .camundaClass(FailingDelegate.class.getName())
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }
@@ -91,7 +91,7 @@ public class HistoryExcludedProcessDefinitionKeysTest {
   protected static BpmnModelInstance externalTaskProcess(String processDefinitionKey) {
     return Bpmn.createExecutableProcess(processDefinitionKey)
         .startEvent()
-        .serviceTask("externalTask").camundaExternalTask("topic")
+        .serviceTask("externalTask").eximeeBpmsExternalTask("topic")
         .endEvent()
         .done();
   }

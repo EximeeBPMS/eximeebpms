@@ -861,7 +861,7 @@ public class HistoricProcessInstanceQueryOrTest {
         .getProcessDefinitionId();
 
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("process")
-        .startEvent().camundaAsyncBefore()
+        .startEvent().eximeeBpmsAsyncBefore()
           .userTask("aUserTask")
         .endEvent()
         .done();
@@ -931,8 +931,8 @@ public class HistoricProcessInstanceQueryOrTest {
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess(processKey)
             .startEvent()
             .serviceTask()
-            .camundaClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
-            .camundaAsyncBefore()
+            .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
+            .eximeeBpmsAsyncBefore()
             .endEvent()
             .done();
 

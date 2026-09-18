@@ -33,7 +33,7 @@ public class ActivityInstanceCountMetricsTest extends AbstractMetricsTest {
   @Test
   public void testBpmnActivityInstances() {
     testRule.deploy(Bpmn.createExecutableProcess("testProcess")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .manualTask()
         .endEvent()

@@ -29,21 +29,4 @@ public interface EximeeBpmsOutputParameter extends BpmnModelElementInstance, Exi
 
   void setEximeeBpmsName(String camundaName);
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsName()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaName() {
-    return getEximeeBpmsName();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsName(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaName(String eximeeBpmsName) {
-    setEximeeBpmsName(eximeeBpmsName);
-  }
 }

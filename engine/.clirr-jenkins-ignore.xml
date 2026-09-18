@@ -12,23 +12,6 @@
     <method>*</method>
   </difference>
 
-  <!-- BPMS-326: intentional Camunda -> EximeeBpms rebranding, to remove after changing eximeebpms.version.old -->
-
-  <!-- 8001: class removed -->
-  <!-- Camunda* classes renamed to EximeeBpms* -->
-  <difference>
-    <differenceType>8001</differenceType>
-    <className>org/eximeebpms/bpm/engine/**/*Camunda*</className>
-  </difference>
-
-  <!-- 7002: removed method -->
-  <!-- *Camunda* methods renamed to *EximeeBpms* -->
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>**</className>
-    <method>*Camunda*</method>
-  </difference>
-
   <!-- 8001: class removed -->
   <!-- class removed from public API due to CAM-4307 -->
   <difference>

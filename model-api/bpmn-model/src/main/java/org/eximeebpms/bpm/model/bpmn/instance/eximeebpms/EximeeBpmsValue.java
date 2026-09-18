@@ -33,37 +33,4 @@ public interface EximeeBpmsValue extends BpmnModelElementInstance {
 
   void setEximeeBpmsName(String camundaName);
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsId()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaId() {
-    return getEximeeBpmsId();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsId(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaId(String eximeeBpmsId) {
-    setEximeeBpmsId(eximeeBpmsId);
-  }
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsName()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaName() {
-    return getEximeeBpmsName();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsName(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaName(String eximeeBpmsName) {
-    setEximeeBpmsName(eximeeBpmsName);
-  }
 }

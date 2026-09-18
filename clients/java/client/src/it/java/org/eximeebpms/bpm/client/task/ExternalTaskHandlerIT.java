@@ -76,7 +76,7 @@ public class ExternalTaskHandlerIT {
     Collection<ErrorEventDefinition> errorDefinitions = boundaryError.getChildElementsByType(ErrorEventDefinition.class);
 
     ErrorEventDefinition errorDefinition = errorDefinitions.iterator().next();
-    errorDefinition.setCamundaErrorMessageVariable("errorMessage");
+    errorDefinition.setEximeeBpmsErrorMessageVariable("errorMessage");
   }
 
   @Test

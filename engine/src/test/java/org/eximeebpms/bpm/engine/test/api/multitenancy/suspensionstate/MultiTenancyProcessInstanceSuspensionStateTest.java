@@ -50,8 +50,8 @@ public class MultiTenancyProcessInstanceSuspensionStateTest {
         .userTask()
       .moveToLastGateway()
         .sendTask()
-          .camundaType("external")
-          .camundaTopic("test")
+          .eximeeBpmsType("external")
+          .eximeeBpmsTopic("test")
         .boundaryEvent()
           .timerWithDuration("PT1M")
       .done();

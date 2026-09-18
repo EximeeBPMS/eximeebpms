@@ -87,8 +87,8 @@ public class MultiTenancyHistoricDataCmdsTenantCheckTest {
   protected static final BpmnModelInstance FAILING_BPMN_PROCESS = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
       .startEvent()
       .serviceTask()
-        .camundaExpression("${failing}")
-        .camundaAsyncBefore()
+        .eximeeBpmsExpression("${failing}")
+        .eximeeBpmsAsyncBefore()
       .endEvent()
       .done();
 

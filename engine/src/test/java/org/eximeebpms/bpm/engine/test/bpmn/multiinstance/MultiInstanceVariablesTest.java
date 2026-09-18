@@ -73,13 +73,13 @@ public class MultiInstanceVariablesTest {
 
   protected void addAllOut(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
     EximeeBpmsOut camundaOut = modelInstance.newInstance(EximeeBpmsOut.class);
-    camundaOut.setCamundaVariables(ALL);
+    camundaOut.setEximeeBpmsVariables(ALL);
     callActivityBuilder.addExtensionElement(camundaOut);
   }
 
   protected void addAllIn(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
     EximeeBpmsIn camundaIn = modelInstance.newInstance(EximeeBpmsIn.class);
-    camundaIn.setCamundaVariables(ALL);
+    camundaIn.setEximeeBpmsVariables(ALL);
     callActivityBuilder.addExtensionElement(camundaIn);
   }
 

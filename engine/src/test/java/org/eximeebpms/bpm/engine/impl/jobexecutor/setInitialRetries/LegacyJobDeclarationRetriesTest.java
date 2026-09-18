@@ -136,12 +136,12 @@ public class LegacyJobDeclarationRetriesTest {
 
   private static BpmnModelInstance getBpmnModelInstance(String processDefinitionName, String retryStrategy) {
     return Bpmn.createExecutableProcess(processDefinitionName)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask()
-        .camundaAsyncBefore()
-        .camundaFailedJobRetryTimeCycle(retryStrategy)
-        .camundaClass(FailingDelegate.class.getName())
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsFailedJobRetryTimeCycle(retryStrategy)
+        .eximeeBpmsClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }

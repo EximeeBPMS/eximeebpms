@@ -57,35 +57,4 @@ public class AbstractSubProcessBuilder<B extends AbstractSubProcessBuilder<B>> e
     return myself;
   }
 
-  /**
-   * @deprecated use eximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead.
-   *
-   * Sets the camunda async attribute.
-   *
-   * @param isCamundaAsync  the async state of the task
-   * @return the builder object
-   */
-  @Deprecated
-  public B eximeeBpmsAsync(boolean isCamundaAsync) {
-    element.setEximeeBpmsAsyncBefore(isCamundaAsync);
-    return myself;
-  }
-
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsync()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaAsync() {
-    return eximeeBpmsAsync();
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsync(boolean)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaAsync(boolean isEximeeBpmsAsync) {
-    return eximeeBpmsAsync(isEximeeBpmsAsync);
-  }
 }

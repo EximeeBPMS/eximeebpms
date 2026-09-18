@@ -103,9 +103,9 @@ public class JobEntityTest {
   public void shouldCheckCreateTimeOnMessage() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .endEvent()
         .done());
 
@@ -126,7 +126,7 @@ public class JobEntityTest {
   public void shouldCheckCreateTimeOnTimer() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .timerWithDuration("PT5S")
         .endEvent()
@@ -165,11 +165,11 @@ public class JobEntityTest {
   public void shouldShowFailedActivityIdPropertyForFailingAsyncTask() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -195,11 +195,11 @@ public class JobEntityTest {
     engineRule.getProcessEngineConfiguration().setLoggingContextActivityId(null);
 
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -223,15 +223,15 @@ public class JobEntityTest {
   public void shouldShowFailedActivityIdPropertyForAsyncTaskWithFailingFollowUp() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 

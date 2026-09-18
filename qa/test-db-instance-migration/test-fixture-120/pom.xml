@@ -72,6 +72,14 @@
                 <configuration>
                   <changeLogFile>eximeebpms-changelog.xml</changeLogFile>
                   <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
+                  <!-- BPMS-766: pin to the tag this fixture's name actually claims. There is
+                       no separate "1.2.0" tag in the changelog because 1.2.0's schema is
+                       identical to 7.24.0's (test-fixture-100's own toTag); without this pin,
+                       `update` ran unrestricted and silently tracked whatever the changelog's
+                       tip happened to be at build time, drifting past 1.2.0 once the 1.3.0 and
+                       1.4.0 tags were added and leaving the 1.2-to-1.3 and 1.3-to-1.4 upgrade
+                       paths (see test-fixture-130, test-fixture-140) completely untested. -->
+                  <toTag>7.24.0</toTag>
                 </configuration>
               </execution>
             </executions>

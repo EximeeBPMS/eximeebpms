@@ -133,8 +133,8 @@ public class VersionedDeploymentHandler implements DeploymentHandler {
     Process process = model.getDefinitions().getChildElementsByType(Process.class)
         .iterator().next();
 
-    return process.getCamundaVersionTag() != null ?
-        Integer.parseInt(process.getCamundaVersionTag()) :
+    return process.getEximeeBpmsVersionTag() != null ?
+        Integer.parseInt(process.getEximeeBpmsVersionTag()) :
         0;
   }
 

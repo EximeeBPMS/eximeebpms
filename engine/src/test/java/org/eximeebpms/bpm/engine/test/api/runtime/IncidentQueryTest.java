@@ -59,8 +59,8 @@ public class IncidentQueryTest {
   public static BpmnModelInstance FAILING_SERVICE_TASK_MODEL  = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
     .startEvent("start")
     .serviceTask("task")
-      .camundaAsyncBefore()
-      .camundaClass(FailingDelegate.class.getName())
+      .eximeeBpmsAsyncBefore()
+      .eximeeBpmsClass(FailingDelegate.class.getName())
     .endEvent("end")
     .done();
 

@@ -110,7 +110,7 @@ public class CommandContextInterceptorTest extends PluggableProcessEngineTest {
       Bpmn.createExecutableProcess("processThrowingThrowable")
         .startEvent()
           .serviceTask()
-          .camundaClass(ThrowErrorJavaDelegate.class)
+          .eximeeBpmsClass(ThrowErrorJavaDelegate.class)
         .endEvent().done();
 
    testRule.deploy(modelInstance);

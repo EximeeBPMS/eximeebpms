@@ -1171,7 +1171,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1211,7 +1211,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1251,7 +1251,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1299,7 +1299,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1484,18 +1484,18 @@ public class HistoricProcessInstanceTest {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
         .startEvent("start")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .subProcess("subProcess")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .embeddedSubProcess()
         .startEvent()
         .serviceTask("task")
-        .camundaAsyncBefore()
-        .camundaExpression("${true}")
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExpression("${true}")
         .endEvent()
         .subProcessDone()
         .endEvent("end")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .done());
 
     // when
@@ -1529,18 +1529,18 @@ public class HistoricProcessInstanceTest {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
         .startEvent("start")
-        .camundaAsyncAfter()
+        .eximeeBpmsAsyncAfter()
         .subProcess("subProcess")
-        .camundaAsyncAfter()
+        .eximeeBpmsAsyncAfter()
         .embeddedSubProcess()
         .startEvent()
         .serviceTask("task")
-        .camundaAsyncAfter()
-        .camundaExpression("${true}")
+        .eximeeBpmsAsyncAfter()
+        .eximeeBpmsExpression("${true}")
         .endEvent()
         .subProcessDone()
         .endEvent("end")
-        .camundaAsyncAfter()
+        .eximeeBpmsAsyncAfter()
         .done());
 
     // when
@@ -1869,12 +1869,12 @@ public class HistoricProcessInstanceTest {
     testHelper.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .eximeeBpmsClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .eximeeBpmsClass(FailingDelegate.class)
         .endEvent()
         .done());
 

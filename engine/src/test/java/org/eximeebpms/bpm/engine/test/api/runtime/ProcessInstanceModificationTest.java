@@ -80,7 +80,7 @@ public class ProcessInstanceModificationTest extends PluggableProcessEngineTest 
   protected static final BpmnModelInstance SIMPLE_TASK_PROCESS_WITH_DELETE_LISTENER = Bpmn.createExecutableProcess("process")
       .startEvent()
       .userTask("userTask")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, SingleVariableListener.class)
+        .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_DELETE, SingleVariableListener.class)
       .endEvent()
       .done();
 

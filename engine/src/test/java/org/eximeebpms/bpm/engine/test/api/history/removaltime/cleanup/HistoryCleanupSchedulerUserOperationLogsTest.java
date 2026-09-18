@@ -60,8 +60,8 @@ public class HistoryCleanupSchedulerUserOperationLogsTest extends AbstractHistor
 
   protected final String PROCESS_KEY = "process";
   protected final BpmnModelInstance PROCESS = Bpmn.createExecutableProcess(PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
-      .startEvent().camundaAsyncBefore()
+    .eximeeBpmsHistoryTimeToLive(5)
+      .startEvent().eximeeBpmsAsyncBefore()
     .endEvent().done();
 
   @Before

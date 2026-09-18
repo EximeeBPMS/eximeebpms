@@ -29,21 +29,4 @@ public interface EximeeBpmsEntry extends BpmnModelElementInstance, EximeeBpmsGen
 
   void setEximeeBpmsKey(String camundaKey);
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsKey()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaKey() {
-    return getEximeeBpmsKey();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsKey(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaKey(String eximeeBpmsKey) {
-    setEximeeBpmsKey(eximeeBpmsKey);
-  }
 }

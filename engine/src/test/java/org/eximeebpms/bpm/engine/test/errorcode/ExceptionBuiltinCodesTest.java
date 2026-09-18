@@ -151,7 +151,7 @@ public class ExceptionBuiltinCodesTest {
         .startEvent()
         .callActivity()
           .calledElement("called")
-          .camundaInBusinessKey("sub-process")
+          .eximeeBpmsInBusinessKey("sub-process")
         .endEvent()
         .done();
 

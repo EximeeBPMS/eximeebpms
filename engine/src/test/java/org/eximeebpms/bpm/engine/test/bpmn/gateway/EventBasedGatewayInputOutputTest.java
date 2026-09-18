@@ -40,13 +40,13 @@ public class EventBasedGatewayInputOutputTest extends PluggableProcessEngineTest
       .startEvent()
       .eventBasedGateway()
       .intermediateCatchEvent("conditionalEvent")
-        .camundaOutputParameter("eventOutput", "foo")
+        .eximeeBpmsOutputParameter("eventOutput", "foo")
         .conditionalEventDefinition()
         .condition("${moveOn}")
         .conditionalEventDefinitionDone()
       .serviceTask("inputParameterTask")
-        .camundaInputParameter("variable1", "testValue")
-        .camundaClass(VariableLogDelegate.class)
+        .eximeeBpmsInputParameter("variable1", "testValue")
+        .eximeeBpmsClass(VariableLogDelegate.class)
       .endEvent()
       .done();
 

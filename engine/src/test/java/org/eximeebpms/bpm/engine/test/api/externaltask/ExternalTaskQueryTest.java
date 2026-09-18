@@ -659,10 +659,10 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void shouldCheckPresenceOfVersionTag() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaVersionTag("1.2.3.4")
+        .eximeeBpmsVersionTag("1.2.3.4")
         .startEvent()
         .serviceTask()
-          .camundaExternalTask("my-topic")
+          .eximeeBpmsExternalTask("my-topic")
         .endEvent()
         .done();
 

@@ -1603,7 +1603,7 @@ public class MessageCorrelationTest {
         .startEvent()
           .intermediateCatchEvent("message_1")
             .message("1")
-            .camundaOutputParameter(outputVarName, "${testLocalVar}")
+            .eximeeBpmsOutputParameter(outputVarName, "${testLocalVar}")
           .userTask("UserTask_1")
         .endEvent()
         .done();
@@ -1657,7 +1657,7 @@ public class MessageCorrelationTest {
         .startEvent()
           .intermediateCatchEvent("message_1")
             .message("1")
-            .camundaOutputParameter(outputVarName, "${testLocalVar}")
+            .eximeeBpmsOutputParameter(outputVarName, "${testLocalVar}")
           .userTask("UserTask_1")
         .endEvent()
         .done();
@@ -1869,7 +1869,7 @@ public class MessageCorrelationTest {
         .intermediateCatchEvent("Message_1")
         .message("1")
         .serviceTask()
-        .camundaClass(ChangeVariableDelegate.class.getName())
+        .eximeeBpmsClass(ChangeVariableDelegate.class.getName())
         .userTask("UserTask_1")
         .endEvent()
         .done();
@@ -2531,7 +2531,7 @@ public class MessageCorrelationTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("Process_1")
         .startEvent()
         .intermediateCatchEvent("Message_1")
-          .camundaAsyncBefore(true)
+          .eximeeBpmsAsyncBefore(true)
             .message("1")
         .userTask("afterMessage")
         .endEvent()
@@ -2603,7 +2603,7 @@ public class MessageCorrelationTest {
   }
 
   protected BpmnModelInstance createModelWithEventSubprocess(boolean isInterrupting, boolean isAsync) {
-    BpmnModelInstance targetModel = modify(Bpmn.createExecutableProcess("Process_1")
+    return modify(Bpmn.createExecutableProcess("Process_1")
         .startEvent()
         .subProcess("Subprocess_1")
           .embeddedSubProcess()
@@ -2617,7 +2617,7 @@ public class MessageCorrelationTest {
         .triggerByEvent()
         .embeddedSubProcess()
           .startEvent("Message_1")
-          .camundaAsyncBefore(isAsync)
+          .eximeeBpmsAsyncBefore(isAsync)
           .interrupting(isInterrupting)
           .message("1")
           .exclusiveGateway("Gateway_1")
@@ -2629,7 +2629,6 @@ public class MessageCorrelationTest {
             .userTask("wrongOutcome")
             .endEvent("unhappyEnd")
             .done();
-    return targetModel;
   }
 
   protected BpmnModelInstance createModelWithBoundaryEvent(boolean isInterrupting, boolean isAsync) {
@@ -2637,7 +2636,7 @@ public class MessageCorrelationTest {
         .startEvent()
         .userTask("UserTask_1")
           .boundaryEvent("Message_1")
-          .camundaAsyncBefore(isAsync)
+          .eximeeBpmsAsyncBefore(isAsync)
           .cancelActivity(isInterrupting)
           .message("1")
             .exclusiveGateway("Gateway_1")

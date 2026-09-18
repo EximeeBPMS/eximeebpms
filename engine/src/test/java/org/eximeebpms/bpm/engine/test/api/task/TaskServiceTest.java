@@ -1373,7 +1373,7 @@ public class TaskServiceTest {
   {
     // given
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .subProcess()
       .embeddedSubProcess()
@@ -2952,7 +2952,7 @@ public class TaskServiceTest {
   public void testThrowBpmnErrorWithoutCatch() {
     // given
     BpmnModelInstance model =Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
         .userTask("skipped-error")
@@ -3100,7 +3100,7 @@ public class TaskServiceTest {
   public void testHandleEscalationWithoutEscalationCode() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .userTask(USER_TASK_THROW_ESCALATION).boundaryEvent("catch-escalation").escalation(ESCALATION_CODE)
       .userTask(USER_TASK_AFTER_CATCH).endEvent().moveToActivity(USER_TASK_THROW_ESCALATION)
@@ -3124,7 +3124,7 @@ public class TaskServiceTest {
   public void testThrowEscalationWithoutCatchEvent() {
     // given
     BpmnModelInstance model =Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ESCALATION)
         .userTask("skipped-error")
@@ -3147,7 +3147,7 @@ public class TaskServiceTest {
   public void testHandleEscalationInterruptEventWithVariables() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ESCALATION)
           .boundaryEvent("catch-escalation")
@@ -3292,7 +3292,7 @@ public class TaskServiceTest {
 
   protected BpmnModelInstance createUserTaskProcessWithCatchBoundaryEvent() {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
           .boundaryEvent("catch-error")
@@ -3314,7 +3314,7 @@ public class TaskServiceTest {
     ProcessBuilder processBuilder = Bpmn.createExecutableProcess(PROCESS_KEY);
 
     BpmnModelInstance model = processBuilder
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
         .userTask(USER_TASK_AFTER_THROW)

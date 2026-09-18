@@ -941,7 +941,7 @@ public abstract class MockProvider {
       .processInstanceId(EXAMPLE_PROCESS_INSTANCE_ID)
       .taskDefinitionKey(EXAMPLE_TASK_DEFINITION_KEY)
       .formKey(EXAMPLE_FORM_KEY)
-      .camundaFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
+      .eximeeBpmsFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
       .tenantId(EXAMPLE_TENANT_ID)
       .taskState(EXAMPLE_HISTORIC_TASK_STATE)
       .hasAttachment(EXAMPLE_TASK_ATTACHMENT_STATE)

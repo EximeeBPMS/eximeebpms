@@ -39,21 +39,4 @@ public interface Error extends RootElement {
 
   void setStructure(ItemDefinition structure);
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsErrorMessage()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaErrorMessage() {
-    return getEximeeBpmsErrorMessage();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsErrorMessage(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaErrorMessage(String eximeeBpmsErrorMessage) {
-    setEximeeBpmsErrorMessage(eximeeBpmsErrorMessage);
-  }
 }

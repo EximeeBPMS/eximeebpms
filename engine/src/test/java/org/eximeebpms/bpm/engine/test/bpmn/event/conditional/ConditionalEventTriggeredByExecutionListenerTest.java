@@ -176,7 +176,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_BEFORE_CONDITION)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
+        .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
       .endEvent(END_EVENT_ID)
       .done();
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
@@ -206,7 +206,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
       .userTask(TASK_WITH_CONDITION_ID)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
+        .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
@@ -240,7 +240,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
@@ -275,7 +275,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
@@ -309,11 +309,11 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .sequenceFlowId(FLOW_ID)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
@@ -345,11 +345,11 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .sequenceFlowId(FLOW_ID)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
@@ -391,7 +391,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .startEvent(START_EVENT_ID)
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
+        .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
@@ -420,7 +420,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .startEvent(START_EVENT_ID)
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
+        .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
@@ -459,7 +459,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
@@ -499,7 +499,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .endEvent(END_EVENT_ID)
       .done();
     EximeeBpmsExecutionListener listener = modelInstance.newInstance(EximeeBpmsExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setEximeeBpmsEvent(ExecutionListener.EVENTNAME_TAKE);
     listener.setEximeeBpmsExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
@@ -533,7 +533,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
           .name(TASK_BEFORE_CONDITION)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
+          .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
         .endEvent()
       .subProcessDone()
       .endEvent(END_EVENT_ID)
@@ -569,7 +569,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
           .name(TASK_BEFORE_CONDITION)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
+          .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
         .endEvent()
       .subProcessDone()
       .endEvent(END_EVENT_ID)
@@ -603,7 +603,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .startEvent()
         .userTask(TASK_BEFORE_CONDITION_ID)
           .name(TASK_BEFORE_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
+          .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
         .endEvent()
@@ -639,7 +639,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .startEvent()
         .userTask(TASK_BEFORE_CONDITION_ID)
           .name(TASK_BEFORE_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
+          .eximeeBpmsExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
         .endEvent()

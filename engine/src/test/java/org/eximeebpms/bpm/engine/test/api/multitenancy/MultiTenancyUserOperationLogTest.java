@@ -91,7 +91,7 @@ public class MultiTenancyUserOperationLogTest {
   protected static final BpmnModelInstance MODEL = Bpmn.createExecutableProcess(PROCESS_NAME)
       .startEvent().userTask(TASK_ID).done();
   protected static final BpmnModelInstance MODEL_JOB = Bpmn.createExecutableProcess(PROCESS_NAME)
-      .startEvent().userTask(TASK_ID).camundaAsyncBefore().done();
+      .startEvent().userTask(TASK_ID).eximeeBpmsAsyncBefore().done();
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);

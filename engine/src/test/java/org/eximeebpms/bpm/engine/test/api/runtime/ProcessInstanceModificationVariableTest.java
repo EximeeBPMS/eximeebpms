@@ -54,7 +54,7 @@ public class ProcessInstanceModificationVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .userTask("userTask")
-        .camundaTaskListenerClass("create", "org.eximeebpms.bpm.engine.test.api.runtime.util.CreateLocalVariableEventListener")
+        .eximeeBpmsTaskListenerClass("create", "org.eximeebpms.bpm.engine.test.api.runtime.util.CreateLocalVariableEventListener")
       .endEvent()
       .done();
 

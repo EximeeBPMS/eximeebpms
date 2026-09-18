@@ -133,37 +133,4 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
     return (T) ((Activity) element.getParentElement()).builder();
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsCollection(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaCollection(String expression) {
-    return eximeeBpmsCollection(expression);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsElementVariable(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaElementVariable(String variableName) {
-    return eximeeBpmsElementVariable(variableName);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsyncBefore()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaAsyncBefore() {
-    return eximeeBpmsAsyncBefore();
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsyncAfter()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaAsyncAfter() {
-    return eximeeBpmsAsyncAfter();
-  }
 }

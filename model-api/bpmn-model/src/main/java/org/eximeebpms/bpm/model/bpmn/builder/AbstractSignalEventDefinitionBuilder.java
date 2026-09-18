@@ -117,45 +117,4 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
     return eximeeBpmsInAllVariables(variables, false);
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInSourceTarget(String, String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInSourceTarget(String source, String target) {
-    return eximeeBpmsInSourceTarget(source, target);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInSourceExpressionTarget(String, String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInSourceExpressionTarget(String sourceExpression, String target) {
-    return eximeeBpmsInSourceExpressionTarget(sourceExpression, target);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInBusinessKey(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInBusinessKey(String businessKey) {
-    return eximeeBpmsInBusinessKey(businessKey);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInAllVariables(String, boolean)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInAllVariables(String variables, boolean local) {
-    return eximeeBpmsInAllVariables(variables, local);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInAllVariables(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInAllVariables(String variables) {
-    return eximeeBpmsInAllVariables(variables);
-  }
 }

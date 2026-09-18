@@ -27,35 +27,6 @@ public interface Task extends Activity {
 
   /** camunda extensions */
 
-  /**
-   * @deprecated use isEximeeBpmsAsyncBefore() instead.
-   */
-  @Deprecated
-  boolean isEximeeBpmsAsync();
-
-  /**
-   * @deprecated use setEximeeBpmsAsyncBefore(isCamundaAsyncBefore) instead;
-   */
-  @Deprecated
-  void setEximeeBpmsAsync(boolean isCamundaAsync);
-
   BpmnShape getDiagramElement();
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #isEximeeBpmsAsync()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default boolean isCamundaAsync() {
-    return isEximeeBpmsAsync();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsAsync(boolean)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaAsync(boolean isEximeeBpmsAsync) {
-    setEximeeBpmsAsync(isEximeeBpmsAsync);
-  }
 }

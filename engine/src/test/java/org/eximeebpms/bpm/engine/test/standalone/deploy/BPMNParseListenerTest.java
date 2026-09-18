@@ -135,7 +135,7 @@ public class BPMNParseListenerTest {
 
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
       .startEvent()
-        .userTask("task").camundaFormKey(originalFormKey)
+        .userTask("task").eximeeBpmsFormKey(originalFormKey)
       .endEvent()
       .done();
 
@@ -181,8 +181,8 @@ public class BPMNParseListenerTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
           .userTask("task")
-            .camundaFormRef(originalFormRef)
-            .camundaFormRefBinding(originalFormRefBinding)
+            .eximeeBpmsFormRef(originalFormRef)
+            .eximeeBpmsFormRefBinding(originalFormRefBinding)
           .endEvent()
         .done();
 

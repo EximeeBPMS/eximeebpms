@@ -94,29 +94,4 @@ public abstract class AbstractMessageEventDefinitionBuilder<B extends AbstractMe
     return (T) ((Event) element.getParentElement()).builder();
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsTopic(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaTopic(String eximeeBpmsTopic) {
-    return eximeeBpmsTopic(eximeeBpmsTopic);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsType(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaType(String eximeeBpmsType) {
-    return eximeeBpmsType(eximeeBpmsType);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsTaskPriority(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaTaskPriority(String taskPriority) {
-    return eximeeBpmsTaskPriority(taskPriority);
-  }
 }

@@ -35,37 +35,4 @@ public interface ErrorEventDefinition extends EventDefinition {
   
   String getEximeeBpmsErrorMessageVariable();
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsErrorCodeVariable(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaErrorCodeVariable(String eximeeBpmsErrorCodeVariable) {
-    setEximeeBpmsErrorCodeVariable(eximeeBpmsErrorCodeVariable);
-  }
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsErrorCodeVariable()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaErrorCodeVariable() {
-    return getEximeeBpmsErrorCodeVariable();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsErrorMessageVariable(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaErrorMessageVariable(String eximeeBpmsErrorCauseVariable) {
-    setEximeeBpmsErrorMessageVariable(eximeeBpmsErrorCauseVariable);
-  }
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsErrorMessageVariable()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaErrorMessageVariable() {
-    return getEximeeBpmsErrorMessageVariable();
-  }
 }

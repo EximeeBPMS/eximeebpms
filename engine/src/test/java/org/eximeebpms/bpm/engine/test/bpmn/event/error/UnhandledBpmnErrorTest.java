@@ -61,7 +61,7 @@ public class UnhandledBpmnErrorTest {
     // given
     BpmnModelInstance instance = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(ThrowBpmnErrorDelegate.class)
+        .serviceTask().eximeeBpmsClass(ThrowBpmnErrorDelegate.class)
         .endEvent().done();
     testRule.deploy(instance);
 

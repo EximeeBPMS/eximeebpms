@@ -51,7 +51,7 @@ public class MigrationSignallableServiceTaskTest {
     BpmnModelInstance model = ProcessModels.newModel()
       .startEvent()
       .serviceTask("serviceTask")
-      .camundaClass(SignallableServiceTaskDelegate.class.getName())
+      .eximeeBpmsClass(SignallableServiceTaskDelegate.class.getName())
       .endEvent()
       .done();
 
@@ -83,8 +83,8 @@ public class MigrationSignallableServiceTaskTest {
     BpmnModelInstance model = ProcessModels.newModel()
       .startEvent()
       .serviceTask("serviceTask")
-      .camundaAsyncBefore()
-      .camundaClass(SignallableServiceTaskDelegate.class.getName())
+      .eximeeBpmsAsyncBefore()
+      .eximeeBpmsClass(SignallableServiceTaskDelegate.class.getName())
       .endEvent()
       .done();
 

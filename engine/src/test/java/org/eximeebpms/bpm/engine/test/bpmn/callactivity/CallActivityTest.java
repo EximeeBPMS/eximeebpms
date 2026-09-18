@@ -470,39 +470,39 @@ public class CallActivityTest extends PluggableProcessEngineTest {
 
     // create camunda:in with source but without target
     EximeeBpmsIn camundaIn = modelInstance.newInstance(EximeeBpmsIn.class);
-    camundaIn.setCamundaSource("superVariable");
+    camundaIn.setEximeeBpmsSource("superVariable");
     callActivityBuilder.addExtensionElement(camundaIn);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaIn.setCamundaTarget("subVariable");
+    camundaIn.setEximeeBpmsTarget("subVariable");
 
     // create camunda:in with sourceExpression but without target
     camundaIn = modelInstance.newInstance(EximeeBpmsIn.class);
-    camundaIn.setCamundaSourceExpression("${x+5}");
+    camundaIn.setEximeeBpmsSourceExpression("${x+5}");
     callActivityBuilder.addExtensionElement(camundaIn);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaIn.setCamundaTarget("subVariable2");
+    camundaIn.setEximeeBpmsTarget("subVariable2");
 
     // create camunda:out with source but without target
     EximeeBpmsOut camundaOut = modelInstance.newInstance(EximeeBpmsOut.class);
-    camundaOut.setCamundaSource("subVariable");
+    camundaOut.setEximeeBpmsSource("subVariable");
     callActivityBuilder.addExtensionElement(camundaOut);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaOut.setCamundaTarget("superVariable");
+    camundaOut.setEximeeBpmsTarget("superVariable");
 
     // create camunda:out with sourceExpression but without target
     camundaOut = modelInstance.newInstance(EximeeBpmsOut.class);
-    camundaOut.setCamundaSourceExpression("${y+1}");
+    camundaOut.setEximeeBpmsSourceExpression("${y+1}");
     callActivityBuilder.addExtensionElement(camundaOut);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaOut.setCamundaTarget("superVariable2");
+    camundaOut.setEximeeBpmsTarget("superVariable2");
 
     try {
       String deploymentId = repositoryService.createDeployment().addModelInstance("process.bpmn", modelInstance).deploy().getId();
@@ -1577,7 +1577,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity("callActivity")
         .calledElement("subProcess")
-        .camundaCalledElementBinding("versionTag")
+        .eximeeBpmsCalledElementBinding("versionTag")
         .endEvent()
         .done();
 
@@ -1843,7 +1843,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("simpleSubProcess")
       .startEvent()
       .serviceTask()
-      .camundaClass(AssertTransientVariableDelegate.class)
+      .eximeeBpmsClass(AssertTransientVariableDelegate.class)
       .userTask()
       .endEvent()
       .done();
@@ -1872,9 +1872,9 @@ public class CallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
       .calledElement("oneTaskProcess")
-      .camundaOut("var", "var")
+      .eximeeBpmsOut("var", "var")
       .serviceTask()
-      .camundaClass(AssertTransientVariableDelegate.class)
+      .eximeeBpmsClass(AssertTransientVariableDelegate.class)
       .userTask()
       .endEvent()
       .done();
@@ -1916,8 +1916,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity("callActivity")
         .calledElement("subProcess")
-        .camundaCalledElementBinding("versionTag")
-        .camundaCalledElementVersionTag(versionTag)
+        .eximeeBpmsCalledElementBinding("versionTag")
+        .eximeeBpmsCalledElementVersionTag(versionTag)
         .endEvent()
         .done();
   }

@@ -702,7 +702,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
+      .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
       .done()
     );
 
@@ -740,7 +740,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
+      .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
       .done()
     );
 
@@ -770,7 +770,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaInputParameter("foo", "bar")
+      .eximeeBpmsInputParameter("foo", "bar")
       .done()
     );
 
@@ -805,7 +805,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaInputParameter("foo", "bar")
+      .eximeeBpmsInputParameter("foo", "bar")
       .done()
     );
 

@@ -63,8 +63,8 @@ public class MigrationIncidentTest {
   public static final BpmnModelInstance FAIL_CALLED_PROC  = Bpmn.createExecutableProcess(FAIL_CALLED_PROC_KEY)
     .startEvent("start")
     .serviceTask("task")
-      .camundaAsyncBefore()
-      .camundaClass(FailingDelegate.class.getName())
+      .eximeeBpmsAsyncBefore()
+      .eximeeBpmsClass(FailingDelegate.class.getName())
     .endEvent("end")
     .done();
 
@@ -82,8 +82,8 @@ public class MigrationIncidentTest {
   public static final BpmnModelInstance NEW_CALLED_PROC = Bpmn.createExecutableProcess(NEW_CALLED_PROC_KEY)
     .startEvent("start")
     .serviceTask("taskV2")
-      .camundaAsyncBefore()
-      .camundaClass(NewDelegate.class.getName())
+      .eximeeBpmsAsyncBefore()
+      .eximeeBpmsClass(NewDelegate.class.getName())
     .endEvent("end")
     .done();
 

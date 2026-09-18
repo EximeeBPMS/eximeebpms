@@ -311,21 +311,6 @@ public class ProcessImpl extends CallableElementImpl implements Process {
   }
 
   @Override
-  public Integer getEximeeBpmsHistoryTimeToLive() {
-    String ttl = getEximeeBpmsHistoryTimeToLiveString();
-    if (ttl != null) {
-      return Integer.parseInt(ttl);
-    }
-    return null;
-  }
-
-  @Override
-  public void setEximeeBpmsHistoryTimeToLive(Integer historyTimeToLive) {
-    var value = historyTimeToLive == null ? null : String.valueOf(historyTimeToLive);
-    setEximeeBpmsHistoryTimeToLiveString(value);
-  }
-
-  @Override
   public String getEximeeBpmsHistoryTimeToLiveString() {
     return camundaHistoryTimeToLiveAttribute.getValue(this);
   }

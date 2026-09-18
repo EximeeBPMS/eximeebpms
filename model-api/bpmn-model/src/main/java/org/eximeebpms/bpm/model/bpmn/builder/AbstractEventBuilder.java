@@ -67,21 +67,4 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
     return myself;
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsInputParameter(String, String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaInputParameter(String name, String value) {
-    return eximeeBpmsInputParameter(name, value);
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsOutputParameter(String, String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  public B camundaOutputParameter(String name, String value) {
-    return eximeeBpmsOutputParameter(name, value);
-  }
 }

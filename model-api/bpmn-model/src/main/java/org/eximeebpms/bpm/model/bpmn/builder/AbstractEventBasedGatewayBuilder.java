@@ -60,25 +60,4 @@ public class AbstractEventBasedGatewayBuilder<B extends AbstractEventBasedGatewa
     throw new UnsupportedOperationException("'asyncAfter' is not supported for 'Event Based Gateway'");
   }
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsyncAfter()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  @SuppressWarnings("removal")
-  @Override
-  public B camundaAsyncAfter() {
-    return eximeeBpmsAsyncAfter();
-  }
-
-  /**
-   * @deprecated use {@link #eximeeBpmsAsyncAfter(boolean)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  @SuppressWarnings("removal")
-  @Override
-  public B camundaAsyncAfter(boolean isEximeeBpmsAsyncAfter) {
-    return eximeeBpmsAsyncAfter(isEximeeBpmsAsyncAfter);
-  }
 }

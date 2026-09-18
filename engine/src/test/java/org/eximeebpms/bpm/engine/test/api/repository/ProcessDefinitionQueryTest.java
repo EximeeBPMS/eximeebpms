@@ -957,7 +957,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
         .done();
 
     result[1] = Bpmn.createExecutableProcess("called")
-        .camundaStartableInTasklist(isStartableSubprocess)
+        .eximeeBpmsStartableInTasklist(isStartableSubprocess)
         .startEvent()
         .userTask()
         .endEvent()

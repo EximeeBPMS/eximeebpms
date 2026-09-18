@@ -107,7 +107,7 @@ public class ExceptionCodeDisabledTest {
     BpmnModelInstance myProcess = Bpmn.createExecutableProcess("foo")
         .startEvent()
         .serviceTask()
-          .camundaClass(FailingJavaDelegateWithErrorCode.class)
+          .eximeeBpmsClass(FailingJavaDelegateWithErrorCode.class)
         .endEvent()
         .done();
 
@@ -130,7 +130,7 @@ public class ExceptionCodeDisabledTest {
     BpmnModelInstance myProcess = Bpmn.createExecutableProcess("foo")
         .startEvent()
         .serviceTask()
-          .camundaClass(FailingJavaDelegateWithErrorCode.class)
+          .eximeeBpmsClass(FailingJavaDelegateWithErrorCode.class)
         .endEvent()
         .done();
 

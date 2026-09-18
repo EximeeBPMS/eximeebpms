@@ -65,7 +65,7 @@ public class SetBusinessKeyTest {
       Bpmn.createExecutableProcess(PROCESS_KEY)
       .startEvent("startEvent")
       .serviceTask()
-        .camundaClass(SetBusinessKeyDelegate.class)
+        .eximeeBpmsClass(SetBusinessKeyDelegate.class)
       .userTask("userTask2")
       .endEvent("endEvent")
       .done();
@@ -74,8 +74,8 @@ public class SetBusinessKeyTest {
       Bpmn.createExecutableProcess(PROCESS_KEY)
       .startEvent("startEvent")
       .serviceTask()
-        .camundaAsyncBefore()
-        .camundaClass(SetBusinessKeyDelegate.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(SetBusinessKeyDelegate.class)
       .userTask("userTask2")
       .endEvent("endEvent")
       .done();
@@ -333,7 +333,7 @@ public class SetBusinessKeyTest {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .userTask("userTask1").name("User task")
-      .camundaExecutionListenerExpression(listener,
+      .eximeeBpmsExecutionListenerExpression(listener,
             "${execution.setProcessBusinessKey(execution.getVariable(\"" + BUSINESS_KEY_VARIABLE + "\"))}")
     .userTask("userTask2")
     .endEvent("endEvent")
@@ -344,7 +344,7 @@ public class SetBusinessKeyTest {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .userTask("userTask1").name("User task")
-      .camundaTaskListenerClass(listener, SetBusinessKeyListener.class)
+      .eximeeBpmsTaskListenerClass(listener, SetBusinessKeyListener.class)
     .userTask("userTask2")
     .endEvent("endEvent")
     .done();

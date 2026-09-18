@@ -66,9 +66,9 @@ public class DefaultExternalTaskModelBuilder {
     return ProcessModels.newModel(processKey)
       .startEvent()
       .serviceTask(externalTaskName)
-      .camundaType(externalTaskType)
-      .camundaTopic(topic)
-      .camundaTaskPriority(priority.toString())
+      .eximeeBpmsType(externalTaskType)
+      .eximeeBpmsTopic(topic)
+      .eximeeBpmsTaskPriority(priority.toString())
       .endEvent()
       .done();
   }

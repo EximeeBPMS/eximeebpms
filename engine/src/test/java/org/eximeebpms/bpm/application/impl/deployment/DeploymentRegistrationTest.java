@@ -92,7 +92,7 @@ public class DeploymentRegistrationTest extends PluggableProcessEngineTest {
     return Bpmn.createExecutableProcess(key)
       .startEvent()
       .serviceTask()
-        .camundaExpression("${true}")
+        .eximeeBpmsExpression("${true}")
       .endEvent()
     .done();
   }

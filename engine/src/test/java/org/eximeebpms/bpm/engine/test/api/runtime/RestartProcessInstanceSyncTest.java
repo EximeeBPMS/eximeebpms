@@ -222,7 +222,7 @@ public class RestartProcessInstanceSyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -259,7 +259,7 @@ public class RestartProcessInstanceSyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent("startEvent")
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -456,8 +456,8 @@ public class RestartProcessInstanceSyncTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .camundaAsyncBefore()
-        .camundaExecutionListenerClass("end", AsyncListener.class)
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsExecutionListenerClass("end", AsyncListener.class)
         .userTask("task")
         .endEvent()
         .done();
@@ -711,7 +711,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldSkipCustomListeners() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process");
 
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");
@@ -732,7 +732,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldSkipIoMappings() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(
-        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").camundaInputParameter("foo", "bar").done());
+        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").eximeeBpmsInputParameter("foo", "bar").done());
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process");
 
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");

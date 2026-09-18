@@ -1512,7 +1512,7 @@ public class RedeploymentTest {
     return Bpmn.createExecutableProcess(key)
       .startEvent()
       .serviceTask()
-        .camundaExpression("${true}")
+        .eximeeBpmsExpression("${true}")
       .endEvent()
     .done();
   }

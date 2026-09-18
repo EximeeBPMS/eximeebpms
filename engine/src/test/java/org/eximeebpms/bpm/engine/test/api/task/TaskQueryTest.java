@@ -3504,10 +3504,10 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void testQueryWithCandidateUsers() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaCandidateUsers("anna")
+        .eximeeBpmsCandidateUsers("anna")
       .endEvent()
       .done();
 
@@ -3525,10 +3525,10 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void testQueryWithoutCandidateUsers() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaCandidateGroups("sales")
+        .eximeeBpmsCandidateGroups("sales")
       .endEvent()
       .done();
 
@@ -3546,10 +3546,10 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void testQueryAssignedTasksWithCandidateUsers() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaCandidateGroups("sales")
+        .eximeeBpmsCandidateGroups("sales")
       .endEvent()
       .done();
 
@@ -3571,10 +3571,10 @@ public class TaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void testQueryAssignedTasksWithoutCandidateUsers() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaCandidateGroups("sales")
+        .eximeeBpmsCandidateGroups("sales")
       .endEvent()
       .done();
 

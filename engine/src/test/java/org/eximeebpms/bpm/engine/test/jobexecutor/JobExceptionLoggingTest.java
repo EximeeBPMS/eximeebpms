@@ -123,8 +123,8 @@ public class JobExceptionLoggingTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("failingDelegate")
         .startEvent()
         .serviceTask()
-          .camundaClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
-          .camundaAsyncBefore()
+          .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
+          .eximeeBpmsAsyncBefore()
         .done();
     testRule.deploy(modelInstance);
 
@@ -157,7 +157,7 @@ public class JobExceptionLoggingTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("failingDelegate")
         .startEvent()
         .serviceTask()
-          .camundaClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
+          .eximeeBpmsClass("org.eximeebpms.bpm.engine.test.jobexecutor.FailingDelegate")
         .done();
     testRule.deploy(modelInstance);
 

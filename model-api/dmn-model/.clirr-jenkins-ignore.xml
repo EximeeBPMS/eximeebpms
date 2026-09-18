@@ -11,4 +11,53 @@
     <differenceType>7012</differenceType>
     <method>*</method>
   </difference>
+
+  <!-- BACKLOG-0096/BPMS-766, 2026-09-17: Phase 2 of the camunda-named
+    identifier rebrand (BPMS-607) removed these deprecated aliases, added
+    in 1.4.0 and scheduled for removal since (adr/0023). Each entry names
+    its class and method explicitly, not wildcarded on className, per the
+    lesson of the BPMS-326 blanket rule this same ticket retired.
+    <method> itself still needs wildcards on both sides because clirr
+    matches it against the full de-visibility'd signature (return type and
+    parens included), not the bare method name. -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*getCamundaHistoryTimeToLive*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*getCamundaHistoryTimeToLiveString*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*getEximeeBpmsHistoryTimeToLive*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*setCamundaHistoryTimeToLive*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*setCamundaHistoryTimeToLiveString*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/Decision</className>
+    <method>*setEximeeBpmsHistoryTimeToLive*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/InputClause</className>
+    <method>*getCamundaInputVariable*</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>org/eximeebpms/bpm/model/dmn/instance/InputClause</className>
+    <method>*setCamundaInputVariable*</method>
+  </difference>
 </differences>

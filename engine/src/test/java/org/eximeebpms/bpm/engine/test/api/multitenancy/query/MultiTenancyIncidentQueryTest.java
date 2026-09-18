@@ -36,8 +36,8 @@ public class MultiTenancyIncidentQueryTest extends PluggableProcessEngineTest {
   protected static final BpmnModelInstance BPMN = Bpmn.createExecutableProcess("failingProcess")
       .startEvent()
       .serviceTask()
-        .camundaExpression("${failing}")
-        .camundaAsyncBefore()
+        .eximeeBpmsExpression("${failing}")
+        .eximeeBpmsAsyncBefore()
       .endEvent()
       .done();
 

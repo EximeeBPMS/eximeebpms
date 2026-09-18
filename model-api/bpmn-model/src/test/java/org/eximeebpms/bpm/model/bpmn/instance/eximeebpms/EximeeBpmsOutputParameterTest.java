@@ -49,7 +49,7 @@ public class EximeeBpmsOutputParameterTest extends BpmnModelElementInstanceTest 
   public void testOutputParameterScriptChildAssignment() {
     try {
       EximeeBpmsOutputParameter outputParamElement = modelInstance.newInstance(EximeeBpmsOutputParameter.class);
-      outputParamElement.setCamundaName("aVariable");
+      outputParamElement.setEximeeBpmsName("aVariable");
 
       EximeeBpmsScript scriptElement = modelInstance.newInstance(EximeeBpmsScript.class);
       scriptElement.setEximeeBpmsScriptFormat("juel");
@@ -66,7 +66,7 @@ public class EximeeBpmsOutputParameterTest extends BpmnModelElementInstanceTest 
   public void testOutputParameterListChildAssignment() {
     try {
       EximeeBpmsOutputParameter outputParamElement = modelInstance.newInstance(EximeeBpmsOutputParameter.class);
-      outputParamElement.setCamundaName("aVariable");
+      outputParamElement.setEximeeBpmsName("aVariable");
 
       EximeeBpmsList listElement = modelInstance.newInstance(EximeeBpmsList.class);
 
@@ -81,7 +81,7 @@ public class EximeeBpmsOutputParameterTest extends BpmnModelElementInstanceTest 
   public void testOutputParameterMapChildAssignment() {
     try {
       EximeeBpmsOutputParameter outputParamElement = modelInstance.newInstance(EximeeBpmsOutputParameter.class);
-      outputParamElement.setCamundaName("aVariable");
+      outputParamElement.setEximeeBpmsName("aVariable");
 
       EximeeBpmsMap listElement = modelInstance.newInstance(EximeeBpmsMap.class);
 

@@ -704,7 +704,7 @@ public class BoundaryTimerNonInterruptingEventTest {
 
     BpmnModelInstance instance = Bpmn.createExecutableProcess("timerProcess")
                                      .startEvent()
-                                       .camundaAsyncBefore()
+                                       .eximeeBpmsAsyncBefore()
                                      .userTask("user-task-with-timer")
                                        .boundaryEvent("non-interuption-timer")
                                          .cancelActivity(false)
@@ -740,9 +740,9 @@ public class BoundaryTimerNonInterruptingEventTest {
 
     BpmnModelInstance instance = Bpmn.createExecutableProcess("timoutProcess")
                                      .startEvent()
-                                       .camundaAsyncBefore()
+                                       .eximeeBpmsAsyncBefore()
                                      .userTask("user-task-with-timer")
-                                       .camundaTaskListenerExpressionTimeoutWithCycle(
+                                       .eximeeBpmsTaskListenerExpressionTimeoutWithCycle(
                                            TaskListener.EVENTNAME_TIMEOUT,
                                            "${true}",
                                            "R/PT3S")

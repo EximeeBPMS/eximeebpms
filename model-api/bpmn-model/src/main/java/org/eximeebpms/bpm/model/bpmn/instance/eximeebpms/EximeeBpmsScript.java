@@ -33,21 +33,4 @@ public interface EximeeBpmsScript extends BpmnModelElementInstance {
 
   void setEximeeBpmsResource(String camundaResource);
 
-  // Deprecated Camunda-named aliases, removed in 1.5.0 (BPMS-607).
-
-  /**
-   * @deprecated use {@link #getEximeeBpmsResource()} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default String getCamundaResource() {
-    return getEximeeBpmsResource();
-  }
-
-  /**
-   * @deprecated use {@link #setEximeeBpmsResource(String)} instead.
-   */
-  @Deprecated(since = "1.4.0", forRemoval = true)
-  default void setCamundaResource(String eximeeBpmsResource) {
-    setEximeeBpmsResource(eximeeBpmsResource);
-  }
 }

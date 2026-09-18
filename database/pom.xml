@@ -31,7 +31,19 @@
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.23.0</camunda.version.old>
+    <!-- the OLD SQL schema distro/sql-script's upgrade-script tests migrate
+      from - not a clirr baseline, despite the name. Deliberately kept
+      separate from eximeebpms.api.baseline below (BACKLOG-0096/BPMS-766):
+      moving the SQL upgrade tests' starting schema is its own decision,
+      for whoever owns those tests, not a side effect of advancing the
+      API-compatibility check. -->
     <eximeebpms.version.old>1.0.0</eximeebpms.version.old>
+    <!-- clirr's comparisonVersion for the 8 modules that run it - the last
+      public-API baseline both EximeeBPMS lines agree on. See
+      guidelines/common/oss-enterprise-parity.md; bump this whenever that
+      baseline moves, in eximeebpms-enterprise first, ported to eximeebpms
+      (OSS) at the next curation pass like everything else here. -->
+    <eximeebpms.api.baseline>1.4.0</eximeebpms.api.baseline>
 
     <!-- Testcontainers JDBC URL parameters. By default, an empty string -->
     <database.tc.params />

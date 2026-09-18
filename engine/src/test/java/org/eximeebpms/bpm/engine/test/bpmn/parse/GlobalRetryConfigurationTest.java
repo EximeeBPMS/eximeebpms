@@ -125,8 +125,8 @@ public class GlobalRetryConfigurationTest {
       Bpmn.createExecutableProcess("testProcess2")
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
         .endEvent()
       .done());
 
@@ -161,10 +161,10 @@ public class GlobalRetryConfigurationTest {
   public void testRetryOnAsyncStartEvent() throws Exception {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .eximeeBpmsClass("bar")
         .endEvent()
         .done();
 
@@ -196,78 +196,72 @@ public class GlobalRetryConfigurationTest {
   }
 
   private BpmnModelInstance prepareSignalEventProcessWithoutRetry() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
+            .eximeeBpmsAsyncBefore(true)
             .signal("start")
           .serviceTask()
-            .camundaClass(FAILING_CLASS)
+            .eximeeBpmsClass(FAILING_CLASS)
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   private BpmnModelInstance prepareFailingServiceTask() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   private BpmnModelInstance prepareFailingServiceTaskWithRetryCycle() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R10/PT5M")
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R10/PT5M")
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   private BpmnModelInstance prepareFailingBusinessRuleTask() {
-    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .businessRuleTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(FAILING_CLASS)
+          .eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
-    return modelInstance;
   }
 
   private BpmnModelInstance prepareFailingScriptTask() {
-    BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
       .startEvent()
       .scriptTask()
         .scriptFormat("groovy")
         .scriptText("x = 5 / 0")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
       .userTask()
       .endEvent()
     .done();
-    return bpmnModelInstance;
   }
 
   private BpmnModelInstance prepareFailingSubProcess() {
-    BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
+    return Bpmn.createExecutableProcess(PROCESS_ID)
       .startEvent()
       .subProcess()
         .embeddedSubProcess()
           .startEvent()
           .serviceTask()
-            .camundaClass(FAILING_CLASS)
-            .camundaAsyncBefore()
+            .eximeeBpmsClass(FAILING_CLASS)
+            .eximeeBpmsAsyncBefore()
           .endEvent()
       .subProcessDone()
       .endEvent()
     .done();
-    return bpmnModelInstance;
   }
 }

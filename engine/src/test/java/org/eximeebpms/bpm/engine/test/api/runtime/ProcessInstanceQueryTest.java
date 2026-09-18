@@ -1914,14 +1914,14 @@ public class ProcessInstanceQueryTest {
   public void testQueryByAsyncBeforeActivityId() {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
-      .startEvent("start").camundaAsyncBefore()
-      .subProcess("subProcess").camundaAsyncBefore()
+      .startEvent("start").eximeeBpmsAsyncBefore()
+      .subProcess("subProcess").eximeeBpmsAsyncBefore()
       .embeddedSubProcess()
         .startEvent()
-        .serviceTask("task").camundaAsyncBefore().camundaExpression("${true}")
+        .serviceTask("task").eximeeBpmsAsyncBefore().eximeeBpmsExpression("${true}")
         .endEvent()
       .subProcessDone()
-      .endEvent("end").camundaAsyncBefore()
+      .endEvent("end").eximeeBpmsAsyncBefore()
       .done()
     );
 
@@ -1955,14 +1955,14 @@ public class ProcessInstanceQueryTest {
   public void testQueryByAsyncAfterActivityId() {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
-      .startEvent("start").camundaAsyncAfter()
-      .subProcess("subProcess").camundaAsyncAfter()
+      .startEvent("start").eximeeBpmsAsyncAfter()
+      .subProcess("subProcess").eximeeBpmsAsyncAfter()
       .embeddedSubProcess()
         .startEvent()
-        .serviceTask("task").camundaAsyncAfter().camundaExpression("${true}")
+        .serviceTask("task").eximeeBpmsAsyncAfter().eximeeBpmsExpression("${true}")
         .endEvent()
       .subProcessDone()
-      .endEvent("end").camundaAsyncAfter()
+      .endEvent("end").eximeeBpmsAsyncAfter()
       .done()
     );
 

@@ -189,6 +189,36 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!--
+            parent/pom.xml sets annotationProcessorPaths to Lombok alone. Setting that
+            element at all makes javac use -processorpath, which switches off processor
+            discovery on the compile classpath entirely - so spring-boot-configuration-
+            processor never ran here despite being a declared dependency, on any JDK, and
+            no spring-configuration-metadata.json was ever produced for eximeebpms.bpm.*.
+            Lombok has to be repeated: this list replaces the inherited one rather than
+            adding to it, and these modules do use Lombok. Declared here, on the shared
+            starter parent, because starter-security also has an @ConfigurationProperties
+            class without declaring the processor, and a per-module fix would miss it.
+          -->
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${version.lombok}</version>
+            </path>
+            <path>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-configuration-processor</artifactId>
+              <version>${version.spring-boot}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 

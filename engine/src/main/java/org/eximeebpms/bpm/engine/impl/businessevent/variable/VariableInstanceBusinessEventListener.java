@@ -6,6 +6,8 @@ import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
 import org.eximeebpms.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 public class VariableInstanceBusinessEventListener implements VariableInstanceLifecycleListener<VariableInstanceEntity> {
 
@@ -15,6 +17,11 @@ public class VariableInstanceBusinessEventListener implements VariableInstanceLi
     public void onCreate(final VariableInstanceEntity variableInstance, final AbstractVariableScope sourceScope) {
         if (!variableInstance.isTransient()) {
             BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+                @Override
+                public BusinessEventType getDeclaredType() {
+                  return BusinessEventTypes.VARIABLE_INSTANCE_CREATE;
+                }
+
                 @Override
                 public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
                     return producer.createVariableCreateEvt(variableInstance, sourceScope);
@@ -28,6 +35,11 @@ public class VariableInstanceBusinessEventListener implements VariableInstanceLi
         if (!variableInstance.isTransient()) {
             BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
                 @Override
+                public BusinessEventType getDeclaredType() {
+                  return BusinessEventTypes.VARIABLE_INSTANCE_DELETE;
+                }
+
+                @Override
                 public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
                     return producer.createVariableDeleteEvt(variableInstance, sourceScope);
                 }
@@ -39,6 +51,11 @@ public class VariableInstanceBusinessEventListener implements VariableInstanceLi
     public void onUpdate(final VariableInstanceEntity variableInstance, final AbstractVariableScope sourceScope) {
         if (!variableInstance.isTransient()) {
             BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+                @Override
+                public BusinessEventType getDeclaredType() {
+                  return BusinessEventTypes.VARIABLE_INSTANCE_UPDATE;
+                }
+
                 @Override
                 public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
                     return producer.createVariableUpdateEvt(variableInstance, sourceScope);

@@ -1,5 +1,12 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * The set of built-in business event types.
  *
@@ -190,6 +197,69 @@ public enum BusinessEventTypes implements BusinessEventType {
 
   public String getEventName() {
     return eventName;
+  }
+
+  /**
+   * Index of every built-in type by its {@code <entity>:<event>} token, plus the set of
+   * distinct entity types. Both are lower-cased so that lookups can be case-insensitive.
+   *
+   * <p>Used by {@link BusinessEventTypeFilter} to validate configured tokens: a token that
+   * names no known entity, or no known event on a known entity, is a configuration error
+   * rather than a rule that silently matches nothing.</p>
+   */
+  private static final Map<String, BusinessEventTypes> BY_TOKEN;
+  private static final Set<String> ENTITY_TYPES;
+
+  static {
+    final Map<String, BusinessEventTypes> byToken = new LinkedHashMap<>();
+    final Set<String> entityTypes = new LinkedHashSet<>();
+
+    for (BusinessEventTypes type : values()) {
+      byToken.put(token(type.getEntityType(), type.getEventName()), type);
+      entityTypes.add(normalize(type.getEntityType()));
+    }
+
+    BY_TOKEN = Collections.unmodifiableMap(byToken);
+    ENTITY_TYPES = Collections.unmodifiableSet(entityTypes);
+  }
+
+  /**
+   * The {@code <entity>:<event>} token identifying a type, lower-cased.
+   */
+  public static String token(String entityType, String eventName) {
+    return normalize(entityType) + ":" + normalize(eventName);
+  }
+
+  /**
+   * The {@code <entity>:<event>} token identifying this type, lower-cased.
+   */
+  public String getToken() {
+    return token(entityType, eventName);
+  }
+
+  /**
+   * Whether {@code entityType} is the entity of at least one built-in type.
+   */
+  public static boolean isKnownEntityType(String entityType) {
+    return entityType != null && ENTITY_TYPES.contains(normalize(entityType));
+  }
+
+  /**
+   * Whether {@code entityType}/{@code eventName} together name a built-in type.
+   */
+  public static boolean isKnownToken(String entityType, String eventName) {
+    return entityType != null && eventName != null && BY_TOKEN.containsKey(token(entityType, eventName));
+  }
+
+  /**
+   * Every built-in type's {@code <entity>:<event>} token, in declaration order.
+   */
+  public static Set<String> getTokens() {
+    return BY_TOKEN.keySet();
+  }
+
+  private static String normalize(String value) {
+    return value.trim().toLowerCase(Locale.ROOT);
   }
 
 }

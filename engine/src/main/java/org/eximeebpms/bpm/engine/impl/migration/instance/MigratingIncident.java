@@ -28,6 +28,8 @@ import org.eximeebpms.bpm.engine.impl.history.producer.HistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IncidentEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 public class MigratingIncident implements MigratingInstance {
 
@@ -73,6 +75,11 @@ public class MigratingIncident implements MigratingInstance {
 
   protected void migrateBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.INCIDENT_MIGRATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createBusinessIncidentMigrateEvt(incident);

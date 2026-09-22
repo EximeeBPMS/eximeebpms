@@ -29,6 +29,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.JobEntity;
 import org.eximeebpms.bpm.engine.management.Metrics;
 
 import java.util.Date;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Frederik Heremans
@@ -150,6 +152,11 @@ public class FailedJobListener implements Command<Void> {
             @Override
             public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
                 return producer.createJobFailedEvt(job, jobFailureCollector.getFailure());
+            }
+
+            @Override
+            public BusinessEventType getDeclaredType() {
+              return BusinessEventTypes.JOB_FAIL;
             }
         });
     }

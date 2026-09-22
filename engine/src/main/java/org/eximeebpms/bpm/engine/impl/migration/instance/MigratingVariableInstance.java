@@ -28,6 +28,8 @@ import org.eximeebpms.bpm.engine.impl.history.producer.HistoryEventProducer;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Thorben Lindhauer
@@ -96,6 +98,11 @@ public class MigratingVariableInstance implements MigratingInstance {
   protected void migrateBusinessEvent() {
     if (!variable.isTransient()) {
       BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+        @Override
+        public BusinessEventType getDeclaredType() {
+          return BusinessEventTypes.VARIABLE_INSTANCE_MIGRATE;
+        }
+
         @Override
         public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
           return producer.createVariableMigrateEvt(variable);

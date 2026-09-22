@@ -53,6 +53,8 @@ import org.eximeebpms.bpm.engine.variable.VariableMap;
 import org.eximeebpms.bpm.engine.variable.impl.VariableMapImpl;
 import org.eximeebpms.bpm.engine.variable.value.SerializableValue;
 import org.eximeebpms.bpm.engine.variable.value.TypedValue;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 
 /**
@@ -360,6 +362,11 @@ public class DefaultFormHandler implements FormHandler {
 
   private void fireFormPropertyUpdateEvent(FormPropertySource source, String propertyName, String propertyValue) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.FORM_PROPERTY_UPDATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createFormPropertyUpdateEvt(source.execution(), propertyName, propertyValue, source.taskId());

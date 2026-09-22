@@ -1,5 +1,6 @@
 package org.eximeebpms.bpm.engine.test.businessevent;
 
+import java.util.List;
 import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
@@ -16,9 +17,19 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 
 public abstract class AbstractBusinessEventIT {
-    protected BusinessEventConfiguration businessEventConfiguration = BusinessEventConfiguration.builder()
-            .enabled(true)
-                        .build();
+    protected BusinessEventConfiguration businessEventConfiguration = businessEventConfiguration();
+
+    /**
+     * The configuration the engine under test is bootstrapped with. Overriding sub-classes must
+     * return a self-contained value — this runs from a field initializer of this class, before any
+     * sub-class field exists.
+     */
+    protected BusinessEventConfiguration businessEventConfiguration() {
+        return BusinessEventConfiguration.builder()
+                .enabled(true)
+                .build();
+    }
+
     protected ProcessEngineBootstrapRule bootstrapRule =
             new ProcessEngineBootstrapRule(config -> {
                 config.setBusinessEventConfiguration(businessEventConfiguration);
@@ -33,6 +44,20 @@ public abstract class AbstractBusinessEventIT {
             .around(testRule);
 
     protected CommandExecutor commandExecutor;
+
+    /**
+     * Every business event written to the outbox for this process instance, as fully-qualified
+     * event types in insertion order.
+     */
+    @SuppressWarnings("unchecked")
+    protected List<String> outboxEventTypes(String processInstanceId) {
+        final List<BusinessEventOutboxEntity> outboxEntries = commandExecutor.execute(ctx ->
+                ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
+
+        return outboxEntries.stream()
+                .map(BusinessEventOutboxEntity::getEventType)
+                .toList();
+    }
 
     @Before
     public void setUp() {

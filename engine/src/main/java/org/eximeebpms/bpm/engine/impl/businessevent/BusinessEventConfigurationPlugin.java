@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.impl.businessevent;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.eximeebpms.bpm.engine.ProcessEngine;
@@ -21,6 +22,14 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
   private String prefix;
   private String publisher;
   private String publisherProperties;
+
+  /**
+   * Comma-separated in XML — {@code PropertyHelper} splits it into the {@code Set<String>} this
+   * setter takes, e.g.
+   * {@code <property name="disabledEventTypes">variable-instance:*,activity-instance:*</property>}.
+   */
+  private Set<String> enabledEventTypes;
+  private Set<String> disabledEventTypes;
 
   @Override
   public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
@@ -51,6 +60,14 @@ public class BusinessEventConfigurationPlugin implements ProcessEnginePlugin {
 
     if (publisher != null && !publisher.isBlank()) {
       builder.publisher(publisher.trim());
+    }
+
+    if (enabledEventTypes != null && !enabledEventTypes.isEmpty()) {
+      builder.enabledEventTypes(Set.copyOf(enabledEventTypes));
+    }
+
+    if (disabledEventTypes != null && !disabledEventTypes.isEmpty()) {
+      builder.disabledEventTypes(Set.copyOf(disabledEventTypes));
     }
 
     processEngineConfiguration.setBusinessEventConfiguration(builder.build());

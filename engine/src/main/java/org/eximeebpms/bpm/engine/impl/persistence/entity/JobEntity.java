@@ -53,6 +53,8 @@ import org.eximeebpms.bpm.engine.management.JobDefinition;
 import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 import org.eximeebpms.bpm.engine.runtime.Incident;
 import org.eximeebpms.bpm.engine.runtime.Job;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * Stub of the common parts of a Job. You will normally work with a subclass of
@@ -155,6 +157,11 @@ public abstract class JobEntity extends AcquirableJobEntity
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createJobSuccessfulEvt(jobEntity);
+      }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.JOB_SUCCESS;
       }
     });
   }

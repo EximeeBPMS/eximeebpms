@@ -122,6 +122,8 @@ import org.eximeebpms.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventParseListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventPublisherResolver;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypeFilter;
 import org.eximeebpms.bpm.engine.impl.businessevent.NoopBusinessEventPublisher;
 import org.eximeebpms.bpm.engine.impl.calendar.BusinessCalendarManager;
 import org.eximeebpms.bpm.engine.impl.calendar.CycleBusinessCalendar;
@@ -431,6 +433,19 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected RuntimeService runtimeService = new RuntimeServiceImpl();
   protected HistoryService historyService = new HistoryServiceImpl();
   protected BusinessEventConfiguration businessEventConfiguration = BusinessEventConfiguration.builder().build();
+  /**
+   * Derived from {@link #businessEventConfiguration}; rebuilt whenever that is replaced.
+   *
+   * <p>Deliberately a plain field. It is lazily initialized without locking, which is safe because
+   * the filter is immutable with final fields: a race costs at most a duplicate instance, never a
+   * half-built one. The only post-publication write is the reset in
+   * {@link #setBusinessEventConfiguration(BusinessEventConfiguration)}, and that is reached solely
+   * during engine bootstrap — from a process engine plugin's {@code preInit} or the Spring Boot
+   * starter, both single-threaded and both finished before the engine is handed out. Making this
+   * {@code volatile} would only matter if the configuration were replaced on a live engine, which
+   * nothing does.</p>
+   */
+  protected BusinessEventTypeFilter businessEventTypeFilter;
   protected BusinessEventService businessEventService = new BusinessEventServiceImpl();
   protected BusinessEventPublisher businessEventPublisher = new NoopBusinessEventPublisher();
   protected IdentityService identityService = new IdentityServiceImpl();
@@ -1550,6 +1565,11 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       businessEventConfiguration = BusinessEventConfiguration.builder().build();
     }
 
+    // resolve eagerly: an invalid event type must fail bootstrap, not the first event it would
+    // have matched — and it must fail even while the feature is off, so that a typo is not lying
+    // in wait for whoever eventually flips 'enabled' to true
+    BusinessEventTypeFilter typeFilter = getBusinessEventTypeFilter();
+
     if (!businessEventConfiguration.isEnabled()) {
       businessEventPublisher = new NoopBusinessEventPublisher();
       LOG.businessEventsDisabled();
@@ -1563,6 +1583,11 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     );
 
     LOG.businessEventsEnabled(businessEventPublisher.getName());
+
+    if (!typeFilter.isAllEnabled()) {
+      LOG.businessEventTypesFiltered(typeFilter.getEnabledTokens(), typeFilter.getDisabledTokens(),
+          typeFilter.getEffectiveTokens());
+    }
   }
 
   public void closeBusinessEvents() {
@@ -2230,7 +2255,12 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected List<BpmnParseListener> getDefaultBPMNParseListeners() {
     List<BpmnParseListener> defaultListeners = new ArrayList<>();
     if (isBusinessEventsEnabled()) {
-      defaultListeners.add(new BusinessEventParseListener());
+      BusinessEventParseListener businessEventParseListener = new BusinessEventParseListener(getBusinessEventTypeFilter());
+      // every type it is responsible for may be filtered out, in which case it would attach
+      // nothing to any parsed element — then keep it out of the chain altogether
+      if (businessEventParseListener.isActive()) {
+        defaultListeners.add(businessEventParseListener);
+      }
     }
 
     if (!isScriptSecurityDisabled()) {
@@ -3350,7 +3380,27 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public ProcessEngineConfigurationImpl setBusinessEventConfiguration(BusinessEventConfiguration businessEventConfiguration) {
     this.businessEventConfiguration = businessEventConfiguration;
+    this.businessEventTypeFilter = null;
     return this;
+  }
+
+  /**
+   * The resolved {@code enabledEventTypes}/{@code disabledEventTypes} filter. Built on first use
+   * and cached until {@link #setBusinessEventConfiguration(BusinessEventConfiguration)} replaces
+   * the configuration it derives from; {@link #initBusinessEvents()} forces it early so that a
+   * malformed token fails engine bootstrap rather than the first event that would have matched it.
+   *
+   * @throws InvalidBusinessEventTypeException if a configured token is invalid
+   */
+  public BusinessEventTypeFilter getBusinessEventTypeFilter() {
+    BusinessEventTypeFilter filter = businessEventTypeFilter;
+
+    if (filter == null) {
+      filter = BusinessEventTypeFilter.of(businessEventConfiguration);
+      businessEventTypeFilter = filter;
+    }
+
+    return filter;
   }
 
   public BusinessEventPublisher getBusinessEventPublisher() {
@@ -3774,6 +3824,14 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return Optional.ofNullable(businessEventConfiguration)
         .map(BusinessEventConfiguration::isEnabled)
         .orElse(false);
+  }
+
+  /**
+   * Whether business events are enabled <em>and</em> this type passes the configured
+   * {@code enabledEventTypes}/{@code disabledEventTypes} filter.
+   */
+  public boolean isBusinessEventTypeEnabled(BusinessEventType businessEventType) {
+    return isBusinessEventsEnabled() && getBusinessEventTypeFilter().isEnabled(businessEventType);
   }
 
   public List<ResolverFactory> getResolverFactories() {

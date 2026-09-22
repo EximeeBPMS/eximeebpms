@@ -44,6 +44,7 @@ import org.eximeebpms.bpm.engine.impl.incident.IncidentContext;
 import org.eximeebpms.bpm.engine.impl.incident.IncidentLogger;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.runtime.Incident;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
 
 /**
  * @author roman.smirnov
@@ -230,6 +231,11 @@ public class IncidentEntity implements Incident, DbEntity, HasDbRevision, HasDbR
 
   protected void fireBusinessIncidentEvent(final BusinessEventTypes eventType) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return eventType;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return switch (eventType) {

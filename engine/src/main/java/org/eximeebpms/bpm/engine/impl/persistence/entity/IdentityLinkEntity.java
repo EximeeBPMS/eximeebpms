@@ -40,6 +40,7 @@ import org.eximeebpms.bpm.engine.impl.history.event.HistoryEventType;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes;
 import org.eximeebpms.bpm.engine.impl.history.producer.HistoryEventProducer;
 import org.eximeebpms.bpm.engine.task.IdentityLink;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
 
 
 /**
@@ -217,6 +218,11 @@ public class IdentityLinkEntity implements Serializable, IdentityLink, DbEntity,
           case IDENTITY_LINK_DELETE -> producer.createIdentityLinkDeleteEvt(IdentityLinkEntity.this);
           default -> null;
         };
+      }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return eventType;
       }
     });
   }

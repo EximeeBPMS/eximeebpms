@@ -17,11 +17,13 @@
 package org.eximeebpms.bpm.engine.impl;
 
 import java.net.URL;
+import java.util.Collection;
 import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
 import org.eximeebpms.bpm.commons.eventbus.BusinessEventPublisher;
 import org.eximeebpms.bpm.container.impl.ContainerIntegrationLogger;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionLogger;
@@ -187,6 +189,20 @@ public class ProcessEngineLogger extends BaseLogger {
 
   public void failedToCloseBusinessEventPublisher(BusinessEventPublisher businessEventPublisher, Exception e) {
     logWarn("012", "Failed to close business event publisher '{}'", businessEventPublisher, e);
+  }
+
+  public void businessEventTypesFiltered(Collection<String> enabledTokens, Collection<String> disabledTokens,
+                                         Collection<String> effectiveTokens) {
+    logInfo(
+        "013",
+        "Business event types are filtered: enabledEventTypes={}, disabledEventTypes={}. "
+            + "{} of {} built-in event types will be published: {}",
+        enabledTokens,
+        disabledTokens,
+        effectiveTokens.size(),
+        BusinessEventTypes.getTokens().size(),
+        effectiveTokens
+    );
   }
 
 }

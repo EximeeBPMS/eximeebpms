@@ -54,6 +54,8 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.CollectionUtil;
 import org.eximeebpms.bpm.engine.impl.util.ImmutablePair;
 import org.eximeebpms.bpm.engine.runtime.Job;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 
 /**
@@ -90,6 +92,11 @@ public class JobManager extends AbstractManager {
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createJobCreatedEvt(job);
       }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.JOB_CREATE;
+      }
     });
   }
 
@@ -112,6 +119,11 @@ public class JobManager extends AbstractManager {
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createJobDeletedEvt(job);
+      }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.JOB_DELETE;
       }
     });
   }

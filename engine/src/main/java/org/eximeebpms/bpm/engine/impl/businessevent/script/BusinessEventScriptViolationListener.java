@@ -21,6 +21,8 @@ import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationListener;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * Publishes script violation events to the business event outbox ({@code ACT_RU_BUS_EVT_OBX})
@@ -40,6 +42,11 @@ public class BusinessEventScriptViolationListener implements ScriptViolationList
       return;
     }
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.SCRIPT_VIOLATION_CREATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createScriptViolationEvt(event);

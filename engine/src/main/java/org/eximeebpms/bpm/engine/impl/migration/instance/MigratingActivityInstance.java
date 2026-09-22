@@ -42,6 +42,8 @@ import org.eximeebpms.bpm.engine.impl.pvm.delegate.ModificationObserverBehavior;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.eximeebpms.bpm.engine.migration.MigrationInstruction;
 import org.eximeebpms.bpm.engine.runtime.ActivityInstance;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Thorben Lindhauer
@@ -394,6 +396,11 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
   protected void migrateProcessInstanceBusinessEvent(final DelegateExecution execution) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
       @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_MIGRATE;
+      }
+
+      @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createProcessInstanceMigrateEvt(execution);
       }
@@ -402,6 +409,11 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
 
   protected void migrateActivityInstanceBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.ACTIVITY_INSTANCE_MIGRATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createActivityInstanceMigrateEvt(MigratingActivityInstance.this);

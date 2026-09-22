@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class BusinessEventConfigurationTest {
@@ -34,8 +36,9 @@ class BusinessEventConfigurationTest {
     BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();
 
     // then
-    assertThat(configuration.getPrefix()).isEqualTo("bpms");
-    assertThat(configuration.getPrefix()).isEqualTo(BusinessEventType.BUSINESS_EVENT_PREFIX);
+    assertThat(configuration.getPrefix())
+        .isEqualTo("bpms")
+        .isEqualTo(BusinessEventType.BUSINESS_EVENT_PREFIX);
   }
 
   @Test
@@ -55,8 +58,9 @@ class BusinessEventConfigurationTest {
     BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();
 
     // then
-    assertThat(configuration.getPublisherProperties()).isNotNull();
-    assertThat(configuration.getPublisherProperties()).isEmpty();
+    assertThat(configuration.getPublisherProperties())
+        .isNotNull()
+        .isEmpty();
   }
 
   @Test
@@ -122,5 +126,69 @@ class BusinessEventConfigurationTest {
     // then
     assertThat(configuration.getPublisherProperties())
         .containsEntry("kafka.topic", "eximee.business-events");
+  }
+
+  @Test
+  void shouldEnableEveryEventTypeByDefault() {
+    // when
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder().build();
+
+    // then
+    assertThat(configuration.getEnabledEventTypes()).containsExactly(BusinessEventTypeFilter.ALL);
+    assertThat(configuration.getDisabledEventTypes()).isEmpty();
+  }
+
+  @Test
+  void shouldStoreConfiguredEventTypes() {
+    // when
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder()
+        .enabledEventTypes(Set.of("task-instance:*"))
+        .disabledEventTypes(Set.of("task-instance:update"))
+        .build();
+
+    // then
+    assertThat(configuration.getEnabledEventTypes()).containsExactly("task-instance:*");
+    assertThat(configuration.getDisabledEventTypes()).containsExactly("task-instance:update");
+  }
+
+  @Test
+  void shouldFallBackToDefaultAllowlistWhenUnset() {
+    // when — an explicit null means "not configured", not "publish nothing"
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder()
+        .enabledEventTypes(null)
+        .disabledEventTypes(null)
+        .build();
+
+    // then
+    assertThat(configuration.getEnabledEventTypes()).containsExactly(BusinessEventTypeFilter.ALL);
+    assertThat(configuration.getDisabledEventTypes()).isEmpty();
+  }
+
+  @Test
+  void shouldHonourExplicitlyEmptyAllowlist() {
+    // when
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder()
+        .enabledEventTypes(Set.of())
+        .build();
+
+    // then
+    assertThat(configuration.getEnabledEventTypes()).isEmpty();
+  }
+
+  @Test
+  void shouldReturnImmutableEventTypes() {
+    // given
+    Set<String> enabledEventTypes = new LinkedHashSet<>();
+    enabledEventTypes.add("job:create");
+
+    BusinessEventConfiguration configuration = BusinessEventConfiguration.builder()
+        .enabledEventTypes(enabledEventTypes)
+        .build();
+
+    Set<String> returnedEventTypes = configuration.getEnabledEventTypes();
+
+    // when & then
+    assertThatThrownBy(() -> returnedEventTypes.add("job:fail"))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 }

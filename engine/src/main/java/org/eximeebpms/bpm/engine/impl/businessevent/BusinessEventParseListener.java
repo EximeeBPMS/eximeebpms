@@ -20,6 +20,52 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
   protected final BusinessEventActivityInstanceExecutionListener activityInstanceListener = new BusinessEventActivityInstanceExecutionListener();
   protected final BusinessEventTaskInstanceTaskListener taskInstanceListener = new BusinessEventTaskInstanceTaskListener();
 
+  /**
+   * Decides which built-in listeners are attached at all. Types excluded by the configured
+   * {@code enabledEventTypes}/{@code disabledEventTypes} filter get no listener on the process
+   * definition, so a disabled type costs nothing at runtime rather than being produced and then
+   * dropped.
+   */
+  protected final BusinessEventTypeFilter typeFilter;
+
+  public BusinessEventParseListener() {
+    this(BusinessEventTypeFilter.of(null));
+  }
+
+  public BusinessEventParseListener(BusinessEventTypeFilter typeFilter) {
+    this.typeFilter = typeFilter == null ? BusinessEventTypeFilter.of(null) : typeFilter;
+  }
+
+  /**
+   * Whether this listener would attach anything at all. When it would not, the engine leaves it
+   * out of the BPMN parse listener chain entirely.
+   *
+   * <p>Covers only the types this listener is responsible for — the {@code migrate} events of the
+   * same entities are produced by the migration code, not by parsed listeners, and are filtered
+   * there.</p>
+   */
+  public boolean isActive() {
+    return isProcessInstanceParsingNeeded() || isActivityInstanceParsingNeeded() || isTaskInstanceParsingNeeded();
+  }
+
+  protected boolean isProcessInstanceParsingNeeded() {
+    return typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_START)
+        || typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END)
+        || typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_UPDATE);
+  }
+
+  protected boolean isActivityInstanceParsingNeeded() {
+    return typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_START)
+        || typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END);
+  }
+
+  protected boolean isTaskInstanceParsingNeeded() {
+    return typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_CREATE)
+        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_UPDATE)
+        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_COMPLETE)
+        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_DELETE);
+  }
+
   @Override
   public void parseRootElement(Element rootElement, List<ProcessDefinitionEntity> processDefinitions) {
     for (ProcessDefinitionEntity processDefinition : processDefinitions) {
@@ -141,21 +187,46 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
   }
 
   protected void addProcessInstanceListeners(ProcessDefinitionEntity processDefinition) {
-    processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_START, processInstanceListener);
-    processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_END, processInstanceListener);
-    processDefinition.addBuiltInListener("update", processInstanceListener);
+    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_START)) {
+      processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_START, processInstanceListener);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END)) {
+      processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_END, processInstanceListener);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_UPDATE)) {
+      processDefinition.addBuiltInListener("update", processInstanceListener);
+    }
   }
 
   protected void addActivityInstanceListeners(final ActivityImpl activity) {
-    activity.addBuiltInListener(PvmEvent.EVENTNAME_START, activityInstanceListener, 0);
-    activity.addBuiltInListener(PvmEvent.EVENTNAME_END, activityInstanceListener);
+    if (typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_START)) {
+      activity.addBuiltInListener(PvmEvent.EVENTNAME_START, activityInstanceListener, 0);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END)) {
+      activity.addBuiltInListener(PvmEvent.EVENTNAME_END, activityInstanceListener);
+    }
   }
 
   private void addTaskInstanceListeners(final TaskDefinition taskDefinition) {
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_CREATE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_UPDATE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_COMPLETE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_DELETE, taskInstanceListener);
+    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_CREATE)) {
+      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_CREATE, taskInstanceListener);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_UPDATE)) {
+      // both BPMN events map to the single task-instance:update business event
+      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, taskInstanceListener);
+      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_UPDATE, taskInstanceListener);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_COMPLETE)) {
+      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_COMPLETE, taskInstanceListener);
+    }
+
+    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_DELETE)) {
+      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_DELETE, taskInstanceListener);
+    }
   }
 }

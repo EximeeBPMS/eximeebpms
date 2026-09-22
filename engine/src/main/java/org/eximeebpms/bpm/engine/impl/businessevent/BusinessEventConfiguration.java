@@ -1,6 +1,7 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import java.util.Map;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,6 +63,32 @@ public class BusinessEventConfiguration {
   protected String prefix = BusinessEventType.BUSINESS_EVENT_PREFIX;
 
   /**
+   * Allowlist of published event types, as {@code <entity>:<event>} tokens — see
+   * {@link BusinessEventTypeFilter} for the accepted syntax.
+   *
+   * <p>Applied together with {@link #disabledEventTypes}, which wins on conflict. Only takes
+   * effect while {@link #enabled} is {@code true}; it narrows the feature, it does not switch
+   * it on.</p>
+   *
+   * <p>Default: {@code *}, i.e. every type.</p>
+   */
+  @Builder.Default
+  protected Set<String> enabledEventTypes = Set.of(BusinessEventTypeFilter.ALL);
+
+  /**
+   * Denylist of published event types, as {@code <entity>:<event>} tokens — see
+   * {@link BusinessEventTypeFilter} for the accepted syntax.
+   *
+   * <p>Applied after {@link #enabledEventTypes} and takes precedence over it, so
+   * {@code disabled-event-types: variable-instance:*} on the default allowlist publishes
+   * everything except variable events.</p>
+   *
+   * <p>Default: empty.</p>
+   */
+  @Builder.Default
+  protected Set<String> disabledEventTypes = Set.of();
+
+  /**
    * Symbolic publisher name resolved through business event publisher SPI.
    *
    * <p>Examples: {@code noop}, {@code kafka}.</p>
@@ -91,6 +118,19 @@ public class BusinessEventConfiguration {
 
   public Map<String, String> getPublisherProperties() {
     return publisherProperties == null ? Map.of() : Map.copyOf(publisherProperties);
+  }
+
+  /**
+   * A {@code null} field means "not configured" and falls back to the default allowlist, so that a
+   * caller which passes nothing publishes everything. An explicitly empty set is a different thing
+   * and is honoured: it disables every type.
+   */
+  public Set<String> getEnabledEventTypes() {
+    return enabledEventTypes == null ? Set.of(BusinessEventTypeFilter.ALL) : Set.copyOf(enabledEventTypes);
+  }
+
+  public Set<String> getDisabledEventTypes() {
+    return disabledEventTypes == null ? Set.of() : Set.copyOf(disabledEventTypes);
   }
 
   public boolean isPublisherNoop() {

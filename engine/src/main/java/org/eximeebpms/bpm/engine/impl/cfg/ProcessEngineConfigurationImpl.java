@@ -1785,12 +1785,21 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected static Properties databaseTypeMappings = getDefaultDatabaseTypeMappings();
   protected static final String MY_SQL_PRODUCT_NAME = "MySQL";
+  protected static final String MARIA_DB_PRODUCT_NAME = "MariaDB";
   protected static final String POSTGRES_DB_PRODUCT_NAME = "PostgreSQL";
 
   protected static Properties getDefaultDatabaseTypeMappings() {
     Properties databaseTypeMappings = new Properties();
     databaseTypeMappings.setProperty("H2", "h2");
     databaseTypeMappings.setProperty(MY_SQL_PRODUCT_NAME, "mysql");
+    // MariaDB reuses the MySQL dialect: its create scripts, statements and type
+    // mappings are the MySQL ones, verified by applying all seven mysql create
+    // scripts to MariaDB 11.4, 12.3 and 13.0 unchanged. Only the product name
+    // differs, and only when the native driver is used - MySQL Connector/J
+    // against a MariaDB server reports "MySQL" and has therefore always worked,
+    // while MariaDB Connector/J reports "MariaDB" and failed startup here for
+    // want of this one entry.
+    databaseTypeMappings.setProperty(MARIA_DB_PRODUCT_NAME, "mysql");
     databaseTypeMappings.setProperty("Oracle", "oracle");
     databaseTypeMappings.setProperty(POSTGRES_DB_PRODUCT_NAME, "postgres");
     databaseTypeMappings.setProperty("Microsoft SQL Server", "mssql");

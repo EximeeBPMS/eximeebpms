@@ -23,6 +23,8 @@
     <version.h2-v1>1.4.200</version.h2-v1><!-- used for instance migration qa -->
     <version.oracle>23.26.2.0.0</version.oracle>
     <version.mysql>9.7.0</version.mysql>
+    <!-- MariaDB runs on the MySQL dialect; only the driver differs. -->
+    <version.mariadb>3.5.7</version.mariadb>
     <version.sqlserver>13.4.0.jre11</version.sqlserver>
     <version.db2-11.5>11.5.9.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>
@@ -65,6 +67,11 @@
         <groupId>com.mysql</groupId>
         <artifactId>mysql-connector-j</artifactId>
         <version>${version.mysql}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>${version.mariadb}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
@@ -277,6 +284,53 @@
                   <groupId>com.mysql</groupId>
                   <artifactId>mysql-connector-j</artifactId>
                   <version>${version.mysql}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+
+    <profile>
+      <id>mariadb</id>
+      <properties>
+        <!-- Shared external DB, same as the mysql profile: engine test forks would
+             otherwise race on schema and test data. -->
+        <engine.test.forkCount>1</engine.test.forkCount>
+        <!-- The dialect is MySQL's, deliberately: MariaDB reuses the mysql create
+             scripts and statement set unchanged. Only the driver below differs. -->
+        <database.type>mysql</database.type>
+        <database.driver>org.mariadb.jdbc.Driver</database.driver>
+        <database.datasource.class>org.mariadb.jdbc.MariaDbDataSource</database.datasource.class>
+        <!-- Consumed by settings/maven/nexus-settings.xml to build a testcontainers
+             URL (jdbc:tc:${database.tc.url}://...). The upstream profiles name
+             Camunda-internal mirrored images here (cammysql, campostgresql,
+             camsqlserver); this one names the image as it actually is on Docker
+             Hub, since no such mirror exists for MariaDB. -->
+        <database.tc.url>mariadb:12.3</database.tc.url>
+        <database.tc.params>/${database.name}?user=${database.username}&amp;password=${database.password}</database.tc.params>
+        <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
+      </properties>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.mariadb.jdbc</groupId>
+          <artifactId>mariadb-java-client</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>sql-maven-plugin</artifactId>
+              <dependencies>
+                <dependency>
+                  <groupId>org.mariadb.jdbc</groupId>
+                  <artifactId>mariadb-java-client</artifactId>
+                  <version>${version.mariadb}</version>
                 </dependency>
               </dependencies>
             </plugin>

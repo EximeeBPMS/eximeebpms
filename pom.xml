@@ -1165,18 +1165,18 @@
   </licenses>
 
   <organization>
-    <name>EximeeBPMS services GmbH</name>
-    <url>http://eximeebpms.org</url>
+    <name>Consdata S.A.</name>
+    <url>https://consdata.com</url>
   </organization>
 
-  <url>http://eximeebpms.org</url>
+  <url>https://eximeebpms.org</url>
 
   <developers>
     <developer>
       <id>eximeebpms.org</id>
       <name>EximeeBPMS Community</name>
       <organization>eximeebpms.org</organization>
-      <organizationUrl>http://eximeebpms.org</organizationUrl>
+      <organizationUrl>https://eximeebpms.org</organizationUrl>
     </developer>
   </developers>
 

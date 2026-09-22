@@ -28,6 +28,7 @@ retroactively added CVE IDs.
 
 ### Changed
 - The supported-versions window in `SECURITY.md` moved with the 1.4.0 release: 1.4.x receives security fixes, 1.3.x receives security fixes only, and 1.2.x and earlier are out of support.
+- Published artifact metadata now names the actual legal entity, **Consdata S.A.**, instead of `EximeeBPMS services GmbH`, a company that does not exist and that the original rebrand carried over from `camunda services GmbH`. This covers the `<organization>` blocks of the root POM, `parent` and both BOMs, plus the job-executor resource adapter's `<vendor-name>`. `<organization>` now points at `https://consdata.com`; the project `<url>` elements stay on `https://eximeebpms.org`, now over `https`. Metadata only.
 
 ### Fixed
 - The API-compatibility check (clirr) on `engine`, `engine-dmn`, `commons/typed-values` and `model-api` was not actually running: its baseline pointed at a version nothing resolves, its profile was deactivated by a sibling profile, and the plugin's bundled BCEL failed on Java 9+ jars. It now compares against the released 1.4.0 artifacts and fails the build when the baseline cannot be resolved. Fixing it also removed a stale `skipTests` override that would have skipped the whole `engine` unit test suite.

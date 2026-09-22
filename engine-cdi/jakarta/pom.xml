@@ -204,6 +204,19 @@
               <forceCreation>true</forceCreation>
               <excludes>
                 <exclude>org/eximeebpms/bpm/engine/cdi/test/CdiProcessEngineTestCase.class</exclude>
+                <!-- ProgrammaticBeanLookupTest and its SpecializedTestBean do not belong in the
+                     Quarkus archive: @Specializes is CDI Full only, and Quarkus rejects it at
+                     augmentation, failing every deployment in the quarkus qa module rather than
+                     just the one test that uses it. The qa module already excludes the test from
+                     running, but that is not enough - the classes still get scanned. Excluded as a
+                     family (the nested beans are separate class files, and the trailing * catches
+                     them) so nothing is left referring to a class no longer in the jar. Nothing
+                     else in this test-jar references either. Excluded here rather than deleted:
+                     the plain test-jar execution above still ships both, so engine-cdi's own
+                     Weld-based run of this test - where @Specializes is valid - is unaffected.
+                     The Quarkus-compatible variant lives in quarkus-extension/engine/deployment. -->
+                <exclude>org/eximeebpms/bpm/engine/cdi/test/impl/util/ProgrammaticBeanLookupTest*.class</exclude>
+                <exclude>org/eximeebpms/bpm/engine/cdi/test/impl/beans/SpecializedTestBean.class</exclude>
               </excludes>
             </configuration>
           </execution>

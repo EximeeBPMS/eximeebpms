@@ -22,7 +22,7 @@ import io.smallrye.config.ConfigMapping;
 import java.util.Map;
 import java.util.Optional;
 
-@ConfigMapping(prefix = "quarkus.camunda")
+@ConfigMapping(prefix = "quarkus.eximeebpms")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface EximeeBpmsEngineConfig {
 

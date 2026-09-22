@@ -96,13 +96,12 @@ public class EximeeBpmsEngineProcessor {
   @Record(RUNTIME_INIT)
   protected void processEngineConfiguration(EximeeBpmsEngineRecorder recorder,
                                             BeanContainerBuildItem beanContainerBuildItem,
-                                            EximeeBpmsEngineConfig eximeeBpmsEngineConfig,
                                             BuildProducer<ProcessEngineConfigurationBuildItem> configurationProducer) {
 
     BeanContainer beanContainer = beanContainerBuildItem.getValue();
     recorder.configureProcessEngineCdiBeans(beanContainer);
     RuntimeValue<ProcessEngineConfigurationImpl> processEngineConfiguration =
-        recorder.createProcessEngineConfiguration(beanContainer, eximeeBpmsEngineConfig);
+        recorder.createProcessEngineConfiguration(beanContainer);
     configurationProducer.produce(new ProcessEngineConfigurationBuildItem(processEngineConfiguration));
   }
 

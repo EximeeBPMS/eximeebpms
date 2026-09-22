@@ -46,6 +46,16 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 @Recorder
 public class EximeeBpmsEngineRecorder {
 
+  // EximeeBpmsEngineConfig is @ConfigRoot(phase = RUN_TIME), so it cannot be injected into a
+  // @BuildStep - Quarkus rejects that outright ("Run time configuration cannot be consumed in
+  // Build Steps, use RuntimeValue<EximeeBpmsEngineConfig> in a @Recorder constructor instead").
+  // Taking it here, as recorder constructor injection, is the mechanism Quarkus points at.
+  private final RuntimeValue<EximeeBpmsEngineConfig> engineConfig;
+
+  public EximeeBpmsEngineRecorder(RuntimeValue<EximeeBpmsEngineConfig> engineConfig) {
+    this.engineConfig = engineConfig;
+  }
+
   public void configureProcessEngineCdiBeans(BeanContainer beanContainer) {
 
     if (BeanManagerLookup.localInstance == null) {
@@ -53,8 +63,9 @@ public class EximeeBpmsEngineRecorder {
     }
   }
 
-  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer,
-                                                                                       EximeeBpmsEngineConfig config) {
+  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer) {
+
+    EximeeBpmsEngineConfig config = this.engineConfig.getValue();
 
     QuarkusProcessEngineConfiguration configuration = getBeanFromContainer(QuarkusProcessEngineConfiguration.class,
         beanContainer);

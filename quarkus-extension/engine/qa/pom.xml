@@ -62,8 +62,6 @@
             <!-- See https://jira.camunda.com/browse/CAM-13751 -->
             <exclude>**/BeanPropertyElTest.java</exclude>
 
-            <!-- See ProgrammaticBeanLookupTest in quarkus-extension/engine/deployment module -->
-            <exclude>**/ProgrammaticBeanLookupTest.java</exclude>
             <!-- See https://github.com/camunda/camunda-bpm-platform/issues/3419 -->
             <exclude>**/TaskFormTest.java</exclude>
           </excludes>

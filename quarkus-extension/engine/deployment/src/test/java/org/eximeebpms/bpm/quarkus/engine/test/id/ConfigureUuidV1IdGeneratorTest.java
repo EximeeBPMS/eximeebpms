@@ -34,7 +34,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * UuidV1Generator was removed in 1.4.0. Verifies that leftover {@code quarkus.camunda.id-generator=uuid-v1}
+ * UuidV1Generator was removed in 1.4.0. Verifies that leftover {@code quarkus.eximeebpms.id-generator=uuid-v1}
  * configuration still starts the engine — it silently falls back to StrongUuidGenerator (UUID v7)
  * instead of activating a legacy generator that no longer exists.
  */
@@ -43,7 +43,7 @@ class ConfigureUuidV1IdGeneratorTest {
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
       .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class))
-      .overrideConfigKey("quarkus.camunda.id-generator", "uuid-v1");
+      .overrideConfigKey("quarkus.eximeebpms.id-generator", "uuid-v1");
 
   @Inject
   public TaskService taskService;

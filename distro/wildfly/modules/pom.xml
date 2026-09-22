@@ -23,7 +23,11 @@
     <!-- pins the Netty modules WildFly bundles internally (io/netty/netty-*)
       to a version patched against CVE-2026-89044 (HTTP request smuggling,
       fixed 4.1.138.Final) - the WildFly distro this repo currently pins
-      (41.0.1.Final) ships the vulnerable 4.1.137.Final -->
+      (41.0.1.Final) ships the vulnerable 4.1.137.Final. WildFly's own
+      netty-bom is already bumped to 4.1.138.Final on its main branch
+      (WFLY-22225, wildfly/wildfly#20398, merged 2026-09-16) but not yet in
+      any released WildFly version - re-check whether this override is
+      still needed next time version.wildfly bumps past 41.0.1.Final. -->
     <version.netty>4.1.138.Final</version.netty>
   </properties>
 

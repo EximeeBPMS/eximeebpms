@@ -39,6 +39,9 @@ retroactively added CVE IDs.
 ### Security
 - Fix CVE-2026-89044 (HTTP request smuggling via a malformed `Transfer-Encoding`, CVSS 6.5) in the Netty modules the WildFly distribution bundles. WildFly 41.0.1.Final ships Netty 4.1.137.Final; the distribution now excludes WildFly's own `io/netty/**` modules and ships its own override modules pinned to Netty 4.1.138.Final. The test-scope Netty pin in `engine-rest-jakarta` moves to 4.1.138.Final as well; it never reached a shipped artifact. See Security Notice EXBPMS-14.
 
+### Documentation
+- ER diagrams of the database schema, generated from the engine's own DDL, are added under `erd/` (`erd_bpmn`, `erd_dmn`, `erd_history`, `erd_identity`; 46 tables). They replace the inherited Camunda 7.23 artwork, which still showed the CMMN columns 1.4.0 removed, lacked `ACT_RU_BUS_EVT_OBX` and `ACT_RU_SCRIPT_VIOLATION`, and drew foreign keys that do not exist. History tables have no declared foreign keys, so the relationships on that diagram come from column names and are drawn dashed.
+
 ---
 
 ## [1.4.0] – 2026-09-15

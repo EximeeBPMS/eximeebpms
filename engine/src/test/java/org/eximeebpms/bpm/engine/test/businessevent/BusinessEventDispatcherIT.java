@@ -211,6 +211,44 @@ public class BusinessEventDispatcherIT extends AbstractBusinessEventIT {
         assertThat(isProcessed(id5)).as("id5 must be persisted as processed after cycle 2").isTrue();
     }
 
+    /**
+     * GIVEN 5 outbox records where the publisher reports a failure <em>result</em> (not an
+     * exception) for the 4th — the way the shipped Kafka publisher reports a broker outage
+     * WHEN  the dispatcher runs a first cycle
+     * THEN  records 1–3 are processed, the failing record and everything after it stay unprocessed
+     * WHEN  the dispatcher runs a second cycle with a healthy publisher
+     * THEN  the failing record is retried first, then the rest
+     */
+    @Test
+    public void shouldStopCycleAndKeepRecordUnprocessed_whenPublisherReportsFailureResult() {
+        insertOutboxRecord("EVENT_1");
+        insertOutboxRecord("EVENT_2");
+        insertOutboxRecord("EVENT_3");
+        insertOutboxRecord("EVENT_FAIL");
+        insertOutboxRecord("EVENT_5");
+
+        List<Long> ids = getAllUnprocessedIds();
+        String id3 = String.valueOf(ids.get(2));
+        String id4 = String.valueOf(ids.get(3));
+        String id5 = String.valueOf(ids.get(4));
+
+        CapturingPublisher cycle1Publisher = new CapturingPublisher();
+        cycle1Publisher.reportFailureOnEventType("EVENT_FAIL");
+        new BusinessEventDispatcher(commandExecutor, cycle1Publisher, businessEventConfiguration).run();
+
+        assertThat(publishedTypes(cycle1Publisher)).containsExactly("EVENT_1", "EVENT_2", "EVENT_3");
+        assertThat(isProcessed(id3)).isTrue();
+        assertThat(isProcessed(id4)).as("a failure result must not mark the record processed").isFalse();
+        assertThat(isProcessed(id5)).as("records after a failure result must not be attempted").isFalse();
+
+        CapturingPublisher cycle2Publisher = new CapturingPublisher();
+        new BusinessEventDispatcher(commandExecutor, cycle2Publisher, businessEventConfiguration).run();
+
+        assertThat(publishedTypes(cycle2Publisher)).containsExactly("EVENT_FAIL", "EVENT_5");
+        assertThat(isProcessed(id4)).isTrue();
+        assertThat(isProcessed(id5)).isTrue();
+    }
+
     // -------------------------------------------------------------------------
     // Event-building tests
     // -------------------------------------------------------------------------
@@ -418,17 +456,22 @@ public class BusinessEventDispatcherIT extends AbstractBusinessEventIT {
 
     /**
      * A {@link BusinessEventPublisher} that records every published event.
-     * Optionally throws a {@link RuntimeException} for events whose type matches
-     * a configured fail-set — simulating a publish failure mid-cycle.
+     * Optionally throws a {@link RuntimeException}, or returns a failure result, for events
+     * whose type matches a configured set — simulating a publish failure mid-cycle.
      */
     @Getter
     private static final class CapturingPublisher implements BusinessEventPublisher {
 
         private final List<Event> published = new ArrayList<>();
         private final Set<String> failOnTypes = new HashSet<>();
+        private final Set<String> reportFailureOnTypes = new HashSet<>();
 
         public void failOnEventType(String eventType) {
             failOnTypes.add(eventType);
+        }
+
+        public void reportFailureOnEventType(String eventType) {
+            reportFailureOnTypes.add(eventType);
         }
 
       @Override
@@ -441,6 +484,9 @@ public class BusinessEventDispatcherIT extends AbstractBusinessEventIT {
             String type = event.metadata().type();
             if (failOnTypes.contains(type)) {
                 throw new RuntimeException("Simulated publish failure for event type: " + type);
+            }
+            if (reportFailureOnTypes.contains(type)) {
+                return BusinessEventPublishResult.failure("Simulated failure result for event type: " + type);
             }
             published.add(event);
             return BusinessEventPublishResult.success();

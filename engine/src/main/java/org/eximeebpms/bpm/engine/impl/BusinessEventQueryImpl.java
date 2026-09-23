@@ -11,6 +11,7 @@ public class BusinessEventQueryImpl extends AbstractVariableQueryImpl<BusinessEv
 
     protected String processInstanceId;
     protected String eventType;
+    protected boolean unprocessed;
 
     public BusinessEventQueryImpl(CommandExecutor commandExecutor) {
         super(commandExecutor);
@@ -26,12 +27,22 @@ public class BusinessEventQueryImpl extends AbstractVariableQueryImpl<BusinessEv
         return this;
     }
 
+    @Override
+    public BusinessEventQuery unprocessed() {
+        this.unprocessed = true;
+        return this;
+    }
+
     public String getProcessInstanceId() {
         return processInstanceId;
     }
 
     public String getEventType() {
         return eventType;
+    }
+
+    public boolean isUnprocessed() {
+        return unprocessed;
     }
 
     @Override

@@ -205,5 +205,34 @@ public class ProcessEngineLogger extends BaseLogger {
     );
   }
 
+  public void businessEventDispatcherStarted(int batchSize, long dispatchIntervalMs) {
+    logInfo("014", "Business event dispatcher started (batchSize={}, intervalMs={})", batchSize, dispatchIntervalMs);
+  }
+
+  public void businessEventDispatcherStopped() {
+    logInfo("015", "Business event dispatcher stopped");
+  }
+
+  public void businessEventDispatchCycleCompleted(int dispatched) {
+    logDebug("016", "Business event dispatch cycle complete, {} record(s) dispatched", dispatched);
+  }
+
+  public void businessEventDispatchCycleFailed(Exception e) {
+    logError("017", "Unexpected error during business event dispatch cycle", e);
+  }
+
+  public void publishingBusinessEvent(String outboxId) {
+    logDebug("018", "Publishing business event outbox record id={}", outboxId);
+  }
+
+  public void businessEventDispatchFailed(String outboxId, Long waitingMillis, String message, Throwable cause) {
+    logError("019", "Failed to dispatch business event outbox record id={} (waiting {} ms), stopping cycle: {}",
+        outboxId, waitingMillis, message, cause);
+  }
+
+  public void businessEventDispatchLockContention() {
+    logDebug("020", "Business event outbox is locked by another dispatcher (FOR UPDATE NOWAIT); skipping this cycle");
+  }
+
 }
 

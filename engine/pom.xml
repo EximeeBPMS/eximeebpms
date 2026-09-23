@@ -554,10 +554,12 @@
           <reuseForks>true</reuseForks>
           <includes>
            <include>%regex[.*(${test.includes}).*Test.*.class]</include>
+           <include>%regex[.*(${test.includes}).*IT.class]</include>
           </includes>
           <excludes>
             <exclude>**/*TestCase.java</exclude>
             <exclude>%regex[.*(${test.excludes}).*Test.*.class]</exclude>
+            <exclude>%regex[.*(${test.excludes}).*IT.class]</exclude>
           </excludes>
           <dependenciesToScan>
             <dependency>org.eximeebpms.bpm:eximeebpms-bpm-archunit</dependency>

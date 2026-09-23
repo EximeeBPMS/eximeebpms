@@ -8,4 +8,7 @@ public interface BusinessEventQuery extends Query<BusinessEventQuery, BusinessEv
 
     BusinessEventQuery eventType(String eventType);
 
+    /** Only records not yet delivered to the publisher. */
+    BusinessEventQuery unprocessed();
+
 }

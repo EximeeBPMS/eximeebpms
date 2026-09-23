@@ -149,7 +149,7 @@ public class BusinessEventDispatcherConcurrencyIT extends AbstractBusinessEventI
             @Override
             public BusinessEventPublishResult publish(Event event) {
                 received.add(event);
-                return null;
+                return BusinessEventPublishResult.success();
             }
         };
     }

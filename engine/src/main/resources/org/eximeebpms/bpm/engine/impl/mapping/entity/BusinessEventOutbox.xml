@@ -180,6 +180,9 @@
       <if test="eventType != null">
         and RES.EVENT_TYPE_ = #{eventType, jdbcType=VARCHAR}
       </if>
+      <if test="unprocessed">
+        and RES.PROCESSED_ = ${falseConstant}
+      </if>
     </where>
   </sql>
 

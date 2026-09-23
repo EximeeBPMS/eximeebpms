@@ -11,8 +11,7 @@ import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity;
 import org.eximeebpms.bpm.engine.impl.util.ExceptionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 
@@ -33,7 +32,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>Records are processed in strict ascending {@code ID_} order. If publishing a record
  * fails the dispatch stops the current cycle immediately — subsequent records are not touched
  * until the failing one succeeds on the next cycle. This preserves the delivery-order
- * guarantee documented on {@link BusinessEventOutboxEntity}.
+ * guarantee documented on {@link BusinessEventOutboxEntity}. A failure is either a thrown
+ * exception or a failed {@link BusinessEventPublishResult}.
  *
  * <h3>Threading</h3>
  * Call {@link #start()} to begin continuous background processing and {@link #stop()} to
@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class BusinessEventDispatcher implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BusinessEventDispatcher.class);
+    private static final ProcessEngineLogger LOG = ProcessEngineLogger.INSTANCE;
 
     /**
      * Records fetched from the outbox per DB round-trip.
@@ -92,7 +92,7 @@ public class BusinessEventDispatcher implements Runnable {
         int batchSize = businessEventConfiguration.getDispatcherBatchSize();
         schedulerRef.set(newScheduler);
         newScheduler.scheduleWithFixedDelay(this, 0, dispatchIntervalMs, TimeUnit.MILLISECONDS);
-        LOG.info("BusinessEventDispatcher started (batchSize={}, intervalMs={})", batchSize, dispatchIntervalMs);
+        LOG.businessEventDispatcherStarted(batchSize, dispatchIntervalMs);
     }
 
     /**
@@ -115,7 +115,7 @@ public class BusinessEventDispatcher implements Runnable {
         }
         // Final drain so no events are left behind after engine shutdown
         run();
-        LOG.info("BusinessEventDispatcher stopped");
+        LOG.businessEventDispatcherStopped();
     }
 
     // -------------------------------------------------------------------------
@@ -140,10 +140,10 @@ public class BusinessEventDispatcher implements Runnable {
                 return processed;
             });
             if (totalProcessed > 0) {
-                LOG.debug("BusinessEventDispatcher: cycle complete, {} record(s) dispatched", totalProcessed);
+                LOG.businessEventDispatchCycleCompleted(totalProcessed);
             }
         } catch (Exception e) {
-            LOG.error("BusinessEventDispatcher: unexpected error during dispatch cycle", e);
+            LOG.businessEventDispatchCycleFailed(e);
         }
     }
 
@@ -158,21 +158,24 @@ public class BusinessEventDispatcher implements Runnable {
         int count = 0;
         for (BusinessEventOutboxEntity entity : batch) {
             try {
-                LOG.debug("Publishing event [id={}]", entity.getId());
+                LOG.publishingBusinessEvent(entity.getId());
                 final BusinessEventPublishResult result = publisher.publish(buildEvent(entity));
                 if (!result.successful()) {
-                  LOG.error("BusinessEventDispatcher: failed to dispatch outbox record id={}, stopping cycle: {}",
-                      entity.getId(), result.message());
+                  LOG.businessEventDispatchFailed(entity.getId(), waitingMillis(entity), result.message(), result.cause());
+                  return count;
                 }
                 markProcessed(ctx, entity);
                 count++;
             } catch (Exception e) {
-                LOG.error("BusinessEventDispatcher: failed to dispatch outbox record id={}, stopping cycle",
-                        entity.getId(), e);
+                LOG.businessEventDispatchFailed(entity.getId(), waitingMillis(entity), e.getMessage(), e);
                 return count;
             }
         }
         return count;
+    }
+
+    private static Long waitingMillis(BusinessEventOutboxEntity entity) {
+        return entity.getCreatedDate() == null ? null : System.currentTimeMillis() - entity.getCreatedDate().getTime();
     }
 
     private List<BusinessEventOutboxEntity> fetchUnprocessed(CommandContext ctx) {
@@ -181,8 +184,7 @@ public class BusinessEventDispatcher implements Runnable {
             return ctx.getBusinessEventManager().findUnprocessedEventsForDispatch(batchSize);
         } catch (ProcessEnginePersistenceException e) {
             if (ExceptionUtil.checkNowaitLockException(e)) {
-                LOG.debug("BusinessEventDispatcher: FOR UPDATE NOWAIT lock contention detected " +
-                        "— another session holds the lock; skipping this cycle");
+                LOG.businessEventDispatchLockContention();
                 return List.of();
             }
             throw e;

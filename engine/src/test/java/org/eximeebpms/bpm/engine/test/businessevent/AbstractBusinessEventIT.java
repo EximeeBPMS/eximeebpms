@@ -3,6 +3,7 @@ package org.eximeebpms.bpm.engine.test.businessevent;
 import java.util.List;
 import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity;
@@ -33,7 +34,17 @@ public abstract class AbstractBusinessEventIT {
     protected ProcessEngineBootstrapRule bootstrapRule =
             new ProcessEngineBootstrapRule(config -> {
                 config.setBusinessEventConfiguration(businessEventConfiguration);
+                configureEngine(config);
             });
+
+    /**
+     * Further engine configuration for sub-classes, applied at bootstrap after the business event
+     * configuration. Like {@link #businessEventConfiguration()}, it must not depend on sub-class
+     * fields.
+     */
+    protected void configureEngine(ProcessEngineConfigurationImpl config) {
+        // nothing by default
+    }
 
     protected ProvidedProcessEngineRule engineRule = new ProvidedProcessEngineRule(bootstrapRule);
     protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -56,6 +67,20 @@ public abstract class AbstractBusinessEventIT {
 
         return outboxEntries.stream()
                 .map(BusinessEventOutboxEntity::getEventType)
+                .toList();
+    }
+
+    /**
+     * The serialized payloads of every business event written to the outbox for this process
+     * instance, in insertion order.
+     */
+    @SuppressWarnings("unchecked")
+    protected List<String> outboxPayloads(String processInstanceId) {
+        final List<BusinessEventOutboxEntity> outboxEntries = commandExecutor.execute(ctx ->
+                ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
+
+        return outboxEntries.stream()
+                .map(BusinessEventOutboxEntity::getBusinessEvent)
                 .toList();
     }
 

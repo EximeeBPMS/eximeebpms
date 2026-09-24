@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  targetNamespace="Examples">
+
+  <process id="processScopeTimer" isExecutable="true">
+    <startEvent id="start" />
+    <sequenceFlow id="flow1" sourceRef="start" targetRef="userTask" />
+    <userTask id="userTask" />
+    <sequenceFlow id="flow2" sourceRef="userTask" targetRef="end" />
+    <endEvent id="end" />
+
+    <subProcess id="timerEventSubProcess" triggeredByEvent="true">
+      <startEvent id="timerStart" isInterrupting="false">
+        <timerEventDefinition>
+          <timeDuration>PT1H</timeDuration>
+        </timerEventDefinition>
+      </startEvent>
+      <sequenceFlow id="flow3" sourceRef="timerStart" targetRef="timerEnd" />
+      <endEvent id="timerEnd" />
+    </subProcess>
+  </process>
+
+</definitions>

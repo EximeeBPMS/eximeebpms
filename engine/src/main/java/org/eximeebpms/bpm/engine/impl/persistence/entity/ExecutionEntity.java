@@ -472,6 +472,36 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
     }
   }
 
+  @Override
+  public void fireBusinessProcessStartEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_START;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createProcessInstanceStartEvt(processInstance);
+      }
+    });
+  }
+
+  @Override
+  public void fireBusinessProcessInstanceUpdate() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_UPDATE;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createProcessInstanceUpdateEvt(ExecutionEntity.this);
+      }
+    });
+  }
+
   /**
    * Method used for destroying a scope in a way that the execution can be
    * removed afterwards.

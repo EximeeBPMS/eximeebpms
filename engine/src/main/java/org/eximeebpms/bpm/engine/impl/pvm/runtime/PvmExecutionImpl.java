@@ -249,6 +249,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     initialize();
 
     fireHistoricProcessStartEvent();
+    fireBusinessProcessStartEvent();
 
     if (variables != null) {
       setVariables(variables);
@@ -272,6 +273,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     initialize();
 
     fireHistoricProcessStartEvent();
+    fireBusinessProcessStartEvent();
 
     setActivityInstanceId(getId());
     setVariables(variables);
@@ -284,6 +286,19 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   public abstract void fireHistoricProcessStartEvent();
+
+  /**
+   * Emits the process-instance start business event. Called at the same point as
+   * {@link #fireHistoricProcessStartEvent()}, before any start variables, form properties or
+   * timers are initialized, so the business event stream orders them the way history does.
+   */
+  public abstract void fireBusinessProcessStartEvent();
+
+  /**
+   * Emits the process-instance update business event for this process instance. Called wherever
+   * history produces its process-instance update event.
+   */
+  public abstract void fireBusinessProcessInstanceUpdate();
 
   @Override
   public void destroy() {
@@ -1191,6 +1206,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
         }
       });
     }
+
+    processInstance.fireBusinessProcessInstanceUpdate();
   }
 
   @Override

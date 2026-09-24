@@ -209,7 +209,7 @@ public class IdentityLinkEntity implements Serializable, IdentityLink, DbEntity,
     this.processDefId = processDef.getId();
   }
 
-  private void fireBusinessIdentityLinkEvent(final BusinessEventTypes eventType) {
+  public void fireBusinessIdentityLinkEvent(final BusinessEventTypes eventType) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {

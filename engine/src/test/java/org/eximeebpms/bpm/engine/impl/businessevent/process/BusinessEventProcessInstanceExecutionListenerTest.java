@@ -30,18 +30,18 @@ class BusinessEventProcessInstanceExecutionListenerTest {
   private BusinessEvent expectedEvent;
 
   @Test
-  void shouldCreateProcessInstanceStartEvent() {
-    // given
+  void shouldNotCreateProcessInstanceStartEvent() {
+    // given: process-instance:start is emitted by ExecutionEntity#fireBusinessProcessStartEvent,
+    // not by this listener
     when(execution.getEventName()).thenReturn(ExecutionListener.EVENTNAME_START);
-    when(producer.createProcessInstanceStartEvt(execution)).thenReturn(expectedEvent);
 
     // when
     final BusinessEvent event = listener.createBusinessEvent(producer, execution);
 
     // then
-    assertThat(event).isSameAs(expectedEvent);
+    assertThat(event).isNull();
 
-    verify(producer).createProcessInstanceStartEvt(execution);
+    verify(producer, never()).createProcessInstanceStartEvt(any());
     verify(producer, never()).createProcessInstanceEndEvt(any());
     verify(producer, never()).createProcessInstanceUpdateEvt(any());
   }
@@ -64,20 +64,20 @@ class BusinessEventProcessInstanceExecutionListenerTest {
   }
 
   @Test
-  void shouldCreateProcessInstanceUpdateEvent() {
-    // given
+  void shouldNotCreateProcessInstanceUpdateEvent() {
+    // given: process-instance-update is emitted by ExecutionEntity#fireBusinessProcessInstanceUpdate,
+    // not by this listener
     when(execution.getEventName()).thenReturn(BusinessEventProcessInstanceExecutionListener.UPDATE);
-    when(producer.createProcessInstanceUpdateEvt(execution)).thenReturn(expectedEvent);
 
     // when
     final BusinessEvent event = listener.createBusinessEvent(producer, execution);
 
     // then
-    assertThat(event).isSameAs(expectedEvent);
+    assertThat(event).isNull();
 
-    verify(producer).createProcessInstanceUpdateEvt(execution);
     verify(producer, never()).createProcessInstanceStartEvt(any());
     verify(producer, never()).createProcessInstanceEndEvt(any());
+    verify(producer, never()).createProcessInstanceUpdateEvt(any());
   }
 
   @Test

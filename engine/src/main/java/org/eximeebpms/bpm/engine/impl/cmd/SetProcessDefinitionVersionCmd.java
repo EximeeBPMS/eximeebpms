@@ -133,6 +133,7 @@ public class SetProcessDefinitionVersionCmd implements Command<Void>, Serializab
         }
       });
     }
+    processInstance.fireBusinessProcessInstanceUpdate();
 
     // switch all sub-executions of the process instance to the new process definition version
     List<ExecutionEntity> childExecutions = executionManager

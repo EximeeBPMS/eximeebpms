@@ -47,6 +47,11 @@ import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.ErrorPropagationException;
 import org.eximeebpms.bpm.engine.impl.bpmn.helper.EscalationHandler;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.businessevent.variable.VariableInstanceBusinessEventListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
@@ -607,6 +612,11 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public void fireIdentityLinkHistoryEvents(String userId, String groupId, String type, HistoryEventTypes historyEventType) {
     IdentityLinkEntity identityLinkEntity = newIdentityLink(userId, groupId, type);
     identityLinkEntity.fireHistoricIdentityLinkEvent(historyEventType);
+    // assignee/owner links exist only as these synthetic events, not as identity link rows, so
+    // the business event is emitted here too
+    identityLinkEntity.fireBusinessIdentityLinkEvent(HistoryEventTypes.IDENTITY_LINK_ADD.equals(historyEventType)
+        ? BusinessEventTypes.IDENTITY_LINK_ADD
+        : BusinessEventTypes.IDENTITY_LINK_DELETE);
   }
 
   public IdentityLinkEntity newIdentityLink(String userId, String groupId, String type) {
@@ -898,6 +908,10 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
    *   or an exception is thrown
    */
   public boolean fireEvent(String taskEventName) {
+
+    // before any task listener, which is where the built-in listener used to emit it; emitted here
+    // so tasks without a task definition (standalone tasks) produce it too
+    fireBusinessTaskEvent(taskEventName);
 
     List<TaskListener> taskEventListeners = getListenersForEvent(taskEventName);
 
@@ -1509,6 +1523,57 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
       fireHistoricIdentityLinks();
       propertyChanges.clear();
     }
+  }
+
+  protected void fireBusinessTaskEvent(final String taskEventName) {
+    final BusinessEventTypes eventType = switch (taskEventName) {
+      case TaskListener.EVENTNAME_CREATE -> BusinessEventTypes.TASK_INSTANCE_CREATE;
+      // both task events map to the single task-instance:update business event
+      case TaskListener.EVENTNAME_UPDATE, TaskListener.EVENTNAME_ASSIGNMENT -> BusinessEventTypes.TASK_INSTANCE_UPDATE;
+      default -> null;
+    };
+
+    if (eventType == null) {
+      return;
+    }
+
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return eventType;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return BusinessEventTypes.TASK_INSTANCE_CREATE.equals(eventType)
+            ? producer.createTaskInstanceCreateEvt(TaskEntity.this)
+            : producer.createTaskInstanceUpdateEvt(TaskEntity.this);
+      }
+    });
+  }
+
+  /**
+   * Emits the task-instance complete or delete business event. Called from
+   * {@link TaskManager#deleteTask} at the point where history marks the task instance ended: after
+   * the task's complete/delete listeners, sub-task deletion and the removal of its identity links
+   * and variables, so the business event stream orders them the way history does.
+   */
+  public void fireBusinessTaskEndEvent(final String deleteReason) {
+    final boolean completed = DELETE_REASON_COMPLETED.equals(deleteReason);
+
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return completed ? BusinessEventTypes.TASK_INSTANCE_COMPLETE : BusinessEventTypes.TASK_INSTANCE_DELETE;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return completed
+            ? producer.createTaskInstanceCompleteEvt(TaskEntity.this)
+            : producer.createTaskInstanceDeleteEvt(TaskEntity.this);
+      }
+    });
   }
 
   public void fireHistoricIdentityLinks() {

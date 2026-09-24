@@ -1,24 +1,19 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import java.util.List;
-import org.eximeebpms.bpm.engine.delegate.TaskListener;
-import org.eximeebpms.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.activity.BusinessEventActivityInstanceExecutionListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.BusinessEventProcessInstanceExecutionListener;
-import org.eximeebpms.bpm.engine.impl.businessevent.task.BusinessEventTaskInstanceTaskListener;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmEvent;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.eximeebpms.bpm.engine.impl.task.TaskDefinition;
 import org.eximeebpms.bpm.engine.impl.util.xml.Element;
 
 public class BusinessEventParseListener extends AbstractBpmnParseListener {
 
   protected final BusinessEventProcessInstanceExecutionListener processInstanceListener = new BusinessEventProcessInstanceExecutionListener();
   protected final BusinessEventActivityInstanceExecutionListener activityInstanceListener = new BusinessEventActivityInstanceExecutionListener();
-  protected final BusinessEventTaskInstanceTaskListener taskInstanceListener = new BusinessEventTaskInstanceTaskListener();
 
   /**
    * Decides which built-in listeners are attached at all. Types excluded by the configured
@@ -45,25 +40,19 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
    * there.</p>
    */
   public boolean isActive() {
-    return isProcessInstanceParsingNeeded() || isActivityInstanceParsingNeeded() || isTaskInstanceParsingNeeded();
+    return isProcessInstanceParsingNeeded() || isActivityInstanceParsingNeeded();
   }
 
   protected boolean isProcessInstanceParsingNeeded() {
-    return typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_START)
-        || typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END)
-        || typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_UPDATE);
+    // process-instance:start and process-instance-update are not parsed listeners: they are
+    // emitted by ExecutionEntity#fireBusinessProcessStartEvent and
+    // #fireBusinessProcessInstanceUpdate at the points history emits its own
+    return typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END);
   }
 
   protected boolean isActivityInstanceParsingNeeded() {
     return typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_START)
         || typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END);
-  }
-
-  protected boolean isTaskInstanceParsingNeeded() {
-    return typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_CREATE)
-        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_UPDATE)
-        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_COMPLETE)
-        || typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_DELETE);
   }
 
   @Override
@@ -75,8 +64,12 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
 
   @Override
   public void parseUserTask(final Element userTaskElement, final ScopeImpl scope, final ActivityImpl activity) {
+    // Deliberately no activity-instance:update on task create/assignment, unlike history's
+    // ActivityInstanceUpdateListener: that only denormalises taskId/assignee onto ACT_HI_ACTINST,
+    // and task-instance:create/update already carry taskId, assignee and activityInstanceId at the
+    // same moment. See docs/specs/business-events.md in eximeebpms-factory, "Why user tasks produce
+    // no activity-instance:update" (BPMS-782).
     addActivityInstanceListeners(activity);
-    addTaskInstanceListeners(getTaskDefinition(activity));
   }
 
   @Override
@@ -182,21 +175,9 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
     addActivityInstanceListeners(activity);
   }
 
-  protected TaskDefinition getTaskDefinition(final ActivityImpl activity) {
-    return ((UserTaskActivityBehavior) activity.getActivityBehavior()).getTaskDefinition();
-  }
-
   protected void addProcessInstanceListeners(ProcessDefinitionEntity processDefinition) {
-    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_START)) {
-      processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_START, processInstanceListener);
-    }
-
     if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END)) {
       processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_END, processInstanceListener);
-    }
-
-    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_UPDATE)) {
-      processDefinition.addBuiltInListener("update", processInstanceListener);
     }
   }
 
@@ -207,26 +188,6 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
 
     if (typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END)) {
       activity.addBuiltInListener(PvmEvent.EVENTNAME_END, activityInstanceListener);
-    }
-  }
-
-  private void addTaskInstanceListeners(final TaskDefinition taskDefinition) {
-    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_CREATE)) {
-      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_CREATE, taskInstanceListener);
-    }
-
-    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_UPDATE)) {
-      // both BPMN events map to the single task-instance:update business event
-      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, taskInstanceListener);
-      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_UPDATE, taskInstanceListener);
-    }
-
-    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_COMPLETE)) {
-      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_COMPLETE, taskInstanceListener);
-    }
-
-    if (typeFilter.isEnabled(BusinessEventTypes.TASK_INSTANCE_DELETE)) {
-      taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_DELETE, taskInstanceListener);
     }
   }
 }

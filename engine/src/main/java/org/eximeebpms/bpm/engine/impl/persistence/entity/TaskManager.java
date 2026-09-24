@@ -75,6 +75,8 @@ public class TaskManager extends AbstractManager {
         .getVariableInstanceManager()
         .deleteVariableInstanceByTask(task);
 
+      task.fireBusinessTaskEndEvent(deleteReason);
+
       if (cascade) {
         commandContext
           .getHistoricTaskInstanceManager()

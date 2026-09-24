@@ -1,2 +1,3 @@
-registry.camunda.cloud/team-cambpm/camunda-ci-sqlserver:2017
-registry.camunda.cloud/team-cambpm/camunda-ci-sqlserver:2019
+mcr.microsoft.com/mssql/server:2017-latest
+mcr.microsoft.com/mssql/server:2025-latest
+ibmcom/db2:11.5.8.0

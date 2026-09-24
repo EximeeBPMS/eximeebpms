@@ -1,2 +1,0 @@
-org.eximeebpms.impl.test.utils.testcontainers.EximeeBpmsPostgreSQLContainerProvider
-org.eximeebpms.impl.test.utils.testcontainers.EximeeBpmsMSSQLContainerProvider

@@ -15,7 +15,7 @@ create table ACT_RU_BUS_EVT_OBX (
     primary key (ID_)
 );
 create index ACT_IDX_BEO_PROC_INST on ACT_RU_BUS_EVT_OBX(PROC_INST_ID_);
-create index ACT_IDX_BEO_UNPROCESSED on ACT_RU_BUS_EVT_OBX(ID_) WHERE PROCESSED_ = 0;
+create index ACT_IDX_BEO_UNPROCESSED on ACT_RU_BUS_EVT_OBX(PROCESSED_, ID_);
 
 -- remove CMMN support --
 

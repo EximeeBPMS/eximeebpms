@@ -125,12 +125,20 @@
     <profile>
       <id>db2</id>
       <properties>
+<!-- ibmcom/db2, the image Testcontainers' built-in db2 provider uses.
+             IBM stopped publishing there in October 2022, so 11.5.8.0 is the
+             newest tag it has - current releases, including 12.1, are only on
+             icr.io/db2_community/db2, which the provider cannot be pointed at
+             (both documented overrides were tried). 11.5.8.0 is inside the
+             supported 11.5 line, and version.db2-11.5 is the JDBC driver, not
+             the server, so the pairing is normal. -->
         <!-- Shared external DB: multiple engine test forks would race on schema/test
              data, unlike the isolated per-JVM default H2 profile - see engine/pom.xml. -->
         <engine.test.forkCount>1</engine.test.forkCount>
         <database.type>db2</database.type>
         <database.driver>com.ibm.db2.jcc.DB2Driver</database.driver>
         <database.datasource.class>com.ibm.db2.jcc.DB2SimpleDataSource</database.datasource.class>
+        <database.tc.url>db2:11.5.8.0</database.tc.url>
       </properties>
     </profile>
 
@@ -261,8 +269,8 @@
         <database.type>mysql</database.type>
         <database.driver>com.mysql.cj.jdbc.Driver</database.driver>
         <database.datasource.class>com.mysql.cj.jdbc.MysqlDataSource</database.datasource.class>
-        <database.tc.url>cammysql:8.0</database.tc.url>
-        <database.tc.params>/${database.name}?sendFractionalSeconds=false&amp;amp;user=${database.username}&amp;amp;password=${database.password}</database.tc.params>
+        <database.tc.url>mysql:8.4</database.tc.url>
+        <database.tc.params>/test?sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
         <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -309,7 +317,7 @@
              camsqlserver); this one names the image as it actually is on Docker
              Hub, since no such mirror exists for MariaDB. -->
         <database.tc.url>mariadb:12.3</database.tc.url>
-        <database.tc.params>/${database.name}?user=${database.username}&amp;password=${database.password}</database.tc.params>
+        <database.tc.params>/test?sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
         <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -348,6 +356,9 @@
         <database.type>oracle</database.type>
         <database.driver>oracle.jdbc.OracleDriver</database.driver>
         <database.datasource.class>oracle.jdbc.pool.OracleDataSource</database.datasource.class>
+        <!-- gvenzl/oracle-free, the image Testcontainers' built-in oracle provider
+             uses. Oracle Database Free, not XE: publicly pullable, no licence file. -->
+        <database.tc.url>oracle:23-slim</database.tc.url>
       </properties>
       <dependencies>
         <dependency>
@@ -387,7 +398,7 @@
         <database.datasource.class>org.postgresql.ds.PGSimpleDataSource</database.datasource.class>
         <jboss.datasource.filename>postgresql-ds.xml</jboss.datasource.filename>
         <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
-        <database.tc.url>campostgresql:13.2</database.tc.url>
+        <database.tc.url>postgresql:18</database.tc.url>
       </properties>
 
       <dependencies>
@@ -431,8 +442,8 @@
         <database.type>mssql</database.type>
         <database.driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</database.driver>
         <database.datasource.class>com.microsoft.sqlserver.jdbc.SQLServerDataSource</database.datasource.class>
-        <database.tc.url>camsqlserver:2019</database.tc.url>
-        <database.tc.params>;DatabaseName=${database.name};user=${database.username};password=${database.password};trustServerCertificate=true;</database.tc.params>
+        <database.tc.url>sqlserver:2025-latest</database.tc.url>
+        <database.tc.params>;trustServerCertificate=true;</database.tc.params>
         <jboss.datasource.filename>sqlserver-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -464,12 +475,25 @@
     <profile>
       <id>sqlserver-2017</id>
       <properties>
-        <database.tc.url>camsqlserver:2017</database.tc.url>
+        <database.tc.url>sqlserver:2017-latest</database.tc.url>
       </properties>
     </profile>
 
     <profile>
+      <!-- Must stay last: its database.url has to win over the per-database
+           profiles activated alongside it (-Ppostgresql,testcontainers).
+           The URL is built purely from properties this POM already owns, so
+           it belongs here and not in settings.xml - which is where its other
+           half used to live. A developer whose ~/.m2/settings.xml was not a
+           current copy of settings/maven/nexus-settings.xml got the profile's
+           dependency half and no database.url at all, and since the profile id
+           does exist here, Maven issued no "profile not found" warning either:
+           the run failed with "No suitable driver found for ${database.url}",
+           the property unresolved and taken literally (BPMS-696). -->
       <id>testcontainers</id>
+      <properties>
+        <database.url>jdbc:tc:${database.tc.url}://localhost${database.tc.params}</database.url>
+      </properties>
       <dependencyManagement>
         <dependencies>
           <dependency>

@@ -311,6 +311,29 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- The datasource the managed server should use. Carried as system properties
+               rather than baked into the server's configuration at build time, so that
+               DatabaseContainerPlaceholderResolver can replace a jdbc:tc: URL with a real
+               one before Arquillian forks the server. Merged with the per-server profiles'
+               own surefire configuration below. -->
+          <systemPropertyVariables>
+            <eximeebpms.ds.url>${database.url}</eximeebpms.ds.url>
+            <eximeebpms.ds.driver>${database.driver}</eximeebpms.ds.driver>
+            <eximeebpms.ds.username>${database.username}</eximeebpms.ds.username>
+            <eximeebpms.ds.password>${database.password}</eximeebpms.ds.password>
+            <!-- An XA datasource is configured from the parts rather than from a URL.
+                 These come from the db profile or from settings.xml; where a profile
+                 defines none, the placeholder stays literal exactly as it does today. -->
+            <eximeebpms.ds.host>${database.host}</eximeebpms.ds.host>
+            <eximeebpms.ds.port>${database.port}</eximeebpms.ds.port>
+            <eximeebpms.ds.name>${database.name}</eximeebpms.ds.name>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <!-- install enhanced artifact -->
@@ -347,6 +370,22 @@
   </build>
 
   <profiles>
+
+    <profile>
+      <!-- Puts DatabaseContainerPlaceholderResolver on the test classpath, where
+           Arquillian's ServiceLoader picks it up. Confined to this profile so the
+           Testcontainers jars stay out of runs against an externally provisioned
+           database, and well away from anything ShrinkWrap might assemble. -->
+      <id>testcontainers</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.eximeebpms.bpm</groupId>
+          <artifactId>eximeebpms-test-utils-testcontainers</artifactId>
+          <version>${project.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
 
     <profile>
       <id>tomcat</id>

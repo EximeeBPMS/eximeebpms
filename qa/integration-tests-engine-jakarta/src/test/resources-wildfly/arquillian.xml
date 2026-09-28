@@ -13,7 +13,10 @@
       <property name="jbossHome">${wildfly.runtime.location}</property>
       <property name="managementPort">${jboss.management-http.port}</property>
       <property name="serverConfig">standalone.xml</property>
-      <property name="javaVmArguments">-Xmx1024m</property>
+      <!-- The ${eximeebpms.ds.*} placeholders are unknown to Maven, so filtering leaves
+           them for Arquillian, which resolves them from this JVM's system properties
+           after DatabaseContainerPlaceholderResolver has had its turn. -->
+      <property name="javaVmArguments">-Xmx1024m -Deximeebpms.ds.url=${eximeebpms.ds.url} -Deximeebpms.ds.username=${eximeebpms.ds.username} -Deximeebpms.ds.password=${eximeebpms.ds.password} -Deximeebpms.ds.host=${eximeebpms.ds.host} -Deximeebpms.ds.port=${eximeebpms.ds.port} -Deximeebpms.ds.name=${eximeebpms.ds.name}</property>
       <property name="startupTimeoutInSeconds">300</property>
 <!--       <property name="javaVmArguments">-Xmx1024m -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</property> -->
     </configuration>

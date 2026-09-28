@@ -33,6 +33,15 @@ public class PropertyEntity implements DbEntity, HasDbRevision, Serializable {
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Stands in for a null value, so that {@code getPersistentState()} never returns null.
+   * Oracle stores the empty string as NULL, so a property legitimately set to "" - an
+   * empty script-security allowlist, for one - reads back with a null value, and the
+   * dirty check in CachedDbEntity dereferences whatever this method returns. Same guard,
+   * and for the same reason, as ByteArrayEntity's.
+   */
+  private static final Object PERSISTENTSTATE_NULL = new Object();
+
   String name;
   int revision;
   String value;
@@ -76,7 +85,7 @@ public class PropertyEntity implements DbEntity, HasDbRevision, Serializable {
   }
 
   public Object getPersistentState() {
-    return value;
+    return value != null ? value : PERSISTENTSTATE_NULL;
   }
 
   public void setId(String id) {

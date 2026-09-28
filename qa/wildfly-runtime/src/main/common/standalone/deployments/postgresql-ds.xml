@@ -7,8 +7,11 @@
       <password>sa</password>
     </security>
   </datasource>
+  <!-- Resolved by IronJacamar's parser from the server JVM's system properties, not by
+       Maven at build time, so a test run can point the datasource at a container it
+       started itself. Arquillian passes them through javaVmArguments. -->
   <datasource jta="true" jndi-name="java:jboss/datasources/ProcessEngine" pool-name="ProcessEngine" enabled="true" use-java-context="true" use-ccm="true">
-    <connection-url>${database.url}</connection-url>
+    <connection-url>${eximeebpms.ds.url}</connection-url>
     <driver>postgresql</driver>
     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
     <pool>
@@ -17,8 +20,8 @@
       <flush-strategy>FailingConnectionOnly</flush-strategy>
     </pool>
     <security>
-      <user-name>${database.username}</user-name>
-      <password>${database.password}</password>
+      <user-name>${eximeebpms.ds.username}</user-name>
+      <password>${eximeebpms.ds.password}</password>
     </security>
     <validation>
       <validate-on-match>false</validate-on-match>

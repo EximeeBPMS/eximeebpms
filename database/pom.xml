@@ -24,7 +24,7 @@
     <version.oracle>23.26.2.0.0</version.oracle>
     <version.mysql>9.7.0</version.mysql>
     <!-- MariaDB runs on the MySQL dialect; only the driver differs. -->
-    <version.mariadb>3.5.7</version.mariadb>
+    <version.mariadb>3.5.10</version.mariadb>
     <version.sqlserver>13.4.0.jre11</version.sqlserver>
     <version.db2-11.5>11.5.9.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>
@@ -270,7 +270,7 @@
         <database.driver>com.mysql.cj.jdbc.Driver</database.driver>
         <database.datasource.class>com.mysql.cj.jdbc.MysqlDataSource</database.datasource.class>
         <database.tc.url>mysql:8.4</database.tc.url>
-        <database.tc.params>/test?sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
+        <database.tc.params>/test?sendFractionalSeconds=false&amp;sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
         <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -493,6 +493,12 @@
       <id>testcontainers</id>
       <properties>
         <database.url>jdbc:tc:${database.tc.url}://localhost${database.tc.params}</database.url>
+        <!-- The named driver is binding for pools that call driver.connect() directly
+             instead of going through DriverManager - Tomcat's org.apache.tomcat.jdbc.pool
+             does, and the vendor driver answers null for a jdbc:tc: URL, which the pool
+             reports as "returned null for URL". MyBatis resolves by URL and so never
+             noticed. -->
+        <database.driver>org.testcontainers.jdbc.ContainerDatabaseDriver</database.driver>
       </properties>
       <dependencyManagement>
         <dependencies>

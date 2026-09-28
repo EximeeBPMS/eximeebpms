@@ -308,6 +308,12 @@
                       <replacefilter token="@version.postgresql@" value="${version.postgresql}" />
                       <replacefilter token="@version.sqlserver@" value="${version.sqlserver}" />
                       <replacefilter token="@version.mysql@" value="${version.mysql}" />
+                      <!-- BPMS-755: these two module.xml files used to name their jar
+                           literally, so a version bump would have left them pointing at a
+                           file that is no longer copied - which is exactly how the
+                           freemarker module broke the whole WildFly distribution. -->
+                      <replacefilter token="@version.jython@" value="${version.jython}" />
+                      <replacefilter token="@version.jruby@" value="${version.jruby}" />
                     </replace>
 
                   </target>
@@ -439,6 +445,12 @@
                       <replacefilter token="@version.postgresql@" value="${version.postgresql}" />
                       <replacefilter token="@version.sqlserver@" value="${version.sqlserver}" />
                       <replacefilter token="@version.mysql@" value="${version.mysql}" />
+                      <!-- BPMS-755: these two module.xml files used to name their jar
+                           literally, so a version bump would have left them pointing at a
+                           file that is no longer copied - which is exactly how the
+                           freemarker module broke the whole WildFly distribution. -->
+                      <replacefilter token="@version.jython@" value="${version.jython}" />
+                      <replacefilter token="@version.jruby@" value="${version.jruby}" />
                     </replace>
 
                   </target>

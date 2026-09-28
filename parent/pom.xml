@@ -79,6 +79,7 @@
     <version.hamcrest>3.0</version.hamcrest>
 
     <version.jython>2.7.4</version.jython>
+    <version.jruby>9.1.17.0</version.jruby>
 
     <version.commonj>1.1.0</version.commonj>
     <version.bouncycastle>1.70</version.bouncycastle>

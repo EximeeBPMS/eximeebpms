@@ -16,7 +16,10 @@
       <property name="user">arquillian</property>
       <property name="pass">arquillian</property>
       <property name="jmxPort">8089</property>
-      <property name="javaVmArguments">-Xmx512m</property>
+      <!-- The ${eximeebpms.ds.*} placeholders are unknown to Maven, so filtering leaves
+           them for Arquillian, which resolves them from this JVM's system properties
+           after DatabaseContainerPlaceholderResolver has had its turn. -->
+      <property name="javaVmArguments">-Xmx512m -Deximeebpms.ds.url=${eximeebpms.ds.url} -Deximeebpms.ds.driver=${eximeebpms.ds.driver} -Deximeebpms.ds.username=${eximeebpms.ds.username} -Deximeebpms.ds.password=${eximeebpms.ds.password}</property>
 <!--       <property name="javaVmArguments">-Xmx512m -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</property> -->
     </configuration>
   </container>

@@ -30,6 +30,29 @@
 
   <dependencies>
 
+    <!-- Arquillian, for the placeholder resolver that materialises a jdbc:tc: URL
+         into a running container before a managed server is configured. Provided
+         scope: consumers that do not run Arquillian never see it, and those that do
+         already manage their own version through arquillian-bom. -->
+    <dependency>
+      <groupId>org.jboss.arquillian.config</groupId>
+      <artifactId>arquillian-config-spi</artifactId>
+      <version>${version.arquillian}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.config</groupId>
+      <artifactId>arquillian-config-api</artifactId>
+      <version>${version.arquillian}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.core</groupId>
+      <artifactId>arquillian-core-spi</artifactId>
+      <version>${version.arquillian}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- TestContainers dependencies -->
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -58,6 +81,14 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers-mariadb</artifactId>
+    </dependency>
+
+    <!-- the descriptor implementation, so the resolver's XML round-trip can be tested -->
+    <dependency>
+      <groupId>org.jboss.arquillian.config</groupId>
+      <artifactId>arquillian-config-impl-base</artifactId>
+      <version>${version.arquillian}</version>
+      <scope>test</scope>
     </dependency>
 
     <!-- test dependencies -->

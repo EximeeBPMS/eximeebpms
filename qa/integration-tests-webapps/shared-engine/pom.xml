@@ -217,6 +217,16 @@
                 <append>false</append>
                 <home>${tomcat.runtime}</home>
                 <timeout>${cargo.timeout}</timeout>
+                <!-- server.xml resolves its datasource from the server JVM's system
+                     properties rather than from Maven filtering, so whoever starts the
+                     server supplies them. Here that is the build's own values; the
+                     Arquillian-driven suites can substitute a container's instead. -->
+                <systemProperties>
+                  <eximeebpms.ds.url>${database.url}</eximeebpms.ds.url>
+                  <eximeebpms.ds.driver>${database.driver}</eximeebpms.ds.driver>
+                  <eximeebpms.ds.username>${database.username}</eximeebpms.ds.username>
+                  <eximeebpms.ds.password>${database.password}</eximeebpms.ds.password>
+                </systemProperties>
               </container>
               <configuration>
                 <type>standalone</type>

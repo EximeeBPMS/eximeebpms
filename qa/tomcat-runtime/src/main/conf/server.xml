@@ -54,15 +54,19 @@
           testOnBorrow="true"
           validationQuery="SELECT 1"
     -->
+    <!-- Resolved by Tomcat from the server JVM's system properties, not by Maven at
+         build time, so a test run can point the datasource at a container it started
+         itself. Whoever launches this Tomcat passes them: Arquillian through
+         javaVmArguments, Cargo through its systemProperties. -->
     <Resource name="jdbc/ProcessEngine"
               auth="Container"
               type="javax.sql.DataSource" 
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               uniqueResourceName="process-engine"
-              driverClassName="${database.driver}" 
-              url="${database.url}"
-              username="${database.username}"
-              password="${database.password}"
+              driverClassName="${eximeebpms.ds.driver}" 
+              url="${eximeebpms.ds.url}"
+              username="${eximeebpms.ds.username}"
+              password="${eximeebpms.ds.password}"
               defaultTransactionIsolation="READ_COMMITTED"
               maxActive="20"
               minIdle="5"

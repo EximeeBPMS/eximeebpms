@@ -483,6 +483,10 @@
                   <include name="**/module.xml" />
                 </replace>
 
+                <replace dir="target/modules" token="@version.joda-time@" value="${version.joda-time}">
+                  <include name="**/module.xml" />
+                </replace>
+
                 <replace dir="target/modules" token="@version.groovy@" value="${version.groovy}">
                   <include name="**/module.xml" />
                 </replace>

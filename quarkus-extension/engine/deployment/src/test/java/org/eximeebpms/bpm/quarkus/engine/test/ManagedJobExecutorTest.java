@@ -17,9 +17,11 @@
 package org.eximeebpms.bpm.quarkus.engine.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.eximeebpms.bpm.engine.impl.test.TestHelper.waitForJobExecutorToProcessAllJobs;
 
 import io.quarkus.test.QuarkusUnitTest;
+import io.smallrye.context.SmallRyeManagedExecutor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
@@ -109,6 +111,22 @@ public class ManagedJobExecutorTest {
     assertThat(jobExecutor.getMaxBackoff()).isEqualTo(5);
     assertThat(jobExecutor.getBackoffDecreaseThreshold()).isEqualTo(120);
     assertThat(jobExecutor.getWaitIncreaseFactor()).isEqualTo(3);
+  }
+
+  @Test
+  public void shouldUseCustomThreadPoolProperties() {
+    // given a custom application.properties file
+    ManagedJobExecutor jobExecutor = (ManagedJobExecutor) processEngineConfiguration.getJobExecutor();
+
+    // then
+    // the thread pool the job executor actually runs on is sized from it,
+    // not only the config object it is read from
+    assertThat(jobExecutor)
+        .extracting("taskExecutor", type(SmallRyeManagedExecutor.class))
+        .satisfies(taskExecutor -> {
+          assertThat(taskExecutor.getMaxAsync()).isEqualTo(12);
+          assertThat(taskExecutor.getMaxQueued()).isEqualTo(5);
+        });
   }
 
   @Test

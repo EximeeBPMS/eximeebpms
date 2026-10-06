@@ -11,6 +11,9 @@ on:
       - 'LICENSE*'
       - 'NOTICE*'
 
+permissions:
+  contents: read
+
 jobs:
   check-snapshot-version:
     runs-on: github-actions-runner-new
@@ -39,18 +42,6 @@ jobs:
             echo "is-snapshot=false" >> "$GITHUB_OUTPUT"
             echo "::notice::Version ${version} is not a SNAPSHOT - skipping the snapshot release."
           fi
-
-  prepare-snapshot-release:
-    needs: check-snapshot-version
-    if: needs.check-snapshot-version.outputs.is-snapshot == 'true'
-    runs-on: github-actions-runner-new
-    steps:
-      - name: Determine user and set secret
-        run: |
-          echo "GITHUB_PAT_USER=SECRET_PAT_${{ github.actor }}" >> $GITHUB_ENV
-        env:
-          GITHUB_TOKEN: ${{ secrets[env.GITHUB_PAT_USER] }}
-
 
   call-snapshot-release:
     needs: check-snapshot-version

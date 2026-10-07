@@ -70,11 +70,12 @@ jobs:
     # Skip the two commits maven-release-plugin pushes during a release. Their
     # tree is byte-identical to the commit that was just analysed; only pom
     # versions differ, so re-running this on them scans the same code twice more.
-    # Scoped to push: a pull_request or the weekly schedule is never affected.
+    # Scoped to push: the weekly schedule is never affected. One `if` only - a
+    # second `if` key makes the whole workflow invalid.
     if: >-
-      github.event_name != 'push' ||
-      !startsWith(github.event.head_commit.message, '[maven-release-plugin]')
-    if: github.event_name != 'pull_request'
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'push' ||
+       !startsWith(github.event.head_commit.message, '[maven-release-plugin]'))
     runs-on: github-actions-runner-new
     permissions:
       security-events: write

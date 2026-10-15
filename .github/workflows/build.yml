@@ -324,7 +324,7 @@ jobs:
 
       - name: Upload Surefire Reports
         if: always()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: surefire-reports
           path: ${{ github.workspace }}/**/target/surefire-reports/**

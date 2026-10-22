@@ -8,6 +8,8 @@ import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
 
 public class BusinessEventProcessInstanceExecutionListener implements ExecutionListener {
 
+  // START and UPDATE are kept for compatibility only: this listener emits process-instance:end,
+  // start and update are emitted by ExecutionEntity at the points history emits its own
   public static final String START = "start";
   public static final String END = "end";
   public static final String UPDATE = "update";
@@ -29,9 +31,7 @@ public class BusinessEventProcessInstanceExecutionListener implements ExecutionL
     final String eventName = execution.getEventName();
 
     return switch (eventName) {
-      case START -> producer.createProcessInstanceStartEvt(execution);
       case END -> producer.createProcessInstanceEndEvt(execution);
-      case UPDATE -> producer.createProcessInstanceUpdateEvt(execution);
       default -> null;
     };
   }

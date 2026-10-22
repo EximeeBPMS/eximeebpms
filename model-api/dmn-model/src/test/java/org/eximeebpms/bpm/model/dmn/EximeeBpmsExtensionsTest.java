@@ -58,17 +58,17 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testCamundaClauseOutput() {
     Input input = modelInstance.getModelElementById("input");
-    assertThat(input.getCamundaInputVariable()).isEqualTo("myVariable");
-    input.setCamundaInputVariable("foo");
-    assertThat(input.getCamundaInputVariable()).isEqualTo("foo");
+    assertThat(input.getEximeeBpmsInputVariable()).isEqualTo("myVariable");
+    input.setEximeeBpmsInputVariable("foo");
+    assertThat(input.getEximeeBpmsInputVariable()).isEqualTo("foo");
   }
 
   @Test
   public void testCamundaHistoryTimeToLive() {
     Decision decision = modelInstance.getModelElementById("decision");
-    assertThat(decision.getCamundaHistoryTimeToLive()).isEqualTo(5);
-    decision.setCamundaHistoryTimeToLive(6);
-    assertThat(decision.getCamundaHistoryTimeToLive()).isEqualTo(6);
+    assertThat(decision.getEximeeBpmsHistoryTimeToLiveString()).isEqualTo("5");
+    decision.setEximeeBpmsHistoryTimeToLiveString("6");
+    assertThat(decision.getEximeeBpmsHistoryTimeToLiveString()).isEqualTo("6");
   }
 
   @Test

@@ -25,9 +25,9 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsField extends BpmnModelElementInstance {
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
 
   String getEximeeBpmsExpression();
 

@@ -34,32 +34,32 @@ public interface MessageEventDefinition extends EventDefinition {
 
   /** camunda extensions */
 
-  String getCamundaClass();
+  String getEximeeBpmsClass();
 
-  void setCamundaClass(String camundaClass);
+  void setEximeeBpmsClass(String camundaClass);
 
-  String getCamundaDelegateExpression();
+  String getEximeeBpmsDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaExpression);
+  void setEximeeBpmsDelegateExpression(String camundaExpression);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaResultVariable();
+  String getEximeeBpmsResultVariable();
 
-  void setCamundaResultVariable(String camundaResultVariable);
+  void setEximeeBpmsResultVariable(String camundaResultVariable);
 
-  String getCamundaTopic();
+  String getEximeeBpmsTopic();
 
-  void setCamundaTopic(String camundaTopic);
+  void setEximeeBpmsTopic(String camundaTopic);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
   
-  String getCamundaTaskPriority();
+  String getEximeeBpmsTaskPriority();
   
-  void setCamundaTaskPriority(String taskPriority);
+  void setEximeeBpmsTaskPriority(String taskPriority);
 
 }

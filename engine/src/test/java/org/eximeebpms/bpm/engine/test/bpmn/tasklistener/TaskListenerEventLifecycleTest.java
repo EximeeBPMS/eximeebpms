@@ -122,8 +122,8 @@ public class TaskListenerEventLifecycleTest extends AbstractTaskListenerTest{
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
-            .camundaTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
+            .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
+            .eximeeBpmsTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
                                                      RecorderTaskListener.class,
                                                      sdf.format(now.getTime()))
         .endEvent()
@@ -154,9 +154,9 @@ public class TaskListenerEventLifecycleTest extends AbstractTaskListenerTest{
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
                                   .startEvent()
                                   .userTask("task")
-                                  .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
-                                  .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, RecorderTaskListener.class)
-                                  .camundaTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
+                                  .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
+                                  .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, RecorderTaskListener.class)
+                                  .eximeeBpmsTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
                                                                            RecorderTaskListener.class,
                                                                            sdf.format(now.getTime()))
                                   .endEvent()

@@ -31,9 +31,9 @@ public interface Error extends RootElement {
 
   void setErrorCode(String errorCode);
 
-  String getCamundaErrorMessage();
+  String getEximeeBpmsErrorMessage();
 
-  void setCamundaErrorMessage(String camundaErrorMessage);
+  void setEximeeBpmsErrorMessage(String camundaErrorMessage);
 
   ItemDefinition getStructure();
 

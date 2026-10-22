@@ -27,25 +27,25 @@ import java.util.Collection;
  */
 public interface EximeeBpmsFormField extends BpmnModelElementInstance {
 
-  String getCamundaId();
+  String getEximeeBpmsId();
 
-  void setCamundaId(String camundaId);
+  void setEximeeBpmsId(String camundaId);
 
-  String getCamundaLabel();
+  String getEximeeBpmsLabel();
 
-  void setCamundaLabel(String camundaLabel);
+  void setEximeeBpmsLabel(String camundaLabel);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
 
-  String getCamundaDatePattern();
+  String getEximeeBpmsDatePattern();
 
-  void setCamundaDatePattern(String camundaDatePattern);
+  void setEximeeBpmsDatePattern(String camundaDatePattern);
 
-  String getCamundaDefaultValue();
+  String getEximeeBpmsDefaultValue();
 
-  void setCamundaDefaultValue(String camundaDefaultValue);
+  void setEximeeBpmsDefaultValue(String camundaDefaultValue);
 
   EximeeBpmsProperties getEximeeBpmsProperties();
 

@@ -128,6 +128,8 @@ public abstract class AbstractDeleteProcessInstanceCmd {
           }
         });
       }
+
+      ((ExecutionEntity) processInstance).fireBusinessProcessInstanceUpdate();
     }
   }
 

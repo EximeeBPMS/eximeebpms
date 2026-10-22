@@ -80,15 +80,15 @@ public abstract class AbstractTaskListenerTest {
                                                .userTask("task");
 
     if (assignee != null) {
-      userTaskModelBuilder.camundaAssignee("kermit");
+      userTaskModelBuilder.eximeeBpmsAssignee("kermit");
     }
 
     for (String eventType : eventTypes) {
-      userTaskModelBuilder.camundaTaskListenerClass(eventType, RecorderTaskListener.class);
+      userTaskModelBuilder.eximeeBpmsTaskListenerClass(eventType, RecorderTaskListener.class);
     }
 
     if (taskListenerClass != null) {
-      userTaskModelBuilder.camundaTaskListenerClass(customListenerEventType, taskListenerClass);
+      userTaskModelBuilder.eximeeBpmsTaskListenerClass(customListenerEventType, taskListenerClass);
     }
 
     BpmnModelInstance model = userTaskModelBuilder

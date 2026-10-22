@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+import javax.sql.DataSource;
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.assertj.core.api.Assertions;
 import org.eximeebpms.bpm.engine.authorization.Authorization;
 import org.eximeebpms.bpm.engine.authorization.AuthorizationQuery;
@@ -101,17 +103,17 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   protected final String CALLED_PROCESS_KEY = "calledProcess";
 
   protected final BpmnModelInstance CALLED_PROCESS = Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .camundaHistoryTimeToLive(180)
+      .eximeeBpmsHistoryTimeToLive(180)
       .startEvent()
       .userTask("userTask")
       .name("userTask")
-      .camundaCandidateUsers("foo")
+      .eximeeBpmsCandidateUsers("foo")
       .endEvent()
       .done();
 
   protected final String CALLING_PROCESS_KEY = "callingProcess";
   protected final BpmnModelInstance CALLING_PROCESS = Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
+    .eximeeBpmsHistoryTimeToLive(5)
     .startEvent()
       .callActivity()
         .calledElement(CALLED_PROCESS_KEY)
@@ -127,11 +129,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   public void shouldResolveHistoricDecisionInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .eximeeBpmsAsyncAfter()
+          .eximeeBpmsDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -172,11 +174,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   public void shouldResolveHistoricDecisionInputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .eximeeBpmsAsyncAfter()
+          .eximeeBpmsDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -225,11 +227,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   public void shouldResolveHistoricDecisionOutputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .eximeeBpmsAsyncAfter()
+          .eximeeBpmsDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -350,20 +352,38 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     int degreeOfParallelism = 30;
 
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(5)
+        .eximeeBpmsHistoryTimeToLive(5)
         .startEvent()
-        .serviceTask().camundaExpression("${true}")
+        .serviceTask().eximeeBpmsExpression("${true}")
         .endEvent()
         .done());
 
     ClockUtil.setCurrentTime(START_DATE);
 
-    // when
+    // the default MyBatis connection pool (10 max active connections) is smaller
+    // than the degree of parallelism used below. Under load, threads waiting for a
+    // connection longer than the pool's checkout timeout cause MyBatis to reclaim
+    // "overdue" connections that are, in fact, still in use, which surfaces as a
+    // random "Error accessing PooledConnection. Connection is invalid" failure.
+    // Temporarily size the pool to fit the parallelism to remove that contention.
+    DataSource dataSource = processEngineConfiguration.getDataSource();
+    Integer previousPoolMaximumActiveConnections = null;
+    if (dataSource instanceof PooledDataSource) {
+      PooledDataSource pooledDataSource = (PooledDataSource) dataSource;
+      previousPoolMaximumActiveConnections = pooledDataSource.getPoolMaximumActiveConnections();
+      pooledDataSource.setPoolMaximumActiveConnections(Math.max(previousPoolMaximumActiveConnections, degreeOfParallelism));
+    }
+
     try {
+      // when
       IntStream.range(0, degreeOfParallelism).parallel().forEach(i -> runtimeService.startProcessInstanceByKey("process"));
     } catch (Exception e) {
       e.printStackTrace();
       fail("No exception should occur");
+    } finally {
+      if (dataSource instanceof PooledDataSource && previousPoolMaximumActiveConnections != null) {
+        ((PooledDataSource) dataSource).setPoolMaximumActiveConnections(previousPoolMaximumActiveConnections);
+      }
     }
   }
 
@@ -912,7 +932,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
     .startEvent()
       .scriptTask()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .scriptFormat("groovy")
         .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException()")
       .userTask()
@@ -963,7 +983,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
     .startEvent()
       .scriptTask()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .scriptFormat("groovy")
         .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException()")
       .userTask()
@@ -1029,11 +1049,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().eximeeBpmsExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1075,11 +1095,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().eximeeBpmsExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1110,7 +1130,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().eximeeBpmsAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1157,7 +1177,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().eximeeBpmsAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1191,7 +1211,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().eximeeBpmsAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1234,11 +1254,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().eximeeBpmsExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1898,7 +1918,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
       .startEvent()
         .scriptTask()
-          .camundaAsyncBefore()
+          .eximeeBpmsAsyncBefore()
           .scriptFormat("groovy")
           .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException(\"I'm supposed to fail!\")")
       .endEvent().done());
@@ -1946,11 +1966,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("aTopicName")
+        .serviceTask().eximeeBpmsExternalTask("aTopicName")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1997,9 +2017,9 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   public void shouldResolveByteArray_DecisionInput() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().eximeeBpmsDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2045,9 +2065,9 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     ClockUtil.setCurrentTime(START_DATE);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().eximeeBpmsDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2091,9 +2111,9 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     ClockUtil.setCurrentTime(START_DATE);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .eximeeBpmsHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().eximeeBpmsDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2207,7 +2227,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
       .startEvent()
       .userTask()
-        .camundaExecutionListenerClass("end", FailingExecutionListener.class)
+        .eximeeBpmsExecutionListenerClass("end", FailingExecutionListener.class)
       .endEvent()
       .done());
 

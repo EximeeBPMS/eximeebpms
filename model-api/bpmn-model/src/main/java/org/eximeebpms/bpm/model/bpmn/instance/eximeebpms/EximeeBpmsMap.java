@@ -27,6 +27,6 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsMap extends BpmnModelElementInstance {
 
-  Collection<EximeeBpmsEntry> getCamundaEntries();
+  Collection<EximeeBpmsEntry> getEximeeBpmsEntries();
   
 }

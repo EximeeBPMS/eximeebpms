@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://eximeebpms.org/examples/mapto"
+             id="mapToValidationDemoDefinitions">
+
+  <!--
+    Demonstrates spinMapToTypeValidationEnabled.
+
+    The script deserializes a JSON payload into a Java type whose name is taken
+    from a process variable (targetType) - the same shape the security analysis
+    calls "Variant B": the mapping target is attacker-controllable.
+
+    Runtime behaviour, when the engine has BOTH
+      deserializationTypeValidationEnabled = true
+      spinMapToTypeValidationEnabled       = true
+    and 'targetType' is not on the deserialization whitelist:
+      mapTo rejects it and the script task throws, so starting the instance
+      fails. It is a RUNTIME check - the process deploys fine either way.
+
+    With spinMapToTypeValidationEnabled = false (the default) the same instance
+    completes: mapTo is not validated.
+  -->
+  <process id="mapToValidationDemo" isExecutable="true">
+    <startEvent id="start"/>
+    <sequenceFlow id="flowToScript" sourceRef="start" targetRef="mapToTask"/>
+
+    <scriptTask id="mapToTask" name="map JSON to a runtime-chosen type" scriptFormat="groovy">
+      <script><![CDATA[
+        def node = org.eximeebpms.spin.Spin.JSON(payload)
+        execution.setVariable('mapped', node.mapTo(targetType).getStringProperty())
+      ]]></script>
+    </scriptTask>
+
+    <sequenceFlow id="flowToEnd" sourceRef="mapToTask" targetRef="end"/>
+    <endEvent id="end"/>
+  </process>
+</definitions>

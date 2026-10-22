@@ -19,9 +19,15 @@ jobs:
   update-sbom:
     name: Generate and commit SBOM
     runs-on: github-actions-runner-new
+    # The second half excludes this workflow's own commit (below): without it, every
+    # successful push re-triggers itself forever - "chore(deps): update SBOM" contains
+    # "deps", matching the first condition on its own resulting push. This ran unnoticed
+    # for days, hammering the scarce self-hosted runner pool with a commit every
+    # 15-90 minutes non-stop (see commit history on main from 2026-08-08 onward).
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      contains(join(github.event.commits.*.message, ' '), 'deps')
+      (contains(join(github.event.commits.*.message, ' '), 'deps') &&
+       !contains(join(github.event.commits.*.message, ' '), 'chore(deps): update SBOM'))
     steps:
       - name: Generate eximeebpmsrunner app token
         id: app-token

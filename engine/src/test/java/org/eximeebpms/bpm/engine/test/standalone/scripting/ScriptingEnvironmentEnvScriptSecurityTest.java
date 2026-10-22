@@ -6,6 +6,7 @@ import org.eximeebpms.bpm.application.ProcessApplicationInterface;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptEnvResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +14,7 @@ import org.junit.Test;
 
 public class ScriptingEnvironmentEnvScriptSecurityTest extends AbstractScriptEnvironmentTest {
 
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
   protected ScriptSecurityPolicy previousScriptSecurityPolicy;
 
   @Override
@@ -28,17 +29,17 @@ public class ScriptingEnvironmentEnvScriptSecurityTest extends AbstractScriptEnv
 
   @Before
   public void enableScriptSecurity() {
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
     previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
 
-    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
   }
 
   @After
   public void resetScriptSecurity() {
     processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   @Test

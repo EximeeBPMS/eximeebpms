@@ -227,7 +227,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .serviceTask("startProcess")
-        .camundaClass(NestedLoggingDelegate.class.getName())
+        .eximeeBpmsClass(NestedLoggingDelegate.class.getName())
         .endEvent("end")
         .done());
 
@@ -329,7 +329,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
       .startEvent("start")
       .serviceTask("startProcess")
-        .camundaClass(NestedLoggingDelegate.class.getName())
+        .eximeeBpmsClass(NestedLoggingDelegate.class.getName())
       .endEvent("end")
       .done());
 
@@ -355,7 +355,7 @@ public class ProcessDataLoggingContextTest {
     // given
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
-        .userTask("waitState").camundaAsyncBefore()
+        .userTask("waitState").eximeeBpmsAsyncBefore()
         .endEvent("end")
         .done());
     // when
@@ -372,7 +372,7 @@ public class ProcessDataLoggingContextTest {
     // given
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
-        .userTask("waitState").camundaAsyncAfter()
+        .userTask("waitState").eximeeBpmsAsyncAfter()
         .endEvent("end")
         .done());
     // when
@@ -429,9 +429,9 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("bkeyChangingTask")
-          .camundaClass(BusinessKeyChangeDelegate.class)
+          .eximeeBpmsClass(BusinessKeyChangeDelegate.class)
         .serviceTask("failingTask")
-          .camundaClass(FailingDelegate.class)
+          .eximeeBpmsClass(FailingDelegate.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -454,7 +454,7 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .userTask("waitState")
         .userTask("failingTask")
-          .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, FailingTaskListener.class)
+          .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_CREATE, FailingTaskListener.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -475,7 +475,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("failingTask")
-          .camundaTaskListenerClass(TaskListener.EVENTNAME_ASSIGNMENT, FailingTaskListener.class)
+          .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_ASSIGNMENT, FailingTaskListener.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -496,7 +496,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("failingTask")
-          .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, FailingTaskListener.class)
+          .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, FailingTaskListener.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -517,7 +517,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("failingTask")
-          .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, FailingTaskListener.class)
+          .eximeeBpmsTaskListenerClass(TaskListener.EVENTNAME_DELETE, FailingTaskListener.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -555,7 +555,7 @@ public class ProcessDataLoggingContextTest {
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("failingTask")
-          .camundaTaskListenerClassTimeoutWithDuration("failure-listener", FailingTaskListener.class, "PT10S")
+          .eximeeBpmsTaskListenerClassTimeoutWithDuration("failure-listener", FailingTaskListener.class, "PT10S")
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -576,11 +576,11 @@ public class ProcessDataLoggingContextTest {
         .userTask("waitState")
         .parallelGateway("pSplit")
           .serviceTask("task")
-            .camundaClass(NoneDelegate.class)
+            .eximeeBpmsClass(NoneDelegate.class)
           .endEvent("end")
         .moveToLastGateway()
           .serviceTask("failingTask")
-            .camundaClass(FailingDelegate.class)
+            .eximeeBpmsClass(FailingDelegate.class)
           .endEvent("failingEnd")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -602,14 +602,14 @@ public class ProcessDataLoggingContextTest {
     manageDeployment("failing.bpmn", Bpmn.createExecutableProcess(FAILING_PROCESS)
         .startEvent("failing_start")
         .serviceTask("failing_task")
-          .camundaClass(FailingDelegate.class)
+          .eximeeBpmsClass(FailingDelegate.class)
         .endEvent("failing_end")
         .done());
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("startProcess")
-          .camundaClass(NestedStartDelegate.class.getName())
+          .eximeeBpmsClass(NestedStartDelegate.class.getName())
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -632,15 +632,15 @@ public class ProcessDataLoggingContextTest {
     manageDeployment("failing.bpmn", Bpmn.createExecutableProcess(FAILING_PROCESS)
         .startEvent("failing_start")
         .serviceTask("failing_task")
-          .camundaClass(NoneDelegate.class.getName())
-          .camundaExecutionListenerClass("end", FailingExecutionListener.class)
+          .eximeeBpmsClass(NoneDelegate.class.getName())
+          .eximeeBpmsExecutionListenerClass("end", FailingExecutionListener.class)
         .endEvent("failing_end")
         .done());
     manageDeployment(Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("startProcess")
-          .camundaClass(NestedStartDelegate.class.getName())
+          .eximeeBpmsClass(NestedStartDelegate.class.getName())
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -664,7 +664,7 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .intermediateCatchEvent("message")
           .message("testMessage")
-          .camundaExecutionListenerClass("end", FailingExecutionListener.class)
+          .eximeeBpmsExecutionListenerClass("end", FailingExecutionListener.class)
         .endEvent("end")
         .done());
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -704,7 +704,7 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("failingTask")
-          .camundaDelegateExpression("${foo}")
+          .eximeeBpmsDelegateExpression("${foo}")
         .endEvent("end")
         .done());
     ProcessInstance pi = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -727,8 +727,8 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("failingTask")
-          .camundaClass(NoneDelegate.class)
-          .camundaInputParameter("foo", "${foooo}")
+          .eximeeBpmsClass(NoneDelegate.class)
+          .eximeeBpmsInputParameter("foo", "${foooo}")
         .endEvent("end")
         .done());
     ProcessInstance pi = runtimeService.startProcessInstanceByKey(PROCESS, B_KEY);
@@ -995,7 +995,7 @@ public class ProcessDataLoggingContextTest {
         .startEvent("start")
         .userTask("waitState")
         .serviceTask("failingTask")
-          .camundaClass(FailingDelegate.class)
+          .eximeeBpmsClass(FailingDelegate.class)
         .endEvent("end")
         .done();
   }
@@ -1004,7 +1004,7 @@ public class ProcessDataLoggingContextTest {
     return Bpmn.createExecutableProcess(PROCESS)
         .startEvent("start")
         .userTask("failingTask")
-          .camundaExecutionListenerClass("end", FailingExecutionListener.class)
+          .eximeeBpmsExecutionListenerClass("end", FailingExecutionListener.class)
         .endEvent("end")
         .done();
   }

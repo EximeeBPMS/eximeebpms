@@ -788,11 +788,11 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
     );
   }
 
-  public void uuidV1GeneratorDeprecated() {
+  public void uuidV1GeneratorRemoved() {
     logWarn(
       "111",
-      "ID generator UuidV1Generator (UUID v1) is deprecated and will be removed in EximeeBPMS 1.4.0. "
-      + "Migrate to StrongUuidGenerator (UUID v7, the default)."
+      "ID generator 'uuid-v1' (UuidV1Generator, UUID v1) has been removed. Falling back to "
+      + "StrongUuidGenerator (UUID v7, the default). Remove the id-generator=uuid-v1 configuration setting."
     );
   }
 

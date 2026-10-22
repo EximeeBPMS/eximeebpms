@@ -49,8 +49,8 @@ public class TelemetryDataTest {
 
     // then
     TelemetryDataImpl telemetryData = processEngineConfiguration.getTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
-    assertThat(camundaIntegration)
-      .containsExactlyInAnyOrder(EximeeBpmsIntegration.CAMUNDA_BPM_RUN, EximeeBpmsIntegration.SPRING_BOOT_STARTER);
+    Set<String> eximeebpmsIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    assertThat(eximeebpmsIntegration)
+      .containsExactlyInAnyOrder(EximeeBpmsIntegration.EXIMEEBPMS_BPM_RUN, EximeeBpmsIntegration.SPRING_BOOT_STARTER);
   }
 }

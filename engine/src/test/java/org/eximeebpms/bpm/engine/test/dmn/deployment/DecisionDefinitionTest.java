@@ -189,7 +189,7 @@ public class DecisionDefinitionTest {
     decision.setId("Decision-1");
     decision.setName("foo");
 
-    decision.setCamundaHistoryTimeToLiveString(historyTTL);
+    decision.setEximeeBpmsHistoryTimeToLiveString(historyTTL);
 
     modelInstance.getDefinitions().addChildElement(decision);
 

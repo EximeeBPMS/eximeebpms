@@ -18,7 +18,7 @@ package org.eximeebpms.bpm.model.bpmn.instance.eximeebpms;
 
 import static org.eximeebpms.bpm.model.bpmn.BpmnTestConstants.PROCESS_ID;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Collection;
 
@@ -49,7 +49,7 @@ public class CompatabilityTest {
     Collection<EximeeBpmsExecutionListener> listeners = extensionElements.getChildElementsByType(EximeeBpmsExecutionListener.class);
     String listenerClass = "org.foo.Bar";
     for (EximeeBpmsExecutionListener listener : listeners) {
-      listener.setCamundaClass(listenerClass);
+      listener.setEximeeBpmsClass(listenerClass);
     }
     for (EximeeBpmsExecutionListener listener : listeners) {
       assertThat(listener.getAttributeValueNs(BpmnModelConstants.ACTIVITI_NS, "class"), is(listenerClass));
@@ -61,17 +61,17 @@ public class CompatabilityTest {
     BpmnModelInstance modelInstance = Bpmn.readModelFromStream(EximeeBpmsExtensionsTest.class.getResourceAsStream("CamundaExtensionsCompatabilityTest.xml"));
     ProcessImpl process = modelInstance.getModelElementById(PROCESS_ID);
     String priority = "9000";
-    process.setCamundaJobPriority(priority);
-    process.setCamundaTaskPriority(priority);
+    process.setEximeeBpmsJobPriority(priority);
+    process.setEximeeBpmsTaskPriority(priority);
     Integer historyTimeToLive = 10;
-    process.setCamundaHistoryTimeToLive(historyTimeToLive);
-    process.setCamundaIsStartableInTasklist(false);
-    process.setCamundaVersionTag("v1.0.0");
+    process.setEximeeBpmsHistoryTimeToLiveString(historyTimeToLive.toString());
+    process.setEximeeBpmsIsStartableInTasklist(false);
+    process.setEximeeBpmsVersionTag("v1.0.0");
     assertThat(process.getAttributeValueNs(BpmnModelConstants.ACTIVITI_NS, "jobPriority"), is(priority));
     assertThat(process.getAttributeValueNs(BpmnModelConstants.ACTIVITI_NS, "taskPriority"), is(priority));
     assertThat(process.getAttributeValueNs(BpmnModelConstants.ACTIVITI_NS, "historyTimeToLive"), is(historyTimeToLive.toString()));
-    assertThat(process.isCamundaStartableInTasklist(), is(false));
-    assertThat(process.getCamundaVersionTag(), is("v1.0.0"));
+    assertThat(process.isEximeeBpmsStartableInTasklist(), is(false));
+    assertThat(process.getEximeeBpmsVersionTag(), is("v1.0.0"));
   }
 
 }

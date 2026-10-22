@@ -25,11 +25,12 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsValue extends BpmnModelElementInstance {
 
-  String getCamundaId();
+  String getEximeeBpmsId();
 
-  void setCamundaId(String camundaId);
+  void setEximeeBpmsId(String camundaId);
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
+
 }

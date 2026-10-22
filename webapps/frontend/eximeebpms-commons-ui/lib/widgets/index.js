@@ -49,7 +49,7 @@ var widgetModule = angular.module('camunda.common.widgets', [
   filtersModule.name,
   directivesModule.name,
   searchModule.name,
-  'ui.bootstrap'
+  'ui.bootstrap',
 ]);
 
 widgetModule.factory('widgetLocalConf', localConf);

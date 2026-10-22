@@ -17,69 +17,72 @@
 package org.eximeebpms.impl.test.utils.testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assume.assumeTrue;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.testcontainers.DockerClientFactory;
 
 /**
- * This test should not be run on our CI, as it requires a Docker-in-Docker image to run successfully.
+ * Guards the `jdbc:tc:` path the `testcontainers` build profile composes.
+ *
+ * <p>This used to be {@code @Ignore}d outright, which is why nobody noticed that its
+ * images had been pointing at a registry with no DNS record ever since the Camunda
+ * rebrand. It now skips only when Docker is genuinely unavailable, so it reports
+ * rather than hides (BPMS-696).
  */
-@Ignore
 @RunWith(Parameterized.class)
 public class DatabaseContainerProviderTest {
-
 
   @Parameterized.Parameter(0)
   public String jdbcUrl;
   @Parameterized.Parameter(1)
   public String versionStatement;
   @Parameterized.Parameter(2)
-  public String dbVersion;
+  public String expectedVersion;
 
-  @Parameterized.Parameters(name = "Job DueDate is set: {0}")
-  public static Collection<Object[]> scenarios() throws ParseException {
+  @Parameterized.Parameters(name = "{0}")
+  public static Collection<Object[]> scenarios() {
     return Arrays.asList(new Object[][] {
-      // The Camunda PostgreSQL 13.2 image is compatible with Testcontainers.
-      // For older versions, please use the public Docker images (DockerHub repo: postgres).
-      { "jdbc:tc:campostgresql:13.2:///process-engine", "SELECT version();", "13.2" },
-      // The current Camunda MySQL images are compatible with Testcontainers.
-      // The username and password need to be explicitly declared.
-      { "jdbc:tc:cammysql:5.7://localhost:3306/process-engine?user=camunda&password=camunda", "SELECT version();", "5.7" },
-      { "jdbc:tc:cammysql:8.0://localhost:3306/process-engine?user=camunda&password=camunda", "SELECT version();", "8.0" },
-      // The current Camunda SqlServer 2017/2019 images are compatible with Testcontainers.
-      { "jdbc:tc:camsqlserver:2017:///process-engine", "SELECT @@VERSION", "2017" },
-      { "jdbc:tc:camsqlserver:2019:///process-engine", "SELECT @@VERSION", "2019" },
-      // The current Camunda DB2 images are not compatible with Testcontainers.
-//      { "jdbc:tc:camdb2:11.1:///engine?user=camunda&password=camunda", "SELECT * FROM SYSIBMADM.ENV_INST_INFO;", "11.1"},
-      // The current Camunda Oracle images are not compatible with Testcontainers.
-//      { "jdbc:tc:camoracle:thin:@localhost:1521:xe?user=camunda&password=camunda", "SELECT * FROM v$version;", "18" }
+      { "jdbc:tc:postgresql:18:///process-engine", "SELECT version();", "18." },
+      { "jdbc:tc:mysql:8.4:///process-engine", "SELECT version();", "8.4" },
+      { "jdbc:tc:mariadb:12.3:///process-engine", "SELECT version();", "12.3" },
+      { "jdbc:tc:sqlserver:2025-latest:///process-engine;trustServerCertificate=true;",
+        "SELECT @@VERSION", "2025" },
+      { "jdbc:tc:sqlserver:2017-latest:///process-engine;trustServerCertificate=true;",
+        "SELECT @@VERSION", "2017" },
+      { "jdbc:tc:oracle:23-slim:///process-engine", "SELECT banner FROM v$version", "Oracle" },
+      { "jdbc:tc:db2:11.5.8.0:///test", "SELECT service_level FROM TABLE(sysproc.env_get_inst_info())", "11.5" },
     });
   }
 
+  /**
+   * Every build runs the first scenario only. It is the cheapest image of the set and it
+   * exercises what actually rots: the profile wiring and the jdbc:tc: URL the build composes.
+   * The rest pull roughly 6 GB between them and start containers as heavy as DB2, which does
+   * not belong on a pull-request build sharing a 5Gi runner - run them with
+   * -Dtestcontainers.databases=all when changing an image or a provider.
+   */
+  private static final boolean ALL = "all".equals(System.getProperty("testcontainers.databases"));
+
   @Test
-  public void testJdbcTestcontainersUrl() {
-    // when
+  public void shouldConnectThroughTestcontainersJdbcUrl() throws SQLException {
+    assumeTrue("Docker is not available", DockerClientFactory.instance().isDockerAvailable());
+    assumeTrue("Set -Dtestcontainers.databases=all to run every database",
+      ALL || jdbcUrl.startsWith("jdbc:tc:postgresql:"));
+
     try (Connection connection = DriverManager.getConnection(jdbcUrl)) {
-      connection.setAutoCommit(false);
       ResultSet rs = connection.prepareStatement(versionStatement).executeQuery();
-      if (rs.next()) {
-        // then
-        String version = rs.getString(1);
-        assertThat(version).contains(dbVersion);
-      }
-    } catch (SQLException throwables) {
-      fail("Testcontainers failed to spin up a Docker container: " + throwables.getMessage());
+      assertThat(rs.next()).isTrue();
+      assertThat(rs.getString(1)).contains(expectedVersion);
     }
   }
 

@@ -1,6 +1,7 @@
 package org.eximeebpms.bpm.engine.test.businessevent;
 
 import org.eximeebpms.bpm.engine.ManagementService;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,6 +37,18 @@ public class BusinessEventOutboxCleanupJobIT extends AbstractBusinessEventIT {
     private static final long RETENTION_MS = 1_000L;
 
     private ManagementService managementService;
+
+    /**
+     * Job events are disabled: the cleanup job's own lifecycle ({@code job:create} at bootstrap,
+     * {@code job:success} on execution) would otherwise land in the outbox these tests count.
+     */
+    @Override
+    protected BusinessEventConfiguration businessEventConfiguration() {
+        return BusinessEventConfiguration.builder()
+                .enabled(true)
+                .disabledEventTypes(Set.of("job"))
+                .build();
+    }
 
     /**
      * Returns a {@link Date} that is {@code millisAgo} milliseconds in the past.

@@ -23,7 +23,7 @@
                        "value": {
                            "installation": "8343cc7a-8ad1-42d4-97d2-43452c0bdfa3",
                            "product": {
-                             "name": "Camunda BPM Runtime",
+                             "name": "EximeeBPMS BPM Runtime",
                              "version": "7.14.0",
                              "edition": "enterprise",
                              "internals": {
@@ -50,7 +50,7 @@
                                  "executed-decision-elements": { "count": 732 }
                                },
                                "data-collection-start-date": "2022-11-320T15:53:20.386+0100",
-                               "camunda-integration": [
+                               "eximeebpms-integration": [
                                  "spring-boot-starter",
                                  "eximeebpms-bpm-run"
                                ],

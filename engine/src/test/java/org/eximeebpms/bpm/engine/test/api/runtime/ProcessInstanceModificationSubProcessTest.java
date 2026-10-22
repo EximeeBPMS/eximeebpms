@@ -201,7 +201,7 @@ public class ProcessInstanceModificationSubProcessTest {
     final BpmnModelInstance modelInstance =
       Bpmn.createExecutableProcess("parentProcess").startEvent()
         .parallelGateway()
-          .serviceTask("doNothingServiceTask").camundaExpression("${true}")
+          .serviceTask("doNothingServiceTask").eximeeBpmsExpression("${true}")
         .moveToLastGateway()
           .callActivity("callActivity").calledElement("subprocess")
         .parallelGateway("mergingParallelGateway")
@@ -247,7 +247,7 @@ public class ProcessInstanceModificationSubProcessTest {
     final BpmnModelInstance modelInstance =
       Bpmn.createExecutableProcess("parentProcess").startEvent()
         .parallelGateway()
-          .serviceTask("doNothingServiceTask").camundaExpression("${true}")
+          .serviceTask("doNothingServiceTask").eximeeBpmsExpression("${true}")
         .moveToLastGateway()
           .callActivity("callActivity").calledElement("subprocess")
         .parallelGateway("mergingParallelGateway")

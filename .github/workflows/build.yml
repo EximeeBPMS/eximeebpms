@@ -213,6 +213,17 @@ jobs:
           mkdir -p ${{ github.workspace }}/webapps/frontend/node
           mkdir -p ${{ github.workspace }}/webapps/frontend/node_modules
 
+      - name: Read the Node.js version
+        id: node-version
+        # Part of the cache key: the cached node/ directories hold the Node.js
+        # binary frontend-maven-plugin installed, so a cache from another
+        # version must not be restored, and a version bump with unchanged
+        # lockfiles must not hit the old entry.
+        run: |
+          version="$(sed -n 's:.*<version.nodejs>\(.*\)</version.nodejs>.*:\1:p' parent/pom.xml)"
+          test -n "${version}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
       - name: Cache Node/npm packages
         uses: actions/cache@v6
         with:
@@ -224,9 +235,9 @@ jobs:
             ${{ github.workspace }}/engine-rest/docs/node_modules
             ${{ github.workspace }}/webapps/frontend/node
             ${{ github.workspace }}/webapps/frontend/node_modules
-          key: ${{ runner.os }}-frontend-${{ hashFiles('engine-rest/docs/package-lock.json', 'webapps/frontend/package-lock.json') }}
+          key: ${{ runner.os }}-frontend-node${{ steps.node-version.outputs.version }}-${{ hashFiles('engine-rest/docs/package-lock.json', 'webapps/frontend/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-frontend-
+            ${{ runner.os }}-frontend-node${{ steps.node-version.outputs.version }}-
 
       - name: Restore Maven packages
         uses: actions/cache/restore@v6

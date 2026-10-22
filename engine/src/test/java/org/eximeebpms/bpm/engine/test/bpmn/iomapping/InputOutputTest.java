@@ -502,12 +502,12 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance processDefinition = Bpmn.createExecutableProcess("process")
       .startEvent()
       .serviceTask()
-        .camundaOutputParameter("variable", "A")
-        .camundaExpression("${'this value does not matter'}")
+        .eximeeBpmsOutputParameter("variable", "A")
+        .eximeeBpmsExpression("${'this value does not matter'}")
       .parallelGateway("fork")
       .endEvent()
       .moveToNode("fork")
-        .serviceTask().camundaExpression("${variable}")
+        .serviceTask().eximeeBpmsExpression("${variable}")
         .receiveTask()
       .endEvent()
     .done();
@@ -1246,7 +1246,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .receiveTask()
-        .camundaInputParameter("var", "Hello World${'!'}")
+        .eximeeBpmsInputParameter("var", "Hello World${'!'}")
       .endEvent("end")
       .done();
 
@@ -1270,9 +1270,9 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaExpression("${true}")
-        .camundaInputParameter("var1", "World!")
-        .camundaOutputParameter("var2", "Hello ${var1}")
+        .eximeeBpmsExpression("${true}")
+        .eximeeBpmsInputParameter("var1", "World!")
+        .eximeeBpmsOutputParameter("var2", "Hello ${var1}")
       .userTask()
       .endEvent("end")
       .done();

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
@@ -33,7 +34,7 @@ public class ScriptTaskResourceScriptSecurityTest {
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
 
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
   protected ScriptSecurityPolicy previousScriptSecurityPolicy;
   protected String deploymentId;
 
@@ -41,10 +42,10 @@ public class ScriptTaskResourceScriptSecurityTest {
   public void enableScriptSecurity() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
 
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
     previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
 
-    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
   }
 
@@ -56,7 +57,7 @@ public class ScriptTaskResourceScriptSecurityTest {
     }
 
     processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   @Test

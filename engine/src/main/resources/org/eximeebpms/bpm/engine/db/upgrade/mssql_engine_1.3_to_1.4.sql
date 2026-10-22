@@ -91,3 +91,8 @@ alter table ACT_HI_OP_LOG drop column CASE_EXECUTION_ID_;
 alter table ACT_HI_DECINST drop column CASE_DEF_KEY_;
 alter table ACT_HI_DECINST drop column CASE_DEF_ID_;
 alter table ACT_HI_DECINST drop column CASE_INST_ID_;
+
+-- replace deprecated MSSQL `image` type with `varbinary(max)` --
+alter table ACT_ID_INFO alter column PASSWORD_ varbinary(max);
+alter table ACT_GE_BYTEARRAY alter column BYTES_ varbinary(max);
+alter table ACT_HI_COMMENT alter column FULL_MSG_ varbinary(max);

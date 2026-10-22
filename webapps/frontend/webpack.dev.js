@@ -24,27 +24,27 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = (_env, argv = {}) => {
   const eeBuild = !!argv.eeBuild;
 
-  const commonConfig = require(path.resolve(
-    __dirname,
-    './webpack.common.js'
-  ))(_env, {...argv, eeBuild, devMode: true});
+  const commonConfig = require(path.resolve(__dirname, './webpack.common.js'))(
+    _env,
+    {...argv, eeBuild, devMode: true},
+  );
 
-  const addEngines = engines => {
+  const addEngines = (engines) => {
     return engines.reduce((acc, engine) => {
       acc[`/eximeebpms/app/*/${engine}/`] = {
         target: 'http://localhost:8081/',
-        pathRewrite: path => {
+        pathRewrite: (path) => {
           return path.replace(`/${engine}`, '').replace('/eximeebpms', '');
-        }
+        },
       };
       acc[`/eximeebpms/app/*/${engine}/setup/`] = {
         target: 'http://localhost:8081/',
-        pathRewrite: path => {
+        pathRewrite: (path) => {
           return path
             .replace(`/${engine}`, '')
             .replace('/eximeebpms', '')
             .replace('/setup', '');
-        }
+        },
       };
       return acc;
     }, {});
@@ -52,64 +52,67 @@ module.exports = (_env, argv = {}) => {
 
   const developmentConfig = {
     output: {
-      publicPath: '/'
+      publicPath: '/',
     },
     entry: {
-      client: 'webpack-dev-server/client?http://localhost:8081?live-reload=true'
+      client:
+        'webpack-dev-server/client?http://localhost:8081?live-reload=true',
     },
     devtool: 'source-map',
     devServer: {
       port: 8081,
       static: {
         directory: path.resolve(__dirname, './public'),
-        publicPath: '/app'
+        publicPath: '/app',
       },
       proxy: [
         {
           context: ['/api'],
           target: 'http://localhost:8080/eximeebpms/api',
           logLevel: 'debug',
-          pathRewrite: { '^/api': '' }
+          pathRewrite: {'^/api': ''},
         },
         {
           context: ['/eximeebpms-welcome'],
           target: 'http://localhost:8080/',
-          logLevel: 'debug'
+          logLevel: 'debug',
         },
-        ...Object.entries(addEngines(['default', 'engine2', 'engine3'])).map(([context, config]) => ({
-          context,
-          ...config
-        })),
+        ...Object.entries(addEngines(['default', 'engine2', 'engine3'])).map(
+          ([context, config]) => ({
+            context,
+            ...config,
+          }),
+        ),
         {
           context: ['/eximeebpms/api'],
           target: 'http://localhost:8080',
-          logLevel: 'debug'
+          logLevel: 'debug',
         },
         {
           context: ['/eximeebpms'],
           target: 'http://localhost:8081/',
           logLevel: 'debug',
-          pathRewrite: path => path.replace('/eximeebpms', '')
-        }
+          pathRewrite: (path) => path.replace('/eximeebpms', ''),
+        },
       ],
-      open: ['/eximeebpms/app/cockpit/default/']
-    }
+      open: ['/eximeebpms/app/cockpit/default/'],
+    },
   };
 
   const merged = merge(commonConfig, developmentConfig);
-  merged.plugins.forEach(plugin => {
+  merged.plugins.forEach((plugin) => {
     const eeApps = ['admin', 'cockpit'];
     function getPluginDeps(appName) {
       const pluginDependencies = [];
       if (appName !== 'welcome') {
         pluginDependencies.push({
           ngModuleName: `${appName}.plugin.${appName}Plugins`,
-          requirePackageName: `${appName}-plugin-${appName}Plugins`
+          requirePackageName: `${appName}-plugin-${appName}Plugins`,
         });
         if (eeBuild && eeApps.includes(appName)) {
           pluginDependencies.push({
             ngModuleName: `${appName}.plugin.${appName}EE`,
-            requirePackageName: `${appName}-plugin-${appName}EE`
+            requirePackageName: `${appName}-plugin-${appName}EE`,
           });
         }
       }
@@ -122,13 +125,13 @@ module.exports = (_env, argv = {}) => {
         pluginPackages.push({
           name: `${appName}-plugin-${appName}Plugins`,
           location: `/plugin/${appName}/app/`,
-          main: 'plugin.js'
+          main: 'plugin.js',
         });
         if (eeBuild && eeApps.includes(appName)) {
           pluginPackages.push({
             name: `${appName}-plugin-${appName}EE`,
             location: `/plugin/${appName}EE/app/`,
-            main: 'plugin.js'
+            main: 'plugin.js',
           });
         }
       }
@@ -143,7 +146,7 @@ module.exports = (_env, argv = {}) => {
         appRoot: '/eximeebpms',
         appBase: `/eximeebpms/app/${options['appName']}/{ENGINE}/`,
         pluginDeps: getPluginDeps(options['appName']),
-        pluginPackages: getPluginPackages(options['appName'])
+        pluginPackages: getPluginPackages(options['appName']),
       };
     }
   });

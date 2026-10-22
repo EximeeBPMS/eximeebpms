@@ -66,6 +66,11 @@ public abstract class SpinXmlNode<T extends SpinXmlNode<?>> extends Spin<T> {
 
   /**
    * Maps XML into specific class
+   * <p>
+   * The target type is not validated against the process engine's deserialization type
+   * whitelist by default; it is checked only when the engine is configured with both
+   * {@code deserializationTypeValidationEnabled} and {@code spinMapToTypeValidationEnabled}.
+   * Outside those settings the caller is responsible for supplying a trusted type.
    *
    * @param type Class to which the Xml should be mapped
    * @return mapped Class
@@ -76,6 +81,12 @@ public abstract class SpinXmlNode<T extends SpinXmlNode<?>> extends Spin<T> {
 
   /**
    * Maps Xml into specific class
+   * <p>
+   * The target type is not validated against the process engine's deserialization type
+   * whitelist by default; it is checked only when the engine is configured with both
+   * {@code deserializationTypeValidationEnabled} and {@code spinMapToTypeValidationEnabled}.
+   * Outside those settings the caller is responsible for supplying a trusted type, in
+   * particular when the type name comes from data the caller does not control.
    *
    * @param canonicalName canonical name of the class
    * @return mapped class

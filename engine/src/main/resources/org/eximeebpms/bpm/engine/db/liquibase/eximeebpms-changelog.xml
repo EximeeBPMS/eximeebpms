@@ -180,6 +180,9 @@
   </changeSet>
 
   <changeSet author="EximeeBPMS" id="1.3-to-1.4">
+    <preConditions onFail="HALT" onFailMessage="Cannot upgrade to 1.4: active CMMN case instances exist in ACT_RU_CASE_EXECUTION. This migration drops CMMN history and runtime tables unconditionally; complete or terminate all active case instances before upgrading.">
+      <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ACT_RU_CASE_EXECUTION</sqlCheck>
+    </preConditions>
     <sqlFile path="upgrade/${db.name}_engine_1.3_to_1.4.sql"
              encoding="UTF-8"
              relativeToChangelogFile="true"

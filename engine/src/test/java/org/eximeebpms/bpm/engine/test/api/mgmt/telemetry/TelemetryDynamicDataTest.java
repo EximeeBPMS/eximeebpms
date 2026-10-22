@@ -102,7 +102,6 @@ public class TelemetryDynamicDataTest {
     // telemetry registry (including the command counts) is reset when telemetry is activated
     // during engine startup
     assertThat(entries.keySet()).containsExactlyInAnyOrder(
-        "GetTableMetaDataCmd",
         "HistoryCleanupCmd",
         "SchemaOperationsProcessEngineBuild",
         "HistoryLevelSetupCommand",

@@ -127,9 +127,19 @@ jobs:
           java -version
 
       - name: Create custom settings.xml
+        # Own directory, not ~/.m2 - the same isolation BPMS-385 gave the
+        # other workflows here and that this one was missed in.
+        # /home/runner/.m2 is a PersistentVolumeClaim shared by every runner
+        # pod in the scale set, so a settings.xml written there is global
+        # mutable state that a concurrent job overwrites mid-build. In
+        # eximeebpms-enterprise, which never got the BPMS-385 pass, exactly
+        # that killed five releases on 2026-09-10 (BPMS-688): a build started
+        # by release:prepare's commits replaced the release job's settings.xml
+        # and its deploy then had no credentials for the "nexus" repository.
+        # run-integration-tests.sh picks the path up from $MAVEN_SETTINGS.
         run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
+          mkdir -p ~/.m2-integration-tests
+          cat <<EOF > ~/.m2-integration-tests/settings.xml
           <settings>
             <localRepository>${{ github.workspace }}/.m2/repository</localRepository>
             <profiles>
@@ -219,6 +229,7 @@ jobs:
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
         run: |
+          export MAVEN_SETTINGS="$HOME/.m2-integration-tests/settings.xml"
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-test
       - name: Install Chrome for Testing
         if: contains(matrix.testsuite, 'webapps')
@@ -249,6 +260,7 @@ jobs:
         env:
           MAVEN_OPTS: -Dmaven.repo.local=${{ github.workspace }}/.m2/repository
         run: |
+          export MAVEN_SETTINGS="$HOME/.m2-integration-tests/settings.xml"
           .github/scripts/run-integration-tests.sh --testsuite=${{ matrix.testsuite }} --distro=${{ matrix.distro }} --db=${{ matrix.database }} --no-build
       - name: Stop PostgreSQL
         if: always() && matrix.database == 'postgresql'

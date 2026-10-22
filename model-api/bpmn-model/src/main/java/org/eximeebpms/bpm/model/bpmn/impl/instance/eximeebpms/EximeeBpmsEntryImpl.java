@@ -50,11 +50,11 @@ public class EximeeBpmsEntryImpl extends EximeeBpmsGenericValueElementImpl imple
     super(instanceContext);
   }
 
-  public String getCamundaKey() {
+  public String getEximeeBpmsKey() {
     return camundaKeyAttribute.getValue(this);
   }
 
-  public void setCamundaKey(String camundaKey) {
+  public void setEximeeBpmsKey(String camundaKey) {
     camundaKeyAttribute.setValue(this, camundaKey);
   }
 

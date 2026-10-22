@@ -39,9 +39,9 @@ import org.eximeebpms.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.JakartaTransactionProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.jboss.as.connector.subsystems.datasources.DataSourceReferenceFactoryService;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.msc.service.ServiceBuilder;
@@ -186,11 +186,10 @@ public class MscManagedProcessEngineController extends MscManagedProcessEngine {
     Map<String, String> configProperties = new HashMap<>(processEngineMetadata.getConfigurationProperties());
     String idGeneratorProperty = configProperties.remove("id-generator");
     if ("uuid-v1".equals(idGeneratorProperty)) {
-      @SuppressWarnings("removal")
-      UuidV1Generator idGen = new UuidV1Generator();
-      processEngineConfiguration.setIdGenerator(idGen);
+      ProcessEngineLogger.PERSISTENCE_LOGGER.uuidV1GeneratorRemoved();
     }
-    // otherwise let initIdGenerator() handle defaulting, preserving any value set by a custom subclass
+    // Otherwise initIdGenerator() defaults to UUID v7, preserving any value set by a custom subclass.
+    // The removed legacy uuid-v1 value is warned about above and otherwise ignored.
 
     PropertyHelper.applyProperties(processEngineConfiguration, configProperties);
 

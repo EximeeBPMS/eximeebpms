@@ -72,9 +72,9 @@ public class MultiEngineCommandContextTest {
     BpmnModelInstance process1 = Bpmn.createExecutableProcess("process1")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine2")
-          .camundaInputParameter("processKey", "process2")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .eximeeBpmsInputParameter("engineName", "engine2")
+          .eximeeBpmsInputParameter("processKey", "process2")
+          .eximeeBpmsClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .endEvent()
         .done();
 
@@ -97,18 +97,18 @@ public class MultiEngineCommandContextTest {
     BpmnModelInstance process1 = Bpmn.createExecutableProcess("process1")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine2")
-          .camundaInputParameter("processKey", "process2")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .eximeeBpmsInputParameter("engineName", "engine2")
+          .eximeeBpmsInputParameter("processKey", "process2")
+          .eximeeBpmsClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .endEvent()
         .done();
 
     BpmnModelInstance process2 = Bpmn.createExecutableProcess("process2")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine1")
-          .camundaInputParameter("processKey", "process3")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .eximeeBpmsInputParameter("engineName", "engine1")
+          .eximeeBpmsInputParameter("processKey", "process3")
+          .eximeeBpmsClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .done();
 
     BpmnModelInstance process3 = Bpmn.createExecutableProcess("process3")

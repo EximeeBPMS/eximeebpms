@@ -166,8 +166,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaClass(SetVariableTask.class.getName())
-          .camundaAsyncAfter()
+          .eximeeBpmsClass(SetVariableTask.class.getName())
+          .eximeeBpmsAsyncAfter()
         .endEvent()
       .done());
 
@@ -185,7 +185,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .userTask()
-          .camundaAsyncAfter()
+          .eximeeBpmsAsyncAfter()
         .endEvent()
       .done());
 
@@ -324,7 +324,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .userTask()
-          .camundaAsyncBefore()
+          .eximeeBpmsAsyncBefore()
         .endEvent()
       .done());
 
@@ -343,8 +343,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaExpression("${failing}")
-          .camundaAsyncBefore()
+          .eximeeBpmsExpression("${failing}")
+          .eximeeBpmsAsyncBefore()
         .endEvent()
         .done());
 
@@ -365,7 +365,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
         .startEvent()
           .timerWithDuration("PT1M")
          .serviceTask()
-           .camundaExpression("${failing}")
+           .eximeeBpmsExpression("${failing}")
          .endEvent()
          .done());
 
@@ -383,8 +383,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaType("external")
-          .camundaTopic("test")
+          .eximeeBpmsType("external")
+          .eximeeBpmsTopic("test")
         .endEvent()
       .done());
 
@@ -406,8 +406,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaType("external")
-          .camundaTopic("test")
+          .eximeeBpmsType("external")
+          .eximeeBpmsTopic("test")
         .endEvent()
       .done());
 

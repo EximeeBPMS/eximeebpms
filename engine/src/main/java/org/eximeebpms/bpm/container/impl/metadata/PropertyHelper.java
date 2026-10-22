@@ -17,8 +17,13 @@
 package org.eximeebpms.bpm.container.impl.metadata;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,10 +78,37 @@ public class PropertyHelper {
     }
     else if (clazz.isAssignableFrom(boolean.class)) {
       propertyValue = Boolean.parseBoolean(value);
+    }
+    else if (Set.class.isAssignableFrom(clazz)) {
+      propertyValue = splitToCollection(value, new LinkedHashSet<>());
+    }
+    else if (List.class.isAssignableFrom(clazz)) {
+      propertyValue = splitToCollection(value, new ArrayList<>());
     } else {
       propertyValue = value;
     }
     return propertyValue;
+  }
+
+  /**
+   * Splits a comma-separated property value into {@code target}, trimming each entry and
+   * dropping empty ones (a blank/empty {@code value} yields an empty collection, not a
+   * collection containing one empty string).
+   *
+   * <p>Only produces {@code String} elements — the setter's erased parameter type (e.g.
+   * {@code Set.class}) doesn't expose its generic element type via reflection, so this is only
+   * correct for {@code Set<String>}/{@code List<String>} targets.
+   */
+  private static <C extends Collection<String>> C splitToCollection(String value, C target) {
+    if (value != null && !value.isBlank()) {
+      for (String entry : value.split(",")) {
+        String trimmed = entry.trim();
+        if (!trimmed.isEmpty()) {
+          target.add(trimmed);
+        }
+      }
+    }
+    return target;
   }
 
   public static void applyProperty(Object configuration, String key, String stringValue) {

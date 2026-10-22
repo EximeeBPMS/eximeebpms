@@ -54,7 +54,7 @@ public class CallActivityModels {
         .startEvent()
         .callActivity()
           .calledElement("${NextProcess}")
-          .camundaIn("NextProcess", "NextProcess")
+          .eximeeBpmsIn("NextProcess", "NextProcess")
         .endEvent()
         .done();
   }
@@ -62,10 +62,10 @@ public class CallActivityModels {
   public static BpmnModelInstance oneBpmnCallActivityProcessAsExpressionAsync(int processNumber){
     return ProcessModels.newModel(processNumber)
         .startEvent()
-          .camundaAsyncBefore(true)
+          .eximeeBpmsAsyncBefore(true)
         .callActivity()
           .calledElement("${NextProcess}")
-          .camundaIn("NextProcess", "NextProcess")
+          .eximeeBpmsIn("NextProcess", "NextProcess")
         .endEvent()
         .done();
   }
@@ -75,8 +75,8 @@ public class CallActivityModels {
         .startEvent()
         .callActivity()
           .calledElement("Process"+calledProcessNumber)
-          .camundaInputParameter("NextProcess", "Process"+(processNumber+1))
-          .camundaIn("NextProcess", "NextProcess")
+          .eximeeBpmsInputParameter("NextProcess", "Process"+(processNumber+1))
+          .eximeeBpmsIn("NextProcess", "NextProcess")
         .endEvent()
         .done();
   }

@@ -56,15 +56,16 @@ public class StartProcessEngineStepIdGeneratorTest {
   }
 
   @Test
-  @SuppressWarnings("removal")
-  public void uuidV1PropertyConfiguresUuidV1Generator() {
+  public void uuidV1PropertyFallsBackToStrongUuidGenerator() {
+    // uuid-v1 was removed in 1.4.0; the property value is still accepted but no longer
+    // instantiates a legacy generator — it silently falls back to the default (with a warning).
     // when
     IdGenerator generator = step.createIdGenerator(Map.of("id-generator", "uuid-v1"));
 
     // then
-    assertThat(generator).isInstanceOf(org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator.class);
+    assertThat(generator).isInstanceOf(StrongUuidGenerator.class);
     UUID uuid = UUID.fromString(generator.getNextId());
-    assertThat(uuid.version()).isEqualTo(1);
+    assertThat(uuid.version()).isEqualTo(7);
   }
 
 }

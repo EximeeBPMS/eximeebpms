@@ -81,7 +81,7 @@ function CamundaClient(config) {
 CamundaClient.HttpClient = require('./http-client');
 
 // provide an isolated scope
-(function(proto) {
+(function (proto) {
   /**
    * configuration storage
    * @memberof CamSDK.client.CamundaClient.prototype
@@ -96,7 +96,7 @@ CamundaClient.HttpClient = require('./http-client');
    * @memberof CamSDK.client.CamundaClient.prototype
    * @name initialize
    */
-  proto.initialize = function() {
+  proto.initialize = function () {
     /* jshint sub: true */
     _resources['authorization'] = require('./resources/authorization');
     _resources['batch'] = require('./resources/batch');
@@ -139,7 +139,7 @@ CamundaClient.HttpClient = require('./http-client');
     // create global HttpClient instance
     this.http = new this.HttpClient({
       baseUrl: this.baseUrl,
-      headers: this.config.headers
+      headers: this.config.headers,
     });
 
     // configure the client for each resources separately,
@@ -150,7 +150,7 @@ CamundaClient.HttpClient = require('./http-client');
         // use the SDK config for some default values
         mock: this.config.mock,
         baseUrl: this.baseUrl,
-        headers: this.config.headers
+        headers: this.config.headers,
       };
       resConf = this.config.resources[name] || {};
 
@@ -174,7 +174,7 @@ CamundaClient.HttpClient = require('./http-client');
    * @param  {String} name
    * @return {CamSDK.client.AbstractClientResource}
    */
-  proto.resource = function(name) {
+  proto.resource = function (name) {
     return _resources[name];
   };
 })(CamundaClient.prototype);

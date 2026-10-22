@@ -6,18 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 
 @Getter
 @Setter
 public class ScriptSecurityProperty {
 
-  public enum Mode {
-    ENFORCE,
-    AUDIT,
-    DISABLED
-  }
-
-  private Mode mode = Mode.ENFORCE;
+  private ScriptSecurityMode mode = ScriptSecurityMode.ENFORCE;
 
   private Set<String> allowlistedProcessDefinitionKeys = new HashSet<>();
 
@@ -31,11 +26,11 @@ public class ScriptSecurityProperty {
   private int retentionDays = 0;
 
   public boolean isDisabled() {
-    return mode == Mode.DISABLED;
+    return mode == ScriptSecurityMode.DISABLED;
   }
 
   public boolean isAuditMode() {
-    return mode == Mode.AUDIT;
+    return mode == ScriptSecurityMode.AUDIT;
   }
 
   @Override

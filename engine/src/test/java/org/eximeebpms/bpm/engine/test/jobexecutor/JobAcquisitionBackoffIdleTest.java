@@ -22,6 +22,7 @@ import static junit.framework.TestCase.assertNotNull;
 import java.util.Date;
 import java.util.List;
 
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.runtime.Job;
 import org.eximeebpms.bpm.engine.runtime.JobQuery;
@@ -49,7 +50,7 @@ public class JobAcquisitionBackoffIdleTest {
 
   protected ControllableJobExecutor jobExecutor;
   protected ThreadControl acquisitionThread;
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   protected ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(configuration -> {
     jobExecutor = new ControllableJobExecutor(true);
@@ -66,15 +67,15 @@ public class JobAcquisitionBackoffIdleTest {
 
   @Before
   public void setUp() {
-    previousScriptSecurityEnabled = engineRule.getProcessEngineConfiguration().isScriptSecurityEnabled();
-    engineRule.getProcessEngineConfiguration().setScriptSecurityEnabled(false);
+    previousScriptSecurityMode = engineRule.getProcessEngineConfiguration().getScriptSecurityMode();
+    engineRule.getProcessEngineConfiguration().setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
   }
 
   @After
   public void shutdownJobExecutor() {
     ClockUtil.reset();
     jobExecutor.shutdown();
-    engineRule.getProcessEngineConfiguration().setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    engineRule.getProcessEngineConfiguration().setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   /**

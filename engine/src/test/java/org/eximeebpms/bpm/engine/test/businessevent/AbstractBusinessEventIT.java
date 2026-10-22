@@ -1,7 +1,9 @@
 package org.eximeebpms.bpm.engine.test.businessevent;
 
+import java.util.List;
 import org.eximeebpms.bpm.engine.businessevent.BusinessEventDispatcher;
 import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventConfiguration;
+import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandExecutor;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.BusinessEventOutboxEntity;
@@ -16,13 +18,33 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 
 public abstract class AbstractBusinessEventIT {
-    protected BusinessEventConfiguration businessEventConfiguration = BusinessEventConfiguration.builder()
-            .enabled(true)
-                        .build();
+    protected BusinessEventConfiguration businessEventConfiguration = businessEventConfiguration();
+
+    /**
+     * The configuration the engine under test is bootstrapped with. Overriding sub-classes must
+     * return a self-contained value — this runs from a field initializer of this class, before any
+     * sub-class field exists.
+     */
+    protected BusinessEventConfiguration businessEventConfiguration() {
+        return BusinessEventConfiguration.builder()
+                .enabled(true)
+                .build();
+    }
+
     protected ProcessEngineBootstrapRule bootstrapRule =
             new ProcessEngineBootstrapRule(config -> {
                 config.setBusinessEventConfiguration(businessEventConfiguration);
+                configureEngine(config);
             });
+
+    /**
+     * Further engine configuration for sub-classes, applied at bootstrap after the business event
+     * configuration. Like {@link #businessEventConfiguration()}, it must not depend on sub-class
+     * fields.
+     */
+    protected void configureEngine(ProcessEngineConfigurationImpl config) {
+        // nothing by default
+    }
 
     protected ProvidedProcessEngineRule engineRule = new ProvidedProcessEngineRule(bootstrapRule);
     protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -33,6 +55,34 @@ public abstract class AbstractBusinessEventIT {
             .around(testRule);
 
     protected CommandExecutor commandExecutor;
+
+    /**
+     * Every business event written to the outbox for this process instance, as fully-qualified
+     * event types in insertion order.
+     */
+    @SuppressWarnings("unchecked")
+    protected List<String> outboxEventTypes(String processInstanceId) {
+        final List<BusinessEventOutboxEntity> outboxEntries = commandExecutor.execute(ctx ->
+                ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
+
+        return outboxEntries.stream()
+                .map(BusinessEventOutboxEntity::getEventType)
+                .toList();
+    }
+
+    /**
+     * The serialized payloads of every business event written to the outbox for this process
+     * instance, in insertion order.
+     */
+    @SuppressWarnings("unchecked")
+    protected List<String> outboxPayloads(String processInstanceId) {
+        final List<BusinessEventOutboxEntity> outboxEntries = commandExecutor.execute(ctx ->
+                ctx.getDbEntityManager().selectList("selectBusinessEventOutboxByProcInstId", processInstanceId));
+
+        return outboxEntries.stream()
+                .map(BusinessEventOutboxEntity::getBusinessEvent)
+                .toList();
+    }
 
     @Before
     public void setUp() {

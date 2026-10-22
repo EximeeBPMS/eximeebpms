@@ -39,13 +39,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
- * <p>Throughput benchmark for UUID generator strategies.</p>
- *
- * <p>Measures and compares the throughput (IDs/second) of:
- * <ul>
- *   <li>{@link StrongUuidGenerator} — UUID v7 (time-ordered epoch, RFC 9562) — <b>default</b></li>
- *   <li>UuidV1Generator — UUID v1 (time-based, deprecated, will be removed in 1.4.0)</li>
- * </ul>
+ * <p>Throughput benchmark for {@link StrongUuidGenerator} (UUID v7, time-ordered epoch, RFC 9562 — the
+ * only generator strategy since UuidV1Generator was removed in 1.4.0).</p>
  *
  * <p>This test does <b>not</b> require a database connection. It measures pure generator throughput,
  * which directly impacts INSERT performance in high-throughput scenarios
@@ -97,34 +92,6 @@ public class UuidGeneratorThroughputTest {
   @Test
   public void d_uuidV7_multiThread_8() throws InterruptedException {
     runBenchmark("UUID v7 (StrongUuidGenerator — default)", new StrongUuidGenerator(), 8);
-  }
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // UUID v1 — UuidV1Generator (deprecated)
-  // ────────────────────────────────────────────────────────────────────────────
-
-  @Test
-  @SuppressWarnings("removal")
-  public void e_uuidV1_singleThread() throws InterruptedException {
-    runBenchmark("UUID v1 (UuidV1Generator — deprecated)", new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator(), 1);
-  }
-
-  @Test
-  @SuppressWarnings("removal")
-  public void f_uuidV1_multiThread_2() throws InterruptedException {
-    runBenchmark("UUID v1 (UuidV1Generator — deprecated)", new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator(), 2);
-  }
-
-  @Test
-  @SuppressWarnings("removal")
-  public void g_uuidV1_multiThread_4() throws InterruptedException {
-    runBenchmark("UUID v1 (UuidV1Generator — deprecated)", new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator(), 4);
-  }
-
-  @Test
-  @SuppressWarnings("removal")
-  public void h_uuidV1_multiThread_8() throws InterruptedException {
-    runBenchmark("UUID v1 (UuidV1Generator — deprecated)", new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator(), 8);
   }
 
   // ────────────────────────────────────────────────────────────────────────────

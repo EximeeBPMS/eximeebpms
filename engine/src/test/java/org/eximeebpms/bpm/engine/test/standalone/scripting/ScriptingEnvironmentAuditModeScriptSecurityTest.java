@@ -16,6 +16,7 @@ import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.InMemoryScriptViolationStore;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityException;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.test.ProcessEngineRule;
@@ -34,7 +35,7 @@ public class ScriptingEnvironmentAuditModeScriptSecurityTest {
   protected ScriptingEnvironment scriptingEnvironment;
   protected ScriptingEngines scriptingEngines;
   protected InMemoryScriptViolationStore violationStore;
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
   protected ScriptSecurityPolicy previousScriptSecurityPolicy;
   protected ScriptingEnvironment previousScriptingEnvironment;
 
@@ -42,14 +43,14 @@ public class ScriptingEnvironmentAuditModeScriptSecurityTest {
   public void setUp() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
 
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
     previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
     previousScriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
 
     violationStore = new InMemoryScriptViolationStore(100);
     ScriptSecurityPolicy auditPolicy = new DefaultScriptSecurityPolicy(Set.of(), true, violationStore);
 
-    processEngineConfiguration.setScriptSecurityEnabled(true);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     processEngineConfiguration.setScriptSecurityPolicy(auditPolicy);
 
     scriptingEngines = processEngineConfiguration.getScriptingEngines();
@@ -69,7 +70,7 @@ public class ScriptingEnvironmentAuditModeScriptSecurityTest {
   public void tearDown() {
     processEngineConfiguration.setScriptingEnvironment(previousScriptingEnvironment);
     processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
   }
 
   @Test

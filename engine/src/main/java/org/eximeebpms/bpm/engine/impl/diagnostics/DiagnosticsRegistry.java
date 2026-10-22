@@ -28,7 +28,7 @@ public class DiagnosticsRegistry {
   protected Map<String, CommandCounter> commands = new HashMap<>();
   protected ApplicationServerImpl applicationServer;
   protected LicenseKeyDataImpl licenseKey;
-  protected String camundaIntegration;
+  protected String eximeebpmsIntegration;
   protected Set<String> webapps = new HashSet<>();
 
   public synchronized ApplicationServerImpl getApplicationServer() {
@@ -47,11 +47,11 @@ public class DiagnosticsRegistry {
   }
 
   public String getEximeeBpmsIntegration() {
-    return camundaIntegration;
+    return eximeebpmsIntegration;
   }
 
-  public void setEximeeBpmsIntegration(String camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setEximeeBpmsIntegration(String eximeebpmsIntegration) {
+    this.eximeebpmsIntegration = eximeebpmsIntegration;
   }
 
   public LicenseKeyDataImpl getLicenseKey() {

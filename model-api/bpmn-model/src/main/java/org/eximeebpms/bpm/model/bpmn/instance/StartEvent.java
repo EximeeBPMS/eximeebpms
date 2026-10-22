@@ -34,25 +34,13 @@ public interface StartEvent extends CatchEvent {
 
   /** camunda extensions */
 
-  /**
-   * @deprecated use isCamundaAsyncBefore() instead.
-   */
-  @Deprecated
-  boolean isCamundaAsync();
+  String getEximeeBpmsFormHandlerClass();
 
-  /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
-   */
-  @Deprecated
-  void setCamundaAsync(boolean isCamundaAsync);
+  void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass);
 
-  String getCamundaFormHandlerClass();
+  String getEximeeBpmsFormKey();
 
-  void setCamundaFormHandlerClass(String camundaFormHandlerClass);
-
-  String getCamundaFormKey();
-
-  void setCamundaFormKey(String camundaFormKey);
+  void setEximeeBpmsFormKey(String camundaFormKey);
 
   String getEximeeBpmsFormRef();
 
@@ -66,7 +54,8 @@ public interface StartEvent extends CatchEvent {
 
   void setEximeeBpmsFormRefVersion(String camundaFormRefVersion);
 
-  String getCamundaInitiator();
+  String getEximeeBpmsInitiator();
 
-  void setCamundaInitiator(String camundaInitiator);
+  void setEximeeBpmsInitiator(String camundaInitiator);
+
 }

@@ -294,7 +294,7 @@ public class ExternalTaskQueryByCreateTimeTest {
   private BpmnModelInstance createProcessWithTask(String processId, String taskId, String topic, String priority) {
     return Bpmn.createExecutableProcess(processId)
         .startEvent()
-        .serviceTask(taskId).camundaExternalTask(topic).camundaTaskPriority(priority)
+        .serviceTask(taskId).eximeeBpmsExternalTask(topic).eximeeBpmsTaskPriority(priority)
         .endEvent()
         .done();
   }

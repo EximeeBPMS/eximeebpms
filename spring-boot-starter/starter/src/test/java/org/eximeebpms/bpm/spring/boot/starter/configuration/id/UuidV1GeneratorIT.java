@@ -19,7 +19,7 @@ package org.eximeebpms.bpm.spring.boot.starter.configuration.id;
 import org.eximeebpms.bpm.engine.ProcessEngine;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
+import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
 import org.eximeebpms.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,11 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.eximeebpms.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration.UUID_V1;
 
 /**
- * UuidV1Generator is configurable via 'eximeebpms.bpm.id-generator=uuid-v1'.
- *
- * @deprecated UUID v1 is deprecated. This test will be removed when UuidV1Generator is removed in 1.4.0.
+ * UuidV1Generator was removed in 1.4.0. Leftover 'eximeebpms.bpm.id-generator=uuid-v1' configuration
+ * must still resolve to a working {@link IdGenerator} — it silently falls back to UUID v7
+ * ({@link IdGeneratorConfiguration#uuidV1GeneratorFallback()}) instead of failing to start.
  */
-@SuppressWarnings("removal")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class }, properties = "eximeebpms.bpm.id-generator=" + UUID_V1)
 public class UuidV1GeneratorIT {
@@ -49,9 +48,9 @@ public class UuidV1GeneratorIT {
   private ProcessEngine processEngine;
 
   @Test
-  public void configured_idGenerator_is_uuidV1Generator() {
+  public void configured_idGenerator_falls_back_to_strongUuidGenerator() {
     IdGenerator configured = ((ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration()).getIdGenerator();
-    assertThat(configured).isInstanceOf(UuidV1Generator.class);
+    assertThat(configured).isInstanceOf(StrongUuidGenerator.class);
   }
 
   @Test
@@ -60,9 +59,9 @@ public class UuidV1GeneratorIT {
   }
 
   @Test
-  public void nextId_is_uuid_version_1() {
+  public void nextId_is_uuid_version_7() {
     UUID uuid = UUID.fromString(idGenerator.getNextId());
-    assertThat(uuid.version()).isEqualTo(1);
+    assertThat(uuid.version()).isEqualTo(7);
   }
 }
 

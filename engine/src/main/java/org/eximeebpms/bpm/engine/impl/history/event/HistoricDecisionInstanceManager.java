@@ -102,6 +102,9 @@ public class HistoricDecisionInstanceManager extends AbstractHistoricManager {
     for (HistoricDecisionInputInstance input : inputs) {
       HistoricDecisionInputInstanceEntity inputEntity = (HistoricDecisionInputInstanceEntity) input;
       inputEntity.setDecisionInstanceId(decisionInstanceId);
+      // creates the byte array for an object-typed value, now that this row is being
+      // written; deferred from the producer so a dropped event leaves nothing (BPMS-662)
+      inputEntity.materializeValue();
 
       getDbEntityManager().insert(inputEntity);
     }
@@ -111,6 +114,7 @@ public class HistoricDecisionInstanceManager extends AbstractHistoricManager {
     for (HistoricDecisionOutputInstance output : outputs) {
       HistoricDecisionOutputInstanceEntity outputEntity = (HistoricDecisionOutputInstanceEntity) output;
       outputEntity.setDecisionInstanceId(decisionInstanceId);
+      outputEntity.materializeValue();
 
       getDbEntityManager().insert(outputEntity);
     }

@@ -29,8 +29,8 @@ public interface EximeeBpmsScript extends BpmnModelElementInstance {
 
   void setEximeeBpmsScriptFormat(String camundaScriptFormat);
 
-  String getCamundaResource();
+  String getEximeeBpmsResource();
 
-  void setCamundaResource(String camundaResource);
+  void setEximeeBpmsResource(String camundaResource);
 
 }

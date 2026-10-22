@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.http.HttpHost;
@@ -39,17 +40,14 @@ import org.eximeebpms.connect.httpclient.impl.util.ParseUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.internal.util.reflection.Whitebox;
 
 public class HttpRequestConfigTest {
 
   public static final String EXAMPLE_URL = "http://eximeebpms.org/example";
 
-  public static final int PORT = 51234;
-
   @Rule
   public WireMockRule wireMockRule = new WireMockRule(
-      WireMockConfiguration.wireMockConfig().port(PORT));
+      WireMockConfiguration.wireMockConfig().dynamicPort());
 
   protected HttpConnector connector;
 
@@ -317,9 +315,9 @@ public class HttpRequestConfigTest {
   }
 
   @Test
-  public void shouldNotChangeDefaultConfig() {
+  public void shouldNotChangeDefaultConfig() throws IllegalAccessException {
     // given
-    HttpClient client = (HttpClient) Whitebox.getInternalState(connector, "httpClient");
+    HttpClient client = (HttpClient) FieldUtils.readField(connector, "httpClient", true);
     connector.createRequest().url(EXAMPLE_URL).get()
         .configOption(RequestConfigOption.CONNECTION_TIMEOUT.getName(), Timeout.ofSeconds(10))
         .configOption(RequestConfigOption.CONNECTION_REQUEST_TIMEOUT.getName(), Timeout.ofSeconds(10))
@@ -328,7 +326,7 @@ public class HttpRequestConfigTest {
         .execute();
 
     // when
-    RequestConfig config = (RequestConfig) Whitebox.getInternalState(client, "defaultConfig");
+    RequestConfig config = (RequestConfig) FieldUtils.readField(client, "defaultConfig", true);
 
     // then
     assertThat(config.getMaxRedirects()).isEqualTo(50);
@@ -344,7 +342,7 @@ public class HttpRequestConfigTest {
       wireMockRule.stubFor(get(urlEqualTo("/")).willReturn(aResponse().withFixedDelay(1000).withStatus(200)));
 
       // when
-      connector.createRequest().url("http://localhost:" + PORT).get()
+      connector.createRequest().url("http://localhost:" + wireMockRule.port()).get()
           .configOption(RequestConfigOption.RESPONSE_TIMEOUT.getName(), Timeout.ofMilliseconds(100))
           .execute();
       fail("No exception thrown");

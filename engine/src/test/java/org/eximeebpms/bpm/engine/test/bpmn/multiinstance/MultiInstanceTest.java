@@ -448,8 +448,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
         .userTask("miTasks")
             .multiInstance()
             .sequential()
-            .camundaCollection("${myBean.resolveCollection(execution)}")
-            .camundaElementVariable("elementVar")
+            .eximeeBpmsCollection("${myBean.resolveCollection(execution)}")
+            .eximeeBpmsElementVariable("elementVar")
             .multiInstanceDone()
         .endEvent()
         .done();

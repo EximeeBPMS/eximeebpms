@@ -199,9 +199,9 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   public void testDuplicateFilteringDefaultBehavior() {
     // given
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("3").done();
+      .eximeeBpmsVersionTag("3").done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").done();
+      .eximeeBpmsVersionTag("1").done();
 
     testRule.deploy(repositoryService.createDeployment()
       .enableDuplicateFiltering(true)
@@ -224,9 +224,9 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     // given
     processEngineConfiguration.setDeploymentHandlerFactory(customDeploymentHandlerFactory);
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").startEvent().done();
+      .eximeeBpmsVersionTag("1").startEvent().done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("2").startEvent().done();
+      .eximeeBpmsVersionTag("2").startEvent().done();
 
     DeploymentWithDefinitions deployment1 = testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(true)

@@ -19,6 +19,13 @@ package org.eximeebpms.bpm.engine.impl.cmd;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.delegate.DelegateExecution;
 import org.eximeebpms.bpm.engine.history.HistoricProcessInstance;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEvent;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProcessor;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventProducer;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
+import org.eximeebpms.bpm.engine.impl.businessevent.process.BusinessProcessInstanceEventEntity;
+import org.eximeebpms.bpm.engine.impl.businessevent.process.BusinessProcessInstanceState;
 import org.eximeebpms.bpm.engine.impl.ProcessInstanceQueryImpl;
 import org.eximeebpms.bpm.engine.impl.cfg.CommandChecker;
 import org.eximeebpms.bpm.engine.impl.history.HistoryLevel;
@@ -137,8 +144,32 @@ public abstract class AbstractSetProcessInstanceStateCmd extends AbstractSetStat
             }
           });
         }
+
+        fireBusinessProcessInstanceUpdate(processInstance);
       }
     }
+  }
+
+  protected void fireBusinessProcessInstanceUpdate(final ProcessInstance processInstance) {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_UPDATE;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        BusinessEvent event = producer.createProcessInstanceUpdateEvt((DelegateExecution) processInstance);
+        // like the history event above: the suspension state is changed by a bulk update, so the
+        // queried process instance still reports the old one
+        if (event instanceof BusinessProcessInstanceEventEntity processInstanceEvent) {
+          processInstanceEvent.setState(SuspensionState.SUSPENDED.getStateCode() == getNewSuspensionState().getStateCode()
+              ? BusinessProcessInstanceState.SUSPENDED.getValue()
+              : BusinessProcessInstanceState.ACTIVE.getValue());
+        }
+        return event;
+      }
+    });
   }
 
   protected List<ProcessInstance> obtainProcessInstances(CommandContext commandContext) {

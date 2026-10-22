@@ -25,12 +25,12 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsConstraint extends BpmnModelElementInstance {
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
 
-  String getCamundaConfig();
+  String getEximeeBpmsConfig();
 
-  void setCamundaConfig(String camundaConfig);
+  void setEximeeBpmsConfig(String camundaConfig);
 
 }

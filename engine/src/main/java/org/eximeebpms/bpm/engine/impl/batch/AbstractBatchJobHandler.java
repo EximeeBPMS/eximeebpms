@@ -38,6 +38,7 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.JobManager;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.MessageEntity;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.impl.util.JsonUtil;
+import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 
 /**
  * Common methods for batch job handlers based on list of ids, providing serialization, configuration instantiation, etc.
@@ -45,6 +46,14 @@ import org.eximeebpms.bpm.engine.impl.util.JsonUtil;
  * @author Askar Akhmerov
  */
 public abstract class AbstractBatchJobHandler<T extends BatchConfiguration> implements BatchJobHandler<T>, OptimisticLockingListener {
+
+  /**
+   * Name carried by every batch job configuration byte array. These rows are referenced
+   * only from the polymorphic {@code ACT_RU_JOB.HANDLER_CFG_} column, which cannot take a
+   * foreign key, so a name and creation time are the only way to account for them when
+   * auditing {@code ACT_GE_BYTEARRAY} (BPMS-662).
+   */
+  public static final String BATCH_JOB_CONFIGURATION_BYTE_ARRAY_NAME = "batch.jobConfiguration";
 
   @Override
   public abstract JobDeclaration<BatchJobContext, MessageEntity> getJobDeclaration();
@@ -219,9 +228,9 @@ public abstract class AbstractBatchJobHandler<T extends BatchConfiguration> impl
   }
 
   protected ByteArrayEntity saveConfiguration(ByteArrayManager byteArrayManager, T jobConfiguration) {
-    ByteArrayEntity configurationEntity = new ByteArrayEntity();
-    configurationEntity.setBytes(writeConfiguration(jobConfiguration));
-    byteArrayManager.insert(configurationEntity);
+    ByteArrayEntity configurationEntity = new ByteArrayEntity(
+        BATCH_JOB_CONFIGURATION_BYTE_ARRAY_NAME, writeConfiguration(jobConfiguration), ResourceTypes.RUNTIME);
+    byteArrayManager.insertByteArray(configurationEntity);
     return configurationEntity;
   }
 

@@ -57,7 +57,7 @@ public class ProcessEngineMultipleDeploymentTest {
     BpmnModelInstance process2 = Bpmn.createExecutableProcess("process-two")
         .startEvent()
         .serviceTask()
-          .camundaExpression("${true}")
+          .eximeeBpmsExpression("${true}")
         .endEvent()
         .done();
 

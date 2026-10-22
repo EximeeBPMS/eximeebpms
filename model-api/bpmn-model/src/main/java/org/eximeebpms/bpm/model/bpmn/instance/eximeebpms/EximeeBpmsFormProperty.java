@@ -27,45 +27,45 @@ import java.util.Collection;
  */
 public interface EximeeBpmsFormProperty extends BpmnModelElementInstance {
 
-  String getCamundaId();
+  String getEximeeBpmsId();
 
-  void setCamundaId(String camundaId);
+  void setEximeeBpmsId(String camundaId);
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
 
-  boolean isCamundaRequired();
+  boolean isEximeeBpmsRequired();
 
-  void setCamundaRequired(boolean isCamundaRequired);
+  void setEximeeBpmsRequired(boolean isCamundaRequired);
 
-  boolean isCamundaReadable();
+  boolean isEximeeBpmsReadable();
 
-  void setCamundaReadable(boolean isCamundaReadable);
+  void setEximeeBpmsReadable(boolean isCamundaReadable);
 
-  boolean isCamundaWriteable();
+  boolean isEximeeBpmsWriteable();
 
-  void setCamundaWriteable(boolean isCamundaWriteable);
+  void setEximeeBpmsWriteable(boolean isCamundaWriteable);
 
-  String getCamundaVariable();
+  String getEximeeBpmsVariable();
 
-  void setCamundaVariable(String camundaVariable);
+  void setEximeeBpmsVariable(String camundaVariable);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaDatePattern();
+  String getEximeeBpmsDatePattern();
 
-  void setCamundaDatePattern(String camundaDatePattern);
+  void setEximeeBpmsDatePattern(String camundaDatePattern);
 
-  String getCamundaDefault();
+  String getEximeeBpmsDefault();
 
-  void setCamundaDefault(String camundaDefault);
+  void setEximeeBpmsDefault(String camundaDefault);
 
   Collection<EximeeBpmsValue> getEximeeBpmsValues();
 

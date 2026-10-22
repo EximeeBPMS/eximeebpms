@@ -207,7 +207,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   @Test
@@ -231,7 +231,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   @Test
@@ -257,7 +257,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   @Test
@@ -414,7 +414,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   @Test
@@ -435,7 +435,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   @Test
@@ -458,7 +458,7 @@ public class RetrieveEximeeBpmsFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref");
   }
 
   /* HELPER METHODS */

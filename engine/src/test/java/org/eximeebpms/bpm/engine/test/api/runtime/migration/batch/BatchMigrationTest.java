@@ -40,6 +40,7 @@ import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.batch.Batch;
 import org.eximeebpms.bpm.engine.batch.history.HistoricBatch;
 import org.eximeebpms.bpm.engine.delegate.ExecutionListener;
+import org.eximeebpms.bpm.engine.impl.batch.AbstractBatchJobHandler;
 import org.eximeebpms.bpm.engine.impl.batch.BatchSeedJobHandler;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.interceptor.Command;
@@ -50,6 +51,7 @@ import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.management.JobDefinition;
 import org.eximeebpms.bpm.engine.migration.MigrationPlan;
 import org.eximeebpms.bpm.engine.repository.ProcessDefinition;
+import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 import org.eximeebpms.bpm.engine.runtime.ActivityInstance;
 import org.eximeebpms.bpm.engine.runtime.EventSubscription;
 import org.eximeebpms.bpm.engine.runtime.Job;
@@ -700,7 +702,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
+      .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
       .done()
     );
 
@@ -738,7 +740,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
+      .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, DelegateExecutionListener.class.getName())
       .done()
     );
 
@@ -768,7 +770,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaInputParameter("foo", "bar")
+      .eximeeBpmsInputParameter("foo", "bar")
       .done()
     );
 
@@ -803,7 +805,7 @@ public class BatchMigrationTest {
     ProcessDefinition sourceProcessDefinition = migrationRule.deployAndGetDefinition(ProcessModels.ONE_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = migrationRule.deployAndGetDefinition(modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaInputParameter("foo", "bar")
+      .eximeeBpmsInputParameter("foo", "bar")
       .done()
     );
 
@@ -869,6 +871,13 @@ public class BatchMigrationTest {
     ByteArrayEntity byteArrayEntity = engineRule.getProcessEngineConfiguration().getCommandExecutorTxRequired()
       .execute(new GetByteArrayCommand(byteArrayId));
     assertNotNull(byteArrayEntity);
+
+    // BPMS-662: referenced only from the polymorphic ACT_RU_JOB.HANDLER_CFG_ column, which
+    // cannot take a foreign key — so name, type and creation time are the only way to
+    // account for these rows when auditing ACT_GE_BYTEARRAY
+    assertEquals(AbstractBatchJobHandler.BATCH_JOB_CONFIGURATION_BYTE_ARRAY_NAME, byteArrayEntity.getName());
+    assertEquals(ResourceTypes.RUNTIME.getValue(), byteArrayEntity.getType());
+    assertNotNull(byteArrayEntity.getCreateTime());
 
     // when
     managementService.deleteJob(migrationJob.getId());

@@ -16,6 +16,8 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.property;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.eximeebpms.bpm.engine.identity.User;
 
@@ -29,6 +31,16 @@ public class AdminUserProperty implements User {
   private String lastName;
   private String email;
   private String password;
+
+  /**
+   * Opt-in override: without it, startup fails fast when {@code id} is set
+   * alongside an external identity provider (OAuth2/OIDC client
+   * registration, or any read-only provider such as LDAP) instead of
+   * silently creating the account or crashing with an opaque error.
+   */
+  @Getter
+  @Setter
+  private boolean allowWithExternalIdentityProvider;
 
   public User init() {
     requireNonNull(getId(), "missing field: eximeebpms.bpm.admin-user.id");

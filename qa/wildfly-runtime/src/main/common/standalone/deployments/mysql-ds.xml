@@ -8,7 +8,7 @@
     </security>
   </datasource>
   <datasource jta="true" jndi-name="java:jboss/datasources/ProcessEngine" pool-name="ProcessEngine" enabled="true" use-java-context="true" use-ccm="true">
-    <connection-url>${database.url}</connection-url>
+    <connection-url>${eximeebpms.ds.url}</connection-url>
     <driver>mysql</driver>
     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
     <pool>
@@ -17,8 +17,8 @@
       <flush-strategy>FailingConnectionOnly</flush-strategy>
     </pool>
     <security>
-      <user-name>${database.username}</user-name>
-      <password>${database.password}</password>
+      <user-name>${eximeebpms.ds.username}</user-name>
+      <password>${eximeebpms.ds.password}</password>
     </security>
     <validation>
       <validate-on-match>false</validate-on-match>

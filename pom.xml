@@ -9,7 +9,7 @@
 
   <groupId>org.eximeebpms.bpm</groupId>
   <artifactId>eximeebpms-root</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>EximeeBPMS - Root Pom</name>
   <inceptionYear>2025</inceptionYear>
@@ -512,6 +512,8 @@
 
         <module>qa</module>
 
+        <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client-jakarta</module>
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
 
@@ -593,6 +595,9 @@
         <it.mysql.url>jdbc:mysql://localhost:3306/process-engine?serverTimezone=UTC</it.mysql.url>
         <it.mysql.username>eximeebpms</it.mysql.username>
         <it.mysql.password>eximeebpms</it.mysql.password>
+        <it.mariadb.url>jdbc:mariadb://localhost:3306/process-engine</it.mariadb.url>
+        <it.mariadb.username>eximeebpms</it.mariadb.username>
+        <it.mariadb.password>eximeebpms</it.mariadb.password>
         <it.mssql.url>jdbc:sqlserver://localhost:1433;DatabaseName=process-engine;trustServerCertificate=true</it.mssql.url>
         <it.mssql.username>sa</it.mssql.username>
         <it.mssql.password>EximeeBpms1!</it.mssql.password>
@@ -733,6 +738,24 @@
                   </arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>it-engine-tomcat-mariadb</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,tomcat,mariadb</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.mariadb.url}</argument>
+                    <argument>-Ddatabase.username=${it.mariadb.username}</argument>
+                    <argument>-Ddatabase.password=${it.mariadb.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
               <!-- TEST: engine + wildfly + mysql -->
               <execution>
                 <id>it-engine-wildfly-mysql</id>
@@ -749,6 +772,24 @@
                     <argument>-Ddatabase.url=${it.mysql.url}</argument>
                     <argument>-Ddatabase.username=${it.mysql.username}</argument>
                     <argument>-Ddatabase.password=${it.mysql.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>it-engine-wildfly-mariadb</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pdistro-ce,engine-integration-jakarta,wildfly,mariadb</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.mariadb.url}</argument>
+                    <argument>-Ddatabase.username=${it.mariadb.username}</argument>
+                    <argument>-Ddatabase.password=${it.mariadb.password}</argument>
                   </arguments>
                 </configuration>
               </execution>
@@ -984,6 +1025,24 @@
                   </arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>it-instance-migration-mariadb</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pinstance-migration,mariadb</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.mariadb.url}</argument>
+                    <argument>-Ddatabase.username=${it.mariadb.username}</argument>
+                    <argument>-Ddatabase.password=${it.mariadb.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
               <!-- TEST: DB rolling update (mysql) -->
               <execution>
                 <id>it-rolling-update-mysql</id>
@@ -1003,6 +1062,24 @@
                   </arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>it-rolling-update-mariadb</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Prolling-update,mariadb</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.mariadb.url}</argument>
+                    <argument>-Ddatabase.username=${it.mariadb.username}</argument>
+                    <argument>-Ddatabase.password=${it.mariadb.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
               <!-- TEST: old engine backward compatibility (mysql) -->
               <execution>
                 <id>it-old-engine-mysql</id>
@@ -1019,6 +1096,24 @@
                     <argument>-Ddatabase.url=${it.mysql.url}</argument>
                     <argument>-Ddatabase.username=${it.mysql.username}</argument>
                     <argument>-Ddatabase.password=${it.mysql.password}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>it-old-engine-mariadb</id>
+                <phase>integration-test</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>${project.basedir}/mvnw</executable>
+                  <arguments>
+                    <argument>-Pold-engine,mariadb</argument>
+                    <argument>clean</argument>
+                    <argument>verify</argument>
+                    <argument>-f</argument>
+                    <argument>qa</argument>
+                    <argument>-Ddatabase.url=${it.mariadb.url}</argument>
+                    <argument>-Ddatabase.username=${it.mariadb.username}</argument>
+                    <argument>-Ddatabase.password=${it.mariadb.password}</argument>
                   </arguments>
                 </configuration>
               </execution>
@@ -1165,18 +1260,18 @@
   </licenses>
 
   <organization>
-    <name>EximeeBPMS services GmbH</name>
-    <url>http://eximeebpms.org</url>
+    <name>Consdata S.A.</name>
+    <url>https://consdata.com</url>
   </organization>
 
-  <url>http://eximeebpms.org</url>
+  <url>https://eximeebpms.org</url>
 
   <developers>
     <developer>
       <id>eximeebpms.org</id>
       <name>EximeeBPMS Community</name>
       <organization>eximeebpms.org</organization>
-      <organizationUrl>http://eximeebpms.org</organizationUrl>
+      <organizationUrl>https://eximeebpms.org</organizationUrl>
     </developer>
   </developers>
 

@@ -16,6 +16,8 @@
  */
 package org.eximeebpms.bpm.engine.impl.history.event;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.history.ExternalTaskState;
 import org.eximeebpms.bpm.engine.history.HistoricExternalTaskLog;
 import org.eximeebpms.bpm.engine.impl.context.Context;
@@ -23,82 +25,62 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
 import org.eximeebpms.bpm.engine.impl.util.EnsureUtil;
 import org.eximeebpms.bpm.engine.impl.util.ExceptionUtil;
-import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 
+import java.io.Serial;
 import java.util.Date;
 
-import static org.eximeebpms.bpm.engine.impl.util.ExceptionUtil.createExceptionByteArray;
 import static org.eximeebpms.bpm.engine.impl.util.StringUtil.toByteArray;
 
+@Getter
 public class HistoricExternalTaskLogEntity extends HistoryEvent implements HistoricExternalTaskLog {
 
+  @Serial
   private static final long serialVersionUID = 1L;
-  private static final String EXCEPTION_NAME = "historicExternalTaskLog.exceptionByteArray";
+  /**
+   * Name carried by every external-task error-details byte array. Public because
+   * DbHistoryEventHandler creates the row and operational queries identify it by
+   * this name, so it lives in one place.
+   */
+  public static final String EXCEPTION_NAME = "historicExternalTaskLog.exceptionByteArray";
 
+  @Setter
   protected Date timestamp;
 
+  @Setter
   protected String externalTaskId;
 
+  @Setter
   protected String topicName;
+  @Setter
   protected String workerId;
+  @Setter
   protected long priority;
+  @Setter
   protected Integer retries;
 
   protected String errorMessage;
 
+  @Setter
   protected String errorDetailsByteArrayId;
+
+  /**
+   * Not persisted. Holds the error details until the component that persists this
+   * event creates the byte array for it (BPMS-662).
+   */
+  @Setter
+  protected byte[] errorDetailsBytes;
+  @Setter
   protected String activityId;
 
+  @Setter
   protected String activityInstanceId;
+  @Setter
   protected String tenantId;
 
+  @Setter
   protected int state;
 
-  public Date getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(Date timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public String getExternalTaskId() {
-    return externalTaskId;
-  }
-
-  public void setExternalTaskId(String externalTaskId) {
-    this.externalTaskId = externalTaskId;
-  }
-
-  public String getTopicName() {
-    return topicName;
-  }
-
-  public void setTopicName(String topicName) {
-    this.topicName = topicName;
-  }
-
-  public String getWorkerId() {
-    return workerId;
-  }
-
-  public void setWorkerId(String workerId) {
-    this.workerId = workerId;
-  }
-
-  public Integer getRetries() {
-    return retries;
-  }
-
-  public void setRetries(Integer retries) {
-    this.retries = retries;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  public void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(String errorMessage) {
     // note: it is not a clean way to truncate where the history event is produced, since truncation is only
     //   relevant for relational history databases that follow our schema restrictions;
     //   a similar problem exists in ExternalTaskEntity#setErrorMessage where truncation may not be required for custom
@@ -110,15 +92,7 @@ public class HistoricExternalTaskLogEntity extends HistoryEvent implements Histo
     }
   }
 
-  public String getErrorDetailsByteArrayId() {
-    return errorDetailsByteArrayId;
-  }
-
-  public void setErrorDetailsByteArrayId(String errorDetailsByteArrayId) {
-    this.errorDetailsByteArrayId = errorDetailsByteArrayId;
-  }
-
-  public String getErrorDetails() {
+    public String getErrorDetails() {
     ByteArrayEntity byteArray = getErrorByteArray();
     return ExceptionUtil.getExceptionStacktrace(byteArray);
   }
@@ -126,12 +100,10 @@ public class HistoricExternalTaskLogEntity extends HistoryEvent implements Histo
   public void setErrorDetails(String exception) {
     EnsureUtil.ensureNotNull("exception", exception);
 
-    byte[] exceptionBytes = toByteArray(exception);
-    ByteArrayEntity byteArray = createExceptionByteArray(EXCEPTION_NAME, exceptionBytes, ResourceTypes.HISTORY);
-    byteArray.setRootProcessInstanceId(rootProcessInstanceId);
-    byteArray.setRemovalTime(removalTime);
-
-    errorDetailsByteArrayId = byteArray.getId();
+    // carried on the event; the byte array is created by whichever component persists it
+    // (DbHistoryEventHandler). Inserting here would leave an unreferenced row behind
+    // whenever a HistoryEventHandler declines to persist the event (BPMS-662).
+    errorDetailsBytes = toByteArray(exception);
   }
 
   protected ByteArrayEntity getErrorByteArray() {
@@ -142,46 +114,6 @@ public class HistoricExternalTaskLogEntity extends HistoryEvent implements Histo
           .selectById(ByteArrayEntity.class, errorDetailsByteArrayId);
     }
     return null;
-  }
-
-  public String getActivityId() {
-    return activityId;
-  }
-
-  public void setActivityId(String activityId) {
-    this.activityId = activityId;
-  }
-
-  public String getActivityInstanceId() {
-    return activityInstanceId;
-  }
-
-  public void setActivityInstanceId(String activityInstanceId) {
-    this.activityInstanceId = activityInstanceId;
-  }
-
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  public long getPriority() {
-    return priority;
-  }
-
-  public void setPriority(long priority) {
-    this.priority = priority;
-  }
-
-  public int getState() {
-    return state;
-  }
-
-  public void setState(int state) {
-    this.state = state;
   }
 
   @Override
@@ -207,10 +139,6 @@ public class HistoricExternalTaskLogEntity extends HistoryEvent implements Histo
   @Override
   public String getRootProcessInstanceId() {
     return rootProcessInstanceId;
-  }
-
-  public void setRootProcessInstanceId(String rootProcessInstanceId) {
-    this.rootProcessInstanceId = rootProcessInstanceId;
   }
 
 }

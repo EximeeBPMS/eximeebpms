@@ -93,19 +93,19 @@ public class EximeeBpmsTaskListenerImpl extends BpmnModelElementInstanceImpl imp
     super(instanceContext);
   }
 
-  public String getCamundaEvent() {
+  public String getEximeeBpmsEvent() {
     return camundaEventAttribute.getValue(this);
   }
 
-  public void setCamundaEvent(String camundaEvent) {
+  public void setEximeeBpmsEvent(String camundaEvent) {
     camundaEventAttribute.setValue(this, camundaEvent);
   }
 
-  public String getCamundaClass() {
+  public String getEximeeBpmsClass() {
     return camundaClassAttribute.getValue(this);
   }
 
-  public void setCamundaClass(String camundaClass) {
+  public void setEximeeBpmsClass(String camundaClass) {
     camundaClassAttribute.setValue(this, camundaClass);
   }
 
@@ -117,11 +117,11 @@ public class EximeeBpmsTaskListenerImpl extends BpmnModelElementInstanceImpl imp
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
-  public String getCamundaDelegateExpression() {
+  public String getEximeeBpmsDelegateExpression() {
     return camundaDelegateExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaDelegateExpression(String camundaDelegateExpression) {
+  public void setEximeeBpmsDelegateExpression(String camundaDelegateExpression) {
     camundaDelegateExpressionAttribute.setValue(this, camundaDelegateExpression);
   }
 

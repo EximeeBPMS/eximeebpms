@@ -7,5 +7,6 @@ public interface BusinessEventOutbox {
     Long getIdAsLong();
     boolean isProcessed();
     Date getProcessedDate();
+    Date getCreatedDate();
     String getProcessInstanceId();
 }

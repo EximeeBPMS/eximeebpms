@@ -33,6 +33,7 @@ import org.eximeebpms.bpm.engine.ScriptEvaluationException;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DefaultScriptSecurityPolicy;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.junit.After;
@@ -66,7 +67,7 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
   protected boolean previousEnableScriptEngineLoadExternalResources;
   protected boolean previousConfigureScriptEngineHostAccess;
   protected boolean previousEnableScriptEngineNashornCompatibility;
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   @Parameters(name = "{index}: host={0}, io={1}, nashorn={2}, security={3}")
   public static Collection<Object[]> setups() {
@@ -102,8 +103,8 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
         processEngineConfiguration.isConfigureScriptEngineHostAccess();
     previousEnableScriptEngineNashornCompatibility =
         processEngineConfiguration.isEnableScriptEngineNashornCompatibility();
-    previousScriptSecurityEnabled =
-        processEngineConfiguration.isScriptSecurityEnabled();
+    previousScriptSecurityMode =
+        processEngineConfiguration.getScriptSecurityMode();
     previousScriptSecurityPolicy =
         processEngineConfiguration.getScriptSecurityPolicy();
 
@@ -115,7 +116,7 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
     processEngineConfiguration.setConfigureScriptEngineHostAccess(configureHostAccess);
     processEngineConfiguration.setEnableScriptEngineLoadExternalResources(enableExternalResources);
     processEngineConfiguration.setEnableScriptEngineNashornCompatibility(enableNashornCompat);
-    processEngineConfiguration.setScriptSecurityEnabled(scriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(scriptSecurityEnabled ? ScriptSecurityMode.ENFORCE.name() : ScriptSecurityMode.DISABLED.name());
     processEngineConfiguration.setScriptSecurityPolicy(new DefaultScriptSecurityPolicy());
 
     processEngineConfiguration.setScriptEngineResolver(new TestScriptEngineResolver(
@@ -124,7 +125,7 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
 
   @After
   public void resetConfiguration() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
     processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
     processEngineConfiguration.setEnableScriptEngineLoadExternalResources(previousEnableScriptEngineLoadExternalResources);
     processEngineConfiguration.setConfigureScriptEngineHostAccess(previousConfigureScriptEngineHostAccess);

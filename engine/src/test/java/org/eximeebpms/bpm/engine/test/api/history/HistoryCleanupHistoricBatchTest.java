@@ -377,15 +377,14 @@ public class HistoryCleanupHistoricBatchTest {
   }
 
   private BpmnModelInstance createModelInstance() {
-    BpmnModelInstance instance = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+    return Bpmn.createExecutableProcess("process")
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent("start")
         .userTask("userTask1")
         .sequenceFlowId("seq")
         .userTask("userTask2")
         .endEvent("end")
         .done();
-    return instance;
   }
 
   private void prepareHistoricBatches(int batchesCount, int daysInThePast) {

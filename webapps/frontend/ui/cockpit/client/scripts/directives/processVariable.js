@@ -19,10 +19,10 @@
 
 module.exports = [
   'Variables',
-  function(Variables) {
+  function (Variables) {
     return {
       require: 'ngModel',
-      link: function(scope, element, attrs, ngModel) {
+      link: function (scope, element, attrs, ngModel) {
         function parseText(text) {
           var variable;
 
@@ -38,7 +38,7 @@ module.exports = [
 
         ngModel.$parsers.push(parseText);
         ngModel.$formatters.push(Variables.toString);
-      }
+      },
     };
-  }
+  },
 ];

@@ -244,38 +244,38 @@ public class ProcessModels {
 
   public static final BpmnModelInstance SCOPE_TASK_PROCESS = modify(ONE_TASK_PROCESS)
     .activityBuilder(USER_TASK_ID)
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance SCOPE_TASK_SUBPROCESS_PROCESS = modify(SUBPROCESS_PROCESS)
     .activityBuilder(USER_TASK_ID)
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance PARALLEL_SCOPE_TASKS = modify(PARALLEL_GATEWAY_PROCESS)
     .activityBuilder("userTask1")
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .moveToActivity("userTask2")
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance PARALLEL_SCOPE_TASKS_SUB_PROCESS = modify(PARALLEL_GATEWAY_SUBPROCESS_PROCESS)
     .activityBuilder("userTask1")
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .moveToActivity("userTask2")
-    .camundaInputParameter("foo", "bar")
+    .eximeeBpmsInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance UNSUPPORTED_ACTIVITIES = Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .businessRuleTask("decisionTask")
-      .camundaDecisionRef("testDecision")
+      .eximeeBpmsDecisionRef("testDecision")
     .intermediateThrowEvent("throwEvent")
       .message("Message")
     .serviceTask("serviceTask")
-      .camundaExpression("${true}")
+      .eximeeBpmsExpression("${true}")
     .sendTask("sendTask")
-      .camundaExpression("${true}")
+      .eximeeBpmsExpression("${true}")
     .scriptTask("scriptTask")
       .scriptText("foo")
     .endEvent("endEvent")

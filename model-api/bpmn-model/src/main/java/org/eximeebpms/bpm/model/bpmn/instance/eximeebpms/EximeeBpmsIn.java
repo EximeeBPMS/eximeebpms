@@ -25,28 +25,28 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsIn extends BpmnModelElementInstance {
 
-  String getCamundaSource();
+  String getEximeeBpmsSource();
 
-  void setCamundaSource(String camundaSource);
+  void setEximeeBpmsSource(String camundaSource);
 
-  String getCamundaSourceExpression();
+  String getEximeeBpmsSourceExpression();
 
-  void setCamundaSourceExpression(String camundaSourceExpression);
+  void setEximeeBpmsSourceExpression(String camundaSourceExpression);
 
-  String getCamundaVariables();
+  String getEximeeBpmsVariables();
 
-  void setCamundaVariables(String camundaVariables);
+  void setEximeeBpmsVariables(String camundaVariables);
 
-  String getCamundaTarget();
+  String getEximeeBpmsTarget();
 
-  void setCamundaTarget(String camundaTarget);
+  void setEximeeBpmsTarget(String camundaTarget);
 
-  String getCamundaBusinessKey();
+  String getEximeeBpmsBusinessKey();
 
-  void setCamundaBusinessKey(String camundaBusinessKey);
+  void setEximeeBpmsBusinessKey(String camundaBusinessKey);
 
-  boolean getCamundaLocal();
+  boolean getEximeeBpmsLocal();
 
-  void setCamundaLocal(boolean camundaLocal);
+  void setEximeeBpmsLocal(boolean camundaLocal);
 
 }

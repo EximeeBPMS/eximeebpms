@@ -72,23 +72,6 @@ public class TaskImpl extends ActivityImpl implements Task {
 
   /** camunda extensions */
 
-  /**
-   * @deprecated use isCamundaAsyncBefore() instead.
-   */
-  @Deprecated
-  public boolean isCamundaAsync() {
-    return camundaAsyncAttribute.getValue(this);
-  }
-
-  /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
-   */
-  @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
-  }
-
-
   public BpmnShape getDiagramElement() {
     return (BpmnShape) super.getDiagramElement();
   }

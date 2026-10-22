@@ -1,1 +1,9 @@
 server.port: 58080
+
+# eximeebpms-enterprise-bpm-spring-boot-monitor bundles these as
+# defaults in its own library.properties, but its auto-configuration never
+# actually loads that file (no @PropertySource), so every consumer must set
+# them explicitly or SnapshotMonitors fails to start with an unresolved
+# placeholder. Values match the library's own documented defaults.
+eximeebpms.monitoring.snapshot.enabled: true
+eximeebpms.monitoring.snapshot.updateRate: 10000

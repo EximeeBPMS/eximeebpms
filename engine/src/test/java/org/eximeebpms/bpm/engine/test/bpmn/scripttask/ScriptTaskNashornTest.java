@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.util.Date;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
 import org.junit.After;
 import org.junit.Before;
@@ -29,19 +30,19 @@ public class ScriptTaskNashornTest extends AbstractScriptTaskTest {
 
   private static final String NASHORN = "nashorn";
 
-  protected boolean previousScriptSecurityEnabled;
+  protected String previousScriptSecurityMode;
 
   @Before
   public void setUp() {
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
 
-    previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
   }
 
   @After
   public void tearDown() {
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
     super.tearDown();
   }
 

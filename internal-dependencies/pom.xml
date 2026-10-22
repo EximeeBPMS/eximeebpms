@@ -6,7 +6,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-core-internal-dependencies</artifactId>
@@ -360,7 +360,7 @@
       <dependency>
         <groupId>org.jruby</groupId>
         <artifactId>jruby-complete</artifactId>
-        <version>9.1.17.0</version>
+        <version>${version.jruby}</version>
       </dependency>
 
       <dependency>
@@ -369,9 +369,16 @@
         <version>${version.freemarker}</version>
       </dependency>
 
+      <!-- No module declares the plain "wiremock" artifact directly any more (all consumers
+           moved to wiremock-jetty12 below, to close the Jetty CVEs affecting the 7.0.0-12.0.11
+           range) - the plain artifact hard-pins Jetty 11 via its own jetty-bom import, so a
+           dependencyManagement version override alone can't move it past Jetty 11 without a
+           classpath mismatch. wiremock-jetty12 is WireMock's own officially published,
+           same-version drop-in (excludes the bundled Jetty 11/http2 artifacts and re-adds
+           jetty-ee10-*). -->
       <dependency>
-        <groupId>com.github.tomakehurst</groupId>
-        <artifactId>wiremock</artifactId>
+        <groupId>org.wiremock</groupId>
+        <artifactId>wiremock-jetty12</artifactId>
         <version>${version.wiremock}</version>
         <scope>test</scope>
         <exclusions>
@@ -400,17 +407,32 @@
       </dependency>
       <dependency>
         <groupId>org.testcontainers</groupId>
-        <artifactId>mysql</artifactId>
+        <artifactId>testcontainers-mysql</artifactId>
         <version>${version.testcontainers}</version>
       </dependency>
       <dependency>
         <groupId>org.testcontainers</groupId>
-        <artifactId>postgresql</artifactId>
+        <artifactId>testcontainers-postgresql</artifactId>
         <version>${version.testcontainers}</version>
       </dependency>
       <dependency>
         <groupId>org.testcontainers</groupId>
-        <artifactId>mssqlserver</artifactId>
+        <artifactId>testcontainers-mssqlserver</artifactId>
+        <version>${version.testcontainers}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-oracle-free</artifactId>
+        <version>${version.testcontainers}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-db2</artifactId>
+        <version>${version.testcontainers}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-mariadb</artifactId>
         <version>${version.testcontainers}</version>
       </dependency>
 

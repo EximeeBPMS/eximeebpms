@@ -33,56 +33,56 @@ public interface BusinessRuleTask extends Task {
 
   /** camunda extensions */
 
-  String getCamundaClass();
+  String getEximeeBpmsClass();
 
-  void setCamundaClass(String camundaClass);
+  void setEximeeBpmsClass(String camundaClass);
 
-  String getCamundaDelegateExpression();
+  String getEximeeBpmsDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaExpression);
+  void setEximeeBpmsDelegateExpression(String camundaExpression);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaResultVariable();
+  String getEximeeBpmsResultVariable();
 
-  void setCamundaResultVariable(String camundaResultVariable);
+  void setEximeeBpmsResultVariable(String camundaResultVariable);
 
-  String getCamundaType();
+  String getEximeeBpmsType();
 
-  void setCamundaType(String camundaType);
+  void setEximeeBpmsType(String camundaType);
 
-  String getCamundaTopic();
+  String getEximeeBpmsTopic();
 
-  void setCamundaTopic(String camundaTopic);
+  void setEximeeBpmsTopic(String camundaTopic);
 
-  String getCamundaDecisionRef();
+  String getEximeeBpmsDecisionRef();
 
-  void setCamundaDecisionRef(String camundaDecisionRef);
+  void setEximeeBpmsDecisionRef(String camundaDecisionRef);
 
-  String getCamundaDecisionRefBinding();
+  String getEximeeBpmsDecisionRefBinding();
 
-  void setCamundaDecisionRefBinding(String camundaDecisionRefBinding);
+  void setEximeeBpmsDecisionRefBinding(String camundaDecisionRefBinding);
 
-  String getCamundaDecisionRefVersion();
+  String getEximeeBpmsDecisionRefVersion();
 
-  void setCamundaDecisionRefVersion(String camundaDecisionRefVersion);
+  void setEximeeBpmsDecisionRefVersion(String camundaDecisionRefVersion);
 
-  String getCamundaDecisionRefVersionTag();
+  String getEximeeBpmsDecisionRefVersionTag();
 
-  void setCamundaDecisionRefVersionTag(String camundaDecisionRefVersionTag);
+  void setEximeeBpmsDecisionRefVersionTag(String camundaDecisionRefVersionTag);
 
-  String getCamundaDecisionRefTenantId();
+  String getEximeeBpmsDecisionRefTenantId();
 
-  void setCamundaDecisionRefTenantId(String tenantId);
+  void setEximeeBpmsDecisionRefTenantId(String tenantId);
 
   String getEximeeBpmsMapDecisionResult();
 
   void setEximeeBpmsMapDecisionResult(String camundaMapDecisionResult);
 
-  String getCamundaTaskPriority();
+  String getEximeeBpmsTaskPriority();
 
-  void setCamundaTaskPriority(String taskPriority);
+  void setEximeeBpmsTaskPriority(String taskPriority);
 
 }

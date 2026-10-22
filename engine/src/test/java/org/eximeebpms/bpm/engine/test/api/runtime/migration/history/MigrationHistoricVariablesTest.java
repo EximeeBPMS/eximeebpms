@@ -280,16 +280,16 @@ public class MigrationHistoricVariablesTest {
     BpmnModelInstance failing =
         Bpmn.createExecutableProcess("Process")
         .startEvent("startEvent")
-        .camundaAsyncBefore(true)
+        .eximeeBpmsAsyncBefore(true)
         .serviceTask("failing")
-        .camundaClass("foo")
+        .eximeeBpmsClass("foo")
         .userTask(userTask)
         .endEvent("endEvent")
         .done();
     BpmnModelInstance passing =
         Bpmn.createExecutableProcess("Process")
         .startEvent("startEvent")
-        .camundaAsyncBefore(true)
+        .eximeeBpmsAsyncBefore(true)
         .userTask(userTask)
         .endEvent("endEvent")
         .done();

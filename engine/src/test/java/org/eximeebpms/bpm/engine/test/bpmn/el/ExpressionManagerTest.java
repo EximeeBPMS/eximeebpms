@@ -610,8 +610,8 @@ public class ExpressionManagerTest extends PluggableProcessEngineTest {
     BpmnModelInstance process = Bpmn.createExecutableProcess("testProcess")
         .startEvent()
         .serviceTask()
-          .camundaExpression("${" + expression + "}")
-          .camundaResultVariable("output")
+          .eximeeBpmsExpression("${" + expression + "}")
+          .eximeeBpmsResultVariable("output")
         .userTask()
         .endEvent()
         .done();

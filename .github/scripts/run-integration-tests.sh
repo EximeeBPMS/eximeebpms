@@ -9,6 +9,16 @@ VALID_TEST_SUITES=("engine" "webapps" "instance-migration" "rolling-update" "old
 VALID_DISTROS=("tomcat" "wildfly")
 VALID_DATABASES=("h2" "postgresql" "mysql" "sqlserver")
 
+# Optional path to a Maven settings.xml. integration-tests.yml sets it to the
+# workflow's own file so Maven never falls back to ~/.m2/settings.xml, which
+# on the CI runners lives on a PersistentVolumeClaim shared by every pod and
+# is therefore rewritten under a running job (BPMS-385 / BPMS-688). Unset
+# locally, where Maven resolves its user settings as usual.
+SETTINGS_ARGS=()
+if [[ -n "${MAVEN_SETTINGS:-}" ]]; then
+  SETTINGS_ARGS=(--settings "$MAVEN_SETTINGS")
+fi
+
 ##########################################################################
 check_valid_values() {
   local param_name=$1
@@ -59,8 +69,8 @@ run_build () {
   # Migration suites don't deploy to a server; only engine artifacts need to be installed
   if [[ "$TEST_SUITE" == "instance-migration" || "$TEST_SUITE" == "rolling-update" || "$TEST_SUITE" == "old-engine" ]]; then
     echo "ℹ️ Installing engine artifacts for $TEST_SUITE tests"
-    echo "./mvnw -U -DskipTests -Pcheck-engine clean install"
-    ./mvnw -U -DskipTests -Pcheck-engine clean install
+    echo "./mvnw -U ${SETTINGS_ARGS[*]} -DskipTests -Pcheck-engine clean install"
+    ./mvnw -U "${SETTINGS_ARGS[@]}" -DskipTests -Pcheck-engine clean install
     if [[ $? -ne 0 ]]; then
       echo "❌ Error: Build failed"
       popd > /dev/null
@@ -82,8 +92,8 @@ run_build () {
   fi
 
   echo "ℹ️ Building $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -U -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
-  ./mvnw -U -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
+  echo "./mvnw -U ${SETTINGS_ARGS[*]} -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install"
+  ./mvnw -U "${SETTINGS_ARGS[@]}" -DskipTests -Dcargo.maven.skip=true -pl '!engine-rest/docs' -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean install
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null
@@ -122,8 +132,8 @@ run_tests () {
           )
           ;;
       esac
-      echo "./mvnw -U -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
-      ./mvnw -U -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
+      echo "./mvnw -U ${SETTINGS_ARGS[*]} -P${TEST_SUITE},${DATABASE} clean verify -f qa ${MIG_DB_ARGS[*]}"
+      ./mvnw -U "${SETTINGS_ARGS[@]}" -P${TEST_SUITE},${DATABASE} clean verify -f qa "${MIG_DB_ARGS[@]}"
       if [[ $? -ne 0 ]]; then
         echo "❌ Error: Tests failed"
         popd > /dev/null
@@ -206,8 +216,8 @@ run_tests () {
   esac
 
   echo "ℹ️ Running $TEST_SUITE integration tests for distro $DISTRO with $DATABASE database using profiles: [${PROFILES[*]}]"
-  echo "./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR ${DB_ARGS[*]} ${EXTRA_ARGS[*]}"
-  ./mvnw -U -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR "${DB_ARGS[@]}" "${EXTRA_ARGS[@]}"
+  echo "./mvnw -U ${SETTINGS_ARGS[*]} -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR ${DB_ARGS[*]} ${EXTRA_ARGS[*]}"
+  ./mvnw -U "${SETTINGS_ARGS[@]}" -Pdistro-ce,$(IFS=,; echo "${PROFILES[*]}") clean verify -f $QA_DIR "${DB_ARGS[@]}" "${EXTRA_ARGS[@]}"
   if [[ $? -ne 0 ]]; then
     echo "❌ Error: Build failed"
     popd > /dev/null

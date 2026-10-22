@@ -39,20 +39,20 @@ public interface FlowNode extends FlowElement {
 
   Query<FlowNode> getSucceedingNodes();
 
-  boolean isCamundaAsyncBefore();
+  boolean isEximeeBpmsAsyncBefore();
 
-  void setCamundaAsyncBefore(boolean isCamundaAsyncBefore);
+  void setEximeeBpmsAsyncBefore(boolean isCamundaAsyncBefore);
 
-  boolean isCamundaAsyncAfter();
+  boolean isEximeeBpmsAsyncAfter();
 
-  void setCamundaAsyncAfter(boolean isCamundaAsyncAfter);
+  void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter);
 
-  boolean isCamundaExclusive();
+  boolean isEximeeBpmsExclusive();
 
-  void setCamundaExclusive(boolean isCamundaExclusive);
+  void setEximeeBpmsExclusive(boolean isCamundaExclusive);
 
-  String getCamundaJobPriority();
+  String getEximeeBpmsJobPriority();
 
-  void setCamundaJobPriority(String jobPriority);
+  void setEximeeBpmsJobPriority(String jobPriority);
 
 }

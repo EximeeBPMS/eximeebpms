@@ -6,7 +6,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-database-settings</artifactId>
@@ -23,6 +23,8 @@
     <version.h2-v1>1.4.200</version.h2-v1><!-- used for instance migration qa -->
     <version.oracle>23.26.2.0.0</version.oracle>
     <version.mysql>9.7.0</version.mysql>
+    <!-- MariaDB runs on the MySQL dialect; only the driver differs. -->
+    <version.mariadb>3.5.10</version.mariadb>
     <version.sqlserver>13.4.0.jre11</version.sqlserver>
     <version.db2-11.5>11.5.9.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>
@@ -31,7 +33,19 @@
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.23.0</camunda.version.old>
+    <!-- the OLD SQL schema distro/sql-script's upgrade-script tests migrate
+      from - not a clirr baseline, despite the name. Deliberately kept
+      separate from eximeebpms.api.baseline below (BACKLOG-0096/BPMS-766):
+      moving the SQL upgrade tests' starting schema is its own decision,
+      for whoever owns those tests, not a side effect of advancing the
+      API-compatibility check. -->
     <eximeebpms.version.old>1.0.0</eximeebpms.version.old>
+    <!-- clirr's comparisonVersion for the 8 modules that run it - the last
+      public-API baseline both EximeeBPMS lines agree on. See
+      guidelines/common/oss-enterprise-parity.md; bump this whenever that
+      baseline moves, in eximeebpms-enterprise first, ported to eximeebpms
+      (OSS) at the next curation pass like everything else here. -->
+    <eximeebpms.api.baseline>1.4.0</eximeebpms.api.baseline>
 
     <!-- Testcontainers JDBC URL parameters. By default, an empty string -->
     <database.tc.params />
@@ -53,6 +67,11 @@
         <groupId>com.mysql</groupId>
         <artifactId>mysql-connector-j</artifactId>
         <version>${version.mysql}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>${version.mariadb}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
@@ -106,12 +125,20 @@
     <profile>
       <id>db2</id>
       <properties>
+<!-- ibmcom/db2, the image Testcontainers' built-in db2 provider uses.
+             IBM stopped publishing there in October 2022, so 11.5.8.0 is the
+             newest tag it has - current releases, including 12.1, are only on
+             icr.io/db2_community/db2, which the provider cannot be pointed at
+             (both documented overrides were tried). 11.5.8.0 is inside the
+             supported 11.5 line, and version.db2-11.5 is the JDBC driver, not
+             the server, so the pairing is normal. -->
         <!-- Shared external DB: multiple engine test forks would race on schema/test
              data, unlike the isolated per-JVM default H2 profile - see engine/pom.xml. -->
         <engine.test.forkCount>1</engine.test.forkCount>
         <database.type>db2</database.type>
         <database.driver>com.ibm.db2.jcc.DB2Driver</database.driver>
         <database.datasource.class>com.ibm.db2.jcc.DB2SimpleDataSource</database.datasource.class>
+        <database.tc.url>db2:11.5.8.0</database.tc.url>
       </properties>
     </profile>
 
@@ -242,8 +269,8 @@
         <database.type>mysql</database.type>
         <database.driver>com.mysql.cj.jdbc.Driver</database.driver>
         <database.datasource.class>com.mysql.cj.jdbc.MysqlDataSource</database.datasource.class>
-        <database.tc.url>cammysql:8.0</database.tc.url>
-        <database.tc.params>/${database.name}?sendFractionalSeconds=false&amp;amp;user=${database.username}&amp;amp;password=${database.password}</database.tc.params>
+        <database.tc.url>mysql:8.4</database.tc.url>
+        <database.tc.params>/test?sendFractionalSeconds=false&amp;sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
         <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -274,6 +301,53 @@
     </profile>
 
     <profile>
+      <id>mariadb</id>
+      <properties>
+        <!-- Shared external DB, same as the mysql profile: engine test forks would
+             otherwise race on schema and test data. -->
+        <engine.test.forkCount>1</engine.test.forkCount>
+        <!-- The dialect is MySQL's, deliberately: MariaDB reuses the mysql create
+             scripts and statement set unchanged. Only the driver below differs. -->
+        <database.type>mysql</database.type>
+        <database.driver>org.mariadb.jdbc.Driver</database.driver>
+        <database.datasource.class>org.mariadb.jdbc.MariaDbDataSource</database.datasource.class>
+        <!-- Consumed by settings/maven/nexus-settings.xml to build a testcontainers
+             URL (jdbc:tc:${database.tc.url}://...). The upstream profiles name
+             Camunda-internal mirrored images here (cammysql, campostgresql,
+             camsqlserver); this one names the image as it actually is on Docker
+             Hub, since no such mirror exists for MariaDB. -->
+        <database.tc.url>mariadb:12.3</database.tc.url>
+        <database.tc.params>/test?sessionVariables=transaction_isolation='READ-COMMITTED'</database.tc.params>
+        <jboss.datasource.filename>mysql-ds.xml</jboss.datasource.filename>
+      </properties>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.mariadb.jdbc</groupId>
+          <artifactId>mariadb-java-client</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>sql-maven-plugin</artifactId>
+              <dependencies>
+                <dependency>
+                  <groupId>org.mariadb.jdbc</groupId>
+                  <artifactId>mariadb-java-client</artifactId>
+                  <version>${version.mariadb}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+
+    <profile>
       <id>oracle</id>
       <properties>
         <!-- Shared external DB: multiple engine test forks would race on schema/test
@@ -282,6 +356,9 @@
         <database.type>oracle</database.type>
         <database.driver>oracle.jdbc.OracleDriver</database.driver>
         <database.datasource.class>oracle.jdbc.pool.OracleDataSource</database.datasource.class>
+        <!-- gvenzl/oracle-free, the image Testcontainers' built-in oracle provider
+             uses. Oracle Database Free, not XE: publicly pullable, no licence file. -->
+        <database.tc.url>oracle:23-slim</database.tc.url>
       </properties>
       <dependencies>
         <dependency>
@@ -321,7 +398,7 @@
         <database.datasource.class>org.postgresql.ds.PGSimpleDataSource</database.datasource.class>
         <jboss.datasource.filename>postgresql-ds.xml</jboss.datasource.filename>
         <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
-        <database.tc.url>campostgresql:13.2</database.tc.url>
+        <database.tc.url>postgresql:18</database.tc.url>
       </properties>
 
       <dependencies>
@@ -365,8 +442,8 @@
         <database.type>mssql</database.type>
         <database.driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</database.driver>
         <database.datasource.class>com.microsoft.sqlserver.jdbc.SQLServerDataSource</database.datasource.class>
-        <database.tc.url>camsqlserver:2019</database.tc.url>
-        <database.tc.params>;DatabaseName=${database.name};user=${database.username};password=${database.password};trustServerCertificate=true;</database.tc.params>
+        <database.tc.url>sqlserver:2025-latest</database.tc.url>
+        <database.tc.params>;trustServerCertificate=true;</database.tc.params>
         <jboss.datasource.filename>sqlserver-ds.xml</jboss.datasource.filename>
       </properties>
 
@@ -398,12 +475,31 @@
     <profile>
       <id>sqlserver-2017</id>
       <properties>
-        <database.tc.url>camsqlserver:2017</database.tc.url>
+        <database.tc.url>sqlserver:2017-latest</database.tc.url>
       </properties>
     </profile>
 
     <profile>
+      <!-- Must stay last: its database.url has to win over the per-database
+           profiles activated alongside it (-Ppostgresql,testcontainers).
+           The URL is built purely from properties this POM already owns, so
+           it belongs here and not in settings.xml - which is where its other
+           half used to live. A developer whose ~/.m2/settings.xml was not a
+           current copy of settings/maven/nexus-settings.xml got the profile's
+           dependency half and no database.url at all, and since the profile id
+           does exist here, Maven issued no "profile not found" warning either:
+           the run failed with "No suitable driver found for ${database.url}",
+           the property unresolved and taken literally (BPMS-696). -->
       <id>testcontainers</id>
+      <properties>
+        <database.url>jdbc:tc:${database.tc.url}://localhost${database.tc.params}</database.url>
+        <!-- The named driver is binding for pools that call driver.connect() directly
+             instead of going through DriverManager - Tomcat's org.apache.tomcat.jdbc.pool
+             does, and the vendor driver answers null for a jdbc:tc: URL, which the pool
+             reports as "returned null for URL". MyBatis resolves by URL and so never
+             noticed. -->
+        <database.driver>org.testcontainers.jdbc.ContainerDatabaseDriver</database.driver>
+      </properties>
       <dependencyManagement>
         <dependencies>
           <dependency>

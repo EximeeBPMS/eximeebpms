@@ -885,7 +885,7 @@ public abstract class MockProvider {
   public static final String EXAMPLE_TELEMETRY_LICENSE_TYPE = "UNIFIED";
   public static final String EXAMPLE_TELEMETRY_LICENSE_VALID_UNTIL = "2022-09-30";
   public static final boolean EXAMPLE_TELEMETRY_LICENSE_UNLIMITED = false;
-  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("camundaBPM", "true");
+  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("eximeebpmsBPM", "true");
   public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;eximeebpmsBPM=true;optimize=false;cawemo=false";
   public static final String EXAMPLE_TELEMETRY_JDK_VERSION = "14.0.2";
   public static final String EXAMPLE_TELEMETRY_JDK_VENDOR = "Oracle Corporation";
@@ -941,7 +941,7 @@ public abstract class MockProvider {
       .processInstanceId(EXAMPLE_PROCESS_INSTANCE_ID)
       .taskDefinitionKey(EXAMPLE_TASK_DEFINITION_KEY)
       .formKey(EXAMPLE_FORM_KEY)
-      .camundaFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
+      .eximeeBpmsFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
       .tenantId(EXAMPLE_TENANT_ID)
       .taskState(EXAMPLE_HISTORIC_TASK_STATE)
       .hasAttachment(EXAMPLE_TASK_ATTACHMENT_STATE)

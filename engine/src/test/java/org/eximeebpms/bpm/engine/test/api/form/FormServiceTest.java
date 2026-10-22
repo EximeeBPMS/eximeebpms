@@ -640,10 +640,10 @@ public class FormServiceTest {
   public void testSubmitStartFormWithExecutionListenerOnStartEvent() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, VariablesRecordingListener.class)
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, VariablesRecordingListener.class)
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, VariablesRecordingListener.class)
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_END, VariablesRecordingListener.class)
         .endEvent()
         .done();
 
@@ -668,8 +668,8 @@ public class FormServiceTest {
   public void testSubmitStartFormWithAsyncStartEvent() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-        .camundaHistoryTimeToLive(180)
-        .startEvent().camundaAsyncBefore()
+        .eximeeBpmsHistoryTimeToLive(180)
+        .startEvent().eximeeBpmsAsyncBefore()
         .endEvent()
         .done();
 
@@ -696,9 +696,9 @@ public class FormServiceTest {
   public void testSubmitStartFormWithAsyncStartEventExecuteJob() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .userTask()
         .endEvent()
         .done();
@@ -1158,7 +1158,7 @@ public class FormServiceTest {
   {
     // given
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
         .subProcess()
         .embeddedSubProcess()

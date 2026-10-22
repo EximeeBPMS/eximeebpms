@@ -90,6 +90,8 @@ import org.eximeebpms.bpm.model.bpmn.BpmnModelInstance;
 import org.eximeebpms.bpm.model.bpmn.instance.FlowElement;
 import org.eximeebpms.bpm.model.xml.instance.ModelElementInstance;
 import org.eximeebpms.bpm.model.xml.type.ModelElementType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Tom Baeyens
@@ -332,6 +334,11 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   public void fireBusinessActivityInstanceUpdate() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
       @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.ACTIVITY_INSTANCE_UPDATE;
+      }
+
+      @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createActivityInstanceUpdateEvt(ExecutionEntity.this);
       }
@@ -463,6 +470,36 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
         }
       });
     }
+  }
+
+  @Override
+  public void fireBusinessProcessStartEvent() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_START;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createProcessInstanceStartEvt(processInstance);
+      }
+    });
+  }
+
+  @Override
+  public void fireBusinessProcessInstanceUpdate() {
+    BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.PROCESS_INSTANCE_UPDATE;
+      }
+
+      @Override
+      public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
+        return producer.createProcessInstanceUpdateEvt(ExecutionEntity.this);
+      }
+    });
   }
 
   /**

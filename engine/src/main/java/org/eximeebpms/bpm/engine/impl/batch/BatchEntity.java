@@ -44,6 +44,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceManager
 import org.eximeebpms.bpm.engine.impl.persistence.entity.util.ByteArrayField;
 import org.eximeebpms.bpm.engine.impl.util.ClockUtil;
 import org.eximeebpms.bpm.engine.repository.ResourceTypes;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, HasDbRevision {
 
@@ -412,6 +414,11 @@ public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, 
   public void fireBatchStartBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
       @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.BATCH_START;
+      }
+
+      @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createBatchStartBusinessEvent(BatchEntity.this);
       }
@@ -421,6 +428,11 @@ public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, 
   public void fireBatchEndBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
       @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.BATCH_END;
+      }
+
+      @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createBatchEndBusinessEvent(BatchEntity.this);
       }
@@ -429,6 +441,11 @@ public class BatchEntity implements Batch, DbEntity, HasDbReferences, Nameable, 
 
   public void fireBatchUpdateBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.BATCH_UPDATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createBatchUpdateBusinessEvent(BatchEntity.this);

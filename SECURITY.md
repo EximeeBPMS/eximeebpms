@@ -12,9 +12,9 @@ previous minor version:
 
 | Version | Supported                 |
 | ------- | -------------------------- |
-| 1.3.x   | Yes                         |
-| 1.2.x   | Yes (security fixes only)  |
-| ≤ 1.1.x | No                          |
+| 1.4.x   | Yes                         |
+| 1.3.x   | Yes (security fixes only)  |
+| ≤ 1.2.x | No                          |
 
 When a new minor version ships, the support window shifts: the previous
 "latest" becomes the "previous minor" and the version before that falls out

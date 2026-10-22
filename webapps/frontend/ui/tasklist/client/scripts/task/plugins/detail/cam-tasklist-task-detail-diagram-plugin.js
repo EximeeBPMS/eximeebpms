@@ -23,7 +23,7 @@ var Controller = [
   '$scope',
   '$q',
   'camAPI',
-  function($scope, $q, camAPI) {
+  function ($scope, $q, camAPI) {
     // setup ///////////////////////////////////////////////////////////
 
     var ProcessDefinition = camAPI.resource('process-definition');
@@ -33,57 +33,57 @@ var Controller = [
 
     diagramData.provide('xml', [
       'processDefinition',
-      function(processDefinition) {
+      function (processDefinition) {
         if (!processDefinition) {
           return $q.when(null);
         }
 
         if (processDefinition) {
           return getDefinition($q, ProcessDefinition, processDefinition)
-            .then(function(xml) {
+            .then(function (xml) {
               return xml.bpmn20Xml;
             })
-            .catch(function() {});
+            .catch(function () {});
         }
-      }
+      },
     ]);
 
     diagramData.provide('diagram', [
       'xml',
       'task',
       'processDefinition',
-      function(xml, task, processDefinition) {
+      function (xml, task, processDefinition) {
         return {
           xml: xml,
           task: task,
-          definition: processDefinition
+          definition: processDefinition,
         };
-      }
+      },
     ]);
 
     // observer /////////////////////////////////////////////////////////
 
-    diagramData.observe('processDefinition', function(processDefinition) {
+    diagramData.observe('processDefinition', function (processDefinition) {
       $scope.processDefinition = processDefinition;
     });
 
-    $scope.diagramState = diagramData.observe('diagram', function(diagram) {
+    $scope.diagramState = diagramData.observe('diagram', function (diagram) {
       $scope.diagram = diagram;
     });
 
     $scope.control = {};
 
-    $scope.highlightTask = function() {
+    $scope.highlightTask = function () {
       $scope.control.scrollToElement($scope.diagram.task.taskDefinitionKey);
       $scope.control.highlight($scope.diagram.task.taskDefinitionKey);
     };
-  }
+  },
 ];
 
 function getDefinition($q, DefinitionApi, definition) {
   var deferred = $q.defer();
 
-  DefinitionApi.xml(definition, function(err, res) {
+  DefinitionApi.xml(definition, function (err, res) {
     if (err) {
       deferred.reject(err);
     } else {
@@ -100,7 +100,7 @@ var Configuration = function PluginConfiguration(ViewsProvider) {
     label: 'DIAGRAM',
     template: template,
     controller: Controller,
-    priority: 600
+    priority: 600,
   });
 };
 

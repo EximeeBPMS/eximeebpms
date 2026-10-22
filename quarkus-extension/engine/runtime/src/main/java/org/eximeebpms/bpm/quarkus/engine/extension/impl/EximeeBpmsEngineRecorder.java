@@ -36,8 +36,8 @@ import org.eximeebpms.bpm.engine.cdi.impl.event.CdiEventSupportBpmnParseListener
 import org.eximeebpms.bpm.engine.cdi.impl.util.BeanManagerLookup;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator;
 import org.eximeebpms.bpm.quarkus.engine.extension.EximeeBpmsEngineConfig;
 import org.eximeebpms.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
 import org.eximeebpms.bpm.quarkus.engine.extension.event.EximeeBpmsEngineStartupEvent;
@@ -46,6 +46,16 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 @Recorder
 public class EximeeBpmsEngineRecorder {
 
+  // EximeeBpmsEngineConfig is @ConfigRoot(phase = RUN_TIME), so it cannot be injected into a
+  // @BuildStep - Quarkus rejects that outright ("Run time configuration cannot be consumed in
+  // Build Steps, use RuntimeValue<EximeeBpmsEngineConfig> in a @Recorder constructor instead").
+  // Taking it here, as recorder constructor injection, is the mechanism Quarkus points at.
+  private final RuntimeValue<EximeeBpmsEngineConfig> engineConfig;
+
+  public EximeeBpmsEngineRecorder(RuntimeValue<EximeeBpmsEngineConfig> engineConfig) {
+    this.engineConfig = engineConfig;
+  }
+
   public void configureProcessEngineCdiBeans(BeanContainer beanContainer) {
 
     if (BeanManagerLookup.localInstance == null) {
@@ -53,8 +63,9 @@ public class EximeeBpmsEngineRecorder {
     }
   }
 
-  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer,
-                                                                                       EximeeBpmsEngineConfig config) {
+  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer) {
+
+    EximeeBpmsEngineConfig config = this.engineConfig.getValue();
 
     QuarkusProcessEngineConfiguration configuration = getBeanFromContainer(QuarkusProcessEngineConfiguration.class,
         beanContainer);
@@ -84,13 +95,13 @@ public class EximeeBpmsEngineRecorder {
     return new RuntimeValue<>(configuration);
   }
 
-  @SuppressWarnings("removal")
   protected void configureIdGenerator(QuarkusProcessEngineConfiguration configuration, EximeeBpmsEngineConfig config) {
     config.idGenerator().ifPresent(idGeneratorType -> {
       if ("uuid-v1".equals(idGeneratorType)) {
-        configuration.setIdGenerator(new UuidV1Generator());
+        ProcessEngineLogger.PERSISTENCE_LOGGER.uuidV1GeneratorRemoved();
       }
-      // else: StrongUuidGenerator (UUID v7) is already set in QuarkusProcessEngineConfiguration constructor
+      // StrongUuidGenerator (UUID v7) is already set in QuarkusProcessEngineConfiguration constructor.
+      // The removed legacy uuid-v1 value is warned about above and otherwise ignored.
     });
   }
 

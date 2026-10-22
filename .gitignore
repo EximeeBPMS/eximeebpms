@@ -25,3 +25,4 @@ eximeebpms-h2-dbs
 **/.jython_cache
 
 *.DS_Store
+.gitmessage

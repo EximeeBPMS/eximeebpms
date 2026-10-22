@@ -32,6 +32,7 @@ public class DefaultHistoryConfiguration extends AbstractEximeeBpmsConfiguration
     if (historyLevel != null) {
       configuration.setHistory(historyLevel);
     }
+    configuration.setHistoryExcludedProcessDefinitionKeys(eximeeBpmsBpmProperties.getHistoryExcludedProcessDefinitionKeys());
     if (historyEventHandler != null) {
       logger.debug("registered history event handler: {}", historyEventHandler.getClass());
       configuration.getCustomHistoryEventHandlers().add(historyEventHandler);

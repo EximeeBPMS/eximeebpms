@@ -71,25 +71,25 @@ public interface MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
   void setNoneBehaviorEventRef(EventDefinition noneBehaviorEventRef);
 
-  String getCamundaCollection();
+  String getEximeeBpmsCollection();
 
-  void setCamundaCollection(String expression);
+  void setEximeeBpmsCollection(String expression);
 
-  String getCamundaElementVariable();
+  String getEximeeBpmsElementVariable();
 
-  void setCamundaElementVariable(String variableName);
+  void setEximeeBpmsElementVariable(String variableName);
 
-  boolean isCamundaAsyncBefore();
+  boolean isEximeeBpmsAsyncBefore();
 
-  void setCamundaAsyncBefore(boolean isCamundaAsyncBefore);
+  void setEximeeBpmsAsyncBefore(boolean isCamundaAsyncBefore);
 
-  boolean isCamundaAsyncAfter();
+  boolean isEximeeBpmsAsyncAfter();
 
-  void setCamundaAsyncAfter(boolean isCamundaAsyncAfter);
+  void setEximeeBpmsAsyncAfter(boolean isCamundaAsyncAfter);
 
-  boolean isCamundaExclusive();
+  boolean isEximeeBpmsExclusive();
 
-  void setCamundaExclusive(boolean isCamundaExclusive);
+  void setEximeeBpmsExclusive(boolean isCamundaExclusive);
 
   MultiInstanceLoopCharacteristicsBuilder builder();
 

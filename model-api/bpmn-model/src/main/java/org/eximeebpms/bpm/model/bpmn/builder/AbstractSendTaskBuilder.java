@@ -82,8 +82,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(Class delegateClass) {
-    return camundaClass(delegateClass.getName());
+  public B eximeeBpmsClass(Class delegateClass) {
+    return eximeeBpmsClass(delegateClass.getName());
   }
 
   /**
@@ -92,8 +92,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B eximeeBpmsClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -103,8 +103,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B eximeeBpmsDelegateExpression(String camundaExpression) {
+    element.setEximeeBpmsDelegateExpression(camundaExpression);
     return myself;
   }
 
@@ -114,7 +114,7 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
+  public B eximeeBpmsExpression(String camundaExpression) {
     element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
@@ -125,8 +125,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
@@ -136,8 +136,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaTopic  the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B eximeeBpmsTopic(String camundaTopic) {
+    element.setEximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
@@ -147,8 +147,8 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param camundaType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B eximeeBpmsType(String camundaType) {
+    element.setEximeeBpmsType(camundaType);
     return myself;
   }
 
@@ -160,8 +160,9 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
    * @param taskPriority the task priority which should used for the external tasks
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
   }
+
 }

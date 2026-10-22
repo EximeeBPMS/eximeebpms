@@ -52,11 +52,11 @@ public class EximeeBpmsOutputParameterImpl extends EximeeBpmsGenericValueElement
     super(instanceContext);
   }
 
-  public String getCamundaName() {
+  public String getEximeeBpmsName() {
     return camundaNameAttribute.getValue(this);
   }
 
-  public void setCamundaName(String camundaName) {
+  public void setEximeeBpmsName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }
 }

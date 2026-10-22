@@ -33,6 +33,8 @@ import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.IncidentEntity;
 import org.eximeebpms.bpm.engine.impl.util.EnsureUtil;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 public class SetAnnotationForIncidentCmd implements Command<Void> {
 
@@ -81,6 +83,11 @@ public class SetAnnotationForIncidentCmd implements Command<Void> {
 
   protected void triggerBusinessEvent(IncidentEntity incident) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.INCIDENT_UPDATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createBusinessIncidentUpdateEvt(incident);

@@ -207,9 +207,17 @@ public abstract class ConcurrencyTestHelper {
 
     public void makeContinue() {
       synchronized (this) {
-        if (exception != null) {
+        // Only fail on an already-thrown exception when the caller did NOT opt in via
+        // reportInterrupts(). Opting in means the controlled thread is *expected* to fail,
+        // and the test asserts on #exception itself afterwards. Failing here anyway made
+        // every such test racy: the usual makeContinue()/waitUntilDone() pair calls this
+        // twice, and if the controlled thread finished flushing (and threw) between the
+        // two calls, the second one failed the test purely on timing. waitForSync() already
+        // honours reportFailure this way; this keeps the two in step.
+        if (exception != null && !reportFailure) {
           fail("Controlled thread has run into an exception already: " + exception.getClass().getName() + ". Stack trace:\n" + ExceptionUtil.getExceptionStacktrace(exception));
         }
+        // Signal regardless: if the thread already finished, this is a harmless no-op.
         continueSignaled = true;
         notifyAll();
       }

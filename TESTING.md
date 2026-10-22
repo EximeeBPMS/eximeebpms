@@ -125,18 +125,26 @@ mvn test -Pdatabase,postgresql -Ddatabase.url=jdbc:postgresql:pgdb -Ddatabase.us
 It is also possible to use Testcontainers to run the test suite agains a given database. To ensure that your database 
 Docker image can be used this way, please perform the following steps:
 
-1. Ensure that your Docker image is compatible with Testcontainers;
-1. Provide the repository name of your Docker image in the [testcontainers.properties](./engine/src/test/resources/testcontainers.properties) file;
-   * If you use a private Docker repository, please include it in the Docker image name (e.g. private.registry.org/postgres)
-1. In the `pom.xml` file located in the `./database` folder, check out the `database.tc.url` property to ensure that 
-   the Docker tags match.
-1. Make sure that the `testcontainers` profile is added to your Maven `settings.xml` (you can find it [here](settings/maven/nexus-settings.xml)).
+Nothing has to be set up beyond a running Docker daemon: the `testcontainers` profile
+in `./database/pom.xml` carries both the image coordinates and the `jdbc:tc:` URL, and
+Testcontainers pulls the public images itself.
+
+1. To use a different image or tag, change the `database.tc.url` property of the
+   database profile you are running (`./database/pom.xml`). It is the standard
+   Testcontainers `<database>:<tag>` form, e.g. `postgresql:18` or `mysql:8.4`.
+1. To point at a private registry instead, give `database.tc.url` the full image
+   name, e.g. `private.registry.org/postgres:18`.
+1. Images requiring a licence to be accepted (SQL Server) must have their exact
+   image name listed in `test-utils/testcontainers/src/main/resources/container-license-acceptance.txt`.
+1. `sqlserver-2017` overrides only the tag, so it is combined with the database
+   profile rather than used instead of it: `-Psqlserver,sqlserver-2017,testcontainers`.
 
 At the moment, Testcontainers can be used with the EximeeBPMS-supported versions of the following databases. Please make 
 sure that the database image is configured according to [this guide](https://docs.eximeebpms.org/manual/latest/user-guide/process-engine/database/database-configuration/#isolation-level-configuration):
 * PostgreSQL
-* MySQL
-* MS-SQL 2017/2019 ([MSSQL-specific configuraion guide](https://docs.eximeebpms.org/manual/latest/user-guide/process-engine/database/mssql-configuration/))
+* MySQL — the READ-COMMITTED isolation the engine needs is set through the JDBC URL
+  (`database.tc.params`), not through a custom image
+* MS-SQL 2017/2025 ([MSSQL-specific configuraion guide](https://docs.eximeebpms.org/manual/latest/user-guide/process-engine/database/mssql-configuration/))
 
 To execute the process engine test suite with a certain database (e.g. PostgreSQL), you should call Maven in the 
 engine directory with

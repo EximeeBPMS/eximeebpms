@@ -4,7 +4,7 @@
   <parent>
     <artifactId>eximeebpms-connect-root</artifactId>
     <groupId>org.eximeebpms.connect</groupId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -55,8 +55,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock</artifactId>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock-jetty12</artifactId>
+      <version>${version.wiremock}</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -72,6 +73,16 @@
           <artifactId>commons-fileupload</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- wiremock's own json-path is excluded above (kept at the project's
+         pinned version instead); wiremock 3.x's WireMockServer constructor
+         loads it eagerly, so it must be supplied explicitly here. -->
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>${version.json-path}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

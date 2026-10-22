@@ -50,8 +50,8 @@ public class TaskListenerProcessEngineServicesAccessTest extends AbstractProcess
     UserTask task = modelInstance.newInstance(UserTask.class);
     task.setId("userTask");
     EximeeBpmsTaskListener executionListener = modelInstance.newInstance(EximeeBpmsTaskListener.class);
-    executionListener.setCamundaEvent(TaskListener.EVENTNAME_CREATE);
-    executionListener.setCamundaClass(delegateClass.getName());
+    executionListener.setEximeeBpmsEvent(TaskListener.EVENTNAME_CREATE);
+    executionListener.setEximeeBpmsClass(delegateClass.getName());
     task.builder().addExtensionElement(executionListener);
     return task;
   }

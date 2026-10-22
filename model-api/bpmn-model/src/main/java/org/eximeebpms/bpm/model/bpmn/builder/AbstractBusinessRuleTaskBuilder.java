@@ -48,8 +48,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaClass(Class camundaClass) {
-    return camundaClass(camundaClass.getName());
+  public B eximeeBpmsClass(Class camundaClass) {
+    return eximeeBpmsClass(camundaClass.getName());
   }
 
   /**
@@ -58,8 +58,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B eximeeBpmsClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -69,8 +69,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B eximeeBpmsDelegateExpression(String camundaExpression) {
+    element.setEximeeBpmsDelegateExpression(camundaExpression);
     return myself;
   }
 
@@ -80,7 +80,7 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
+  public B eximeeBpmsExpression(String camundaExpression) {
     element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
@@ -91,20 +91,20 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
   /**
    * Sets the camunda topic attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    * @param camundaTopic the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B eximeeBpmsTopic(String camundaTopic) {
+    element.setEximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
@@ -114,8 +114,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B eximeeBpmsType(String camundaType) {
+    element.setEximeeBpmsType(camundaType);
     return myself;
   }
 
@@ -125,8 +125,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRef the decisionRef to set
    * @return the builder object
    */
-  public B camundaDecisionRef(String camundaDecisionRef) {
-    element.setCamundaDecisionRef(camundaDecisionRef);
+  public B eximeeBpmsDecisionRef(String camundaDecisionRef) {
+    element.setEximeeBpmsDecisionRef(camundaDecisionRef);
     return myself;
   }
 
@@ -136,8 +136,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefBinding the decisionRefBinding to set
    * @return the builder object
    */
-  public B camundaDecisionRefBinding(String camundaDecisionRefBinding) {
-    element.setCamundaDecisionRefBinding(camundaDecisionRefBinding);
+  public B eximeeBpmsDecisionRefBinding(String camundaDecisionRefBinding) {
+    element.setEximeeBpmsDecisionRefBinding(camundaDecisionRefBinding);
     return myself;
   }
 
@@ -147,8 +147,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefVersion the decisionRefVersion to set
    * @return the builder object
    */
-  public B camundaDecisionRefVersion(String camundaDecisionRefVersion) {
-    element.setCamundaDecisionRefVersion(camundaDecisionRefVersion);
+  public B eximeeBpmsDecisionRefVersion(String camundaDecisionRefVersion) {
+    element.setEximeeBpmsDecisionRefVersion(camundaDecisionRefVersion);
     return myself;
   }
 
@@ -158,8 +158,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaDecisionRefVersionTag the decisionRefVersionTag to set
    * @return the builder object
    */
-  public B camundaDecisionRefVersionTag(String camundaDecisionRefVersionTag) {
-    element.setCamundaDecisionRefVersionTag(camundaDecisionRefVersionTag);
+  public B eximeeBpmsDecisionRefVersionTag(String camundaDecisionRefVersionTag) {
+    element.setEximeeBpmsDecisionRefVersionTag(camundaDecisionRefVersionTag);
     return myself;
   }
 
@@ -169,8 +169,8 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param decisionRefTenantId the decisionRefTenantId to set
    * @return the builder object
    */
-  public B camundaDecisionRefTenantId(String decisionRefTenantId) {
-    element.setCamundaDecisionRefTenantId(decisionRefTenantId);
+  public B eximeeBpmsDecisionRefTenantId(String decisionRefTenantId) {
+    element.setEximeeBpmsDecisionRefTenantId(decisionRefTenantId);
     return myself;
   }
 
@@ -180,21 +180,22 @@ public abstract class AbstractBusinessRuleTaskBuilder<B extends AbstractBusiness
    * @param camundaMapDecisionResult the mapper for the decision result to set
    * @return the builder object
    */
-  public B camundaMapDecisionResult(String camundaMapDecisionResult) {
+  public B eximeeBpmsMapDecisionResult(String camundaMapDecisionResult) {
     element.setEximeeBpmsMapDecisionResult(camundaMapDecisionResult);
     return myself;
   }
 
   /**
    * Sets the camunda task priority attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    *
    * @param taskPriority the priority for the external task
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
   }
+
 }

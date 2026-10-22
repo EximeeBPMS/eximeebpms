@@ -22,12 +22,15 @@ import org.eximeebpms.bpm.engine.history.HistoricVariableInstance;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricDecisionEvaluationEvent;
+import org.eximeebpms.bpm.engine.impl.history.event.HistoricExternalTaskLogEntity;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricScopeInstanceEvent;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEvent;
 import org.eximeebpms.bpm.engine.impl.history.event.HistoryEventTypes;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricJobLogEventEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
+import org.eximeebpms.bpm.engine.impl.util.ExceptionUtil;
 import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 
 /**
@@ -43,6 +46,10 @@ public class DbHistoryEventHandler implements HistoryEventHandler {
 
     if (historyEvent instanceof HistoricVariableUpdateEventEntity) {
       insertHistoricVariableUpdateEntity((HistoricVariableUpdateEventEntity) historyEvent);
+    } else if (historyEvent instanceof HistoricJobLogEventEntity historicJobLogEventEntity) {
+      insertHistoricJobLogEntity(historicJobLogEventEntity);
+    } else if (historyEvent instanceof HistoricExternalTaskLogEntity historicExternalTaskLogEntity) {
+      insertHistoricExternalTaskLogEntity(historicExternalTaskLogEntity);
     } else if(historyEvent instanceof HistoricDecisionEvaluationEvent) {
       insertHistoricDecisionEvaluationEvent((HistoricDecisionEvaluationEvent) historyEvent);
     } else {
@@ -83,6 +90,56 @@ public class DbHistoryEventHandler implements HistoryEventHandler {
     }
   }
 
+
+  /**
+   * Customized insert behavior for HistoricJobLogEventEntity: the exception byte
+   * array is created here rather than in the producer, so that an event this
+   * handler never sees leaves nothing behind (BPMS-662).
+   */
+  protected void insertHistoricJobLogEntity(HistoricJobLogEventEntity historyEvent) {
+    byte[] exceptionStacktrace = historyEvent.getExceptionStacktraceBytes();
+
+    // guard against a second persisting handler in a CompositeHistoryEventHandler
+    // creating a duplicate row for the same event
+    if (exceptionStacktrace != null && historyEvent.getExceptionByteArrayId() == null) {
+      ByteArrayEntity byteArrayEntity = new ByteArrayEntity(
+          ExceptionUtil.JOB_EXCEPTION_BYTE_ARRAY_NAME, exceptionStacktrace, ResourceTypes.HISTORY);
+      byteArrayEntity.setRootProcessInstanceId(historyEvent.getRootProcessInstanceId());
+      byteArrayEntity.setRemovalTime(historyEvent.getRemovalTime());
+
+      Context
+        .getCommandContext()
+        .getByteArrayManager()
+        .insertByteArray(byteArrayEntity);
+      historyEvent.setExceptionByteArrayId(byteArrayEntity.getId());
+    }
+
+    insertOrUpdate(historyEvent);
+  }
+
+  /**
+   * Customized insert behavior for HistoricExternalTaskLogEntity: same reasoning as
+   * {@link #insertHistoricJobLogEntity} — the byte array is created here, not in the
+   * producer, so an event this handler never sees leaves nothing behind (BPMS-662).
+   */
+  protected void insertHistoricExternalTaskLogEntity(HistoricExternalTaskLogEntity historyEvent) {
+    byte[] errorDetails = historyEvent.getErrorDetailsBytes();
+
+    if (errorDetails != null && historyEvent.getErrorDetailsByteArrayId() == null) {
+      ByteArrayEntity byteArrayEntity = new ByteArrayEntity(
+          HistoricExternalTaskLogEntity.EXCEPTION_NAME, errorDetails, ResourceTypes.HISTORY);
+      byteArrayEntity.setRootProcessInstanceId(historyEvent.getRootProcessInstanceId());
+      byteArrayEntity.setRemovalTime(historyEvent.getRemovalTime());
+
+      Context
+        .getCommandContext()
+        .getByteArrayManager()
+        .insertByteArray(byteArrayEntity);
+      historyEvent.setErrorDetailsByteArrayId(byteArrayEntity.getId());
+    }
+
+    insertOrUpdate(historyEvent);
+  }
 
   /** customized insert behavior for HistoricVariableUpdateEventEntity */
   protected void insertHistoricVariableUpdateEntity(HistoricVariableUpdateEventEntity historyEvent) {

@@ -8,7 +8,7 @@
     <groupId>org.eximeebpms.bpm</groupId>
     <artifactId>eximeebpms-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
@@ -140,7 +140,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>7.2.5.Final</version>
+      <version>7.4.13.Final</version>
       <scope>test</scope>
       <exclusions>
         <!-- hibernate uses an older slf4j version -->

@@ -9,11 +9,11 @@
   </datasource>
   <xa-datasource jndi-name="java:jboss/datasources/ProcessEngine" pool-name="ProcessEngine" enabled="true" use-ccm="false">
     <driver>postgresql</driver>
-    <xa-datasource-property name="ServerName">${database.host}</xa-datasource-property>
-    <xa-datasource-property name="PortNumber">${database.port}</xa-datasource-property>
-    <xa-datasource-property name="DatabaseName">${database.name}</xa-datasource-property>
-    <xa-datasource-property name="User">${database.username}</xa-datasource-property>
-    <xa-datasource-property name="Password">${database.password}</xa-datasource-property>
+    <xa-datasource-property name="ServerName">${eximeebpms.ds.host}</xa-datasource-property>
+    <xa-datasource-property name="PortNumber">${eximeebpms.ds.port}</xa-datasource-property>
+    <xa-datasource-property name="DatabaseName">${eximeebpms.ds.name}</xa-datasource-property>
+    <xa-datasource-property name="User">${eximeebpms.ds.username}</xa-datasource-property>
+    <xa-datasource-property name="Password">${eximeebpms.ds.password}</xa-datasource-property>
     <xa-pool>
       <min-pool-size>1</min-pool-size>
       <max-pool-size>60</max-pool-size>

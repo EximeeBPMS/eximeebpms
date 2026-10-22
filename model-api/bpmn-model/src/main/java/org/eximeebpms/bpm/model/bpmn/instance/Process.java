@@ -22,7 +22,6 @@ import org.eximeebpms.bpm.model.bpmn.builder.ProcessBuilder;
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  * The BPMN process element
  *
@@ -71,45 +70,40 @@ public interface Process extends CallableElement {
 
   /** camunda extensions */
 
-  String getCamundaCandidateStarterGroups();
+  String getEximeeBpmsCandidateStarterGroups();
 
-  void setCamundaCandidateStarterGroups(String camundaCandidateStarterGroups);
+  void setEximeeBpmsCandidateStarterGroups(String camundaCandidateStarterGroups);
 
-  List<String> getCamundaCandidateStarterGroupsList();
+  List<String> getEximeeBpmsCandidateStarterGroupsList();
 
-  void setCamundaCandidateStarterGroupsList(List<String> camundaCandidateStarterGroupsList);
+  void setEximeeBpmsCandidateStarterGroupsList(List<String> camundaCandidateStarterGroupsList);
 
-  String getCamundaCandidateStarterUsers();
+  String getEximeeBpmsCandidateStarterUsers();
 
-  void setCamundaCandidateStarterUsers(String camundaCandidateStarterUsers);
+  void setEximeeBpmsCandidateStarterUsers(String camundaCandidateStarterUsers);
 
-  List<String> getCamundaCandidateStarterUsersList();
+  List<String> getEximeeBpmsCandidateStarterUsersList();
 
-  void setCamundaCandidateStarterUsersList(List<String> camundaCandidateStarterUsersList);
+  void setEximeeBpmsCandidateStarterUsersList(List<String> camundaCandidateStarterUsersList);
 
-  String getCamundaJobPriority();
+  String getEximeeBpmsJobPriority();
 
-  void setCamundaJobPriority(String jobPriority);
+  void setEximeeBpmsJobPriority(String jobPriority);
 
-  String getCamundaTaskPriority();
+  String getEximeeBpmsTaskPriority();
 
-  void setCamundaTaskPriority(String taskPriority);
+  void setEximeeBpmsTaskPriority(String taskPriority);
 
-  @Deprecated
-  Integer getCamundaHistoryTimeToLive();
+  String getEximeeBpmsHistoryTimeToLiveString();
 
-  @Deprecated
-  void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
+  void setEximeeBpmsHistoryTimeToLiveString(String historyTimeToLive);
 
-  String getCamundaHistoryTimeToLiveString();
+  Boolean isEximeeBpmsStartableInTasklist();
 
-  void setCamundaHistoryTimeToLiveString(String historyTimeToLive);
+  void setEximeeBpmsIsStartableInTasklist(Boolean isStartableInTasklist);
 
-  Boolean isCamundaStartableInTasklist();
+  String getEximeeBpmsVersionTag();
 
-  void setCamundaIsStartableInTasklist(Boolean isStartableInTasklist);
+  void setEximeeBpmsVersionTag(String versionTag);
 
-  String getCamundaVersionTag();
-
-  void setCamundaVersionTag(String versionTag);
 }

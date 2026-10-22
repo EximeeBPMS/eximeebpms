@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.eximeebpms.bpm.quarkus</groupId>
     <artifactId>eximeebpms-bpm-quarkus-engine-parent</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -62,8 +62,6 @@
             <!-- See https://jira.camunda.com/browse/CAM-13751 -->
             <exclude>**/BeanPropertyElTest.java</exclude>
 
-            <!-- See ProgrammaticBeanLookupTest in quarkus-extension/engine/deployment module -->
-            <exclude>**/ProgrammaticBeanLookupTest.java</exclude>
             <!-- See https://github.com/camunda/camunda-bpm-platform/issues/3419 -->
             <exclude>**/TaskFormTest.java</exclude>
           </excludes>

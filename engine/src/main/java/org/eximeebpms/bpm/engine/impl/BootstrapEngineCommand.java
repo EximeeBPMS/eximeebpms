@@ -29,6 +29,8 @@ import org.eximeebpms.bpm.engine.impl.db.entitymanager.operation.DbOperation;
 import org.eximeebpms.bpm.engine.impl.interceptor.CommandContext;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobDeclaration;
 import org.eximeebpms.bpm.engine.impl.jobexecutor.businesseventoutboxcleanup.BusinessEventOutboxCleanupJobHandler;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.scriptviolationcleanup.ScriptViolationCleanupJobDeclaration;
+import org.eximeebpms.bpm.engine.impl.jobexecutor.scriptviolationcleanup.ScriptViolationCleanupJobHandler;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.EverLivingJobEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.PropertyEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.PropertyManager;
@@ -60,6 +62,10 @@ public class BootstrapEngineCommand implements ProcessEngineBootstrapCommand {
       createBusinessEventOutboxCleanupJob(commandContext);
     }
 
+    if (isScriptViolationCleanupEnabled(commandContext)) {
+      createScriptViolationCleanupJob(commandContext);
+    }
+
     // installationId needs to be updated in the telemetry data
     updateTelemetryData(commandContext);
 
@@ -67,24 +73,22 @@ public class BootstrapEngineCommand implements ProcessEngineBootstrapCommand {
   }
 
   protected void createHistoryCleanupJob(CommandContext commandContext) {
-    if (Context.getProcessEngineConfiguration().getManagementService().getTableMetaData("ACT_RU_JOB") != null) {
-      // CAM-9671: avoid transaction rollback due to the OLE being caught in CommandContext#close
-      commandContext.getDbEntityManager().registerOptimisticLockingListener(new OptimisticLockingListener() {
+    // CAM-9671: avoid transaction rollback due to the OLE being caught in CommandContext#close
+    commandContext.getDbEntityManager().registerOptimisticLockingListener(new OptimisticLockingListener() {
 
-        @Override
-        public Class<? extends DbEntity> getEntityType() {
-          return EverLivingJobEntity.class;
-        }
+      @Override
+      public Class<? extends DbEntity> getEntityType() {
+        return EverLivingJobEntity.class;
+      }
 
-        @Override
-        public OptimisticLockingResult failedOperation(DbOperation operation) {
+      @Override
+      public OptimisticLockingResult failedOperation(DbOperation operation) {
 
-          // nothing to do, reconfiguration will be handled later on
-          return OptimisticLockingResult.IGNORE;
-        }
-      });
-      Context.getProcessEngineConfiguration().getHistoryService().cleanUpHistoryAsync();
-    }
+        // nothing to do, reconfiguration will be handled later on
+        return OptimisticLockingResult.IGNORE;
+      }
+    });
+    Context.getProcessEngineConfiguration().getHistoryService().cleanUpHistoryAsync();
   }
 
   public void checkDeploymentLockExists(CommandContext commandContext) {
@@ -110,32 +114,47 @@ public class BootstrapEngineCommand implements ProcessEngineBootstrapCommand {
     return commandContext.getProcessEngineConfiguration().isBusinessEventsEnabled();
   }
 
+  protected boolean isScriptViolationCleanupEnabled(CommandContext commandContext) {
+    return commandContext.getProcessEngineConfiguration().getScriptViolationRetentionDays() > 0;
+  }
+
   /**
    * Creates the business-event outbox cleanup job if it does not yet exist.
    * The job is an ever-living periodic job that runs every hour.
    */
   @SuppressWarnings("unchecked")
   protected void createBusinessEventOutboxCleanupJob(CommandContext commandContext) {
-    if (Context.getProcessEngineConfiguration().getManagementService().getTableMetaData("ACT_RU_JOB") != null) {
-      // Only create if no such job exists yet
-      if (commandContext.getJobManager().findJobsByHandlerType(BusinessEventOutboxCleanupJobHandler.TYPE).isEmpty()) {
-        commandContext.getDbEntityManager().registerOptimisticLockingListener(new OptimisticLockingListener() {
+    createCleanupJob(commandContext, BusinessEventOutboxCleanupJobHandler.TYPE, new BusinessEventOutboxCleanupJobDeclaration().createJobInstance(null));
+  }
 
-          @Override
-          public Class<? extends DbEntity> getEntityType() {
-            return EverLivingJobEntity.class;
-          }
+  /**
+   * Creates the script violation cleanup job if it does not yet exist. The job is an
+   * ever-living periodic job that runs roughly once a day, identically on every deployment
+   * model (Spring Boot or plain {@code bpm-platform.xml}/Tomcat) since it's registered here in
+   * the engine's own bootstrap rather than a Spring-specific scheduler.
+   */
+  @SuppressWarnings("unchecked")
+  protected void createScriptViolationCleanupJob(CommandContext commandContext) {
+    createCleanupJob(commandContext, ScriptViolationCleanupJobHandler.TYPE, new ScriptViolationCleanupJobDeclaration().createJobInstance(null));
+  }
 
-          @Override
-          public OptimisticLockingResult failedOperation(DbOperation operation) {
-            return OptimisticLockingResult.IGNORE;
-          }
-        });
+  private static void createCleanupJob(CommandContext commandContext, String handlerType, EverLivingJobEntity jobEntity) {
+    // Only create if no such job exists yet
+    if (commandContext.getJobManager().findJobsByHandlerType(handlerType).isEmpty()) {
+      commandContext.getDbEntityManager().registerOptimisticLockingListener(new OptimisticLockingListener() {
 
-        BusinessEventOutboxCleanupJobDeclaration declaration = new BusinessEventOutboxCleanupJobDeclaration();
-        EverLivingJobEntity job = declaration.createJobInstance(null);
-        commandContext.getJobManager().insertAndHintJobExecutor(job);
-      }
+        @Override
+        public Class<? extends DbEntity> getEntityType() {
+          return EverLivingJobEntity.class;
+        }
+
+        @Override
+        public OptimisticLockingResult failedOperation(DbOperation operation) {
+          return OptimisticLockingResult.IGNORE;
+        }
+      });
+
+      commandContext.getJobManager().insertAndHintJobExecutor(jobEntity);
     }
   }
 

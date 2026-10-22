@@ -57,9 +57,9 @@ public class TelemetryNonPaIT extends AbstractEximeeBpmsAutoConfigurationIT {
 
     // then
     TelemetryDataImpl telemetryData = processEngineConfiguration.getTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
-    assertThat(camundaIntegration.size()).isOne();
-    assertThat(camundaIntegration).containsExactly(EximeeBpmsIntegration.SPRING_BOOT_STARTER);
+    Set<String> eximeebpmsIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    assertThat(eximeebpmsIntegration.size()).isOne();
+    assertThat(eximeebpmsIntegration).containsExactly(EximeeBpmsIntegration.SPRING_BOOT_STARTER);
   }
 
 }

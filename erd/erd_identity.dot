@@ -1,0 +1,73 @@
+// GENERATED FILE - do not edit.
+// Produced by .github/scripts/generate-erd.py from the engine's H2 create scripts.
+// Re-run that script instead of editing; erd-gate.yml verifies it is current.
+digraph erd_identity {
+  graph [splines=spline, overlap=prism, bgcolor="white",
+         nodesep=0.4, K=1.4,
+         labelloc="t", labeljust="l", fontname="Helvetica,sans-Serif", fontsize=12, fontcolor="#4a6484",
+         label="Solid: foreign key declared in the schema.\l"];
+  node [shape=plaintext, fontname="Helvetica,sans-Serif", fontsize=11];
+  edge [color="#5b7aa0", arrowhead=crow, arrowtail=none, penwidth=1.1];
+
+  ACT_ID_GROUP [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_GROUP</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">REV_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">integer</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">NAME_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">TYPE_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+    </TABLE>>
+  ];
+  ACT_ID_INFO [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_INFO</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">REV_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">integer</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">USER_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">TYPE_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">KEY_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">VALUE_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">PASSWORD_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">longvarbinary</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">PARENT_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+    </TABLE>>
+  ];
+  ACT_ID_MEMBERSHIP [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_MEMBERSHIP</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>USER_ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>GROUP_ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+    </TABLE>>
+  ];
+  ACT_ID_TENANT [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_TENANT</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">REV_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">integer</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">NAME_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+    </TABLE>>
+  ];
+  ACT_ID_TENANT_MEMBER [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_TENANT_MEMBER</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">TENANT_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">USER_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">GROUP_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+    </TABLE>>
+  ];
+  ACT_ID_USER [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7a8bb0">
+      <TR><TD BGCOLOR="#bcd2e8" COLSPAN="3" ALIGN="CENTER"><FONT COLOR="#1f3a5f"><B>ACT_ID_USER</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>ID_</B></TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"><FONT COLOR="#b8860b"><B>PK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">REV_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">integer</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">FIRST_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">LAST_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">EMAIL_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">PWD_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">SALT_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(255)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">LOCK_EXP_TIME_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">timestamp</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">ATTEMPTS_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">integer</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+      <TR><TD ALIGN="LEFT">PICTURE_ID_</TD><TD ALIGN="LEFT"><FONT COLOR="#4a6484">varchar(64)</FONT></TD><TD ALIGN="RIGHT"> </TD></TR>
+    </TABLE>>
+  ];
+
+  ACT_ID_GROUP -> ACT_ID_MEMBERSHIP;
+  ACT_ID_USER -> ACT_ID_MEMBERSHIP;
+  ACT_ID_GROUP -> ACT_ID_TENANT_MEMBER;
+  ACT_ID_TENANT -> ACT_ID_TENANT_MEMBER;
+  ACT_ID_USER -> ACT_ID_TENANT_MEMBER;
+}

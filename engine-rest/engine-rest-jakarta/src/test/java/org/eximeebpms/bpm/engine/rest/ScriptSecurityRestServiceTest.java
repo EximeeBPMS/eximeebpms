@@ -36,6 +36,7 @@ import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.identity.Authentication;
 import org.eximeebpms.bpm.engine.impl.scripting.security.DbAwareScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptOrigin;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationEvent;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptViolationStore;
@@ -64,6 +65,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
     when(processEngine.getProcessEngineConfiguration()).thenReturn(configMock);
     when(configMock.isAuthorizationEnabled()).thenReturn(false);
     when(configMock.getScriptViolationStore()).thenReturn(storeMock);
+    when(configMock.getScriptSecurityMode()).thenReturn(ScriptSecurityMode.ENFORCE.name());
   }
 
   @Test
@@ -196,7 +198,26 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
         .expect()
         .statusCode(Status.OK.getStatusCode())
         .contentType(ContentType.JSON)
-        .body("mode", equalTo("ENFORCE"))
+        .body("mode", equalTo(ScriptSecurityMode.ENFORCE.name()))
+        .body("allowlistedKeys", hasSize(0))
+        .when()
+        .get(CONFIG_URL);
+  }
+
+  @Test
+  public void shouldReturnEngineConfiguredModeWhenNoDbPropertyExists() {
+    // given: no ACT_GE_PROPERTY row (e.g. a plain-XML/Tomcat deployment where nothing seeds it),
+    // but the engine itself was configured with AUDIT (e.g. bpm-platform.xml's scriptSecurityMode)
+    when(processEngine.getManagementService().getProperties()).thenReturn(Collections.emptyMap());
+    when(configMock.getScriptSecurityMode()).thenReturn(ScriptSecurityMode.AUDIT.name());
+
+    // when / then
+    given()
+        .then()
+        .expect()
+        .statusCode(Status.OK.getStatusCode())
+        .contentType(ContentType.JSON)
+        .body("mode", equalTo(ScriptSecurityMode.AUDIT.name()))
         .body("allowlistedKeys", hasSize(0))
         .when()
         .get(CONFIG_URL);
@@ -206,7 +227,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
   public void shouldReturnConfigFromDbProperties() {
     // given
     Map<String, String> props = new HashMap<>();
-    props.put(DbAwareScriptSecurityPolicy.PROP_MODE, "AUDIT");
+    props.put(DbAwareScriptSecurityPolicy.PROP_MODE, ScriptSecurityMode.AUDIT.name());
     props.put(DbAwareScriptSecurityPolicy.PROP_ALLOWLIST, "invoiceProcess,legacyMigration");
     when(processEngine.getManagementService().getProperties()).thenReturn(props);
 
@@ -216,7 +237,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
         .expect()
         .statusCode(Status.OK.getStatusCode())
         .contentType(ContentType.JSON)
-        .body("mode", equalTo("AUDIT"))
+        .body("mode", equalTo(ScriptSecurityMode.AUDIT.name()))
         .body("allowlistedKeys", hasSize(2))
         .when()
         .get(CONFIG_URL);
@@ -243,7 +264,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
     // given
     when(configMock.getScriptSecurityPolicy()).thenReturn(mock(DbAwareScriptSecurityPolicy.class));
     Map<String, Object> body = new HashMap<>();
-    body.put("mode", "AUDIT");
+    body.put("mode", ScriptSecurityMode.AUDIT.name());
     body.put("allowlistedKeys", Collections.emptyList());
 
     // when / then
@@ -253,12 +274,12 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
         .then()
         .expect()
         .statusCode(Status.OK.getStatusCode())
-        .body("mode", equalTo("AUDIT"))
+        .body("mode", equalTo(ScriptSecurityMode.AUDIT.name()))
         .body("allowlistedKeys", hasSize(0))
         .when()
         .put(CONFIG_URL);
 
-    verify(processEngine.getManagementService()).setProperty(DbAwareScriptSecurityPolicy.PROP_MODE, "AUDIT");
+    verify(processEngine.getManagementService()).setProperty(DbAwareScriptSecurityPolicy.PROP_MODE, ScriptSecurityMode.AUDIT.name());
     verify(processEngine.getManagementService()).setProperty(DbAwareScriptSecurityPolicy.PROP_ALLOWLIST, "");
   }
 
@@ -268,7 +289,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
     DbAwareScriptSecurityPolicy policyMock = mock(DbAwareScriptSecurityPolicy.class);
     when(configMock.getScriptSecurityPolicy()).thenReturn(policyMock);
     Map<String, Object> body = new HashMap<>();
-    body.put("mode", "ENFORCE");
+    body.put("mode", ScriptSecurityMode.ENFORCE.name());
 
     // when
     given()
@@ -319,7 +340,7 @@ public class ScriptSecurityRestServiceTest extends AbstractRestServiceTest {
     // given
     setupUnauthorizedUser();
     Map<String, Object> body = new HashMap<>();
-    body.put("mode", "AUDIT");
+    body.put("mode", ScriptSecurityMode.AUDIT.name());
 
     // when / then
     given()

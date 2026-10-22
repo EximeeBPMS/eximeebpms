@@ -33,56 +33,44 @@ public interface CallActivity extends Activity {
 
   /** camunda extensions */
 
-  /**
-   * @deprecated use isCamundaAsyncBefore() instead.
-   */
-  @Deprecated
-  boolean isCamundaAsync();
+  String getEximeeBpmsCalledElementBinding();
 
-  /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
-   */
-  @Deprecated
-  void setCamundaAsync(boolean isCamundaAsync);
+  void setEximeeBpmsCalledElementBinding(String camundaCalledElementBinding);
 
-  String getCamundaCalledElementBinding();
+  String getEximeeBpmsCalledElementVersion();
 
-  void setCamundaCalledElementBinding(String camundaCalledElementBinding);
+  void setEximeeBpmsCalledElementVersion(String camundaCalledElementVersion);
 
-  String getCamundaCalledElementVersion();
+  String getEximeeBpmsCalledElementVersionTag();
 
-  void setCamundaCalledElementVersion(String camundaCalledElementVersion);
+  void setEximeeBpmsCalledElementVersionTag(String camundaCalledElementVersionTag);
 
-  String getCamundaCalledElementVersionTag();
+  String getEximeeBpmsCaseRef();
 
-  void setCamundaCalledElementVersionTag(String camundaCalledElementVersionTag);
+  void setEximeeBpmsCaseRef(String camundaCaseRef);
 
-  String getCamundaCaseRef();
+  String getEximeeBpmsCaseBinding();
 
-  void setCamundaCaseRef(String camundaCaseRef);
+  void setEximeeBpmsCaseBinding(String camundaCaseBinding);
 
-  String getCamundaCaseBinding();
+  String getEximeeBpmsCaseVersion();
 
-  void setCamundaCaseBinding(String camundaCaseBinding);
+  void setEximeeBpmsCaseVersion(String camundaCaseVersion);
 
-  String getCamundaCaseVersion();
+  String getEximeeBpmsCalledElementTenantId();
 
-  void setCamundaCaseVersion(String camundaCaseVersion);
+  void setEximeeBpmsCalledElementTenantId(String tenantId);
 
-  String getCamundaCalledElementTenantId();
+  String getEximeeBpmsCaseTenantId();
 
-  void setCamundaCalledElementTenantId(String tenantId);
+  void setEximeeBpmsCaseTenantId(String tenantId);
 
-  String getCamundaCaseTenantId();
+  String getEximeeBpmsVariableMappingClass();
 
-  void setCamundaCaseTenantId(String tenantId);
+  void setEximeeBpmsVariableMappingClass(String camundaClass);
 
-  String getCamundaVariableMappingClass();
+  String getEximeeBpmsVariableMappingDelegateExpression();
 
-  void setCamundaVariableMappingClass(String camundaClass);
-
-  String getCamundaVariableMappingDelegateExpression();
-
-  void setCamundaVariableMappingDelegateExpression(String camundaExpression);
+  void setEximeeBpmsVariableMappingDelegateExpression(String camundaExpression);
 
 }

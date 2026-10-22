@@ -200,13 +200,13 @@ public class MigrationPlanGenerationTest {
   @Test
   public void testMapEqualUnsupportedAsyncBeforeActivities() {
     BpmnModelInstance testModel = modify(ProcessModels.UNSUPPORTED_ACTIVITIES)
-      .flowNodeBuilder("startEvent").camundaAsyncBefore()
-      .moveToNode("decisionTask").camundaAsyncBefore()
-      .moveToNode("throwEvent").camundaAsyncAfter()
-      .moveToNode("serviceTask").camundaAsyncBefore()
-      .moveToNode("sendTask").camundaAsyncBefore()
-      .moveToNode("scriptTask").camundaAsyncBefore()
-      .moveToNode("endEvent").camundaAsyncBefore()
+      .flowNodeBuilder("startEvent").eximeeBpmsAsyncBefore()
+      .moveToNode("decisionTask").eximeeBpmsAsyncBefore()
+      .moveToNode("throwEvent").eximeeBpmsAsyncAfter()
+      .moveToNode("serviceTask").eximeeBpmsAsyncBefore()
+      .moveToNode("sendTask").eximeeBpmsAsyncBefore()
+      .moveToNode("scriptTask").eximeeBpmsAsyncBefore()
+      .moveToNode("endEvent").eximeeBpmsAsyncBefore()
       .done();
 
     assertGeneratedMigrationPlan(testModel, testModel)
@@ -224,13 +224,13 @@ public class MigrationPlanGenerationTest {
   @Test
   public void testMapEqualUnsupportedAsyncAfterActivities() {
     BpmnModelInstance testModel = modify(ProcessModels.UNSUPPORTED_ACTIVITIES)
-      .flowNodeBuilder("startEvent").camundaAsyncAfter()
-      .moveToNode("decisionTask").camundaAsyncAfter()
-      .moveToNode("throwEvent").camundaAsyncAfter()
-      .moveToNode("serviceTask").camundaAsyncAfter()
-      .moveToNode("sendTask").camundaAsyncAfter()
-      .moveToNode("scriptTask").camundaAsyncAfter()
-      .moveToNode("endEvent").camundaAsyncAfter()
+      .flowNodeBuilder("startEvent").eximeeBpmsAsyncAfter()
+      .moveToNode("decisionTask").eximeeBpmsAsyncAfter()
+      .moveToNode("throwEvent").eximeeBpmsAsyncAfter()
+      .moveToNode("serviceTask").eximeeBpmsAsyncAfter()
+      .moveToNode("sendTask").eximeeBpmsAsyncAfter()
+      .moveToNode("scriptTask").eximeeBpmsAsyncAfter()
+      .moveToNode("endEvent").eximeeBpmsAsyncAfter()
       .done();
 
     assertGeneratedMigrationPlan(testModel, testModel)
@@ -772,8 +772,8 @@ public class MigrationPlanGenerationTest {
     BpmnModelInstance targetModel = ProcessModels.newModel()
       .startEvent()
       .sendTask("externalTask")
-        .camundaType("external")
-        .camundaTopic("foo")
+        .eximeeBpmsType("external")
+        .eximeeBpmsTopic("foo")
       .endEvent()
       .done();
 

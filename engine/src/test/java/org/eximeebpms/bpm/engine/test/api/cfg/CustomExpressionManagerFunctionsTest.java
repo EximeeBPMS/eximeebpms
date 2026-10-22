@@ -55,9 +55,9 @@ public class CustomExpressionManagerFunctionsTest {
     // given
     processEngineConfiguration.getExpressionManager().addFunction("foobar", ReflectUtil.getMethod(TestFunctions.class, "foobar"));
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
        .startEvent()
-       .serviceTask().camundaExpression("${execution.setVariable(\"baz\", foobar())}")
+       .serviceTask().eximeeBpmsExpression("${execution.setVariable(\"baz\", foobar())}")
        .userTask()
        .endEvent()
        .done());
@@ -72,9 +72,9 @@ public class CustomExpressionManagerFunctionsTest {
     // given
     processEngineConfiguration.getExpressionManager().addFunction("foo:bar", ReflectUtil.getMethod(TestFunctions.class, "foobar"));
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent()
-        .serviceTask().camundaExpression("${execution.setVariable(\"baz\", foo:bar())}")
+        .serviceTask().eximeeBpmsExpression("${execution.setVariable(\"baz\", foo:bar())}")
         .userTask()
         .endEvent()
         .done());

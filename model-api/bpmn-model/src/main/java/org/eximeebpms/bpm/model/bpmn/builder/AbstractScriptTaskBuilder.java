@@ -65,8 +65,8 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
    * @param camundaResultVariable  the result variable to set
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
@@ -76,8 +76,8 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
    * @param camundaResource  the resource to set
    * @return the builder object
    */
-  public B camundaResource(String camundaResource) {
-    element.setCamundaResource(camundaResource);
+  public B eximeeBpmsResource(String camundaResource) {
+    element.setEximeeBpmsResource(camundaResource);
     return myself;
   }
 

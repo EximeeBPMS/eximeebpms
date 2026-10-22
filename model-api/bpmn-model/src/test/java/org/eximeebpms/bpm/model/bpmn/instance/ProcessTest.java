@@ -71,32 +71,32 @@ public class ProcessTest extends BpmnModelElementInstanceTest {
   @Test
   public void testCamundaJobPriority() {
     Process process = modelInstance.newInstance(Process.class);
-    assertThat(process.getCamundaJobPriority()).isNull();
+    assertThat(process.getEximeeBpmsJobPriority()).isNull();
 
-    process.setCamundaJobPriority("15");
+    process.setEximeeBpmsJobPriority("15");
 
-    assertThat(process.getCamundaJobPriority()).isEqualTo("15");
+    assertThat(process.getEximeeBpmsJobPriority()).isEqualTo("15");
   }
 
   @Test
   public void testCamundaTaskPriority() {
     //given
     Process proc = modelInstance.newInstance(Process.class);
-    assertThat(proc.getCamundaTaskPriority()).isNull();
+    assertThat(proc.getEximeeBpmsTaskPriority()).isNull();
     //when
-    proc.setCamundaTaskPriority(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
+    proc.setEximeeBpmsTaskPriority(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
     //then
-    assertThat(proc.getCamundaTaskPriority()).isEqualTo(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
+    assertThat(proc.getEximeeBpmsTaskPriority()).isEqualTo(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
   }
 
   @Test
   public void testCamundaHistoryTimeToLive() {
     //given
     Process proc = modelInstance.newInstance(Process.class);
-    assertThat(proc.getCamundaHistoryTimeToLive()).isNull();
+    assertThat(proc.getEximeeBpmsHistoryTimeToLiveString()).isNull();
     //when
-    proc.setCamundaHistoryTimeToLive(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
+    proc.setEximeeBpmsHistoryTimeToLiveString(String.valueOf(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE));
     //then
-    assertThat(proc.getCamundaHistoryTimeToLive()).isEqualTo(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
+    assertThat(proc.getEximeeBpmsHistoryTimeToLiveString()).isEqualTo(String.valueOf(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE));
   }
 }

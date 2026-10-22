@@ -50,8 +50,8 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaClass(Class camundaClass) {
-    return camundaClass(camundaClass.getName());
+  public B eximeeBpmsClass(Class camundaClass) {
+    return eximeeBpmsClass(camundaClass.getName());
   }
 
   /**
@@ -60,8 +60,8 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @param camundaClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B eximeeBpmsClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -71,8 +71,8 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @param camundaExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B eximeeBpmsDelegateExpression(String camundaExpression) {
+    element.setEximeeBpmsDelegateExpression(camundaExpression);
     return myself;
   }
 
@@ -82,7 +82,7 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @param camundaExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
+  public B eximeeBpmsExpression(String camundaExpression) {
     element.setEximeeBpmsExpression(camundaExpression);
     return myself;
   }
@@ -93,20 +93,20 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @param camundaResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B eximeeBpmsResultVariable(String camundaResultVariable) {
+    element.setEximeeBpmsResultVariable(camundaResultVariable);
     return myself;
   }
 
   /**
    * Sets the camunda topic attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    * @param camundaTopic the topic to set
    * @return the build object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B eximeeBpmsTopic(String camundaTopic) {
+    element.setEximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
@@ -116,46 +116,47 @@ public abstract class AbstractServiceTaskBuilder<B extends AbstractServiceTaskBu
    * @param camundaType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B eximeeBpmsType(String camundaType) {
+    element.setEximeeBpmsType(camundaType);
     return myself;
   }
 
   /**
    * Sets the camunda topic attribute and the camunda type attribute to the
-   * value <code>external</code. Reduces two calls to {@link #camundaType(String)} and {@link #camundaTopic(String)}.
+   * value <code>external</code. Reduces two calls to {@link #eximeeBpmsType(String)} and {@link #eximeeBpmsTopic(String)}.
    *
    * @param camundaTopic the topic to set
    * @return the build object
    */
-  public B camundaExternalTask(String camundaTopic) {
-    this.camundaType("external");
-    this.camundaTopic(camundaTopic);
+  public B eximeeBpmsExternalTask(String camundaTopic) {
+    this.eximeeBpmsType("external");
+    this.eximeeBpmsTopic(camundaTopic);
     return myself;
   }
 
   /**
    * Sets the camunda task priority attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    *
    * @param taskPriority the priority for the external task
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B eximeeBpmsTaskPriority(String taskPriority) {
+    element.setEximeeBpmsTaskPriority(taskPriority);
     return myself;
   }
 
   /**
    * Creates an error event definition for this service task and returns a builder for the error event definition.
-   * This is only meaningful when the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * This is only meaningful when the {@link #eximeeBpmsType(String)} attribute has the value <code>external</code>.
    *
    * @return the error event definition builder object
    */
-  public EximeeBpmsErrorEventDefinitionBuilder camundaErrorEventDefinition() {
+  public EximeeBpmsErrorEventDefinitionBuilder eximeeBpmsErrorEventDefinition() {
     ErrorEventDefinition camundaErrorEventDefinition = createInstance(EximeeBpmsErrorEventDefinition.class);
     addExtensionElement(camundaErrorEventDefinition);
     return new EximeeBpmsErrorEventDefinitionBuilder(modelInstance, camundaErrorEventDefinition);
   }
+
 }

@@ -38,41 +38,41 @@ public interface UserTask extends Task {
 
   /** camunda extensions */
 
-  String getCamundaAssignee();
+  String getEximeeBpmsAssignee();
 
-  void setCamundaAssignee(String camundaAssignee);
+  void setEximeeBpmsAssignee(String camundaAssignee);
 
-  String getCamundaCandidateGroups();
+  String getEximeeBpmsCandidateGroups();
 
-  void setCamundaCandidateGroups(String camundaCandidateGroups);
+  void setEximeeBpmsCandidateGroups(String camundaCandidateGroups);
 
-  List<String> getCamundaCandidateGroupsList();
+  List<String> getEximeeBpmsCandidateGroupsList();
 
-  void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList);
+  void setEximeeBpmsCandidateGroupsList(List<String> camundaCandidateGroupsList);
 
-  String getCamundaCandidateUsers();
+  String getEximeeBpmsCandidateUsers();
 
-  void setCamundaCandidateUsers(String camundaCandidateUsers);
+  void setEximeeBpmsCandidateUsers(String camundaCandidateUsers);
 
-  List<String> getCamundaCandidateUsersList();
+  List<String> getEximeeBpmsCandidateUsersList();
 
-  void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList);
+  void setEximeeBpmsCandidateUsersList(List<String> camundaCandidateUsersList);
 
-  String getCamundaDueDate();
+  String getEximeeBpmsDueDate();
 
-  void setCamundaDueDate(String camundaDueDate);
+  void setEximeeBpmsDueDate(String camundaDueDate);
 
-  String getCamundaFollowUpDate();
+  String getEximeeBpmsFollowUpDate();
 
-  void setCamundaFollowUpDate(String camundaFollowUpDate);
+  void setEximeeBpmsFollowUpDate(String camundaFollowUpDate);
 
-  String getCamundaFormHandlerClass();
+  String getEximeeBpmsFormHandlerClass();
 
-  void setCamundaFormHandlerClass(String camundaFormHandlerClass);
+  void setEximeeBpmsFormHandlerClass(String camundaFormHandlerClass);
 
-  String getCamundaFormKey();
+  String getEximeeBpmsFormKey();
 
-  void setCamundaFormKey(String camundaFormKey);
+  void setEximeeBpmsFormKey(String camundaFormKey);
 
   String getEximeeBpmsFormRef();
 
@@ -86,7 +86,8 @@ public interface UserTask extends Task {
 
   void setEximeeBpmsFormRefVersion(String camundaFormRefVersion);
 
-  String getCamundaPriority();
+  String getEximeeBpmsPriority();
 
-  void setCamundaPriority(String camundaPriority);
+  void setEximeeBpmsPriority(String camundaPriority);
+
 }

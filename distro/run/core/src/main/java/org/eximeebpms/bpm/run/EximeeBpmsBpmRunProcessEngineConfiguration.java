@@ -59,8 +59,8 @@ public class EximeeBpmsBpmRunProcessEngineConfiguration extends SpringProcessEng
   @Override
   protected void initTelemetryData() {
     super.initTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
-    camundaIntegration.add(EximeeBpmsIntegration.CAMUNDA_BPM_RUN);
+    Set<String> eximeebpmsIntegration = telemetryData.getProduct().getInternals().getEximeeBpmsIntegration();
+    eximeebpmsIntegration.add(EximeeBpmsIntegration.EXIMEEBPMS_BPM_RUN);
   }
 
   protected void configureProcessEnginePlugins(List<ProcessEnginePlugin> processEnginePluginsFromContext,

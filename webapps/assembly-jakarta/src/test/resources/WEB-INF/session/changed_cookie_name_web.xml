@@ -7,7 +7,7 @@
   <display-name>Camunda Platform webapp</display-name>
   
   <context-param>
-    <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
+    <param-name>org.eclipse.jetty.session.SessionCookie</param-name>
     <param-value>MYCOOKIENAME</param-value>
   </context-param>
 

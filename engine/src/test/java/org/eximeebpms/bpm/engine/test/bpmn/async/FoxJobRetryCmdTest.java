@@ -264,8 +264,8 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .intermediateThrowEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R10/PT5S")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R10/PT5S")
           .messageEventDefinition("messageDefinition")
             .message("message")
           .messageEventDefinitionDone()
@@ -273,7 +273,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
         .done();
 
     MessageEventDefinition messageDefinition = bpmnModelInstance.getModelElementById("messageDefinition");
-    messageDefinition.setCamundaClass(FailingDelegate.class.getName());
+    messageDefinition.setEximeeBpmsClass(FailingDelegate.class.getName());
 
    testRule.deploy(bpmnModelInstance);
 
@@ -348,9 +348,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .eximeeBpmsClass("foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -377,9 +377,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .eximeeBpmsClass("foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -406,9 +406,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .eximeeBpmsClass("foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -455,10 +455,10 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
   public void testRetryOnTimerStartEventWithExpression() {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .eximeeBpmsFailedJobRetryTimeCycle("${var}")
           .timerWithDuration("PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .eximeeBpmsClass("bar")
         .endEvent()
         .done();
 
@@ -482,10 +482,10 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
   public void testRetryOnAsyncStartEvent() throws Exception {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .eximeeBpmsClass("bar")
         .endEvent()
         .done();
 
@@ -521,9 +521,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
         .startEvent()
         .intermediateCatchEvent()
           .message("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -558,9 +558,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .endEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .done();
 
    testRule.deploy(bpmnModelInstance);
@@ -594,9 +594,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .exclusiveGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -631,9 +631,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .inclusiveGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -668,9 +668,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .eventBasedGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .intermediateCatchEvent()
           .condition("${true}")
         .endEvent()
@@ -707,9 +707,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .parallelGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R5/PT5M")
+          .eximeeBpmsExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -749,9 +749,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
           .boundaryEvent("timer")
           .cancelActivity(false)
           .timerWithCycle("R4/PT1M")
-          .camundaFailedJobRetryTimeCycle("R2/PT10M")
+          .eximeeBpmsFailedJobRetryTimeCycle("R2/PT10M")
         .serviceTask("failing")
-          .camundaClass("foo")
+          .eximeeBpmsClass("foo")
         .endEvent()
         .done();
 
@@ -800,14 +800,14 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
       .startEvent()
       .parallelGateway("gwt")
         .serviceTask("failing")
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R2/PT5M")
+          .eximeeBpmsClass("foo")
+          .eximeeBpmsAsyncBefore()
+          .eximeeBpmsFailedJobRetryTimeCycle("R2/PT5M")
       .moveToNode("gwt")
         .userTask("beforePassing")
         .serviceTask("passing")
-          .camundaExpression("${true}")
-          .camundaAsyncBefore()
+          .eximeeBpmsExpression("${true}")
+          .eximeeBpmsAsyncBefore()
         .userTask("afterPassing")
       .done();
 

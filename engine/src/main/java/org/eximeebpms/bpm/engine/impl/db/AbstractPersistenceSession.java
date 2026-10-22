@@ -99,7 +99,7 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaCreateBusinessEvent();
     }
 
-    if (processEngineConfiguration.isScriptSecurityEnabled()) {
+    if (!processEngineConfiguration.isScriptSecurityDisabled()) {
       dbSchemaCreateScriptSecurity();
     }
 
@@ -152,7 +152,7 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaDropBusinessEvent();
     }
 
-    if (processEngineConfiguration.isScriptSecurityEnabled()) {
+    if (!processEngineConfiguration.isScriptSecurityDisabled()) {
       dbSchemaDropScriptSecurity();
     }
 
@@ -220,7 +220,7 @@ public abstract class AbstractPersistenceSession implements PersistenceSession {
       dbSchemaCreateBusinessEvent();
     }
 
-    if (!isScriptViolationTablePresent() && processEngineConfiguration.isScriptSecurityEnabled()) {
+    if (!isScriptViolationTablePresent() && !processEngineConfiguration.isScriptSecurityDisabled()) {
       dbSchemaCreateScriptSecurity();
     }
 

@@ -25,8 +25,8 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsEntry extends BpmnModelElementInstance, EximeeBpmsGenericValueElement {
 
-  String getCamundaKey();
+  String getEximeeBpmsKey();
 
-  void setCamundaKey(String camundaKey);
+  void setEximeeBpmsKey(String camundaKey);
 
 }

@@ -140,7 +140,7 @@ public class MockTaskBuilder {
     return this;
   }
 
-  public MockTaskBuilder camundaFormRef(String key, String binding, Integer version) {
+  public MockTaskBuilder eximeeBpmsFormRef(String key, String binding, Integer version) {
     EximeeBpmsFormRefImpl camundaFormRef = new EximeeBpmsFormRefImpl(key, binding);
     camundaFormRef.setVersion(version);
     this.camundaFormRef = camundaFormRef;

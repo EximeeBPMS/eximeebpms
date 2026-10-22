@@ -39,11 +39,11 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
    * @param value the value of the input parameter
    * @return the builder object
    */
-  public B camundaInputParameter(String name, String value) {
+  public B eximeeBpmsInputParameter(String name, String value) {
     EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
     EximeeBpmsInputParameter camundaInputParameter = createChild(camundaInputOutput, EximeeBpmsInputParameter.class);
-    camundaInputParameter.setCamundaName(name);
+    camundaInputParameter.setEximeeBpmsName(name);
     camundaInputParameter.setTextContent(value);
 
     return myself;
@@ -57,11 +57,11 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
    * @param value the value of the output parameter
    * @return the builder object
    */
-  public B camundaOutputParameter(String name, String value) {
+  public B eximeeBpmsOutputParameter(String name, String value) {
     EximeeBpmsInputOutput camundaInputOutput = getCreateSingleExtensionElement(EximeeBpmsInputOutput.class);
 
     EximeeBpmsOutputParameter camundaOutputParameter = createChild(camundaInputOutput, EximeeBpmsOutputParameter.class);
-    camundaOutputParameter.setCamundaName(name);
+    camundaOutputParameter.setEximeeBpmsName(name);
     camundaOutputParameter.setTextContent(value);
 
     return myself;

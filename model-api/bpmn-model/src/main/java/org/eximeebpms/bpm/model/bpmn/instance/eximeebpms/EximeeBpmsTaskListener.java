@@ -27,21 +27,21 @@ import java.util.Collection;
  */
 public interface EximeeBpmsTaskListener extends BpmnModelElementInstance {
 
-  String getCamundaEvent();
+  String getEximeeBpmsEvent();
 
-  void setCamundaEvent(String camundaEvent);
+  void setEximeeBpmsEvent(String camundaEvent);
 
-  String getCamundaClass();
+  String getEximeeBpmsClass();
 
-  void setCamundaClass(String camundaClass);
+  void setEximeeBpmsClass(String camundaClass);
 
   String getEximeeBpmsExpression();
 
   void setEximeeBpmsExpression(String camundaExpression);
 
-  String getCamundaDelegateExpression();
+  String getEximeeBpmsDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaDelegateExpression);
+  void setEximeeBpmsDelegateExpression(String camundaDelegateExpression);
 
   Collection<EximeeBpmsField> getEximeeBpmsFields();
 

@@ -17,6 +17,8 @@
 package org.eximeebpms.bpm.engine.impl.history.event;
 import java.util.Date;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.eximeebpms.bpm.engine.job.JobState;
 import org.eximeebpms.bpm.engine.impl.context.Context;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ByteArrayEntity;
@@ -27,87 +29,67 @@ import org.eximeebpms.bpm.engine.impl.util.StringUtil;
  * @author Roman Smirnov
  *
  */
+@Getter
 public class HistoricJobLogEvent extends HistoryEvent {
 
   private static final long serialVersionUID = 1L;
 
+  @Setter
   protected Date timestamp;
 
+  @Setter
   protected String jobId;
 
+  @Setter
   protected Date jobDueDate;
 
+  @Setter
   protected int jobRetries;
 
+  @Setter
   protected long jobPriority;
 
   protected String jobExceptionMessage;
 
+  @Setter
   protected String exceptionByteArrayId;
 
+  /**
+   * Not persisted. Holds the stacktrace until the component that persists this
+   * event creates the byte array for it (BPMS-662).
+   */
+  @Setter
+  protected byte[] exceptionStacktraceBytes;
+
+  @Setter
   protected String jobDefinitionId;
 
+  @Setter
   protected String jobDefinitionType;
 
+  @Setter
   protected String jobDefinitionConfiguration;
 
+  @Setter
   protected String activityId;
 
+  @Setter
   protected String failedActivityId;
 
+  @Setter
   protected String deploymentId;
 
+  @Setter
   protected int state;
 
+  @Setter
   protected String tenantId;
 
+  @Setter
   protected String hostname;
 
+  @Setter
   protected String batchId;
-
-  public Date getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(Date timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public String getJobId() {
-    return jobId;
-  }
-
-  public void setJobId(String jobId) {
-    this.jobId = jobId;
-  }
-
-  public Date getJobDueDate() {
-    return jobDueDate;
-  }
-
-  public void setJobDueDate(Date jobDueDate) {
-    this.jobDueDate = jobDueDate;
-  }
-
-  public int getJobRetries() {
-    return jobRetries;
-  }
-
-  public void setJobRetries(int jobRetries) {
-    this.jobRetries = jobRetries;
-  }
-
-  public long getJobPriority() {
-    return jobPriority;
-  }
-
-  public void setJobPriority(long jobPriority) {
-    this.jobPriority = jobPriority;
-  }
-
-  public String getJobExceptionMessage() {
-    return jobExceptionMessage;
-  }
 
   public void setJobExceptionMessage(String jobExceptionMessage) {
     // note: it is not a clean way to truncate where the history event is produced, since truncation is only
@@ -115,14 +97,6 @@ public class HistoricJobLogEvent extends HistoryEvent {
     //   a similar problem exists in JobEntity#setExceptionMessage where truncation may not be required for custom
     //   persistence implementations
     this.jobExceptionMessage = StringUtil.trimToMaximumLengthAllowed(jobExceptionMessage);
-  }
-
-  public String getExceptionByteArrayId() {
-    return exceptionByteArrayId;
-  }
-
-  public void setExceptionByteArrayId(String exceptionByteArrayId) {
-    this.exceptionByteArrayId = exceptionByteArrayId;
   }
 
   public String getExceptionStacktrace() {
@@ -140,71 +114,6 @@ public class HistoricJobLogEvent extends HistoryEvent {
 
     return null;
   }
-
-  public String getJobDefinitionId() {
-    return jobDefinitionId;
-  }
-
-  public void setJobDefinitionId(String jobDefinitionId) {
-    this.jobDefinitionId = jobDefinitionId;
-  }
-
-  public String getJobDefinitionType() {
-    return jobDefinitionType;
-  }
-
-  public void setJobDefinitionType(String jobDefinitionType) {
-    this.jobDefinitionType = jobDefinitionType;
-  }
-
-  public String getJobDefinitionConfiguration() {
-    return jobDefinitionConfiguration;
-  }
-
-  public void setJobDefinitionConfiguration(String jobDefinitionConfiguration) {
-    this.jobDefinitionConfiguration = jobDefinitionConfiguration;
-  }
-
-  public String getActivityId() {
-    return activityId;
-  }
-
-  public void setActivityId(String activityId) {
-    this.activityId = activityId;
-  }
-
-  public String getDeploymentId() {
-    return deploymentId;
-  }
-
-  public void setDeploymentId(String deploymentId) {
-    this.deploymentId = deploymentId;
-  }
-
-  public int getState() {
-    return state;
-  }
-
-  public void setState(int state) {
-    this.state = state;
-  }
-
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  public String getHostname() {
-    return hostname;
-  }
-
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
-  }
-
   public boolean isCreationLog() {
     return state == JobState.CREATED.getStateCode();
   }
@@ -221,27 +130,4 @@ public class HistoricJobLogEvent extends HistoryEvent {
     return state == JobState.DELETED.getStateCode();
   }
 
-  public String getRootProcessInstanceId() {
-    return rootProcessInstanceId;
-  }
-
-  public void setRootProcessInstanceId(String rootProcessInstanceId) {
-    this.rootProcessInstanceId = rootProcessInstanceId;
-  }
-
-  public String getFailedActivityId() {
-    return failedActivityId;
-  }
-
-  public void setFailedActivityId(String failedActivityId) {
-    this.failedActivityId = failedActivityId;
-  }
-
-  public String getBatchId() {
-    return batchId;
-  }
-
-  public void setBatchId(String batchId) {
-    this.batchId = batchId;
-  }
 }

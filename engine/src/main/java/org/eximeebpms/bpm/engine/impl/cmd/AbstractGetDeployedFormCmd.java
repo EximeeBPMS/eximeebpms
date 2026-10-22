@@ -33,13 +33,13 @@ import org.eximeebpms.bpm.engine.repository.EximeeBpmsFormDefinition;
  */
 public abstract class AbstractGetDeployedFormCmd implements Command<InputStream> {
 
-  protected static String EMBEDDED_KEY = "embedded:";
-  protected static String CAMUNDA_FORMS_KEY = "eximeebpms-forms:";
-  protected static int EMBEDDED_KEY_LENGTH = EMBEDDED_KEY.length();
-  protected static int CAMUNDA_FORMS_KEY_LENGTH = CAMUNDA_FORMS_KEY.length();
+  private static final String EMBEDDED_KEY = "embedded:";
+  private static final String EXIMEEBPMS_FORMS_KEY = "eximeebpms-forms:";
+  private static final int EMBEDDED_KEY_LENGTH = EMBEDDED_KEY.length();
+  private static final int EXIMEEBPMS_FORMS_KEY_LENGTH = EXIMEEBPMS_FORMS_KEY.length();
 
-  protected static String DEPLOYMENT_KEY = "deployment:";
-  protected static int DEPLOYMENT_KEY_LENGTH = DEPLOYMENT_KEY.length();
+  private static final String DEPLOYMENT_KEY = "deployment:";
+  private static final int DEPLOYMENT_KEY_LENGTH = DEPLOYMENT_KEY.length();
 
   protected CommandContext commandContext;
 
@@ -49,12 +49,12 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
 
     final FormData formData = getFormData();
     String formKey = formData.getFormKey();
-    EximeeBpmsFormRef camundaFormRef = formData.getEximeeBpmsFormRef();
+    EximeeBpmsFormRef eximeeBpmsFormRef = formData.getEximeeBpmsFormRef();
 
     if (formKey != null) {
       return getResourceForFormKey(formData, formKey);
-    } else if(camundaFormRef != null && camundaFormRef.getKey() != null) {
-      return getResourceForEximeeBpmsFormRef(camundaFormRef, formData.getDeploymentId());
+    } else if(eximeeBpmsFormRef != null && eximeeBpmsFormRef.getKey() != null) {
+      return getResourceForEximeeBpmsFormRef(eximeeBpmsFormRef, formData.getDeploymentId());
     } else {
       throw new BadUserRequestException("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
     }
@@ -65,8 +65,8 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
 
     if (resourceName.startsWith(EMBEDDED_KEY)) {
       resourceName = resourceName.substring(EMBEDDED_KEY_LENGTH, resourceName.length());
-    } else if (resourceName.startsWith(CAMUNDA_FORMS_KEY)) {
-      resourceName = resourceName.substring(CAMUNDA_FORMS_KEY_LENGTH, resourceName.length());
+    } else if (resourceName.startsWith(EXIMEEBPMS_FORMS_KEY)) {
+      resourceName = resourceName.substring(EXIMEEBPMS_FORMS_KEY_LENGTH, resourceName.length());
     }
 
     if (!resourceName.startsWith(DEPLOYMENT_KEY)) {
@@ -78,13 +78,13 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
     return getDeploymentResource(formData.getDeploymentId(), resourceName);
   }
 
-  protected InputStream getResourceForEximeeBpmsFormRef(EximeeBpmsFormRef camundaFormRef,
+  protected InputStream getResourceForEximeeBpmsFormRef(EximeeBpmsFormRef eximeeBpmsFormRef,
       String deploymentId) {
     EximeeBpmsFormDefinition definition = commandContext.runWithoutAuthorization(
-        new GetEximeeBpmsFormDefinitionCmd(camundaFormRef, deploymentId));
+        new GetEximeeBpmsFormDefinitionCmd(eximeeBpmsFormRef, deploymentId));
 
     if (definition == null) {
-      throw new NotFoundException("No Camunda Form Definition was found for Camunda Form Ref: " + camundaFormRef);
+      throw new NotFoundException("No EximeeBPMS Form Definition was found for EximeeBPMS Form Ref: " + eximeeBpmsFormRef);
     }
 
     return getDeploymentResource(definition.getDeploymentId(), definition.getResourceName());

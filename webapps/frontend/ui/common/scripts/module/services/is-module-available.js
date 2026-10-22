@@ -19,8 +19,8 @@
 
 var angular = require('eximeebpms-commons-ui/vendor/angular');
 
-module.exports = function() {
-  return function(moduleName) {
+module.exports = function () {
+  return function (moduleName) {
     try {
       return !!angular.module(moduleName);
     } catch (err) {

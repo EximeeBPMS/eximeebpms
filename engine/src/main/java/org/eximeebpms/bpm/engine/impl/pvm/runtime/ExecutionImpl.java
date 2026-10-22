@@ -289,6 +289,16 @@ public class ExecutionImpl extends PvmExecutionImpl implements
     // do nothing
   }
 
+  @Override
+  public void fireBusinessProcessStartEvent() {
+    // do nothing
+  }
+
+  @Override
+  public void fireBusinessProcessInstanceUpdate() {
+    // do nothing
+  }
+
   protected void removeVariablesLocalInternal(){
     // do nothing
   }

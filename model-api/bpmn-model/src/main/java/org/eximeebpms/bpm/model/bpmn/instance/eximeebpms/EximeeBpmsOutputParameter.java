@@ -25,8 +25,8 @@ import org.eximeebpms.bpm.model.bpmn.instance.BpmnModelElementInstance;
  */
 public interface EximeeBpmsOutputParameter extends BpmnModelElementInstance, EximeeBpmsGenericValueElement {
 
-  String getCamundaName();
+  String getEximeeBpmsName();
 
-  void setCamundaName(String camundaName);
+  void setEximeeBpmsName(String camundaName);
 
 }

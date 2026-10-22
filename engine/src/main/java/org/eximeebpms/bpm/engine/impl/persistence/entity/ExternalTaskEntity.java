@@ -50,6 +50,8 @@ import org.eximeebpms.bpm.engine.impl.util.EnsureUtil;
 import org.eximeebpms.bpm.engine.impl.util.ExceptionUtil;
 import org.eximeebpms.bpm.engine.repository.ResourceTypes;
 import org.eximeebpms.bpm.engine.runtime.Incident;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Thorben Lindhauer
@@ -600,6 +602,11 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createExternalTaskCreatedBusinessEvent(ExternalTaskEntity.this);
       }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.EXTERNAL_TASK_CREATE;
+      }
     });
   }
 
@@ -608,6 +615,11 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createExternalTaskFailedBusinessEvent(ExternalTaskEntity.this);
+      }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.EXTERNAL_TASK_FAIL;
       }
     });
   }
@@ -618,6 +630,11 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createExternalTaskSuccessfulBusinessEvent(ExternalTaskEntity.this);
       }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.EXTERNAL_TASK_SUCCESS;
+      }
     });
   }
 
@@ -626,6 +643,11 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createExternalTaskDeletedBusinessEvent(ExternalTaskEntity.this);
+      }
+
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.EXTERNAL_TASK_DELETE;
       }
     });
   }

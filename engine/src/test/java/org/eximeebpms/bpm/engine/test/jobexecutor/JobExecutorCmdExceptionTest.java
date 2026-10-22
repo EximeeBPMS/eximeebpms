@@ -174,8 +174,8 @@ public class JobExecutorCmdExceptionTest extends PluggableProcessEngineTest {
    testRule.deploy(Bpmn.createExecutableProcess("testProcess")
         .startEvent()
         .serviceTask()
-          .camundaClass(FailingTransactionListenerDelegate.class.getName())
-          .camundaAsyncBefore()
+          .eximeeBpmsClass(FailingTransactionListenerDelegate.class.getName())
+          .eximeeBpmsAsyncBefore()
         .endEvent()
         .done());
 

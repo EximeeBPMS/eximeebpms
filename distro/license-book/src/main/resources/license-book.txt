@@ -2074,7 +2074,7 @@ Copyright (c) 2018 Oracle and/or its affiliates. All rights reserved.
 Licensed under BSD-3-Clause
 
 ===========================================================================================
-org.freemarker:freemarker:jar:2.3.31
+org.freemarker:freemarker:jar:2.3.35
 https://freemarker.apache.org/
 Copyright:  Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.

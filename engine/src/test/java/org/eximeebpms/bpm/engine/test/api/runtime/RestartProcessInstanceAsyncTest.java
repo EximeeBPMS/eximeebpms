@@ -361,7 +361,7 @@ public class RestartProcessInstanceAsyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -409,7 +409,7 @@ public class RestartProcessInstanceAsyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -965,7 +965,7 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldSkipCustomListeners() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
+        .eximeeBpmsExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process");
     ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process");
 
@@ -989,7 +989,7 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldSkipIoMappings() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(
-        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").camundaInputParameter("foo", "bar").done());
+        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").eximeeBpmsInputParameter("foo", "bar").done());
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process");
     ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process");
 

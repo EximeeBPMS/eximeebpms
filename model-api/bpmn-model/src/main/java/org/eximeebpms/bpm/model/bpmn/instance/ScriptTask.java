@@ -37,12 +37,12 @@ public interface ScriptTask extends Task {
 
   /** camunda extensions */
 
-  String getCamundaResultVariable();
+  String getEximeeBpmsResultVariable();
 
-  void setCamundaResultVariable(String camundaResultVariable);
+  void setEximeeBpmsResultVariable(String camundaResultVariable);
 
-  String getCamundaResource();
+  String getEximeeBpmsResource();
 
-  void setCamundaResource(String camundaResource);
+  void setEximeeBpmsResource(String camundaResource);
 
 }

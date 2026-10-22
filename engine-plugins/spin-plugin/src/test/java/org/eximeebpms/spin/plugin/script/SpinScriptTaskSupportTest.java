@@ -22,6 +22,7 @@ import org.eximeebpms.bpm.engine.RepositoryService;
 import org.eximeebpms.bpm.engine.RuntimeService;
 import org.eximeebpms.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.eximeebpms.bpm.engine.impl.scripting.env.ScriptingEnvironment;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.repository.Deployment;
 import org.eximeebpms.bpm.engine.runtime.ProcessInstance;
@@ -45,7 +46,7 @@ import org.junit.runners.Parameterized.Parameters;
 public class SpinScriptTaskSupportTest {
 
   private ProcessEngineConfigurationImpl processEngineConfiguration;
-  private boolean previousScriptSecurityEnabled;
+  private String previousScriptSecurityMode;
   private ScriptSecurityPolicy previousScriptSecurityPolicy;
   private ScriptingEnvironment previousScriptingEnvironment;
   private boolean previousConfigureScriptEngineHostAccess;
@@ -79,12 +80,12 @@ public class SpinScriptTaskSupportTest {
     this.repositoryService = engineRule.getRepositoryService();
 
     this.processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    this.previousScriptSecurityEnabled = processEngineConfiguration.isScriptSecurityEnabled();
+    this.previousScriptSecurityMode = processEngineConfiguration.getScriptSecurityMode();
     this.previousScriptSecurityPolicy = processEngineConfiguration.getScriptSecurityPolicy();
     this.previousScriptingEnvironment = processEngineConfiguration.getScriptingEnvironment();
     this.previousConfigureScriptEngineHostAccess = processEngineConfiguration.isConfigureScriptEngineHostAccess();
 
-    processEngineConfiguration.setScriptSecurityEnabled(false);
+    processEngineConfiguration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
     processEngineConfiguration.setConfigureScriptEngineHostAccess(true);
   }
 
@@ -92,7 +93,7 @@ public class SpinScriptTaskSupportTest {
   public void tearDown() {
     processEngineConfiguration.setScriptingEnvironment(previousScriptingEnvironment);
     processEngineConfiguration.setScriptSecurityPolicy(previousScriptSecurityPolicy);
-    processEngineConfiguration.setScriptSecurityEnabled(previousScriptSecurityEnabled);
+    processEngineConfiguration.setScriptSecurityMode(previousScriptSecurityMode);
     processEngineConfiguration.setConfigureScriptEngineHostAccess(previousConfigureScriptEngineHostAccess);
   }
 

@@ -28,6 +28,7 @@ import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.ProcessEngineException;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAwareExpressionManager;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -116,7 +117,7 @@ public class ProcessEngineConfigurationTest {
     ScriptSecurityAwareExpressionManager customExpressionManager = new ScriptSecurityAwareExpressionManager();
 
     ProcessEngineConfigurationImpl configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(true);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     configuration.setExpressionManager(customExpressionManager);
 
     // when

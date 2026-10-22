@@ -77,11 +77,11 @@ public class SignalEventDefinitionImpl extends EventDefinitionImpl implements Si
     signalRefAttribute.setReferenceTargetElement(this, signal);
   }
 
-  public boolean isCamundaAsync() {
+  public boolean isEximeeBpmsAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
 
-  public void setCamundaAsync(boolean camundaAsync) {
+  public void setEximeeBpmsAsync(boolean camundaAsync) {
     camundaAsyncAttribute.setValue(this, camundaAsync);
   }
 }

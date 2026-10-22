@@ -50,6 +50,8 @@ import org.eximeebpms.bpm.engine.impl.persistence.AbstractHistoricManager;
 import org.eximeebpms.bpm.engine.impl.repository.ResourceDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.util.PermissionConverter;
 import org.eximeebpms.bpm.engine.impl.util.StringUtil;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * Manager for {@link UserOperationLogEntryEventEntity} that also provides a generic and some specific log methods.
@@ -790,6 +792,11 @@ public class UserOperationLogManager extends AbstractHistoricManager {
     // relies on context.getOperationId() already being populated by the history event
     // producer call above, which assigns it as a side effect on this shared context
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.USER_OPERATION_LOG;
+      }
+
       @Override
       public List<BusinessEvent> createBusinessEvents(BusinessEventProducer producer) {
         return producer.createUserOperationLogEvents(context);

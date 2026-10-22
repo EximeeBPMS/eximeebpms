@@ -6,6 +6,7 @@ import org.eximeebpms.bpm.engine.impl.el.JuelExpressionManager;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityAwareExpressionManager;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityContext;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityDecision;
+import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityMode;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSecurityPolicy;
 import org.eximeebpms.bpm.engine.impl.scripting.security.ScriptSourceType;
 import org.eximeebpms.bpm.engine.impl.scripting.security.SecureJuelExpressionManager;
@@ -62,7 +63,7 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
   public void shouldUseSecureExpressionManagerWhenScriptSecurityIsEnabled() {
     // given
     ProcessEngineConfigurationImpl configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(true);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
 
     // when
     configuration.initBeans();
@@ -77,7 +78,7 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
   public void shouldUseDefaultExpressionManagerWhenScriptSecurityIsDisabled() {
     // given
     ProcessEngineConfigurationImpl configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(false);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.DISABLED.name());
 
     // when
     configuration.initBeans();
@@ -95,7 +96,7 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
     ScriptSecurityAwareExpressionManager customExpressionManager = new ScriptSecurityAwareExpressionManager();
 
     StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(true);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     configuration.setExpressionManager(customExpressionManager);
 
     // when
@@ -113,7 +114,7 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
     JuelExpressionManager customExpressionManager = new JuelExpressionManager();
 
     StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(true);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
     configuration.setExpressionManager(customExpressionManager);
 
     // when
@@ -129,7 +130,7 @@ public class ProcessEngineConfigurationScriptSecurityPolicyTest {
   public void shouldUseSecureJuelExpressionManagerWhenScriptSecurityIsEnabledAndExpressionManagerIsNotConfigured() {
     // given
     StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setScriptSecurityEnabled(true);
+    configuration.setScriptSecurityMode(ScriptSecurityMode.ENFORCE.name());
 
     // when
     configuration.initScriptSecurityPolicy();

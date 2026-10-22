@@ -17,11 +17,13 @@
 package org.eximeebpms.bpm.engine.impl;
 
 import java.net.URL;
+import java.util.Collection;
 import org.eximeebpms.bpm.application.impl.ProcessApplicationLogger;
 import org.eximeebpms.bpm.commons.eventbus.BusinessEventPublisher;
 import org.eximeebpms.bpm.container.impl.ContainerIntegrationLogger;
 import org.eximeebpms.bpm.engine.ProcessEngineConfiguration;
 import org.eximeebpms.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.BpmnParseLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.ConfigurationLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.TransactionLogger;
@@ -187,6 +189,49 @@ public class ProcessEngineLogger extends BaseLogger {
 
   public void failedToCloseBusinessEventPublisher(BusinessEventPublisher businessEventPublisher, Exception e) {
     logWarn("012", "Failed to close business event publisher '{}'", businessEventPublisher, e);
+  }
+
+  public void businessEventTypesFiltered(Collection<String> enabledTokens, Collection<String> disabledTokens,
+                                         Collection<String> effectiveTokens) {
+    logInfo(
+        "013",
+        "Business event types are filtered: enabledEventTypes={}, disabledEventTypes={}. "
+            + "{} of {} built-in event types will be published: {}",
+        enabledTokens,
+        disabledTokens,
+        effectiveTokens.size(),
+        BusinessEventTypes.getTokens().size(),
+        effectiveTokens
+    );
+  }
+
+  public void businessEventDispatcherStarted(int batchSize, long dispatchIntervalMs) {
+    logInfo("014", "Business event dispatcher started (batchSize={}, intervalMs={})", batchSize, dispatchIntervalMs);
+  }
+
+  public void businessEventDispatcherStopped() {
+    logInfo("015", "Business event dispatcher stopped");
+  }
+
+  public void businessEventDispatchCycleCompleted(int dispatched) {
+    logDebug("016", "Business event dispatch cycle complete, {} record(s) dispatched", dispatched);
+  }
+
+  public void businessEventDispatchCycleFailed(Exception e) {
+    logError("017", "Unexpected error during business event dispatch cycle", e);
+  }
+
+  public void publishingBusinessEvent(String outboxId) {
+    logDebug("018", "Publishing business event outbox record id={}", outboxId);
+  }
+
+  public void businessEventDispatchFailed(String outboxId, Long waitingMillis, String message, Throwable cause) {
+    logError("019", "Failed to dispatch business event outbox record id={} (waiting {} ms), stopping cycle: {}",
+        outboxId, waitingMillis, message, cause);
+  }
+
+  public void businessEventDispatchLockContention() {
+    logDebug("020", "Business event outbox is locked by another dispatcher (FOR UPDATE NOWAIT); skipping this cycle");
   }
 
 }

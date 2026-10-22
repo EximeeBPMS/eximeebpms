@@ -54,8 +54,8 @@ public class GetCompletedHistoricIncidentsForOptimizeTest {
     Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
       .startEvent("start")
       .serviceTask("task")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class.getName())
+        .eximeeBpmsAsyncBefore()
+        .eximeeBpmsClass(FailingDelegate.class.getName())
       .endEvent("end")
       .done();
 

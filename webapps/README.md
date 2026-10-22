@@ -37,7 +37,6 @@ See [plugin development guide](http://docs.eximeebpms.org/real-life/how-to/#cock
 #### Translations
 
 English and german translations are located in the `ui/<app>/client/locales` folders.  
-Translations for other languages are available in the [eximeebpms-webapp-translations](https://github.com/camunda-community-hub/camunda-7-webapp-translations) repository.
 
 ### Libraries
 
@@ -60,9 +59,12 @@ You need [node.js](http://nodejs.org) 20.14.0 and npm 10.7.0. Both are installed
 Start the backend and frontend dev servers in separate terminals:
 
 ```sh
-# Terminal 1 — backend (REST API + engine) on http://localhost:8080
-cd webapps/assembly-jakarta
-mvn jetty:run -Pdevelop
+# Terminal 1 — backend (REST API + engine) on http://localhost:8080, run from the repo root
+# (the fully-qualified goal is required here: Maven's "jetty:run" shorthand only resolves
+# against plugins declared in the project at the invocation directory — i.e. the repo root,
+# not the -pl-selected module — so it can't find this plugin without a personal, machine-local
+# <pluginGroups> entry in settings.xml, which we don't want every developer to have to add)
+mvn -pl webapps/assembly-jakarta -am org.eclipse.jetty.ee10:jetty-ee10-maven-plugin:run -Pdevelop
 
 # Terminal 2 — frontend dev server on http://localhost:8081
 cd webapps/frontend
@@ -72,7 +74,9 @@ npm start
 
 The webapps are then available at [http://localhost:8081/eximeebpms/app/cockpit/default/](http://localhost:8081/eximeebpms/app/cockpit/default/).
 
-Demo users created on first start (login = password): `demo`, `john`, `mary`, `peter`.
+Demo users created on first start (login = password): `demo`, `john`, `mary`, `peter` — these have access to Cockpit, Tasklist and Admin, but no rights to manage authorizations.
+
+An initial admin user `jonny1` / `jonny1` is also created on first start (via the Admin webapp's setup flow) and is a member of the `camunda-admin` group with `ALL` permissions on every resource, including `AUTHORIZATION`. Use this account to manage users, groups and permissions in the Admin webapp.
 
 ## Browsers support
 

@@ -176,189 +176,174 @@ public class EximeeBpmsExtensionsTest {
 
   @Test
   public void testAssignee() {
-    assertThat(userTask.getCamundaAssignee()).isEqualTo(TEST_STRING_XML);
-    userTask.setCamundaAssignee(TEST_STRING_API);
-    assertThat(userTask.getCamundaAssignee()).isEqualTo(TEST_STRING_API);
-  }
-
-  @Test
-  public void testAsync() {
-    assertThat(startEvent.isCamundaAsync()).isFalse();
-    assertThat(userTask.isCamundaAsync()).isTrue();
-    assertThat(parallelGateway.isCamundaAsync()).isTrue();
-
-    startEvent.setCamundaAsync(true);
-    userTask.setCamundaAsync(false);
-    parallelGateway.setCamundaAsync(false);
-
-    assertThat(startEvent.isCamundaAsync()).isTrue();
-    assertThat(userTask.isCamundaAsync()).isFalse();
-    assertThat(parallelGateway.isCamundaAsync()).isFalse();
+    assertThat(userTask.getEximeeBpmsAssignee()).isEqualTo(TEST_STRING_XML);
+    userTask.setEximeeBpmsAssignee(TEST_STRING_API);
+    assertThat(userTask.getEximeeBpmsAssignee()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testAsyncBefore() {
-    assertThat(startEvent.isCamundaAsyncBefore()).isTrue();
-    assertThat(endEvent.isCamundaAsyncBefore()).isTrue();
-    assertThat(userTask.isCamundaAsyncBefore()).isTrue();
-    assertThat(parallelGateway.isCamundaAsyncBefore()).isTrue();
+    assertThat(startEvent.isEximeeBpmsAsyncBefore()).isTrue();
+    assertThat(endEvent.isEximeeBpmsAsyncBefore()).isTrue();
+    assertThat(userTask.isEximeeBpmsAsyncBefore()).isTrue();
+    assertThat(parallelGateway.isEximeeBpmsAsyncBefore()).isTrue();
 
-    startEvent.setCamundaAsyncBefore(false);
-    endEvent.setCamundaAsyncBefore(false);
-    userTask.setCamundaAsyncBefore(false);
-    parallelGateway.setCamundaAsyncBefore(false);
+    startEvent.setEximeeBpmsAsyncBefore(false);
+    endEvent.setEximeeBpmsAsyncBefore(false);
+    userTask.setEximeeBpmsAsyncBefore(false);
+    parallelGateway.setEximeeBpmsAsyncBefore(false);
 
-    assertThat(startEvent.isCamundaAsyncBefore()).isFalse();
-    assertThat(endEvent.isCamundaAsyncBefore()).isFalse();
-    assertThat(userTask.isCamundaAsyncBefore()).isFalse();
-    assertThat(parallelGateway.isCamundaAsyncBefore()).isFalse();
+    assertThat(startEvent.isEximeeBpmsAsyncBefore()).isFalse();
+    assertThat(endEvent.isEximeeBpmsAsyncBefore()).isFalse();
+    assertThat(userTask.isEximeeBpmsAsyncBefore()).isFalse();
+    assertThat(parallelGateway.isEximeeBpmsAsyncBefore()).isFalse();
   }
 
   @Test
   public void testAsyncAfter() {
-    assertThat(startEvent.isCamundaAsyncAfter()).isTrue();
-    assertThat(endEvent.isCamundaAsyncAfter()).isTrue();
-    assertThat(userTask.isCamundaAsyncAfter()).isTrue();
-    assertThat(parallelGateway.isCamundaAsyncAfter()).isTrue();
+    assertThat(startEvent.isEximeeBpmsAsyncAfter()).isTrue();
+    assertThat(endEvent.isEximeeBpmsAsyncAfter()).isTrue();
+    assertThat(userTask.isEximeeBpmsAsyncAfter()).isTrue();
+    assertThat(parallelGateway.isEximeeBpmsAsyncAfter()).isTrue();
 
-    startEvent.setCamundaAsyncAfter(false);
-    endEvent.setCamundaAsyncAfter(false);
-    userTask.setCamundaAsyncAfter(false);
-    parallelGateway.setCamundaAsyncAfter(false);
+    startEvent.setEximeeBpmsAsyncAfter(false);
+    endEvent.setEximeeBpmsAsyncAfter(false);
+    userTask.setEximeeBpmsAsyncAfter(false);
+    parallelGateway.setEximeeBpmsAsyncAfter(false);
 
-    assertThat(startEvent.isCamundaAsyncAfter()).isFalse();
-    assertThat(endEvent.isCamundaAsyncAfter()).isFalse();
-    assertThat(userTask.isCamundaAsyncAfter()).isFalse();
-    assertThat(parallelGateway.isCamundaAsyncAfter()).isFalse();
+    assertThat(startEvent.isEximeeBpmsAsyncAfter()).isFalse();
+    assertThat(endEvent.isEximeeBpmsAsyncAfter()).isFalse();
+    assertThat(userTask.isEximeeBpmsAsyncAfter()).isFalse();
+    assertThat(parallelGateway.isEximeeBpmsAsyncAfter()).isFalse();
   }
 
   @Test
   public void testFlowNodeJobPriority() {
-    assertThat(startEvent.getCamundaJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
-    assertThat(endEvent.getCamundaJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
-    assertThat(userTask.getCamundaJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
-    assertThat(parallelGateway.getCamundaJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
+    assertThat(startEvent.getEximeeBpmsJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
+    assertThat(endEvent.getEximeeBpmsJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
+    assertThat(userTask.getEximeeBpmsJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
+    assertThat(parallelGateway.getEximeeBpmsJobPriority()).isEqualTo(TEST_FLOW_NODE_JOB_PRIORITY);
   }
 
   @Test
   public void testProcessJobPriority() {
-    assertThat(process.getCamundaJobPriority()).isEqualTo(TEST_PROCESS_JOB_PRIORITY);
+    assertThat(process.getEximeeBpmsJobPriority()).isEqualTo(TEST_PROCESS_JOB_PRIORITY);
   }
 
   @Test
   public void testProcessTaskPriority() {
-    assertThat(process.getCamundaTaskPriority()).isEqualTo(TEST_PROCESS_TASK_PRIORITY);
+    assertThat(process.getEximeeBpmsTaskPriority()).isEqualTo(TEST_PROCESS_TASK_PRIORITY);
   }
 
   @Test
   public void testHistoryTimeToLive() {
-    assertThat(process.getCamundaHistoryTimeToLive()).isEqualTo(TEST_HISTORY_TIME_TO_LIVE);
+    assertThat(process.getEximeeBpmsHistoryTimeToLiveString()).isEqualTo(String.valueOf(TEST_HISTORY_TIME_TO_LIVE));
   }
 
   @Test
   public void testIsStartableInTasklist() {
-    assertThat(process.isCamundaStartableInTasklist()).isEqualTo(false);
+    assertThat(process.isEximeeBpmsStartableInTasklist()).isFalse();
   }
 
   @Test
   public void testVersionTag() {
-    assertThat(process.getCamundaVersionTag()).isEqualTo("v1.0.0");
+    assertThat(process.getEximeeBpmsVersionTag()).isEqualTo("v1.0.0");
   }
 
   @Test
   public void testServiceTaskPriority() {
-    assertThat(serviceTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(serviceTask.getEximeeBpmsTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
   }
 
   @Test
   public void testCalledElementBinding() {
-    assertThat(callActivity.getCamundaCalledElementBinding()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCalledElementBinding(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCalledElementBinding()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementBinding()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCalledElementBinding(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementBinding()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCalledElementVersion() {
-    assertThat(callActivity.getCamundaCalledElementVersion()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCalledElementVersion(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCalledElementVersion()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementVersion()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCalledElementVersion(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementVersion()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCalledElementVersionTag() {
-    assertThat(callActivity.getCamundaCalledElementVersionTag()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCalledElementVersionTag(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCalledElementVersionTag()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementVersionTag()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCalledElementVersionTag(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementVersionTag()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCalledElementTenantId() {
-    assertThat(callActivity.getCamundaCalledElementTenantId()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCalledElementTenantId(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCalledElementTenantId()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementTenantId()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCalledElementTenantId(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCalledElementTenantId()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCaseRef() {
-    assertThat(callActivity.getCamundaCaseRef()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCaseRef(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCaseRef()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseRef()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCaseRef(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseRef()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCaseBinding() {
-    assertThat(callActivity.getCamundaCaseBinding()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCaseBinding(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCaseBinding()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseBinding()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCaseBinding(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseBinding()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCaseVersion() {
-    assertThat(callActivity.getCamundaCaseVersion()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCaseVersion(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCaseVersion()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseVersion()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCaseVersion(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseVersion()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testCaseTenantId() {
-    assertThat(callActivity.getCamundaCaseTenantId()).isEqualTo(TEST_STRING_XML);
-    callActivity.setCamundaCaseTenantId(TEST_STRING_API);
-    assertThat(callActivity.getCamundaCaseTenantId()).isEqualTo(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseTenantId()).isEqualTo(TEST_STRING_XML);
+    callActivity.setEximeeBpmsCaseTenantId(TEST_STRING_API);
+    assertThat(callActivity.getEximeeBpmsCaseTenantId()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testDecisionRef() {
-    assertThat(businessRuleTask.getCamundaDecisionRef()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaDecisionRef(TEST_STRING_API);
-    assertThat(businessRuleTask.getCamundaDecisionRef()).isEqualTo(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRef()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsDecisionRef(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRef()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testDecisionRefBinding() {
-    assertThat(businessRuleTask.getCamundaDecisionRefBinding()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaDecisionRefBinding(TEST_STRING_API);
-    assertThat(businessRuleTask.getCamundaDecisionRefBinding()).isEqualTo(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefBinding()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsDecisionRefBinding(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefBinding()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testDecisionRefVersion() {
-    assertThat(businessRuleTask.getCamundaDecisionRefVersion()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaDecisionRefVersion(TEST_STRING_API);
-    assertThat(businessRuleTask.getCamundaDecisionRefVersion()).isEqualTo(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefVersion()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsDecisionRefVersion(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefVersion()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testDecisionRefVersionTag() {
-    assertThat(businessRuleTask.getCamundaDecisionRefVersionTag()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaDecisionRefVersionTag(TEST_STRING_API);
-    assertThat(businessRuleTask.getCamundaDecisionRefVersionTag()).isEqualTo(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefVersionTag()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsDecisionRefVersionTag(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefVersionTag()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testDecisionRefTenantId() {
-    assertThat(businessRuleTask.getCamundaDecisionRefTenantId()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaDecisionRefTenantId(TEST_STRING_API);
-    assertThat(businessRuleTask.getCamundaDecisionRefTenantId()).isEqualTo(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefTenantId()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsDecisionRefTenantId(TEST_STRING_API);
+    assertThat(businessRuleTask.getEximeeBpmsDecisionRefTenantId()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
@@ -371,88 +356,88 @@ public class EximeeBpmsExtensionsTest {
 
   @Test
   public void testTaskPriority() {
-    assertThat(businessRuleTask.getCamundaTaskPriority()).isEqualTo(TEST_STRING_XML);
-    businessRuleTask.setCamundaTaskPriority(TEST_SERVICE_TASK_PRIORITY);
-    assertThat(businessRuleTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(businessRuleTask.getEximeeBpmsTaskPriority()).isEqualTo(TEST_STRING_XML);
+    businessRuleTask.setEximeeBpmsTaskPriority(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(businessRuleTask.getEximeeBpmsTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
   }
 
   @Test
   public void testCandidateGroups() {
-    assertThat(userTask.getCamundaCandidateGroups()).isEqualTo(TEST_GROUPS_XML);
-    assertThat(userTask.getCamundaCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
-    userTask.setCamundaCandidateGroups(TEST_GROUPS_API);
-    assertThat(userTask.getCamundaCandidateGroups()).isEqualTo(TEST_GROUPS_API);
-    assertThat(userTask.getCamundaCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_API);
-    userTask.setCamundaCandidateGroupsList(TEST_GROUPS_LIST_XML);
-    assertThat(userTask.getCamundaCandidateGroups()).isEqualTo(TEST_GROUPS_XML);
-    assertThat(userTask.getCamundaCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
+    assertThat(userTask.getEximeeBpmsCandidateGroups()).isEqualTo(TEST_GROUPS_XML);
+    assertThat(userTask.getEximeeBpmsCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
+    userTask.setEximeeBpmsCandidateGroups(TEST_GROUPS_API);
+    assertThat(userTask.getEximeeBpmsCandidateGroups()).isEqualTo(TEST_GROUPS_API);
+    assertThat(userTask.getEximeeBpmsCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_API);
+    userTask.setEximeeBpmsCandidateGroupsList(TEST_GROUPS_LIST_XML);
+    assertThat(userTask.getEximeeBpmsCandidateGroups()).isEqualTo(TEST_GROUPS_XML);
+    assertThat(userTask.getEximeeBpmsCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
   }
 
   @Test
   public void testCandidateStarterGroups() {
-    assertThat(process.getCamundaCandidateStarterGroups()).isEqualTo(TEST_GROUPS_XML);
-    assertThat(process.getCamundaCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
-    process.setCamundaCandidateStarterGroups(TEST_GROUPS_API);
-    assertThat(process.getCamundaCandidateStarterGroups()).isEqualTo(TEST_GROUPS_API);
-    assertThat(process.getCamundaCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_API);
-    process.setCamundaCandidateStarterGroupsList(TEST_GROUPS_LIST_XML);
-    assertThat(process.getCamundaCandidateStarterGroups()).isEqualTo(TEST_GROUPS_XML);
-    assertThat(process.getCamundaCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterGroups()).isEqualTo(TEST_GROUPS_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
+    process.setEximeeBpmsCandidateStarterGroups(TEST_GROUPS_API);
+    assertThat(process.getEximeeBpmsCandidateStarterGroups()).isEqualTo(TEST_GROUPS_API);
+    assertThat(process.getEximeeBpmsCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_API);
+    process.setEximeeBpmsCandidateStarterGroupsList(TEST_GROUPS_LIST_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterGroups()).isEqualTo(TEST_GROUPS_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterGroupsList()).containsAll(TEST_GROUPS_LIST_XML);
   }
 
   @Test
   public void testCandidateStarterUsers() {
-    assertThat(process.getCamundaCandidateStarterUsers()).isEqualTo(TEST_USERS_XML);
-    assertThat(process.getCamundaCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_XML);
-    process.setCamundaCandidateStarterUsers(TEST_USERS_API);
-    assertThat(process.getCamundaCandidateStarterUsers()).isEqualTo(TEST_USERS_API);
-    assertThat(process.getCamundaCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_API);
-    process.setCamundaCandidateStarterUsersList(TEST_USERS_LIST_XML);
-    assertThat(process.getCamundaCandidateStarterUsers()).isEqualTo(TEST_USERS_XML);
-    assertThat(process.getCamundaCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterUsers()).isEqualTo(TEST_USERS_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_XML);
+    process.setEximeeBpmsCandidateStarterUsers(TEST_USERS_API);
+    assertThat(process.getEximeeBpmsCandidateStarterUsers()).isEqualTo(TEST_USERS_API);
+    assertThat(process.getEximeeBpmsCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_API);
+    process.setEximeeBpmsCandidateStarterUsersList(TEST_USERS_LIST_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterUsers()).isEqualTo(TEST_USERS_XML);
+    assertThat(process.getEximeeBpmsCandidateStarterUsersList()).containsAll(TEST_USERS_LIST_XML);
   }
 
   @Test
   public void testCandidateUsers() {
-    assertThat(userTask.getCamundaCandidateUsers()).isEqualTo(TEST_USERS_XML);
-    assertThat(userTask.getCamundaCandidateUsersList()).containsAll(TEST_USERS_LIST_XML);
-    userTask.setCamundaCandidateUsers(TEST_USERS_API);
-    assertThat(userTask.getCamundaCandidateUsers()).isEqualTo(TEST_USERS_API);
-    assertThat(userTask.getCamundaCandidateUsersList()).containsAll(TEST_USERS_LIST_API);
-    userTask.setCamundaCandidateUsersList(TEST_USERS_LIST_XML);
-    assertThat(userTask.getCamundaCandidateUsers()).isEqualTo(TEST_USERS_XML);
-    assertThat(userTask.getCamundaCandidateUsersList()).containsAll(TEST_USERS_LIST_XML);
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isEqualTo(TEST_USERS_XML);
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).containsAll(TEST_USERS_LIST_XML);
+    userTask.setEximeeBpmsCandidateUsers(TEST_USERS_API);
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isEqualTo(TEST_USERS_API);
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).containsAll(TEST_USERS_LIST_API);
+    userTask.setEximeeBpmsCandidateUsersList(TEST_USERS_LIST_XML);
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isEqualTo(TEST_USERS_XML);
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).containsAll(TEST_USERS_LIST_XML);
   }
 
   @Test
   public void testClass() {
-    assertThat(serviceTask.getCamundaClass()).isEqualTo(TEST_CLASS_XML);
-    assertThat(messageEventDefinition.getCamundaClass()).isEqualTo(TEST_CLASS_XML);
+    assertThat(serviceTask.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_XML);
+    assertThat(messageEventDefinition.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_XML);
 
-    serviceTask.setCamundaClass(TEST_CLASS_API);
-    messageEventDefinition.setCamundaClass(TEST_CLASS_API);
+    serviceTask.setEximeeBpmsClass(TEST_CLASS_API);
+    messageEventDefinition.setEximeeBpmsClass(TEST_CLASS_API);
 
-    assertThat(serviceTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(messageEventDefinition.getCamundaClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(serviceTask.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(messageEventDefinition.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_API);
   }
 
   @Test
   public void testDelegateExpression() {
-    assertThat(serviceTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
-    assertThat(messageEventDefinition.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
+    assertThat(serviceTask.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
+    assertThat(messageEventDefinition.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
 
-    serviceTask.setCamundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
-    messageEventDefinition.setCamundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
+    serviceTask.setEximeeBpmsDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
+    messageEventDefinition.setEximeeBpmsDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
 
-    assertThat(serviceTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(messageEventDefinition.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(serviceTask.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(messageEventDefinition.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
   }
 
   @Test
   public void testDueDate() {
-    assertThat(userTask.getCamundaDueDate()).isEqualTo(TEST_DUE_DATE_XML);
-    userTask.setCamundaDueDate(TEST_DUE_DATE_API);
-    assertThat(userTask.getCamundaDueDate()).isEqualTo(TEST_DUE_DATE_API);
+    assertThat(userTask.getEximeeBpmsDueDate()).isEqualTo(TEST_DUE_DATE_XML);
+    userTask.setEximeeBpmsDueDate(TEST_DUE_DATE_API);
+    assertThat(userTask.getEximeeBpmsDueDate()).isEqualTo(TEST_DUE_DATE_API);
   }
 
   @Test
@@ -469,24 +454,24 @@ public class EximeeBpmsExtensionsTest {
 
   @Test
   public void testErrorMessage() {
-    assertThat(error.getCamundaErrorMessage()).isEqualTo(TEST_STRING_XML);
-    error.setCamundaErrorMessage(TEST_STRING_API);
-    assertThat(error.getCamundaErrorMessage()).isEqualTo(TEST_STRING_API);
+    assertThat(error.getEximeeBpmsErrorMessage()).isEqualTo(TEST_STRING_XML);
+    error.setEximeeBpmsErrorMessage(TEST_STRING_API);
+    assertThat(error.getEximeeBpmsErrorMessage()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testExclusive() {
-    assertThat(startEvent.isCamundaExclusive()).isTrue();
-    assertThat(userTask.isCamundaExclusive()).isFalse();
-    userTask.setCamundaExclusive(true);
-    assertThat(userTask.isCamundaExclusive()).isTrue();
-    assertThat(parallelGateway.isCamundaExclusive()).isTrue();
-    parallelGateway.setCamundaExclusive(false);
-    assertThat(parallelGateway.isCamundaExclusive()).isFalse();
+    assertThat(startEvent.isEximeeBpmsExclusive()).isTrue();
+    assertThat(userTask.isEximeeBpmsExclusive()).isFalse();
+    userTask.setEximeeBpmsExclusive(true);
+    assertThat(userTask.isEximeeBpmsExclusive()).isTrue();
+    assertThat(parallelGateway.isEximeeBpmsExclusive()).isTrue();
+    parallelGateway.setEximeeBpmsExclusive(false);
+    assertThat(parallelGateway.isEximeeBpmsExclusive()).isFalse();
 
-    assertThat(callActivity.isCamundaExclusive()).isFalse();
-    callActivity.setCamundaExclusive(true);
-    assertThat(callActivity.isCamundaExclusive()).isTrue();
+    assertThat(callActivity.isEximeeBpmsExclusive()).isFalse();
+    callActivity.setEximeeBpmsExclusive(true);
+    assertThat(callActivity.isEximeeBpmsExclusive()).isTrue();
   }
 
   @Test
@@ -501,81 +486,81 @@ public class EximeeBpmsExtensionsTest {
 
   @Test
   public void testFormHandlerClass() {
-    assertThat(startEvent.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_XML);
-    assertThat(userTask.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_XML);
-    startEvent.setCamundaFormHandlerClass(TEST_CLASS_API);
-    userTask.setCamundaFormHandlerClass(TEST_CLASS_API);
-    assertThat(startEvent.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(userTask.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(startEvent.getEximeeBpmsFormHandlerClass()).isEqualTo(TEST_CLASS_XML);
+    assertThat(userTask.getEximeeBpmsFormHandlerClass()).isEqualTo(TEST_CLASS_XML);
+    startEvent.setEximeeBpmsFormHandlerClass(TEST_CLASS_API);
+    userTask.setEximeeBpmsFormHandlerClass(TEST_CLASS_API);
+    assertThat(startEvent.getEximeeBpmsFormHandlerClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(userTask.getEximeeBpmsFormHandlerClass()).isEqualTo(TEST_CLASS_API);
   }
 
   @Test
   public void testFormKey() {
-    assertThat(startEvent.getCamundaFormKey()).isEqualTo(TEST_STRING_XML);
-    assertThat(userTask.getCamundaFormKey()).isEqualTo(TEST_STRING_XML);
-    startEvent.setCamundaFormKey(TEST_STRING_API);
-    userTask.setCamundaFormKey(TEST_STRING_API);
-    assertThat(startEvent.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
-    assertThat(userTask.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
+    assertThat(startEvent.getEximeeBpmsFormKey()).isEqualTo(TEST_STRING_XML);
+    assertThat(userTask.getEximeeBpmsFormKey()).isEqualTo(TEST_STRING_XML);
+    startEvent.setEximeeBpmsFormKey(TEST_STRING_API);
+    userTask.setEximeeBpmsFormKey(TEST_STRING_API);
+    assertThat(startEvent.getEximeeBpmsFormKey()).isEqualTo(TEST_STRING_API);
+    assertThat(userTask.getEximeeBpmsFormKey()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testInitiator() {
-    assertThat(startEvent.getCamundaInitiator()).isEqualTo(TEST_STRING_XML);
-    startEvent.setCamundaInitiator(TEST_STRING_API);
-    assertThat(startEvent.getCamundaInitiator()).isEqualTo(TEST_STRING_API);
+    assertThat(startEvent.getEximeeBpmsInitiator()).isEqualTo(TEST_STRING_XML);
+    startEvent.setEximeeBpmsInitiator(TEST_STRING_API);
+    assertThat(startEvent.getEximeeBpmsInitiator()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testPriority() {
-    assertThat(userTask.getCamundaPriority()).isEqualTo(TEST_PRIORITY_XML);
-    userTask.setCamundaPriority(TEST_PRIORITY_API);
-    assertThat(userTask.getCamundaPriority()).isEqualTo(TEST_PRIORITY_API);
+    assertThat(userTask.getEximeeBpmsPriority()).isEqualTo(TEST_PRIORITY_XML);
+    userTask.setEximeeBpmsPriority(TEST_PRIORITY_API);
+    assertThat(userTask.getEximeeBpmsPriority()).isEqualTo(TEST_PRIORITY_API);
   }
 
   @Test
   public void testResultVariable() {
-    assertThat(serviceTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_XML);
-    assertThat(messageEventDefinition.getCamundaResultVariable()).isEqualTo(TEST_STRING_XML);
-    serviceTask.setCamundaResultVariable(TEST_STRING_API);
-    messageEventDefinition.setCamundaResultVariable(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
-    assertThat(messageEventDefinition.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsResultVariable()).isEqualTo(TEST_STRING_XML);
+    assertThat(messageEventDefinition.getEximeeBpmsResultVariable()).isEqualTo(TEST_STRING_XML);
+    serviceTask.setEximeeBpmsResultVariable(TEST_STRING_API);
+    messageEventDefinition.setEximeeBpmsResultVariable(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsResultVariable()).isEqualTo(TEST_STRING_API);
+    assertThat(messageEventDefinition.getEximeeBpmsResultVariable()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testType() {
-    assertThat(serviceTask.getCamundaType()).isEqualTo(TEST_TYPE_XML);
-    assertThat(messageEventDefinition.getCamundaType()).isEqualTo(TEST_STRING_XML);
-    serviceTask.setCamundaType(TEST_TYPE_API);
-    messageEventDefinition.setCamundaType(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaType()).isEqualTo(TEST_TYPE_API);
-    assertThat(messageEventDefinition.getCamundaType()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsType()).isEqualTo(TEST_TYPE_XML);
+    assertThat(messageEventDefinition.getEximeeBpmsType()).isEqualTo(TEST_STRING_XML);
+    serviceTask.setEximeeBpmsType(TEST_TYPE_API);
+    messageEventDefinition.setEximeeBpmsType(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsType()).isEqualTo(TEST_TYPE_API);
+    assertThat(messageEventDefinition.getEximeeBpmsType()).isEqualTo(TEST_STRING_API);
 
   }
 
   @Test
   public void testTopic() {
-    assertThat(serviceTask.getCamundaTopic()).isEqualTo(TEST_STRING_XML);
-    assertThat(messageEventDefinition.getCamundaTopic()).isEqualTo(TEST_STRING_XML);
-    serviceTask.setCamundaTopic(TEST_TYPE_API);
-    messageEventDefinition.setCamundaTopic(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaTopic()).isEqualTo(TEST_TYPE_API);
-    assertThat(messageEventDefinition.getCamundaTopic()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsTopic()).isEqualTo(TEST_STRING_XML);
+    assertThat(messageEventDefinition.getEximeeBpmsTopic()).isEqualTo(TEST_STRING_XML);
+    serviceTask.setEximeeBpmsTopic(TEST_TYPE_API);
+    messageEventDefinition.setEximeeBpmsTopic(TEST_STRING_API);
+    assertThat(serviceTask.getEximeeBpmsTopic()).isEqualTo(TEST_TYPE_API);
+    assertThat(messageEventDefinition.getEximeeBpmsTopic()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testVariableMappingClass() {
-    assertThat(callActivity.getCamundaVariableMappingClass()).isEqualTo(TEST_CLASS_XML);
-    callActivity.setCamundaVariableMappingClass(TEST_CLASS_API);
-    assertThat(callActivity.getCamundaVariableMappingClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(callActivity.getEximeeBpmsVariableMappingClass()).isEqualTo(TEST_CLASS_XML);
+    callActivity.setEximeeBpmsVariableMappingClass(TEST_CLASS_API);
+    assertThat(callActivity.getEximeeBpmsVariableMappingClass()).isEqualTo(TEST_CLASS_API);
   }
 
   @Test
   public void testVariableMappingDelegateExpression() {
-    assertThat(callActivity.getCamundaVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
-    callActivity.setCamundaVariableMappingDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(callActivity.getCamundaVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(callActivity.getEximeeBpmsVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
+    callActivity.setEximeeBpmsVariableMappingDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(callActivity.getEximeeBpmsVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
   }
 
   @Test
@@ -583,24 +568,24 @@ public class EximeeBpmsExtensionsTest {
     EximeeBpmsExecutionListener processListener = process.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsExecutionListener.class).singleResult();
     EximeeBpmsExecutionListener startEventListener = startEvent.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsExecutionListener.class).singleResult();
     EximeeBpmsExecutionListener serviceTaskListener = serviceTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsExecutionListener.class).singleResult();
-    assertThat(processListener.getCamundaClass()).isEqualTo(TEST_CLASS_XML);
-    assertThat(processListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
+    assertThat(processListener.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_XML);
+    assertThat(processListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
     assertThat(startEventListener.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(startEventListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
-    assertThat(serviceTaskListener.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
-    assertThat(serviceTaskListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
-    processListener.setCamundaClass(TEST_CLASS_API);
-    processListener.setCamundaEvent(TEST_EXECUTION_EVENT_API);
+    assertThat(startEventListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
+    assertThat(serviceTaskListener.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
+    assertThat(serviceTaskListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_XML);
+    processListener.setEximeeBpmsClass(TEST_CLASS_API);
+    processListener.setEximeeBpmsEvent(TEST_EXECUTION_EVENT_API);
     startEventListener.setEximeeBpmsExpression(TEST_EXPRESSION_API);
-    startEventListener.setCamundaEvent(TEST_EXECUTION_EVENT_API);
-    serviceTaskListener.setCamundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
-    serviceTaskListener.setCamundaEvent(TEST_EXECUTION_EVENT_API);
-    assertThat(processListener.getCamundaClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(processListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
+    startEventListener.setEximeeBpmsEvent(TEST_EXECUTION_EVENT_API);
+    serviceTaskListener.setEximeeBpmsDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
+    serviceTaskListener.setEximeeBpmsEvent(TEST_EXECUTION_EVENT_API);
+    assertThat(processListener.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(processListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
     assertThat(startEventListener.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(startEventListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
-    assertThat(serviceTaskListener.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(serviceTaskListener.getCamundaEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
+    assertThat(startEventListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
+    assertThat(serviceTaskListener.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(serviceTaskListener.getEximeeBpmsEvent()).isEqualTo(TEST_EXECUTION_EVENT_API);
   }
 
   @Test
@@ -609,17 +594,17 @@ public class EximeeBpmsExtensionsTest {
 
     EximeeBpmsScript script = sequenceFlowListener.getEximeeBpmsScript();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("groovy");
-    assertThat(script.getCamundaResource()).isNull();
+    assertThat(script.getEximeeBpmsResource()).isNull();
     assertThat(script.getTextContent()).isEqualTo("println 'Hello World'");
 
     EximeeBpmsScript newScript = modelInstance.newInstance(EximeeBpmsScript.class);
     newScript.setEximeeBpmsScriptFormat("groovy");
-    newScript.setCamundaResource("test.groovy");
+    newScript.setEximeeBpmsResource("test.groovy");
     sequenceFlowListener.setEximeeBpmsScript(newScript);
 
     script = sequenceFlowListener.getEximeeBpmsScript();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("groovy");
-    assertThat(script.getCamundaResource()).isEqualTo("test.groovy");
+    assertThat(script.getEximeeBpmsResource()).isEqualTo("test.groovy");
     assertThat(script.getTextContent()).isEmpty();
   }
 
@@ -634,17 +619,17 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testFieldExtension() {
     EximeeBpmsField field = sendTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsField.class).singleResult();
-    assertThat(field.getCamundaName()).isEqualTo(TEST_STRING_XML);
+    assertThat(field.getEximeeBpmsName()).isEqualTo(TEST_STRING_XML);
     assertThat(field.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_XML);
     assertThat(field.getEximeeBpmsStringValue()).isEqualTo(TEST_STRING_XML);
     assertThat(field.getEximeeBpmsExpressionChild().getTextContent()).isEqualTo(TEST_EXPRESSION_XML);
     assertThat(field.getEximeeBpmsString().getTextContent()).isEqualTo(TEST_STRING_XML);
-    field.setCamundaName(TEST_STRING_API);
+    field.setEximeeBpmsName(TEST_STRING_API);
     field.setEximeeBpmsExpression(TEST_EXPRESSION_API);
     field.setEximeeBpmsStringValue(TEST_STRING_API);
     field.getEximeeBpmsExpressionChild().setTextContent(TEST_EXPRESSION_API);
     field.getEximeeBpmsString().setTextContent(TEST_STRING_API);
-    assertThat(field.getCamundaName()).isEqualTo(TEST_STRING_API);
+    assertThat(field.getEximeeBpmsName()).isEqualTo(TEST_STRING_API);
     assertThat(field.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
     assertThat(field.getEximeeBpmsStringValue()).isEqualTo(TEST_STRING_API);
     assertThat(field.getEximeeBpmsExpressionChild().getTextContent()).isEqualTo(TEST_EXPRESSION_API);
@@ -655,123 +640,123 @@ public class EximeeBpmsExtensionsTest {
   public void testFormData() {
     EximeeBpmsFormData formData = userTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsFormData.class).singleResult();
     EximeeBpmsFormField formField = formData.getEximeeBpmsFormFields().iterator().next();
-    assertThat(formField.getCamundaId()).isEqualTo(TEST_STRING_XML);
-    assertThat(formField.getCamundaLabel()).isEqualTo(TEST_STRING_XML);
-    assertThat(formField.getCamundaType()).isEqualTo(TEST_STRING_XML);
-    assertThat(formField.getCamundaDatePattern()).isEqualTo(TEST_STRING_XML);
-    assertThat(formField.getCamundaDefaultValue()).isEqualTo(TEST_STRING_XML);
-    formField.setCamundaId(TEST_STRING_API);
-    formField.setCamundaLabel(TEST_STRING_API);
-    formField.setCamundaType(TEST_STRING_API);
-    formField.setCamundaDatePattern(TEST_STRING_API);
-    formField.setCamundaDefaultValue(TEST_STRING_API);
-    assertThat(formField.getCamundaId()).isEqualTo(TEST_STRING_API);
-    assertThat(formField.getCamundaLabel()).isEqualTo(TEST_STRING_API);
-    assertThat(formField.getCamundaType()).isEqualTo(TEST_STRING_API);
-    assertThat(formField.getCamundaDatePattern()).isEqualTo(TEST_STRING_API);
-    assertThat(formField.getCamundaDefaultValue()).isEqualTo(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsId()).isEqualTo(TEST_STRING_XML);
+    assertThat(formField.getEximeeBpmsLabel()).isEqualTo(TEST_STRING_XML);
+    assertThat(formField.getEximeeBpmsType()).isEqualTo(TEST_STRING_XML);
+    assertThat(formField.getEximeeBpmsDatePattern()).isEqualTo(TEST_STRING_XML);
+    assertThat(formField.getEximeeBpmsDefaultValue()).isEqualTo(TEST_STRING_XML);
+    formField.setEximeeBpmsId(TEST_STRING_API);
+    formField.setEximeeBpmsLabel(TEST_STRING_API);
+    formField.setEximeeBpmsType(TEST_STRING_API);
+    formField.setEximeeBpmsDatePattern(TEST_STRING_API);
+    formField.setEximeeBpmsDefaultValue(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsId()).isEqualTo(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsLabel()).isEqualTo(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsType()).isEqualTo(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsDatePattern()).isEqualTo(TEST_STRING_API);
+    assertThat(formField.getEximeeBpmsDefaultValue()).isEqualTo(TEST_STRING_API);
 
     EximeeBpmsProperty property = formField.getEximeeBpmsProperties().getEximeeBpmsProperties().iterator().next();
-    assertThat(property.getCamundaId()).isEqualTo(TEST_STRING_XML);
+    assertThat(property.getEximeeBpmsId()).isEqualTo(TEST_STRING_XML);
     assertThat(property.getEximeeBpmsValue()).isEqualTo(TEST_STRING_XML);
-    property.setCamundaId(TEST_STRING_API);
+    property.setEximeeBpmsId(TEST_STRING_API);
     property.setEximeeBpmsValue(TEST_STRING_API);
-    assertThat(property.getCamundaId()).isEqualTo(TEST_STRING_API);
+    assertThat(property.getEximeeBpmsId()).isEqualTo(TEST_STRING_API);
     assertThat(property.getEximeeBpmsValue()).isEqualTo(TEST_STRING_API);
 
     EximeeBpmsConstraint constraint = formField.getEximeeBpmsValidation().getEximeeBpmsConstraints().iterator().next();
-    assertThat(constraint.getCamundaName()).isEqualTo(TEST_STRING_XML);
-    assertThat(constraint.getCamundaConfig()).isEqualTo(TEST_STRING_XML);
-    constraint.setCamundaName(TEST_STRING_API);
-    constraint.setCamundaConfig(TEST_STRING_API);
-    assertThat(constraint.getCamundaName()).isEqualTo(TEST_STRING_API);
-    assertThat(constraint.getCamundaConfig()).isEqualTo(TEST_STRING_API);
+    assertThat(constraint.getEximeeBpmsName()).isEqualTo(TEST_STRING_XML);
+    assertThat(constraint.getEximeeBpmsConfig()).isEqualTo(TEST_STRING_XML);
+    constraint.setEximeeBpmsName(TEST_STRING_API);
+    constraint.setEximeeBpmsConfig(TEST_STRING_API);
+    assertThat(constraint.getEximeeBpmsName()).isEqualTo(TEST_STRING_API);
+    assertThat(constraint.getEximeeBpmsConfig()).isEqualTo(TEST_STRING_API);
 
     EximeeBpmsValue value = formField.getEximeeBpmsValues().iterator().next();
-    assertThat(value.getCamundaId()).isEqualTo(TEST_STRING_XML);
-    assertThat(value.getCamundaName()).isEqualTo(TEST_STRING_XML);
-    value.setCamundaId(TEST_STRING_API);
-    value.setCamundaName(TEST_STRING_API);
-    assertThat(value.getCamundaId()).isEqualTo(TEST_STRING_API);
-    assertThat(value.getCamundaName()).isEqualTo(TEST_STRING_API);
+    assertThat(value.getEximeeBpmsId()).isEqualTo(TEST_STRING_XML);
+    assertThat(value.getEximeeBpmsName()).isEqualTo(TEST_STRING_XML);
+    value.setEximeeBpmsId(TEST_STRING_API);
+    value.setEximeeBpmsName(TEST_STRING_API);
+    assertThat(value.getEximeeBpmsId()).isEqualTo(TEST_STRING_API);
+    assertThat(value.getEximeeBpmsName()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testFormProperty() {
     EximeeBpmsFormProperty formProperty = startEvent.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsFormProperty.class).singleResult();
-    assertThat(formProperty.getCamundaId()).isEqualTo(TEST_STRING_XML);
-    assertThat(formProperty.getCamundaName()).isEqualTo(TEST_STRING_XML);
-    assertThat(formProperty.getCamundaType()).isEqualTo(TEST_STRING_XML);
-    assertThat(formProperty.isCamundaRequired()).isFalse();
-    assertThat(formProperty.isCamundaReadable()).isTrue();
-    assertThat(formProperty.isCamundaWriteable()).isTrue();
-    assertThat(formProperty.getCamundaVariable()).isEqualTo(TEST_STRING_XML);
+    assertThat(formProperty.getEximeeBpmsId()).isEqualTo(TEST_STRING_XML);
+    assertThat(formProperty.getEximeeBpmsName()).isEqualTo(TEST_STRING_XML);
+    assertThat(formProperty.getEximeeBpmsType()).isEqualTo(TEST_STRING_XML);
+    assertThat(formProperty.isEximeeBpmsRequired()).isFalse();
+    assertThat(formProperty.isEximeeBpmsReadable()).isTrue();
+    assertThat(formProperty.isEximeeBpmsWriteable()).isTrue();
+    assertThat(formProperty.getEximeeBpmsVariable()).isEqualTo(TEST_STRING_XML);
     assertThat(formProperty.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(formProperty.getCamundaDatePattern()).isEqualTo(TEST_STRING_XML);
-    assertThat(formProperty.getCamundaDefault()).isEqualTo(TEST_STRING_XML);
-    formProperty.setCamundaId(TEST_STRING_API);
-    formProperty.setCamundaName(TEST_STRING_API);
-    formProperty.setCamundaType(TEST_STRING_API);
-    formProperty.setCamundaRequired(true);
-    formProperty.setCamundaReadable(false);
-    formProperty.setCamundaWriteable(false);
-    formProperty.setCamundaVariable(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsDatePattern()).isEqualTo(TEST_STRING_XML);
+    assertThat(formProperty.getEximeeBpmsDefault()).isEqualTo(TEST_STRING_XML);
+    formProperty.setEximeeBpmsId(TEST_STRING_API);
+    formProperty.setEximeeBpmsName(TEST_STRING_API);
+    formProperty.setEximeeBpmsType(TEST_STRING_API);
+    formProperty.setEximeeBpmsRequired(true);
+    formProperty.setEximeeBpmsReadable(false);
+    formProperty.setEximeeBpmsWriteable(false);
+    formProperty.setEximeeBpmsVariable(TEST_STRING_API);
     formProperty.setEximeeBpmsExpression(TEST_EXPRESSION_API);
-    formProperty.setCamundaDatePattern(TEST_STRING_API);
-    formProperty.setCamundaDefault(TEST_STRING_API);
-    assertThat(formProperty.getCamundaId()).isEqualTo(TEST_STRING_API);
-    assertThat(formProperty.getCamundaName()).isEqualTo(TEST_STRING_API);
-    assertThat(formProperty.getCamundaType()).isEqualTo(TEST_STRING_API);
-    assertThat(formProperty.isCamundaRequired()).isTrue();
-    assertThat(formProperty.isCamundaReadable()).isFalse();
-    assertThat(formProperty.isCamundaWriteable()).isFalse();
-    assertThat(formProperty.getCamundaVariable()).isEqualTo(TEST_STRING_API);
+    formProperty.setEximeeBpmsDatePattern(TEST_STRING_API);
+    formProperty.setEximeeBpmsDefault(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsId()).isEqualTo(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsName()).isEqualTo(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsType()).isEqualTo(TEST_STRING_API);
+    assertThat(formProperty.isEximeeBpmsRequired()).isTrue();
+    assertThat(formProperty.isEximeeBpmsReadable()).isFalse();
+    assertThat(formProperty.isEximeeBpmsWriteable()).isFalse();
+    assertThat(formProperty.getEximeeBpmsVariable()).isEqualTo(TEST_STRING_API);
     assertThat(formProperty.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(formProperty.getCamundaDatePattern()).isEqualTo(TEST_STRING_API);
-    assertThat(formProperty.getCamundaDefault()).isEqualTo(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsDatePattern()).isEqualTo(TEST_STRING_API);
+    assertThat(formProperty.getEximeeBpmsDefault()).isEqualTo(TEST_STRING_API);
   }
 
   @Test
   public void testInExtension() {
     EximeeBpmsIn in = callActivity.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsIn.class).singleResult();
-    assertThat(in.getCamundaSource()).isEqualTo(TEST_STRING_XML);
-    assertThat(in.getCamundaSourceExpression()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(in.getCamundaVariables()).isEqualTo(TEST_STRING_XML);
-    assertThat(in.getCamundaTarget()).isEqualTo(TEST_STRING_XML);
-    assertThat(in.getCamundaBusinessKey()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(in.getCamundaLocal()).isTrue();
-    in.setCamundaSource(TEST_STRING_API);
-    in.setCamundaSourceExpression(TEST_EXPRESSION_API);
-    in.setCamundaVariables(TEST_STRING_API);
-    in.setCamundaTarget(TEST_STRING_API);
-    in.setCamundaBusinessKey(TEST_EXPRESSION_API);
-    in.setCamundaLocal(false);
-    assertThat(in.getCamundaSource()).isEqualTo(TEST_STRING_API);
-    assertThat(in.getCamundaSourceExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(in.getCamundaVariables()).isEqualTo(TEST_STRING_API);
-    assertThat(in.getCamundaTarget()).isEqualTo(TEST_STRING_API);
-    assertThat(in.getCamundaBusinessKey()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(in.getCamundaLocal()).isFalse();
+    assertThat(in.getEximeeBpmsSource()).isEqualTo(TEST_STRING_XML);
+    assertThat(in.getEximeeBpmsSourceExpression()).isEqualTo(TEST_EXPRESSION_XML);
+    assertThat(in.getEximeeBpmsVariables()).isEqualTo(TEST_STRING_XML);
+    assertThat(in.getEximeeBpmsTarget()).isEqualTo(TEST_STRING_XML);
+    assertThat(in.getEximeeBpmsBusinessKey()).isEqualTo(TEST_EXPRESSION_XML);
+    assertThat(in.getEximeeBpmsLocal()).isTrue();
+    in.setEximeeBpmsSource(TEST_STRING_API);
+    in.setEximeeBpmsSourceExpression(TEST_EXPRESSION_API);
+    in.setEximeeBpmsVariables(TEST_STRING_API);
+    in.setEximeeBpmsTarget(TEST_STRING_API);
+    in.setEximeeBpmsBusinessKey(TEST_EXPRESSION_API);
+    in.setEximeeBpmsLocal(false);
+    assertThat(in.getEximeeBpmsSource()).isEqualTo(TEST_STRING_API);
+    assertThat(in.getEximeeBpmsSourceExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(in.getEximeeBpmsVariables()).isEqualTo(TEST_STRING_API);
+    assertThat(in.getEximeeBpmsTarget()).isEqualTo(TEST_STRING_API);
+    assertThat(in.getEximeeBpmsBusinessKey()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(in.getEximeeBpmsLocal()).isFalse();
   }
 
   @Test
   public void testOutExtension() {
     EximeeBpmsOut out = callActivity.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsOut.class).singleResult();
-    assertThat(out.getCamundaSource()).isEqualTo(TEST_STRING_XML);
-    assertThat(out.getCamundaSourceExpression()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(out.getCamundaVariables()).isEqualTo(TEST_STRING_XML);
-    assertThat(out.getCamundaTarget()).isEqualTo(TEST_STRING_XML);
-    assertThat(out.getCamundaLocal()).isTrue();
-    out.setCamundaSource(TEST_STRING_API);
-    out.setCamundaSourceExpression(TEST_EXPRESSION_API);
-    out.setCamundaVariables(TEST_STRING_API);
-    out.setCamundaTarget(TEST_STRING_API);
-    out.setCamundaLocal(false);
-    assertThat(out.getCamundaSource()).isEqualTo(TEST_STRING_API);
-    assertThat(out.getCamundaSourceExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(out.getCamundaVariables()).isEqualTo(TEST_STRING_API);
-    assertThat(out.getCamundaTarget()).isEqualTo(TEST_STRING_API);
-    assertThat(out.getCamundaLocal()).isFalse();
+    assertThat(out.getEximeeBpmsSource()).isEqualTo(TEST_STRING_XML);
+    assertThat(out.getEximeeBpmsSourceExpression()).isEqualTo(TEST_EXPRESSION_XML);
+    assertThat(out.getEximeeBpmsVariables()).isEqualTo(TEST_STRING_XML);
+    assertThat(out.getEximeeBpmsTarget()).isEqualTo(TEST_STRING_XML);
+    assertThat(out.getEximeeBpmsLocal()).isTrue();
+    out.setEximeeBpmsSource(TEST_STRING_API);
+    out.setEximeeBpmsSourceExpression(TEST_EXPRESSION_API);
+    out.setEximeeBpmsVariables(TEST_STRING_API);
+    out.setEximeeBpmsTarget(TEST_STRING_API);
+    out.setEximeeBpmsLocal(false);
+    assertThat(out.getEximeeBpmsSource()).isEqualTo(TEST_STRING_API);
+    assertThat(out.getEximeeBpmsSourceExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(out.getEximeeBpmsVariables()).isEqualTo(TEST_STRING_API);
+    assertThat(out.getEximeeBpmsTarget()).isEqualTo(TEST_STRING_API);
+    assertThat(out.getEximeeBpmsLocal()).isFalse();
   }
 
   @Test
@@ -786,21 +771,21 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testTaskListener() {
     EximeeBpmsTaskListener taskListener = userTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsTaskListener.class).list().get(0);
-    assertThat(taskListener.getCamundaEvent()).isEqualTo(TEST_TASK_EVENT_XML);
-    assertThat(taskListener.getCamundaClass()).isEqualTo(TEST_CLASS_XML);
+    assertThat(taskListener.getEximeeBpmsEvent()).isEqualTo(TEST_TASK_EVENT_XML);
+    assertThat(taskListener.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_XML);
     assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_XML);
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
-    taskListener.setCamundaEvent(TEST_TASK_EVENT_API);
-    taskListener.setCamundaClass(TEST_CLASS_API);
+    assertThat(taskListener.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_XML);
+    taskListener.setEximeeBpmsEvent(TEST_TASK_EVENT_API);
+    taskListener.setEximeeBpmsClass(TEST_CLASS_API);
     taskListener.setEximeeBpmsExpression(TEST_EXPRESSION_API);
-    taskListener.setCamundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(taskListener.getCamundaEvent()).isEqualTo(TEST_TASK_EVENT_API);
-    assertThat(taskListener.getCamundaClass()).isEqualTo(TEST_CLASS_API);
+    taskListener.setEximeeBpmsDelegateExpression(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(taskListener.getEximeeBpmsEvent()).isEqualTo(TEST_TASK_EVENT_API);
+    assertThat(taskListener.getEximeeBpmsClass()).isEqualTo(TEST_CLASS_API);
     assertThat(taskListener.getEximeeBpmsExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(taskListener.getEximeeBpmsDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
 
     EximeeBpmsField field = taskListener.getEximeeBpmsFields().iterator().next();
-    assertThat(field.getCamundaName()).isEqualTo(TEST_STRING_XML);
+    assertThat(field.getEximeeBpmsName()).isEqualTo(TEST_STRING_XML);
     assertThat(field.getEximeeBpmsString().getTextContent()).isEqualTo(TEST_STRING_XML);
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
@@ -819,7 +804,7 @@ public class EximeeBpmsExtensionsTest {
 
     EximeeBpmsScript script = taskListener.getEximeeBpmsScript();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("groovy");
-    assertThat(script.getCamundaResource()).isEqualTo("test.groovy");
+    assertThat(script.getEximeeBpmsResource()).isEqualTo("test.groovy");
     assertThat(script.getTextContent()).isEmpty();
 
     EximeeBpmsScript newScript = modelInstance.newInstance(EximeeBpmsScript.class);
@@ -829,7 +814,7 @@ public class EximeeBpmsExtensionsTest {
 
     script = taskListener.getEximeeBpmsScript();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("groovy");
-    assertThat(script.getCamundaResource()).isNull();
+    assertThat(script.getEximeeBpmsResource()).isNull();
     assertThat(script.getTextContent()).isEqualTo("println 'Hello World'");
   }
 
@@ -840,8 +825,8 @@ public class EximeeBpmsExtensionsTest {
     assertThat(camundaProperties.getEximeeBpmsProperties()).hasSize(2);
 
     for (EximeeBpmsProperty camundaProperty : camundaProperties.getEximeeBpmsProperties()) {
-      assertThat(camundaProperty.getCamundaId()).isNull();
-      assertThat(camundaProperty.getCamundaName()).startsWith("name");
+      assertThat(camundaProperty.getEximeeBpmsId()).isNull();
+      assertThat(camundaProperty.getEximeeBpmsName()).startsWith("name");
       assertThat(camundaProperty.getEximeeBpmsValue()).startsWith("value");
     }
   }
@@ -849,50 +834,50 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testGetNonExistingCamundaCandidateUsers() {
     userTask.removeAttributeNs(namespace, "candidateUsers");
-    assertThat(userTask.getCamundaCandidateUsers()).isNull();
-    assertThat(userTask.getCamundaCandidateUsersList()).isEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNull();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isEmpty();
   }
 
   @Test
   public void testSetNullCamundaCandidateUsers() {
-    assertThat(userTask.getCamundaCandidateUsers()).isNotEmpty();
-    assertThat(userTask.getCamundaCandidateUsersList()).isNotEmpty();
-    userTask.setCamundaCandidateUsers(null);
-    assertThat(userTask.getCamundaCandidateUsers()).isNull();
-    assertThat(userTask.getCamundaCandidateUsersList()).isEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNotEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isNotEmpty();
+    userTask.setEximeeBpmsCandidateUsers(null);
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNull();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isEmpty();
   }
 
   @Test
   public void testEmptyCamundaCandidateUsers() {
-    assertThat(userTask.getCamundaCandidateUsers()).isNotEmpty();
-    assertThat(userTask.getCamundaCandidateUsersList()).isNotEmpty();
-    userTask.setCamundaCandidateUsers("");
-    assertThat(userTask.getCamundaCandidateUsers()).isNull();
-    assertThat(userTask.getCamundaCandidateUsersList()).isEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNotEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isNotEmpty();
+    userTask.setEximeeBpmsCandidateUsers("");
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNull();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isEmpty();
   }
 
   @Test
   public void testSetNullCamundaCandidateUsersList() {
-    assertThat(userTask.getCamundaCandidateUsers()).isNotEmpty();
-    assertThat(userTask.getCamundaCandidateUsersList()).isNotEmpty();
-    userTask.setCamundaCandidateUsersList(null);
-    assertThat(userTask.getCamundaCandidateUsers()).isNull();
-    assertThat(userTask.getCamundaCandidateUsersList()).isEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNotEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isNotEmpty();
+    userTask.setEximeeBpmsCandidateUsersList(null);
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNull();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isEmpty();
   }
 
   @Test
   public void testEmptyCamundaCandidateUsersList() {
-    assertThat(userTask.getCamundaCandidateUsers()).isNotEmpty();
-    assertThat(userTask.getCamundaCandidateUsersList()).isNotEmpty();
-    userTask.setCamundaCandidateUsersList(Collections.<String>emptyList());
-    assertThat(userTask.getCamundaCandidateUsers()).isNull();
-    assertThat(userTask.getCamundaCandidateUsersList()).isEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNotEmpty();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isNotEmpty();
+    userTask.setEximeeBpmsCandidateUsersList(Collections.<String>emptyList());
+    assertThat(userTask.getEximeeBpmsCandidateUsers()).isNull();
+    assertThat(userTask.getEximeeBpmsCandidateUsersList()).isEmpty();
   }
 
   @Test
   public void testScriptResource() {
     assertThat(scriptTask.getScriptFormat()).isEqualTo("groovy");
-    assertThat(scriptTask.getCamundaResource()).isEqualTo("test.groovy");
+    assertThat(scriptTask.getEximeeBpmsResource()).isEqualTo("test.groovy");
   }
 
   @Test
@@ -910,14 +895,14 @@ public class EximeeBpmsExtensionsTest {
     assertThat(inputParameters).hasSize(1);
 
     EximeeBpmsInputParameter inputParameter = inputParameters.iterator().next();
-    assertThat(inputParameter.getCamundaName()).isEqualTo("endpointUrl");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("endpointUrl");
     assertThat(inputParameter.getTextContent()).isEqualTo("http://example.com/webservice");
 
     Collection<EximeeBpmsOutputParameter> outputParameters = camundaInputOutput.getEximeeBpmsOutputParameters();
     assertThat(outputParameters).hasSize(1);
 
     EximeeBpmsOutputParameter outputParameter = outputParameters.iterator().next();
-    assertThat(outputParameter.getCamundaName()).isEqualTo("result");
+    assertThat(outputParameter.getEximeeBpmsName()).isEqualTo("result");
     assertThat(outputParameter.getTextContent()).isEqualTo("output");
   }
 
@@ -935,49 +920,49 @@ public class EximeeBpmsExtensionsTest {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeConstant");
 
     // modify existing
-    inputParameter.setCamundaName("hello");
+    inputParameter.setEximeeBpmsName("hello");
     inputParameter.setTextContent("world");
     inputParameter = findInputParameterByName(serviceTask, "hello");
     assertThat(inputParameter.getTextContent()).isEqualTo("world");
 
     // add new one
     inputParameter = modelInstance.newInstance(EximeeBpmsInputParameter.class);
-    inputParameter.setCamundaName("abc");
+    inputParameter.setEximeeBpmsName("abc");
     inputParameter.setTextContent("def");
     serviceTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsInputOutput.class).singleResult()
       .addChildElement(inputParameter);
 
     // search for new one
     inputParameter = findInputParameterByName(serviceTask, "abc");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("abc");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("abc");
     assertThat(inputParameter.getTextContent()).isEqualTo("def");
   }
 
   @Test
   public void testCamundaNullInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeNull");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeNull");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeNull");
     assertThat(inputParameter.getTextContent()).isEmpty();
   }
 
   @Test
   public void testCamundaConstantInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeConstant");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeConstant");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeConstant");
     assertThat(inputParameter.getTextContent()).isEqualTo("foo");
   }
 
   @Test
   public void testEximeeBpmsExpressionInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeExpression");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeExpression");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeExpression");
     assertThat(inputParameter.getTextContent()).isEqualTo("${1 + 1}");
   }
 
   @Test
   public void testEximeeBpmsListInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeList");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeList");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeList");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
     assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "list")).isNotNull();
 
@@ -1051,36 +1036,36 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testEximeeBpmsMapInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeMap");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeMap");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeMap");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
     assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "map")).isNotNull();
 
     EximeeBpmsMap map = inputParameter.getValue();
-    assertThat(map.getCamundaEntries()).hasSize(2);
-    for (EximeeBpmsEntry entry : map.getCamundaEntries()) {
-      if (entry.getCamundaKey().equals("foo")) {
+    assertThat(map.getEximeeBpmsEntries()).hasSize(2);
+    for (EximeeBpmsEntry entry : map.getEximeeBpmsEntries()) {
+      if (entry.getEximeeBpmsKey().equals("foo")) {
         assertThat(entry.getTextContent()).isEqualTo("bar");
       }
       else {
-        assertThat(entry.getCamundaKey()).isEqualTo("hello");
+        assertThat(entry.getEximeeBpmsKey()).isEqualTo("hello");
         assertThat(entry.getTextContent()).isEqualTo("world");
       }
     }
 
     map = modelInstance.newInstance(EximeeBpmsMap.class);
     EximeeBpmsEntry entry = modelInstance.newInstance(EximeeBpmsEntry.class);
-    entry.setCamundaKey("test");
+    entry.setEximeeBpmsKey("test");
     entry.setTextContent("value");
-    map.getCamundaEntries().add(entry);
+    map.getEximeeBpmsEntries().add(entry);
 
     inputParameter.setValue(map);
     map = inputParameter.getValue();
-    assertThat(map.getCamundaEntries()).hasSize(1);
-    entry = map.getCamundaEntries().iterator().next();
-    assertThat(entry.getCamundaKey()).isEqualTo("test");
+    assertThat(map.getEximeeBpmsEntries()).hasSize(1);
+    entry = map.getEximeeBpmsEntries().iterator().next();
+    assertThat(entry.getEximeeBpmsKey()).isEqualTo("test");
     assertThat(entry.getTextContent()).isEqualTo("value");
 
-    Collection<EximeeBpmsEntry> entries = map.getCamundaEntries();
+    Collection<EximeeBpmsEntry> entries = map.getEximeeBpmsEntries();
     entries.add(modelInstance.newInstance(EximeeBpmsEntry.class));
     assertThat(entries).hasSize(2);
 
@@ -1091,25 +1076,25 @@ public class EximeeBpmsExtensionsTest {
   @Test
   public void testEximeeBpmsScriptInputParameter() {
     EximeeBpmsInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeScript");
-    assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeScript");
+    assertThat(inputParameter.getEximeeBpmsName()).isEqualTo("shouldBeScript");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
     assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "script")).isNotNull();
     assertThat(inputParameter.getUniqueChildElementByType(EximeeBpmsScript.class)).isNotNull();
 
     EximeeBpmsScript script = inputParameter.getValue();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("groovy");
-    assertThat(script.getCamundaResource()).isNull();
+    assertThat(script.getEximeeBpmsResource()).isNull();
     assertThat(script.getTextContent()).isEqualTo("1 + 1");
 
     script = modelInstance.newInstance(EximeeBpmsScript.class);
     script.setEximeeBpmsScriptFormat("python");
-    script.setCamundaResource("script.py");
+    script.setEximeeBpmsResource("script.py");
 
     inputParameter.setValue(script);
 
     script = inputParameter.getValue();
     assertThat(script.getEximeeBpmsScriptFormat()).isEqualTo("python");
-    assertThat(script.getCamundaResource()).isEqualTo("script.py");
+    assertThat(script.getEximeeBpmsResource()).isEqualTo("script.py");
     assertThat(script.getTextContent()).isEmpty();
 
     inputParameter.removeValue();
@@ -1121,7 +1106,7 @@ public class EximeeBpmsExtensionsTest {
     EximeeBpmsOutputParameter camundaOutputParameter = serviceTask.getExtensionElements().getElementsQuery().filterByType(EximeeBpmsInputOutput.class).singleResult().getEximeeBpmsOutputParameters().iterator().next();
 
     assertThat(camundaOutputParameter).isNotNull();
-    assertThat(camundaOutputParameter.getCamundaName()).isEqualTo("nested");
+    assertThat(camundaOutputParameter.getEximeeBpmsName()).isEqualTo("nested");
     EximeeBpmsList list = camundaOutputParameter.getValue();
     assertThat(list).isNotNull();
     assertThat(list.getValues()).hasSize(2);
@@ -1138,13 +1123,13 @@ public class EximeeBpmsExtensionsTest {
     // nested map
     EximeeBpmsMap nestedMap = (EximeeBpmsMap) iterator.next().getUniqueChildElementByType(EximeeBpmsMap.class);
     assertThat(nestedMap).isNotNull();
-    assertThat(nestedMap.getCamundaEntries()).hasSize(2);
-    Iterator<EximeeBpmsEntry> mapIterator = nestedMap.getCamundaEntries().iterator();
+    assertThat(nestedMap.getEximeeBpmsEntries()).hasSize(2);
+    Iterator<EximeeBpmsEntry> mapIterator = nestedMap.getEximeeBpmsEntries().iterator();
 
     // nested list in nested map
     EximeeBpmsEntry nestedListEntry = mapIterator.next();
     assertThat(nestedListEntry).isNotNull();
-    assertThat(nestedListEntry.getCamundaKey()).isEqualTo("list");
+    assertThat(nestedListEntry.getEximeeBpmsKey()).isEqualTo("list");
     EximeeBpmsList nestedNestedList = nestedListEntry.getValue();
     for (BpmnModelElementInstance value : nestedNestedList.getValues()) {
       assertThat(value.getTextContent()).isEqualTo("map");
@@ -1153,10 +1138,10 @@ public class EximeeBpmsExtensionsTest {
     // nested map in nested map
     EximeeBpmsEntry nestedMapEntry = mapIterator.next();
     assertThat(nestedMapEntry).isNotNull();
-    assertThat(nestedMapEntry.getCamundaKey()).isEqualTo("map");
+    assertThat(nestedMapEntry.getEximeeBpmsKey()).isEqualTo("map");
     EximeeBpmsMap nestedNestedMap = nestedMapEntry.getValue();
-    EximeeBpmsEntry entry = nestedNestedMap.getCamundaEntries().iterator().next();
-    assertThat(entry.getCamundaKey()).isEqualTo("so");
+    EximeeBpmsEntry entry = nestedNestedMap.getEximeeBpmsEntries().iterator().next();
+    assertThat(entry.getEximeeBpmsKey()).isEqualTo("so");
     assertThat(entry.getTextContent()).isEqualTo("nested");
   }
 
@@ -1164,7 +1149,7 @@ public class EximeeBpmsExtensionsTest {
     Collection<EximeeBpmsInputParameter> camundaInputParameters = baseElement.getExtensionElements().getElementsQuery()
       .filterByType(EximeeBpmsInputOutput.class).singleResult().getEximeeBpmsInputParameters();
     for (EximeeBpmsInputParameter camundaInputParameter : camundaInputParameters) {
-      if (camundaInputParameter.getCamundaName().equals(name)) {
+      if (camundaInputParameter.getEximeeBpmsName().equals(name)) {
         return camundaInputParameter;
       }
     }

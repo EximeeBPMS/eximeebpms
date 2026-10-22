@@ -24,7 +24,7 @@ var angular = require('eximeebpms-commons-ui/vendor/angular'),
 var processModule = angular.module('cam.tasklist.process', [
   'cam.tasklist.client',
   'cam.tasklist.form',
-  'ui.bootstrap'
+  'ui.bootstrap',
 ]);
 
 /* action plugins */

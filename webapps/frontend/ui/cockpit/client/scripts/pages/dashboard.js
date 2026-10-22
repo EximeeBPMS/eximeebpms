@@ -29,7 +29,7 @@ function valuesSort(a, b) {
 }
 
 function replaceAll(str, obj) {
-  Object.keys(obj).forEach(function(searched) {
+  Object.keys(obj).forEach(function (searched) {
     var replaced = obj[searched];
     str = str.split('{{' + searched + '}}').join(replaced);
   });
@@ -57,7 +57,7 @@ var Controller = [
   'Data',
   'dataDepend',
   '$translate',
-  function(
+  function (
     $scope,
     camAPI,
     localConf,
@@ -66,15 +66,15 @@ var Controller = [
     page,
     Data,
     dataDepend,
-    $translate
+    $translate,
   ) {
     $scope.hasMetricsPlugin = hasPlugin(
       'cockpit.dashboard.metrics',
-      'executed-activity-instances'
+      'executed-activity-instances',
     );
     $scope.hasProcessSearch = hasPlugin(
       'cockpit.processes.dashboard',
-      'search-process-instances'
+      'search-process-instances',
     );
     $scope.hasTaskSearch = hasPlugin('cockpit.tasks.dashboard', 'search-tasks');
 
@@ -84,7 +84,7 @@ var Controller = [
     // old plugins are still shown on the dashboard
     $scope.dashboardVars = {read: ['processData']};
     $scope.deprecateDashboardProviders = Views.getProviders({
-      component: 'cockpit.dashboard'
+      component: 'cockpit.dashboard',
     });
 
     // reset breadcrumbs
@@ -96,18 +96,18 @@ var Controller = [
 
     $scope.values = {
       procInst: [],
-      procIncid: []
+      procIncid: [],
     };
 
     $scope.data = {
-      actual: {}
+      actual: {},
     };
 
     $scope.linkBase = {
       processInstances: '/process-definition/{{id}}',
       processIncidents: '/process-definition/{{id}}',
       tasks:
-        '/process-instance/{{processInstanceId}}/runtime?tab=user-tasks-tab'
+        '/process-instance/{{processInstanceId}}/runtime?tab=user-tasks-tab',
     };
 
     if ($scope.hasProcessSearch) {
@@ -124,10 +124,10 @@ var Controller = [
         value: 0,
         label: $translate.instant('DASHBOARD_OTHERS'),
         names: [],
-        url: url
+        url: url,
       };
 
-      values.forEach(function(item) {
+      values.forEach(function (item) {
         if (item.value && item.value < treshold) {
           belowTreshold.value += item.value;
           belowTreshold.names.push(item.label);
@@ -135,7 +135,7 @@ var Controller = [
       });
 
       values = values
-        .filter(function(item) {
+        .filter(function (item) {
           return item.value && item.value >= treshold;
         })
         .sort(valuesSort);
@@ -144,7 +144,7 @@ var Controller = [
         values.unshift(belowTreshold);
       }
 
-      return values.map(function(item, i) {
+      return values.map(function (item, i) {
         item.color = color(i, values.length);
         return item;
       });
@@ -158,22 +158,22 @@ var Controller = [
     var processData = $scope.processData.newChild($scope);
     Data.instantiateProviders('cockpit.dashboard.data', {
       $scope: $scope,
-      processData: processData
+      processData: processData,
     });
 
     function aggregateInstances(processDefinitionStatistics) {
       var values = [];
       var totalInstances = 0;
 
-      processDefinitionStatistics.forEach(function(statistic) {
+      processDefinitionStatistics.forEach(function (statistic) {
         if (statistic.definition && statistic.instances) {
           values.push({
             value: statistic.instances,
             label: statistic.definition.name || statistic.definition.id,
             url: replaceAll(
               $scope.linkBase.processInstances,
-              statistic.definition
-            )
+              statistic.definition,
+            ),
           });
 
           totalInstances += statistic.instances;
@@ -183,7 +183,7 @@ var Controller = [
       $scope.values.procInst = prepareValues(
         values,
         totalInstances,
-        '/processes'
+        '/processes',
       );
 
       $scope.data.actual.runningProcessInstances = totalInstances;
@@ -193,9 +193,9 @@ var Controller = [
       var values = [];
       var totalIncidents = 0;
 
-      processDefinitionStatistics.forEach(function(statistic) {
+      processDefinitionStatistics.forEach(function (statistic) {
         var definitionIncidents = 0;
-        statistic.incidents.forEach(function(info) {
+        statistic.incidents.forEach(function (info) {
           definitionIncidents += info.incidentCount;
         });
 
@@ -204,8 +204,8 @@ var Controller = [
           label: statistic.definition.name || statistic.definition.id,
           url: replaceAll(
             $scope.linkBase.processIncidents,
-            statistic.definition
-          )
+            statistic.definition,
+          ),
         });
 
         totalIncidents += definitionIncidents;
@@ -214,14 +214,14 @@ var Controller = [
       $scope.values.procIncid = prepareValues(
         values,
         totalIncidents,
-        '/processes'
+        '/processes',
       );
 
       $scope.data.actual.openIncidents = totalIncidents;
     }
 
     var taskResource = camAPI.resource('task');
-    $scope.$watch('actualActive', function() {
+    $scope.$watch('actualActive', function () {
       if (!$scope.actualActive) {
         return;
       }
@@ -229,19 +229,19 @@ var Controller = [
       $scope.loadingActual = true;
       series(
         {
-          processes: function(next) {
+          processes: function (next) {
             processData.observe(
               'processDefinitionWithRootIncidentsStatistics',
-              function(processDefinitionStatistics) {
+              function (processDefinitionStatistics) {
                 aggregateInstances(processDefinitionStatistics);
                 aggregateIncidents(processDefinitionStatistics);
-              }
+              },
             );
 
             next();
           },
-          tasks: function(next) {
-            taskResource.count({}, function(err, total) {
+          tasks: function (next) {
+            taskResource.count({}, function (err, total) {
               if (err) {
                 return next();
               }
@@ -250,82 +250,79 @@ var Controller = [
 
               series(
                 {
-                  assignedToUser: function(done) {
+                  assignedToUser: function (done) {
                     taskResource.count(
                       {
                         unfinished: true,
-                        assigned: true
+                        assigned: true,
                       },
-                      function(err, value) {
+                      function (err, value) {
                         done(err, {
                           label: $translate.instant(
-                            'DASHBOARD_ASSIGNED_TO_USER'
+                            'DASHBOARD_ASSIGNED_TO_USER',
                           ),
-                          url:
-                            '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22assigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
-                          value: value
+                          url: '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22assigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
+                          value: value,
                         });
-                      }
+                      },
                     );
                   },
-                  assignedToGroup: function(done) {
+                  assignedToGroup: function (done) {
                     taskResource.count(
                       {
                         unfinished: true,
                         unassigned: true,
-                        withCandidateGroups: true
+                        withCandidateGroups: true,
                       },
-                      function(err, value) {
+                      function (err, value) {
                         done(err, {
                           label: $translate.instant(
-                            'DASHBOARD_ASSIGNED_TO_GROUPS'
+                            'DASHBOARD_ASSIGNED_TO_GROUPS',
                           ),
-                          url:
-                            '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22withCandidateGroups%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22unassigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
-                          value: value
+                          url: '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22withCandidateGroups%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22unassigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
+                          value: value,
                         });
-                      }
+                      },
                     );
                   },
-                  unassigned: function(done) {
+                  unassigned: function (done) {
                     taskResource.count(
                       {
                         unfinished: true,
                         unassigned: true,
-                        withoutCandidateGroups: true
+                        withoutCandidateGroups: true,
                       },
-                      function(err, value) {
+                      function (err, value) {
                         done(err, {
                           label: $translate.instant('DASHBOARD_UNASSIGNED'),
-                          url:
-                            '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22withoutCandidateGroups%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22unassigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
-                          value: value
+                          url: '/tasks?searchQuery=%5B%7B%22type%22:%22unfinished%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22withoutCandidateGroups%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D,%7B%22type%22:%22unassigned%22,%22operator%22:%22eq%22,%22value%22:%22%22,%22name%22:%22%22%7D%5D',
+                          value: value,
                         });
-                      }
+                      },
                     );
-                  }
+                  },
                 },
-                function(err, results) {
+                function (err, results) {
                   if (err) {
                     return next(err);
                   }
 
                   var values = [];
-                  Object.keys(results).forEach(function(key) {
+                  Object.keys(results).forEach(function (key) {
                     values.push(results[key]);
                   });
 
                   $scope.values.tasks = prepareValues(values, total, '/tasks');
 
                   next(null, total);
-                }
+                },
               );
             });
-          }
+          },
         },
-        function() {
+        function () {
           $scope.loadingActual = false;
-        }
+        },
       );
     });
 
@@ -335,42 +332,42 @@ var Controller = [
       // 8: GET /deployment/count
       series(
         {
-          processDefinitions: function(next) {
+          processDefinitions: function (next) {
             processDefinitionService.count(
               {
-                latestVersion: true
+                latestVersion: true,
               },
-              next
+              next,
             );
           },
-          decisionDefinitions: function(next) {
+          decisionDefinitions: function (next) {
             decisionDefResource.count(
               {
-                latestVersion: true
+                latestVersion: true,
               },
-              next
+              next,
             );
           },
-          deploymentDefinitions: function(next) {
+          deploymentDefinitions: function (next) {
             deploymentResource.count({}, next);
-          }
+          },
         },
-        function(err, results) {
+        function (err, results) {
           if (err) {
             throw err;
           }
           cb(err, results);
-        }
+        },
       );
     }
 
-    $scope.$watch('deployedActive', function() {
+    $scope.$watch('deployedActive', function () {
       if (!$scope.deployedActive || $scope.data.deployed) {
         return;
       }
 
       $scope.loadingDeployed = true;
-      fetchDeployed(function(err, results) {
+      fetchDeployed(function (err, results) {
         $scope.loadingDeployed = false;
         if (err) {
           throw err;
@@ -381,16 +378,16 @@ var Controller = [
     });
 
     // ----------------------------------------------------------------------------------------
-    ['actual', 'metrics', 'deployed', 'deprecate'].forEach(function(name) {
+    ['actual', 'metrics', 'deployed', 'deprecate'].forEach(function (name) {
       $scope[name + 'Active'] = localConf.get('dashboardSection:' + name, true);
     });
-    $scope.toggleSection = function(name) {
+    $scope.toggleSection = function (name) {
       $scope[name + 'Active'] = !$scope[name + 'Active'];
       localConf.set('dashboardSection:' + name, $scope[name + 'Active']);
     };
 
     $scope.metricsPeriod = localConf.get('dashboardMetricsPeriod', 'day');
-    $scope.setMetricsPeriod = function(period) {
+    $scope.setMetricsPeriod = function (period) {
       $scope.metricsPeriod = period;
       localConf.set('dashboardMetricsPeriod', period);
     };
@@ -398,22 +395,22 @@ var Controller = [
     if ($scope.hasMetricsPlugin) {
       $scope.metricsVars = {read: ['metricsPeriod']};
       $scope.metricsPlugins = Views.getProviders({
-        component: 'cockpit.dashboard.metrics'
+        component: 'cockpit.dashboard.metrics',
       }).sort(prioritySort);
     }
-  }
+  },
 ];
 
 var RouteConfig = [
   '$routeProvider',
-  function($routeProvider) {
+  function ($routeProvider) {
     $routeProvider.when('/dashboard', {
       template: template,
       controller: Controller,
       authentication: 'required',
-      reloadOnSearch: false
+      reloadOnSearch: false,
     });
-  }
+  },
 ];
 
 module.exports = RouteConfig;

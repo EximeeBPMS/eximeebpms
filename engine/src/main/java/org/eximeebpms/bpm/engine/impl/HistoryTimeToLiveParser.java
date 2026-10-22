@@ -78,7 +78,7 @@ public class HistoryTimeToLiveParser {
   }
 
   public Integer parse(Decision decision, String definitionKey, boolean skipEnforceTtl) {
-    String historyTimeToLiveString = decision.getCamundaHistoryTimeToLiveString();
+    String historyTimeToLiveString = decision.getEximeeBpmsHistoryTimeToLiveString();
 
     return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
   }

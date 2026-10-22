@@ -11,12 +11,19 @@ import org.eximeebpms.bpm.engine.impl.context.CoreExecutionContext;
 import org.eximeebpms.bpm.engine.impl.core.instance.CoreExecution;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.repository.DecisionDefinition;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 public class BusinessEventDecisionEvaluationListener implements DmnDecisionEvaluationListener {
 
   @Override
   public void notify(final DmnDecisionEvaluationEvent evaluationEvent) {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.DMN_DECISION_EVALUATE;
+      }
+
 
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {

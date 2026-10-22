@@ -63,6 +63,16 @@ jobs:
             build_conclusion=$(gh api "repos/${{ github.repository }}/actions/runs/$run_id/jobs" --jq '.jobs[] | select(.name=="Build") | .conclusion')
             if [[ "$build_conclusion" == "skipped" ]]; then
               echo "Rerunning $pr_branch (run $run_id) - Build job was skipped by the business-hours gate"
-              gh run rerun "$run_id" --repo "${{ github.repository }}"
+              # A single Dependabot PR whose latest run is older than GitHub's
+              # 30-day rerun limit ("cannot be rerun; ... created over a month
+              # ago") used to abort this whole step under bash -e, silently
+              # skipping every PR queued after it and failing this workflow's
+              # own run on every single scheduled fire (BPMS-688). Isolate the
+              # failure per PR instead: log it and move on, since the fix here
+              # is on the PR itself (close it, or comment "@dependabot
+              # recreate" to force a fresh, rerunnable run), not in this loop.
+              if ! gh run rerun "$run_id" --repo "${{ github.repository }}"; then
+                echo "::warning::Could not rerun run $run_id for $pr_branch (likely older than GitHub's 30-day rerun limit) - skipping. Close the PR or comment '@dependabot recreate' on it to get a fresh, rerunnable build."
+              fi
             fi
           done

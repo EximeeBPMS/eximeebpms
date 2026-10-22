@@ -30,6 +30,8 @@ import org.eximeebpms.bpm.engine.impl.migration.MigrationLogger;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventType;
+import org.eximeebpms.bpm.engine.impl.businessevent.BusinessEventTypes;
 
 /**
  * @author Thorben Lindhauer
@@ -103,6 +105,11 @@ public class MigratingUserTaskInstance implements MigratingInstance {
 
   protected void migrateBusinessEvent() {
     BusinessEventProcessor.processBusinessEvents(new BusinessEventProcessor.BusinessEventCreator() {
+      @Override
+      public BusinessEventType getDeclaredType() {
+        return BusinessEventTypes.TASK_INSTANCE_MIGRATE;
+      }
+
       @Override
       public BusinessEvent createBusinessEvent(BusinessEventProducer producer) {
         return producer.createTaskInstanceMigrateEvt(userTask);

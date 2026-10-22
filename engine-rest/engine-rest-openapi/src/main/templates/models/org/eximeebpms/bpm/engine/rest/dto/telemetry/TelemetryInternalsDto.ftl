@@ -23,7 +23,7 @@
         desc = "Information about the Camunda license key."/>
 
     <@lib.property
-        name = "camunda-integration"
+        name = "eximeebpms-integration"
         type = "array"
         itemType = "string"
         desc = "List of EximeeBPMS integrations used (e.g., EximeeBPMS Spring Boot Starter, EximeeBPMS Run, WildFly/JBoss subsystem, EximeeBPMS EJB)."/>

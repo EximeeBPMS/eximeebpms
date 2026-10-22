@@ -196,9 +196,9 @@ public class MigrationUserTaskTest {
     // given
     BpmnModelInstance model = ModifiableBpmnModelInstance.modify(ProcessModels.PARALLEL_GATEWAY_PROCESS)
         .activityBuilder("userTask1")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .moveToActivity("userTask2")
-        .camundaAsyncBefore()
+        .eximeeBpmsAsyncBefore()
         .done();
 
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(model);
@@ -938,8 +938,8 @@ public class MigrationUserTaskTest {
 
   protected static void addTaskListener(BpmnModelInstance targetModel, String activityId, String event, String className) {
     EximeeBpmsTaskListener taskListener = targetModel.newInstance(EximeeBpmsTaskListener.class);
-    taskListener.setCamundaClass(className);
-    taskListener.setCamundaEvent(event);
+    taskListener.setEximeeBpmsClass(className);
+    taskListener.setEximeeBpmsEvent(event);
 
     UserTask task = targetModel.getModelElementById(activityId);
     task.builder().addExtensionElement(taskListener);

@@ -60,6 +60,15 @@ public class SpinProcessEnginePlugin extends SpinConfiguration {
     registerSerializers(processEngineConfiguration);
     registerValueTypes(processEngineConfiguration);
     registerFallbackSerializer(processEngineConfiguration);
+    registerMapToTypeValidator();
+  }
+
+  protected void registerMapToTypeValidator() {
+    // Resolve the mapTo deserialization-type validator per call from the executing engine.
+    // A no-op provider (returning null) stays in place until an engine opts in, and standalone
+    // Spin is unaffected. The provider itself reads the current engine's configuration, so this
+    // is safe to (re-)register from every engine sharing the JVM-wide DataFormats singleton.
+    DataFormats.setDeserializationTypeValidatorProvider(new SpinEngineDeserializationTypeValidatorProvider());
   }
 
   protected void registerFallbackSerializer(ProcessEngineConfigurationImpl processEngineConfiguration) {

@@ -125,6 +125,11 @@ public abstract class Spin<T extends Spin<?>> {
 
   /**
    * Maps the wrapped object to an instance of a java class.
+   * <p>
+   * The target type is not validated against the process engine's deserialization type
+   * whitelist by default; it is checked only when the engine is configured with both
+   * {@code deserializationTypeValidationEnabled} and {@code spinMapToTypeValidationEnabled}.
+   * Outside those settings the caller is responsible for supplying a trusted type.
    *
    * @param type the java class to map to
    * @return the mapped object
@@ -135,6 +140,12 @@ public abstract class Spin<T extends Spin<?>> {
    * Maps the wrapped object to a java object.
    * The object is determined based on the configuration string
    * which is data format specific.
+   * <p>
+   * The target type is not validated against the process engine's deserialization type
+   * whitelist by default; it is checked only when the engine is configured with both
+   * {@code deserializationTypeValidationEnabled} and {@code spinMapToTypeValidationEnabled}.
+   * Outside those settings the caller is responsible for supplying a trusted type, in
+   * particular when the type name comes from data the caller does not control.
    *
    * @param type the class name to map to
    * @return the mapped object

@@ -4,13 +4,23 @@
   <parent>
     <groupId>org.eximeebpms.bpm.wildfly</groupId>
     <artifactId>eximeebpms-wildfly</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>eximeebpms-wildfly-subsystem</artifactId>
   <packaging>jar</packaging>
 
   <name>EximeeBPMS - Wildfly Subsystem</name>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>${version.plexus-utils}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
 

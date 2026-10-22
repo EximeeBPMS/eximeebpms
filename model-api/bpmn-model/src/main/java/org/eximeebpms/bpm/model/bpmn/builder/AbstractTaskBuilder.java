@@ -31,29 +31,15 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, E>, E
   /** camunda extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use eximeeBpmsAsyncBefore() instead.
    *
    * Sets the camunda async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
-    return myself;
-  }
-
-  /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead.
-   *
-   * Sets the camunda async attribute.
-   *
-   * @param isCamundaAsync  the async state of the task
-   * @return the builder object
-   */
-  @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B eximeeBpmsAsync() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 

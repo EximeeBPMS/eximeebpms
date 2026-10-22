@@ -44,29 +44,15 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
   /** camunda extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use eximeeBpmsAsyncBefore() instead.
    *
    * Sets the camunda async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
-    return myself;
-  }
-
-  /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead
-   *
-   * Sets the camunda async attribute.
-   *
-   * @param isCamundaAsync  the async state of the task
-   * @return the builder object
-   */
-  @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B eximeeBpmsAsync() {
+    element.setEximeeBpmsAsyncBefore(true);
     return myself;
   }
 
@@ -76,8 +62,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCalledElementBinding  the element binding to use
    * @return the builder object
    */
-  public B camundaCalledElementBinding(String camundaCalledElementBinding) {
-    element.setCamundaCalledElementBinding(camundaCalledElementBinding);
+  public B eximeeBpmsCalledElementBinding(String camundaCalledElementBinding) {
+    element.setEximeeBpmsCalledElementBinding(camundaCalledElementBinding);
     return myself;
   }
 
@@ -87,8 +73,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCalledElementVersion  the element version to use
    * @return the builder object
    */
-  public B camundaCalledElementVersion(String camundaCalledElementVersion) {
-    element.setCamundaCalledElementVersion(camundaCalledElementVersion);
+  public B eximeeBpmsCalledElementVersion(String camundaCalledElementVersion) {
+    element.setEximeeBpmsCalledElementVersion(camundaCalledElementVersion);
     return myself;
   }
 
@@ -98,8 +84,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCalledElementVersionTag  the element version to use
    * @return the builder object
    */
-  public B camundaCalledElementVersionTag(String camundaCalledElementVersionTag) {
-    element.setCamundaCalledElementVersionTag(camundaCalledElementVersionTag);
+  public B eximeeBpmsCalledElementVersionTag(String camundaCalledElementVersionTag) {
+    element.setEximeeBpmsCalledElementVersionTag(camundaCalledElementVersionTag);
     return myself;
   }
 
@@ -108,8 +94,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCalledElementTenantId the called element tenant id
    * @return the builder object
    */
-  public B camundaCalledElementTenantId(String camundaCalledElementTenantId) {
-    element.setCamundaCalledElementTenantId(camundaCalledElementTenantId);
+  public B eximeeBpmsCalledElementTenantId(String camundaCalledElementTenantId) {
+    element.setEximeeBpmsCalledElementTenantId(camundaCalledElementTenantId);
     return myself;
   }
 
@@ -119,8 +105,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param caseRef the case to call
    * @return the builder object
    */
-  public B camundaCaseRef(String caseRef) {
-    element.setCamundaCaseRef(caseRef);
+  public B eximeeBpmsCaseRef(String caseRef) {
+    element.setEximeeBpmsCaseRef(caseRef);
     return myself;
   }
 
@@ -130,8 +116,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCaseBinding  the case binding to use
    * @return the builder object
    */
-  public B camundaCaseBinding(String camundaCaseBinding) {
-    element.setCamundaCaseBinding(camundaCaseBinding);
+  public B eximeeBpmsCaseBinding(String camundaCaseBinding) {
+    element.setEximeeBpmsCaseBinding(camundaCaseBinding);
     return myself;
   }
 
@@ -141,8 +127,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaCaseVersion  the case version to use
    * @return the builder object
    */
-  public B camundaCaseVersion(String camundaCaseVersion) {
-    element.setCamundaCaseVersion(camundaCaseVersion);
+  public B eximeeBpmsCaseVersion(String camundaCaseVersion) {
+    element.setEximeeBpmsCaseVersion(camundaCaseVersion);
     return myself;
   }
 
@@ -151,8 +137,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param tenantId the tenant id to set
    * @return the builder object
    */
-  public B camundaCaseTenantId(String tenantId) {
-    element.setCamundaCaseTenantId(tenantId);
+  public B eximeeBpmsCaseTenantId(String tenantId) {
+    element.setEximeeBpmsCaseTenantId(tenantId);
     return myself;
   }
 
@@ -161,9 +147,9 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param businessKey the business key to set
    * @return the builder object
    */
-  public B camundaInBusinessKey(String businessKey) {
+  public B eximeeBpmsInBusinessKey(String businessKey) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
-    param.setCamundaBusinessKey(businessKey);
+    param.setEximeeBpmsBusinessKey(businessKey);
     addExtensionElement(param);
     return myself;
   }
@@ -175,10 +161,10 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param target the name of the variable in the sub process instance
    * @return the builder object
    */
-  public B camundaIn(String source, String target) {
+  public B eximeeBpmsIn(String source, String target) {
     EximeeBpmsIn param = modelInstance.newInstance(EximeeBpmsIn.class);
-    param.setCamundaSource(source);
-    param.setCamundaTarget(target);
+    param.setEximeeBpmsSource(source);
+    param.setEximeeBpmsTarget(target);
     addExtensionElement(param);
     return myself;
   }
@@ -190,10 +176,10 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param target the name of the variable in the super process instance
    * @return the builder object
    */
-  public B camundaOut(String source, String target) {
+  public B eximeeBpmsOut(String source, String target) {
     EximeeBpmsOut param = modelInstance.newInstance(EximeeBpmsOut.class);
-    param.setCamundaSource(source);
-    param.setCamundaTarget(target);
+    param.setEximeeBpmsSource(source);
+    param.setEximeeBpmsTarget(target);
     addExtensionElement(param);
     return myself;
   }
@@ -207,8 +193,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @return                              the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaVariableMappingClass(Class camundaVariableMappingClass) {
-    return camundaVariableMappingClass(camundaVariableMappingClass.getName());
+  public B eximeeBpmsVariableMappingClass(Class camundaVariableMappingClass) {
+    return eximeeBpmsVariableMappingClass(camundaVariableMappingClass.getName());
   }
 
   /**
@@ -219,8 +205,8 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaVariableMappingClass                  the class name to set
    * @return                              the builder object
    */
-  public B camundaVariableMappingClass(String fullQualifiedClassName) {
-    element.setCamundaVariableMappingClass(fullQualifiedClassName);
+  public B eximeeBpmsVariableMappingClass(String fullQualifiedClassName) {
+    element.setEximeeBpmsVariableMappingClass(fullQualifiedClassName);
     return myself;
   }
 
@@ -232,8 +218,9 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param camundaVariableMappingDelegateExpression     the expression which references a delegate object
    * @return                              the builder object
    */
-  public B camundaVariableMappingDelegateExpression(String camundaVariableMappingDelegateExpression) {
-    element.setCamundaVariableMappingDelegateExpression(camundaVariableMappingDelegateExpression);
+  public B eximeeBpmsVariableMappingDelegateExpression(String camundaVariableMappingDelegateExpression) {
+    element.setEximeeBpmsVariableMappingDelegateExpression(camundaVariableMappingDelegateExpression);
     return myself;
   }
+
 }

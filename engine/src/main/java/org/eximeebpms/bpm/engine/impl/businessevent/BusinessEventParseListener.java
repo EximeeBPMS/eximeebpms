@@ -1,24 +1,59 @@
 package org.eximeebpms.bpm.engine.impl.businessevent;
 
 import java.util.List;
-import org.eximeebpms.bpm.engine.delegate.TaskListener;
-import org.eximeebpms.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.eximeebpms.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.activity.BusinessEventActivityInstanceExecutionListener;
 import org.eximeebpms.bpm.engine.impl.businessevent.process.BusinessEventProcessInstanceExecutionListener;
-import org.eximeebpms.bpm.engine.impl.businessevent.task.BusinessEventTaskInstanceTaskListener;
 import org.eximeebpms.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.eximeebpms.bpm.engine.impl.pvm.PvmEvent;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.eximeebpms.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.eximeebpms.bpm.engine.impl.task.TaskDefinition;
 import org.eximeebpms.bpm.engine.impl.util.xml.Element;
 
 public class BusinessEventParseListener extends AbstractBpmnParseListener {
 
   protected final BusinessEventProcessInstanceExecutionListener processInstanceListener = new BusinessEventProcessInstanceExecutionListener();
   protected final BusinessEventActivityInstanceExecutionListener activityInstanceListener = new BusinessEventActivityInstanceExecutionListener();
-  protected final BusinessEventTaskInstanceTaskListener taskInstanceListener = new BusinessEventTaskInstanceTaskListener();
+
+  /**
+   * Decides which built-in listeners are attached at all. Types excluded by the configured
+   * {@code enabledEventTypes}/{@code disabledEventTypes} filter get no listener on the process
+   * definition, so a disabled type costs nothing at runtime rather than being produced and then
+   * dropped.
+   */
+  protected final BusinessEventTypeFilter typeFilter;
+
+  public BusinessEventParseListener() {
+    this(BusinessEventTypeFilter.of(null));
+  }
+
+  public BusinessEventParseListener(BusinessEventTypeFilter typeFilter) {
+    this.typeFilter = typeFilter == null ? BusinessEventTypeFilter.of(null) : typeFilter;
+  }
+
+  /**
+   * Whether this listener would attach anything at all. When it would not, the engine leaves it
+   * out of the BPMN parse listener chain entirely.
+   *
+   * <p>Covers only the types this listener is responsible for — the {@code migrate} events of the
+   * same entities are produced by the migration code, not by parsed listeners, and are filtered
+   * there.</p>
+   */
+  public boolean isActive() {
+    return isProcessInstanceParsingNeeded() || isActivityInstanceParsingNeeded();
+  }
+
+  protected boolean isProcessInstanceParsingNeeded() {
+    // process-instance:start and process-instance-update are not parsed listeners: they are
+    // emitted by ExecutionEntity#fireBusinessProcessStartEvent and
+    // #fireBusinessProcessInstanceUpdate at the points history emits its own
+    return typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END);
+  }
+
+  protected boolean isActivityInstanceParsingNeeded() {
+    return typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_START)
+        || typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END);
+  }
 
   @Override
   public void parseRootElement(Element rootElement, List<ProcessDefinitionEntity> processDefinitions) {
@@ -29,8 +64,12 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
 
   @Override
   public void parseUserTask(final Element userTaskElement, final ScopeImpl scope, final ActivityImpl activity) {
+    // Deliberately no activity-instance:update on task create/assignment, unlike history's
+    // ActivityInstanceUpdateListener: that only denormalises taskId/assignee onto ACT_HI_ACTINST,
+    // and task-instance:create/update already carry taskId, assignee and activityInstanceId at the
+    // same moment. See docs/specs/business-events.md in eximeebpms-factory, "Why user tasks produce
+    // no activity-instance:update" (BPMS-782).
     addActivityInstanceListeners(activity);
-    addTaskInstanceListeners(getTaskDefinition(activity));
   }
 
   @Override
@@ -136,26 +175,19 @@ public class BusinessEventParseListener extends AbstractBpmnParseListener {
     addActivityInstanceListeners(activity);
   }
 
-  protected TaskDefinition getTaskDefinition(final ActivityImpl activity) {
-    return ((UserTaskActivityBehavior) activity.getActivityBehavior()).getTaskDefinition();
-  }
-
   protected void addProcessInstanceListeners(ProcessDefinitionEntity processDefinition) {
-    processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_START, processInstanceListener);
-    processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_END, processInstanceListener);
-    processDefinition.addBuiltInListener("update", processInstanceListener);
+    if (typeFilter.isEnabled(BusinessEventTypes.PROCESS_INSTANCE_END)) {
+      processDefinition.addBuiltInListener(PvmEvent.EVENTNAME_END, processInstanceListener);
+    }
   }
 
   protected void addActivityInstanceListeners(final ActivityImpl activity) {
-    activity.addBuiltInListener(PvmEvent.EVENTNAME_START, activityInstanceListener, 0);
-    activity.addBuiltInListener(PvmEvent.EVENTNAME_END, activityInstanceListener);
-  }
+    if (typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_START)) {
+      activity.addBuiltInListener(PvmEvent.EVENTNAME_START, activityInstanceListener, 0);
+    }
 
-  private void addTaskInstanceListeners(final TaskDefinition taskDefinition) {
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_CREATE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_UPDATE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_COMPLETE, taskInstanceListener);
-    taskDefinition.addBuiltInTaskListener(TaskListener.EVENTNAME_DELETE, taskInstanceListener);
+    if (typeFilter.isEnabled(BusinessEventTypes.ACTIVITY_INSTANCE_END)) {
+      activity.addBuiltInListener(PvmEvent.EVENTNAME_END, activityInstanceListener);
+    }
   }
 }

@@ -16,6 +16,7 @@
  */
 package org.eximeebpms.bpm.spring.boot.starter.configuration.id;
 
+import org.eximeebpms.bpm.engine.impl.ProcessEngineLogger;
 import org.eximeebpms.bpm.engine.impl.cfg.IdGenerator;
 import org.eximeebpms.bpm.engine.impl.persistence.StrongUuidGenerator;
 import org.eximeebpms.bpm.spring.boot.starter.property.EximeeBpmsBpmProperties;
@@ -42,15 +43,17 @@ public class IdGeneratorConfiguration {
   }
 
   /**
-   * @deprecated Use {@link #strongUuidGenerator()} (UUID v7) instead. Will be removed in 1.4.0.
+   * {@code uuid-v1} (UuidV1Generator) was removed in 1.4.0. This bean exists only so that leftover
+   * {@code id-generator=uuid-v1} configuration still resolves to a working {@link IdGenerator} instead
+   * of leaving none satisfied — it logs a warning and falls back to UUID v7, same as
+   * {@link #strongUuidGenerator()}.
    */
   @Bean
   @ConditionalOnMissingBean(IdGenerator.class)
   @ConditionalOnProperty(prefix = EximeeBpmsBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = UUID_V1)
-  @Deprecated(since = "1.3.0", forRemoval = true)
-  @SuppressWarnings({"java:S1874", "java:S1133", "removal"})
-  public IdGenerator uuidV1Generator() {
-    return new org.eximeebpms.bpm.engine.impl.persistence.UuidV1Generator();
+  public IdGenerator uuidV1GeneratorFallback() {
+    ProcessEngineLogger.PERSISTENCE_LOGGER.uuidV1GeneratorRemoved();
+    return new StrongUuidGenerator();
   }
 
   @Bean

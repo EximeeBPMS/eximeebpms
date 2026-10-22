@@ -26,10 +26,10 @@ public interface InputClause extends DmnElement {
 
   void setInputValues(InputValues inputValues);
 
-  // camunda extensions
+  // eximeebpms extensions
 
-  String getCamundaInputVariable();
+  String getEximeeBpmsInputVariable();
 
-  void setCamundaInputVariable(String inputVariable);
+  void setEximeeBpmsInputVariable(String inputVariable);
 
 }

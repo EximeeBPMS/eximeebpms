@@ -358,13 +358,13 @@ public class DeploymentCacheCfgTest {
 
   protected BpmnModelInstance createModel(String suffix) {
     BpmnModelInstance bpmnModel = Bpmn.createExecutableProcess("Process" + suffix)
-        .camundaHistoryTimeToLive(180)
+        .eximeeBpmsHistoryTimeToLive(180)
         .startEvent("startEvent")
         .userTask().name("User Task")
         .endEvent("endEvent")
         .done();
     org.eximeebpms.bpm.model.bpmn.instance.Process model = bpmnModel.getModelElementById("Process" + suffix);
-    model.setCamundaCandidateStarterUsers("demo" + suffix);
+    model.setEximeeBpmsCandidateStarterUsers("demo" + suffix);
     return bpmnModel;
   }
 

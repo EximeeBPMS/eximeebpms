@@ -75,4 +75,9 @@ public class BusinessEventOutboxEntity implements DbEntity, BusinessEventOutbox 
     public Long getIdAsLong() {
         return id;
     }
+
+    @Override
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 }

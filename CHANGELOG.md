@@ -40,6 +40,7 @@ retroactively added CVE IDs.
 - MariaDB Connector/J bumped from 3.5.7 to 3.5.10.
 
 ### Fixed
+- Dependabot PRs deferred during business hours were never built automatically: the evening rerun picked the `pull_request` run of `build.yml`, which skips the build for Dependabot. It now reruns the `pull_request_target` run. CI only.
 - The API-compatibility check (clirr) on `engine`, `engine-dmn`, `commons/typed-values` and `model-api` was not actually running: its baseline pointed at a version nothing resolves, its profile was deactivated by a sibling profile, and the plugin's bundled BCEL failed on Java 9+ jars. It now compares against the released 1.4.0 artifacts and fails the build when the baseline cannot be resolved. Fixing it also removed a stale `skipTests` override that would have skipped the whole `engine` unit test suite.
 - Modules using `eximeebpms-bpm-archunit` (`engine`, `engine-dmn/engine`, `engine-spring/core-6`, `model-api/bpmn-model`, `model-api/dmn-model`, `commons/typed-values`) ran none of their own JUnit 4 tests on a plain `mvn install`, only `ArchRulesTest`, and still reported success. `junit-vintage-engine` is now on their test classpath. Also fixes a timing race in the concurrency test harness that the re-enabled tests exposed.
 - The database instance-migration suite never migrated a process instance through the `1.2-to-1.3` or `1.3-to-1.4` upgrade scripts. `test-fixture-120` is now pinned to its own schema state, and `test-fixture-130` and `test-fixture-140` cover the two newer steps.

@@ -3,9 +3,9 @@ name: Rerun deferred Dependabot builds
 # build.yml's hours-gate defers Dependabot builds (no-op skip) during
 # business hours (Mon-Fri 07:00-18:00 Europe/Warsaw) to keep the scarce
 # github-actions-runner-new pool free for human PRs. This workflow finds any
-# Dependabot PR whose latest build run had its "Build" job skipped and
-# reruns it once business hours are over, so those builds/auto-merges
-# resume automatically.
+# Dependabot PR whose latest pull_request_target run of build.yml was
+# deferred by that gate and reruns it once business hours are over, so
+# those builds/auto-merges resume automatically.
 on:
   schedule:
     # 18:00 Europe/Warsaw is 16:00 UTC (CEST) or 17:00 UTC (CET) depending on
@@ -50,7 +50,11 @@ jobs:
           command -v gh >/dev/null || { sudo apt-get update -q && sudo apt-get install -y gh; }
 
           for pr_branch in $(gh pr list --repo "${{ github.repository }}" --author "app/dependabot" --state open --json headRefName --jq '.[].headRefName'); do
-            run_id=$(gh run list --repo "${{ github.repository }}" --branch "$pr_branch" --workflow=build.yml --limit 1 --json databaseId --jq '.[0].databaseId')
+            # build.yml runs twice per Dependabot PR. Only the
+            # pull_request_target run builds; the pull_request run, created a
+            # moment later and so always the newest, skips Build for
+            # Dependabot on every attempt, so rerunning it builds nothing.
+            run_id=$(gh run list --repo "${{ github.repository }}" --branch "$pr_branch" --workflow=build.yml --event pull_request_target --limit 1 --json databaseId --jq '.[0].databaseId')
             if [[ -z "$run_id" ]]; then
               continue
             fi
@@ -60,8 +64,13 @@ jobs:
             # its "if" condition - only the Build job itself reports
             # "skipped". Check that job directly instead of the run-level
             # conclusion, otherwise deferred runs are never picked up here.
-            build_conclusion=$(gh api "repos/${{ github.repository }}/actions/runs/$run_id/jobs" --jq '.jobs[] | select(.name=="Build") | .conclusion')
-            if [[ "$build_conclusion" == "skipped" ]]; then
+            jobs_url="repos/${{ github.repository }}/actions/runs/$run_id/jobs"
+            build_conclusion=$(gh api "$jobs_url" --jq '.jobs[] | select(.name=="Build") | .conclusion')
+            # Build is skipped as well when Check finds nothing to build or
+            # someone other than Dependabot triggered the run; only a
+            # business-hours deferral also fails Build Required.
+            required_conclusion=$(gh api "$jobs_url" --jq '.jobs[] | select(.name=="Build Required") | .conclusion')
+            if [[ "$build_conclusion" == "skipped" && "$required_conclusion" == "failure" ]]; then
               echo "Rerunning $pr_branch (run $run_id) - Build job was skipped by the business-hours gate"
               # A single Dependabot PR whose latest run is older than GitHub's
               # 30-day rerun limit ("cannot be rerun; ... created over a month

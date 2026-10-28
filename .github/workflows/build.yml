@@ -49,9 +49,16 @@ jobs:
     # Dependabot-triggered pull_request workflows) and skip the
     # pull_request_target run for everyone else (their plain pull_request run
     # above already covers it - avoids running Check twice for the same PR).
+    # On pull_request_target this job checks out the PR's head, and Build runs
+    # it with the repository secrets, so only Dependabot's own PRs from this
+    # repository pass: github.actor is whoever triggered the latest event, and
+    # Dependabot can trigger one on a PR someone else opened.
     if: >-
       !(github.event_name == 'pull_request' && github.actor == 'dependabot[bot]') &&
-      !(github.event_name == 'pull_request_target' && github.actor != 'dependabot[bot]')
+      !(github.event_name == 'pull_request_target' && !(
+        github.actor == 'dependabot[bot]' &&
+        github.event.pull_request.user.login == 'dependabot[bot]' &&
+        github.event.pull_request.head.repo.full_name == github.repository))
     outputs:
       skip_build: ${{ steps.verify.outputs.skip_build }}
     steps:
@@ -345,7 +352,20 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - name: Evaluate whether Build actually ran and passed
+        # Event fields through env, never inlined into the script: the head
+        # repository's name is chosen by whoever opened the PR.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          REPOSITORY: ${{ github.repository }}
         run: |
+          if [[ "$EVENT_NAME" == "pull_request_target" && "$ACTOR" == "dependabot[bot]" ]] &&
+             [[ "$PR_AUTHOR" != "dependabot[bot]" || "$HEAD_REPO" != "$REPOSITORY" ]]; then
+            echo "::error::Dependabot triggered this run on a PR it did not open, or from another repository - the privileged build does not run it."
+            exit 1
+          fi
           if [[ "${{ needs.check.result }}" == "skipped" ]]; then
             echo "check didn't run under this trigger (pull_request vs pull_request_target) for this actor - the real evaluation happens on the other one."
             exit 0

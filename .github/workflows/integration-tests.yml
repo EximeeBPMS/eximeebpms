@@ -109,7 +109,7 @@ jobs:
           restore-keys: ${{ runner.os }}-npm
       - name: Set up Java
         id: setup-java
-        uses: actions/setup-java@v5.4.0
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -276,7 +276,7 @@ jobs:
 
       - name: Upload Artifacts
         if: always()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: surefire-reports-${{ matrix.testsuite }}-${{ matrix.distro }}-${{ matrix.database }}
           path: |

@@ -24,7 +24,7 @@
     <version.oracle>23.26.2.0.0</version.oracle>
     <version.mysql>9.7.0</version.mysql>
     <!-- MariaDB runs on the MySQL dialect; only the driver differs. -->
-    <version.mariadb>3.5.10</version.mariadb>
+    <version.mariadb>3.5.11</version.mariadb>
     <version.sqlserver>13.4.0.jre11</version.sqlserver>
     <version.db2-11.5>11.5.9.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>

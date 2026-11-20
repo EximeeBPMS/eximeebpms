@@ -512,6 +512,8 @@
 
         <module>qa</module>
 
+        <module>javaee/ejb-service</module>
+        <module>javaee/ejb-client-jakarta</module>
         <module>javaee/jobexecutor-ra</module>
         <module>javaee/jobexecutor-rar</module>
 

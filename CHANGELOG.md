@@ -19,6 +19,9 @@ retroactively added CVE IDs.
 
 ## [Unreleased]
 
+### Security
+- Fix CVE-2026-114938 in the Java runtime of the container images: the `run` and `tomcat` images ship OpenJDK 21.0.13.1 (Alpine `openjdk21-jre-headless` 21.0.13.1_p2-r0) instead of 21.0.12. The engine, the distributions and the Java major version are unchanged from 1.4.0; an installation that runs a distribution on its own Java runtime has to update that runtime. See Security Notice EXBPMS-21.
+
 ---
 
 ## [1.4.0] – 2026-09-15

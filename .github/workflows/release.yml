@@ -117,7 +117,10 @@ jobs:
           path = "CHANGELOG.md"
           with open(path) as f:
               content = f.read()
-          pattern = re.compile(r"## \[Unreleased\]\n\n(?P<content>.*?)\n\n---\n\n(?=## \[)", re.S)
+          # content must not cross a `---` line: with an empty [Unreleased] it
+          # would otherwise run on into the next section and re-cut it under a
+          # second header (same fix as eximeebpms-enterprise's release.yml).
+          pattern = re.compile(r"## \[Unreleased\]\n\n(?P<content>(?:(?!^---$).)*?)\n?^---\n\n(?=## \[)", re.S | re.M)
           m = pattern.search(content)
           if not m:
               print("Could not find an [Unreleased] section followed by another version header - leaving CHANGELOG.md untouched.")
@@ -138,7 +141,9 @@ jobs:
             # push-triggered workflows already covers it; this is the belt to that
             # pair of braces, and survives someone relaxing paths-ignore later.
             git commit -m "Cut CHANGELOG.md [Unreleased] into this release [skip ci]"
-            git push origin HEAD:main
+            # Back to the branch the release runs from, so a release from a
+            # release/<major>.<minor>.x maintenance branch does not try to push to main.
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           else
             echo "CHANGELOG.md unchanged - skipping commit."
           fi
